@@ -56,7 +56,7 @@ class ChooseAccountProviderPresenter @Inject constructor(
         }
 
         val staticAccountProviderList = remember {
-            // The list cannot contains "*" and cannot be empty at this point
+            // The list cannot contains ANY_ACCOUNT_PROVIDER ("*") and cannot be empty at this point
             enterpriseService.defaultHomeserverList()
                 .map { it.ensureProtocol() }
                 .map { url ->

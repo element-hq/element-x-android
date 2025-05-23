@@ -26,7 +26,7 @@ class ChangeAccountProviderPresenter @Inject constructor(
     override fun present(): ChangeAccountProviderState {
         val staticAccountProviderList = remember {
             enterpriseService.defaultHomeserverList()
-                .filter { it != "*" }
+                .filter { it != EnterpriseService.ANY_ACCOUNT_PROVIDER }
                 .map { it.ensureProtocol() }
                 .ifEmpty { listOf(AuthenticationConfig.MATRIX_ORG_URL) }
                 .map { url ->

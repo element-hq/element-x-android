@@ -10,6 +10,7 @@ package io.element.android.features.login.impl.accountprovider
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -64,7 +65,7 @@ class AccountProviderDataSourceTest {
     fun `present - ensure that default homeserver is not start char`() = runTest {
         val sut = AccountProviderDataSource(
             FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf("*", AuthenticationConfig.MATRIX_ORG_URL) }
+                defaultHomeserverListResult = { listOf(EnterpriseService.ANY_ACCOUNT_PROVIDER, AuthenticationConfig.MATRIX_ORG_URL) }
             )
         )
         sut.flow.test {

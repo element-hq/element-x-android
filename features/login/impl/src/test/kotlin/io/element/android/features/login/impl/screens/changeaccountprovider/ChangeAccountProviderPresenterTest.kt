@@ -11,6 +11,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.changeserver.aChangeServerState
@@ -97,7 +98,7 @@ class ChangeAccountProviderPresenterTest {
             changeServerPresenter = { aChangeServerState() },
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = {
-                    listOf(AN_ACCOUNT_PROVIDER, "*")
+                    listOf(AN_ACCOUNT_PROVIDER, EnterpriseService.ANY_ACCOUNT_PROVIDER)
                 }
             ),
         )

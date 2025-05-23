@@ -73,7 +73,7 @@ class OnBoardingPresenterTest {
             buildMeta = buildMeta,
             featureFlagService = featureFlagService,
             enterpriseService = FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, "*") },
+                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, EnterpriseService.ANY_ACCOUNT_PROVIDER) },
             ),
             rageshakeFeatureAvailability = { true },
         )
@@ -110,7 +110,7 @@ class OnBoardingPresenterTest {
                 initialState = mapOf(FeatureFlags.QrCodeLogin.key to true),
             ),
             enterpriseService = FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, "*") },
+                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, EnterpriseService.ANY_ACCOUNT_PROVIDER) },
                 isAllowedToConnectToHomeserverResult = { true },
             ),
         )
