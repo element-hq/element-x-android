@@ -14,6 +14,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.error.ChangeServerError
+import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderPresenter
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.screens.onboarding.OnBoardingPresenter
@@ -31,7 +32,8 @@ import javax.inject.Inject
 /**
  * This class is responsible for managing the login flow, including handling OIDC actions and
  * submitting login requests.
- * It's an helper to avoid code duplication. It is used by [OnBoardingPresenter] and [ConfirmAccountProviderPresenter].
+ * It's an helper to avoid code duplication. It is used by [OnBoardingPresenter], [ConfirmAccountProviderPresenter]
+ * and [ChooseAccountProviderPresenter].
  */
 class LoginHelper @Inject constructor(
     private val oidcActionFlow: OidcActionFlow,

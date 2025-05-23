@@ -16,6 +16,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.appconfig.OnBoardingConfig
+import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
@@ -27,6 +29,7 @@ class OnBoardingPresenter @AssistedInject constructor(
     @Assisted private val params: OnBoardingNode.Params,
     private val buildMeta: BuildMeta,
     private val featureFlagService: FeatureFlagService,
+    private val enterpriseService: EnterpriseService,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val loginHelper: LoginHelper,
 ) : Presenter<OnBoardingState> {
@@ -37,15 +40,33 @@ class OnBoardingPresenter @AssistedInject constructor(
         ): OnBoardingPresenter
     }
 
-    private val defaultAccountProvider = params.accountProvider
-    private val loginHint = params.loginHint
-
     @Composable
     override fun present(): OnBoardingState {
         val localCoroutineScope = rememberCoroutineScope()
-
-        val canLoginWithQrCode by produceState(initialValue = false) {
-            value = defaultAccountProvider == null &&
+        val forcedAccountProvider = remember {
+            // If defaultHomeserverList() returns a singleton list, this is the default account provider.
+            // In this case, the user can sign in using this homeserver, or use QrCode login
+            enterpriseService.defaultHomeserverList().singleOrNull()
+        }
+        val canConnectToAnyHomeserver = remember {
+            enterpriseService.canConnectToAnyHomeserver()
+        }
+        val mustChooseAccountProvider = remember {
+            !canConnectToAnyHomeserver && enterpriseService.defaultHomeserverList().size > 1
+        }
+        val linkAccountProvider by produceState<String?>(initialValue = null) {
+            // Account provider from the link, if allowed by the enterprise service
+            value = params.accountProvider?.takeIf {
+                enterpriseService.isAllowedToConnectToHomeserver(it)
+            }
+        }
+        val defaultAccountProvider = remember(linkAccountProvider) {
+            // If there is a forced account provider, this is the default account provider
+            // Else use the account provider passed in the params if any and if allowed
+            forcedAccountProvider ?: linkAccountProvider
+        }
+        val canLoginWithQrCode by produceState(initialValue = false, linkAccountProvider) {
+            value = linkAccountProvider == null &&
                 featureFlagService.isFeatureEnabled(FeatureFlags.QrCodeLogin)
         }
         val canReportBug = remember { rageshakeFeatureAvailability.isAvailable() }
@@ -58,7 +79,7 @@ class OnBoardingPresenter @AssistedInject constructor(
                     coroutineScope = localCoroutineScope,
                     isAccountCreation = false,
                     homeserverUrl = event.defaultAccountProvider,
-                    loginHint = loginHint,
+                    loginHint = params.loginHint?.takeIf { forcedAccountProvider == null },
                 )
                 OnBoardingEvents.ClearError -> loginHelper.clearError()
             }
@@ -67,8 +88,9 @@ class OnBoardingPresenter @AssistedInject constructor(
         return OnBoardingState(
             productionApplicationName = buildMeta.productionApplicationName,
             defaultAccountProvider = defaultAccountProvider,
+            mustChooseAccountProvider = mustChooseAccountProvider,
             canLoginWithQrCode = canLoginWithQrCode,
-            canCreateAccount = defaultAccountProvider == null && OnBoardingConfig.CAN_CREATE_ACCOUNT,
+            canCreateAccount = defaultAccountProvider == null && canConnectToAnyHomeserver && OnBoardingConfig.CAN_CREATE_ACCOUNT,
             canReportBug = canReportBug,
             loginMode = loginMode,
             eventSink = ::handleEvent,
