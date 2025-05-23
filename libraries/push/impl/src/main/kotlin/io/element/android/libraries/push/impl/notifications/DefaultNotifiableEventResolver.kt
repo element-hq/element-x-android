@@ -94,8 +94,12 @@ class DefaultNotifiableEventResolver @Inject constructor(
                 Timber.tag(loggerTag.value).d("No notification data found for event $eventId")
                 return@flatMap Result.failure(ResolvingException("Unable to resolve event $eventId"))
             } else {
-                Timber.tag(loggerTag.value).d("Found notification item for $eventId")
-                it.asNotifiableEvent(client, sessionId)
+                if (client.ignoredUsersFlow.value.contains(it.senderId)) {
+                    Result.failure(ResolvingException("Discarding notification for ignored user ${it.senderId}"))
+                } else {
+                    Timber.tag(loggerTag.value).d("Found notification item for $eventId")
+                    it.asNotifiableEvent(client, sessionId)
+                }
             }
         }
     }

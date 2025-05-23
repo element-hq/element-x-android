@@ -18,6 +18,7 @@ data class NotificationData(
     val eventId: EventId,
     val threadId: ThreadId?,
     val roomId: RoomId,
+    val senderId: UserId,
     // mxc url
     val senderAvatarUrl: String?,
     // private, must use `getDisambiguatedDisplayName`

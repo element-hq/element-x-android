@@ -34,11 +34,17 @@ class NotificationMapper(
                 isDirect = item.roomInfo.isDirect,
                 activeMembersCount = item.roomInfo.joinedMembersCount.toInt(),
             )
+            val senderId = when (item.event) {
+                is NotificationEvent.Invite -> (item.event as NotificationEvent.Invite).sender
+                is NotificationEvent.Timeline -> (item.event as NotificationEvent.Timeline).event.senderId()
+            }.let(::UserId)
+
             NotificationData(
                 eventId = eventId,
                 // FIXME once the `NotificationItem` in the SDK returns the thread id
                 threadId = null,
                 roomId = roomId,
+                senderId = senderId,
                 senderAvatarUrl = item.senderInfo.avatarUrl,
                 senderDisplayName = item.senderInfo.displayName,
                 senderIsNameAmbiguous = item.senderInfo.isNameAmbiguous,
