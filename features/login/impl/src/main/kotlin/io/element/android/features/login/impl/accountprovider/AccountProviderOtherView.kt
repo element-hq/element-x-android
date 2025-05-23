@@ -68,8 +68,8 @@ fun AccountProviderOtherView(
 
 @PreviewsDayNight
 @Composable
-internal fun AccountProviderViewOtherPreview() = ElementPreview {
+internal fun AccountProviderOtherViewPreview() = ElementPreview {
     AccountProviderOtherView(
-        onClick = { }
+        onClick = { },
     )
 }
