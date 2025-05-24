@@ -426,12 +426,6 @@ class JoinedRustRoom(
         }
     }
 
-    override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.sendCallNotificationIfNeeded()
-        }
-    }
-
     override suspend fun setSendQueueEnabled(enabled: Boolean) {
         withContext(roomDispatcher) {
             Timber.d("setSendQueuesEnabled: $enabled")

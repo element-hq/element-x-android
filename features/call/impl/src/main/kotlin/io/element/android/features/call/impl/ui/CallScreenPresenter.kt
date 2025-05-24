@@ -71,7 +71,6 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private val isInWidgetMode = callType is CallType.RoomCall
     private val userAgent = userAgentProvider.provide()
-    private var notifiedCallStart = false
 
     @Composable
     override fun present(): CallScreenState {
@@ -225,9 +224,7 @@ class CallScreenPresenter @AssistedInject constructor(
             coroutineScope.launch {
                 client.syncService().syncState
                     .collect { state ->
-                        if (state == SyncState.Running) {
-                            client.notifyCallStartIfNeeded(callType.roomId)
-                        } else {
+                        if (state != SyncState.Running) {
                             appForegroundStateService.updateIsInCallState(true)
                         }
                     }
@@ -236,13 +233,6 @@ class CallScreenPresenter @AssistedInject constructor(
                 // Make sure we mark the call as ended in the app state
                 appForegroundStateService.updateIsInCallState(false)
             }
-        }
-    }
-
-    private suspend fun MatrixClient.notifyCallStartIfNeeded(roomId: RoomId) {
-        if (!notifiedCallStart) {
-            getJoinedRoom(roomId)?.use { it.sendCallNotificationIfNeeded() }
-                ?.onSuccess { notifiedCallStart = true }
         }
     }
 
