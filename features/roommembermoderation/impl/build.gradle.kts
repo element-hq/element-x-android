@@ -13,6 +13,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.roommembermoderation.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 setupAnvil()
@@ -29,7 +34,6 @@ dependencies {
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.coroutines.core)
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
@@ -38,5 +42,6 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.androidx.compose.ui.test.junit)
-
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(projects.libraries.testtags)
 }

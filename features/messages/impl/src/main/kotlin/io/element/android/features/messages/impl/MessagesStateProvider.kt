@@ -44,7 +44,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import kotlinx.collections.immutable.persistentListOf
@@ -154,7 +153,6 @@ fun aMessagesState(
 fun aRoomMemberModerationState(
     canKick: Boolean = false,
     canBan: Boolean = false,
-
 ) = object : RoomMemberModerationState {
     override val canKick: Boolean = canKick
     override val canBan: Boolean = canBan

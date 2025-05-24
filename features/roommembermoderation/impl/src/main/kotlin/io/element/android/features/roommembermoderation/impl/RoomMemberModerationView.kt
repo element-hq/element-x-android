@@ -327,7 +327,6 @@ internal fun RoomMemberModerationViewPreview(@PreviewParameter(InternalRoomMembe
             RoomMemberModerationView(
                 state = state,
                 onSelectAction = { _, _ ->
-
                 },
             )
         }

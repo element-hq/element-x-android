@@ -35,7 +35,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class RoomMemberModerationPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

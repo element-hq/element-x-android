@@ -9,7 +9,7 @@ package io.element.android.features.roommembermoderation.impl
 
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 
-sealed interface InternalRoomMemberModerationEvents: RoomMemberModerationEvents {
+sealed interface InternalRoomMemberModerationEvents : RoomMemberModerationEvents {
     data class DoKickUser(val reason: String) : InternalRoomMemberModerationEvents
     data class DoBanUser(val reason: String) : InternalRoomMemberModerationEvents
     data object DoUnbanUser : InternalRoomMemberModerationEvents

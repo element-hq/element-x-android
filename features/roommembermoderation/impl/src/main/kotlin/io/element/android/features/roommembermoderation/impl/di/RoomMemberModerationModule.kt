@@ -14,7 +14,6 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.features.roommembermoderation.impl.RoomMemberModerationPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SessionScope
 
 @ContributesTo(RoomScope::class)
 @Module

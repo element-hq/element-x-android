@@ -48,7 +48,6 @@ class RoomMemberModerationPresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
 ) : Presenter<RoomMemberModerationState> {
-
     @Composable
     override fun present(): RoomMemberModerationState {
         val coroutineScope = rememberCoroutineScope()
@@ -147,7 +146,8 @@ class RoomMemberModerationPresenter @Inject constructor(
         return buildList {
             add(ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true))
             // Assume the member is a regular user when it's unknown
-            val canModerateThisUser = (member?.powerLevel ?: 0) < currentUserMemberPowerLevel
+            val targetMemberPowerLevel = member?.powerLevel ?: 0
+            val canModerateThisUser = currentUserMemberPowerLevel > targetMemberPowerLevel
             // Assume the member is joined when it's unknown
             val membership = member?.membership ?: RoomMembershipState.JOIN
             if (canKick) {

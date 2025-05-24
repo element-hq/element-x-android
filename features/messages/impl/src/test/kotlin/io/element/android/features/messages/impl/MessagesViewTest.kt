@@ -67,7 +67,6 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParamsAndResul
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
-import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule

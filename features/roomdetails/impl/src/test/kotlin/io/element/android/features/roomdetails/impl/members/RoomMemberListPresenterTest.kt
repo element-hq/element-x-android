@@ -15,7 +15,6 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembersState
@@ -203,7 +202,7 @@ class RoomMemberListPresenterTest {
 
     @Test
     fun `present - RoomMemberSelected will open the moderation options when target user is not banned`() = runTest {
-        val roomMemberModerationPresenter= Presenter {
+        val roomMemberModerationPresenter = Presenter {
             aRoomMemberModerationState(canBan = true, canKick = true)
         }
         val presenter = createPresenter(
@@ -221,15 +220,6 @@ class RoomMemberListPresenterTest {
             skipItems(1)
             awaitItem().eventSink(RoomMemberListEvents.RoomMemberSelected(aVictor()))
         }
-    }
-}
-
-private class FakeRoomMemberListNavigator : RoomMemberListNavigator {
-    var openRoomMemberDetailsCallCount = 0
-        private set
-
-    override fun openRoomMemberDetails(roomMemberId: UserId) {
-        openRoomMemberDetailsCallCount++
     }
 }
 

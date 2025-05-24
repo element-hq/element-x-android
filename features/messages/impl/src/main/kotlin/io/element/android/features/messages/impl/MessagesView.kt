@@ -209,9 +209,11 @@ fun MessagesView(
                     .consumeWindowInsets(padding),
                 onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
-                onUserDataClick = { hidingKeyboard {
+                onUserDataClick = {
+                    hidingKeyboard {
                    state.eventSink(MessagesEvents.OnUserClicked(it))
-                } },
+                }
+                },
                 onLinkClick = { link, customTab ->
                     if (customTab) {
                         onLinkClick(link.url, true)
