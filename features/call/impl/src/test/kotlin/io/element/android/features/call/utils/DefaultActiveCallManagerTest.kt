@@ -40,11 +40,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
@@ -63,30 +59,28 @@ class DefaultActiveCallManagerTest {
     fun `registerIncomingCall - sets the incoming call as active`() = runTest {
         setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
-        inCancellableScope {
-            val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
 
-            assertThat(manager.activeWakeLock?.isHeld).isFalse()
-            assertThat(manager.activeCall.value).isNull()
+        assertThat(manager.activeWakeLock?.isHeld).isFalse()
+        assertThat(manager.activeCall.value).isNull()
 
-            val callNotificationData = aCallNotificationData()
-            manager.registerIncomingCall(callNotificationData)
+        val callNotificationData = aCallNotificationData()
+        manager.registerIncomingCall(callNotificationData)
 
-            assertThat(manager.activeCall.value).isEqualTo(
-                ActiveCall(
-                    callType = CallType.RoomCall(
-                        sessionId = callNotificationData.sessionId,
-                        roomId = callNotificationData.roomId,
-                    ),
-                    callState = CallState.Ringing(callNotificationData)
-                )
+        assertThat(manager.activeCall.value).isEqualTo(
+            ActiveCall(
+                callType = CallType.RoomCall(
+                    sessionId = callNotificationData.sessionId,
+                    roomId = callNotificationData.roomId,
+                ),
+                callState = CallState.Ringing(callNotificationData)
             )
+        )
 
-            runCurrent()
+        runCurrent()
 
-            assertThat(manager.activeWakeLock?.isHeld).isTrue()
-            verify { notificationManagerCompat.notify(notificationId, any()) }
-        }
+        assertThat(manager.activeWakeLock?.isHeld).isTrue()
+        verify { notificationManagerCompat.notify(notificationId, any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -94,42 +88,38 @@ class DefaultActiveCallManagerTest {
     fun `registerIncomingCall - when there is an already active call adds missed call notification`() = runTest {
         val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, EventId, Unit> { _, _, _ -> }
         val onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda)
-        inCancellableScope {
-            val manager = createActiveCallManager(
-                onMissedCallNotificationHandler = onMissedCallNotificationHandler,
-            )
+        val manager = createActiveCallManager(
+            onMissedCallNotificationHandler = onMissedCallNotificationHandler,
+        )
 
-            // Register existing call
-            val callNotificationData = aCallNotificationData()
-            manager.registerIncomingCall(callNotificationData)
-            val activeCall = manager.activeCall.value
+        // Register existing call
+        val callNotificationData = aCallNotificationData()
+        manager.registerIncomingCall(callNotificationData)
+        val activeCall = manager.activeCall.value
 
-            // Now add a new call
-            manager.registerIncomingCall(aCallNotificationData(roomId = A_ROOM_ID_2))
+        // Now add a new call
+        manager.registerIncomingCall(aCallNotificationData(roomId = A_ROOM_ID_2))
 
-            assertThat(manager.activeCall.value).isEqualTo(activeCall)
-            assertThat((manager.activeCall.value?.callType as? CallType.RoomCall)?.roomId).isNotEqualTo(A_ROOM_ID_2)
+        assertThat(manager.activeCall.value).isEqualTo(activeCall)
+        assertThat((manager.activeCall.value?.callType as? CallType.RoomCall)?.roomId).isNotEqualTo(A_ROOM_ID_2)
 
-            advanceTimeBy(1)
+        advanceTimeBy(1)
 
-            addMissedCallNotificationLambda.assertions()
-                .isCalledOnce()
-                .with(value(A_SESSION_ID), value(A_ROOM_ID_2), value(AN_EVENT_ID))
-        }
+        addMissedCallNotificationLambda.assertions()
+            .isCalledOnce()
+            .with(value(A_SESSION_ID), value(A_ROOM_ID_2), value(AN_EVENT_ID))
     }
 
     @Test
     fun `incomingCallTimedOut - when there isn't an active call does nothing`() = runTest {
         val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, EventId, Unit> { _, _, _ -> }
-        inCancellableScope {
-            val manager = createActiveCallManager(
-                onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda)
-            )
+        val manager = createActiveCallManager(
+            onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda)
+        )
 
-            manager.incomingCallTimedOut(displayMissedCallNotification = true)
+        manager.incomingCallTimedOut(displayMissedCallNotification = true)
 
-            addMissedCallNotificationLambda.assertions().isNeverCalled()
-        }
+        addMissedCallNotificationLambda.assertions().isNeverCalled()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -138,90 +128,80 @@ class DefaultActiveCallManagerTest {
         setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
         val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, EventId, Unit> { _, _, _ -> }
-        inCancellableScope {
-            val manager = createActiveCallManager(
-                onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda),
-                notificationManagerCompat = notificationManagerCompat,
-            )
+        val manager = createActiveCallManager(
+            onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda),
+            notificationManagerCompat = notificationManagerCompat,
+        )
 
-            manager.registerIncomingCall(aCallNotificationData())
-            assertThat(manager.activeCall.value).isNotNull()
-            assertThat(manager.activeWakeLock?.isHeld).isTrue()
+        manager.registerIncomingCall(aCallNotificationData())
+        assertThat(manager.activeCall.value).isNotNull()
+        assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
-            manager.incomingCallTimedOut(displayMissedCallNotification = true)
-            advanceTimeBy(1)
+        manager.incomingCallTimedOut(displayMissedCallNotification = true)
+        advanceTimeBy(1)
 
-            assertThat(manager.activeCall.value).isNull()
-            assertThat(manager.activeWakeLock?.isHeld).isFalse()
-            addMissedCallNotificationLambda.assertions().isCalledOnce()
-            verify { notificationManagerCompat.cancel(notificationId) }
-        }
+        assertThat(manager.activeCall.value).isNull()
+        assertThat(manager.activeWakeLock?.isHeld).isFalse()
+        addMissedCallNotificationLambda.assertions().isCalledOnce()
+        verify { notificationManagerCompat.cancel(notificationId) }
     }
 
     @Test
     fun `hungUpCall - removes existing call if the CallType matches`() = runTest {
         setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
-        // Create a cancellable coroutine scope to cancel the test when needed
-        inCancellableScope {
-            val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
 
-            val notificationData = aCallNotificationData()
-            manager.registerIncomingCall(notificationData)
-            assertThat(manager.activeCall.value).isNotNull()
-            assertThat(manager.activeWakeLock?.isHeld).isTrue()
+        val notificationData = aCallNotificationData()
+        manager.registerIncomingCall(notificationData)
+        assertThat(manager.activeCall.value).isNotNull()
+        assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
-            manager.hungUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
-            assertThat(manager.activeCall.value).isNull()
-            assertThat(manager.activeWakeLock?.isHeld).isFalse()
+        manager.hungUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
+        assertThat(manager.activeCall.value).isNull()
+        assertThat(manager.activeWakeLock?.isHeld).isFalse()
 
-            verify { notificationManagerCompat.cancel(notificationId) }
-        }
+        verify { notificationManagerCompat.cancel(notificationId) }
     }
 
     @Test
     fun `hungUpCall - does nothing if the CallType doesn't match`() = runTest {
         setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
-        // Create a cancellable coroutine scope to cancel the test when needed
-        inCancellableScope {
-            val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
 
-            manager.registerIncomingCall(aCallNotificationData())
-            assertThat(manager.activeCall.value).isNotNull()
-            assertThat(manager.activeWakeLock?.isHeld).isTrue()
+        manager.registerIncomingCall(aCallNotificationData())
+        assertThat(manager.activeCall.value).isNotNull()
+        assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
-            manager.hungUpCall(CallType.ExternalUrl("https://example.com"))
-            assertThat(manager.activeCall.value).isNotNull()
-            assertThat(manager.activeWakeLock?.isHeld).isTrue()
+        manager.hungUpCall(CallType.ExternalUrl("https://example.com"))
+        assertThat(manager.activeCall.value).isNotNull()
+        assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
-            verify(exactly = 0) { notificationManagerCompat.cancel(notificationId) }
-        }
+        verify(exactly = 0) { notificationManagerCompat.cancel(notificationId) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `joinedCall - register an ongoing call and tries sending the call notify event`() = runTest {
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
-        inCancellableScope {
-            val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
-            assertThat(manager.activeCall.value).isNull()
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
+        assertThat(manager.activeCall.value).isNull()
 
-            manager.joinedCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID))
-            assertThat(manager.activeCall.value).isEqualTo(
-                ActiveCall(
-                    callType = CallType.RoomCall(
-                        sessionId = A_SESSION_ID,
-                        roomId = A_ROOM_ID,
-                    ),
-                    callState = CallState.InCall,
-                )
+        manager.joinedCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID))
+        assertThat(manager.activeCall.value).isEqualTo(
+            ActiveCall(
+                callType = CallType.RoomCall(
+                    sessionId = A_SESSION_ID,
+                    roomId = A_ROOM_ID,
+                ),
+                callState = CallState.InCall,
             )
+        )
 
-            runCurrent()
+        runCurrent()
 
-            verify { notificationManagerCompat.cancel(notificationId) }
-        }
+        verify { notificationManagerCompat.cancel(notificationId) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -233,22 +213,19 @@ class DefaultActiveCallManagerTest {
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
-        // Create a cancellable coroutine scope to cancel the test when needed
-        inCancellableScope {
-            val matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(client) })
-            val manager = createActiveCallManager(matrixClientProvider = matrixClientProvider)
+        val matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(client) })
+        val manager = createActiveCallManager(matrixClientProvider = matrixClientProvider)
 
-            manager.registerIncomingCall(aCallNotificationData())
+        manager.registerIncomingCall(aCallNotificationData())
 
-            // Call is active (the other user join the call)
-            room.givenRoomInfo(aRoomInfo(hasRoomCall = true))
-            advanceTimeBy(1)
-            // Call is cancelled (the other user left the call)
-            room.givenRoomInfo(aRoomInfo(hasRoomCall = false))
-            advanceTimeBy(1)
+        // Call is active (the other user join the call)
+        room.givenRoomInfo(aRoomInfo(hasRoomCall = true))
+        advanceTimeBy(1)
+        // Call is cancelled (the other user left the call)
+        room.givenRoomInfo(aRoomInfo(hasRoomCall = false))
+        advanceTimeBy(1)
 
-            assertThat(manager.activeCall.value).isNull()
-        }
+        assertThat(manager.activeCall.value).isNull()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -260,44 +237,34 @@ class DefaultActiveCallManagerTest {
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
-        // Create a cancellable coroutine scope to cancel the test when needed
-        inCancellableScope {
-            val matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.failure(IllegalStateException("Matrix client not found")) })
-            val manager = createActiveCallManager(matrixClientProvider = matrixClientProvider)
+        val matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.failure(IllegalStateException("Matrix client not found")) })
+        val manager = createActiveCallManager(matrixClientProvider = matrixClientProvider)
 
-            // No matrix client
+        // No matrix client
 
-            manager.registerIncomingCall(aCallNotificationData())
+        manager.registerIncomingCall(aCallNotificationData())
 
-            room.givenRoomInfo(aRoomInfo(hasRoomCall = true))
-            advanceTimeBy(1)
-            room.givenRoomInfo(aRoomInfo(hasRoomCall = false))
-            advanceTimeBy(1)
+        room.givenRoomInfo(aRoomInfo(hasRoomCall = true))
+        advanceTimeBy(1)
+        room.givenRoomInfo(aRoomInfo(hasRoomCall = false))
+        advanceTimeBy(1)
 
-            // The call should still be active
-            assertThat(manager.activeCall.value).isNotNull()
+        // The call should still be active
+        assertThat(manager.activeCall.value).isNotNull()
 
-            // No room
-            client.givenGetRoomResult(A_ROOM_ID, null)
-            matrixClientProvider.getClient = { Result.success(client) }
+        // No room
+        client.givenGetRoomResult(A_ROOM_ID, null)
+        matrixClientProvider.getClient = { Result.success(client) }
 
-            manager.registerIncomingCall(aCallNotificationData())
+        manager.registerIncomingCall(aCallNotificationData())
 
-            room.givenRoomInfo(aRoomInfo(hasRoomCall = true))
-            advanceTimeBy(1)
-            room.givenRoomInfo(aRoomInfo(hasRoomCall = false))
-            advanceTimeBy(1)
+        room.givenRoomInfo(aRoomInfo(hasRoomCall = true))
+        advanceTimeBy(1)
+        room.givenRoomInfo(aRoomInfo(hasRoomCall = false))
+        advanceTimeBy(1)
 
-            // The call should still be active
-            assertThat(manager.activeCall.value).isNotNull()
-        }
-    }
-
-    private fun TestScope.inCancellableScope(block: suspend CoroutineScope.() -> Unit) {
-        launch(SupervisorJob()) {
-            block()
-            cancel()
-        }
+        // The call should still be active
+        assertThat(manager.activeCall.value).isNotNull()
     }
 
     private fun setupShadowPowerManager() {
@@ -306,14 +273,13 @@ class DefaultActiveCallManagerTest {
         }
     }
 
-    private fun CoroutineScope.createActiveCallManager(
+    private fun TestScope.createActiveCallManager(
         matrixClientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
         onMissedCallNotificationHandler: FakeOnMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(),
         notificationManagerCompat: NotificationManagerCompat = mockk(relaxed = true),
-        coroutineScope: CoroutineScope = this,
     ) = DefaultActiveCallManager(
         context = InstrumentationRegistry.getInstrumentation().targetContext,
-        coroutineScope = coroutineScope,
+        coroutineScope = backgroundScope,
         onMissedCallNotificationHandler = onMissedCallNotificationHandler,
         ringingCallNotificationCreator = RingingCallNotificationCreator(
             context = InstrumentationRegistry.getInstrumentation().targetContext,

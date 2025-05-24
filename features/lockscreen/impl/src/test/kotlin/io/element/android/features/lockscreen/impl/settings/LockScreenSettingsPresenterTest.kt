@@ -20,14 +20,14 @@ import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.test
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class LockScreenSettingsPresenterTest {
     @Test
     fun `present - remove pin option is hidden when mandatory`() = runTest {
-        val presenter = createLockScreenSettingsPresenter(this, lockScreenConfig = aLockScreenConfig(isPinMandatory = true))
+        val presenter = createLockScreenSettingsPresenter(lockScreenConfig = aLockScreenConfig(isPinMandatory = true))
         presenter.test {
             awaitItem().also { state ->
                 assertThat(state.showRemovePinOption).isFalse()
@@ -37,7 +37,7 @@ class LockScreenSettingsPresenterTest {
 
     @Test
     fun `present - remove pin flow`() = runTest {
-        val presenter = createLockScreenSettingsPresenter(this)
+        val presenter = createLockScreenSettingsPresenter()
         presenter.test {
             consumeItemsUntilPredicate { state ->
                 state.showRemovePinOption
@@ -71,7 +71,6 @@ class LockScreenSettingsPresenterTest {
             isDeviceSecured = true,
         )
         val presenter = createLockScreenSettingsPresenter(
-            coroutineScope = this,
             biometricAuthenticatorManager = fakeBiometricAuthenticatorManager
         )
         presenter.test {
@@ -88,7 +87,6 @@ class LockScreenSettingsPresenterTest {
             }
         )
         val presenter = createLockScreenSettingsPresenter(
-            coroutineScope = this,
             biometricAuthenticatorManager = fakeBiometricAuthenticatorManager
         )
         presenter.test {
@@ -110,7 +108,6 @@ class LockScreenSettingsPresenterTest {
             }
         )
         val presenter = createLockScreenSettingsPresenter(
-            coroutineScope = this,
             biometricAuthenticatorManager = fakeBiometricAuthenticatorManager
         )
         presenter.test {
@@ -130,7 +127,6 @@ class LockScreenSettingsPresenterTest {
         )
         val lockScreenStore = InMemoryLockScreenStore()
         val presenter = createLockScreenSettingsPresenter(
-            coroutineScope = this,
             lockScreenStore = lockScreenStore,
             biometricAuthenticatorManager = fakeBiometricAuthenticatorManager
         )
@@ -148,8 +144,7 @@ class LockScreenSettingsPresenterTest {
         }
     }
 
-    private suspend fun createLockScreenSettingsPresenter(
-        coroutineScope: CoroutineScope,
+    private suspend fun TestScope.createLockScreenSettingsPresenter(
         lockScreenConfig: LockScreenConfig = aLockScreenConfig(),
         biometricAuthenticatorManager: BiometricAuthenticatorManager = FakeBiometricAuthenticatorManager(),
         lockScreenStore: LockScreenStore = InMemoryLockScreenStore(),
@@ -160,7 +155,7 @@ class LockScreenSettingsPresenterTest {
         return LockScreenSettingsPresenter(
             lockScreenStore = lockScreenStore,
             pinCodeManager = pinCodeManager,
-            coroutineScope = coroutineScope,
+            coroutineScope = this,
             lockScreenConfig = lockScreenConfig,
             biometricAuthenticatorManager = biometricAuthenticatorManager,
         )

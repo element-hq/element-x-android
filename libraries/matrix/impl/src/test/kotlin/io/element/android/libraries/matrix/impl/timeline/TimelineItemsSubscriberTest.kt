@@ -17,7 +17,6 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineI
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +37,6 @@ class TimelineItemsSubscriberTest {
             MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
         val timeline = FakeRustTimeline()
         val timelineItemsSubscriber = createTimelineItemsSubscriber(
-            coroutineScope = backgroundScope,
             timeline = timeline,
             timelineItems = timelineItems,
         )
@@ -59,7 +57,6 @@ class TimelineItemsSubscriberTest {
             MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
         val timeline = FakeRustTimeline()
         val timelineItemsSubscriber = createTimelineItemsSubscriber(
-            coroutineScope = backgroundScope,
             timeline = timeline,
             timelineItems = timelineItems,
         )
@@ -81,7 +78,6 @@ class TimelineItemsSubscriberTest {
         val timeline = FakeRustTimeline()
         val onNewSyncedEventRecorder = lambdaRecorder<Unit> { }
         val timelineItemsSubscriber = createTimelineItemsSubscriber(
-            coroutineScope = backgroundScope,
             timeline = timeline,
             timelineItems = timelineItems,
             onNewSyncedEvent = onNewSyncedEventRecorder,
@@ -109,9 +105,7 @@ class TimelineItemsSubscriberTest {
 
     @Test
     fun `multiple subscriptions does not have side effect`() = runTest {
-        val timelineItemsSubscriber = createTimelineItemsSubscriber(
-            coroutineScope = backgroundScope,
-        )
+        val timelineItemsSubscriber = createTimelineItemsSubscriber()
         timelineItemsSubscriber.subscribeIfNeeded()
         timelineItemsSubscriber.subscribeIfNeeded()
         timelineItemsSubscriber.unsubscribeIfNeeded()
@@ -120,7 +114,6 @@ class TimelineItemsSubscriberTest {
 }
 
 private fun TestScope.createTimelineItemsSubscriber(
-    coroutineScope: CoroutineScope,
     timeline: Timeline = FakeRustTimeline(),
     timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> = MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE),
     initLatch: CompletableDeferred<Unit> = CompletableDeferred(),
@@ -128,7 +121,7 @@ private fun TestScope.createTimelineItemsSubscriber(
     onNewSyncedEvent: () -> Unit = { lambdaError() },
 ): TimelineItemsSubscriber {
     return TimelineItemsSubscriber(
-        timelineCoroutineScope = coroutineScope,
+        timelineCoroutineScope = backgroundScope,
         dispatcher = StandardTestDispatcher(testScheduler),
         timeline = timeline,
         timelineDiffProcessor = createMatrixTimelineDiffProcessor(timelineItems),

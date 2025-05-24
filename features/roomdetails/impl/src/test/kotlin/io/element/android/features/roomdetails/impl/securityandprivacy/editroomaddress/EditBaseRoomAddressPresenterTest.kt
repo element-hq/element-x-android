@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
@@ -289,7 +290,14 @@ class EditBaseRoomAddressPresenterTest {
         val navigator = FakeSecurityAndPrivacyNavigator(
             closeEditRoomAddressLambda = closeEditAddressLambda
         )
-        val presenter = createEditRoomAddressPresenter(navigator = navigator)
+        val presenter = createEditRoomAddressPresenter(
+            navigator = navigator,
+            room = FakeJoinedRoom(
+                publishRoomAliasInRoomDirectoryResult = {
+                    Result.failure(AN_EXCEPTION)
+                },
+            )
+        )
         presenter.test {
             with(awaitItem()) {
                 eventSink(EditRoomAddressEvents.RoomAddressChanged("valid"))
@@ -313,7 +321,13 @@ class EditBaseRoomAddressPresenterTest {
 
     @Test
     fun `present - dismiss error`() = runTest {
-        val presenter = createEditRoomAddressPresenter()
+        val presenter = createEditRoomAddressPresenter(
+            room = FakeJoinedRoom(
+                publishRoomAliasInRoomDirectoryResult = {
+                    Result.failure(AN_EXCEPTION)
+                },
+            )
+        )
         presenter.test {
             with(awaitItem()) {
                 eventSink(EditRoomAddressEvents.Save)

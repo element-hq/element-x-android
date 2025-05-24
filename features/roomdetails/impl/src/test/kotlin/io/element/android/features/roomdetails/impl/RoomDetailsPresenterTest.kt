@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
@@ -241,6 +242,8 @@ class RoomDetailsPresenterTest {
     fun `present - initial state when user can not invite others to room`() = runTest {
         val room = aJoinedRoom(
             canInviteResult = { Result.success(false) },
+            canKickResult = { Result.success(false) },
+            canBanResult = { Result.success(false) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
         )
@@ -277,6 +280,8 @@ class RoomDetailsPresenterTest {
                     else -> Result.failure(Throwable("Whelp"))
                 }
             },
+            canBanResult = { Result.success(false) },
+            canKickResult = { Result.success(false) },
             canInviteResult = { Result.success(false) },
             canUserJoinCallResult = { Result.success(true) },
         )
@@ -304,6 +309,8 @@ class RoomDetailsPresenterTest {
                     else -> Result.failure(Throwable("Whelp"))
                 }
             },
+            canKickResult = { Result.success(false) },
+            canBanResult = { Result.success(false) },
             canInviteResult = { Result.success(false) },
             canUserJoinCallResult = { Result.success(true) },
             getUpdatedMemberResult = { userId ->
@@ -353,6 +360,8 @@ class RoomDetailsPresenterTest {
                     else -> Result.failure(Throwable("Whelp"))
                 }
             },
+            userDisplayNameResult = { Result.success(A_USER_NAME) },
+            userAvatarUrlResult = { Result.success(AN_AVATAR_URL) },
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             getUpdatedMemberResult = { userId ->
@@ -397,6 +406,12 @@ class RoomDetailsPresenterTest {
                     else -> Result.failure(Throwable("Whelp"))
                 }
             },
+            canKickResult = {
+                Result.success(false)
+            },
+            canBanResult = {
+                Result.success(false)
+            },
             canInviteResult = {
                 Result.success(false)
             },
@@ -424,6 +439,12 @@ class RoomDetailsPresenterTest {
                     else -> Result.failure(Throwable("Whelp"))
                 }
             },
+            canBanResult = {
+                Result.success(false)
+            },
+            canKickResult = {
+                Result.success(false)
+            },
             canInviteResult = {
                 Result.success(false)
             },
@@ -450,6 +471,12 @@ class RoomDetailsPresenterTest {
                     else -> Result.failure(Throwable("Whelp"))
                 }
             },
+            canKickResult = {
+                Result.success(false)
+            },
+            canBanResult = {
+                Result.success(false)
+            },
             canInviteResult = {
                 Result.success(false)
             },
@@ -475,6 +502,12 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_NAME -> Result.success(true)
                     else -> Result.failure(Throwable("Whelp"))
                 }
+            },
+            canKickResult = {
+                Result.success(false)
+            },
+            canBanResult = {
+                Result.success(false)
             },
             canInviteResult = {
                 Result.success(false)
