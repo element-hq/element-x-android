@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.notification
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
@@ -25,6 +26,7 @@ class NotificationMapper(
     private val notificationContentMapper = NotificationContentMapper()
 
     fun map(
+        sessionId: SessionId,
         eventId: EventId,
         roomId: RoomId,
         notificationItem: NotificationItem
@@ -35,6 +37,7 @@ class NotificationMapper(
                 activeMembersCount = item.roomInfo.joinedMembersCount.toInt(),
             )
             NotificationData(
+                sessionId = sessionId,
                 eventId = eventId,
                 // FIXME once the `NotificationItem` in the SDK returns the thread id
                 threadId = null,

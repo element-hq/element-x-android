@@ -159,7 +159,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             roomIsDm = room.isDm(),
             outGoingMessage = true,
         )
-        onNotifiableEventReceived.onNotifiableEventReceived(notifiableMessageEvent)
+        onNotifiableEventReceived.onNotifiableEventsReceived(listOf(notifiableMessageEvent))
 
         if (threadId != null && replyToEventId != null) {
             room.liveTimeline.replyMessage(
@@ -177,9 +177,11 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             )
         }.onFailure {
             Timber.e(it, "Failed to send smart reply message")
-            onNotifiableEventReceived.onNotifiableEventReceived(
-                notifiableMessageEvent.copy(
-                    outGoingMessageFailed = true
+            onNotifiableEventReceived.onNotifiableEventsReceived(
+                listOf(
+                    notifiableMessageEvent.copy(
+                        outGoingMessageFailed = true
+                    )
                 )
             )
         }

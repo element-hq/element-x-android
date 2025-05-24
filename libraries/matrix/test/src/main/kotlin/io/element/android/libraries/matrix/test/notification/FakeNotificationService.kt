@@ -13,16 +13,13 @@ import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
 
 class FakeNotificationService : NotificationService {
-    private var getNotificationResult: Result<NotificationData?> = Result.success(null)
+    private var getNotificationsResult: Result<Map<EventId, NotificationData>> = Result.success(emptyMap())
 
-    fun givenGetNotificationResult(result: Result<NotificationData?>) {
-        getNotificationResult = result
+    fun givenGetNotificationsResult(result: Result<Map<EventId, NotificationData>>) {
+        getNotificationsResult = result
     }
 
-    override suspend fun getNotification(
-        roomId: RoomId,
-        eventId: EventId,
-    ): Result<NotificationData?> {
-        return getNotificationResult
+    override suspend fun getNotifications(ids: Map<RoomId, List<EventId>>): Result<Map<EventId, NotificationData>> {
+        return getNotificationsResult
     }
 }

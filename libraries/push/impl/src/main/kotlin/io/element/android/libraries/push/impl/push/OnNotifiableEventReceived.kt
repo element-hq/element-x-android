@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 interface OnNotifiableEventReceived {
-    fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent)
+    fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>)
 }
 
 @ContributesBinding(AppScope::class)
@@ -26,12 +26,10 @@ class DefaultOnNotifiableEventReceived @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
 ) : OnNotifiableEventReceived {
-    override fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
+    override fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>) {
         coroutineScope.launch {
-            launch { syncOnNotifiableEvent(notifiableEvent) }
-            if (notifiableEvent !is NotifiableRingingCallEvent) {
-                defaultNotificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
-            }
+            launch { syncOnNotifiableEvent(notifiableEvents) }
+            defaultNotificationDrawerManager.onNotifiableEventsReceived(notifiableEvents.filter { it !is NotifiableRingingCallEvent })
         }
     }
 }
