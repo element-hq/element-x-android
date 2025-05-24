@@ -37,6 +37,7 @@ dependencies {
     implementation(projects.libraries.roomselect.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.testtags)
+    implementation(projects.services.appnavstate.api)
     api(libs.statemachine)
     api(projects.features.share.api)
 

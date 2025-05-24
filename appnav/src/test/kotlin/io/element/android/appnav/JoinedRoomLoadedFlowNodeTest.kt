@@ -24,16 +24,18 @@ import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.childNode
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class JoinBaseRoomLoadedFlowNodeTest {
+class JoinedRoomLoadedFlowNodeTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -100,6 +102,7 @@ class JoinBaseRoomLoadedFlowNodeTest {
         plugins: List<Plugin>,
         messagesEntryPoint: MessagesEntryPoint = FakeMessagesEntryPoint(),
         roomDetailsEntryPoint: RoomDetailsEntryPoint = FakeRoomDetailsEntryPoint(),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
         coroutineScope: CoroutineScope,
     ) = JoinedRoomLoadedFlowNode(
         buildContext = BuildContext.root(savedStateMap = null),
@@ -110,6 +113,7 @@ class JoinBaseRoomLoadedFlowNodeTest {
         appCoroutineScope = coroutineScope,
         roomComponentFactory = FakeRoomComponentFactory(),
         matrixClient = FakeMatrixClient(),
+        activeRoomsHolder = activeRoomsHolder,
     )
 
     @Test
@@ -153,5 +157,56 @@ class JoinBaseRoomLoadedFlowNodeTest {
         roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.RoomDetails, Lifecycle.State.CREATED)
         val roomDetailsNode = roomFlowNode.childNode(JoinedRoomLoadedFlowNode.NavTarget.RoomDetails)!!
         assertThat(roomDetailsNode.id).isEqualTo(fakeRoomDetailsEntryPoint.nodeId)
+    }
+
+    @Test
+    fun `the ActiveRoomsHolder will be updated with the loaded room on create`() = runTest {
+        // GIVEN
+        val room = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {}))
+        val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
+        val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
+        val activeRoomsHolder = ActiveRoomsHolder()
+        val roomFlowNode = createJoinedRoomLoadedFlowNode(
+            plugins = listOf(inputs),
+            messagesEntryPoint = fakeMessagesEntryPoint,
+            roomDetailsEntryPoint = fakeRoomDetailsEntryPoint,
+            coroutineScope = this,
+            activeRoomsHolder = activeRoomsHolder,
+        )
+
+        assertThat(activeRoomsHolder.getActiveRoom(A_SESSION_ID)).isNull()
+        val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
+        // WHEN
+        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.Messages(null), Lifecycle.State.CREATED)
+        // THEN
+        assertThat(activeRoomsHolder.getActiveRoom(A_SESSION_ID)).isNotNull()
+    }
+
+    @Test
+    fun `the ActiveRoomsHolder will be removed on destroy`() = runTest {
+        // GIVEN
+        val room = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {}))
+        val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
+        val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
+        val activeRoomsHolder = ActiveRoomsHolder().apply {
+            addRoom(room)
+        }
+        val roomFlowNode = createJoinedRoomLoadedFlowNode(
+            plugins = listOf(inputs),
+            messagesEntryPoint = fakeMessagesEntryPoint,
+            roomDetailsEntryPoint = fakeRoomDetailsEntryPoint,
+            coroutineScope = this,
+            activeRoomsHolder = activeRoomsHolder,
+        )
+        val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
+        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.Messages(null), Lifecycle.State.CREATED)
+        assertThat(activeRoomsHolder.getActiveRoom(A_SESSION_ID)).isNotNull()
+        // WHEN
+        roomFlowNode.updateLifecycleState(Lifecycle.State.DESTROYED)
+        // THEN
+        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.Messages(null), Lifecycle.State.DESTROYED)
+        assertThat(activeRoomsHolder.getActiveRoom(A_SESSION_ID)).isNull()
     }
 }

@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -199,7 +200,8 @@ class SyncOnNotifiableEventTest {
         isSyncOnPushEnabled: Boolean = true,
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = true,
-        )
+        ),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ): SyncOnNotifiableEvent {
         val featureFlagService = FakeFeatureFlagService(
             initialState = mapOf(
@@ -212,6 +214,7 @@ class SyncOnNotifiableEventTest {
             featureFlagService = featureFlagService,
             appForegroundStateService = appForegroundStateService,
             dispatchers = testCoroutineDispatchers(),
+            activeRoomsHolder = activeRoomsHolder,
         )
     }
 }

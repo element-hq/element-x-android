@@ -15,11 +15,13 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.widget.FakeCallWidgetSettingsProvider
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -78,6 +80,23 @@ class DefaultCallWidgetProviderTest {
     }
 
     @Test
+    fun `getWidget - reuses the active room if possible`() = runTest {
+        val client = FakeMatrixClient().apply {
+            // No room from the client
+            givenGetRoomResult(A_ROOM_ID, null)
+        }
+        val activeRoomsHolder = ActiveRoomsHolder().apply {
+            // A current active room with the same room id
+            addRoom(FakeJoinedRoom(baseRoom = FakeBaseRoom(roomId = A_ROOM_ID)))
+        }
+        val provider = createProvider(
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+            activeRoomsHolder = activeRoomsHolder
+        )
+        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").isFailure).isTrue()
+    }
+
+    @Test
     fun `getWidget - will use a custom base url if it exists`() = runTest {
         val room = FakeJoinedRoom(
             generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
@@ -104,9 +123,11 @@ class DefaultCallWidgetProviderTest {
         matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         callWidgetSettingsProvider: CallWidgetSettingsProvider = FakeCallWidgetSettingsProvider(),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ) = DefaultCallWidgetProvider(
         matrixClientsProvider = matrixClientProvider,
         appPreferencesStore = appPreferencesStore,
         callWidgetSettingsProvider = callWidgetSettingsProvider,
+        activeRoomsHolder = activeRoomsHolder,
     )
 }
