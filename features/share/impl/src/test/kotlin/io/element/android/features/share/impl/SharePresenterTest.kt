@@ -23,7 +23,8 @@ import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
@@ -90,11 +91,13 @@ class SharePresenterTest {
 
     @Test
     fun `present - send text ok`() = runTest {
-        val matrixRoom = FakeMatrixRoom(
-            sendMessageResult = { _, _, _ -> Result.success(Unit) },
+        val joinedRoom = FakeJoinedRoom(
+            liveTimeline = FakeTimeline().apply {
+                sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+            },
         )
         val matrixClient = FakeMatrixClient().apply {
-            givenGetRoomResult(A_ROOM_ID, matrixRoom)
+            givenGetRoomResult(A_ROOM_ID, joinedRoom)
         }
         val presenter = createSharePresenter(
             matrixClient = matrixClient,
@@ -121,11 +124,13 @@ class SharePresenterTest {
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
-        val matrixRoom = FakeMatrixRoom(
-            sendFileResult = sendFileResult,
+        val joinedRoom = FakeJoinedRoom(
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
         )
         val matrixClient = FakeMatrixClient().apply {
-            givenGetRoomResult(A_ROOM_ID, matrixRoom)
+            givenGetRoomResult(A_ROOM_ID, joinedRoom)
         }
         val presenter = createSharePresenter(
             matrixClient = matrixClient,

@@ -11,8 +11,9 @@ import android.net.Uri
 import io.element.android.libraries.core.extensions.flatMapCatching
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 class MediaSender @Inject constructor(
     private val preProcessor: MediaPreProcessor,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) {
     private val ongoingUploadJobs = ConcurrentHashMap<Job.Key, MediaUploadHandler>()
@@ -49,7 +50,7 @@ class MediaSender @Inject constructor(
         progressCallback: ProgressCallback?,
         replyParameters: ReplyParameters?,
     ): Result<Unit> {
-        return room.sendMedia(
+        return room.liveTimeline.sendMedia(
             uploadInfo = mediaUploadInfo,
             progressCallback = progressCallback,
             caption = caption,
@@ -76,7 +77,7 @@ class MediaSender @Inject constructor(
                 compressIfPossible = compressIfPossible,
             )
             .flatMapCatching { info ->
-                room.sendMedia(
+                room.liveTimeline.sendMedia(
                     uploadInfo = info,
                     progressCallback = progressCallback,
                     caption = caption,
@@ -108,7 +109,7 @@ class MediaSender @Inject constructor(
                     audioInfo = audioInfo,
                     waveform = waveForm,
                 )
-                room.sendMedia(
+                room.liveTimeline.sendMedia(
                     uploadInfo = newInfo,
                     progressCallback = progressCallback,
                     caption = null,
@@ -130,7 +131,7 @@ class MediaSender @Inject constructor(
             ongoingUploadJobs.remove(Job)
         }
 
-    private suspend fun MatrixRoom.sendMedia(
+    private suspend fun Timeline.sendMedia(
         uploadInfo: MediaUploadInfo,
         progressCallback: ProgressCallback?,
         caption: String?,

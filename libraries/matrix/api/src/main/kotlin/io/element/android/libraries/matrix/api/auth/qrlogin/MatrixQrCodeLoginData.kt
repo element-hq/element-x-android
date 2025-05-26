@@ -7,4 +7,6 @@
 
 package io.element.android.libraries.matrix.api.auth.qrlogin
 
-interface MatrixQrCodeLoginData
+interface MatrixQrCodeLoginData {
+    fun serverName(): String?
+}

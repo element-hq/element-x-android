@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Du vil ikke se noen meldinger eller rominvitasjoner fra denne brukeren"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Blokker bruker"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Rapporter dette rommet til din kontoleverandør."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Beskriv årsaken for å rapportere…"</string>
+  <string name="screen_decline_and_block_title">"Avslå og blokker"</string>
   <string name="screen_invites_decline_chat_message">"Er du sikker på at du vil takke nei til invitasjonen til å bli med i %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Avvis invitasjon"</string>
   <string name="screen_invites_decline_direct_chat_message">"Er du sikker på at du vil avslå denne private chatten med %1$s?"</string>

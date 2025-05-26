@@ -12,7 +12,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
@@ -40,7 +40,7 @@ interface MediaGalleryDataSource {
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
 class TimelineMediaGalleryDataSource @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val mediaTimeline: MediaTimeline,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
     private val mediaItemsPostProcessor: MediaItemsPostProcessor,

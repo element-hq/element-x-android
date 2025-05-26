@@ -10,12 +10,12 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import io.element.android.compound.theme.ElementTheme
 
 @Composable
 fun Scaffold(
@@ -25,7 +25,7 @@ fun Scaffold(
     snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
-    containerColor: Color = MaterialTheme.colorScheme.background,
+    containerColor: Color = ElementTheme.colors.bgCanvasDefault,
     contentColor: Color = contentColorFor(containerColor),
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit

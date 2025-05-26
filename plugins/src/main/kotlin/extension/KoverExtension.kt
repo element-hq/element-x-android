@@ -175,7 +175,7 @@ fun Project.setupKover() {
                         "io.element.android.libraries.maplibre.compose.SaveableCameraPositionState",
                         "io.element.android.libraries.maplibre.compose.SymbolState",
                         "io.element.android.libraries.matrix.api.room.RoomMembershipState",
-                        "io.element.android.libraries.matrix.api.room.MatrixRoomMembersState",
+                        "io.element.android.libraries.matrix.api.room.RoomMembersState",
                         "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*",
                         "io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState*",
                         "io.element.android.libraries.mediaviewer.impl.local.pdf.PdfViewerState",

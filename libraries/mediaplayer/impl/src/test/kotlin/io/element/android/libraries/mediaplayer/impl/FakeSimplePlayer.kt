@@ -16,6 +16,7 @@ class FakeSimplePlayer(
     private val getCurrentMediaItemLambda: () -> MediaItem? = { lambdaError() },
     private val prepareLambda: () -> Unit = { lambdaError() },
     private val playLambda: () -> Unit = { lambdaError() },
+    private val isPlayingLambda: () -> Boolean = { lambdaError() },
     private val pauseLambda: () -> Unit = { lambdaError() },
     private val seekToLambda: (Long) -> Unit = { lambdaError() },
     private val releaseLambda: () -> Unit = { lambdaError() },
@@ -40,6 +41,7 @@ class FakeSimplePlayer(
     override fun getCurrentMediaItem(): MediaItem? = getCurrentMediaItemLambda()
     override fun prepare() = prepareLambda()
     override fun play() = playLambda()
+    override fun isPlaying() = isPlayingLambda()
     override fun pause() = pauseLambda()
     override fun seekTo(positionMs: Long) = seekToLambda(positionMs)
     override fun release() = releaseLambda()

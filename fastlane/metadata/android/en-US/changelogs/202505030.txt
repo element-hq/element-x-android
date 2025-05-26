@@ -1,0 +1,2 @@
+Main changes in this version: fix issue with Element Call and to-device events.
+Full changelog: https://github.com/element-hq/element-x-android/releases

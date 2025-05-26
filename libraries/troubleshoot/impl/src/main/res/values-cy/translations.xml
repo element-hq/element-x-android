@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"Hanes gwthio"</string>
+  <string name="troubleshoot_notifications_screen_action">"Rhedeg profion"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Rhedeg profion eto"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Methodd rhai profion. Gwiriwch y manylion."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Rhedwch y profion i ganfod unrhyw broblem yn eich ffurfweddiad a allai wneud i hysbysiadau beidio ag ymddwyn yn ôl y disgwyl."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Ceisio trwsio"</string>
+  <string name="troubleshoot_notifications_screen_success">"Pasiwyd pob prawf yn llwyddiannus."</string>
+  <string name="troubleshoot_notifications_screen_title">"Hysbysiadau datrys problemau"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Mae rhai profion angen eich sylw. Gwiriwch y manylion."</string>
+</resources>

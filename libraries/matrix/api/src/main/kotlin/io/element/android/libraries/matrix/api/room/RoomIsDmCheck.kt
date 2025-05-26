@@ -21,11 +21,11 @@ fun isDm(isDirect: Boolean, activeMembersCount: Int): Boolean {
 }
 
 /**
- * Returns whether the [MatrixRoom] is a DM, with an updated state from the latest [MatrixRoomInfo].
+ * Returns whether the [BaseRoom] is a DM, with an updated state from the latest [RoomInfo].
  */
-suspend fun MatrixRoom.isDm() = roomInfoFlow.first().isDm
+suspend fun BaseRoom.isDm() = roomInfoFlow.first().isDm
 
 /**
- * Returns whether the [MatrixRoomInfo] is from a DM.
+ * Returns whether the [RoomInfo] is from a DM.
  */
-val MatrixRoomInfo.isDm get() = isDm(isDirect, activeMembersCount.toInt())
+val RoomInfo.isDm get() = isDm(isDirect, activeMembersCount.toInt())

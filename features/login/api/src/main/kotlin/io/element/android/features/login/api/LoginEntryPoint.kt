@@ -7,28 +7,26 @@
 
 package io.element.android.features.login.api
 
-import android.os.Parcelable
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
-import kotlinx.parcelize.Parcelize
 
 interface LoginEntryPoint : FeatureEntryPoint {
     data class Params(
-        val flowType: LoginFlowType
+        val accountProvider: String?,
+        val loginHint: String?,
     )
+
+    interface Callback : Plugin {
+        fun onReportProblem()
+    }
 
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface NodeBuilder {
         fun params(params: Params): NodeBuilder
+        fun callback(callback: Callback): NodeBuilder
         fun build(): Node
     }
-}
-
-@Parcelize
-enum class LoginFlowType : Parcelable {
-    SIGN_IN_MANUAL,
-    SIGN_IN_QR_CODE,
-    SIGN_UP
 }

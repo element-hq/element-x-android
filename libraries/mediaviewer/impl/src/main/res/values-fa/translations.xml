@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_list_mode_files">"پرونده‌ها"</string>
+  <string name="screen_media_browser_list_mode_media">"رسانه"</string>
+  <string name="screen_media_details_file_format">"قالب پرونده"</string>
+  <string name="screen_media_details_filename">"نام پرونده"</string>
+  <string name="screen_media_details_uploaded_by">"بارگذاشته به دست"</string>
+  <string name="screen_media_details_uploaded_on">"بارگذاشته در"</string>
+</resources>

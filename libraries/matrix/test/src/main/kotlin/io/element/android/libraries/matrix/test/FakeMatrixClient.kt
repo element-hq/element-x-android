@@ -22,9 +22,10 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -77,7 +78,7 @@ class FakeMatrixClient(
             Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
         )
     },
-    private val getRoomPreviewResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
+    private val getNotJoinedRoomResult: (RoomIdOrAlias, List<String>) -> Result<NotJoinedRoom> = { _, _ -> lambdaError() },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
@@ -87,6 +88,7 @@ class FakeMatrixClient(
     private val availableSlidingSyncVersionsLambda: () -> Result<List<SlidingSyncVersion>> = { lambdaError() },
     private val ignoreUserResult: (UserId) -> Result<Unit> = { lambdaError() },
     private var unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
+    private val canReportRoomLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
@@ -102,7 +104,7 @@ class FakeMatrixClient(
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
-    private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
+    private val getRoomResults = mutableMapOf<RoomId, BaseRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
@@ -123,12 +125,12 @@ class FakeMatrixClient(
     }
     var logoutLambda: (Boolean, Boolean) -> Unit = { _, _ -> }
 
-    override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
+    override suspend fun getRoom(roomId: RoomId): BaseRoom? {
         return getRoomResults[roomId]
     }
 
-    override suspend fun getPendingRoom(roomId: RoomId): RoomPreview? = simulateLongTask {
-        getRoomPreviewResult(RoomIdOrAlias.Id(roomId), emptyList()).getOrNull()
+    override suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom? {
+        return getRoomResults[roomId] as? JoinedRoom
     }
 
     override suspend fun findDM(userId: UserId): RoomId? {
@@ -250,7 +252,7 @@ class FakeMatrixClient(
         findDmResult = result
     }
 
-    fun givenGetRoomResult(roomId: RoomId, result: MatrixRoom?) {
+    fun givenGetRoomResult(roomId: RoomId, result: BaseRoom?) {
         if (result == null) {
             getRoomResults.remove(roomId)
         } else {
@@ -294,8 +296,8 @@ class FakeMatrixClient(
         resolveRoomAliasResult(roomAlias)
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = simulateLongTask {
-        getRoomPreviewResult(roomIdOrAlias, serverNames)
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom> = simulateLongTask {
+        getNotJoinedRoomResult(roomIdOrAlias, serverNames)
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {
@@ -327,5 +329,9 @@ class FakeMatrixClient(
 
     override suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>> {
         return availableSlidingSyncVersionsLambda()
+    }
+
+    override suspend fun canReportRoom(): Boolean {
+        return canReportRoomLambda()
     }
 }

@@ -28,7 +28,6 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.appnav.room.joined.LoadingRoomNodeView
-import io.element.android.appnav.room.joined.LoadingRoomState
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
 import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
@@ -49,6 +48,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first

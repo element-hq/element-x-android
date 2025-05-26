@@ -28,7 +28,7 @@
   <string name="state_event_room_invite_you">"%1$s запрасіў(-ла) вас"</string>
   <string name="state_event_room_join">"%1$s далучыўся(-лась) да пакоя"</string>
   <string name="state_event_room_join_by_you">"Вы далучыліся да пакоя"</string>
-  <string name="state_event_room_knock">"%1$s прасіў(-ла) далучыцца"</string>
+  <string name="state_event_room_knock">"%1$sпросіць далучыцца"</string>
   <string name="state_event_room_knock_accepted">"%1$s дазволіў(-ла) %2$s далучыцца"</string>
   <string name="state_event_room_knock_accepted_by_you">"Вы дазволілі %1$s далучыцца"</string>
   <string name="state_event_room_knock_by_you">"Вы прасілі далучыцца"</string>

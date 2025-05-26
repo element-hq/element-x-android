@@ -137,6 +137,7 @@ class RustMatrixAuthenticationService @Inject constructor(
             }.onFailure {
                 clear()
             }.mapFailure { failure ->
+                Timber.e(failure, "Failed to set homeserver to $homeserver")
                 failure.mapAuthenticationException()
             }
         }
@@ -162,6 +163,7 @@ class RustMatrixAuthenticationService @Inject constructor(
 
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
+                Timber.e(failure, "Failed to login")
                 failure.mapAuthenticationException()
             }
         }
@@ -185,18 +187,23 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     private var pendingOAuthAuthorizationData: OAuthAuthorizationData? = null
 
-    override suspend fun getOidcUrl(prompt: OidcPrompt): Result<OidcDetails> {
+    override suspend fun getOidcUrl(
+        prompt: OidcPrompt,
+        loginHint: String?,
+    ): Result<OidcDetails> {
         return withContext(coroutineDispatchers.io) {
             runCatching {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val oAuthAuthorizationData = client.urlForOidc(
                     oidcConfiguration = oidcConfigurationProvider.get(),
                     prompt = prompt.toRustPrompt(),
+                    loginHint = loginHint,
                 )
                 val url = oAuthAuthorizationData.loginUrl()
                 pendingOAuthAuthorizationData = oAuthAuthorizationData
                 OidcDetails(url)
             }.mapFailure { failure ->
+                Timber.e(failure, "Failed to get OIDC URL")
                 failure.mapAuthenticationException()
             }
         }
@@ -210,6 +217,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                 }
                 pendingOAuthAuthorizationData = null
             }.mapFailure { failure ->
+                Timber.e(failure, "Failed to cancel OIDC login")
                 failure.mapAuthenticationException()
             }
         }
@@ -243,6 +251,7 @@ class RustMatrixAuthenticationService @Inject constructor(
 
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
+                Timber.e(failure, "Failed to login with OIDC")
                 failure.mapAuthenticationException()
             }
         }

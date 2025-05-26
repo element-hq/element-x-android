@@ -49,7 +49,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.IntentionalMention
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
@@ -98,7 +98,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 class MessageComposerPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val appCoroutineScope: CoroutineScope,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
     private val sessionPreferencesStore: SessionPreferencesStore,
@@ -424,7 +424,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
             is MessageComposerMode.Attachment,
-            is MessageComposerMode.Normal -> room.sendMessage(
+            is MessageComposerMode.Normal -> room.liveTimeline.sendMessage(
                 body = message.markdown,
                 htmlBody = message.html,
                 intentionalMentions = message.intentionalMentions

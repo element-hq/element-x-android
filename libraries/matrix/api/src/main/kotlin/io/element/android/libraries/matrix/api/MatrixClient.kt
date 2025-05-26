@@ -23,10 +23,11 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.NotJoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -52,8 +53,8 @@ interface MatrixClient {
     val mediaLoader: MatrixMediaLoader
     val sessionCoroutineScope: CoroutineScope
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
-    suspend fun getRoom(roomId: RoomId): MatrixRoom?
-    suspend fun getPendingRoom(roomId: RoomId): RoomPreview?
+    suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom?
+    suspend fun getRoom(roomId: RoomId): BaseRoom?
     suspend fun findDM(userId: UserId): RoomId?
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
@@ -147,7 +148,7 @@ interface MatrixClient {
     /**
      * Get a room preview for a given room ID or alias. This is especially useful for rooms that the user is not a member of, or hasn't joined yet.
      */
-    suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview>
+    suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom>
 
     /**
      * Returns the currently used sliding sync version.
@@ -161,6 +162,11 @@ interface MatrixClient {
 
     fun canDeactivateAccount(): Boolean
     suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit>
+
+    /**
+     * Check if the user can report a room.
+     */
+    suspend fun canReportRoom(): Boolean
 }
 
 /**
@@ -168,7 +174,7 @@ interface MatrixClient {
  * The flow will emit a new value whenever the room info is updated.
  * The flow will emit Optional.empty item if the room is not found.
  */
-fun MatrixClient.getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<MatrixRoomInfo>> {
+fun MatrixClient.getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<RoomInfo>> {
     return getRoomSummaryFlow(roomIdOrAlias)
         .map { roomSummary -> roomSummary.map { it.info } }
         .distinctUntilChanged()

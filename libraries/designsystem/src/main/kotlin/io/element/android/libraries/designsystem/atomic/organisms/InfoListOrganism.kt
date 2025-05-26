@@ -111,7 +111,6 @@ internal fun InfoListOrganismPreview() = ElementPreview {
         InfoListItem(message = "A bottom item"),
     )
     InfoListOrganism(
-        items,
-        backgroundColor = ElementTheme.materialColors.surfaceVariant,
+        items = items,
     )
 }

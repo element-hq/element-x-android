@@ -34,11 +34,11 @@ import io.element.android.libraries.oidc.impl.OidcUrlParser
 @Composable
 fun OidcView(
     state: OidcState,
+    oidcUrlParser: OidcUrlParser,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isPreview = LocalInspectionMode.current
-    val oidcUrlParser = remember { OidcUrlParser() }
     var webView by remember { mutableStateOf<WebView?>(null) }
     fun shouldOverrideUrl(url: String): Boolean {
         val action = oidcUrlParser.parse(url)
@@ -111,6 +111,7 @@ fun OidcView(
 internal fun OidcViewPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) = ElementPreview {
     OidcView(
         state = state,
+        oidcUrlParser = { null },
         onNavigateBack = {},
     )
 }

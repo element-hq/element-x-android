@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"به دست %1$s از این اتاق محروم شدید."</string>
+  <string name="screen_join_room_ban_message">"از این اتاق محروم شدید"</string>
+  <string name="screen_join_room_ban_reason">"دلیل: %1$s."</string>
+  <string name="screen_join_room_cancel_knock_action">"لغو درخواست"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"بله. لغو"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"لغو درخواست پیوستن"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"بله. رد و انسداد"</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"رد دعوت و انسداد"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"رد و انسداد"</string>
+  <string name="screen_join_room_fail_message">"پیوستن به اتاق شکست خورد."</string>
+  <string name="screen_join_room_forget_action">"فراموشی این اتاق"</string>
+  <string name="screen_join_room_invite_required_message">"برای پیوستن به این اتاق نیاز به دعوت دارید"</string>
   <string name="screen_join_room_join_action">"پیوستن به اتاق"</string>
   <string name="screen_join_room_knock_action">"در زدن برای پیوستن"</string>
+  <string name="screen_join_room_knock_message_description">"پیام (اختیاری)"</string>
+  <string name="screen_join_room_knock_sent_title">"درخواست پیوستن فرستاده شد"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s هنوز از فضاها پشتیبانی نمی‌کند. می‌توانید روی وب به فضاها دسترسی داشته باشید."</string>
   <string name="screen_join_room_space_not_supported_title">"فضاها هنوز پشتیبانی نمی‌شوند"</string>
   <string name="screen_join_room_subtitle_knock">"زدن روی این دکمه برای آگاه شدن مدیر اتاق. پس از تأیید می‌توانید به گفت‌وگو بپیوندید."</string>

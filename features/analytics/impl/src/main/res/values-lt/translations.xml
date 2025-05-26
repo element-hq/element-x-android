@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Mes nekaupsime ir neprofiliuosime jokių asmens duomenų"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Dalinkitės anoniminiais naudojimo duomenimis ir padėkite mums nustatyti problemas."</string>
+  <string name="screen_analytics_prompt_read_terms">"Galite perskaityti visas mūsų sąlygas %1$s."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"čia"</string>
+  <string name="screen_analytics_prompt_settings">"Tai galite bet kada išjungti"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Mes nesidalinsime Jūsų duomenimis su trečiosiomis šalimis"</string>
+  <string name="screen_analytics_prompt_title">"Padėkite pagerinti %1$s"</string>
+</resources>

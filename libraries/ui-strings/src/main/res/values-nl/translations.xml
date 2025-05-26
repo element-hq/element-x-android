@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Afbeelding"</string>
   <string name="a11y_delete">"Verwijderen"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d cijfer ingevoerd"</item>
     <item quantity="other">"%1$d cijfers ingevoerd"</item>
   </plurals>
   <string name="a11y_hide_password">"Wachtwoord verbergen"</string>
+  <string name="a11y_join_call">"Deelnemen aan gesprek"</string>
   <string name="a11y_jump_to_bottom">"Spring naar einde"</string>
   <string name="a11y_notifications_mentions_only">"Alleen vermeldingen"</string>
   <string name="a11y_notifications_muted">"Gedempt"</string>
   <string name="a11y_page_n">"Pagina %1$d"</string>
   <string name="a11y_pause">"Pauzeren"</string>
+  <string name="a11y_paused_voice_message">"Spraakbericht, duur: %1$s, huidige positie: %2$s"</string>
   <string name="a11y_pin_field">"PIN-veld"</string>
   <string name="a11y_play">"Afspelen"</string>
   <string name="a11y_poll">"Peiling"</string>
@@ -30,6 +33,7 @@
   <string name="a11y_start_call">"Begin een oproep"</string>
   <string name="a11y_user_menu">"Gebruikersmenu"</string>
   <string name="a11y_view_details">"Details bekijken"</string>
+  <string name="a11y_voice_message">"Spraakbericht, duur: %1$s"</string>
   <string name="a11y_voice_message_record">"Spraakbericht opnemen."</string>
   <string name="a11y_voice_message_stop_recording">"Opnemen stoppen"</string>
   <string name="action_accept">"Accepteren"</string>
@@ -66,6 +70,7 @@
   <string name="action_forgot_password">"Wachtwoord vergeten?"</string>
   <string name="action_forward">"Doorsturen"</string>
   <string name="action_go_back">"Terug"</string>
+  <string name="action_ignore">"Negeren"</string>
   <string name="action_invite">"Uitnodigen"</string>
   <string name="action_invite_friends">"Mensen uitnodigen"</string>
   <string name="action_invite_friends_to_app">"Nodig mensen uit voor %1$s"</string>
@@ -141,6 +146,7 @@
   <string name="common_dark">"Donker"</string>
   <string name="common_decryption_error">"Decryptie fout"</string>
   <string name="common_developer_options">"Ontwikkelaarsopties"</string>
+  <string name="common_device_id">"Apparaat-ID"</string>
   <string name="common_direct_chat">"Directe chat"</string>
   <string name="common_do_not_show_this_again">"Dit niet meer weergeven"</string>
   <string name="common_edited_suffix">"(bewerkt)"</string>
@@ -168,6 +174,10 @@ Reden: %1$s."</string>
   <string name="common_light">"Licht"</string>
   <string name="common_link_copied_to_clipboard">"Link gekopieerd naar klembord"</string>
   <string name="common_loading">"Laden…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d andere"</item>
+    <item quantity="other">"%d anderen"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d lid"</item>
     <item quantity="other">"%1$d leden"</item>
@@ -255,8 +265,8 @@ Reden: %1$s."</string>
   <string name="common_waiting">"Wachten…"</string>
   <string name="common_waiting_for_decryption_key">"Wachten op dit bericht"</string>
   <string name="common_you">"Jij"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s\'s identiteit lijkt te zijn veranderd. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s identiteit lijkt te zijn veranderd. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s\'s identiteit lijkt te zijn gewijzigd. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s identiteit lijkt te zijn gewijzigd. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Bevestiging"</string>
   <string name="dialog_title_error">"Fout"</string>

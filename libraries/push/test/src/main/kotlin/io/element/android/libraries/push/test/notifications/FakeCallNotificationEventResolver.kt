@@ -18,7 +18,7 @@ class FakeCallNotificationEventResolver(
         lambdaError()
     },
 ) : CallNotificationEventResolver {
-    override fun resolveEvent(sessionId: SessionId, notificationData: NotificationData, forceNotify: Boolean): Result<NotifiableEvent> {
+    override suspend fun resolveEvent(sessionId: SessionId, notificationData: NotificationData, forceNotify: Boolean): Result<NotifiableEvent> {
         return resolveEventLambda(sessionId, notificationData, forceNotify)
     }
 }

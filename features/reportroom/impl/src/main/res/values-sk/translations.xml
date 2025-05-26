@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"Vaša správa bola úspešne odoslaná, ale pri pokuse o opustenie miestnosti sme narazili na problém. Skúste to prosím znova."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Nie je možné opustiť miestnosť"</string>
+  <string name="screen_report_room_reason_footer">"Nahláste túto miestnosť svojmu správcovi. Ak sú správy zašifrované, váš správca ich nebude môcť prečítať."</string>
+  <string name="screen_report_room_reason_placeholder">"Popíšte dôvod…"</string>
+  <string name="screen_report_room_title">"Nahlásiť miestnosť"</string>
+</resources>

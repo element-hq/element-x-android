@@ -189,6 +189,10 @@ Razão: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Ligação copiada para a área de transferência"</string>
   <string name="common_loading">"A carregar…"</string>
   <string name="common_loading_more">"A carregar mais…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d outro"</item>
+    <item quantity="other">"%d outros"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membro"</item>
     <item quantity="other">"%1$d membros"</item>
@@ -329,6 +333,7 @@ Tens a certeza de que queres continuar?"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Não poderão voltar a entrar nesta sala, mesmo se forem convidados."</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Tens a certeza que queres banir este participante?"</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"A banir %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Poderão entrar na sala novamente se convidados."</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Ver perfil"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Remover da sala"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Remover participante e proibir que entre no futuro?"</string>

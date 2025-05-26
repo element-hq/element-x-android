@@ -19,12 +19,14 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.oidc.impl.OidcUrlParser
 
 @ContributesNode(AppScope::class)
 class OidcNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: OidcPresenter.Factory,
+    private val oidcUrlParser: OidcUrlParser,
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(
         val oidcDetails: OidcDetails,
@@ -38,6 +40,7 @@ class OidcNode @AssistedInject constructor(
         val state = presenter.present()
         OidcView(
             state = state,
+            oidcUrlParser = oidcUrlParser,
             modifier = modifier,
             onNavigateBack = ::navigateUp,
         )

@@ -109,6 +109,7 @@
   <string name="action_report">"Anmäl"</string>
   <string name="action_report_bug">"Rapportera bugg"</string>
   <string name="action_report_content">"Rapportera innehåll"</string>
+  <string name="action_report_dm">"Anmäl konversation"</string>
   <string name="action_report_room">"Anmäl rum"</string>
   <string name="action_reset">"Återställ"</string>
   <string name="action_reset_identity">"Återställ identitet"</string>
@@ -197,6 +198,10 @@ Anledning:%1$s."</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
   <string name="common_loading">"Laddar …"</string>
   <string name="common_loading_more">"Laddar mer …"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d annan"</item>
+    <item quantity="other">"%d andra"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d medlem"</item>
     <item quantity="other">"%1$d medlemmar"</item>
@@ -260,6 +265,7 @@ Anledning:%1$s."</string>
   <string name="common_shared_location">"Delade plats"</string>
   <string name="common_signing_out">"Loggar ut"</string>
   <string name="common_something_went_wrong">"Något gick fel"</string>
+  <string name="common_something_went_wrong_message">"Vi stötte på ett problem. Vänligen försök igen."</string>
   <string name="common_starting_chat">"Startar chatt …"</string>
   <string name="common_sticker">"Dekal"</string>
   <string name="common_success">"Lyckades"</string>
@@ -349,10 +355,6 @@ Anledning:%1$s."</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Ta bort från rummet"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Ta bort medlem och banna från att gå med i framtiden?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Tar bort %1$s …"</string>
-  <string name="screen_decline_and_block_block_user_option_description">"Du kommer inte att se några meddelanden eller rumsinbjudningar från den här användaren"</string>
-  <string name="screen_decline_and_block_block_user_option_title">"Blockera användare"</string>
-  <string name="screen_decline_and_block_report_user_option_description">"Rapportera det här rummet till din kontoleverantör."</string>
-  <string name="screen_decline_and_block_title">"Avvisa och blockera"</string>
   <string name="screen_media_picker_error_failed_selection">"Misslyckades att välja media, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_caption_warning">"Bildtexter kanske inte är synliga för personer som använder äldre appar."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
@@ -364,11 +366,6 @@ Anledning:%1$s."</string>
     <item quantity="other">"%1$d Fästa meddelanden"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fästa meddelanden"</string>
-  <string name="screen_report_room_leave_failed_alert_message">"Din anmälan skickades in framgångsrikt, men vi stötte på ett problem när vi försökte lämna rummet. Vänligen försök igen."</string>
-  <string name="screen_report_room_leave_failed_alert_title">"Kunde inte lämna rummet"</string>
-  <string name="screen_report_room_reason_footer">"Anmäl det här rummet till din administratör. Om meddelandena är krypterade kommer din administratör inte att kunna läsa dem."</string>
-  <string name="screen_report_room_reason_placeholder">"Beskriv anledningen …"</string>
-  <string name="screen_report_room_title">"Rapportera rum"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Du är på väg att gå till ditt %1$s-konto för att återställa din identitet. Därefter kommer du att tas tillbaka till appen."</string>
   <string name="screen_reset_identity_confirmation_title">"Kan du inte bekräfta? Gå till ditt konto för att återställa din identitet."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Dra tillbaka verifieringen och skicka"</string>

@@ -18,6 +18,7 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
@@ -25,13 +26,15 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.login.api.LoginFlowType
+import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
+import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
 import io.element.android.features.login.impl.screens.createaccount.CreateAccountNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
+import io.element.android.features.login.impl.screens.onboarding.OnBoardingNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -57,20 +60,19 @@ class LoginFlowNode @AssistedInject constructor(
     private val oidcEntryPoint: OidcEntryPoint,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root,
+        initialElement = NavTarget.OnBoarding,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
     plugins = plugins,
 ) {
-    private var activity: Activity? = null
-    private var darkTheme: Boolean = false
-
-    data class Inputs(
-        val flowType: LoginFlowType,
+    data class Params(
+        val accountProvider: String?,
+        val loginHint: String?,
     ) : NodeInputs
 
-    private val inputs: Inputs = inputs()
+    private var activity: Activity? = null
+    private var darkTheme: Boolean = false
 
     private var customChromeTabStarted = false
 
@@ -96,10 +98,18 @@ class LoginFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Root : NavTarget
+        data object OnBoarding : NavTarget
 
         @Parcelize
-        data object ConfirmAccountProvider : NavTarget
+        data object QrCode : NavTarget
+
+        @Parcelize
+        data class ConfirmAccountProvider(
+            val isAccountCreation: Boolean,
+        ) : NavTarget
+
+        @Parcelize
+        data object ChooseAccountProvider : NavTarget
 
         @Parcelize
         data object ChangeAccountProvider : NavTarget
@@ -119,29 +129,77 @@ class LoginFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Root -> {
-                if (inputs.flowType == LoginFlowType.SIGN_IN_QR_CODE) {
-                    createNode<QrCodeLoginFlowNode>(buildContext)
-                } else {
-                    resolve(NavTarget.ConfirmAccountProvider, buildContext)
+            NavTarget.OnBoarding -> {
+                val callback = object : OnBoardingNode.Callback {
+                    override fun onSignUp() {
+                        backstack.push(
+                            NavTarget.ConfirmAccountProvider(isAccountCreation = true)
+                        )
+                    }
+
+                    override fun onSignIn(mustChooseAccountProvider: Boolean) {
+                        backstack.push(
+                            if (mustChooseAccountProvider) {
+                                NavTarget.ChooseAccountProvider
+                            } else {
+                                NavTarget.ConfirmAccountProvider(isAccountCreation = false)
+                            }
+                        )
+                    }
+
+                    override fun onSignInWithQrCode() {
+                        backstack.push(NavTarget.QrCode)
+                    }
+
+                    override fun onReportProblem() {
+                        plugins<LoginEntryPoint.Callback>().forEach { it.onReportProblem() }
+                    }
+
+                    override fun onOidcDetails(oidcDetails: OidcDetails) {
+                        navigateToMas(oidcDetails)
+                    }
+
+                    override fun onCreateAccountContinue(url: String) {
+                        backstack.push(NavTarget.CreateAccount(url))
+                    }
+
+                    override fun onLoginPasswordNeeded() {
+                        backstack.push(NavTarget.LoginPassword)
+                    }
                 }
+                val params = inputs<Params>()
+                val inputs = OnBoardingNode.Params(
+                    accountProvider = params.accountProvider,
+                    loginHint = params.loginHint,
+                )
+                createNode<OnBoardingNode>(buildContext, listOf(callback, inputs))
             }
-            NavTarget.ConfirmAccountProvider -> {
+            NavTarget.ChooseAccountProvider -> {
+                val callback = object : ChooseAccountProviderNode.Callback {
+                    override fun onOidcDetails(oidcDetails: OidcDetails) {
+                        navigateToMas(oidcDetails)
+                    }
+
+                    override fun onCreateAccountContinue(url: String) {
+                        backstack.push(NavTarget.CreateAccount(url))
+                    }
+
+                    override fun onLoginPasswordNeeded() {
+                        backstack.push(NavTarget.LoginPassword)
+                    }
+                }
+                createNode<ChooseAccountProviderNode>(buildContext, listOf(callback))
+            }
+            NavTarget.QrCode -> {
+                createNode<QrCodeLoginFlowNode>(buildContext)
+            }
+            is NavTarget.ConfirmAccountProvider -> {
                 val inputs = ConfirmAccountProviderNode.Inputs(
-                    isAccountCreation = inputs.flowType == LoginFlowType.SIGN_UP,
+                    isAccountCreation = navTarget.isAccountCreation,
                 )
                 val callback = object : ConfirmAccountProviderNode.Callback {
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
-                        if (oidcEntryPoint.canUseCustomTab()) {
-                            // In this case open a Chrome Custom tab
-                            activity?.let {
-                                customChromeTabStarted = true
-                                oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
-                            }
-                        } else {
-                            // Fallback to WebView mode
-                            backstack.push(NavTarget.OidcView(oidcDetails))
-                        }
+                        navigateToMas(oidcDetails)
                     }
 
                     override fun onCreateAccountContinue(url: String) {
@@ -162,7 +220,10 @@ class LoginFlowNode @AssistedInject constructor(
                 val callback = object : ChangeAccountProviderNode.Callback {
                     override fun onDone() {
                         // Go back to the Account Provider screen
-                        backstack.singleTop(NavTarget.ConfirmAccountProvider)
+                        val confirmAccountProvider = backstack.elements.value.firstOrNull {
+                            it.key.navTarget is NavTarget.ConfirmAccountProvider
+                        }?.key?.navTarget ?: NavTarget.ConfirmAccountProvider(isAccountCreation = false)
+                        backstack.singleTop(confirmAccountProvider)
                     }
 
                     override fun onOtherClick() {
@@ -176,7 +237,10 @@ class LoginFlowNode @AssistedInject constructor(
                 val callback = object : SearchAccountProviderNode.Callback {
                     override fun onDone() {
                         // Go back to the Account Provider screen
-                        backstack.singleTop(NavTarget.ConfirmAccountProvider)
+                        val confirmAccountProvider = backstack.elements.value.firstOrNull {
+                            it.key.navTarget is NavTarget.ConfirmAccountProvider
+                        }?.key?.navTarget ?: NavTarget.ConfirmAccountProvider(isAccountCreation = false)
+                        backstack.singleTop(confirmAccountProvider)
                     }
                 }
 
@@ -194,6 +258,19 @@ class LoginFlowNode @AssistedInject constructor(
                 )
                 createNode<CreateAccountNode>(buildContext, listOf(inputs))
             }
+        }
+    }
+
+    private fun navigateToMas(oidcDetails: OidcDetails) {
+        if (oidcEntryPoint.canUseCustomTab()) {
+            // In this case open a Chrome Custom tab
+            activity?.let {
+                customChromeTabStarted = true
+                oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
+            }
+        } else {
+            // Fallback to WebView mode
+            backstack.push(NavTarget.OidcView(oidcDetails))
         }
     }
 

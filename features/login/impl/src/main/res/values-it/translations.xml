@@ -16,9 +16,7 @@
   <string name="screen_change_server_error_invalid_homeserver">"Non siamo riusciti a raggiungere questo homeserver. Verifica di aver inserito correttamente l\'URL. Se l\'URL è corretto, contatta l\'amministratore del homeserver per ulteriore assistenza."</string>
   <string name="screen_change_server_error_invalid_well_known">"La sliding sync non è disponibile per un problema nel file well-known:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Questo server attualmente non supporta la sliding sync."</string>
   <string name="screen_change_server_form_header">"URL dell\'homeserver"</string>
-  <string name="screen_change_server_form_notice">"Puoi connetterti solo a un server esistente che supporta la sliding sync. L\'amministratore del tuo homeserver dovrà configurarla. %1$s"</string>
   <string name="screen_change_server_subtitle">"Qual è l\'indirizzo del tuo server?"</string>
   <string name="screen_change_server_title">"Seleziona il tuo server"</string>
   <string name="screen_create_account_title">"Crea account"</string>
@@ -31,6 +29,12 @@
   <string name="screen_login_subtitle">"Matrix è una rete aperta per comunicazioni sicure e decentralizzate."</string>
   <string name="screen_login_title">"Bentornato!"</string>
   <string name="screen_login_title_with_homeserver">"Accedi a %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Accedi manualmente"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Accedi con codice QR"</string>
+  <string name="screen_onboarding_sign_up">"Crea account"</string>
+  <string name="screen_onboarding_welcome_message">"Benvenuti nell\'%1$s più veloce di sempre. Potenziato per velocità e semplicità."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Benvenuto su %1$s. Potenziato in velocità e semplicità."</string>
+  <string name="screen_onboarding_welcome_title">"Sii nel tuo elemento"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Stabilendo la connessione"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Non è stato possibile stabilire una connessione sicura con il nuovo dispositivo. I tuoi dispositivi esistenti sono ancora al sicuro e non devi preoccuparti di loro."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"E adesso?"</string>
@@ -52,7 +56,7 @@
 
 Prova ad accedere manualmente o scansiona il codice QR con un altro dispositivo."</string>
   <string name="screen_qr_code_login_error_linking_not_suported_title">"Codice QR non supportato"</string>
-  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Il tuo fornitore di account non supporta %1$s ."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Il tuo fornitore di account non supporta %1$s."</string>
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s non supportato"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Pronto per la scansione"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Apri %1$s su un dispositivo desktop"</string>

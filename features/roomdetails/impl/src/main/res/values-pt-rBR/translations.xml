@@ -52,6 +52,7 @@
   <string name="screen_room_details_share_room_title">"Compartilhar sala"</string>
   <string name="screen_room_details_topic_title">"Tópico"</string>
   <string name="screen_room_details_updating_room">"Atualizando a sala…"</string>
+  <string name="screen_room_member_list_banned_empty">"Não há usuários banidos nesta sala."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d pessoa"</item>
     <item quantity="other">"%1$d pessoas"</item>

@@ -49,8 +49,8 @@ fun AdvancedSettingsView(
             title = stringResource(id = CommonStrings.common_appearance),
             selectedOption = state.theme,
             options = ThemeOption.entries.toPersistentList(),
-            onSelectOption = { logLevel ->
-                state.eventSink(AdvancedSettingsEvents.SetTheme(logLevel))
+            onSelectOption = { themeOption ->
+                state.eventSink(AdvancedSettingsEvents.SetTheme(themeOption))
             }
         )
         ListItem(

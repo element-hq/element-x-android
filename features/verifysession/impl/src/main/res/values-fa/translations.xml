@@ -17,9 +17,10 @@
   <string name="screen_session_verification_open_existing_session_title">"گشودن نشستی موجود"</string>
   <string name="screen_session_verification_positive_button_canceled">"تلاش برای تأیید دوباره"</string>
   <string name="screen_session_verification_positive_button_initial">"آماده‌ام"</string>
-  <string name="screen_session_verification_positive_button_verifying_ongoing">"منتظر تطابق"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"منتظر تطابق…"</string>
   <string name="screen_session_verification_ready_subtitle">"مقایسهٔ مجموعه‌ای یکتا از شکلک‌ها."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"شکلک‌ها را مقایسه کنید، از ترتیب نمایش آنان نیز مطمئن شوید."</string>
+  <string name="screen_session_verification_request_failure_title">"صحت‌سنجی شکست خورد"</string>
   <string name="screen_session_verification_request_success_title">"افزاره تأیید شده"</string>
   <string name="screen_session_verification_they_dont_match">"مطابق نیستند"</string>
   <string name="screen_session_verification_they_match">"مطابقند"</string>

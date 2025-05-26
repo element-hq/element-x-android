@@ -62,7 +62,7 @@ private fun StateEventContent.toContent(): NotificationContent.StateEvent {
         StateEventContent.RoomServerAcl -> NotificationContent.StateEvent.RoomServerAcl
         StateEventContent.RoomThirdPartyInvite -> NotificationContent.StateEvent.RoomThirdPartyInvite
         StateEventContent.RoomTombstone -> NotificationContent.StateEvent.RoomTombstone
-        StateEventContent.RoomTopic -> NotificationContent.StateEvent.RoomTopic
+        is StateEventContent.RoomTopic -> NotificationContent.StateEvent.RoomTopic(topic)
         StateEventContent.SpaceChild -> NotificationContent.StateEvent.SpaceChild
         StateEventContent.SpaceParent -> NotificationContent.StateEvent.SpaceParent
     }

@@ -111,6 +111,7 @@
   <string name="action_report">"Поскаржитися"</string>
   <string name="action_report_bug">"Повідомити про помилку"</string>
   <string name="action_report_content">"Повідомити про вміст"</string>
+  <string name="action_report_dm">"Поскаржитися на розмову"</string>
   <string name="action_report_room">"Поскаржитися на кімнату"</string>
   <string name="action_reset">"Скинути"</string>
   <string name="action_reset_identity">"Скинути ідентичність"</string>
@@ -199,6 +200,11 @@
   <string name="common_link_copied_to_clipboard">"Посилання скопійовано в буфер обміну"</string>
   <string name="common_loading">"Завантаження"</string>
   <string name="common_loading_more">"Завантаження наступних…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d інший"</item>
+    <item quantity="few">"%d інші"</item>
+    <item quantity="many">"%d інші"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d учасник"</item>
     <item quantity="few">"%1$d учасники"</item>
@@ -264,6 +270,7 @@
   <string name="common_shared_location">"Поширене розташування"</string>
   <string name="common_signing_out">"Вихід"</string>
   <string name="common_something_went_wrong">"Щось пішло не так"</string>
+  <string name="common_something_went_wrong_message">"Ми зіткнулися з проблемою. Будь ласка, повторіть спробу."</string>
   <string name="common_starting_chat">"Початок бесіди…"</string>
   <string name="common_sticker">"Наліпка"</string>
   <string name="common_success">"Успіх"</string>
@@ -353,11 +360,6 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Вилучити з кімнати"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Вилучити учасника та заборонити приєднання в майбутньому?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Вилучення %1$s…"</string>
-  <string name="screen_decline_and_block_block_user_option_description">"Ви не бачитимете повідомлень або запрошень у кімнату від цього користувача"</string>
-  <string name="screen_decline_and_block_block_user_option_title">"Заблокувати користувача"</string>
-  <string name="screen_decline_and_block_report_user_option_description">"Поскаржитися на цю кімнату постачальнику облікового запису."</string>
-  <string name="screen_decline_and_block_report_user_reason_placeholder">"Опишіть причину скарги…"</string>
-  <string name="screen_decline_and_block_title">"Відхилити та заблокувати"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_caption_warning">"Користувачі старих застосунків можуть не бачити підписи."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
@@ -370,11 +372,6 @@
     <item quantity="many">"%1$d Закріплених повідомлення"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Закріплені повідомлення"</string>
-  <string name="screen_report_room_leave_failed_alert_message">"Ваша скарга надіслана, але ми зіткнулися з проблемою під час спроби вийти з кімнати. Повторіть спробу."</string>
-  <string name="screen_report_room_leave_failed_alert_title">"Не вдалося вийти з кімнати"</string>
-  <string name="screen_report_room_reason_footer">"Поскаржтеся на цю кімнату своєму адміністратору. Якщо повідомлення зашифровані, ваш адміністратор не зможе їх прочитати."</string>
-  <string name="screen_report_room_reason_placeholder">"Опишіть причину…"</string>
-  <string name="screen_report_room_title">"Поскаржитися на кімнату"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Ви збираєтеся перейти до свого облікового запису %1$s, щоб скинути свій обліковий запис. Після цього ви повернетесь до програми."</string>
   <string name="screen_reset_identity_confirmation_title">"Не можете підтвердити? Перейдіть до свого облікового запису, щоб скинути облікові дані."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Відкликати верифікацію та відправити"</string>

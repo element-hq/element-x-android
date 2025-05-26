@@ -69,7 +69,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -101,7 +101,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val analyticsService: AnalyticsService,
     private val locationService: LocationService,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val roomNamesCache: RoomNamesCache,
     private val mentionSpanUpdater: MentionSpanUpdater,

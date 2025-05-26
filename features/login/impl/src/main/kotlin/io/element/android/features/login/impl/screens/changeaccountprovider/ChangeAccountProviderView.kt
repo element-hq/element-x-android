@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.accountprovider.AccountProvider
+import io.element.android.features.login.impl.accountprovider.AccountProviderOtherView
 import io.element.android.features.login.impl.accountprovider.AccountProviderView
 import io.element.android.features.login.impl.changeserver.ChangeServerEvents
 import io.element.android.features.login.impl.changeserver.ChangeServerView
@@ -95,13 +95,11 @@ fun ChangeAccountProviderView(
                     )
                 }
                 // Other
-                AccountProviderView(
-                    item = AccountProvider(
-                        url = "",
-                        title = stringResource(id = R.string.screen_change_account_provider_other),
-                    ),
-                    onClick = onOtherProviderClick
-                )
+                if (state.canSearchForAccountProviders) {
+                    AccountProviderOtherView(
+                        onClick = onOtherProviderClick
+                    )
+                }
                 Spacer(Modifier.height(32.dp))
             }
             ChangeServerView(

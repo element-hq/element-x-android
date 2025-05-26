@@ -8,14 +8,22 @@
   <string name="screen_advanced_settings_element_call_base_url">"Προσαρμοσμένο URL βάσης κλήσεων Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Όρισε μια προσαρμοσμένη διεύθυνση βάσης URL για κλήση Element."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Μη έγκυρη διεύθυνση URL, βεβαιώσου ότι έχεις συμπεριλάβει το πρωτόκολλο (http/https) και τη σωστή διεύθυνση."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Απόκρυψη εικόνων προφίλ σε αιτήματα πρόσκλησης δωματίου"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Απόκρυψη προεπισκοπήσεων πολυμέσων στο timeline"</string>
   <string name="screen_advanced_settings_media_compression_description">"Ανέβασε φωτογραφίες και βίντεο γρηγορότερα και μείωσε τη χρήση δεδομένων"</string>
   <string name="screen_advanced_settings_media_compression_title">"Βελτιστοποίηση ποιότητας των μέσων"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Συντονισμός και Ασφάλεια"</string>
   <string name="screen_advanced_settings_push_provider_android">"Πάροχος ειδοποιήσεων push"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Απενεργοποίησε τον επεξεργαστή εμπλουτισμένου κειμένου για να πληκτρολογήσεις Markdown χειροκίνητα."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Αποδεικτικά ανάγνωσης"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Εάν απενεργοποιηθεί, τα αποδεικτικά ανάγνωσης δεν θα στέλνονται σε κανέναν. Θα εξακολουθείς να λαμβάνεις αποδεικτικά ανάγνωσης από άλλους χρήστες."</string>
   <string name="screen_advanced_settings_share_presence">"Κοινή χρήση παρουσίας"</string>
   <string name="screen_advanced_settings_share_presence_description">"Εάν απενεργοποιηθεί, δεν θα μπορείς να στέλνεις ή να λαμβάνεις αποδεικτικά ανάγνωσης ή ειδοποιήσεις πληκτρολόγησης."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Πάντα απόκρυψη"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Πάντα εμφάνιση"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Σε ιδιωτικά δωμάτια"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ένα κρυφό πολυμέσο μπορεί πάντα να εμφανιστεί πατώντας το"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Εμφάνιση πολυμέσων στο timeline"</string>
   <string name="screen_advanced_settings_view_source_description">"Ενεργοποίησε την επιλογή για προβολή πηγής μηνυμάτων στη ροή."</string>
   <string name="screen_blocked_users_empty">"Δεν έχεις αποκλεισμένους χρήστες"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Άρση αποκλεισμού"</string>
@@ -51,10 +59,11 @@
   <string name="screen_notification_settings_mode_mentions">"Αναφορές"</string>
   <string name="screen_notification_settings_notification_section_title">"Ειδοποίησέ με για"</string>
   <string name="screen_notification_settings_room_mention_label">"Ειδοποίηση για @room"</string>
-  <string name="screen_notification_settings_system_notifications_action_required">"Για να λαμβάνεις ειδοποιήσεις, άλλαξε το %1$s ."</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Για να λαμβάνεις ειδοποιήσεις, άλλαξε το %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ρυθμίσεις συστήματος"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Ειδοποιήσεις συστήματος ανενεργές"</string>
   <string name="screen_notification_settings_title">"Ειδοποιήσεις"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Ιστορικό push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Αντιμετώπιση προβλημάτων"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Αντιμετώπιση προβλημάτων ειδοποιήσεων"</string>
 </resources>

@@ -28,13 +28,14 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolder
 import io.element.android.libraries.push.test.notifications.FakeOnMissedCallNotificationHandler
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
+import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.mockk.mockk
@@ -226,7 +227,7 @@ class DefaultActiveCallManagerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `observeRingingCalls - will cancel the active ringing call if the call is cancelled`() = runTest {
-        val room = FakeMatrixRoom().apply {
+        val room = FakeBaseRoom().apply {
             givenRoomInfo(aRoomInfo())
         }
         val client = FakeMatrixClient().apply {
@@ -253,7 +254,7 @@ class DefaultActiveCallManagerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `observeRingingCalls - will do nothing if either the session or the room are not found`() = runTest {
-        val room = FakeMatrixRoom().apply {
+        val room = FakeBaseRoom().apply {
             givenRoomInfo(aRoomInfo())
         }
         val client = FakeMatrixClient().apply {
@@ -323,5 +324,7 @@ class DefaultActiveCallManagerTest {
         notificationManagerCompat = notificationManagerCompat,
         matrixClientProvider = matrixClientProvider,
         defaultCurrentCallService = DefaultCurrentCallService(),
+        appForegroundStateService = FakeAppForegroundStateService(),
+        imageLoaderHolder = FakeImageLoaderHolder(),
     )
 }

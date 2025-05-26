@@ -72,7 +72,7 @@ class SharePresenter @AssistedInject constructor(
                     } else {
                         roomIds
                             .map { roomId ->
-                                val room = matrixClient.getRoom(roomId) ?: return@map false
+                                val room = matrixClient.getJoinedRoom(roomId) ?: return@map false
                                 val mediaSender = MediaSender(
                                     preProcessor = mediaPreProcessor,
                                     room = room,
@@ -86,6 +86,7 @@ class SharePresenter @AssistedInject constructor(
                                         ).isSuccess
                                     }
                                     .all { it }
+                                    .also { room.destroy() }
                             }
                             .all { it }
                     }
@@ -93,7 +94,7 @@ class SharePresenter @AssistedInject constructor(
                 onPlainText = { text ->
                     roomIds
                         .map { roomId ->
-                            matrixClient.getRoom(roomId)?.sendMessage(
+                            matrixClient.getJoinedRoom(roomId)?.liveTimeline?.sendMessage(
                                 body = text,
                                 htmlBody = null,
                                 intentionalMentions = emptyList(),

@@ -33,13 +33,13 @@ jobs:
           sudo swapon /mnt/swapfile
           sudo swapon --show
       - name: ⏬ Checkout with LFS
-        uses: nschloe/action-cached-lfs-checkout@v1.2.3
+        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 # v1.2.3
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Add SSH private keys for submodule repositories
-        uses: webfactory/ssh-agent@v0.9.1
+        uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
@@ -82,7 +82,7 @@ jobs:
 
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}

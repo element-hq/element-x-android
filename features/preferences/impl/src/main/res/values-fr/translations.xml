@@ -19,6 +19,11 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"En cas de désactivation, vos accusés de lecture ne seront pas envoyés aux autres membres. Vous verrez toujours les accusés des autres membres."</string>
   <string name="screen_advanced_settings_share_presence">"Partager la présence"</string>
   <string name="screen_advanced_settings_share_presence_description">"Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Toujours cacher"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Toujours montrer"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Dans les salons privés"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Un média caché peut toujours être affiché en cliquant dessus"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Afficher les médias dans les discussions."</string>
   <string name="screen_advanced_settings_view_source_description">"Activer cette option pour pouvoir voir la source des messages dans la discussion."</string>
   <string name="screen_blocked_users_empty">"Vous n’avez bloqué personne"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Débloquer"</string>
@@ -58,6 +63,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres du système"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Historique des Push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Dépannage"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Dépanner les notifications"</string>
 </resources>

@@ -107,6 +107,7 @@ fun RoomDetailsView(
     onKnockRequestsClick: () -> Unit,
     onSecurityAndPrivacyClick: () -> Unit,
     onProfileClick: (UserId) -> Unit,
+    onReportRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -255,8 +256,9 @@ fun RoomDetailsView(
             }
 
             OtherActionsSection(
-                isDm = state.roomType is RoomDetailsType.Dm,
-                onLeaveRoom = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
+                canReportRoom = state.canReportRoom,
+                onReportRoomClick = onReportRoomClick,
+                onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
             )
         }
     }
@@ -669,22 +671,29 @@ private fun MediaGalleryItem(
 }
 
 @Composable
-private fun OtherActionsSection(isDm: Boolean, onLeaveRoom: () -> Unit) {
+private fun OtherActionsSection(
+    canReportRoom: Boolean,
+    onReportRoomClick: () -> Unit,
+    onLeaveRoomClick: () -> Unit,
+) {
     PreferenceCategory(showTopDivider = true) {
+        if (canReportRoom) {
+            ListItem(
+                headlineContent = {
+                    Text(stringResource(CommonStrings.action_report_room))
+                },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
+                style = ListItemStyle.Destructive,
+                onClick = onReportRoomClick,
+            )
+        }
         ListItem(
             headlineContent = {
-                val leaveText = stringResource(
-                    id = if (isDm) {
-                        R.string.screen_room_details_leave_conversation_title
-                    } else {
-                        R.string.screen_room_details_leave_room_title
-                    }
-                )
-                Text(leaveText)
+                Text(stringResource(CommonStrings.action_leave_room))
             },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),
             style = ListItemStyle.Destructive,
-            onClick = onLeaveRoom,
+            onClick = onLeaveRoomClick,
         )
     }
 }
@@ -719,5 +728,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onKnockRequestsClick = {},
         onSecurityAndPrivacyClick = {},
         onProfileClick = {},
+        onReportRoomClick = {},
     )
 }

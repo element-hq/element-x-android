@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.viewfolder.api.TextFileViewer
+import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultLocalMediaRenderer @Inject constructor(
     private val textFileViewer: TextFileViewer,
+    private val audioFocus: AudioFocus,
 ) : LocalMediaRenderer {
     @Composable
     override fun Render(localMedia: LocalMedia) {
@@ -37,7 +39,8 @@ class DefaultLocalMediaRenderer @Inject constructor(
             localMedia = localMedia,
             localMediaViewState = localMediaViewState,
             textFileViewer = textFileViewer,
-            onClick = {}
+            audioFocus = audioFocus,
+            onClick = {},
         )
     }
 }

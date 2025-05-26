@@ -109,6 +109,7 @@
   <string name="action_report">"Jelentés"</string>
   <string name="action_report_bug">"Hiba jelentése"</string>
   <string name="action_report_content">"Tartalom jelentése"</string>
+  <string name="action_report_dm">"Beszélgetés jelentése"</string>
   <string name="action_report_room">"Szoba jelentése"</string>
   <string name="action_reset">"Visszaállítás"</string>
   <string name="action_reset_identity">"Személyazonosság visszaállítása"</string>
@@ -197,6 +198,10 @@ Ok: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Hivatkozás a vágólapra másolva"</string>
   <string name="common_loading">"Betöltés…"</string>
   <string name="common_loading_more">"Továbbiak betöltése…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d további felhasználó"</item>
+    <item quantity="other">"%d további felhasználó"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d tag"</item>
     <item quantity="other">"%1$d tag"</item>
@@ -260,6 +265,7 @@ Ok: %1$s."</string>
   <string name="common_shared_location">"Megosztott tartózkodási hely"</string>
   <string name="common_signing_out">"Kijelentkezés"</string>
   <string name="common_something_went_wrong">"Valamilyen hiba történt"</string>
+  <string name="common_something_went_wrong_message">"Problémába ütköztünk. Próbálja újra."</string>
   <string name="common_starting_chat">"Csevegés megkezdése…"</string>
   <string name="common_sticker">"Matrica"</string>
   <string name="common_success">"Sikeres"</string>
@@ -349,10 +355,11 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Eltávolítás a szobából"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Eltávolítja a tagot, és megtiltja a jövőbeni csatlakozást?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s eltávolítása…"</string>
-  <string name="screen_decline_and_block_block_user_option_description">"Ettől a felhasználótól nem fog többé üzeneteket vagy meghívásokat látni."</string>
-  <string name="screen_decline_and_block_block_user_option_title">"Felhasználó letiltása"</string>
-  <string name="screen_decline_and_block_report_user_option_description">"A szoba jelentése a fiókszolgáltatójának."</string>
-  <string name="screen_decline_and_block_title">"Elutasítás és blokkolás"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Visszaengedés a szobába"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Kitiltás visszavonása"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Újra beléphetnek a szobába, ha meghívják őket."</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Biztos, hogy feloldja a felhasználó kitiltását?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"%1$s kitiltásának feloldása"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
@@ -364,11 +371,6 @@ Biztos, hogy folytatja?"</string>
     <item quantity="other">"%1$d kitűzött üzenet"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Kitűzött üzenetek"</string>
-  <string name="screen_report_room_leave_failed_alert_message">"A jelentése sikeresen el lett küldve, de hibát találtunk a szoba elhagyása során. Próbálja újra."</string>
-  <string name="screen_report_room_leave_failed_alert_title">"Nem tudja elhagyni a szobát"</string>
-  <string name="screen_report_room_reason_footer">"A szoba jelentése a rendszergazdának. Ha az üzenetek titkosítva vannak, akkor a rendszergazda nem fogja tudni elolvasni őket."</string>
-  <string name="screen_report_room_reason_placeholder">"Írja le az okot…"</string>
-  <string name="screen_report_room_title">"Szoba jelentése"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Arra készül, hogy belépjen a(z) %1$s fiókjába, hogy visszaállítsa a személyazonosságát. Ezután vissza fog térni az alkalmazásba."</string>
   <string name="screen_reset_identity_confirmation_title">"Nem tudja megerősíteni? Ugorjon a fiókjához, és állítsa vissza a személyazonosságát."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ellenőrzés visszavonása és elküldés"</string>

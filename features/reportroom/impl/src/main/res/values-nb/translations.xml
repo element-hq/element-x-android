@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"Rapporten din ble sendt inn, men vi oppdaget et problem da vi prøvde å forlate rommet. Prøv igjen."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Kan ikke forlate rommet"</string>
+  <string name="screen_report_room_reason_footer">"Rapporter dette rommet til administratoren din. Hvis meldingene er kryptert, vil administratoren ikke kunne lese dem."</string>
+  <string name="screen_report_room_reason_placeholder">"Beskriv årsaken…"</string>
+  <string name="screen_report_room_title">"Rapporter rom"</string>
+</resources>

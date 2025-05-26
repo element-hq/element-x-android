@@ -20,15 +20,15 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.api.LoginEntryPoint
-import io.element.android.features.login.api.LoginFlowType
-import io.element.android.features.onboarding.api.OnBoardingEntryPoint
+import io.element.android.features.login.api.LoginParams
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.utils.ForceOrientationInMobileDevices
 import io.element.android.libraries.designsystem.utils.ScreenOrientation
 import io.element.android.libraries.di.AppScope
@@ -39,20 +39,25 @@ import kotlinx.parcelize.Parcelize
 class NotLoggedInFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val onBoardingEntryPoint: OnBoardingEntryPoint,
     private val loginEntryPoint: LoginEntryPoint,
     private val notLoggedInImageLoaderFactory: NotLoggedInImageLoaderFactory,
 ) : BaseFlowNode<NotLoggedInFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.OnBoarding,
+        initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap
     ),
     buildContext = buildContext,
     plugins = plugins,
 ) {
+    data class Params(
+        val loginParams: LoginParams?,
+    ) : NodeInputs
+
     interface Callback : Plugin {
         fun onOpenBugReport()
     }
+
+    private val inputs = inputs<Params>()
 
     override fun onBuilt() {
         super.onBuilt()
@@ -65,40 +70,26 @@ class NotLoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object OnBoarding : NavTarget
-
-        @Parcelize
-        data class LoginFlow(val type: LoginFlowType) : NavTarget
+        data object Root : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.OnBoarding -> {
-                val callback = object : OnBoardingEntryPoint.Callback {
-                    override fun onSignUp() {
-                        backstack.push(NavTarget.LoginFlow(type = LoginFlowType.SIGN_UP))
-                    }
-
-                    override fun onSignIn() {
-                        backstack.push(NavTarget.LoginFlow(type = LoginFlowType.SIGN_IN_MANUAL))
-                    }
-
-                    override fun onSignInWithQrCode() {
-                        backstack.push(NavTarget.LoginFlow(type = LoginFlowType.SIGN_IN_QR_CODE))
-                    }
-
+            NavTarget.Root -> {
+                val callback = object : LoginEntryPoint.Callback {
                     override fun onReportProblem() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
                 }
-                onBoardingEntryPoint
+                loginEntryPoint
                     .nodeBuilder(this, buildContext)
+                    .params(
+                        LoginEntryPoint.Params(
+                            accountProvider = inputs.loginParams?.accountProvider,
+                            loginHint = inputs.loginParams?.loginHint,
+                        )
+                    )
                     .callback(callback)
-                    .build()
-            }
-            is NavTarget.LoginFlow -> {
-                loginEntryPoint.nodeBuilder(this, buildContext)
-                    .params(LoginEntryPoint.Params(flowType = navTarget.type))
                     .build()
             }
         }

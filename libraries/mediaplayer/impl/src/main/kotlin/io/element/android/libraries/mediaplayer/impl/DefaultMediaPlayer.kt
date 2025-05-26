@@ -11,6 +11,8 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.audio.api.AudioFocus
+import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
@@ -36,6 +38,7 @@ import kotlin.time.Duration.Companion.seconds
 class DefaultMediaPlayer @Inject constructor(
     private val player: SimplePlayer,
     private val coroutineScope: CoroutineScope,
+    private val audioFocus: AudioFocus,
 ) : MediaPlayer {
     private val listener = object : SimplePlayer.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -49,6 +52,7 @@ class DefaultMediaPlayer @Inject constructor(
             if (isPlaying) {
                 job = coroutineScope.launch { updateCurrentPosition() }
             } else {
+                audioFocus.releaseAudioFocus()
                 job?.cancel()
             }
         }
@@ -118,6 +122,14 @@ class DefaultMediaPlayer @Inject constructor(
     }
 
     override fun play() {
+        audioFocus.requestAudioFocus(
+            requester = AudioFocusRequester.VoiceMessage,
+            onFocusLost = {
+                if (player.isPlaying()) {
+                    player.pause()
+                }
+            },
+        )
         if (player.playbackState == Player.STATE_ENDED) {
             // There's a bug with some ogg files that somehow report to
             // have no duration.

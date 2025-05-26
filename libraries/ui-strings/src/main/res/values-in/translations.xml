@@ -125,6 +125,7 @@
   <string name="action_view_in_timeline">"Lihat di lini masa"</string>
   <string name="action_view_source">"Tampilkan sumber"</string>
   <string name="action_yes">"Ya"</string>
+  <string name="action_yes_try_again">"Ya, coba lagi"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Server Anda kini mendukung protokol baru yang lebih cepat. Keluar dan masuk lagi untuk memperbarui sekarang. Melakukan hal ini sekarang akan membantu Anda menghindari keluar paksa saat protokol lama dihapus nantinya."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Peningkatan tersedia"</string>
   <string name="common_about">"Tentang"</string>
@@ -148,6 +149,7 @@
   <string name="common_device_id">"ID Perangkat"</string>
   <string name="common_direct_chat">"Obrolan langsung"</string>
   <string name="common_do_not_show_this_again">"Jangan tampilkan ini lagi"</string>
+  <string name="common_download_failed">"Pengunduhan gagal"</string>
   <string name="common_downloading">"Mengunduh"</string>
   <string name="common_edited_suffix">"(disunting)"</string>
   <string name="common_editing">"Penyuntingan"</string>
@@ -165,6 +167,8 @@ Alasan: %1$s."</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Difavoritkan"</string>
   <string name="common_file">"Berkas"</string>
+  <string name="common_file_deleted">"Berkas dihapus"</string>
+  <string name="common_file_saved">"Berkas disimpan"</string>
   <string name="common_file_saved_on_disk_android">"Berkas disimpan ke Unduhan"</string>
   <string name="common_forward_message">"Teruskan pesan"</string>
   <string name="common_frequently_used">"Sering digunakan"</string>
@@ -177,6 +181,9 @@ Alasan: %1$s."</string>
   <string name="common_light">"Terang"</string>
   <string name="common_link_copied_to_clipboard">"Tautan disalin ke papan klip"</string>
   <string name="common_loading">"Memuat…"</string>
+  <plurals name="common_many_members">
+    <item quantity="other">"%d lainnya"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d anggota"</item>
   </plurals>
@@ -350,6 +357,7 @@ Alasan: %1$s."</string>
   <string name="settings_version_number">"Versi: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"id"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Riwayat pesan tidak tersedia di perangkat ini"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Anda harus memverifikasi perangkat ini untuk mengakses riwayat pesan"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Anda tidak memiliki akses ke pesan ini"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Tidak dapat mendekripsi pesan"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Pesan ini diblokir karena Anda tidak memverifikasi perangkat Anda atau karena pengirim perlu memverifikasi identitas Anda."</string>

@@ -14,11 +14,14 @@
   <string name="screen_change_account_provider_subtitle">"Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet."</string>
   <string name="screen_change_account_provider_title">"Zmeniť poskytovateľa účtu"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nemohli sme sa spojiť s týmto domovským serverom. Skontrolujte prosím, či ste zadali URL adresu domovského servera správne. Ak je adresa URL správna, kontaktujte svoj domovský server pre ďalšiu pomoc."</string>
-  <string name="screen_change_server_error_invalid_well_known">"Posuvná synchronizácia nie je k dispozícii z dôvodu problému v známom súbore:
+  <string name="screen_change_server_error_invalid_well_known">"Server nie je k dispozícii kvôli problému v známom súbore:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Tento server momentálne nepodporuje kĺzavú synchronizáciu."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Vybraný poskytovateľ účtu nepodporuje kĺzavú synchronizáciu. Na používanie aplikácie %1$s je potrebná aktualizácia servera,"</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s nemá dovolené pripojiť sa k %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Táto aplikácia bola nastavená tak, aby povoľovala: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Poskytovateľ účtu %1$s nie je povolený."</string>
   <string name="screen_change_server_form_header">"Adresa URL domovského servera"</string>
-  <string name="screen_change_server_form_notice">"Môžete sa pripojiť iba k existujúcemu serveru, ktorý podporuje kĺzavú synchronizáciu. Správca domovského servera ju bude musieť nakonfigurovať. %1$s"</string>
+  <string name="screen_change_server_form_notice">"Zadajte adresu domény."</string>
   <string name="screen_change_server_subtitle">"Aká je adresa vášho servera?"</string>
   <string name="screen_change_server_title">"Vyberte svoj server"</string>
   <string name="screen_create_account_title">"Vytvoriť účet"</string>
@@ -31,6 +34,13 @@
   <string name="screen_login_subtitle">"Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu."</string>
   <string name="screen_login_title">"Vitajte späť!"</string>
   <string name="screen_login_title_with_homeserver">"Prihlásiť sa do %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Prihlásiť sa manuálne"</string>
+  <string name="screen_onboarding_sign_in_to">"Prihlásiť sa do %1$s"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Prihlásiť sa pomocou QR kódu"</string>
+  <string name="screen_onboarding_sign_up">"Vytvoriť účet"</string>
+  <string name="screen_onboarding_welcome_message">"Vitajte v najrýchlejšom %1$s vôbec. Nadupaný pre rýchlosť a jednoduchosť."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Vitajte v %1$s. Nadupaný, pre rýchlosť a jednoduchosť."</string>
+  <string name="screen_onboarding_welcome_title">"Buďte vo svojom elemente"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Nadväzovanie bezpečného spojenia"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"K novému zariadeniu sa nepodarilo vytvoriť bezpečné pripojenie. Vaše existujúce zariadenia sú stále v bezpečí a nemusíte sa o ne obávať."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Čo teraz?"</string>

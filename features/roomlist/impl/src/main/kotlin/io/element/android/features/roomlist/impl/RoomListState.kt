@@ -8,7 +8,7 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Immutable
-import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
@@ -28,6 +28,7 @@ data class RoomListState(
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
     val contextMenu: ContextMenu,
+    val declineInviteMenu: DeclineInviteMenu,
     val leaveRoomState: LeaveRoomState,
     val filtersState: RoomListFiltersState,
     val canReportBug: Boolean,
@@ -36,6 +37,7 @@ data class RoomListState(
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val directLogoutState: DirectLogoutState,
     val hideInvitesAvatars: Boolean,
+    val canReportRoom: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     val displayFilters = contentState is RoomListContentState.Rooms
@@ -49,9 +51,14 @@ data class RoomListState(
             val isDm: Boolean,
             val isFavorite: Boolean,
             val markAsUnreadFeatureFlagEnabled: Boolean,
-            val eventCacheFeatureFlagEnabled: Boolean,
             val hasNewContent: Boolean,
+            val displayClearRoomCacheAction: Boolean,
         ) : ContextMenu
+    }
+
+    sealed interface DeclineInviteMenu {
+        data object Hidden : DeclineInviteMenu
+        data class Shown(val roomSummary: RoomListRoomSummary) : DeclineInviteMenu
     }
 }
 

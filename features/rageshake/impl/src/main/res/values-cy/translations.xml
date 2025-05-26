@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Atodwch lun sgrin"</string>
+  <string name="screen_bug_report_contact_me">"Gallwch gysylltu â mi os oes gennych unrhyw gwestiynau dilynol."</string>
+  <string name="screen_bug_report_contact_me_title">"Cysylltwch â mi"</string>
+  <string name="screen_bug_report_edit_screenshot">"Golygu\'r llun sgrin"</string>
+  <string name="screen_bug_report_editor_description">"Disgrifiwch y broblem. Beth wnaethoch chi? Beth oeddech chi\'n disgwyl i ddigwydd? Beth ddigwyddodd mewn gwirionedd. Ewch i gymaint o fanylion ag y gallwch."</string>
+  <string name="screen_bug_report_editor_placeholder">"Disgrifiwch y broblem…"</string>
+  <string name="screen_bug_report_editor_supporting">"Os yn bosibl, ysgrifennwch y disgrifiad yn Saesneg."</string>
+  <string name="screen_bug_report_error_description_too_short">"Mae\'r disgrifiad yn rhy fyr, rhowch fwy o fanylion am yr hyn ddigwyddodd. Diolch!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Anfonwch logiau chwalu"</string>
+  <string name="screen_bug_report_include_logs">"Caniatáu logiau"</string>
+  <string name="screen_bug_report_include_screenshot">"Anfon luniau sgrin"</string>
+  <string name="screen_bug_report_logs_description">"Bydd cofnodion yn cael eu cynnwys gyda\'ch neges i wneud yn siŵr bod popeth yn gweithio\'n iawn. I anfon eich neges heb logiau, diffoddwch y gosodiad hwn."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"Chwalodd %1$s y tro diwethaf iddo gael ei ddefnyddio. Hoffech chi rannu adroddiad gwall gyda ni?"</string>
+  <string name="screen_bug_report_view_logs">"Gweld logiau"</string>
+</resources>

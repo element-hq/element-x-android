@@ -147,13 +147,6 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    EventCache(
-        key = "feature.event_cache",
-        title = "Use SDK Event cache",
-        description = "Warning: you must kill and restart the app for the change to take effect.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
         title = "Print logs to logcat",
@@ -163,5 +156,5 @@ enum class FeatureFlags(
         defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
         // False so it's displayed in the developer options screen
         isFinished = false,
-    )
+    ),
 }
