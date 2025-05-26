@@ -18,6 +18,7 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
@@ -37,8 +38,11 @@ class DefaultClearCacheUseCase @Inject constructor(
     private val ftueService: FtueService,
     private val pushService: PushService,
     private val seenInvitesStore: SeenInvitesStore,
+    private val activeRoomsHolder: ActiveRoomsHolder,
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
+        // Active rooms should be disposed of before clearing the cache
+        activeRoomsHolder.clear(matrixClient.sessionId)
         // Clear Matrix cache
         matrixClient.clearCache()
         // Clear Coil cache
