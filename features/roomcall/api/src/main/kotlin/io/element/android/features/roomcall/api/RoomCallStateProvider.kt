@@ -16,6 +16,7 @@ open class RoomCallStateProvider : PreviewParameterProvider<RoomCallState> {
         anOngoingCallState(),
         anOngoingCallState(canJoinCall = false),
         anOngoingCallState(canJoinCall = true, isUserInTheCall = true),
+        RoomCallState.Unavailable,
     )
 }
 
