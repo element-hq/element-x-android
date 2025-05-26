@@ -16,6 +16,7 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -65,7 +66,7 @@ class NotificationResolverQueue @Inject constructor(
         Timber.d("Starting processing job for request: $request")
     }
 
-    private fun processQueue() = appCoroutineScope.launch {
+    private fun processQueue() = appCoroutineScope.launch(SupervisorJob()) {
         delay(BATCH_WINDOW_MS.milliseconds)
 
         // If this job is still active (so this is the latest job), we launch a separate one that won't be cancelled when enqueueing new items
