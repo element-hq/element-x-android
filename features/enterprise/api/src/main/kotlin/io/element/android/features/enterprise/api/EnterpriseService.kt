@@ -21,4 +21,14 @@ interface EnterpriseService {
 
     fun firebasePushGateway(): String?
     fun unifiedPushDefaultPushGateway(): String?
+
+    companion object {
+        const val ANY_ACCOUNT_PROVIDER = "*"
+    }
+}
+
+fun EnterpriseService.canConnectToAnyHomeserver(): Boolean {
+    return defaultHomeserverList().let {
+        it.isEmpty() || it.contains(EnterpriseService.ANY_ACCOUNT_PROVIDER)
+    }
 }

@@ -16,7 +16,7 @@ constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.9.0"
 activity = "1.10.1"
-media3 = "1.6.1"
+media3 = "1.7.1"
 camera = "1.4.2"
 
 # Compose
@@ -72,7 +72,7 @@ kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", ve
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.13.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.14.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -232,7 +232,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.8"
-ktlint = "org.jlleitschuh.gradle.ktlint:12.2.0"
+ktlint = "org.jlleitschuh.gradle.ktlint:12.3.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:12.1.1"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
