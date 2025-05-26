@@ -49,12 +49,10 @@ class ActiveRoomsHolder @Inject constructor() {
 
     /**
      * Removes any room matching the provided [sessionId] and [roomId].
-     *
-     * @return true if a room was removed, false otherwise.
      */
-    fun removeRoom(sessionId: SessionId, roomId: RoomId): Boolean {
-        val roomsForSessionId = rooms[sessionId] ?: return false
-        return roomsForSessionId.removeIf { it.roomId == roomId }
+    fun removeRoom(sessionId: SessionId, roomId: RoomId) {
+        val roomsForSessionId = rooms[sessionId] ?: return
+        roomsForSessionId.removeIf { it.roomId == roomId }
     }
 
     /**
