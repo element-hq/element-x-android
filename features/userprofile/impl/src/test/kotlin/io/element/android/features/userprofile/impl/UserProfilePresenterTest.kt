@@ -150,6 +150,9 @@ class UserProfilePresenterTest {
             val initialState = awaitLastSequentialItem()
             assertThat(initialState.canCall).isEqualTo(expectedResult)
         }
+        if (isElementCallAvailable && canFindRoom && dmRoom != null) {
+            room.assertDestroyed()
+        }
     }
 
     @Test

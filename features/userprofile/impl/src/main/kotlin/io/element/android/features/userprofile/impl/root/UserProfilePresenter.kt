@@ -68,7 +68,12 @@ class UserProfilePresenter @AssistedInject constructor(
                 isElementCallAvailable.not() -> false
                 client.isMe(userId) -> false
                 else ->
-                    roomId?.let { client.getRoom(it)?.canUserJoinCall(client.sessionId)?.getOrNull() == true }.orFalse()
+                    roomId
+                        ?.let { client.getRoom(it) }
+                        ?.use { room ->
+                            room.canUserJoinCall(client.sessionId).getOrNull()
+                        }
+                        .orFalse()
             }
         }
     }
