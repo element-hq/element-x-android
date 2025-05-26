@@ -16,6 +16,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.createroom.test.FakeStartDMAction
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
@@ -116,7 +117,16 @@ class UserProfilePresenterTest {
         )
     }
 
+    @Test
+    fun `present - canCall is false when call is not available`() {
+        testCanCall(
+            isElementCallAvailable = false,
+            expectedResult = false,
+        )
+    }
+
     private fun testCanCall(
+        isElementCallAvailable: Boolean = true,
         canUserJoinCallResult: Result<Boolean> = Result.success(true),
         dmRoom: RoomId? = A_ROOM_ID,
         canFindRoom: Boolean = true,
@@ -134,6 +144,7 @@ class UserProfilePresenterTest {
         val presenter = createUserProfilePresenter(
             userId = A_USER_ID_2,
             client = client,
+            isElementCallAvailable = isElementCallAvailable,
         )
         presenter.test {
             val initialState = awaitLastSequentialItem()
@@ -387,12 +398,16 @@ class UserProfilePresenterTest {
     private fun createUserProfilePresenter(
         client: MatrixClient = createFakeMatrixClient(),
         userId: UserId = UserId("@alice:server.org"),
-        startDMAction: StartDMAction = FakeStartDMAction()
+        startDMAction: StartDMAction = FakeStartDMAction(),
+        isElementCallAvailable: Boolean = true,
     ): UserProfilePresenter {
         return UserProfilePresenter(
             userId = userId,
             client = client,
             startDMAction = startDMAction,
+            enterpriseService = FakeEnterpriseService(
+                isElementCallAvailableResult = { isElementCallAvailable },
+            ),
         )
     }
 }
