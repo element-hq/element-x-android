@@ -16,7 +16,10 @@ import io.element.android.libraries.pushproviders.unifiedpush.registration.Endpo
 import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.unifiedpush.android.connector.FailedReason
 import org.unifiedpush.android.connector.MessagingReceiver
+import org.unifiedpush.android.connector.data.PushEndpoint
+import org.unifiedpush.android.connector.data.PushMessage
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -45,15 +48,15 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * @param message the message
      * @param instance connection, for multi-account
      */
-    override fun onMessage(context: Context, message: ByteArray, instance: String) {
-        Timber.tag(loggerTag.value).w("New message")
+    override fun onMessage(context: Context, message: PushMessage, instance: String) {
+        Timber.tag(loggerTag.value).d("New message, decrypted: ${message.decrypted}")
         coroutineScope.launch {
-            val pushData = pushParser.parse(message, instance)
+            val pushData = pushParser.parse(message.content, instance)
             if (pushData == null) {
                 Timber.tag(loggerTag.value).w("Invalid data received from UnifiedPush")
                 pushHandler.handleInvalid(
                     providerInfo = "${UnifiedPushConfig.NAME} - $instance",
-                    data = String(message),
+                    data = String(message.content),
                 )
             } else {
                 pushHandler.handle(
@@ -68,20 +71,20 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * Called when a new endpoint is to be used for sending push messages.
      * You should send the endpoint to your application server and sync for missing notifications.
      */
-    override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
+    override fun onNewEndpoint(context: Context, endpoint: PushEndpoint, instance: String) {
         Timber.tag(loggerTag.value).w("onNewEndpoint: $endpoint")
         coroutineScope.launch {
-            val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
+            val gateway = unifiedPushGatewayResolver.getGateway(endpoint.url)
                 .let { gatewayResult ->
                     unifiedPushGatewayUrlResolver.resolve(gatewayResult, instance)
                 }
             unifiedPushStore.storePushGateway(instance, gateway)
-            val result = newGatewayHandler.handle(endpoint, gateway, instance)
+            val result = newGatewayHandler.handle(endpoint.url, gateway, instance)
                 .onFailure {
                     Timber.tag(loggerTag.value).e(it, "Failed to handle new gateway")
                 }
                 .onSuccess {
-                    unifiedPushStore.storeUpEndpoint(instance, endpoint)
+                    unifiedPushStore.storeUpEndpoint(instance, endpoint.url)
                 }
             endpointRegistrationHandler.registrationDone(
                 RegistrationResult(
@@ -96,8 +99,8 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     /**
      * Called when the registration is not possible, eg. no network.
      */
-    override fun onRegistrationFailed(context: Context, instance: String) {
-        Timber.tag(loggerTag.value).e("onRegistrationFailed for $instance")
+    override fun onRegistrationFailed(context: Context, reason: FailedReason, instance: String) {
+        Timber.tag(loggerTag.value).e("onRegistrationFailed for $instance, reason: $reason")
         /*
         Toast.makeText(context, "Push service registration failed", Toast.LENGTH_SHORT).show()
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
@@ -110,7 +113,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * Called when this application is unregistered from receiving push messages.
      */
     override fun onUnregistered(context: Context, instance: String) {
-        Timber.tag(loggerTag.value).w("Unifiedpush: Unregistered")
+        Timber.tag(loggerTag.value).w("UnifiedPush: Unregistered")
         /*
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         pushDataStore.setFdroidSyncBackgroundMode(mode)
