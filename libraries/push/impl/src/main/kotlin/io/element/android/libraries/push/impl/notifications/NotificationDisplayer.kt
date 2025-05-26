@@ -37,6 +37,7 @@ class DefaultNotificationDisplayer @Inject constructor(
             return false
         }
         notificationManager.notify(tag, id, notification)
+        Timber.d("Notifying with tag: $tag, id: $id")
         return true
     }
 
