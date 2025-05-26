@@ -8,16 +8,21 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomInfo
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.tests.testutils.lambda.lambdaError
+import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
 
 class FakeRustRoom(
     private val roomId: RoomId = A_ROOM_ID,
     private val getMembers: () -> RoomMembersIterator = { lambdaError() },
     private val getMembersNoSync: () -> RoomMembersIterator = { lambdaError() },
+    private val latestEventLambda: () -> EventTimelineItem? = { lambdaError() },
+    private val roomInfo: RoomInfo = aRustRoomInfo(id = roomId.value),
 ) : Room(NoPointer) {
     override fun id(): String {
         return roomId.value
@@ -29,6 +34,14 @@ class FakeRustRoom(
 
     override suspend fun membersNoSync(): RoomMembersIterator {
         return getMembersNoSync()
+    }
+
+    override suspend fun roomInfo(): RoomInfo {
+        return roomInfo
+    }
+
+    override suspend fun latestEvent(): EventTimelineItem? {
+        return latestEventLambda()
     }
 
     override fun close() {

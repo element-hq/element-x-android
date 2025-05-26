@@ -47,6 +47,6 @@ class FakeRustClientBuilder : ClientBuilder(NoPointer) {
     }
 
     override suspend fun build(): Client {
-        return FakeRustClient()
+        return FakeRustClient(withUtdHook = {})
     }
 }

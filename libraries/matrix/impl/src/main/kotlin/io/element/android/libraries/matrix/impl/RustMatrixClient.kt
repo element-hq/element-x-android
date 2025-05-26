@@ -189,7 +189,6 @@ class RustMatrixClient(
 
     private val roomMembershipObserver = RoomMembershipObserver()
     private val roomFactory = RustRoomFactory(
-        innerClient = innerClient,
         roomListService = roomListService,
         innerRoomListService = innerRoomListService,
         sessionId = sessionId,
