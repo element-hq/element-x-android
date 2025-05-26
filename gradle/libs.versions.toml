@@ -40,7 +40,7 @@ serialization_json = "1.8.1"
 coil = "3.1.0"
 showkase = "1.0.3"
 appyx = "1.7.0"
-sqldelight = "2.0.2"
+sqldelight = "2.1.0"
 wysiwyg = "2.38.3"
 telephoto = "0.15.1"
 
