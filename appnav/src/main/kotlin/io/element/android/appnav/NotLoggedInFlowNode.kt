@@ -24,8 +24,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.api.LoginEntryPoint
+import io.element.android.features.login.api.LoginParams
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.utils.ForceOrientationInMobileDevices
 import io.element.android.libraries.designsystem.utils.ScreenOrientation
 import io.element.android.libraries.di.AppScope
@@ -46,9 +49,15 @@ class NotLoggedInFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
+    data class Params(
+        val loginParams: LoginParams?,
+    ) : NodeInputs
+
     interface Callback : Plugin {
         fun onOpenBugReport()
     }
+
+    private val inputs = inputs<Params>()
 
     override fun onBuilt() {
         super.onBuilt()
@@ -74,6 +83,12 @@ class NotLoggedInFlowNode @AssistedInject constructor(
                 }
                 loginEntryPoint
                     .nodeBuilder(this, buildContext)
+                    .params(
+                        LoginEntryPoint.Params(
+                            accountProvider = inputs.loginParams?.accountProvider,
+                            loginHint = inputs.loginParams?.loginHint,
+                        )
+                    )
                     .callback(callback)
                     .build()
             }

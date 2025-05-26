@@ -13,6 +13,11 @@ import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 
 interface LoginEntryPoint : FeatureEntryPoint {
+    data class Params(
+        val accountProvider: String?,
+        val loginHint: String?,
+    )
+
     interface Callback : Plugin {
         fun onReportProblem()
     }
@@ -20,6 +25,7 @@ interface LoginEntryPoint : FeatureEntryPoint {
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface NodeBuilder {
+        fun params(params: Params): NodeBuilder
         fun callback(callback: Callback): NodeBuilder
         fun build(): Node
     }

@@ -58,6 +58,7 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(projects.features.login.test)
     testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)

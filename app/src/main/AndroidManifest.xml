@@ -34,11 +34,17 @@
                 android:value='androidx.startup' />
         </provider>
 
+        <!--
+        Using launchMode singleTask to avoid multiple instances of the Activity
+        when the app is already open. This is important for incoming share (see
+        https://github.com/element-hq/element-x-android/issues/4074) and for opening
+        the application from a mobile.element.io link.
+        -->
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.ElementX.Splash"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -54,6 +60,9 @@
                     android:host="open"
                     android:scheme="elementx" />
             </intent-filter>
+            <!--
+              Oidc redirection
+            -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -79,6 +88,21 @@
                 <data android:host="develop.element.io" />
                 <!-- Matching asset file: https://staging.element.io/.well-known/assetlinks.json -->
                 <data android:host="staging.element.io" />
+            </intent-filter>
+            <!--
+              Element mobile links
+              Example: https://mobile.element.io/element?account_provider=example.org&login_hint=mxid:@alice:example.org
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <!-- Matching asset file: https://mobile.element.io/.well-known/assetlinks.json -->
+                <data android:host="mobile.element.io" />
+                <data android:path="/element" />
             </intent-filter>
             <!--
               matrix.to links

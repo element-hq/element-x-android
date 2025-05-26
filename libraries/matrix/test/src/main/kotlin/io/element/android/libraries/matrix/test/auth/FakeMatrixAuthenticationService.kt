@@ -87,7 +87,10 @@ class FakeMatrixAuthenticationService(
         return importCreatedSessionLambda(externalSession)
     }
 
-    override suspend fun getOidcUrl(prompt: OidcPrompt): Result<OidcDetails> = simulateLongTask {
+    override suspend fun getOidcUrl(
+        prompt: OidcPrompt,
+        loginHint: String?,
+    ): Result<OidcDetails> = simulateLongTask {
         oidcError?.let { Result.failure(it) } ?: Result.success(A_OIDC_DATA)
     }
 

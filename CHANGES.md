@@ -1,3 +1,50 @@
+<!-- Release notes generated using configuration in .github/release.yml at v25.05.4 -->
+
+Changes in Element X v25.05.4
+=============================
+
+Rust SDK: https://github.com/matrix-org/matrix-rust-sdk/releases/tag/matrix-sdk-ffi%2F20250521
+
+## What's Changed
+### 🙌 Improvements
+* Change (report room) : check if server supports the report room api by @ganfra in https://github.com/element-hq/element-x-android/pull/4718
+### 🐛 Bugfixes
+* Improve audio focus management by @bmarty in https://github.com/element-hq/element-x-android/pull/4707
+* When transcoding a video fails, send it as a file by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4257
+* Disable mutliple click (parallel or serial) on a room by @bmarty in https://github.com/element-hq/element-x-android/pull/4683
+* Fix generic mime type used when externally sharing several files by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4715
+* Fix issues on JoinedRoom / BaseRoom by @bmarty in https://github.com/element-hq/element-x-android/pull/4724
+* Use the right live timeline instance in `RustRoomFactory` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4745
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4739
+### 🧱 Build
+* Ensure the CI is marked as failed when Maestro test is failing by @bmarty in https://github.com/element-hq/element-x-android/pull/4700
+* Trigger pipeline build when a release tag is pushed by @bmarty in https://github.com/element-hq/element-x-android/pull/4741
+* Fix compilation issues. by @bmarty in https://github.com/element-hq/element-x-android/pull/4750
+### 📄 Documentation
+* README.md: fix broken link by @richvdh in https://github.com/element-hq/element-x-android/pull/4728
+### Dependency upgrades
+* chore(config): migrate renovate config by @renovate in https://github.com/element-hq/element-x-android/pull/4688
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.5.13 by @renovate in https://github.com/element-hq/element-x-android/pull/4716
+* fix(deps): update dependency io.sentry:sentry-android to v8.12.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4717
+* chore(deps): update plugin sonarqube to v6.2.0.5505 by @renovate in https://github.com/element-hq/element-x-android/pull/4725
+* fix(deps): update dependency com.posthog:posthog-android to v3.15.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4723
+* fix(deps): update dependency com.squareup.retrofit2:retrofit-bom to v2.12.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4727
+* chore(deps): update codecov/codecov-action action to v5.4.3 by @renovate in https://github.com/element-hq/element-x-android/pull/4730
+* fix(deps): update kotlin by @renovate in https://github.com/element-hq/element-x-android/pull/4713
+* fix(deps): update dependency com.squareup.retrofit2:retrofit-bom to v3 by @renovate in https://github.com/element-hq/element-x-android/pull/4729
+* fix(deps): update kotlinpoet to v2.2.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4732
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.5.21 by @renovate in https://github.com/element-hq/element-x-android/pull/4759
+### Others
+* Remove event cache feature flag by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4719
+* Check homeserver when login using qr code by @bmarty in https://github.com/element-hq/element-x-android/pull/4708
+* Merge on boarding module to login module by @bmarty in https://github.com/element-hq/element-x-android/pull/4746
+* Allow configuration to provide multiple account providers. by @bmarty in https://github.com/element-hq/element-x-android/pull/4742
+* Reduce API of JoinedRoom, caller must use the Timeline API from liveTimeline instead by @bmarty in https://github.com/element-hq/element-x-android/pull/4731
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.05.3...v25.05.4
+
 Changes in Element X v25.05.3
 =============================
 
