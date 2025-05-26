@@ -20,7 +20,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -34,7 +33,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @SingleIn(AppScope::class)
 class NotificationResolverQueue @Inject constructor(
     private val notifiableEventResolver: NotifiableEventResolver,
-    private val coroutineScope: CoroutineScope,
+    private val appCoroutineScope: CoroutineScope,
 ) {
     companion object {
         private const val BATCH_WINDOW_MS = 250L
@@ -66,16 +65,12 @@ class NotificationResolverQueue @Inject constructor(
         Timber.d("Starting processing job for request: $request")
     }
 
-    private fun processQueue() = coroutineScope.launch {
-        if (!isActive) return@launch
-
+    private fun processQueue() = appCoroutineScope.launch {
         delay(BATCH_WINDOW_MS.milliseconds)
-
-        if (!isActive) return@launch
 
         // If this job is still active (so this is the latest job), we launch a separate one that won't be cancelled when enqueueing new items
         // to process the existing queued items.
-        coroutineScope.launch {
+        appCoroutineScope.launch {
             val groupedRequestsById = buildList {
                 while (!requestQueue.isEmpty) {
                     requestQueue.receiveCatching().getOrNull()?.let(this::add)
