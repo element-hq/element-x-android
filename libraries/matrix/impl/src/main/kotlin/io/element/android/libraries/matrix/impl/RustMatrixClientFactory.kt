@@ -72,8 +72,9 @@ class RustMatrixClientFactory @Inject constructor(
     suspend fun create(client: Client): RustMatrixClient {
         val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
 
+        client.setUtdDelegate(UtdTracker(analyticsService))
+
         val syncService = client.syncService()
-            .withUtdHook(UtdTracker(analyticsService))
             .withOfflineMode()
             .finish()
 
