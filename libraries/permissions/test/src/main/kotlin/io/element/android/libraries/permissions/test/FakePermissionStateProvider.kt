@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.permissions.impl
+package io.element.android.libraries.permissions.test
 
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import kotlinx.coroutines.flow.Flow

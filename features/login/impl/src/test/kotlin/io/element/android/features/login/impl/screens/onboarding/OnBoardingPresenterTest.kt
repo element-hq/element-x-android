@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.oidc.api.OidcActionFlow
-import io.element.android.libraries.oidc.impl.customtab.DefaultOidcActionFlow
+import io.element.android.libraries.oidc.test.customtab.FakeOidcActionFlow
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
@@ -226,7 +226,7 @@ private fun createPresenter(
 )
 
 fun createLoginHelper(
-    oidcActionFlow: OidcActionFlow = DefaultOidcActionFlow(),
+    oidcActionFlow: OidcActionFlow = FakeOidcActionFlow(),
     authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
     defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
     webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
