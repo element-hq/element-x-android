@@ -16,6 +16,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.createroom.test.FakeStartDMAction
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
@@ -37,7 +38,6 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -81,6 +81,8 @@ class UserProfilePresenterTest {
     fun `present - canCall is true when all the conditions are met`() {
         testCanCall(
             expectedResult = true,
+            skipItems = 3,
+            checkThatRoomIsDestroyed = true,
         )
     }
 
@@ -116,11 +118,22 @@ class UserProfilePresenterTest {
         )
     }
 
+    @Test
+    fun `present - canCall is false when call is not available`() {
+        testCanCall(
+            isElementCallAvailable = false,
+            expectedResult = false,
+        )
+    }
+
     private fun testCanCall(
+        isElementCallAvailable: Boolean = true,
         canUserJoinCallResult: Result<Boolean> = Result.success(true),
         dmRoom: RoomId? = A_ROOM_ID,
         canFindRoom: Boolean = true,
         expectedResult: Boolean,
+        skipItems: Int = 1,
+        checkThatRoomIsDestroyed: Boolean = false,
     ) = runTest {
         val room = FakeBaseRoom(
             canUserJoinCallResult = { canUserJoinCallResult },
@@ -134,10 +147,14 @@ class UserProfilePresenterTest {
         val presenter = createUserProfilePresenter(
             userId = A_USER_ID_2,
             client = client,
+            isElementCallAvailable = isElementCallAvailable,
         )
         presenter.test {
-            val initialState = awaitLastSequentialItem()
+            val initialState = awaitFirstItem(skipItems)
             assertThat(initialState.canCall).isEqualTo(expectedResult)
+        }
+        if (checkThatRoomIsDestroyed) {
+            room.assertDestroyed()
         }
     }
 
@@ -202,7 +219,7 @@ class UserProfilePresenterTest {
         )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
-            val initialState = awaitFirstItem()
+            val initialState = awaitFirstItem(count = 2)
             initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
@@ -220,7 +237,7 @@ class UserProfilePresenterTest {
         )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
-            val initialState = awaitFirstItem()
+            val initialState = awaitFirstItem(count = 2)
             initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
@@ -363,8 +380,8 @@ class UserProfilePresenterTest {
         }
     }
 
-    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-        skipItems(1)
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(count: Int = 1): T {
+        skipItems(count)
         return awaitItem()
     }
 
@@ -387,12 +404,16 @@ class UserProfilePresenterTest {
     private fun createUserProfilePresenter(
         client: MatrixClient = createFakeMatrixClient(),
         userId: UserId = UserId("@alice:server.org"),
-        startDMAction: StartDMAction = FakeStartDMAction()
+        startDMAction: StartDMAction = FakeStartDMAction(),
+        isElementCallAvailable: Boolean = true,
     ): UserProfilePresenter {
         return UserProfilePresenter(
             userId = userId,
             client = client,
             startDMAction = startDMAction,
+            enterpriseService = FakeEnterpriseService(
+                isElementCallAvailableResult = { isElementCallAvailable },
+            ),
         )
     }
 }

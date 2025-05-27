@@ -13,6 +13,8 @@ import io.element.android.features.roomcall.api.RoomCallState.StandBy
 
 @Immutable
 sealed interface RoomCallState {
+    data object Unavailable : RoomCallState
+
     data class StandBy(
         val canStartCall: Boolean,
     ) : RoomCallState
@@ -25,6 +27,7 @@ sealed interface RoomCallState {
 }
 
 fun RoomCallState.hasPermissionToJoin() = when (this) {
+    RoomCallState.Unavailable -> false
     is StandBy -> canStartCall
     is OnGoing -> canJoinCall
 }
