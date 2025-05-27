@@ -61,9 +61,11 @@ class UserProfilePresenter @AssistedInject constructor(
 
     @Composable
     private fun getCanCall(roomId: RoomId?): State<Boolean> {
-        return produceState(initialValue = false, roomId) {
-            val isElementCallAvailable = enterpriseService.isElementCallAvailable()
+        val isElementCallAvailable by produceState(initialValue = false, roomId) {
+            value = enterpriseService.isElementCallAvailable()
+        }
 
+        return produceState(initialValue = false, isElementCallAvailable, roomId) {
             value = when {
                 isElementCallAvailable.not() -> false
                 client.isMe(userId) -> false

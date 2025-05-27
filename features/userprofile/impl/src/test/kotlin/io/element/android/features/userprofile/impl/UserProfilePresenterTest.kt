@@ -38,7 +38,6 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -82,6 +81,8 @@ class UserProfilePresenterTest {
     fun `present - canCall is true when all the conditions are met`() {
         testCanCall(
             expectedResult = true,
+            skipItems = 3,
+            checkThatRoomIsDestroyed = true,
         )
     }
 
@@ -131,6 +132,8 @@ class UserProfilePresenterTest {
         dmRoom: RoomId? = A_ROOM_ID,
         canFindRoom: Boolean = true,
         expectedResult: Boolean,
+        skipItems: Int = 1,
+        checkThatRoomIsDestroyed: Boolean = false,
     ) = runTest {
         val room = FakeBaseRoom(
             canUserJoinCallResult = { canUserJoinCallResult },
@@ -147,10 +150,10 @@ class UserProfilePresenterTest {
             isElementCallAvailable = isElementCallAvailable,
         )
         presenter.test {
-            val initialState = awaitLastSequentialItem()
+            val initialState = awaitFirstItem(skipItems)
             assertThat(initialState.canCall).isEqualTo(expectedResult)
         }
-        if (isElementCallAvailable && canFindRoom && dmRoom != null) {
+        if (checkThatRoomIsDestroyed) {
             room.assertDestroyed()
         }
     }
@@ -216,7 +219,7 @@ class UserProfilePresenterTest {
         )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
-            val initialState = awaitFirstItem()
+            val initialState = awaitFirstItem(count = 2)
             initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
@@ -234,7 +237,7 @@ class UserProfilePresenterTest {
         )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
-            val initialState = awaitFirstItem()
+            val initialState = awaitFirstItem(count = 2)
             initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
@@ -377,8 +380,8 @@ class UserProfilePresenterTest {
         }
     }
 
-    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-        skipItems(1)
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(count: Int = 1): T {
+        skipItems(count)
         return awaitItem()
     }
 
