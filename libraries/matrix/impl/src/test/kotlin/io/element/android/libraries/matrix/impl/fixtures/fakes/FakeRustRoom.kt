@@ -21,6 +21,7 @@ class FakeRustRoom(
     private val roomId: RoomId = A_ROOM_ID,
     private val getMembers: () -> RoomMembersIterator = { lambdaError() },
     private val getMembersNoSync: () -> RoomMembersIterator = { lambdaError() },
+    private val leaveLambda: () -> Unit = { lambdaError() },
     private val latestEventLambda: () -> EventTimelineItem? = { lambdaError() },
     private val roomInfo: RoomInfo = aRustRoomInfo(id = roomId.value),
 ) : Room(NoPointer) {
@@ -34,6 +35,10 @@ class FakeRustRoom(
 
     override suspend fun membersNoSync(): RoomMembersIterator {
         return getMembersNoSync()
+    }
+
+    override suspend fun leave() {
+        leaveLambda()
     }
 
     override suspend fun roomInfo(): RoomInfo {
