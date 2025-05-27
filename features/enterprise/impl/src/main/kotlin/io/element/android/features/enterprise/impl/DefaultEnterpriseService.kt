@@ -25,6 +25,8 @@ class DefaultEnterpriseService @Inject constructor() : EnterpriseService {
     override fun defaultHomeserverList(): List<String> = emptyList()
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String) = true
 
+    override suspend fun isElementCallAvailable(): Boolean = true
+
     override fun semanticColorsLight(): SemanticColors = compoundColorsLight
 
     override fun semanticColorsDark(): SemanticColors = compoundColorsDark

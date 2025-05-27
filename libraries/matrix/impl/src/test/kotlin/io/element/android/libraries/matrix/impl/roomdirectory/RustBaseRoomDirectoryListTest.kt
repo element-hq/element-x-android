@@ -13,7 +13,6 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomDescription
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomDirectorySearch
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -31,7 +30,6 @@ class RustBaseRoomDirectoryListTest {
         val mapper = RoomDescriptionMapper()
         val sut = createRustRoomDirectoryList(
             roomDirectorySearch = roomDirectorySearch,
-            scope = backgroundScope,
         )
         // Let the mxCallback be ready
         runCurrent()
@@ -81,10 +79,9 @@ class RustBaseRoomDirectoryListTest {
 
     private fun TestScope.createRustRoomDirectoryList(
         roomDirectorySearch: RoomDirectorySearch = FakeRustRoomDirectorySearch(),
-        scope: CoroutineScope,
     ) = RustRoomDirectoryList(
         inner = roomDirectorySearch,
-        coroutineScope = scope,
+        coroutineScope = backgroundScope,
         coroutineContext = StandardTestDispatcher(testScheduler),
     )
 }

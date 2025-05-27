@@ -32,7 +32,6 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
@@ -155,7 +154,6 @@ class PollHistoryPresenterTest {
 
     private fun TestScope.createPollHistoryPresenter(
         room: FakeJoinedRoom = FakeJoinedRoom(),
-        appCoroutineScope: CoroutineScope = this,
         endPollAction: EndPollAction = FakeEndPollAction(),
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
         pollHistoryItemFactory: PollHistoryItemsFactory = PollHistoryItemsFactory(
@@ -165,7 +163,7 @@ class PollHistoryPresenterTest {
         ),
     ): PollHistoryPresenter {
         return PollHistoryPresenter(
-            appCoroutineScope = appCoroutineScope,
+            appCoroutineScope = this,
             sendPollResponseAction = sendPollResponseAction,
             endPollAction = endPollAction,
             pollHistoryItemFactory = pollHistoryItemFactory,

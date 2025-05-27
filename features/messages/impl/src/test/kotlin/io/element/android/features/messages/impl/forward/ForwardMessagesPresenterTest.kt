@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -91,13 +91,12 @@ class ForwardMessagesPresenterTest {
         }
     }
 
-    private fun CoroutineScope.aForwardMessagesPresenter(
+    private fun TestScope.aForwardMessagesPresenter(
         eventId: EventId = AN_EVENT_ID,
         fakeRoom: FakeJoinedRoom = FakeJoinedRoom(),
-        coroutineScope: CoroutineScope = this,
     ) = ForwardMessagesPresenter(
         eventId = eventId.value,
         timelineProvider = LiveTimelineProvider(fakeRoom),
-        appCoroutineScope = coroutineScope,
+        appCoroutineScope = this,
     )
 }

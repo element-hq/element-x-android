@@ -93,7 +93,15 @@ class FakeBaseRoom(
         return powerLevelsResult()
     }
 
-    override fun destroy() = Unit
+    private var isDestroyed = false
+
+    override fun destroy() {
+        isDestroyed = true
+    }
+
+    fun assertDestroyed() {
+        check(isDestroyed) { "Room should be destroyed" }
+    }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = simulateLongTask {
         userDisplayNameResult(userId)

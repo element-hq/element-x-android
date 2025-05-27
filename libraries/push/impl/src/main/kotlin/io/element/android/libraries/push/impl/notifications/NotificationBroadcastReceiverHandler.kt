@@ -23,6 +23,7 @@ import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +45,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
     private val stringProvider: StringProvider,
     private val replyMessageExtractor: ReplyMessageExtractor,
+    private val activeRoomsHolder: ActiveRoomsHolder,
 ) {
     fun onReceive(intent: Intent) {
         val sessionId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_SESSION_ID)?.let(::SessionId) ?: return
@@ -117,13 +119,15 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             return@launch
         }
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
-        client.getJoinedRoom(roomId)?.let { room ->
+        val room = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId) ?: client.getJoinedRoom(roomId)
+
+        room?.let {
             sendMatrixEvent(
                 sessionId = sessionId,
                 roomId = roomId,
                 replyToEventId = replyToEventId,
                 threadId = threadId,
-                room = room,
+                room = it,
                 message = message,
             )
         }
@@ -159,7 +163,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             roomIsDm = room.isDm(),
             outGoingMessage = true,
         )
-        onNotifiableEventReceived.onNotifiableEventReceived(notifiableMessageEvent)
+        onNotifiableEventReceived.onNotifiableEventsReceived(listOf(notifiableMessageEvent))
 
         if (threadId != null && replyToEventId != null) {
             room.liveTimeline.replyMessage(
@@ -177,9 +181,11 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             )
         }.onFailure {
             Timber.e(it, "Failed to send smart reply message")
-            onNotifiableEventReceived.onNotifiableEventReceived(
-                notifiableMessageEvent.copy(
-                    outGoingMessageFailed = true
+            onNotifiableEventReceived.onNotifiableEventsReceived(
+                listOf(
+                    notifiableMessageEvent.copy(
+                        outGoingMessageFailed = true
+                    )
                 )
             )
         }

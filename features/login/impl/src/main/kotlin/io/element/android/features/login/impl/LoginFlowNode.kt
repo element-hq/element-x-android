@@ -30,6 +30,7 @@ import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
+import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
 import io.element.android.features.login.impl.screens.createaccount.CreateAccountNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
@@ -108,6 +109,9 @@ class LoginFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
+        data object ChooseAccountProvider : NavTarget
+
+        @Parcelize
         data object ChangeAccountProvider : NavTarget
 
         @Parcelize
@@ -133,9 +137,13 @@ class LoginFlowNode @AssistedInject constructor(
                         )
                     }
 
-                    override fun onSignIn() {
+                    override fun onSignIn(mustChooseAccountProvider: Boolean) {
                         backstack.push(
-                            NavTarget.ConfirmAccountProvider(isAccountCreation = false)
+                            if (mustChooseAccountProvider) {
+                                NavTarget.ChooseAccountProvider
+                            } else {
+                                NavTarget.ConfirmAccountProvider(isAccountCreation = false)
+                            }
                         )
                     }
 
@@ -165,6 +173,22 @@ class LoginFlowNode @AssistedInject constructor(
                     loginHint = params.loginHint,
                 )
                 createNode<OnBoardingNode>(buildContext, listOf(callback, inputs))
+            }
+            NavTarget.ChooseAccountProvider -> {
+                val callback = object : ChooseAccountProviderNode.Callback {
+                    override fun onOidcDetails(oidcDetails: OidcDetails) {
+                        navigateToMas(oidcDetails)
+                    }
+
+                    override fun onCreateAccountContinue(url: String) {
+                        backstack.push(NavTarget.CreateAccount(url))
+                    }
+
+                    override fun onLoginPasswordNeeded() {
+                        backstack.push(NavTarget.LoginPassword)
+                    }
+                }
+                createNode<ChooseAccountProviderNode>(buildContext, listOf(callback))
             }
             NavTarget.QrCode -> {
                 createNode<QrCodeLoginFlowNode>(buildContext)

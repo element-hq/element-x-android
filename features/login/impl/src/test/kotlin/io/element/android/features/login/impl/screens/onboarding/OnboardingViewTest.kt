@@ -23,6 +23,7 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -56,10 +57,28 @@ class OnboardingViewTest {
     }
 
     @Test
-    fun `when can login with QR code - clicking on sign in manually calls the expected callback`() {
-        ensureCalledOnce { callback ->
+    fun `when can login with QR code - clicking on sign in manually calls the expected callback - can search account provider`() {
+        `when can login with QR code - clicking on sign in manually calls the expected callback`(
+            mustChooseAccountProvider = false,
+        )
+    }
+
+    @Test
+    fun `when can login with QR code - clicking on sign in manually calls the expected callback - cannot search account provider`() {
+        `when can login with QR code - clicking on sign in manually calls the expected callback`(
+            mustChooseAccountProvider = true,
+        )
+    }
+
+    private fun `when can login with QR code - clicking on sign in manually calls the expected callback`(
+        mustChooseAccountProvider: Boolean,
+    ) {
+        ensureCalledOnceWithParam(mustChooseAccountProvider) { callback ->
             rule.setOnboardingView(
-                state = anOnBoardingState(canLoginWithQrCode = true),
+                state = anOnBoardingState(
+                    canLoginWithQrCode = true,
+                    mustChooseAccountProvider = mustChooseAccountProvider,
+                ),
                 onSignIn = callback,
             )
             rule.clickOn(R.string.screen_onboarding_sign_in_manually)
@@ -67,12 +86,28 @@ class OnboardingViewTest {
     }
 
     @Test
-    fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback`() {
-        ensureCalledOnce { callback ->
+    fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback - can search account provider`() {
+        `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
+            mustChooseAccountProvider = false,
+        )
+    }
+
+    @Test
+    fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback - cannot search account provider`() {
+        `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
+            mustChooseAccountProvider = true,
+        )
+    }
+
+    private fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
+        mustChooseAccountProvider: Boolean,
+    ) {
+        ensureCalledOnceWithParam(mustChooseAccountProvider) { callback ->
             rule.setOnboardingView(
                 state = anOnBoardingState(
                     canLoginWithQrCode = false,
                     canCreateAccount = false,
+                    mustChooseAccountProvider = mustChooseAccountProvider,
                 ),
                 onSignIn = callback,
             )
@@ -137,7 +172,7 @@ class OnboardingViewTest {
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setOnboardingView(
         state: OnBoardingState,
         onSignInWithQrCode: () -> Unit = EnsureNeverCalled(),
-        onSignIn: () -> Unit = EnsureNeverCalled(),
+        onSignIn: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
         onCreateAccount: () -> Unit = EnsureNeverCalled(),
         onReportProblem: () -> Unit = EnsureNeverCalled(),
         onOidcDetails: (OidcDetails) -> Unit = EnsureNeverCalledWithParam(),

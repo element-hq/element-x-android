@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -19,7 +20,6 @@ import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.isActive
@@ -30,10 +30,7 @@ import org.junit.Test
 class RustBaseRoomTest {
     @Test
     fun `RustBaseRoom should cancel the room coroutine scope when it is destroyed`() = runTest {
-        val rustBaseRoom = createRustBaseRoom(
-            // Not using backgroundScope here, but the test scope
-            sessionCoroutineScope = this
-        )
+        val rustBaseRoom = createRustBaseRoom()
         assertThat(rustBaseRoom.roomCoroutineScope.isActive).isTrue()
         rustBaseRoom.destroy()
         assertThat(rustBaseRoom.roomCoroutineScope.isActive).isFalse()
@@ -43,7 +40,6 @@ class RustBaseRoomTest {
     fun `when currentUserMembership=JOINED and user leave room succeed then roomMembershipObserver emits change as LEFT`() = runTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val rustBaseRoom = createRustBaseRoom(
-            sessionCoroutineScope = this,
             initialRoomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.JOINED),
             innerRoom = FakeRustRoom(
                 leaveLambda = {
@@ -52,23 +48,18 @@ class RustBaseRoomTest {
             ),
             roomMembershipObserver = roomMembershipObserver,
         )
-        val shared = roomMembershipObserver.updates.shareIn(scope = backgroundScope, started = SharingStarted.Eagerly, replay = 1)
-        rustBaseRoom.leave()
-        shared.test {
+        leaveRoomAndObserveMembershipChange(roomMembershipObserver, rustBaseRoom) {
             val membershipUpdate = awaitItem()
             assertThat(membershipUpdate.roomId).isEqualTo(rustBaseRoom.roomId)
             assertThat(membershipUpdate.isUserInRoom).isFalse()
             assertThat(membershipUpdate.change).isEqualTo(MembershipChange.LEFT)
-            ensureAllEventsConsumed()
         }
-        rustBaseRoom.destroy()
     }
 
     @Test
     fun `when currentUserMembership=KNOCKED and user leave room succeed then roomMembershipObserver emits change as KNOCK_RETRACTED`() = runTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val rustBaseRoom = createRustBaseRoom(
-            sessionCoroutineScope = this,
             initialRoomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.KNOCKED),
             innerRoom = FakeRustRoom(
                 leaveLambda = {
@@ -77,23 +68,18 @@ class RustBaseRoomTest {
             ),
             roomMembershipObserver = roomMembershipObserver,
         )
-        val shared = roomMembershipObserver.updates.shareIn(scope = backgroundScope, started = SharingStarted.Eagerly, replay = 1)
-        rustBaseRoom.leave()
-        shared.test {
+        leaveRoomAndObserveMembershipChange(roomMembershipObserver, rustBaseRoom) {
             val membershipUpdate = awaitItem()
             assertThat(membershipUpdate.roomId).isEqualTo(rustBaseRoom.roomId)
             assertThat(membershipUpdate.isUserInRoom).isFalse()
             assertThat(membershipUpdate.change).isEqualTo(MembershipChange.KNOCK_RETRACTED)
-            ensureAllEventsConsumed()
         }
-        rustBaseRoom.destroy()
     }
 
     @Test
     fun `when currentUserMembership=INVITED and user leave room succeed then roomMembershipObserver emits change as INVITATION_REJECTED`() = runTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val rustBaseRoom = createRustBaseRoom(
-            sessionCoroutineScope = this,
             initialRoomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.INVITED),
             innerRoom = FakeRustRoom(
                 leaveLambda = {
@@ -102,39 +88,44 @@ class RustBaseRoomTest {
             ),
             roomMembershipObserver = roomMembershipObserver,
         )
-        val shared = roomMembershipObserver.updates.shareIn(scope = backgroundScope, started = SharingStarted.Eagerly, replay = 1)
-        rustBaseRoom.leave()
-        shared.test {
+        leaveRoomAndObserveMembershipChange(roomMembershipObserver, rustBaseRoom) {
             val membershipUpdate = awaitItem()
             assertThat(membershipUpdate.roomId).isEqualTo(rustBaseRoom.roomId)
             assertThat(membershipUpdate.isUserInRoom).isFalse()
             assertThat(membershipUpdate.change).isEqualTo(MembershipChange.INVITATION_REJECTED)
-            ensureAllEventsConsumed()
         }
-        rustBaseRoom.destroy()
     }
 
     @Test
     fun `when user leave room fails then roomMembershipObserver emits nothing`() = runTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val rustBaseRoom = createRustBaseRoom(
-            sessionCoroutineScope = this,
             initialRoomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.INVITED),
             innerRoom = FakeRustRoom(
                 leaveLambda = { error("Leave failed") }
             ),
             roomMembershipObserver = roomMembershipObserver,
         )
+        leaveRoomAndObserveMembershipChange(roomMembershipObserver, rustBaseRoom) {
+            // No emit
+        }
+    }
+
+    private suspend fun TestScope.leaveRoomAndObserveMembershipChange(
+        roomMembershipObserver: RoomMembershipObserver,
+        rustBaseRoom: RustBaseRoom,
+        validate: suspend TurbineTestContext<RoomMembershipObserver.RoomMembershipUpdate>.() -> Unit
+    ) {
         val shared = roomMembershipObserver.updates.shareIn(scope = backgroundScope, started = SharingStarted.Eagerly, replay = 1)
         rustBaseRoom.leave()
         shared.test {
+            validate()
             ensureAllEventsConsumed()
         }
         rustBaseRoom.destroy()
     }
 
     private fun TestScope.createRustBaseRoom(
-        sessionCoroutineScope: CoroutineScope,
         initialRoomInfo: RoomInfo = aRoomInfo(),
         innerRoom: FakeRustRoom = FakeRustRoom(),
         roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
@@ -150,7 +141,8 @@ class RustBaseRoomTest {
                 dispatchers = dispatchers,
             ),
             roomMembershipObserver = roomMembershipObserver,
-            sessionCoroutineScope = sessionCoroutineScope,
+            // Not using backgroundScope here, but the test scope
+            sessionCoroutineScope = this,
             roomInfoMapper = RoomInfoMapper(),
             initialRoomInfo = initialRoomInfo,
         )

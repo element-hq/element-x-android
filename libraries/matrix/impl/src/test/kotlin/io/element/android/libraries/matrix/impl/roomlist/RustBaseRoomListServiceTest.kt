@@ -12,7 +12,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -28,7 +27,6 @@ class RustBaseRoomListServiceTest {
     fun `syncIndicator should emit the expected values`() = runTest {
         val roomListService = FakeRustRoomListService()
         val sut = createRustRoomListService(
-            sessionCoroutineScope = backgroundScope,
             roomListService = roomListService,
         )
         // Give time for mxCallback to setup
@@ -44,18 +42,17 @@ class RustBaseRoomListServiceTest {
 }
 
 private fun TestScope.createRustRoomListService(
-    sessionCoroutineScope: CoroutineScope,
     roomListService: RustRoomListService = FakeRustRoomListService(),
 ) = RustRoomListService(
     innerRoomListService = roomListService,
     sessionDispatcher = StandardTestDispatcher(testScheduler),
     roomListFactory = RoomListFactory(
         innerRoomListService = roomListService,
-        sessionCoroutineScope = sessionCoroutineScope,
+        sessionCoroutineScope = backgroundScope,
     ),
     roomSyncSubscriber = RoomSyncSubscriber(
         roomListService = roomListService,
         dispatchers = testCoroutineDispatchers(),
     ),
-    sessionCoroutineScope = sessionCoroutineScope,
+    sessionCoroutineScope = backgroundScope,
 )

@@ -56,7 +56,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun OnBoardingView(
     state: OnBoardingState,
     onSignInWithQrCode: () -> Unit,
-    onSignIn: () -> Unit,
+    onSignIn: (mustChooseAccountProvider: Boolean) -> Unit,
     onCreateAccount: () -> Unit,
     onOidcDetails: (OidcDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
@@ -143,7 +143,7 @@ private fun OnBoardingContent(state: OnBoardingState) {
 private fun OnBoardingButtons(
     state: OnBoardingState,
     onSignInWithQrCode: () -> Unit,
-    onSignIn: () -> Unit,
+    onSignIn: (mustChooseAccountProvider: Boolean) -> Unit,
     onCreateAccount: () -> Unit,
     onReportProblem: () -> Unit,
 ) {
@@ -171,7 +171,9 @@ private fun OnBoardingButtons(
         if (defaultAccountProvider == null) {
             Button(
                 text = stringResource(id = signInButtonStringRes),
-                onClick = onSignIn,
+                onClick = {
+                    onSignIn(state.mustChooseAccountProvider)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag(TestTags.onBoardingSignIn)

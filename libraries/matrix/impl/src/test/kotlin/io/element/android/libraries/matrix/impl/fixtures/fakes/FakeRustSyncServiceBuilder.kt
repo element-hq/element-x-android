@@ -10,10 +10,8 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
-import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 
 class FakeRustSyncServiceBuilder : SyncServiceBuilder(NoPointer) {
-    override suspend fun withUtdHook(delegate: UnableToDecryptDelegate): SyncServiceBuilder = this
     override fun withOfflineMode(): SyncServiceBuilder = this
     override suspend fun finish(): SyncService = FakeRustSyncService()
 }

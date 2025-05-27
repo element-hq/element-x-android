@@ -53,6 +53,6 @@ class DefaultUnregisterUnifiedPushUseCase @Inject constructor(
     override fun cleanup(clientSecret: String) {
         unifiedPushStore.storeUpEndpoint(clientSecret, null)
         unifiedPushStore.storePushGateway(clientSecret, null)
-        UnifiedPush.unregisterApp(context, clientSecret)
+        UnifiedPush.unregister(context, clientSecret)
     }
 }

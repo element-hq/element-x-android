@@ -25,6 +25,7 @@ import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 
 class FakeRustClient(
     private val userId: String = A_USER_ID.value,
@@ -34,6 +35,7 @@ class FakeRustClient(
     private val encryption: Encryption = FakeRustEncryption(),
     private val session: Session = aRustSession(),
     private val clearCachesResult: () -> Unit = { lambdaError() },
+    private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoPointer) {
     override fun userId(): String = userId
@@ -58,5 +60,6 @@ class FakeRustClient(
 
     override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
     override suspend fun clearCaches() = simulateLongTask { clearCachesResult() }
+    override suspend fun setUtdDelegate(utdDelegate: UnableToDecryptDelegate) = withUtdHook(utdDelegate)
     override fun close() = closeResult()
 }

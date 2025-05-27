@@ -11,7 +11,6 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.ForwardEventException
-import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.timeline.runWithTimelineListenerRegistered
 import kotlinx.coroutines.CancellationException
@@ -49,10 +48,7 @@ class RoomContentForwarder(
         val content = (messageLikeContent.kind as? MsgLikeKind.Message)?.content
             ?: throw ForwardEventException(toRoomIds)
 
-        val targetSlidingSyncRooms = toRoomIds.mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
-        val targetRooms = targetSlidingSyncRooms.map { slidingSyncRoom ->
-            slidingSyncRoom.use { it.fullRoomWithTimeline(null) }
-        }
+        val targetRooms = toRoomIds.mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
         val failedForwardingTo = mutableSetOf<RoomId>()
         targetRooms.parallelMap { room ->
             room.use { targetRoom ->
