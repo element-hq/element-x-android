@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -98,19 +98,18 @@ class JoinedRoomLoadedFlowNodeTest {
         }
     }
 
-    private fun createJoinedRoomLoadedFlowNode(
+    private fun TestScope.createJoinedRoomLoadedFlowNode(
         plugins: List<Plugin>,
         messagesEntryPoint: MessagesEntryPoint = FakeMessagesEntryPoint(),
         roomDetailsEntryPoint: RoomDetailsEntryPoint = FakeRoomDetailsEntryPoint(),
         activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
-        coroutineScope: CoroutineScope,
     ) = JoinedRoomLoadedFlowNode(
         buildContext = BuildContext.root(savedStateMap = null),
         plugins = plugins,
         messagesEntryPoint = messagesEntryPoint,
         roomDetailsEntryPoint = roomDetailsEntryPoint,
         appNavigationStateService = FakeAppNavigationStateService(),
-        appCoroutineScope = coroutineScope,
+        appCoroutineScope = this,
         roomComponentFactory = FakeRoomComponentFactory(),
         matrixClient = FakeMatrixClient(),
         activeRoomsHolder = activeRoomsHolder,
@@ -125,7 +124,6 @@ class JoinedRoomLoadedFlowNodeTest {
         val roomFlowNode = createJoinedRoomLoadedFlowNode(
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,
-            coroutineScope = this
         )
         // WHEN
         val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
@@ -148,7 +146,6 @@ class JoinedRoomLoadedFlowNodeTest {
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,
             roomDetailsEntryPoint = fakeRoomDetailsEntryPoint,
-            coroutineScope = this
         )
         val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
         // WHEN
@@ -171,7 +168,6 @@ class JoinedRoomLoadedFlowNodeTest {
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,
             roomDetailsEntryPoint = fakeRoomDetailsEntryPoint,
-            coroutineScope = this,
             activeRoomsHolder = activeRoomsHolder,
         )
 
@@ -197,7 +193,6 @@ class JoinedRoomLoadedFlowNodeTest {
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,
             roomDetailsEntryPoint = fakeRoomDetailsEntryPoint,
-            coroutineScope = this,
             activeRoomsHolder = activeRoomsHolder,
         )
         val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
