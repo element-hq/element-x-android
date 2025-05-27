@@ -87,13 +87,19 @@ class DefaultCallWidgetProviderTest {
         }
         val activeRoomsHolder = ActiveRoomsHolder().apply {
             // A current active room with the same room id
-            addRoom(FakeJoinedRoom(baseRoom = FakeBaseRoom(roomId = A_ROOM_ID)))
+            addRoom(
+                FakeJoinedRoom(
+                    baseRoom = FakeBaseRoom(roomId = A_ROOM_ID),
+                    generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
+                    getWidgetDriverResult = { Result.success(FakeMatrixWidgetDriver()) },
+                )
+            )
         }
         val provider = createProvider(
             matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
             activeRoomsHolder = activeRoomsHolder
         )
-        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").isFailure).isTrue()
+        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").isSuccess).isTrue()
     }
 
     @Test
