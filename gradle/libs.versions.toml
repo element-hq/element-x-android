@@ -45,7 +45,7 @@ wysiwyg = "2.38.3"
 telephoto = "0.15.1"
 
 # Dependency analysis
-dependencyAnalysis = "2.17.0"
+dependencyAnalysis = "2.18.0"
 
 # DI
 dagger = "2.56.2"
