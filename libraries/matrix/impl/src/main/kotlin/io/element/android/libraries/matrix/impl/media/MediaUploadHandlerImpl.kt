@@ -19,6 +19,7 @@ class MediaUploadHandlerImpl(
     override suspend fun await(): Result<Unit> =
         runCatching {
             sendAttachmentJoinHandle.join()
+            Unit
         }
             .also { cleanUpFiles() }
 

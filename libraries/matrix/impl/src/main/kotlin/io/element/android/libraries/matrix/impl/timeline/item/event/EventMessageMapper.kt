@@ -111,6 +111,9 @@ class EventMessageMapper {
         is MessageType.Other -> {
             OtherMessageType(type.msgtype, type.body)
         }
+        else -> {
+            OtherMessageType("Unsupported", "Unsupported message")
+        }
     }
 }
 
