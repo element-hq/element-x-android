@@ -116,7 +116,7 @@ fun HeaderFooterPage(
                 // Footer
                 Box(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                         .fillMaxWidth()
                         .padding(footerInsetsPadding)
                 ) {
