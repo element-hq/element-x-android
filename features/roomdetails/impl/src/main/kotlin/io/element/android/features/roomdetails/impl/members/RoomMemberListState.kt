@@ -7,7 +7,7 @@
 
 package io.element.android.features.roomdetails.impl.members
 
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -20,7 +20,7 @@ data class RoomMemberListState(
     val searchResults: SearchBarResultState<AsyncData<RoomMembers>>,
     val isSearchActive: Boolean,
     val canInvite: Boolean,
-    val moderationState: RoomMembersModerationState,
+    val moderationState: RoomMemberModerationState,
     val eventSink: (RoomMemberListEvents) -> Unit,
 )
 

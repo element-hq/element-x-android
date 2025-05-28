@@ -103,6 +103,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbar
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
@@ -208,7 +209,11 @@ fun MessagesView(
                     .consumeWindowInsets(padding),
                 onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
-                onUserDataClick = { hidingKeyboard { onUserDataClick(it) } },
+                onUserDataClick = {
+                    hidingKeyboard {
+                   state.eventSink(MessagesEvents.OnUserClicked(it))
+                }
+                },
                 onLinkClick = { link, customTab ->
                     if (customTab) {
                         onLinkClick(link.url, true)
@@ -293,7 +298,7 @@ private fun ReinviteDialog(state: MessagesState) {
 private fun MessagesViewContent(
     state: MessagesState,
     onContentClick: (TimelineItem.Event) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link, Boolean) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,

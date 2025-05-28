@@ -320,6 +320,12 @@
       "includeRegex" : [
         "screen\\.report_room\\..*"
       ]
+    },
+    {
+      "name" : ":features:roommembermoderation:impl",
+      "includeRegex" : [
+        "screen\\.bottom_sheet\\.manage_room_member\\..*"
+      ]
     }
   ]
 }

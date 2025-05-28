@@ -44,6 +44,13 @@ fun ProfileTimelineDetails.getDisambiguatedDisplayName(userId: UserId): String {
     }
 }
 
+fun ProfileTimelineDetails.getDisplayName(): String? {
+    return when (this) {
+        is ProfileTimelineDetails.Ready -> displayName
+        else -> null
+    }
+}
+
 fun ProfileTimelineDetails.getAvatarUrl(): String? {
     return when (this) {
         is ProfileTimelineDetails.Ready -> avatarUrl

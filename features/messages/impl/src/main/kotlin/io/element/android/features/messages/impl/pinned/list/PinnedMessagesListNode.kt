@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesNode(RoomScope::class)
@@ -63,8 +64,8 @@ class PinnedMessagesListNode @AssistedInject constructor(
         return callbacks.forEach { it.onEventClick(event) }
     }
 
-    private fun onUserDataClick(userId: UserId) {
-        callbacks.forEach { it.onUserDataClick(userId) }
+    private fun onUserDataClick(user: MatrixUser) {
+        callbacks.forEach { it.onUserDataClick(user.userId) }
     }
 
     private fun onLinkClick(context: Context, url: String) {

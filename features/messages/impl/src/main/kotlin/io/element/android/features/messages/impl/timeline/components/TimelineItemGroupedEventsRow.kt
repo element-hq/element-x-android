@@ -34,7 +34,7 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.wysiwyg.link.Link
 
 @Composable
@@ -48,7 +48,7 @@ fun TimelineItemGroupedEventsRow(
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
@@ -117,7 +117,7 @@ private fun TimelineItemGroupedEventsRowContent(
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,

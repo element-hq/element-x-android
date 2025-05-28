@@ -310,18 +310,6 @@
   <string name="invite_friends_rich_title">"🔐️ پییوستن به من روی %1$s"</string>
   <string name="invite_friends_text">"درود. با من روی %1$s صحبت کن: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s اندروید"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban">"برداشت و تحریم عضو"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"تحریم"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"در صورت دعوت نمی‌تواند دوباره به اتاق بپیوندد."</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"مطمئنید می‌خواهید این عضو را تحریم کنید؟"</string>
-  <string name="screen_bottom_sheet_manage_room_member_banning_user">"تحریم کردن %1$s"</string>
-  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"برداشتن"</string>
-  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"در صورت دعوت می‌تواند دوباره به اتاق بپیوندد."</string>
-  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"مطمئنید می‌خواهید این عضو را بردارید؟"</string>
-  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"دیدن نمایه"</string>
-  <string name="screen_bottom_sheet_manage_room_member_remove">"برداشتن از اتاق"</string>
-  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"برداشتن عضو و تحریم پیوستن در آینده؟"</string>
-  <string name="screen_bottom_sheet_manage_room_member_removing_user">"برداشتن %1$s…"</string>
   <string name="screen_media_picker_error_failed_selection">"گزینش رسانه شکست خورد. لطفاً دوباره تلاش کنید."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"پردازش رسانه برای بارگذاری شکست خورد. لطفاً دوباره تلاش کنید."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"بارگذاری رسانه شکست خورد. لطفاً دوباره تلاش کنید."</string>
