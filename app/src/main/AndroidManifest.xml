@@ -87,11 +87,11 @@
                 <data android:scheme="https" />
                 <!-- Note: we can't use "*.element.io" here because it'll intercept the "mas.element.io" domain too. -->
                 <!-- Matching asset file: https://app.element.io/.well-known/assetlinks.json -->
-                <data android:host="app.element.io" />
+                <data android:host="chat.efael.net" />
                 <!-- Matching asset file: https://develop.element.io/.well-known/assetlinks.json -->
-                <data android:host="develop.element.io" />
+                <data android:host="chat.efael.net" />
                 <!-- Matching asset file: https://staging.element.io/.well-known/assetlinks.json -->
-                <data android:host="staging.element.io" />
+                <data android:host="chat.efael.net" />
             </intent-filter>
             <!--
               Element mobile links
@@ -105,7 +105,7 @@
 
                 <data android:scheme="https" />
                 <!-- Matching asset file: https://mobile.element.io/.well-known/assetlinks.json -->
-                <data android:host="mobile.element.io" />
+                <data android:host="efael.net" />
                 <data android:path="/element/" />
             </intent-filter>
             <!--

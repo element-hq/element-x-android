@@ -29,15 +29,15 @@ android {
     defaultConfig {
         buildConfigFieldStr(
             name = "URL_COPYRIGHT",
-            value = BuildTimeConfig.URL_COPYRIGHT ?: "https://element.io/copyright",
+            value = BuildTimeConfig.URL_COPYRIGHT ?: "https://efael.net/copyright",
         )
         buildConfigFieldStr(
             name = "URL_ACCEPTABLE_USE",
-            value = BuildTimeConfig.URL_ACCEPTABLE_USE ?: "https://element.io/acceptable-use-policy-terms",
+            value = BuildTimeConfig.URL_ACCEPTABLE_USE ?: "https://efael.net/acceptable-use-policy-terms",
         )
         buildConfigFieldStr(
             name = "URL_PRIVACY",
-            value = BuildTimeConfig.URL_PRIVACY ?: "https://element.io/privacy",
+            value = BuildTimeConfig.URL_PRIVACY ?: "https://efael.net/privacy",
         )
     }
 }
