@@ -15,6 +15,7 @@ import io.element.android.tests.testutils.simulateLongTask
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.Encryption
+import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
@@ -23,9 +24,11 @@ import org.matrix.rustcomponents.sdk.PusherIdentifiers
 import org.matrix.rustcomponents.sdk.PusherKind
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import org.matrix.rustcomponents.sdk.Session
+import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
+import org.matrix.rustcomponents.sdk.UserProfile
 
 class FakeRustClient(
     private val userId: String = A_USER_ID.value,
@@ -61,5 +64,16 @@ class FakeRustClient(
     override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
     override suspend fun clearCaches() = simulateLongTask { clearCachesResult() }
     override suspend fun setUtdDelegate(utdDelegate: UnableToDecryptDelegate) = withUtdHook(utdDelegate)
+    override suspend fun getSessionVerificationController(): SessionVerificationController = FakeSessionVerificationController()
+    override suspend fun ignoredUsers(): List<String> {
+        return emptyList()
+    }
+    override fun subscribeToIgnoredUsers(listener: IgnoredUsersListener): TaskHandle {
+        return FakeRustTaskHandle()
+    }
+
+    override suspend fun getProfile(userId: String): UserProfile {
+        return UserProfile(userId = userId, displayName = null, avatarUrl = null)
+    }
     override fun close() = closeResult()
 }
