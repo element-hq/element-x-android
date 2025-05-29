@@ -7,11 +7,20 @@
 
 package io.element.android.libraries.core.data
 
-inline fun <A> tryOrNull(onError: ((Throwable) -> Unit) = { }, operation: () -> A): A? {
+import kotlin.coroutines.cancellation.CancellationException
+
+/**
+ * Can be used to catch [Exception]s in a block of code, returning `null` if an exception occurs.
+ *
+ * If the block throws a [CancellationException], it will be rethrown.
+ */
+inline fun <A> tryOrNull(onException: ((Exception) -> Unit) = { }, operation: () -> A): A? {
     return try {
         operation()
-    } catch (any: Throwable) {
-        onError.invoke(any)
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        onException.invoke(e)
         null
     }
 }
