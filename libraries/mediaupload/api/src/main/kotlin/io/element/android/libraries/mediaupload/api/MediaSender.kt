@@ -192,8 +192,10 @@ class MediaSender @Inject constructor(
             }
         }
 
+        // We handle the cancellations here manually, so we suppress the warning
+        @Suppress("RunCatchingNotAllowed")
         return handler
-            .flatMapCatching { uploadHandler ->
+            .mapCatching { uploadHandler ->
                 ongoingUploadJobs[Job] = uploadHandler
                 uploadHandler.await()
             }
