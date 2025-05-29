@@ -17,7 +17,7 @@ open class CreateAccountStateProvider : PreviewParameterProvider<CreateAccountSt
             aCreateAccountState(),
             aCreateAccountState(pageProgress = 33),
             aCreateAccountState(createAction = AsyncAction.Loading),
-            aCreateAccountState(createAction = AsyncAction.Failure(Throwable("Failed to create account"))),
+            aCreateAccountState(createAction = AsyncAction.Failure(RuntimeException("Failed to create account"))),
         )
 }
 

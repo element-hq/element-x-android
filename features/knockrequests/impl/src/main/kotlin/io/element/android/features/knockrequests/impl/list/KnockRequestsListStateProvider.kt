@@ -89,7 +89,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                     canBan = true,
                 ),
                 currentAction = KnockRequestsAction.AcceptAll,
-                asyncAction = AsyncAction.Failure(Throwable("Failed to accept all")),
+                asyncAction = AsyncAction.Failure(RuntimeException("Failed to accept all")),
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(

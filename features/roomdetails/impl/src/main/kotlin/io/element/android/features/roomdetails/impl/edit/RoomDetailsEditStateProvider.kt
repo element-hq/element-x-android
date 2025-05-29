@@ -27,7 +27,7 @@ open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEd
             aRoomDetailsEditState(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
             aRoomDetailsEditState(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
             aRoomDetailsEditState(saveAction = AsyncAction.Loading),
-            aRoomDetailsEditState(saveAction = AsyncAction.Failure(Throwable("Whelp"))),
+            aRoomDetailsEditState(saveAction = AsyncAction.Failure(RuntimeException("Whelp"))),
         )
 }
 

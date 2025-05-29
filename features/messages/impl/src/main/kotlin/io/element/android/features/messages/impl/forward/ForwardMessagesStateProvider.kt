@@ -24,7 +24,7 @@ open class ForwardMessagesStateProvider : PreviewParameterProvider<ForwardMessag
                 )
             ),
             aForwardMessagesState(
-                forwardAction = AsyncAction.Failure(Throwable("error")),
+                forwardAction = AsyncAction.Failure(RuntimeException("error")),
             ),
         )
 }

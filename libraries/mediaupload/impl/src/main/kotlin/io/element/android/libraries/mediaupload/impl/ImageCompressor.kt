@@ -16,6 +16,7 @@ import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.bitmap.rotateToMetadataOrientation
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -38,7 +39,7 @@ class ImageCompressor @Inject constructor(
         orientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
         desiredQuality: Int = 78,
     ): Result<ImageCompressionResult> = withContext(dispatchers.io) {
-        runCatching {
+        catchingExceptions {
             val format = mimeTypeToCompressFormat(mimeType)
             val extension = mimeTypeToCompressFileExtension(mimeType)
             val compressedBitmap = compressToBitmap(inputStreamProvider, resizeMode, orientation).getOrThrow()
@@ -65,7 +66,7 @@ class ImageCompressor @Inject constructor(
         inputStreamProvider: () -> InputStream,
         resizeMode: ResizeMode,
         orientation: Int,
-    ): Result<Bitmap> = runCatching {
+    ): Result<Bitmap> = catchingExceptions {
         val options = BitmapFactory.Options()
         // Decode bounds
         inputStreamProvider().use { input ->

@@ -14,7 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingPresenter
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingStateEvents
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.test.A_THROWABLE
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
@@ -81,7 +81,7 @@ class EditDefaultNotificationSettingsPresenterTest {
     fun `present - edit default notification setting failed`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
         val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService)
-        notificationSettingsService.givenSetDefaultNotificationModeError(A_THROWABLE)
+        notificationSettingsService.givenSetDefaultNotificationModeError(AN_EXCEPTION)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {

@@ -13,6 +13,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.audio.api.AudioFocusRequester
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.mediaplayer.test.FakeAudioFocus
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -337,7 +338,7 @@ class DefaultMediaPlayerTest {
                     duration = null,
                 )
             )
-            val result = runCatching {
+            val result = catchingExceptions {
                 sut.setMedia("uri", "mediaId", "mimeType", 12)
             }
             pauseLambda.assertions().isCalledOnce()

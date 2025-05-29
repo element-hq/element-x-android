@@ -208,7 +208,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
     private suspend fun MatrixClient.getSafeUserProfile(): MatrixUser {
         return tryOrNull(
-            onError = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
+            onException = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
             operation = {
                 val profile = getUserProfile().getOrNull()
                 // displayName cannot be empty else NotificationCompat.MessagingStyle() will crash

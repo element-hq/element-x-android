@@ -13,8 +13,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.impl.aJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.tests.testutils.awaitLastSequentialItem
@@ -71,7 +71,7 @@ class RoomNotificationSettingsPresenterTest {
     @Test
     fun `present - notification settings set custom failed`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        notificationSettingsService.givenSetNotificationModeError(A_THROWABLE)
+        notificationSettingsService.givenSetNotificationModeError(AN_EXCEPTION)
         val presenter = createRoomNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -131,7 +131,7 @@ class RoomNotificationSettingsPresenterTest {
     @Test
     fun `present - notification settings restore default failed`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        notificationSettingsService.givenRestoreDefaultNotificationModeError(A_THROWABLE)
+        notificationSettingsService.givenRestoreDefaultNotificationModeError(AN_EXCEPTION)
         val presenter = createRoomNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

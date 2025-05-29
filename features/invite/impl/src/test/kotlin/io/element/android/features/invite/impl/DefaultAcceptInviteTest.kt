@@ -69,7 +69,7 @@ class DefaultAcceptInviteTest {
     fun `accept invite failure scenario`() = runTest {
         val joinRoomLambda =
             lambdaRecorder<RoomIdOrAlias, List<String>, JoinedRoom.Trigger, Result<Unit>> { _, _, _ ->
-                Result.failure(Throwable("Join room failed"))
+                Result.failure(RuntimeException("Join room failed"))
             }
 
         val acceptInvite = DefaultAcceptInvite(

@@ -41,7 +41,7 @@ fun AudioManager.enableExternalAudioDevice() {
         selectedDevice?.let { device ->
             Timber.d("Audio device selected, type: ${device.type}")
             tryOrNull(
-                onError = { failure ->
+                onException = { failure ->
                     Timber.e(failure, "Audio: exception when setting communication device")
                 }
             ) {

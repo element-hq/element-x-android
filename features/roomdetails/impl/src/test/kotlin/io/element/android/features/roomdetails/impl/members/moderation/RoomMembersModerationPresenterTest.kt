@@ -294,9 +294,9 @@ class RoomMembersModerationPresenterTest {
         val room = aJoinedRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
-            kickUserResult = { _, _ -> Result.failure(Throwable("Eek")) },
-            banUserResult = { _, _ -> Result.failure(Throwable("Eek")) },
-            unBanUserResult = { _, _ -> Result.failure(Throwable("Eek")) },
+            kickUserResult = { _, _ -> Result.failure(RuntimeException("Eek")) },
+            banUserResult = { _, _ -> Result.failure(RuntimeException("Eek")) },
+            unBanUserResult = { _, _ -> Result.failure(RuntimeException("Eek")) },
             userRoleResult = { Result.success(RoomMember.Role.USER) },
         )
         val presenter = createRoomMembersModerationPresenter(joinedRoom = room)

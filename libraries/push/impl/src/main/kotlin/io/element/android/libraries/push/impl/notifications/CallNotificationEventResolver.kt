@@ -8,6 +8,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -54,13 +55,13 @@ class DefaultCallNotificationEventResolver @Inject constructor(
         sessionId: SessionId,
         notificationData: NotificationData,
         forceNotify: Boolean
-    ): Result<NotifiableEvent> = runCatching {
+    ): Result<NotifiableEvent> = catchingExceptions {
         val content = notificationData.content as? NotificationContent.MessageLike.CallNotify
             ?: throw ResolvingException("content is not a call notify")
 
         val previousRingingCallStatus = appForegroundStateService.hasRingingCall.value
         // We need the sync service working to get the updated room info
-        val isRoomCallActive = runCatching {
+        val isRoomCallActive = catchingExceptions {
             if (content.type == CallNotifyType.RING) {
                 appForegroundStateService.updateHasRingingCall(true)
 

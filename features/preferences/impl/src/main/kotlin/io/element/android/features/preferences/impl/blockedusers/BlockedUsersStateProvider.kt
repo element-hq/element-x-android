@@ -21,7 +21,7 @@ class BlockedUsersStateProvider : PreviewParameterProvider<BlockedUsersState> {
             aBlockedUsersState(blockedUsers = emptyList()),
             aBlockedUsersState(unblockUserAction = AsyncAction.ConfirmingNoParams),
             aBlockedUsersState(unblockUserAction = AsyncAction.Loading),
-            aBlockedUsersState(unblockUserAction = AsyncAction.Failure(Throwable("Failed to unblock user"))),
+            aBlockedUsersState(unblockUserAction = AsyncAction.Failure(RuntimeException("Failed to unblock user"))),
             aBlockedUsersState(unblockUserAction = AsyncAction.Success(Unit)),
         )
 }

@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.utils.time.formatShort
@@ -101,7 +102,7 @@ class VoiceMessagePresenter(
                                 },
                             ) {
                                 player.prepare().flatMap {
-                                    runCatching { player.play() }
+                                    catchingExceptions { player.play() }
                                 }
                             }
                         }

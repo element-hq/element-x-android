@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.notification
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -30,7 +31,7 @@ class RustNotificationService(
     override suspend fun getNotifications(
         ids: Map<RoomId, List<EventId>>
     ): Result<Map<EventId, NotificationData>> = withContext(dispatchers.io) {
-        runCatching {
+        catchingExceptions {
             val requests = ids.map { (roomId, eventIds) ->
                 NotificationItemsRequest(
                     roomId = roomId.value,

@@ -22,6 +22,7 @@ import com.otaliastudios.transcoder.validator.WriteAlwaysValidator
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getMimeType
 import io.element.android.libraries.androidutils.file.safeDelete
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -81,7 +82,7 @@ class VideoCompressor @Inject constructor(
     }
 
     private fun getVideoMetadata(uri: Uri): VideoFileMetadata? {
-        return runCatching {
+        return catchingExceptions {
             MediaMetadataRetriever().use {
                 it.setDataSource(context, uri)
 
