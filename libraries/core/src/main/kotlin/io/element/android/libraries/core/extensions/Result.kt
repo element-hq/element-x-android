@@ -7,6 +7,61 @@
 
 package io.element.android.libraries.core.extensions
 
+import kotlin.coroutines.cancellation.CancellationException
+
+/**
+ * Can be used to catch exceptions in a block of code and return a [Result].
+ * If the block throws a [CancellationException], it will be rethrown.
+ * If it throws any other exception, it will be wrapped in a [Result.failure].
+ *
+ * [Error]s are not caught by this function, as they are not meant to be caught in normal application flow.
+ */
+inline fun <T> catchingExceptions(
+    block: () -> T
+): Result<T> {
+    return try {
+        Result.success(block())
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+}
+
+/**
+ * Can be used to catch exceptions in a block of code and return a [Result].
+ * If the block throws a [CancellationException], it will be rethrown.
+ * If it throws any other exception, it will be wrapped in a [Result.failure].
+ *
+ * [Error]s are not caught by this function, as they are not meant to be caught in normal application flow.
+ */
+inline fun <T, R> T.catchingExceptions(
+    block: T.() -> R
+): Result<R> {
+    return try {
+        Result.success(block())
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+}
+
+/**
+ * Can be used to transform a [Result] into another [Result] by applying a [block] to the value if it is successful.
+ * If the original [Result] is a failure, the exception will be wrapped in a new [Result.failure].
+ *
+ * This is a safer version of [Result.mapCatching].
+ */
+inline fun <R, T> Result<T>.mapCatchingException(
+    block: (T) -> R,
+): Result<R> {
+    return when {
+        isSuccess -> catchingExceptions { block(getOrNull()!!) }
+        else -> Result.failure(exceptionOrNull()!!)
+    }
+}
+
 /**
  * Can be used to transform some Throwable into some other.
  */
@@ -33,12 +88,16 @@ inline fun <R, T> Result<T>.flatMap(transform: (T) -> Result<R>): Result<R> {
  * @return The result of the transform or a caught exception wrapped in a [Result].
  */
 inline fun <R, T> Result<T>.flatMapCatching(transform: (T) -> Result<R>): Result<R> {
-    return mapCatching(transform).fold(
+    return mapCatchingException(transform).fold(
         onSuccess = { it },
         onFailure = { Result.failure(it) }
     )
 }
 
+/**
+ * Can be used to execute a block of code after the [Result] has been processed, regardless of whether it was successful or not.
+ * The block receives the exception if there was one, or `null` if the result was successful.
+ */
 inline fun <T> Result<T>.finally(block: (exception: Throwable?) -> Unit): Result<T> {
     onSuccess { block(null) }
     onFailure(block)
