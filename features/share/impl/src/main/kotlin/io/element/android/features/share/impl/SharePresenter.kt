@@ -27,6 +27,7 @@ import io.element.android.libraries.preferences.api.store.SessionPreferencesStor
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class SharePresenter @AssistedInject constructor(
     @Assisted private val intent: Intent,
@@ -89,12 +90,21 @@ class SharePresenter @AssistedInject constructor(
                                 )
                                 filesToShare
                                     .map { fileToShare ->
-                                        mediaSender.sendMedia(
+                                        val result = mediaSender.sendMedia(
                                             uri = fileToShare.uri,
                                             mimeType = fileToShare.mimeType,
-                                        ).isSuccess
+                                        )
+                                        // If the coroutine was cancelled, destroy the room and rethrow the exception
+                                        val cancellationException = result.exceptionOrNull() as? CancellationException
+                                        if (cancellationException != null) {
+                                            if (activeRoomsHolder.getActiveRoomMatching(matrixClient.sessionId, roomId) == null) {
+                                                room.destroy()
+                                            }
+                                            throw cancellationException
+                                        }
+                                        result.isSuccess
                                     }
-                                    .all { it }
+                                    .all { isSuccess -> isSuccess }
                                     .also {
                                         if (activeRoomsHolder.getActiveRoomMatching(matrixClient.sessionId, roomId) == null) {
                                             room.destroy()
