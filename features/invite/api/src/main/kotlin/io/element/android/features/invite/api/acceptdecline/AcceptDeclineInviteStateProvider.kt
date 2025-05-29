@@ -29,10 +29,10 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
                 ),
             ),
             anAcceptDeclineInviteState(
-                acceptAction = AsyncAction.Failure(Throwable("Error while accepting invite")),
+                acceptAction = AsyncAction.Failure(RuntimeException("Error while accepting invite")),
             ),
             anAcceptDeclineInviteState(
-                declineAction = AsyncAction.Failure(Throwable("Error while declining invite")),
+                declineAction = AsyncAction.Failure(RuntimeException("Error while declining invite")),
             ),
         )
 }

@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
@@ -34,7 +35,7 @@ class RustMediaLoader(
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> =
         withContext(mediaDispatcher) {
-            runCatching {
+            catchingExceptions {
                 source.toRustMediaSource().use { source ->
                     innerClient.getMediaContent(source)
                 }
@@ -48,7 +49,7 @@ class RustMediaLoader(
         height: Long
     ): Result<ByteArray> =
         withContext(mediaDispatcher) {
-            runCatching {
+            catchingExceptions {
                 source.toRustMediaSource().use { mediaSource ->
                     innerClient.getMediaThumbnail(
                         mediaSource = mediaSource,
@@ -66,7 +67,7 @@ class RustMediaLoader(
         useCache: Boolean,
     ): Result<MediaFile> =
         withContext(mediaDispatcher) {
-            runCatching {
+            catchingExceptions {
                 source.toRustMediaSource().use { mediaSource ->
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,

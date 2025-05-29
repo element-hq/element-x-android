@@ -7,8 +7,6 @@
 
 package io.element.android.tests.testutils.lambda
 
-import kotlin.system.exitProcess
-
 fun lambdaError(
     message: String = "This lambda should never be called."
 ): Nothing {
@@ -17,9 +15,5 @@ fun lambdaError(
     // The error will be:
     // "Could not stop all services."
     // In this case, put a breakpoint here and run the test in debug mode to identify which lambda is failing.
-    System.err.println(message)
-    Thread.currentThread().stackTrace.forEach {
-        System.err.println(it)
-    }
-    exitProcess(1)
+    throw AssertionError(message)
 }

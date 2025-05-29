@@ -17,7 +17,7 @@ import java.util.UUID
 fun File.safeDelete() {
     if (exists().not()) return
     tryOrNull(
-        onError = {
+        onException = {
             Timber.e(it, "Error, unable to delete file $path")
         },
         operation = {
@@ -30,7 +30,7 @@ fun File.safeDelete() {
 
 fun File.safeRenameTo(dest: File) {
     tryOrNull(
-        onError = {
+        onException = {
             Timber.e(it, "Error, unable to rename file $path to ${dest.path}")
         },
         operation = {

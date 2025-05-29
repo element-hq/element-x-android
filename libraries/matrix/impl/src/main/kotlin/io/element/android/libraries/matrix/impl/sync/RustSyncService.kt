@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.sync
 
 import io.element.android.libraries.core.coroutine.mapState
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.CoroutineDispatcher
@@ -33,10 +34,10 @@ class RustSyncService(
     private val isServiceReady = AtomicBoolean(true)
 
     override suspend fun startSync() = withContext(dispatcher) {
-        runCatching {
+        catchingExceptions {
             if (!isServiceReady.get()) {
                 Timber.d("Can't start sync: service is not ready")
-                return@runCatching
+                return@catchingExceptions
             }
             Timber.i("Start sync")
             inner.start()
@@ -46,10 +47,10 @@ class RustSyncService(
     }
 
     override suspend fun stopSync() = withContext(dispatcher) {
-        runCatching {
+        catchingExceptions {
             if (!isServiceReady.get()) {
                 Timber.d("Can't stop sync: service is not ready")
-                return@runCatching
+                return@catchingExceptions
             }
             Timber.i("Stop sync")
             inner.stop()

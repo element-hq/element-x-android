@@ -20,6 +20,7 @@ import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -74,7 +75,7 @@ class CreateAccountPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.importSession(message: String, loggedInState: MutableState<AsyncAction<SessionId>>) = launch {
         loggedInState.value = AsyncAction.Loading
-        runCatching {
+        catchingExceptions {
             messageParser.parse(message)
         }.flatMap { externalSession ->
             authenticationService.importCreatedSession(externalSession)

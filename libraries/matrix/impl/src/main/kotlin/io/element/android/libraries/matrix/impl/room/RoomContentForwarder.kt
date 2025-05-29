@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.parallelMap
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.ForwardEventException
@@ -52,7 +53,7 @@ class RoomContentForwarder(
         val failedForwardingTo = mutableSetOf<RoomId>()
         targetRooms.parallelMap { room ->
             room.use { targetRoom ->
-                runCatching {
+                catchingExceptions {
                     // Sending a message requires a registered timeline listener
                     targetRoom.timeline().runWithTimelineListenerRegistered {
                         withTimeout(timeoutMs.milliseconds) {

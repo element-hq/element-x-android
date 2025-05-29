@@ -8,6 +8,7 @@
 package io.element.android.features.call.impl.utils
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -33,7 +34,7 @@ class DefaultCallWidgetProvider @Inject constructor(
         clientId: String,
         languageTag: String?,
         theme: String?,
-    ): Result<CallWidgetProvider.GetWidgetResult> = runCatching {
+    ): Result<CallWidgetProvider.GetWidgetResult> = catchingExceptions {
         val matrixClient = matrixClientsProvider.getOrRestore(sessionId).getOrThrow()
         val room = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)
             ?: matrixClient.getJoinedRoom(roomId)

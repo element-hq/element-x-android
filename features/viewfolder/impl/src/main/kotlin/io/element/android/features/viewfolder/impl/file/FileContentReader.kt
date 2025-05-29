@@ -9,6 +9,7 @@ package io.element.android.features.viewfolder.impl.file
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -23,7 +24,7 @@ class DefaultFileContentReader @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
 ) : FileContentReader {
     override suspend fun getLines(path: String): Result<List<String>> = withContext(dispatchers.io) {
-        runCatching {
+        catchingExceptions {
             File(path).readLines()
         }
     }

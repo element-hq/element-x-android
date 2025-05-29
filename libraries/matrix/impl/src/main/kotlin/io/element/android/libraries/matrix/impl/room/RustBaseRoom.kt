@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -90,7 +91,7 @@ class RustBaseRoom(
     }
 
     override suspend fun getMembers(limit: Int) = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.members().use {
                 it.nextChunk(limit.toUInt()).orEmpty().map { roomMember ->
                     RoomMemberMapper.map(roomMember)
@@ -100,7 +101,7 @@ class RustBaseRoom(
     }
 
     override suspend fun getUpdatedMember(userId: UserId): Result<RoomMember> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             RoomMemberMapper.map(innerRoom.member(userId.value))
         }
     }
@@ -113,32 +114,32 @@ class RustBaseRoom(
     }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.memberDisplayName(userId.value)
         }
     }
 
     override suspend fun userRole(userId: UserId): Result<RoomMember.Role> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             RoomMemberMapper.mapRole(innerRoom.suggestedRoleForUser(userId.value))
         }
     }
 
     override suspend fun powerLevels(): Result<RoomPowerLevels> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             RoomPowerLevelsMapper.map(innerRoom.getPowerLevels())
         }
     }
 
     override suspend fun userAvatarUrl(userId: UserId): Result<String?> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.memberAvatarUrl(userId.value)
         }
     }
 
     override suspend fun leave(): Result<Unit> = withContext(roomDispatcher) {
         val membershipBeforeLeft = roomInfoFlow.value.currentUserMembership
-        runCatching {
+        catchingExceptions {
             innerRoom.leave()
         }.onSuccess {
             roomMembershipObserver.notifyUserLeftRoom(roomId, membershipBeforeLeft)
@@ -146,142 +147,142 @@ class RustBaseRoom(
     }
 
     override suspend fun join(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.join()
         }
     }
 
     override suspend fun forget(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.forget()
         }
     }
 
     override suspend fun canUserInvite(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.canUserInvite(userId.value)
         }
     }
 
     override suspend fun canUserKick(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.canUserKick(userId.value)
         }
     }
 
     override suspend fun canUserBan(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.canUserBan(userId.value)
         }
     }
 
     override suspend fun canUserRedactOwn(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.canUserRedactOwn(userId.value)
         }
     }
 
     override suspend fun canUserRedactOther(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.canUserRedactOther(userId.value)
         }
     }
 
     override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.canUserSendState(userId.value, type.map())
         }
     }
 
     override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.canUserSendMessage(userId.value, type.map())
         }
     }
 
     override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.canUserTriggerRoomNotification(userId.value)
         }
     }
 
     override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.canUserPinUnpin(userId.value)
         }
     }
 
     override suspend fun clearEventCacheStorage(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.clearEventCacheStorage()
         }
     }
 
     override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.setIsFavourite(isFavorite, null)
         }
     }
 
     override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.markAsRead(receiptType.toRustReceiptType())
         }
     }
 
     override suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.setUnreadFlag(isUnread)
         }
     }
 
     override suspend fun getPermalink(): Result<String> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.matrixToPermalink()
         }
     }
 
     override suspend fun getPermalinkFor(eventId: EventId): Result<String> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.matrixToEventPermalink(eventId.value)
         }
     }
 
     override suspend fun getRoomVisibility(): Result<RoomVisibility> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.getRoomVisibility().map()
         }
     }
 
     override suspend fun getUpdatedIsEncrypted(): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.latestEncryptionState() == EncryptionState.ENCRYPTED
         }
     }
 
     override suspend fun saveComposerDraft(composerDraft: ComposerDraft): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             Timber.d("saveComposerDraft: $composerDraft into $roomId")
             innerRoom.saveComposerDraft(composerDraft.into())
         }
     }
 
     override suspend fun loadComposerDraft(): Result<ComposerDraft?> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             Timber.d("loadComposerDraft for $roomId")
             innerRoom.loadComposerDraft()?.into()
         }
     }
 
     override suspend fun clearComposerDraft(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             Timber.d("clearComposerDraft for $roomId")
             innerRoom.clearComposerDraft()
         }
     }
 
     override suspend fun reportRoom(reason: String?): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             Timber.d("reportRoom $roomId")
             innerRoom.reportRoom(reason)
         }

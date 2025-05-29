@@ -23,10 +23,10 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             aValidNotificationSettingsState(systemNotificationsEnabled = false),
             aValidNotificationSettingsState(),
             aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Loading),
-            aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
+            aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(RuntimeException("error"))),
             aValidNotificationSettingsState(
                 availablePushDistributors = listOf(aDistributor("Firebase")),
-                changeNotificationSettingAction = AsyncAction.Failure(Throwable("error")),
+                changeNotificationSettingAction = AsyncAction.Failure(RuntimeException("error")),
             ),
             aValidNotificationSettingsState(availablePushDistributors = listOf(aDistributor("Firebase"))),
             aValidNotificationSettingsState(showChangePushProviderDialog = true),

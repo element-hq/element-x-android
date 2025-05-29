@@ -17,7 +17,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_3
-import io.element.android.libraries.matrix.test.A_THROWABLE
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
@@ -113,7 +113,7 @@ class ChooseAccountProviderPresenterTest {
             }
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isEqualTo(accountProvider1)
-                authenticationService.givenChangeServerError(A_THROWABLE)
+                authenticationService.givenChangeServerError(AN_EXCEPTION)
                 it.eventSink(ChooseAccountProviderEvents.Continue)
                 skipItems(1) // Loading
 

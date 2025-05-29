@@ -29,6 +29,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.Feature
@@ -201,8 +202,8 @@ class DeveloperSettingsPresenter @Inject constructor(
 }
 
 private fun customElementCallUrlValidator(url: String?): Boolean {
-    return runCatching {
-        if (url.isNullOrEmpty()) return@runCatching
+    return catchingExceptions {
+        if (url.isNullOrEmpty()) return@catchingExceptions
         val parsedUrl = URL(url)
         if (parsedUrl.protocol !in listOf("http", "https")) error("Incorrect protocol")
         if (parsedUrl.host.isNullOrBlank()) error("Missing host")

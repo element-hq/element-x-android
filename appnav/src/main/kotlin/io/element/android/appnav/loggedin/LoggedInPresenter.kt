@@ -21,6 +21,7 @@ import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -125,7 +126,7 @@ class LoggedInPresenter @Inject constructor(
     }
 
     // Force the user to log out if they were using the proxy sliding sync as it's no longer supported by the SDK
-    private suspend fun MatrixClient.needsForcedNativeSlidingSyncMigration(): Result<Boolean> = runCatching {
+    private suspend fun MatrixClient.needsForcedNativeSlidingSyncMigration(): Result<Boolean> = catchingExceptions {
         val currentSlidingSyncVersion = currentSlidingSyncVersion().getOrThrow()
         currentSlidingSyncVersion == SlidingSyncVersion.Proxy
     }

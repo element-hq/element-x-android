@@ -12,6 +12,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.core.net.toFile
+import io.element.android.libraries.core.extensions.catchingExceptions
 
 fun Context.getMimeType(uri: Uri): String? = when (uri.scheme) {
     ContentResolver.SCHEME_CONTENT -> contentResolver.getType(uri)
@@ -32,14 +33,14 @@ fun Context.getFileSize(uri: Uri): Long {
     } ?: 0
 }
 
-private fun Context.getContentFileSize(uri: Uri): Long? = runCatching {
+private fun Context.getContentFileSize(uri: Uri): Long? = catchingExceptions {
     contentResolver.query(uri, null, null, null, null)?.use { cursor ->
         cursor.moveToFirst()
         return@use cursor.getColumnIndexOrThrow(OpenableColumns.SIZE).let(cursor::getLong)
     }
 }.getOrNull()
 
-private fun Context.getContentFileName(uri: Uri): String? = runCatching {
+private fun Context.getContentFileName(uri: Uri): String? = catchingExceptions {
     contentResolver.query(uri, null, null, null, null)?.use { cursor ->
         cursor.moveToFirst()
         return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)

@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.call
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.AppScope
 import org.matrix.rustcomponents.sdk.ElementWellKnown
 import org.matrix.rustcomponents.sdk.makeElementWellKnown
@@ -20,7 +21,7 @@ interface ElementWellKnownParser {
 @ContributesBinding(AppScope::class)
 class RustElementWellKnownParser @Inject constructor() : ElementWellKnownParser {
     override fun parse(str: String): Result<ElementWellKnown> {
-        return runCatching {
+        return catchingExceptions {
             makeElementWellKnown(str)
         }
     }

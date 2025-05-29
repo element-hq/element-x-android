@@ -308,7 +308,7 @@ class DefaultBugReporter @Inject constructor(
      */
     private fun getLogFiles(): List<File> {
         return tryOrNull(
-            onError = { Timber.e(it, "## getLogFiles() failed") }
+            onException = { Timber.e(it, "## getLogFiles() failed") }
         ) {
             val logDirectory = logDirectory()
             logDirectory.listFiles()?.toList()

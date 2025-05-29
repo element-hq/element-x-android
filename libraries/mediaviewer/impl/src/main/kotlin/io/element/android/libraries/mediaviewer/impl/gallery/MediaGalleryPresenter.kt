@@ -22,6 +22,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.extensions.mapCatchingException
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
@@ -154,7 +155,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
             mimeType = mediaItem.mediaInfo().mimeType,
             filename = mediaItem.mediaInfo().filename
         )
-            .mapCatching { mediaFile ->
+            .mapCatchingException { mediaFile ->
                 localMediaFactory.createFromMediaFile(
                     mediaFile = mediaFile,
                     mediaInfo = mediaItem.mediaInfo()
@@ -164,7 +165,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
 
     private suspend fun saveOnDisk(mediaItem: MediaItem.Event) {
         downloadMedia(mediaItem)
-            .mapCatching { localMedia ->
+            .mapCatchingException { localMedia ->
                 localMediaActions.saveOnDisk(localMedia)
             }
             .onSuccess {
@@ -179,7 +180,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
 
     private suspend fun share(mediaItem: MediaItem.Event) {
         downloadMedia(mediaItem)
-            .mapCatching { localMedia ->
+            .mapCatchingException { localMedia ->
                 localMediaActions.share(localMedia)
             }
             .onFailure {

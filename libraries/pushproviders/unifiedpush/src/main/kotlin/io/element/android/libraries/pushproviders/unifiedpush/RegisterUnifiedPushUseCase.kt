@@ -9,6 +9,7 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.pushproviders.api.Distributor
@@ -35,7 +36,7 @@ class DefaultRegisterUnifiedPushUseCase @Inject constructor(
         // VectorUnifiedPushMessagingReceiver.onNewEndpoint
         UnifiedPush.register(context = context, instance = clientSecret)
         // Wait for VectorUnifiedPushMessagingReceiver.onNewEndpoint to proceed
-        return runCatching {
+        return catchingExceptions {
             withTimeout(30.seconds) {
                 val result = endpointRegistrationHandler.state
                     .filter { it.clientSecret == clientSecret }

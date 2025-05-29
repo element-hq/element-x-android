@@ -205,7 +205,7 @@ class RoomDetailsEditViewTest {
         rule.setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
-                saveAction = AsyncAction.Failure(Throwable("Whelp")),
+                saveAction = AsyncAction.Failure(RuntimeException("Whelp")),
             ),
         )
         rule.clickOn(CommonStrings.action_ok)

@@ -9,6 +9,7 @@ package io.element.android.features.migration.impl.migrations
 
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesMultibinding
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
@@ -26,6 +27,6 @@ class AppMigration04 @Inject constructor(
     override val order: Int = 4
 
     override suspend fun migrate() {
-        runCatching { context.getDatabasePath(NOTIFICATION_FILE_NAME).delete() }
+        catchingExceptions { context.getDatabasePath(NOTIFICATION_FILE_NAME).delete() }
     }
 }

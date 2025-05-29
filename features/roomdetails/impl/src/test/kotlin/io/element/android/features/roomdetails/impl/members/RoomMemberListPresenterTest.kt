@@ -189,7 +189,7 @@ class RoomMemberListPresenterTest {
         val presenter = createPresenter(
             joinedRoom = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
-                    canInviteResult = { Result.failure(Throwable("Eek")) },
+                    canInviteResult = { Result.failure(RuntimeException("Eek")) },
                     updateMembersResult = { Result.success(Unit) }
                 )
             )
