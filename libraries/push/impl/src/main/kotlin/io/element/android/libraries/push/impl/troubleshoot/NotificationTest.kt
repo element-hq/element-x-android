@@ -8,7 +8,6 @@
 package io.element.android.libraries.push.impl.troubleshoot
 
 import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationDisplayer
@@ -64,7 +63,8 @@ class NotificationTest @Inject constructor(
             notificationClickHandler.state.first()
             Timber.d("Notification clicked!")
         }
-        catchingExceptions {
+        @Suppress("RunCatchingNotAllowed")
+        runCatching {
             withTimeout(30.seconds) {
                 job.join()
             }
