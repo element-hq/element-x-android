@@ -154,7 +154,7 @@ gplayTargetPath="${targetPath}/gplay"
 unsignedBundlePath="${gplayTargetPath}/app-gplay-release.aab"
 signedBundlePath="${gplayTargetPath}/app-gplay-release-signed.aab"
 
-#./gradlew bundleGplayRelease
+./gradlew bundleGplayRelease
 mkdir -p "${gplayTargetPath}"
 cp ./app/build/intermediates/intermediary_bundle/gplayRelease/packageGplayReleaseBundle/intermediary-bundle.aab "$unsignedBundlePath"
 
