@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
-import io.element.android.libraries.oidc.impl.customtab.DefaultOidcActionFlow
+import io.element.android.libraries.oidc.test.customtab.FakeOidcActionFlow
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.waitForPredicate
 import kotlinx.coroutines.test.runTest
@@ -100,7 +100,7 @@ class ConfirmAccountProviderPresenterTest {
     @Test
     fun `present - oidc - cancel with failure`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService()
-        val defaultOidcActionFlow = DefaultOidcActionFlow()
+        val defaultOidcActionFlow = FakeOidcActionFlow()
         val presenter = createConfirmAccountProviderPresenter(
             matrixAuthenticationService = authenticationService,
             defaultOidcActionFlow = defaultOidcActionFlow,
@@ -128,7 +128,7 @@ class ConfirmAccountProviderPresenterTest {
     @Test
     fun `present - oidc - cancel with success`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService()
-        val defaultOidcActionFlow = DefaultOidcActionFlow()
+        val defaultOidcActionFlow = FakeOidcActionFlow()
         val presenter = createConfirmAccountProviderPresenter(
             matrixAuthenticationService = authenticationService,
             defaultOidcActionFlow = defaultOidcActionFlow,
@@ -155,7 +155,7 @@ class ConfirmAccountProviderPresenterTest {
     @Test
     fun `present - oidc - success with failure`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService()
-        val defaultOidcActionFlow = DefaultOidcActionFlow()
+        val defaultOidcActionFlow = FakeOidcActionFlow()
         val presenter = createConfirmAccountProviderPresenter(
             matrixAuthenticationService = authenticationService,
             defaultOidcActionFlow = defaultOidcActionFlow,
@@ -185,7 +185,7 @@ class ConfirmAccountProviderPresenterTest {
     @Test
     fun `present - oidc - success with success`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService()
-        val defaultOidcActionFlow = DefaultOidcActionFlow()
+        val defaultOidcActionFlow = FakeOidcActionFlow()
         val defaultLoginUserStory = DefaultLoginUserStory().apply {
             setLoginFlowIsDone(false)
         }
@@ -356,7 +356,7 @@ class ConfirmAccountProviderPresenterTest {
         params: ConfirmAccountProviderPresenter.Params = ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
-        defaultOidcActionFlow: OidcActionFlow = DefaultOidcActionFlow(),
+        defaultOidcActionFlow: OidcActionFlow = FakeOidcActionFlow(),
         defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
         webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
     ) = ConfirmAccountProviderPresenter(

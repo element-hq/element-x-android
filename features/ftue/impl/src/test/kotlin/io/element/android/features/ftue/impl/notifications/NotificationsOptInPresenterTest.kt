@@ -14,7 +14,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
+import io.element.android.libraries.permissions.test.FakePermissionStateProvider
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider

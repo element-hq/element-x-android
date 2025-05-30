@@ -62,7 +62,7 @@ dependencies {
     testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.oidc.impl)
+    testImplementation(projects.libraries.oidc.test)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.tests.testutils)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)

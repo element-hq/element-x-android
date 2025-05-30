@@ -17,14 +17,14 @@ import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.indicator.impl.DefaultIndicatorService
+import io.element.android.libraries.indicator.api.IndicatorService
+import io.element.android.libraries.indicator.test.FakeIndicatorService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -71,7 +71,7 @@ class PreferencesRootPresenterTest {
             )
             assertThat(initialState.version).isEqualTo("A Version")
             assertThat(loadedState.showSecureBackup).isFalse()
-            assertThat(loadedState.showSecureBackupBadge).isTrue()
+            assertThat(loadedState.showSecureBackupBadge).isFalse()
             assertThat(loadedState.accountManagementUrl).isNull()
             assertThat(loadedState.devicesManagementUrl).isNull()
             assertThat(loadedState.showAnalyticsSettings).isFalse()
@@ -107,6 +107,27 @@ class PreferencesRootPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.canReportBug).isFalse()
             skipItems(1)
+        }
+    }
+
+    @Test
+    fun `present - secure backup badge`() = runTest {
+        val matrixClient = FakeMatrixClient(
+            canDeactivateAccountResult = { true },
+            accountManagementUrlResult = { Result.success("") },
+        )
+        val indicatorService = FakeIndicatorService()
+        createPresenter(
+            matrixClient = matrixClient,
+            rageshakeFeatureAvailability = { false },
+            indicatorService = indicatorService,
+        ).test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.showSecureBackupBadge).isFalse()
+            indicatorService.setShowSettingChatBackupIndicator(true)
+            val finalState = awaitItem()
+            assertThat(finalState.showSecureBackupBadge).isTrue()
         }
     }
 
@@ -165,6 +186,7 @@ class PreferencesRootPresenterTest {
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
         showDeveloperSettingsProvider: ShowDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.DEBUG)),
         rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { true },
+        indicatorService: IndicatorService = FakeIndicatorService(),
     ) = PreferencesRootPresenter(
         matrixClient = matrixClient,
         sessionVerificationService = sessionVerificationService,
@@ -172,10 +194,7 @@ class PreferencesRootPresenterTest {
         versionFormatter = FakeVersionFormatter(),
         snackbarDispatcher = SnackbarDispatcher(),
         featureFlagService = FakeFeatureFlagService(),
-        indicatorService = DefaultIndicatorService(
-            sessionVerificationService = sessionVerificationService,
-            encryptionService = FakeEncryptionService(),
-        ),
+        indicatorService = indicatorService,
         directLogoutPresenter = { aDirectLogoutState() },
         showDeveloperSettingsProvider = showDeveloperSettingsProvider,
         rageshakeFeatureAvailability = rageshakeFeatureAvailability,

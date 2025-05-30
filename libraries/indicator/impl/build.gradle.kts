@@ -31,6 +31,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.truth)
 }

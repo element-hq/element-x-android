@@ -40,6 +40,7 @@ dependencies {
     api(projects.libraries.oidc.api)
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.test.robolectric)
     testImplementation(libs.androidx.test.ext.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

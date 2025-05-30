@@ -40,11 +40,11 @@ import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageForma
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
-import io.element.android.libraries.indicator.impl.DefaultIndicatorService
+import io.element.android.libraries.indicator.api.IndicatorService
+import io.element.android.libraries.indicator.test.FakeIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -121,31 +121,24 @@ class RoomListPresenterTest {
             assertThat(withUserState.matrixUser.userId).isEqualTo(A_USER_ID)
             assertThat(withUserState.matrixUser.displayName).isEqualTo(A_USER_NAME)
             assertThat(withUserState.matrixUser.avatarUrl).isEqualTo(AN_AVATAR_URL)
-            assertThat(withUserState.showAvatarIndicator).isTrue()
+            assertThat(withUserState.showAvatarIndicator).isFalse()
         }
     }
 
     @Test
     fun `present - show avatar indicator`() = runTest {
-        val encryptionService = FakeEncryptionService()
-        val sessionVerificationService = FakeSessionVerificationService()
-        val matrixClient = FakeMatrixClient(
-            encryptionService = encryptionService,
-            sessionVerificationService = sessionVerificationService,
-        )
+        val indicatorService = FakeIndicatorService()
         val presenter = createRoomListPresenter(
-            client = matrixClient,
+            indicatorService = indicatorService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.showAvatarIndicator).isTrue()
-            assertThat(initialState.canReportBug).isTrue()
-            sessionVerificationService.emitNeedsSessionVerification(false)
-            encryptionService.emitBackupState(BackupState.ENABLED)
+            assertThat(initialState.showAvatarIndicator).isFalse()
+            indicatorService.setShowRoomListTopBarIndicator(true)
             val finalState = awaitItem()
-            assertThat(finalState.showAvatarIndicator).isFalse()
+            assertThat(finalState.showAvatarIndicator).isTrue()
         }
     }
 
@@ -686,7 +679,8 @@ class RoomListPresenterTest {
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { true },
-        seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore()
+        seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
+        indicatorService: IndicatorService = FakeIndicatorService(),
     ) = RoomListPresenter(
         client = client,
         syncService = syncService,
@@ -704,10 +698,7 @@ class RoomListPresenterTest {
             dateTimeObserver = FakeDateTimeObserver(),
         ),
         featureFlagService = featureFlagService,
-        indicatorService = DefaultIndicatorService(
-            sessionVerificationService = client.sessionVerificationService(),
-            encryptionService = client.encryptionService(),
-        ),
+        indicatorService = indicatorService,
         searchPresenter = searchPresenter,
         sessionPreferencesStore = sessionPreferencesStore,
         filtersPresenter = filtersPresenter,
