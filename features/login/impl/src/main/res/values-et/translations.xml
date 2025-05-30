@@ -89,5 +89,6 @@ Proovi käsitsi sisselogimist või skaneeri QR-koodi mõne muu seadmega."</strin
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks."</string>
   <string name="screen_server_confirmation_message_register">"See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postiteenuse pakkujat."</string>
   <string name="screen_server_confirmation_title_login">"Sa oled sisselogimas koduserverisse %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Vali teenusepakkuja"</string>
   <string name="screen_server_confirmation_title_register">"Sa oled loomas kasutajakontot koduserveris %1$s"</string>
 </resources>

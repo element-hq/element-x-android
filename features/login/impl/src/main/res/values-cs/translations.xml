@@ -89,5 +89,6 @@ Zkuste se přihlásit ručně nebo naskenujte QR kód pomocí jiného zařízen�
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci."</string>
   <string name="screen_server_confirmation_message_register">"Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily."</string>
   <string name="screen_server_confirmation_title_login">"Chystáte se přihlásit do služby %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Vyberte poskytovatele účtu"</string>
   <string name="screen_server_confirmation_title_register">"Chystáte se vytvořit účet na %1$s"</string>
 </resources>

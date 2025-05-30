@@ -107,6 +107,7 @@
   <string name="action_report">"回報"</string>
   <string name="action_report_bug">"回報程式錯誤"</string>
   <string name="action_report_content">"檢舉內容"</string>
+  <string name="action_report_dm">"回報對話"</string>
   <string name="action_report_room">"回報聊天室"</string>
   <string name="action_reset">"重設"</string>
   <string name="action_reset_identity">"重設身份"</string>
@@ -259,6 +260,7 @@
   <string name="common_shared_location">"位置分享"</string>
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"有錯誤發生"</string>
+  <string name="common_something_went_wrong_message">"我們了遇到了問題。請再試一次。"</string>
   <string name="common_starting_chat">"開始聊天…"</string>
   <string name="common_sticker">"貼圖"</string>
   <string name="common_success">"成功"</string>

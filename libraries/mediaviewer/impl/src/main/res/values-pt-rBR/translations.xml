@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Esse arquivo será removido da sala e os membros não terão acesso a ele."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Excluir arquivo?"</string>
+  <string name="screen_media_browser_download_error_message">"Verifique sua conexão com a Internet e tente novamente."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Os documentos, arquivos de áudio e mensagens de voz enviados para esta sala serão exibidos aqui."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Ainda não foram enviados arquivos"</string>
+  <string name="screen_media_browser_list_loading_files">"Carregando arquivos…"</string>
+  <string name="screen_media_browser_list_loading_media">"Carregando mídia…"</string>
+  <string name="screen_media_browser_list_mode_files">"Arquivos"</string>
+  <string name="screen_media_browser_list_mode_media">"Mídia"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"As imagens e os vídeos enviados para esta sala serão exibidos aqui."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Nenhuma mídia foi carregada ainda"</string>
+  <string name="screen_media_browser_title">"Mídia e arquivos"</string>
+  <string name="screen_media_details_file_format">"Formato de arquivo"</string>
+  <string name="screen_media_details_filename">"Nome do arquivo"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Não há mais arquivos para mostrar"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Não há mais mídia para mostrar"</string>
+  <string name="screen_media_details_uploaded_by">"Enviado por"</string>
+  <string name="screen_media_details_uploaded_on">"Enviado em"</string>
+</resources>

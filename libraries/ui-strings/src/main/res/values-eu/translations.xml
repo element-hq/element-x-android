@@ -9,6 +9,7 @@
   <string name="a11y_notifications_muted">"Mutututa"</string>
   <string name="a11y_page_n">"%1$d. orria"</string>
   <string name="a11y_pause">"Eten"</string>
+  <string name="a11y_paused_voice_message">"Ahots-mezua, iraupena: %1$s, uneko posizioa: %2$s"</string>
   <string name="a11y_pin_field">"PINaren eremua"</string>
   <string name="a11y_play">"Erreproduzitu"</string>
   <string name="a11y_poll">"Inkesta"</string>
@@ -28,6 +29,7 @@
   <string name="a11y_start_call">"Hasi dei bat"</string>
   <string name="a11y_user_menu">"Erabiltzailea-menua"</string>
   <string name="a11y_view_details">"Ikusi xehetasunak"</string>
+  <string name="a11y_voice_message">"Ahots-mezua, iraupena: %1$s"</string>
   <string name="a11y_voice_message_record">"Grabatu ahots-mezua."</string>
   <string name="a11y_voice_message_stop_recording">"Utzi grabatzeari"</string>
   <string name="action_accept">"Onartu"</string>
@@ -103,6 +105,7 @@
   <string name="action_report">"Salatu"</string>
   <string name="action_report_bug">"Eman errore baten berri"</string>
   <string name="action_report_content">"Salatu edukia"</string>
+  <string name="action_report_dm">"Salatu elkarrizketa"</string>
   <string name="action_report_room">"Salatu gela"</string>
   <string name="action_reset">"Berrezarri"</string>
   <string name="action_reset_identity">"Berrezarri identitatea"</string>
@@ -131,6 +134,7 @@
   <string name="action_view_source">"Ikusi iturburua"</string>
   <string name="action_yes">"Bai"</string>
   <string name="action_yes_try_again">"Bai, saiatu berriro"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Orain zure zerbitzaria protokolo berri eta azkarrago batekin da bateragarria. Amaitu saioa eta hasi berriro protokolo berria erabiltzeko. Orain eginez gero, etorkizunean protokolo zaharra kentzen denean ez zaizu behartutako saioa ixtera."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Bertsio-berritzea eskuragarri"</string>
   <string name="common_about">"Honi buruz"</string>
   <string name="common_adding_caption">"Testua gehitzen"</string>
@@ -213,6 +217,7 @@ Arrazoia: %1$s."</string>
   <string name="common_permalink">"Esteka iraunkorra"</string>
   <string name="common_permission">"Baimena"</string>
   <string name="common_pinned">"Finkatuta"</string>
+  <string name="common_please_check_internet_connection">"Egiaztatu Interneteko konexioa"</string>
   <string name="common_please_wait">"Itxaron…"</string>
   <string name="common_poll_end_confirmation">"Ziur inkesta hau amaitu nahi duzula?"</string>
   <string name="common_poll_summary">"Inkesta:%1$s"</string>
@@ -290,6 +295,7 @@ Arrazoia: %1$s."</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s(r)en %2$s identitatea berrezarri da. %3$s"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s(r)en identitatea berrezarri da."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s(r)en %2$s identitatea berrezarri da. %3$s"</string>
+  <string name="dialog_confirm_link_title">"Egiaztatu honako esteka"</string>
   <string name="dialog_room_reported">"Gela salatu da"</string>
   <string name="dialog_room_reported_and_left">"Gela salatu eta utzi da"</string>
   <string name="dialog_title_confirmation">"Baieztapena"</string>

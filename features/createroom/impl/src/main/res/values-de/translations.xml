@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Neuer Raum"</string>
-  <string name="screen_create_room_add_people_title">"Personen einladen"</string>
+  <string name="screen_create_room_add_people_title">"Nutzer einladen"</string>
   <string name="screen_create_room_error_creating_room">"Beim Erstellen des Chats ist ein Fehler aufgetreten"</string>
-  <string name="screen_create_room_private_option_description">"Nur eingeladene Personen haben Zutritt zu diesem Chatroom. Alle Nachrichten sind durchgehend verschlüsselt."</string>
+  <string name="screen_create_room_private_option_description">"Nur eingeladene Personen haben Zutritt zu diesem Chatroom. Alle Nachrichten sind Ende-zu-Ende verschlüsselt."</string>
   <string name="screen_create_room_private_option_title">"Privater Chatroom"</string>
-  <string name="screen_create_room_public_option_description">"Jeder kann diesen Chatroom finden.
+  <string name="screen_create_room_public_option_description">"Alle können diesen Chatroom finden.
 Sie können dies aber jederzeit in den Chatroomeinstellungen ändern."</string>
   <string name="screen_create_room_public_option_title">"Öffentlicher Raum"</string>
   <string name="screen_create_room_room_access_section_anyone_option_description">"Jeder kann diesem Chatroom beitreten"</string>

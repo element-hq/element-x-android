@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"مسدود کریں"</string>
+  <string name="screen_dm_details_block_alert_description">"مسدود کردہ صارفین آپ کو پیغامات نہیں بھیج سکیں گے اور انکے تمام پیغامات چھپ جائیں گے۔ آپ انھیں کسی بھی وقت غیر مسدود کر سکتے ہیں۔"</string>
+  <string name="screen_dm_details_block_user">"صارف کو مسدود کریں"</string>
+  <string name="screen_dm_details_unblock_alert_action">"غیر مسدود کریں"</string>
+  <string name="screen_dm_details_unblock_alert_description">"آپ انکی جانب سے تمام پیغامات دوبارہ دیکھ سکیں گے۔"</string>
+  <string name="screen_dm_details_unblock_user">"صارف کو غیر مسدود کریں"</string>
+  <string name="screen_room_member_details_block_alert_action">"مسدود کریں"</string>
+  <string name="screen_room_member_details_block_alert_description">"مسدود کردہ صارفین آپ کو پیغامات نہیں بھیج سکیں گے اور انکے تمام پیغامات چھپ جائیں گے۔ آپ انھیں کسی بھی وقت غیر مسدود کر سکتے ہیں۔"</string>
+  <string name="screen_room_member_details_block_user">"صارف کو مسدود کریں"</string>
+  <string name="screen_room_member_details_title">"نمایہ"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"غیر مسدود کریں"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"آپ انکی جانب سے تمام پیغامات دوبارہ دیکھ سکیں گے۔"</string>
+  <string name="screen_room_member_details_unblock_user">"صارف کو غیر مسدود کریں"</string>
+  <string name="screen_start_chat_error_starting_chat">"گفتگو شروع کرنے کی کوشش کرتے وقت ایک خرابی واقع ہوگئی"</string>
+</resources>

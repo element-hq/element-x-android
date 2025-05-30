@@ -2,6 +2,14 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_avatar">"Afatar"</string>
   <string name="a11y_delete">"Dileu"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="zero">"%1$d nodau wedi eu cynnig"</item>
+    <item quantity="one">"%1$d nod wedi ei gynnig"</item>
+    <item quantity="two">"%1$d nod wedi ei gynnig"</item>
+    <item quantity="few">"%1$d nod wedi ei gynnig"</item>
+    <item quantity="many">"%1$d nod wedi ei gynnig"</item>
+    <item quantity="other">"%1$d nod wedi eu cynnig"</item>
+  </plurals>
   <string name="a11y_hide_password">"Cuddio cyfrinair"</string>
   <string name="a11y_join_call">"Ymuno â galwad"</string>
   <string name="a11y_jump_to_bottom">"Symud i\'r gwaelod"</string>
@@ -17,6 +25,14 @@
   <string name="a11y_react_with">"Ymateb gyda %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Ymateb gydag emojis eraill"</string>
   <string name="a11y_read_receipts_multiple">"Wedi\'i ddarllen gan %1$s a %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="zero">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
+    <item quantity="one">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
+    <item quantity="two">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
+    <item quantity="few">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
+    <item quantity="many">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
+    <item quantity="other">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Wedi\'i ddarllen gan %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tapio i ddangos y cyfan"</string>
   <string name="a11y_remove_reaction_with">"Wedi dileu adwaith gyda %1$s"</string>
@@ -190,6 +206,22 @@ Rheswm: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Dolen wedi\'i chopïo i\'r clipfwrdd"</string>
   <string name="common_loading">"Yn Llwytho…"</string>
   <string name="common_loading_more">"Wrthi\'n llwytho mwy…"</string>
+  <plurals name="common_many_members">
+    <item quantity="zero">"%d arall"</item>
+    <item quantity="one">"%d arall"</item>
+    <item quantity="two">"%d arall"</item>
+    <item quantity="few">"%d arall"</item>
+    <item quantity="many">"%d arall"</item>
+    <item quantity="other">"%d arall"</item>
+  </plurals>
+  <plurals name="common_member_count">
+    <item quantity="zero">"%1$d aelodau"</item>
+    <item quantity="one">"%1$d aelod"</item>
+    <item quantity="two">"%1$d aelod"</item>
+    <item quantity="few">"%1$d aelod"</item>
+    <item quantity="many">"%1$d aelod"</item>
+    <item quantity="other">"%1$d aelod"</item>
+  </plurals>
   <string name="common_message">"Neges"</string>
   <string name="common_message_actions">"Gweithredoedd neges"</string>
   <string name="common_message_layout">"Cynllun y neges"</string>
@@ -214,6 +246,14 @@ Rheswm: %1$s."</string>
   <string name="common_poll_summary">"Pleidlais: %1$s"</string>
   <string name="common_poll_total_votes">"Cyfanswm y pleidleisiau: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Bydd y canlyniadau\'n dangos ar ôl i\'r bleidlais ddod i ben"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="zero">"%d pleidleisiau"</item>
+    <item quantity="one">"%d pleidlais"</item>
+    <item quantity="two">"%d pleidlais"</item>
+    <item quantity="few">"%d pleidlais"</item>
+    <item quantity="many">"%d pleidlais"</item>
+    <item quantity="other">"%d pleidlais"</item>
+  </plurals>
   <string name="common_privacy_policy">"Polisi preifatrwydd"</string>
   <string name="common_reaction">"Adwaith"</string>
   <string name="common_reactions">"Adweithiau"</string>
@@ -346,6 +386,14 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Wedi methu llwytho cyfryngau, ceisiwch eto."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Pwyswch ar neges a dewis “%1$s” i\'w cynnwys yma."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pinio negeseuon pwysig fel y mae modd eu darganfod yn hawdd"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="zero">"%1$d Negeseuon wedi\'u pinio"</item>
+    <item quantity="one">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="two">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="few">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="many">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="other">"%1$d Neges wedi\'i phinio"</item>
+  </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Negeseuon wedi\'u pinio"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Rydych chi ar fin mynd i\'ch cyfrif %1$s i ailosod eich hunaniaeth. Wedi hynny byddwch yn cael eich tywys yn ôl i\'r ap."</string>
   <string name="screen_reset_identity_confirmation_title">"Methu cadarnhau? Ewch i\'ch cyfrif i ailosod eich hunaniaeth."</string>

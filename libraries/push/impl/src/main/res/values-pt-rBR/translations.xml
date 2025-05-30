@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Chamada"</string>
   <string name="notification_channel_listening_for_events">"Ouvindo eventos"</string>
   <string name="notification_channel_noisy">"Notificações barulhentas"</string>
+  <string name="notification_channel_ringing_calls">"Chamadas tocando"</string>
   <string name="notification_channel_silent">"Notificações silenciosas"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d mensagem"</item>
@@ -13,6 +14,7 @@
     <item quantity="other">"%d notificações"</item>
   </plurals>
   <string name="notification_fallback_content">"Notificação"</string>
+  <string name="notification_incoming_call">"📹 Chamada recebida"</string>
   <string name="notification_inline_reply_failed">"** Falha ao enviar - por favor, abra a sala"</string>
   <string name="notification_invitation_action_join">"Entrar"</string>
   <string name="notification_invitation_action_reject">"Recusar"</string>
@@ -34,6 +36,7 @@
   <string name="notification_room_invite_body">"Convidou você para entrar na sala"</string>
   <string name="notification_room_invite_body_with_sender">"%1$s te convidou para entrar na sala"</string>
   <string name="notification_sender_me">"Eu"</string>
+  <string name="notification_sender_mention_reply">"%1$s mencionado ou respondido"</string>
   <string name="notification_test_push_notification_content">"Você está visualizando a notificação! Clique em mim!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -51,5 +54,29 @@
   <string name="push_distributor_background_sync_android">"Sincronização em segundo plano"</string>
   <string name="push_distributor_firebase_android">"Serviços do Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"O Google Play Services não foi encontrado. As notificações podem não funcionar corretamente."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Obtenha o nome do provedor atual."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nenhum provedor de push foi selecionado."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Provedor de push atual: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Provedor de push atual"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Certifique-se de que o aplicativo seja compatível com pelo menos um provedor de push."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nenhum suporte de provedor de push foi encontrado."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Encontrado %1$d provedor de push: %2$s"</item>
+    <item quantity="other">"Encontrados %1$d provedores de push: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"O aplicativo foi desenvolvido com suporte para: %1$s"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Suporte ao provedor de push"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Verifique se o aplicativo pode exibir a notificação."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"A notificação não foi clicada."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Não é possível exibir a notificação."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"A notificação foi clicada!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Exibir notificação"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Clique na notificação para continuar o teste."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Certifique-se de que o aplicativo está recebendo push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Erro: o pusher rejeitou a solicitação."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Erro: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Erro, não é possível testar o push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Erro, tempo limite de espera pelo push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"O push loop back levou %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Teste o loopback do push"</string>
 </resources>

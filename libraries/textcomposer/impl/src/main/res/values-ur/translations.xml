@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"منسلکہ شامل کریں"</string>
+  <string name="rich_text_editor_bullet_list">"گولئی فہرست تبدیل کریں"</string>
+  <string name="rich_text_editor_close_formatting_options">"تنسیق کے اختیارات بند کریں"</string>
+  <string name="rich_text_editor_code_block">"رمز بلاک تبدیل کریں"</string>
+  <string name="rich_text_editor_composer_placeholder">"پیغام…"</string>
+  <string name="rich_text_editor_create_link">"ایک ربط بنائیں"</string>
+  <string name="rich_text_editor_edit_link">"ربط میں ترمیم کریں"</string>
+  <string name="rich_text_editor_format_bold">"جلی وضع لاگو کریں"</string>
+  <string name="rich_text_editor_format_italic">"ترچھی وضع لاگو کریں"</string>
+  <string name="rich_text_editor_format_strikethrough">"مشطوب وضع لاگو کریں"</string>
+  <string name="rich_text_editor_format_underline">"مسطر وضع لاگو کریں"</string>
+  <string name="rich_text_editor_full_screen_toggle">"مکمل نمایشگر وضع تبدیل کریں"</string>
+  <string name="rich_text_editor_indent">"حاشیہ"</string>
+  <string name="rich_text_editor_inline_code">"درخط رمز وضع تبدیل کریں"</string>
+  <string name="rich_text_editor_link">"ربط متعین کریں"</string>
+  <string name="rich_text_editor_numbered_list">"عددی فہرست تبدیل کریں"</string>
+  <string name="rich_text_editor_open_compose_options">"تحریر کے اختیارات کھولیں"</string>
+  <string name="rich_text_editor_quote">"حوالہ تبدیل کریں"</string>
+  <string name="rich_text_editor_remove_link">"ربط ہٹائیں"</string>
+  <string name="rich_text_editor_unindent">"غیر حاشیہ"</string>
+  <string name="rich_text_editor_url_placeholder">"ربط"</string>
+  <string name="screen_room_voice_message_tooltip">"ثبت کرنے کیلئے دبا کر رکھیں"</string>
+</resources>

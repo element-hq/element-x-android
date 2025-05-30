@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"یقینی بنائیں کہ Firebase دستیاب ہے۔"</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase دستیاب نہیں ہے۔"</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase دستیاب ہے۔"</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Firebase کی پڑتال کریں"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"یقینی بنائیں کہ Firebase رمزِ ممیز دستیاب ہے۔"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Firebase رمزِ ممیز معلوم نہیں ہے۔"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Firebase رمزِ ممیز:%1$s۔"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Firebase رمزِ ممیز کی پڑتال کریں"</string>
+</resources>

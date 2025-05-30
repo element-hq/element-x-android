@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"您移除了聊天室大頭照"</string>
   <string name="state_event_room_ban">"%1$s 將 %2$s 加入黑名單"</string>
   <string name="state_event_room_ban_by_you">"您將 %1$s 加入黑名單"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"您封鎖了 %1$s：%2$s"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s 封鎖了 %2$s：%3$s"</string>
   <string name="state_event_room_created">"%1$s 建立此聊天室"</string>
   <string name="state_event_room_created_by_you">"您建立此聊天室"</string>
   <string name="state_event_room_invite">"%1$s 已邀請 %2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"您拒絕了邀請"</string>
   <string name="state_event_room_remove">"%2$s 已被 %1$s 移除"</string>
   <string name="state_event_room_remove_by_you">"%1$s 已被您移除"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"您移除了 %1$s：%2$s"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s 移除了 %2$s：%3$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s 已邀請 %2$s 加入聊天室"</string>
   <string name="state_event_room_third_party_invite_by_you">"您已邀請 %1$s 加入聊天室"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s 撤銷了對 %2$s 的聊天室邀請"</string>

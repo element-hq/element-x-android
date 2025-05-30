@@ -33,6 +33,7 @@ val locales = setOf(
     "sv",
     "tr",
     "uk",
+    "ur",
     "uz",
     "zh-rCN",
     "zh-rTW",

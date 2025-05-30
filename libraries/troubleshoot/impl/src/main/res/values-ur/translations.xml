@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"جانچہا چلائیں"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"جانچہا دوبارہ چلائیں"</string>
+  <string name="troubleshoot_notifications_screen_failure">"کچھ جانچیں ناکام۔ برائے مہربانی تفصیلات پڑتال کریں۔"</string>
+  <string name="troubleshoot_notifications_screen_notice">"اپنی تکوین میں کسی بھی مسئلے کا کھوج لگانے کے لیے جانچ ہا چلائیں جس سے اطلاعات توقع کے مطابق برتاؤ نہ کریں۔"</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"ٹھیک کرنے کی کوشش کریں"</string>
+  <string name="troubleshoot_notifications_screen_success">"تمام جانچیں کامیابی سے گزاریں ہیں۔"</string>
+  <string name="troubleshoot_notifications_screen_title">"اطلاعات کا ازالہ کریں"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"کچھ جانچوں کیلئے آپکی توجہ درکار ہے۔ برائے مہربانی تفصیلات پڑتال کریں۔"</string>
+</resources>
