@@ -5,6 +5,9 @@
   <plurals name="a11y_digits_entered">
     <item quantity="zero">"%1$d nodau wedi eu cynnig"</item>
     <item quantity="one">"%1$d nod wedi ei gynnig"</item>
+    <item quantity="two">"%1$d nod wedi ei gynnig"</item>
+    <item quantity="few">"%1$d nod wedi ei gynnig"</item>
+    <item quantity="many">"%1$d nod wedi ei gynnig"</item>
     <item quantity="other">"%1$d nod wedi eu cynnig"</item>
   </plurals>
   <string name="a11y_hide_password">"Cuddio cyfrinair"</string>
