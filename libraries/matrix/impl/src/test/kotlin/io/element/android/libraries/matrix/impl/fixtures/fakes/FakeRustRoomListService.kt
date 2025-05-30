@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListServiceStateListener
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicatorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
@@ -31,5 +32,9 @@ class FakeRustRoomListService : RoomListService(NoPointer) {
 
     fun emitRoomListServiceSyncIndicator(syncIndicator: RoomListServiceSyncIndicator) {
         listener?.onUpdate(syncIndicator)
+    }
+
+    override fun state(listener: RoomListServiceStateListener): TaskHandle {
+        return FakeRustTaskHandle()
     }
 }

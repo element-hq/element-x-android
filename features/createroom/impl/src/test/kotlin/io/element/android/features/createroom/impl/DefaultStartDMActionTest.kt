@@ -14,8 +14,8 @@ import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUse
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.services.analytics.api.AnalyticsService
@@ -70,13 +70,13 @@ class DefaultStartDMActionTest {
     fun `when dm creation fails, assert state is updated with given error`() = runTest {
         val matrixClient = FakeMatrixClient().apply {
             givenFindDmResult(null)
-            givenCreateDmResult(Result.failure(A_THROWABLE))
+            givenCreateDmResult(Result.failure(AN_EXCEPTION))
         }
         val analyticsService = FakeAnalyticsService()
         val action = createStartDMAction(matrixClient, analyticsService)
         val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
         action.execute(aMatrixUser(), true, state)
-        assertThat(state.value).isEqualTo(AsyncAction.Failure(A_THROWABLE))
+        assertThat(state.value).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
         assertThat(analyticsService.capturedEvents).isEmpty()
     }
 

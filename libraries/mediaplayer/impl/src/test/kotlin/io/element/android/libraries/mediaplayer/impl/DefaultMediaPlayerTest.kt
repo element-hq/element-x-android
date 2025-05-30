@@ -337,6 +337,7 @@ class DefaultMediaPlayerTest {
                     duration = null,
                 )
             )
+            @Suppress("RunCatchingNotAllowed")
             val result = runCatching {
                 sut.setMedia("uri", "mediaId", "mimeType", 12)
             }

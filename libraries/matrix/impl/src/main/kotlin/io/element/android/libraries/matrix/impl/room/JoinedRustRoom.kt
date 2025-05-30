@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -204,7 +205,7 @@ class JoinedRustRoom(
         // Track read receipts only for focused timeline for performance optimization
         val trackReadReceipts = createTimelineParams is CreateTimelineParams.Focused
 
-        runCatching {
+        catchingExceptions {
             innerRoom.timelineWithConfiguration(
                 configuration = TimelineConfiguration(
                     focus = focus,
@@ -243,7 +244,7 @@ class JoinedRustRoom(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>
     ): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             MessageEventContent.from(body, htmlBody, intentionalMentions).use { newContent ->
                 innerRoom.edit(eventId.value, newContent)
             }
@@ -251,43 +252,43 @@ class JoinedRustRoom(
     }
 
     override suspend fun typingNotice(isTyping: Boolean) = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.typingNotice(isTyping)
         }
     }
 
     override suspend fun inviteUserById(id: UserId): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.inviteUserById(id.value)
         }
     }
 
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.uploadAvatar(mimeType, data, null)
         }
     }
 
     override suspend fun removeAvatar(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.removeAvatar()
         }
     }
 
     override suspend fun setName(name: String): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.setName(name)
         }
     }
 
     override suspend fun setTopic(topic: String): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.setTopic(topic)
         }
     }
 
     override suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.reportContent(eventId = eventId.value, score = null, reason = reason)
             if (blockUserId != null) {
                 innerRoom.ignoreUser(blockUserId.value)
@@ -299,7 +300,7 @@ class JoinedRustRoom(
         val currentState = roomNotificationSettingsStateFlow.value
         val currentRoomNotificationSettings = currentState.roomNotificationSettings()
         roomNotificationSettingsStateFlow.value = RoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
-        runCatching {
+        catchingExceptions {
             val isEncrypted = roomInfoFlow.value.isEncrypted ?: getUpdatedIsEncrypted().getOrThrow()
             notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
         }.map {
@@ -313,56 +314,56 @@ class JoinedRustRoom(
     }
 
     override suspend fun updateCanonicalAlias(canonicalAlias: RoomAlias?, alternativeAliases: List<RoomAlias>): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.updateCanonicalAlias(canonicalAlias?.value, alternativeAliases.map { it.value })
         }
     }
 
     override suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.publishRoomAliasInRoomDirectory(roomAlias.value)
         }
     }
 
     override suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.removeRoomAliasFromRoomDirectory(roomAlias.value)
         }
     }
 
     override suspend fun updateRoomVisibility(roomVisibility: RoomVisibility): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.updateRoomVisibility(roomVisibility.map())
         }
     }
 
     override suspend fun updateHistoryVisibility(historyVisibility: RoomHistoryVisibility): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.updateHistoryVisibility(historyVisibility.map())
         }
     }
 
     override suspend fun enableEncryption(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.enableEncryption()
         }
     }
 
     override suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.updateJoinRules(joinRule.map())
         }
     }
 
     override suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit> {
-        return runCatching {
+        return catchingExceptions {
             val powerLevelChanges = changes.map { UserPowerLevelUpdate(it.userId.value, it.powerLevel) }
             innerRoom.updatePowerLevelsForUsers(powerLevelChanges)
         }
     }
 
     override suspend fun updatePowerLevels(roomPowerLevels: RoomPowerLevels): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             val changes = RoomPowerLevelChanges(
                 ban = roomPowerLevels.ban,
                 invite = roomPowerLevels.invite,
@@ -378,25 +379,25 @@ class JoinedRustRoom(
     }
 
     override suspend fun resetPowerLevels(): Result<RoomPowerLevels> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             RoomPowerLevelsMapper.map(innerRoom.resetPowerLevels())
         }
     }
 
     override suspend fun kickUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.kickUser(userId.value, reason)
         }
     }
 
     override suspend fun banUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.banUser(userId.value, reason)
         }
     }
 
     override suspend fun unbanUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.unbanUser(userId.value, reason)
         }
     }
@@ -407,13 +408,13 @@ class JoinedRustRoom(
         languageTag: String?,
         theme: String?,
     ) = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             widgetSettings.generateWidgetWebViewUrl(innerRoom, clientId, languageTag, theme)
         }
     }
 
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> {
-        return runCatching {
+        return catchingExceptions {
             RustWidgetDriver(
                 widgetSettings = widgetSettings,
                 room = innerRoom,
@@ -427,7 +428,7 @@ class JoinedRustRoom(
     }
 
     override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.sendCallNotificationIfNeeded()
         }
     }
@@ -435,14 +436,14 @@ class JoinedRustRoom(
     override suspend fun setSendQueueEnabled(enabled: Boolean) {
         withContext(roomDispatcher) {
             Timber.d("setSendQueuesEnabled: $enabled")
-            runCatching {
+            catchingExceptions {
                 innerRoom.enableSendQueue(enabled)
             }
         }
     }
 
     override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, sendHandle: SendHandle) = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.ignoreDeviceTrustAndResend(
                 devices = devices.entries.associate { entry ->
                     entry.key.value to entry.value.map { it.value }
@@ -453,7 +454,7 @@ class JoinedRustRoom(
     }
 
     override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle) = withContext(roomDispatcher) {
-        runCatching {
+        catchingExceptions {
             innerRoom.withdrawVerificationAndResend(
                 userIds = userIds.map { it.value },
                 sendHandle = (sendHandle as RustSendHandle).inner,

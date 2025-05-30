@@ -7,13 +7,14 @@
 
 package io.element.android.libraries.matrix.impl.core
 
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.matrix.api.core.SendHandle
 
 class RustSendHandle(
     val inner: org.matrix.rustcomponents.sdk.SendHandle,
 ) : SendHandle {
     override suspend fun retry(): Result<Unit> {
-        return runCatching {
+        return catchingExceptions {
             inner.tryResend()
         }
     }

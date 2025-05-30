@@ -7,8 +7,12 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
+import io.element.android.tests.testutils.simulateLongTask
+import org.matrix.rustcomponents.sdk.BackupState
+import org.matrix.rustcomponents.sdk.BackupStateListener
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.RecoveryState
 import org.matrix.rustcomponents.sdk.RecoveryStateListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.VerificationStateListener
@@ -19,6 +23,24 @@ class FakeRustEncryption : Encryption(NoPointer) {
     }
 
     override fun recoveryStateListener(listener: RecoveryStateListener): TaskHandle {
+        return FakeRustTaskHandle()
+    }
+
+    override suspend fun waitForE2eeInitializationTasks() = simulateLongTask {}
+
+    override suspend fun isLastDevice(): Boolean {
+        return false
+    }
+
+    override fun backupState(): BackupState {
+        return BackupState.ENABLED
+    }
+
+    override fun recoveryState(): RecoveryState {
+        return RecoveryState.ENABLED
+    }
+
+    override fun backupStateListener(listener: BackupStateListener): TaskHandle {
         return FakeRustTaskHandle()
     }
 }

@@ -15,6 +15,7 @@ android {
 
 dependencies {
     api(projects.libraries.di)
+    api(projects.libraries.core)
     api(libs.dagger)
     api(libs.appyx.core)
     api(libs.androidx.lifecycle.runtime)

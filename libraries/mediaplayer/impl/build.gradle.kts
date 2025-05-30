@@ -22,6 +22,7 @@ dependencies {
 
     implementation(libs.dagger)
     implementation(projects.libraries.audio.api)
+    implementation(projects.libraries.core)
     implementation(projects.libraries.di)
 
     implementation(libs.coroutines.core)

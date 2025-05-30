@@ -16,11 +16,14 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -89,12 +92,16 @@ class CreateAccountPresenterTest {
         defaultLoginUserStory.setLoginFlowIsDone(false)
         assertThat(defaultLoginUserStory.loginFlowIsDone.value).isFalse()
         val lambda = lambdaRecorder<String, ExternalSession> { _ -> anExternalSession() }
+        val sessionVerificationService = FakeSessionVerificationService()
+        val client = FakeMatrixClient(sessionVerificationService = sessionVerificationService)
+        val clientProvider = FakeMatrixClientProvider(getClient = { Result.success(client) })
         val presenter = createPresenter(
             authenticationService = FakeMatrixAuthenticationService(
                 importCreatedSessionLambda = { Result.success(A_SESSION_ID) }
             ),
             messageParser = FakeMessageParser(lambda),
             defaultLoginUserStory = defaultLoginUserStory,
+            clientProvider = clientProvider,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -102,6 +109,7 @@ class CreateAccountPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(CreateAccountEvents.OnMessageReceived("aMessage"))
             assertThat(awaitItem().createAction.isLoading()).isTrue()
+            sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
             assertThat(awaitItem().createAction.dataOrNull()).isEqualTo(A_SESSION_ID)
         }
         lambda.assertions().isCalledOnce().with(value("aMessage"))

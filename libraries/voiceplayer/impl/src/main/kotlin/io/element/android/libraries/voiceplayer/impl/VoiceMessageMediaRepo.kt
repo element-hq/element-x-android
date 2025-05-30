@@ -11,6 +11,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.libraries.core.extensions.mapCatchingException
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
@@ -80,7 +81,7 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
             source = mediaSource,
             mimeType = mimeType,
             filename = filename,
-        ).mapCatching {
+        ).mapCatchingException {
             it.use { mediaFile ->
                 val dest = cachedFile.apply { parentFile?.mkdirs() }
                 if (mediaFile.persist(dest.path)) {

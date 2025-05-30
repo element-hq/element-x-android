@@ -14,7 +14,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.test.A_THROWABLE
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.auth.A_OIDC_DATA
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.oidc.api.OidcAction
@@ -68,7 +68,7 @@ class OidcPresenterTest {
             A_OIDC_DATA,
             authenticationService,
         )
-        authenticationService.givenOidcCancelError(A_THROWABLE)
+        authenticationService.givenOidcCancelError(AN_EXCEPTION)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -77,7 +77,7 @@ class OidcPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.requestState).isEqualTo(AsyncAction.Loading)
             val finalState = awaitItem()
-            assertThat(finalState.requestState).isEqualTo(AsyncAction.Failure(A_THROWABLE))
+            assertThat(finalState.requestState).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
             // Note: in real life I do not think this can happen, and the app should not block the user.
         }
     }
@@ -124,7 +124,7 @@ class OidcPresenterTest {
             A_OIDC_DATA,
             authenticationService,
         )
-        authenticationService.givenLoginError(A_THROWABLE)
+        authenticationService.givenLoginError(AN_EXCEPTION)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -133,7 +133,7 @@ class OidcPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.requestState).isEqualTo(AsyncAction.Loading)
             val errorState = awaitItem()
-            assertThat(errorState.requestState).isEqualTo(AsyncAction.Failure(A_THROWABLE))
+            assertThat(errorState.requestState).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
             errorState.eventSink.invoke(OidcEvents.ClearError)
             val finalState = awaitItem()
             assertThat(finalState.requestState).isEqualTo(AsyncAction.Uninitialized)

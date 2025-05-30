@@ -24,8 +24,8 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
@@ -42,7 +42,7 @@ class CreateBaseRoomRootPresenterTest {
 
     @Test
     fun `present - start DM action failure scenario`() = runTest {
-        val startDMFailureResult = AsyncAction.Failure(A_THROWABLE)
+        val startDMFailureResult = AsyncAction.Failure(AN_EXCEPTION)
         val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
             actionState.value = startDMFailureResult
         }

@@ -206,6 +206,7 @@ class OutgoingVerificationPresenterTest {
                 )
             )
             service.emitVerificationFlowState(VerificationFlowState.DidFinish)
+            service.emitVerifiedStatus(SessionVerifiedStatus.Verified)
             assertThat(awaitItem().step).isEqualTo(Step.Completed)
         }
     }

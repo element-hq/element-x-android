@@ -24,7 +24,7 @@ open class ShareStateProvider : PreviewParameterProvider<ShareState> {
                 )
             ),
             aShareState(
-                shareAction = AsyncAction.Failure(Throwable("error")),
+                shareAction = AsyncAction.Failure(RuntimeException("error")),
             ),
         )
 }

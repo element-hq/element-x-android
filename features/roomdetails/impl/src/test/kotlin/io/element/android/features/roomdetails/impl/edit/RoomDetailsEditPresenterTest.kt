@@ -124,7 +124,7 @@ class RoomDetailsEditPresenterTest {
                 when (stateEventType) {
                     StateEventType.ROOM_NAME -> Result.success(true)
                     StateEventType.ROOM_AVATAR -> Result.success(false)
-                    StateEventType.ROOM_TOPIC -> Result.failure(Throwable("Oops"))
+                    StateEventType.ROOM_TOPIC -> Result.failure(RuntimeException("Oops"))
                     else -> lambdaError()
                 }
             },
@@ -157,7 +157,7 @@ class RoomDetailsEditPresenterTest {
                 when (stateEventType) {
                     StateEventType.ROOM_NAME -> Result.success(false)
                     StateEventType.ROOM_AVATAR -> Result.success(true)
-                    StateEventType.ROOM_TOPIC -> Result.failure(Throwable("Oops"))
+                    StateEventType.ROOM_TOPIC -> Result.failure(RuntimeException("Oops"))
                     else -> lambdaError()
                 }
             }
@@ -188,7 +188,7 @@ class RoomDetailsEditPresenterTest {
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
                     StateEventType.ROOM_NAME -> Result.success(false)
-                    StateEventType.ROOM_AVATAR -> Result.failure(Throwable("Oops"))
+                    StateEventType.ROOM_AVATAR -> Result.failure(RuntimeException("Oops"))
                     StateEventType.ROOM_TOPIC -> Result.success(true)
                     else -> lambdaError()
                 }
@@ -559,7 +559,7 @@ class RoomDetailsEditPresenterTest {
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         fakePickerProvider.givenResult(anotherAvatarUri)
-        fakeMediaPreProcessor.givenResult(Result.failure(Throwable("Oh no")))
+        fakeMediaPreProcessor.givenResult(Result.failure(RuntimeException("Oh no")))
         val deleteCallback = lambdaRecorder<Uri?, Unit> {}
         val presenter = createRoomDetailsEditPresenter(
             room = room,
@@ -580,7 +580,7 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            setNameResult = { Result.failure(Throwable("!")) },
+            setNameResult = { Result.failure(RuntimeException("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         saveAndAssertFailure(room, RoomDetailsEditEvents.UpdateRoomName("New name"), deleteCallbackNumberOfInvocation = 1)
@@ -592,7 +592,7 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            setTopicResult = { Result.failure(Throwable("!")) },
+            setTopicResult = { Result.failure(RuntimeException("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         saveAndAssertFailure(room, RoomDetailsEditEvents.UpdateRoomTopic("New topic"), deleteCallbackNumberOfInvocation = 1)
@@ -604,7 +604,7 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            removeAvatarResult = { Result.failure(Throwable("!")) },
+            removeAvatarResult = { Result.failure(RuntimeException("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove), deleteCallbackNumberOfInvocation = 2)
@@ -617,7 +617,7 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            updateAvatarResult = { _, _ -> Result.failure(Throwable("!")) },
+            updateAvatarResult = { _, _ -> Result.failure(RuntimeException("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto), deleteCallbackNumberOfInvocation = 2)
@@ -630,7 +630,7 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            setTopicResult = { Result.failure(Throwable("!")) },
+            setTopicResult = { Result.failure(RuntimeException("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         val deleteCallback = lambdaRecorder<Uri?, Unit> {}

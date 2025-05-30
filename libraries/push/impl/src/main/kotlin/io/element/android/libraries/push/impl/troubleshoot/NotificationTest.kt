@@ -63,6 +63,7 @@ class NotificationTest @Inject constructor(
             notificationClickHandler.state.first()
             Timber.d("Notification clicked!")
         }
+        @Suppress("RunCatchingNotAllowed")
         runCatching {
             withTimeout(30.seconds) {
                 job.join()

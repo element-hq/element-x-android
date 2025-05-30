@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.auth.qrlogin
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.extensions.catchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDataFactory
@@ -17,6 +18,6 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class RustQrCodeLoginDataFactory @Inject constructor() : MatrixQrCodeLoginDataFactory {
     override fun parseQrCodeData(data: ByteArray): Result<MatrixQrCodeLoginData> {
-        return runCatching { SdkQrCodeLoginData(QrCodeData.fromBytes(data)) }
+        return catchingExceptions { SdkQrCodeLoginData(QrCodeData.fromBytes(data)) }
     }
 }
