@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signout_confirmation_dialog_content">"Bist du sicher, dass du dich abmelden willst?"</string>
+  <string name="screen_signout_confirmation_dialog_content">"Möchten Sie sich wirklich abmelden?"</string>
   <string name="screen_signout_confirmation_dialog_submit">"Abmelden"</string>
   <string name="screen_signout_confirmation_dialog_title">"Abmelden"</string>
   <string name="screen_signout_in_progress_dialog_content">"Abmelden…"</string>

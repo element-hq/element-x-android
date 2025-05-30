@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Sim, aceitar todos"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Tem certeza de que deseja aceitar todos os pedidos de adesão?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Aceitar todos os pedidos"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Aceitar todos"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Não pudemos aceitar todas as solicitações. Você gostaria de tentar novamente?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Falha ao aceitar todas as solicitações"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Aceitando todas as solicitações de adesão"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Não pudemos aceitar essa solicitação. Você gostaria de tentar novamente?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Falha ao aceitar a solicitação"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Aceitando solicitação de adesão"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Sim, recusar e banir"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Você tem certeza de que deseja recusar e banir %1$s? Este usuário não poderá solicitar acesso para entrar nesta sala novamente."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Recusar e proibir o acesso"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Recusando e proibindo o acesso"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Sim, recusar"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Você tem certeza de que deseja recusar a solicitação de %1$s para participar desta sala?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Recusar acesso"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Recusar e banir"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Não foi possível recusar esta solicitação. Você gostaria de tentar novamente?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Falha ao recusar a solicitação"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Recusando a solicitação de adesão"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Quando alguém pedir para entrar na sala, você poderá ver o pedido aqui."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Nenhum pedido pendente de adesão"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Carregando solicitações para participar…"</string>
+  <string name="screen_knock_requests_list_title">"Solicitações para entrar"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d outro desejam entrar desta sala"</item>
+    <item quantity="other">"%1$s +%2$d outros desejam entrar desta sala"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Ver tudo"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Aceitar"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s quer entrar nesta sala"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Ver"</string>
 </resources>

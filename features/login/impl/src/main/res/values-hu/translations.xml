@@ -89,5 +89,6 @@ Próbáljon meg kézileg bejelentkezni, vagy olvassa be a QR-kódot egy másik e
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz."</string>
   <string name="screen_server_confirmation_message_register">"Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez."</string>
   <string name="screen_server_confirmation_title_login">"Hamarosan bejelentkezik ebbe: %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Válassza ki a fiókszolgáltatót"</string>
   <string name="screen_server_confirmation_title_register">"Hamarosan létrehoz egy fiókot ezen: %1$s"</string>
 </resources>

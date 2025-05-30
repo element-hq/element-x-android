@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_media_browser_delete_confirmation_subtitle">"Fitxategia gelatik kenduko da eta kideek ezingo dute atzitu."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Fitxategia ezabatu?"</string>
+  <string name="screen_media_browser_download_error_message">"Egiaztatu Interneteko konexioa eta saiatu berriro."</string>
   <string name="screen_media_browser_files_empty_state_subtitle">"Gela honetara igotako dokumentuak, audio-fitxategiak, eta ahots-mezuak hemen erakutsiko dira."</string>
   <string name="screen_media_browser_files_empty_state_title">"Oraindik ez da fitxategirik igo"</string>
   <string name="screen_media_browser_list_loading_files">"Fitxategiak kargatzen…"</string>

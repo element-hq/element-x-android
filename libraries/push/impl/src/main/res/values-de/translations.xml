@@ -22,7 +22,7 @@
     <item quantity="one">"%d Einladung"</item>
     <item quantity="other">"%d Einladungen"</item>
   </plurals>
-  <string name="notification_invite_body">"Du wurdest zu einem Chat eingeladen"</string>
+  <string name="notification_invite_body">"Sie wurden zu einem Chat eingeladen"</string>
   <string name="notification_invite_body_with_sender">"%1$s hat dich zum Chatten eingeladen"</string>
   <string name="notification_mentioned_you_body">"Hat Dich erwähnt: %1$s"</string>
   <string name="notification_new_messages">"Neue Nachrichten"</string>
@@ -37,7 +37,7 @@
   <string name="notification_room_invite_body_with_sender">"%1$s hat dich eingeladen, dem Chatroom beizutreten"</string>
   <string name="notification_sender_me">"Ich"</string>
   <string name="notification_sender_mention_reply">"%1$s hat Dich erwähnt oder geantwortet"</string>
-  <string name="notification_test_push_notification_content">"Du siehst dir die Benachrichtigung an! Klicke hier!"</string>
+  <string name="notification_test_push_notification_content">"Sie sehen die Benachrichtigung! Klicken Sie hier!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">

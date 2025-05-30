@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$sآخری بار استعمال ہونے پر ٹکرا گیا۔ کیا آپ ہمارے ساتھ ٹکر کی گزارش (رپورٹ) کا اشتراک کرنا چاہیں گے؟"</string>
+  <string name="rageshake_detection_dialog_content">"لگتا ہے آپ مایوسی میں ہاتف ہلا رہے ہیں۔ کیا آپ گزارش خطاء نمائش کھولنا چاہیں گے؟"</string>
+  <string name="settings_rageshake">"غصے سے جھٹکانا"</string>
+  <string name="settings_rageshake_detection_threshold">"حد کھوج"</string>
+</resources>

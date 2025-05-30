@@ -355,6 +355,11 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Poista huoneesta"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Poistetaanko jäsen huoneesta ja kielletäänkö heitä liittymästä tulevaisuudessa?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Poistetaan käyttäjää %1$s huoneesta…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Poista porttikielto huoneesta"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Poista porttikielto"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"He voivat liittyä huoneeseen uudelleen, jos heidät kutsutaan"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Haluatko varmasti poistaa tämän jäsenen porttikiellon?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Poistetaan käyttäjän %1$s porttikieltoa"</string>
   <string name="screen_media_picker_error_failed_selection">"Median valinta epäonnistui, yritä uudelleen."</string>
   <string name="screen_media_upload_preview_caption_warning">"Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Median käsittely epäonnistui, yritä uudelleen."</string>

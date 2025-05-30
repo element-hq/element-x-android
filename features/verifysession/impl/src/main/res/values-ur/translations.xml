@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"تصدیق نہیں کر سکتے؟"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"ایک نئی بازیابی کلید تخلیق کریں"</string>
+  <string name="screen_identity_confirmation_subtitle">"محفوظ پیغام رسانی ترتیب دینے کیلئے اس آلے کی توثیق کریں۔"</string>
+  <string name="screen_identity_confirmation_title">"اپنی شناخت کی تصدیق کریں"</string>
+  <string name="screen_identity_confirmation_use_another_device">"دوسرا آلہ استعمال کریں"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"بازیابی کلید استعمال کریں"</string>
+  <string name="screen_identity_confirmed_subtitle">"اب آپ محفوظ طریقے سے پیغامات پڑھ یا بھیج سکتے ہیں، اور جسکے ساتھ آپ گفتگو کرتے ہیں وہ بھی اس آلہ پر بھروسہ کر سکتا ہے۔"</string>
+  <string name="screen_identity_confirmed_title">"آلہ توثیق شدہ"</string>
+  <string name="screen_identity_use_another_device">"دوسرا آلہ استعمال کریں"</string>
+  <string name="screen_identity_waiting_on_other_device">"دوسرے آلہ پر منتظر…"</string>
+  <string name="screen_session_verification_cancelled_subtitle">"کچھ ٹھیک نہیں لگتا۔ یا تو درخواست کا وقت ختم ہو گیا یا درخواست مسترد کر دی گئی۔"</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"تصدیق کریں کہ نیچے ایموجی آپ کے دوسرے جلسے میں دکھائے گئے ایموجیوں سے مماثل ہیں۔"</string>
+  <string name="screen_session_verification_compare_emojis_title">"ایموجیوں کا موازنہ کریں۔"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"تصدیق کریں کہ نیچے دیے گئے اعداد آپکے دوسرے جلسے میں دکھائے گئے اعداد سے مماثل ہیں۔"</string>
+  <string name="screen_session_verification_compare_numbers_title">"اعداد کا موازنہ کریں"</string>
+  <string name="screen_session_verification_complete_subtitle">"آپ کا نیا جلسہ اب توثیق شدہ ہے۔ اسے آپ کے مرموزکردہ پیغامات تک رسائی حاصل ہے، اور دوسرے صارفین اسے بھروسہ مند کے طور پر دیکھیں گے۔"</string>
+  <string name="screen_session_verification_enter_recovery_key">"بازیابی کلید درج کریں"</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"اپنی مرموزکردہ پیغام کی سرگزشت تک رسائی حاصل کرنے کے لیے ثابت کریں کہ یہ آپ ہی ہیں۔"</string>
+  <string name="screen_session_verification_open_existing_session_title">"ایک موجودہ جلسہ کھولیں"</string>
+  <string name="screen_session_verification_positive_button_canceled">"توثیق کی پھر کوشش کریں"</string>
+  <string name="screen_session_verification_positive_button_initial">"میں تیار ہوں"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"ملانے کا انتظار"</string>
+  <string name="screen_session_verification_ready_subtitle">"رموز تعبیری کے منفرد مجموعہ کا موازنہ کریں۔"</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"منفرد ایموجی کا موازنہ کریں، یقینی بناتے ہوئے کہ وہ ایک ہی ترتیب میں دکھائی دیں۔"</string>
+  <string name="screen_session_verification_request_success_title">"آلہ توثیق شدہ"</string>
+  <string name="screen_session_verification_they_dont_match">"وہ مماثل نہیں ہیں"</string>
+  <string name="screen_session_verification_they_match">"وہ مماثل ہیں"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"جاری رکھنے کیلئے اپنے دوسرے جلسے میں توثیقی عمل شروع کرنے کی درخواست کو قبول کریں۔"</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"درخواست قبول کرنے کا منتظر"</string>
+  <string name="screen_signout_in_progress_dialog_content">"خارج ہورہاہے…"</string>
+</resources>

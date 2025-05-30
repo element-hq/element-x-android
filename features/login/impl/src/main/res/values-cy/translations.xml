@@ -89,5 +89,6 @@ Ceisiwch fewngofnodi â llaw, neu sganiwch y cod QR gyda dyfais arall."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Mae Matrix yn rhwydwaith agored ar gyfer cyfathrebu diogel, datganoledig."</string>
   <string name="screen_server_confirmation_message_register">"Dyma lle bydd eich sgyrsiau\'n byw - yn union fel y byddech chi\'n defnyddio darparwr e-bost i gadw\'ch e-byst."</string>
   <string name="screen_server_confirmation_title_login">"Rydych ar fin mewngofnodi i %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Dewiswch ddarparwr cyfrif"</string>
   <string name="screen_server_confirmation_title_register">"Rydych chi ar fin creu cyfrif ar %1$s"</string>
 </resources>

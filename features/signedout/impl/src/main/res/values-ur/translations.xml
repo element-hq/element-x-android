@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"آپ نے دوسرے جلسے میں اپنا لفظِ عبور تبدیل کر لیا ہے"</string>
+  <string name="screen_signed_out_reason_2">"آپ نے جلسہ کو دوسرے جلسے سے حذف کر دیا ہے"</string>
+  <string name="screen_signed_out_reason_3">"آپ کے خادم کے منتظم نے آپکی رسائی کو باطل کردیا"</string>
+  <string name="screen_signed_out_subtitle">"ہوسکتا ہے کہ آپ کو ذیل میں درج وجوہات میں سے کسی ایک کی وجہ سے خارج کیا گیا ہو۔ برائے مہربانی %s کا استعمال جاری رکھنے کے لئے دوبارہ داخل ہوں۔"</string>
+  <string name="screen_signed_out_title">"آپ خارج ہوگئے ہیں"</string>
+</resources>

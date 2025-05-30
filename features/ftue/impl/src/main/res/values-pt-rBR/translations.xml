@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Não consegue confirmar?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Criar uma nova chave de recuperação"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verifique este dispositivo para configurar mensagens seguras."</string>
+  <string name="screen_identity_confirmation_title">"Confirme sua identidade"</string>
   <string name="screen_identity_confirmation_use_another_device">"Usar outro dispositivo"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Use a chave de recuperação"</string>
+  <string name="screen_identity_confirmed_subtitle">"Agora você pode ler ou enviar mensagens com segurança, e qualquer pessoa com quem você conversa também pode confiar neste dispositivo."</string>
   <string name="screen_identity_confirmed_title">"Dispositivo verificado"</string>
   <string name="screen_identity_use_another_device">"Usar outro dispositivo"</string>
+  <string name="screen_identity_waiting_on_other_device">"Aguardando outro dispositivo…"</string>
   <string name="screen_notification_optin_subtitle">"Você pode alterar suas configurações mais tarde."</string>
   <string name="screen_notification_optin_title">"Permita notificações e nunca perca uma mensagem"</string>
   <string name="screen_session_verification_enter_recovery_key">"Insira a chave de recuperação"</string>

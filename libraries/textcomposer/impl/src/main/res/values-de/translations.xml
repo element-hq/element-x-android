@@ -12,7 +12,7 @@
   <string name="rich_text_editor_edit_link">"Link bearbeiten"</string>
   <string name="rich_text_editor_format_bold">"Fettes Format anwenden"</string>
   <string name="rich_text_editor_format_italic">"Kursives Format anwenden"</string>
-  <string name="rich_text_editor_format_strikethrough">"Durchgestrichenes Format anwenden"</string>
+  <string name="rich_text_editor_format_strikethrough">"Text durchstreichen"</string>
   <string name="rich_text_editor_format_underline">"Unterstreichungsformat anwenden"</string>
   <string name="rich_text_editor_full_screen_toggle">"Vollbildmodus umschalten"</string>
   <string name="rich_text_editor_indent">"Einrückung"</string>
