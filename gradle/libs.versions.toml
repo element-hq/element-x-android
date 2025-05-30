@@ -37,7 +37,7 @@ datetime = "0.6.2"
 serialization_json = "1.8.1"
 
 #other
-coil = "3.1.0"
+coil = "3.2.0"
 showkase = "1.0.3"
 appyx = "1.7.0"
 sqldelight = "2.1.0"
