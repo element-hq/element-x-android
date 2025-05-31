@@ -65,7 +65,10 @@ for entry in config["modules"]:
             "excludeKeys": list(map(lambda i: "REGEX:" + i, excludeRegex)),
             "conditions": [
                 "!equals: ${langAndroidResNoScript}, en | equals: ${file}, content.json"
-            ]
+            ],
+            "langAliases": {
+                "id": "in"
+            }
         }
         allActions.append(actionTranslation)
     allRegexToExcludeFromMainModule.extend(entry["includeRegex"])
@@ -88,7 +91,10 @@ if allFiles:
         "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
         "conditions": [
             "!equals: ${langAndroidResNoScript}, en | equals: ${file}, content.json"
-        ]
+        ],
+        "langAliases": {
+            "id": "in"
+        }
     }
     allActions.append(mainActionTranslation)
 
