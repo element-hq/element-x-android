@@ -4,11 +4,11 @@
   <string name="screen_create_poll_anonymous_desc">"Ergebnisse erst nach Ende der Umfrage anzeigen"</string>
   <string name="screen_create_poll_anonymous_headline">"Anonyme Umfrage"</string>
   <string name="screen_create_poll_answer_hint">"Option %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"Deine Änderungen wurden nicht gespeichert. Bist du sicher, dass du zurückgehen willst?"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Ihre Änderungen wurden nicht gespeichert. Sind Sie sicher, dass Sie zurückgehen wollen?"</string>
   <string name="screen_create_poll_question_desc">"Frage oder Thema"</string>
   <string name="screen_create_poll_question_hint">"Worum geht es bei der Umfrage?"</string>
   <string name="screen_create_poll_title">"Umfrage erstellen"</string>
-  <string name="screen_edit_poll_delete_confirmation">"Bist du dir sicher, dass du diese Umfrage löschen möchtest?"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Möchten Sie diese Umfrage wirklich löschen?"</string>
   <string name="screen_edit_poll_delete_confirmation_title">"Umfrage löschen"</string>
   <string name="screen_edit_poll_title">"Umfrage bearbeiten"</string>
   <string name="screen_polls_history_empty_ongoing">"Keine laufenden Umfragen vorhanden."</string>

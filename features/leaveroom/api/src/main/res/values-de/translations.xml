@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="leave_conversation_alert_subtitle">"Bist du sicher, dass du diese Unterhaltung verlassen willst? Diese Unterhaltung ist nicht öffentlich und du kannst ihr ohne Einladung nicht wieder beitreten."</string>
+  <string name="leave_conversation_alert_subtitle">"Sind Sie sicher, dass Sie diesen Chat verlassen wollen? Dieser Chat ist nicht öffentlich und Sie können ihn ohne Einladung nicht wieder betreten."</string>
   <string name="leave_room_alert_empty_subtitle">"Sind Sie sicher dass Sie diesen Chatroom verlassen möchten? Sie sind die einzige Person hier. Wenn Sie gehen, kann in Zukunft niemand mehr - auch Sie nicht - diesen Chatrooom betreten.."</string>
   <string name="leave_room_alert_private_subtitle">"Sind Sie sicher dass Sie diesen Chatroom verlassen möchten? Dieser Chatroom ist nicht öffentlich und Sie können ihn ohne Einladung nicht wieder betreten."</string>
   <string name="leave_room_alert_subtitle">"Sind Sie sicher, dass Sie den Raum verlassen möchten?"</string>
