@@ -13,7 +13,7 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
@@ -38,7 +38,7 @@ class DefaultFileShare @Inject constructor(
     override suspend fun share(
         path: String,
     ) {
-        catchingExceptions {
+        runCatchingExceptions {
             val file = File(path)
             val shareableUri = file.toShareableUri()
             val shareMediaIntent = Intent(Intent.ACTION_SEND)

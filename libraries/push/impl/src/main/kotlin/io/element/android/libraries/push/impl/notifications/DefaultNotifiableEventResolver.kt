@@ -11,8 +11,8 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.core.extensions.catchingExceptions
-import io.element.android.libraries.core.extensions.mapCatchingException
+import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -92,7 +92,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
         val ids = notificationEventRequests.groupBy { it.roomId }.mapValues { (_, value) -> value.map { it.eventId } }
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
-        val notifications = client.notificationService().getNotifications(ids).mapCatchingException { map ->
+        val notifications = client.notificationService().getNotifications(ids).mapCatchingExceptions { map ->
             map.mapValues { (_, notificationData) ->
                 notificationData.asNotifiableEvent(client, sessionId)
             }
@@ -114,7 +114,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
     private suspend fun NotificationData.asNotifiableEvent(
         client: MatrixClient,
         userId: SessionId,
-    ): Result<ResolvedPushEvent> = catchingExceptions {
+    ): Result<ResolvedPushEvent> = runCatchingExceptions {
         when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
                 val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)

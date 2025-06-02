@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.api.room.powerlevels
 
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
@@ -61,7 +61,7 @@ suspend fun BaseRoom.canRedactOther(): Result<Boolean> = canUserRedactOther(sess
 /**
  * Shortcut for checking if current user can handle knock requests.
  */
-suspend fun BaseRoom.canHandleKnockRequests(): Result<Boolean> = catchingExceptions {
+suspend fun BaseRoom.canHandleKnockRequests(): Result<Boolean> = runCatchingExceptions {
     canInvite().getOrThrow() || canBan().getOrThrow() || canKick().getOrThrow()
 }
 

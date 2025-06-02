@@ -8,7 +8,7 @@
 package io.element.android.libraries.pushproviders.firebase
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
@@ -25,7 +25,7 @@ class DefaultFirebaseTroubleshooter @Inject constructor(
     private val firebaseTokenGetter: FirebaseTokenGetter,
 ) : FirebaseTroubleshooter {
     override suspend fun troubleshoot(): Result<Unit> {
-        return catchingExceptions {
+        return runCatchingExceptions {
             val token = firebaseTokenGetter.get()
             newTokenHandler.handle(token)
         }

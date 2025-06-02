@@ -20,7 +20,7 @@ import io.element.android.libraries.androidutils.file.safeRenameTo
 import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
@@ -74,7 +74,7 @@ class AndroidMediaPreProcessor @Inject constructor(
         deleteOriginal: Boolean,
         compressIfPossible: Boolean,
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
-        catchingExceptions {
+        runCatchingExceptions {
             val result = when {
                 // Special case for SVG, since Android can't read its metadata or create a thumbnail, it must be sent as a file
                 mimeType == MimeTypes.Svg -> {
@@ -189,7 +189,7 @@ class AndroidMediaPreProcessor @Inject constructor(
     }
 
     private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean): MediaUploadInfo {
-        val resultFile = catchingExceptions {
+        val resultFile = runCatchingExceptions {
             videoCompressor.compress(uri, shouldBeCompressed)
                 .onEach {
                     // TODO handle progress

@@ -8,14 +8,14 @@
 package io.element.android.features.call.impl.utils
 
 import io.element.android.features.call.impl.data.WidgetMessage
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.serialization.json.Json
 
 object WidgetMessageSerializer {
     private val coder = Json { ignoreUnknownKeys = true }
 
     fun deserialize(message: String): Result<WidgetMessage> {
-        return catchingExceptions { coder.decodeFromString(WidgetMessage.serializer(), message) }
+        return runCatchingExceptions { coder.decodeFromString(WidgetMessage.serializer(), message) }
     }
 
     fun serialize(message: WidgetMessage): String {

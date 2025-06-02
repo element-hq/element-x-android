@@ -21,7 +21,7 @@ class RunCatchingRule(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         id = "RunCatchingNotAllowed",
         severity = Severity.Style,
-        description = "Avoid using runCatching, use `catchingExceptions` or `tryOrNull` instead. Avoid `mapCatching`, use `mapCatchingExceptions` instead.",
+        description = "Avoid using runCatching, use `runCatchingExceptions` or `tryOrNull` instead. Avoid `mapCatching`, use `maprunCatchingExceptions` instead.",
         debt = Debt.FIVE_MINS,
     )
 
@@ -35,7 +35,7 @@ class RunCatchingRule(config: Config) : Rule(config) {
             report(CodeSmell(
                 issue = issue,
                 entity = Entity.from(expression),
-                message = "Use `catchingExceptions` or `tryOrNull` instead of `runCatching`. Avoid `mapCatching`, use `mapCatchingExceptions` instead."
+                message = "Use `runCatchingExceptions` or `tryOrNull` instead of `runCatching`. Avoid `mapCatching`, use `maprunCatchingExceptions` instead."
             ))
         }
     }

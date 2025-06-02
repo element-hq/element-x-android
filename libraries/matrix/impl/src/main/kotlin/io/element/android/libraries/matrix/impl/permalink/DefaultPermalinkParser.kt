@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.impl.permalink
 
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -45,7 +45,7 @@ class DefaultPermalinkParser @Inject constructor(
         // so convert URI to matrix.to to simplify parsing process
         val matrixToUri = matrixToConverter.convert(uri) ?: return PermalinkData.FallbackLink(uri)
 
-        val result = catchingExceptions {
+        val result = runCatchingExceptions {
             parseMatrixEntityFrom(matrixToUri.toString())
         }.getOrNull()
         return if (result == null) {

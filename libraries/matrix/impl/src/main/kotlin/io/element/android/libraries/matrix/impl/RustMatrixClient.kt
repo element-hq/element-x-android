@@ -12,7 +12,7 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.data.tryOrNull
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -251,7 +251,7 @@ class RustMatrixClient(
     }
 
     override fun userIdServerName(): String {
-        return catchingExceptions {
+        return runCatchingExceptions {
             innerClient.userIdServerName()
         }
             .onFailure {
@@ -262,7 +262,7 @@ class RustMatrixClient(
     }
 
     override suspend fun getUrl(url: String): Result<String> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.getUrl(url)
         }
     }
@@ -302,19 +302,19 @@ class RustMatrixClient(
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.ignoreUser(userId.value)
         }
     }
 
     override suspend fun unignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.unignoreUser(userId.value)
         }
     }
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             val rustParams = RustCreateRoomParameters(
                 name = createRoomParams.name,
                 topic = createRoomParams.topic,
@@ -364,7 +364,7 @@ class RustMatrixClient(
     }
 
     override suspend fun getProfile(userId: UserId): Result<MatrixUser> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.getProfile(userId.value).let(UserProfileMapper::map)
         }
     }
@@ -374,28 +374,28 @@ class RustMatrixClient(
 
     override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
         withContext(sessionDispatcher) {
-            catchingExceptions {
+            runCatchingExceptions {
                 innerClient.searchUsers(searchTerm, limit.toULong()).let(UserSearchResultMapper::map)
             }
         }
 
     override suspend fun setDisplayName(displayName: String): Result<Unit> =
         withContext(sessionDispatcher) {
-            catchingExceptions { innerClient.setDisplayName(displayName) }
+            runCatchingExceptions { innerClient.setDisplayName(displayName) }
         }
 
     override suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit> =
         withContext(sessionDispatcher) {
-            catchingExceptions { innerClient.uploadAvatar(mimeType, data) }
+            runCatchingExceptions { innerClient.uploadAvatar(mimeType, data) }
         }
 
     override suspend fun removeAvatar(): Result<Unit> =
         withContext(sessionDispatcher) {
-            catchingExceptions { innerClient.removeAvatar() }
+            runCatchingExceptions { innerClient.removeAvatar() }
         }
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomSummary?> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.joinRoomById(roomId.value).destroy()
             try {
                 awaitRoom(roomId.toRoomIdOrAlias(), 10.seconds, CurrentUserMembership.JOINED)
@@ -407,7 +407,7 @@ class RustMatrixClient(
     }.mapFailure { it.mapClientException() }
 
     override suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomSummary?> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.joinRoomByIdOrAlias(
                 roomIdOrAlias = roomIdOrAlias.identifier,
                 serverNames = serverNames,
@@ -424,7 +424,7 @@ class RustMatrixClient(
     override suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomSummary?> = withContext(
         sessionDispatcher
     ) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.knock(roomIdOrAlias.identifier, message, serverNames).destroy()
             try {
                 awaitRoom(roomIdOrAlias, 10.seconds, CurrentUserMembership.KNOCKED)
@@ -436,19 +436,19 @@ class RustMatrixClient(
     }
 
     override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.trackRecentlyVisitedRoom(roomId.value)
         }
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.getRecentlyVisitedRooms().map(::RoomId)
         }
     }
 
     override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<Optional<ResolvedRoomAlias>> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             val result = innerClient.resolveRoomAlias(roomAlias.value)?.let {
                 ResolvedRoomAlias(
                     roomId = RoomId(it.roomId),
@@ -460,7 +460,7 @@ class RustMatrixClient(
     }
 
     override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             when (roomIdOrAlias) {
                 is RoomIdOrAlias.Alias -> {
                     val roomId = innerClient.resolveRoomAlias(roomIdOrAlias.roomAlias.value)?.roomId?.let { RoomId(it) }
@@ -557,7 +557,7 @@ class RustMatrixClient(
     }
 
     override fun canDeactivateAccount(): Boolean {
-        return catchingExceptions {
+        return runCatchingExceptions {
             innerClient.canDeactivateAccount()
         }
             .getOrNull()
@@ -569,9 +569,9 @@ class RustMatrixClient(
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
         clientDelegateTaskHandle = null
-        catchingExceptions {
+        runCatchingExceptions {
             // First call without AuthData, should fail
-            val firstAttempt = catchingExceptions {
+            val firstAttempt = runCatchingExceptions {
                 innerClient.deactivateAccount(
                     authData = null,
                     eraseData = eraseData,
@@ -580,7 +580,7 @@ class RustMatrixClient(
             if (firstAttempt.isFailure) {
                 Timber.w(firstAttempt.exceptionOrNull(), "Expected failure, try again")
                 // This is expected, try again with the password
-                catchingExceptions {
+                runCatchingExceptions {
                     innerClient.deactivateAccount(
                         authData = AuthData.Password(
                             passwordDetails = AuthDataPasswordDetails(
@@ -607,13 +607,13 @@ class RustMatrixClient(
 
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> = withContext(sessionDispatcher) {
         val rustAction = action?.toRustAction()
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.accountUrl(rustAction)
         }
     }
 
     override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.uploadMedia(mimeType, data, progressCallback?.toProgressWatcher())
         }
     }
@@ -655,19 +655,19 @@ class RustMatrixClient(
     }.buffer(Channel.UNLIMITED)
 
     override suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.availableSlidingSyncVersions().map { it.map() }
         }
     }
 
     override suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion> = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.session().slidingSyncVersion.map()
         }
     }
 
     override suspend fun canReportRoom(): Boolean = withContext(sessionDispatcher) {
-        catchingExceptions {
+        runCatchingExceptions {
             innerClient.isReportRoomApiSupported()
         }.getOrDefault(false)
     }

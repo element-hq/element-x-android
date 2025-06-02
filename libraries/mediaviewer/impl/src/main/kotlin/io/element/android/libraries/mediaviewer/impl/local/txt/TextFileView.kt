@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -44,7 +44,7 @@ fun TextFileView(
         data.value = AsyncData.Loading()
         if (localMedia?.uri != null) {
             // Load the file content
-            val result = catchingExceptions {
+            val result = runCatchingExceptions {
                 context.contentResolver.openInputStream(localMedia.uri).use {
                     it?.bufferedReader()?.readLines()?.toList().orEmpty()
                 }

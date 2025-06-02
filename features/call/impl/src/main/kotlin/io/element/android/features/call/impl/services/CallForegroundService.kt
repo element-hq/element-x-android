@@ -24,7 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.IconCompat
 import io.element.android.features.call.impl.R
 import io.element.android.features.call.impl.ui.ElementCallActivity
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
@@ -79,7 +79,7 @@ class CallForegroundService : Service() {
         } else {
             0
         }
-        catchingExceptions {
+        runCatchingExceptions {
             ServiceCompat.startForeground(this, notificationId, notification, serviceType)
         }.onFailure {
             Timber.e(it, "Failed to start ongoing call foreground service")

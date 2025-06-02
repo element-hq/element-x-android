@@ -21,7 +21,7 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
@@ -219,7 +219,7 @@ class DefaultActiveCallManager @Inject constructor(
             timestamp = notificationData.timestamp,
             textContent = notificationData.textContent,
         ) ?: return
-        catchingExceptions {
+        runCatchingExceptions {
             notificationManagerCompat.notify(
                 NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.INCOMING_CALL),
                 notification,

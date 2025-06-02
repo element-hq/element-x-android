@@ -15,7 +15,7 @@ import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.location.api.Location
 import io.element.android.libraries.androidutils.system.openAppSettingsPage
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import timber.log.Timber
@@ -27,7 +27,7 @@ class AndroidLocationActions @Inject constructor(
     @ApplicationContext private val context: Context
 ) : LocationActions {
     override fun share(location: Location, label: String?) {
-        catchingExceptions {
+        runCatchingExceptions {
             val uri = buildUrl(location, label).toUri()
             val showMapsIntent = Intent(Intent.ACTION_VIEW).setData(uri)
             val chooserIntent = Intent.createChooser(showMapsIntent, null)

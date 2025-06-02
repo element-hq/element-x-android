@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.impl.encryption
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -97,7 +97,7 @@ internal class RustEncryptionService(
         .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
     override suspend fun enableBackups(): Result<Unit> = withContext(dispatchers.io) {
-        catchingExceptions {
+        runCatchingExceptions {
             service.enableBackups()
         }.mapFailure {
             it.mapRecoveryException()
@@ -107,7 +107,7 @@ internal class RustEncryptionService(
     override suspend fun enableRecovery(
         waitForBackupsToUpload: Boolean,
     ): Result<Unit> = withContext(dispatchers.io) {
-        catchingExceptions {
+        runCatchingExceptions {
             service.enableRecovery(
                 waitForBackupsToUpload = waitForBackupsToUpload,
                 progressListener = object : EnableRecoveryProgressListener {
@@ -125,14 +125,14 @@ internal class RustEncryptionService(
     }
 
     override suspend fun doesBackupExistOnServer(): Result<Boolean> = withContext(dispatchers.io) {
-        catchingExceptions {
+        runCatchingExceptions {
             service.backupExistsOnServer()
         }
     }
 
     override fun waitForBackupUploadSteadyState(): Flow<BackupUploadState> {
         return callbackFlow {
-            catchingExceptions {
+            runCatchingExceptions {
                 service.waitForBackupUploadSteadyState(
                     progressListener = object : BackupSteadyStateListener {
                         override fun onUpdate(status: RustBackupUploadState) {
@@ -156,7 +156,7 @@ internal class RustEncryptionService(
     }
 
     override suspend fun disableRecovery(): Result<Unit> = withContext(dispatchers.io) {
-        catchingExceptions {
+        runCatchingExceptions {
             service.disableRecovery()
         }.mapFailure {
             it.mapRecoveryException()
@@ -164,7 +164,7 @@ internal class RustEncryptionService(
     }
 
     private suspend fun isLastDevice(): Result<Boolean> = withContext(dispatchers.io) {
-        catchingExceptions {
+        runCatchingExceptions {
             service.isLastDevice()
         }.mapFailure {
             it.mapRecoveryException()
@@ -172,7 +172,7 @@ internal class RustEncryptionService(
     }
 
     override suspend fun resetRecoveryKey(): Result<String> = withContext(dispatchers.io) {
-        catchingExceptions {
+        runCatchingExceptions {
             service.resetRecoveryKey()
         }.mapFailure {
             it.mapRecoveryException()
@@ -180,7 +180,7 @@ internal class RustEncryptionService(
     }
 
     override suspend fun recover(recoveryKey: String): Result<Unit> = withContext(dispatchers.io) {
-        catchingExceptions {
+        runCatchingExceptions {
             service.recover(recoveryKey)
         }.mapFailure {
             it.mapRecoveryException()
@@ -188,34 +188,34 @@ internal class RustEncryptionService(
     }
 
     override suspend fun deviceCurve25519(): String? {
-        return catchingExceptions { service.curve25519Key() }.getOrNull()
+        return runCatchingExceptions { service.curve25519Key() }.getOrNull()
     }
 
     override suspend fun deviceEd25519(): String? {
-        return catchingExceptions { service.ed25519Key() }.getOrNull()
+        return runCatchingExceptions { service.ed25519Key() }.getOrNull()
     }
 
     override suspend fun startIdentityReset(): Result<IdentityResetHandle?> {
-        return catchingExceptions {
+        return runCatchingExceptions {
             service.resetIdentity()
         }.flatMap { handle ->
             RustIdentityResetHandleFactory.create(sessionId, handle)
         }
     }
 
-    override suspend fun isUserVerified(userId: UserId): Result<Boolean> = catchingExceptions {
+    override suspend fun isUserVerified(userId: UserId): Result<Boolean> = runCatchingExceptions {
         getUserIdentityInternal(userId).isVerified()
     }
 
-    override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = catchingExceptions {
+    override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = runCatchingExceptions {
         getUserIdentityInternal(userId).pin()
     }
 
-    override suspend fun withdrawVerification(userId: UserId): Result<Unit> = catchingExceptions {
+    override suspend fun withdrawVerification(userId: UserId): Result<Unit> = runCatchingExceptions {
         getUserIdentityInternal(userId).withdrawVerification()
     }
 
-    override suspend fun getUserIdentity(userId: UserId): Result<IdentityState?> = catchingExceptions {
+    override suspend fun getUserIdentity(userId: UserId): Result<IdentityState?> = runCatchingExceptions {
         val identity = getUserIdentityInternal(userId)
         val isVerified = identity.isVerified()
         when {

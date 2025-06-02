@@ -16,7 +16,7 @@ import kotlin.coroutines.cancellation.CancellationException
  *
  * [Error]s are not caught by this function, as they are not meant to be caught in normal application flow.
  */
-inline fun <T> catchingExceptions(
+inline fun <T> runCatchingExceptions(
     block: () -> T
 ): Result<T> {
     return try {
@@ -35,7 +35,7 @@ inline fun <T> catchingExceptions(
  *
  * [Error]s are not caught by this function, as they are not meant to be caught in normal application flow.
  */
-inline fun <T, R> T.catchingExceptions(
+inline fun <T, R> T.runCatchingExceptions(
     block: T.() -> R
 ): Result<R> {
     return try {
@@ -53,13 +53,13 @@ inline fun <T, R> T.catchingExceptions(
  *
  * This is a safer version of [Result.mapCatching].
  */
-inline fun <R, T> Result<T>.mapCatchingException(
+inline fun <R, T> Result<T>.mapCachingExceptions(
     block: (T) -> R,
 ): Result<R> {
-    return when {
-        isSuccess -> catchingExceptions { block(getOrNull()!!) }
-        else -> Result.failure(exceptionOrNull()!!)
-    }
+    return fold(
+        onSuccess = { value -> runCatchingExceptions { block(value) } },
+        onFailure = { exception -> Result.failure(exception) }
+    )
 }
 
 /**
@@ -88,7 +88,7 @@ inline fun <R, T> Result<T>.flatMap(transform: (T) -> Result<R>): Result<R> {
  * @return The result of the transform or a caught exception wrapped in a [Result].
  */
 inline fun <R, T> Result<T>.flatMapCatching(transform: (T) -> Result<R>): Result<R> {
-    return mapCatchingException(transform).fold(
+    return mapCachingExceptions(transform).fold(
         onSuccess = { it },
         onFailure = { Result.failure(it) }
     )

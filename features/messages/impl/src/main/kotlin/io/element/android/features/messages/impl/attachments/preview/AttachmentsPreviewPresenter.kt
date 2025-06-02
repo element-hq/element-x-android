@@ -27,7 +27,7 @@ import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.firstInstanceOf
-import io.element.android.libraries.core.extensions.catchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -241,7 +241,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         sendActionState: MutableState<SendActionState>,
         dismissAfterSend: Boolean,
         replyParameters: ReplyParameters?,
-    ) = catchingExceptions {
+    ) = runCatchingExceptions {
         val context = coroutineContext
         val progressCallback = object : ProgressCallback {
             override fun onProgress(current: Long, total: Long) {
