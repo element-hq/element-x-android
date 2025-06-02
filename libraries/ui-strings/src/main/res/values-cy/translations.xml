@@ -5,9 +5,9 @@
   <plurals name="a11y_digits_entered">
     <item quantity="zero">"%1$d nodau wedi eu cynnig"</item>
     <item quantity="one">"%1$d nod wedi ei gynnig"</item>
-    <item quantity="two">"%1$d nod wedi ei gynnig"</item>
-    <item quantity="few">"%1$d nod wedi ei gynnig"</item>
-    <item quantity="many">"%1$d nod wedi ei gynnig"</item>
+    <item quantity="two">"%1$d nod wedi eu cynnig"</item>
+    <item quantity="few">"%1$d nod wedi eu cynnig"</item>
+    <item quantity="many">"%1$d nod wedi eu cynnig"</item>
     <item quantity="other">"%1$d nod wedi eu cynnig"</item>
   </plurals>
   <string name="a11y_hide_password">"Cuddio cyfrinair"</string>
@@ -428,7 +428,7 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="test_language_identifier">"cy"</string>
   <string name="test_untranslated_default_language_identifier">"cy"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Nid yw negeseuon hanesyddol ar gael ar y ddyfais hon"</string>
-  <string name="timeline_decryption_failure_historical_event_unverified_device">"Mae angen i chi wirio\'r ddyfais hon ar gyfer mynediad i negeseuon hanesyddol"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Mae angen i chi wirio\'r ddyfais hon i gael mynediad at negeseuon hanesyddol"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Does gennych chi ddim mynediad i\'r neges hon"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Methu dadgryptio\'r neges"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Cafodd y neges hon ei rhwystro naill ai oherwydd nad ydych wedi ddilysu\'ch dyfais neu oherwydd bod angen i\'r anfonwr ddilysu\'ch hunaniaeth chi."</string>
