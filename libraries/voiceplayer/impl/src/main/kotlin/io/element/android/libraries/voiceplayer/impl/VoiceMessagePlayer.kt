@@ -8,7 +8,7 @@
 package io.element.android.libraries.voiceplayer.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.core.extensions.mapCatchingException
+import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -181,7 +181,7 @@ class DefaultVoiceMessagePlayer(
     }.distinctUntilChanged()
 
     override suspend fun prepare(): Result<Unit> = if (eventId != null) {
-        repo.getMediaFile().mapCatchingException<Unit, File> { mediaFile ->
+        repo.getMediaFile().mapCatchingExceptions<Unit, File> { mediaFile ->
             val state = internalState.value
             mediaPlayer.setMedia(
                 uri = mediaFile.path,

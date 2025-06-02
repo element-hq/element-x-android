@@ -53,7 +53,7 @@ inline fun <T, R> T.runCatchingExceptions(
  *
  * This is a safer version of [Result.mapCatching].
  */
-inline fun <R, T> Result<T>.mapCachingExceptions(
+inline fun <R, T> Result<T>.mapCatchingExceptions(
     block: (T) -> R,
 ): Result<R> {
     return fold(
@@ -88,7 +88,7 @@ inline fun <R, T> Result<T>.flatMap(transform: (T) -> Result<R>): Result<R> {
  * @return The result of the transform or a caught exception wrapped in a [Result].
  */
 inline fun <R, T> Result<T>.flatMapCatching(transform: (T) -> Result<R>): Result<R> {
-    return mapCachingExceptions(transform).fold(
+    return mapCatchingExceptions(transform).fold(
         onSuccess = { it },
         onFailure = { Result.failure(it) }
     )
