@@ -91,7 +91,7 @@
             </intent-filter>
             <!--
               Element mobile links
-              Example: https://mobile.element.io/element?account_provider=example.org&login_hint=mxid:@alice:example.org
+              Example: https://mobile.element.io/element/?account_provider=example.org&login_hint=mxid:@alice:example.org
             -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -102,7 +102,7 @@
                 <data android:scheme="https" />
                 <!-- Matching asset file: https://mobile.element.io/.well-known/assetlinks.json -->
                 <data android:host="mobile.element.io" />
-                <data android:path="/element" />
+                <data android:path="/element/" />
             </intent-filter>
             <!--
               matrix.to links

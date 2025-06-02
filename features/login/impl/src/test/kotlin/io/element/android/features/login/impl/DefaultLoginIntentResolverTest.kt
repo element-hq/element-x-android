@@ -18,7 +18,7 @@ class DefaultLoginIntentResolverTest {
     @Test
     fun `nominal case`() {
         val sut = DefaultLoginIntentResolver()
-        val uriString = "https://mobile.element.io/element?account_provider=example.org&login_hint=mxid:@alice:example.org"
+        val uriString = "https://mobile.element.io/element/?account_provider=example.org&login_hint=mxid:@alice:example.org"
         assertThat(sut.parse(uriString)).isEqualTo(
             LoginParams(
                 accountProvider = "example.org",
@@ -30,7 +30,7 @@ class DefaultLoginIntentResolverTest {
     @Test
     fun `extra unknown param`() {
         val sut = DefaultLoginIntentResolver()
-        val uriString = "https://mobile.element.io/element?account_provider=example.org&login_hint=mxid:@alice:example.org&extra=uknown"
+        val uriString = "https://mobile.element.io/element/?account_provider=example.org&login_hint=mxid:@alice:example.org&extra=uknown"
         assertThat(sut.parse(uriString)).isEqualTo(
             LoginParams(
                 accountProvider = "example.org",
@@ -42,7 +42,7 @@ class DefaultLoginIntentResolverTest {
     @Test
     fun `no account provider`() {
         val sut = DefaultLoginIntentResolver()
-        val uriString = "https://mobile.element.io/element?login_hint=mxid:@alice:example.org"
+        val uriString = "https://mobile.element.io/element/?login_hint=mxid:@alice:example.org"
         assertThat(sut.parse(uriString)).isNull()
     }
 
@@ -63,14 +63,14 @@ class DefaultLoginIntentResolverTest {
     @Test
     fun `wrong host`() {
         val sut = DefaultLoginIntentResolver()
-        val uriString = "https://wrong.element.io/element?account_provider=example.org&login_hint=mxid:@alice:example.org"
+        val uriString = "https://wrong.element.io/element/?account_provider=example.org&login_hint=mxid:@alice:example.org"
         assertThat(sut.parse(uriString)).isNull()
     }
 
     @Test
     fun `no login_hint param`() {
         val sut = DefaultLoginIntentResolver()
-        val uriString = "https://mobile.element.io/element?account_provider=example.org"
+        val uriString = "https://mobile.element.io/element/?account_provider=example.org"
         assertThat(sut.parse(uriString)).isEqualTo(
             LoginParams(
                 accountProvider = "example.org",
