@@ -64,7 +64,7 @@ class FakeRustClient(
     override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
     override suspend fun clearCaches() = simulateLongTask { clearCachesResult() }
     override suspend fun setUtdDelegate(utdDelegate: UnableToDecryptDelegate) = withUtdHook(utdDelegate)
-    override suspend fun getSessionVerificationController(): SessionVerificationController = FakeSessionVerificationController()
+    override suspend fun getSessionVerificationController(): SessionVerificationController = FakeRustSessionVerificationController()
     override suspend fun ignoredUsers(): List<String> {
         return emptyList()
     }
