@@ -11,8 +11,8 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext

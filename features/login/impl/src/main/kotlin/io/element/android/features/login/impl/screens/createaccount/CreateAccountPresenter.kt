@@ -20,8 +20,8 @@ import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.tryOrNull
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.extensions.flatMap
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService

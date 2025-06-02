@@ -20,8 +20,8 @@ import io.element.android.libraries.androidutils.file.safeRenameTo
 import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.extensions.mapFailure
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage

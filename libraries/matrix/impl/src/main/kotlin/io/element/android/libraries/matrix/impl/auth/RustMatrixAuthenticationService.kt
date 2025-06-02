@@ -9,8 +9,8 @@ package io.element.android.libraries.matrix.impl.auth
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.extensions.mapFailure
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
