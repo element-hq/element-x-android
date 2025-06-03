@@ -10,7 +10,6 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.longClick
@@ -22,7 +21,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
-import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -31,6 +29,7 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import io.element.android.tests.testutils.setSafeContent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
@@ -275,21 +274,19 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
     onReportRoomClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onDeclineInviteAndBlockUser: (RoomListRoomSummary) -> Unit = EnsureNeverCalledWithParam(),
 ) {
-    setContent {
-        CompositionLocalProvider(LocalUiTestMode provides true) {
-            RoomListView(
-                state = state,
-                onRoomClick = onRoomClick,
-                onSettingsClick = onSettingsClick,
-                onSetUpRecoveryClick = onSetUpRecoveryClick,
-                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                onCreateRoomClick = onCreateRoomClick,
-                onRoomSettingsClick = onRoomSettingsClick,
-                onMenuActionClick = onMenuActionClick,
-                onDeclineInviteAndBlockUser = onDeclineInviteAndBlockUser,
-                onReportRoomClick = onReportRoomClick,
-                acceptDeclineInviteView = { },
-            )
-        }
+    setSafeContent {
+        RoomListView(
+            state = state,
+            onRoomClick = onRoomClick,
+            onSettingsClick = onSettingsClick,
+            onSetUpRecoveryClick = onSetUpRecoveryClick,
+            onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+            onCreateRoomClick = onCreateRoomClick,
+            onRoomSettingsClick = onRoomSettingsClick,
+            onMenuActionClick = onMenuActionClick,
+            onDeclineInviteAndBlockUser = onDeclineInviteAndBlockUser,
+            onReportRoomClick = onReportRoomClick,
+            acceptDeclineInviteView = { },
+        )
     }
 }

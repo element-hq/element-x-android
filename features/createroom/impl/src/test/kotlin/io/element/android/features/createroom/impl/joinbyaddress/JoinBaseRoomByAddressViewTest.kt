@@ -8,17 +8,16 @@
 package io.element.android.features.createroom.impl.joinbyaddress
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.createroom.impl.R
-import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.setSafeContent
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -58,9 +57,7 @@ class JoinBaseRoomByAddressViewTest {
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinRoomByAddressView(
     state: JoinRoomByAddressState,
 ) {
-    setContent {
-        CompositionLocalProvider(LocalUiTestMode provides true) {
-            JoinRoomByAddressView(state = state)
-        }
+    setSafeContent {
+        JoinRoomByAddressView(state = state)
     }
 }

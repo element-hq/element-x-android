@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -23,7 +22,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
-import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -189,23 +187,21 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     forceJumpToBottomVisibility: Boolean = false,
 ) {
-    setSafeContent {
-        CompositionLocalProvider(LocalUiTestMode provides true) {
-            TimelineView(
-                state = state,
-                timelineProtectionState = timelineProtectionState,
-                onUserDataClick = onUserDataClick,
-                onLinkClick = onLinkClick,
-                onContentClick = onMessageClick,
-                onMessageLongClick = onMessageLongClick,
-                onSwipeToReply = onSwipeToReply,
-                onReactionClick = onReactionClick,
-                onReactionLongClick = onReactionLongClick,
-                onMoreReactionsClick = onMoreReactionsClick,
-                onReadReceiptClick = onReadReceiptClick,
-                onJoinCallClick = onJoinCallClick,
-                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-            )
-        }
+    setSafeContent(clearAndroidUiDispatcher = true) {
+        TimelineView(
+            state = state,
+            timelineProtectionState = timelineProtectionState,
+            onUserDataClick = onUserDataClick,
+            onLinkClick = onLinkClick,
+            onContentClick = onMessageClick,
+            onMessageLongClick = onMessageLongClick,
+            onSwipeToReply = onSwipeToReply,
+            onReactionClick = onReactionClick,
+            onReactionLongClick = onReactionLongClick,
+            onMoreReactionsClick = onMoreReactionsClick,
+            onReadReceiptClick = onReadReceiptClick,
+            onJoinCallClick = onJoinCallClick,
+            forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+        )
     }
 }

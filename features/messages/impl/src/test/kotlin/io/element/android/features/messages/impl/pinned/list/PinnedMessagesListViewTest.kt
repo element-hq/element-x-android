@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.pinned.list
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.longClick
@@ -23,7 +22,6 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
@@ -105,16 +103,14 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinne
     onLinkClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
     onLinkLongClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
 ) {
-    setSafeContent {
-        CompositionLocalProvider(LocalUiTestMode provides true) {
-            PinnedMessagesListView(
-                state = state,
-                onBackClick = onBackClick,
-                onEventClick = onEventClick,
-                onUserDataClick = onUserDataClick,
-                onLinkClick = onLinkClick,
-                onLinkLongClick = onLinkLongClick,
-            )
-        }
+    setSafeContent(clearAndroidUiDispatcher = true) {
+        PinnedMessagesListView(
+            state = state,
+            onBackClick = onBackClick,
+            onEventClick = onEventClick,
+            onUserDataClick = onUserDataClick,
+            onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
+        )
     }
 }

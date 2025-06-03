@@ -52,7 +52,6 @@ import io.element.android.features.messages.impl.timeline.components.receipt.aRe
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
@@ -69,6 +68,7 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.setSafeContent
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
@@ -568,12 +568,9 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     onViewAllPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
 ) {
-    setContent {
+    setSafeContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
-        CompositionLocalProvider(
-            LocalInspectionMode provides true,
-            LocalUiTestMode provides true,
-        ) {
+        CompositionLocalProvider(LocalInspectionMode provides true) {
             MessagesView(
                 state = state,
                 onBackClick = onBackClick,

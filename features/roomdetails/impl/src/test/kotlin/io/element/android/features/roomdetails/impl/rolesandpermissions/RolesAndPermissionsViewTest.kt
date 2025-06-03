@@ -8,13 +8,11 @@
 package io.element.android.features.roomdetails.impl.rolesandpermissions
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -23,6 +21,7 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledTimes
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.setSafeContent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -161,26 +160,24 @@ class RolesAndPermissionsViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRolesAndPermissionsView(
     state: RolesAndPermissionsState = aRolesAndPermissionsState(
-         eventSink = EventsRecorder(expectEvents = false),
+        eventSink = EventsRecorder(expectEvents = false),
     ),
     goBack: () -> Unit = EnsureNeverCalled(),
     openAdminList: () -> Unit = EnsureNeverCalled(),
     openModeratorList: () -> Unit = EnsureNeverCalled(),
     openPermissionScreens: () -> Unit = EnsureNeverCalled(),
 ) {
-    setContent {
-        CompositionLocalProvider(LocalUiTestMode provides true) {
-            RolesAndPermissionsView(
-                state = state,
-                rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {
-                    override fun onBackClick() = goBack()
-                    override fun openAdminList() = openAdminList()
-                    override fun openModeratorList() = openModeratorList()
-                    override fun openEditRoomDetailsPermissions() = openPermissionScreens()
-                    override fun openModerationPermissions() = openPermissionScreens()
-                    override fun openMessagesAndContentPermissions() = openPermissionScreens()
-                }
-            )
-        }
+    setSafeContent {
+        RolesAndPermissionsView(
+            state = state,
+            rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {
+                override fun onBackClick() = goBack()
+                override fun openAdminList() = openAdminList()
+                override fun openModeratorList() = openModeratorList()
+                override fun openEditRoomDetailsPermissions() = openPermissionScreens()
+                override fun openModerationPermissions() = openPermissionScreens()
+                override fun openMessagesAndContentPermissions() = openPermissionScreens()
+            }
+        )
     }
 }
