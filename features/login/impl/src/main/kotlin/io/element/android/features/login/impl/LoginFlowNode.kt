@@ -36,6 +36,7 @@ import io.element.android.features.login.impl.screens.createaccount.CreateAccoun
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.screens.onboarding.OnBoardingNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
@@ -45,7 +46,6 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
-import io.element.android.libraries.oidc.api.OidcEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -57,7 +57,6 @@ class LoginFlowNode @AssistedInject constructor(
     private val accountProviderDataSource: AccountProviderDataSource,
     private val defaultLoginUserStory: DefaultLoginUserStory,
     private val oidcActionFlow: OidcActionFlow,
-    private val oidcEntryPoint: OidcEntryPoint,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.OnBoarding,
@@ -74,15 +73,15 @@ class LoginFlowNode @AssistedInject constructor(
     private var activity: Activity? = null
     private var darkTheme: Boolean = false
 
-    private var customChromeTabStarted = false
+    private var externalAppStarted = false
 
     override fun onBuilt() {
         super.onBuilt()
         defaultLoginUserStory.setLoginFlowIsDone(false)
         lifecycle.subscribe(
             onResume = {
-                if (customChromeTabStarted) {
-                    customChromeTabStarted = false
+                if (externalAppStarted) {
+                    externalAppStarted = false
                     // Workaround to detect that the Custom Chrome Tab has been closed
                     // If there is no coming OidcAction (that would end this Node),
                     // consider that the user has cancelled the login
@@ -122,9 +121,6 @@ class LoginFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class CreateAccount(val url: String) : NavTarget
-
-        @Parcelize
-        data class OidcView(val oidcDetails: OidcDetails) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -249,9 +245,6 @@ class LoginFlowNode @AssistedInject constructor(
             NavTarget.LoginPassword -> {
                 createNode<LoginPasswordNode>(buildContext)
             }
-            is NavTarget.OidcView -> {
-                oidcEntryPoint.createFallbackWebViewNode(this, buildContext, navTarget.oidcDetails.url)
-            }
             is NavTarget.CreateAccount -> {
                 val inputs = CreateAccountNode.Inputs(
                     url = navTarget.url,
@@ -262,15 +255,9 @@ class LoginFlowNode @AssistedInject constructor(
     }
 
     private fun navigateToMas(oidcDetails: OidcDetails) {
-        if (oidcEntryPoint.canUseCustomTab()) {
-            // In this case open a Chrome Custom tab
-            activity?.let {
-                customChromeTabStarted = true
-                oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
-            }
-        } else {
-            // Fallback to WebView mode
-            backstack.push(NavTarget.OidcView(oidcDetails))
+        activity?.let {
+            externalAppStarted = true
+            it.openUrlInChromeCustomTab(null, darkTheme, oidcDetails.url)
         }
     }
 
