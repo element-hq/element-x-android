@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Usuń i zbanuj członka"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Zbanuj"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Nie będą mogli ponownie dołączyć do tego pokoju, jeśli zostaną zaproszeni."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Czy na pewno chcesz zbanować tego członka?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Banowanie %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Usuń"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Będą mogli ponownie dołączyć do pokoju, jeśli zostaną zaproszeni."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Czy na pewno chcesz usunąć tego członka?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Wyświetl profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Usuń z pokoju"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Usunąć członka i zablokować możliwość dołączenia w przyszłości?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Usuwanie %1$s…"</string>
+</resources>

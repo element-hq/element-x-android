@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"移除并封禁成员"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"封禁"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"即使受到邀请，他们也无法再次加入聊天室。"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"您确定要封禁该成员吗？"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"封禁 %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"移除"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"如果受到邀请，他们可以重新加入聊天室。"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"您确定要移除此成员吗？"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"查看个人资料"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"从聊天室移除"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"删除成员并禁止重新加入？"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"正在移除 %1$s……"</string>
+</resources>

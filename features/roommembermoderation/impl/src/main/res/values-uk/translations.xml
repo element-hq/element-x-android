@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Вилучити й заблокувати учасника"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Заблокувати"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Він не зможе приєднатися до цієї кімнати знову, якщо його запросять."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Ви точно хочете заблокувати цього користувача?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Блокування %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Вилучити"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Вони зможуть знову приєднатися до цієї кімнати, якщо їх запросять."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Ви дійсно хочете вилучити цього учасника?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Переглянути профіль"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Вилучити з кімнати"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Вилучити учасника та заборонити приєднання в майбутньому?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Вилучення %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Розблокувати в кімнаті"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Розблокувати"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Вони зможуть знову приєднатися до кімнати, якщо їх запросять"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Ви впевнені, що хочете розблокувати цього учасника?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Розблокування %1$s"</string>
+</resources>

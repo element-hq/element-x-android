@@ -69,8 +69,8 @@ import io.element.android.libraries.designsystem.theme.components.FloatingAction
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -92,7 +92,7 @@ import kotlin.time.Duration.Companion.milliseconds
 fun TimelineView(
     state: TimelineState,
     timelineProtectionState: TimelineProtectionState,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onContentClick: (TimelineItem.Event) -> Unit,
     onMessageLongClick: (TimelineItem.Event) -> Unit,
