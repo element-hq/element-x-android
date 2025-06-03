@@ -12,10 +12,4 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Αφαίρεση από το δωμάτιο"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Αφαίρεση μέλους και απαγόρευση συμμετοχής στο μέλλον;"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Αφαίρεση %1$s…"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Αφαίρεση και αποκλεισμός μέλους"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Μόνο αφαίρεση μέλους"</string>
-  <string name="screen_room_member_list_manage_member_unban_action">"Αναίρεση αποκλεισμού"</string>
-  <string name="screen_room_member_list_manage_member_unban_message">"Θα μπορεί να συμμετάσχει ξανά στο δωμάτιο εάν προσκληθεί."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Άρση αποκλεισμού χρήστη"</string>
-  <string name="screen_room_member_list_unbanning_user">"Άρση αποκλεισμού %1$s"</string>
 </resources>

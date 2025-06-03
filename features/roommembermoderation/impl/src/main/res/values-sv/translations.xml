@@ -12,10 +12,9 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Ta bort från rummet"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Ta bort medlem och banna från att gå med i framtiden?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Tar bort %1$s …"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Ta bort och banna medlem"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Ta bara bort medlem"</string>
-  <string name="screen_room_member_list_manage_member_unban_action">"Avbanna"</string>
-  <string name="screen_room_member_list_manage_member_unban_message">"Denne kommer kunna gå med i rummet igen om denne bjuds in"</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Avbanna användare"</string>
-  <string name="screen_room_member_list_unbanning_user">"Avbannar %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Avbanna från rummet"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Avbanna"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"De skulle kunna gå med i rummet igen om de blev inbjudna"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Är du säker på att du vill avbanna den här medlemmen?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Avbannar %1$s"</string>
 </resources>

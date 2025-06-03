@@ -12,10 +12,4 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"踢出聊天室"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"移除成員並禁止未來再度加入？"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"正在踢出 %1$s…"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"踢出並加入黑名單"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"僅移除成員"</string>
-  <string name="screen_room_member_list_manage_member_unban_action">"解除黑名單"</string>
-  <string name="screen_room_member_list_manage_member_unban_message">"如果收到邀請，他們能再次加入聊天室。"</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"解除黑名單"</string>
-  <string name="screen_room_member_list_unbanning_user">"正在解除黑名單 %1$s"</string>
 </resources>

@@ -12,10 +12,9 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Odebrat z místnosti"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Odebrat člena a zakázat mu připojení v budoucnu?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Odstraňování %1$s…"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Odebrat a vykázat člena"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Pouze odebrat člena"</string>
-  <string name="screen_room_member_list_manage_member_unban_action">"Zrušit vykázání"</string>
-  <string name="screen_room_member_list_manage_member_unban_message">"Pokud budou pozváni, budou se moci do této místnosti znovu připojit."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Zrušit vykázání uživatele"</string>
-  <string name="screen_room_member_list_unbanning_user">"Rušení vykázání %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Zrušit vykázání z místnosti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Zrušit vykázání"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Pokud by byli pozváni, mohli by se znovu připojit do místnosti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Opravdu chcete zrušit vykázání tohoto člena?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Rušení vykázání %1$s"</string>
 </resources>

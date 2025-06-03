@@ -9,10 +9,4 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Odadan çıkar"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Üyeyi çıkarın ve gelecekte katılmasını yasaklayın?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Kaldırılıyor %1$s…"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Üyeyi çıkar ve yasakla"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Yalnızca üyeyi kaldır"</string>
-  <string name="screen_room_member_list_manage_member_unban_action">"Yasağı Kaldır"</string>
-  <string name="screen_room_member_list_manage_member_unban_message">"Davet edildikleri takdirde bu odaya tekrar katılabileceklerdir."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Kullanıcının yasağını kaldır"</string>
-  <string name="screen_room_member_list_unbanning_user">"Yasak kaldırılıyor %1$s"</string>
 </resources>

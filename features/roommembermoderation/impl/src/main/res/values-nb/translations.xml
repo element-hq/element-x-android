@@ -12,10 +12,9 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Fjern fra rommet"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Fjerne medlem og utestenge fra å bli med i fremtiden?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Fjerner %1$s…"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Fjern og utesteng medlem"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Bare fjern medlem"</string>
-  <string name="screen_room_member_list_manage_member_unban_action">"Opphev utestengelse"</string>
-  <string name="screen_room_member_list_manage_member_unban_message">"De vil kunne bli med i dette rommet igjen hvis de blir invitert."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Opphev utestengelse av bruker"</string>
-  <string name="screen_room_member_list_unbanning_user">"Oppheve utestengelsen av %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Fjern utestengelsen fra rommet"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Opphev utestengelsen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"De vil kunne bli med i rommet igjen hvis de blir invitert"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Er du sikker på at du vil oppheve utestengelsen av dette medlemmet?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Oppheve utestengelsen av %1$s"</string>
 </resources>

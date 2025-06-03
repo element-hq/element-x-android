@@ -9,10 +9,4 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Verwijderen uit kamer"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Lid verwijderen en toekomstige deelname verbieden?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s wordt verwijderd…"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Lid verwijderen en verbannen"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Alleen lid verwijderen"</string>
-  <string name="screen_room_member_list_manage_member_unban_action">"Ontbannen"</string>
-  <string name="screen_room_member_list_manage_member_unban_message">"Ze kunnen opnieuw tot de kamer toetreden als ze worden uitgenodigd."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Ontban gebruiker"</string>
-  <string name="screen_room_member_list_unbanning_user">"%1$s ontbannen"</string>
 </resources>
