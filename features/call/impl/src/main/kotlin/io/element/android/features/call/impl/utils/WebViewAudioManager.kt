@@ -32,6 +32,8 @@ import kotlin.time.Duration.Companion.seconds
  *
  * It listens for audio device changes and updates the WebView with the available devices.
  * It also handles the selection of the audio device by the user in the WebView and the default audio device based on the device type.
+ *
+ * See also: [Element Call controls docs.](https://github.com/element-hq/element-call/blob/livekit/docs/controls.md#audio-devices)
  */
 class WebViewAudioManager(
     private val webView: WebView,
@@ -382,7 +384,7 @@ private fun deviceName(type: Int, name: String): String {
         AudioDeviceInfo.TYPE_WIRED_HEADPHONES -> "Wired headphones"
         AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> "Built-in speaker"
         AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> "Built-in earpiece"
-        else -> "Unknown:"
+        else -> "Unknown"
     }
     return if (isBuiltIn(type)) {
         typePart
