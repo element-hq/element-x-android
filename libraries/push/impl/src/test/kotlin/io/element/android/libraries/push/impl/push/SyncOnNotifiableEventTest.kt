@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -75,7 +76,7 @@ class SyncOnNotifiableEventTest {
     fun `when feature flag is disabled, nothing happens`() = runTest {
         val sut = createSyncOnNotifiableEvent(client = client, isSyncOnPushEnabled = false)
 
-        sut(notifiableEvent)
+        sut(listOf(notifiableEvent))
 
         assert(startSyncLambda).isNeverCalled()
         assert(stopSyncLambda).isNeverCalled()
@@ -96,7 +97,7 @@ class SyncOnNotifiableEventTest {
             unlocked.set(true)
             room.givenRoomInfo(aRoomInfo(hasRoomCall = true))
         }
-        sut(incomingCallNotifiableEvent)
+        sut(listOf(incomingCallNotifiableEvent))
 
         // The process was completed before the timeout
         assertThat(unlocked.get()).isTrue()
@@ -116,28 +117,10 @@ class SyncOnNotifiableEventTest {
             unlocked.set(true)
             room.givenRoomInfo(aRoomInfo(hasRoomCall = true))
         }
-        sut(incomingCallNotifiableEvent)
+        sut(listOf(incomingCallNotifiableEvent))
 
         // Didn't unlock before the timeout
         assertThat(unlocked.get()).isFalse()
-    }
-
-    @Test
-    fun `when feature flag is enabled and app is in foreground, sync is not started`() = runTest {
-        val appForegroundStateService = FakeAppForegroundStateService(
-            initialForegroundValue = true,
-        )
-        val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService, isSyncOnPushEnabled = true)
-
-        appForegroundStateService.isSyncingNotificationEvent.test {
-            sut(notifiableEvent)
-            sut(incomingCallNotifiableEvent)
-
-            // It's initially false
-            assertThat(awaitItem()).isFalse()
-            // It never becomes true
-            ensureAllEventsConsumed()
-        }
     }
 
     @Test
@@ -153,7 +136,7 @@ class SyncOnNotifiableEventTest {
 
         appForegroundStateService.isSyncingNotificationEvent.test {
             syncService.emitSyncState(SyncState.Running)
-            sut(notifiableEvent)
+            sut(listOf(notifiableEvent))
 
             // It's initially false
             assertThat(awaitItem()).isFalse()
@@ -174,8 +157,8 @@ class SyncOnNotifiableEventTest {
         val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService, isSyncOnPushEnabled = true)
 
         appForegroundStateService.isSyncingNotificationEvent.test {
-            launch { sut(notifiableEvent) }
-            launch { sut(notifiableEvent) }
+            launch { sut(listOf(notifiableEvent)) }
+            launch { sut(listOf(notifiableEvent)) }
             launch {
                 delay(1)
                 timelineItems.emit(
@@ -199,7 +182,8 @@ class SyncOnNotifiableEventTest {
         isSyncOnPushEnabled: Boolean = true,
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = true,
-        )
+        ),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ): SyncOnNotifiableEvent {
         val featureFlagService = FakeFeatureFlagService(
             initialState = mapOf(
@@ -212,6 +196,7 @@ class SyncOnNotifiableEventTest {
             featureFlagService = featureFlagService,
             appForegroundStateService = appForegroundStateService,
             dispatchers = testCoroutineDispatchers(),
+            activeRoomsHolder = activeRoomsHolder,
         )
     }
 }

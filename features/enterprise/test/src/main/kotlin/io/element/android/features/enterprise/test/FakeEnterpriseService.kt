@@ -18,6 +18,7 @@ class FakeEnterpriseService(
     private val isEnterpriseUserResult: (SessionId) -> Boolean = { lambdaError() },
     private val defaultHomeserverListResult: () -> List<String> = { emptyList() },
     private val isAllowedToConnectToHomeserverResult: (String) -> Boolean = { lambdaError() },
+    private val isElementCallAvailableResult: () -> Boolean = { lambdaError() },
     private val semanticColorsLightResult: () -> SemanticColors = { lambdaError() },
     private val semanticColorsDarkResult: () -> SemanticColors = { lambdaError() },
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
@@ -33,6 +34,10 @@ class FakeEnterpriseService(
 
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean = simulateLongTask {
         isAllowedToConnectToHomeserverResult(homeserverUrl)
+    }
+
+    override suspend fun isElementCallAvailable(): Boolean = simulateLongTask {
+        isElementCallAvailableResult()
     }
 
     override fun semanticColorsLight(): SemanticColors {

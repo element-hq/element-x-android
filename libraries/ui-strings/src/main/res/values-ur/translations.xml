@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_delete">"حذف کریں"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d ہندسہ درج"</item>
+    <item quantity="other">"%1$d ہندسے درج"</item>
+  </plurals>
+  <string name="a11y_hide_password">"لفظ عبور چھپائیں"</string>
+  <string name="a11y_jump_to_bottom">"نیچے چھلانگ لگائیں"</string>
+  <string name="a11y_notifications_mentions_only">"صرف تذکرے"</string>
+  <string name="a11y_notifications_muted">"خاموش"</string>
+  <string name="a11y_page_n">"صفحہ %1$d"</string>
+  <string name="a11y_pause">"متوقف"</string>
+  <string name="a11y_pin_field">"PIN میدان"</string>
+  <string name="a11y_play">"چلائیں"</string>
+  <string name="a11y_poll">"رائے شماری"</string>
+  <string name="a11y_poll_end">"رائے شماری ختم کردی"</string>
+  <string name="a11y_react_with">"%1$s کے ساتھ رد عمل کریں"</string>
+  <string name="a11y_react_with_other_emojis">"دیگر رموز تعبیری سے رد عمل کریں"</string>
+  <string name="a11y_read_receipts_multiple">"%1$s اور %2$s نے پڑھا"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"%1$s اور %2$d دیگر نے پڑھا"</item>
+    <item quantity="other">"%1$s اور %2$d دیگر نے لڑھا"</item>
+  </plurals>
+  <string name="a11y_read_receipts_single">"%1$s نے پڑھا"</string>
+  <string name="a11y_read_receipts_tap_to_show_all">"سب دکھانے کے لیے تھپتھپائیں"</string>
+  <string name="a11y_remove_reaction_with">"%1$s کے ساتھ رد عمل ہٹائیں"</string>
+  <string name="a11y_send_files">"مسلیں بھیجیں"</string>
+  <string name="a11y_show_password">"لفظ عبور دکھائیں"</string>
+  <string name="a11y_start_call">"مکالمہ شروع کریں"</string>
+  <string name="a11y_user_menu">"لائحۂ صارف"</string>
+  <string name="a11y_voice_message_record">"صوتی پیغام ثبت کریں۔"</string>
+  <string name="a11y_voice_message_stop_recording">"ثبت کاری بند کریں"</string>
+  <string name="action_accept">"قبول کریں"</string>
+  <string name="action_add_to_timeline">"جدول زمانی میں شامل کریں"</string>
+  <string name="action_back">"واپس"</string>
+  <string name="action_call">"مکالمہ کریں"</string>
+  <string name="action_cancel">"منسوخ کریں"</string>
+  <string name="action_choose_photo">"تصویر چنیں"</string>
+  <string name="action_clear">"صاف کریں"</string>
+  <string name="action_close">"بند کریں"</string>
+  <string name="action_complete_verification">"توثیق مکمل کریں"</string>
+  <string name="action_confirm">"تصدیق کریں"</string>
+  <string name="action_continue">"جاری رکھیں"</string>
+  <string name="action_copy">"نقل"</string>
+  <string name="action_copy_link">"ربط نقل کریں"</string>
+  <string name="action_copy_link_to_message">"پیغام کا ربط نقل کریں"</string>
+  <string name="action_create">"تخلیق کریں"</string>
+  <string name="action_create_a_room">"ایک کمرہ بنائیں"</string>
+  <string name="action_decline">"مسترد کریں"</string>
+  <string name="action_delete_poll">"رائے شماری حذف کریں"</string>
+  <string name="action_disable">"غیر فعال کریں"</string>
+  <string name="action_discard">"رد کریں"</string>
+  <string name="action_done">"ہوگیا"</string>
+  <string name="action_edit">"تدوین کریں"</string>
+  <string name="action_edit_poll">"رائے شماری میں ترمیم کریں"</string>
+  <string name="action_enable">"فعال کریں"</string>
+  <string name="action_end_poll">"رائے شماری ختم کریں"</string>
+  <string name="action_enter_pin">"‏PIN درج کریں"</string>
+  <string name="action_forgot_password">"لفظِ عبور بھول گئے؟"</string>
+  <string name="action_forward">"آگے کریں"</string>
+  <string name="action_go_back">"واپس جائیں"</string>
+  <string name="action_invite">"مدعو کریں"</string>
+  <string name="action_invite_friends">"لوگوں کو مدعو کریں"</string>
+  <string name="action_invite_friends_to_app">"لوگوں کو %1$s پر مدعو کریں"</string>
+  <string name="action_invite_people_to_app">"لوگوں کو %1$s پر مدعو کریں"</string>
+  <string name="action_invites_list">"دعوت نامے"</string>
+  <string name="action_join">"شامل ہوں"</string>
+  <string name="action_learn_more">"مزید جانئے"</string>
+  <string name="action_leave">"چھوڑ دیں"</string>
+  <string name="action_leave_conversation">"گفتگو چھوڑیں"</string>
+  <string name="action_leave_room">"کمرہ چھوڑ دیں"</string>
+  <string name="action_load_more">"مزید لادیں"</string>
+  <string name="action_manage_account">"کھاتہ کا انتظام کریں"</string>
+  <string name="action_manage_devices">"آلات کا نظم کریں"</string>
+  <string name="action_message">"ارسال"</string>
+  <string name="action_next">"اگلا"</string>
+  <string name="action_no">"نہیں"</string>
+  <string name="action_not_now">"ابھی نہیں"</string>
+  <string name="action_ok">"ٹھیک"</string>
+  <string name="action_open_settings">"ترتیبات"</string>
+  <string name="action_open_with">"کھولیں مع"</string>
+  <string name="action_pin">"تثبیت کریں"</string>
+  <string name="action_quick_reply">"فوری جواب"</string>
+  <string name="action_quote">"حوالہ دیں"</string>
+  <string name="action_react">"رد عمل"</string>
+  <string name="action_reject">"مسترد کریں"</string>
+  <string name="action_remove">"ہٹائیں"</string>
+  <string name="action_reply">"جواب دیں"</string>
+  <string name="action_reply_in_thread">"دھاگے میں جواب دیں"</string>
+  <string name="action_report_bug">"خطاء کی اطلاع دیں"</string>
+  <string name="action_report_content">"مواد کی اطلاع دیں"</string>
+  <string name="action_reset">"بحال کریں"</string>
+  <string name="action_reset_identity">"شناخت بحال کر دیں"</string>
+  <string name="action_retry">"پھر کوشش کریں"</string>
+  <string name="action_retry_decryption">"رمزکشائی کی پھر کوشش کریں"</string>
+  <string name="action_save">"محفوظ کریں"</string>
+  <string name="action_search">"تلاش کریں"</string>
+  <string name="action_send">"بھیجیں"</string>
+  <string name="action_send_message">"پیغام بھیجیں"</string>
+  <string name="action_share">"اشتراک کریں"</string>
+  <string name="action_share_link">"ربط کا اشتراک کریں"</string>
+  <string name="action_sign_in_again">"دوبارہ داخل ہوں"</string>
+  <string name="action_signout">"خارج ہوں"</string>
+  <string name="action_signout_anyway">"بہرحال خارج ہوں"</string>
+  <string name="action_skip">"چھوڑیں"</string>
+  <string name="action_start">"شروع کریں"</string>
+  <string name="action_start_chat">"گفتگو شروع کریں"</string>
+  <string name="action_start_verification">"توثیق شروع کریں"</string>
+  <string name="action_static_map_load">"نقشہ لادنے کیلئے تھپتھپائیں"</string>
+  <string name="action_take_photo">"تصویر لیں"</string>
+  <string name="action_tap_for_options">"اختیارات کے لیے تھپتھپائیں"</string>
+  <string name="action_try_again">"دوبارہ کوشش کریں"</string>
+  <string name="action_unpin">"غیر تثبیت کریں"</string>
+  <string name="action_view_source">"ماخذ دیکھیں"</string>
+  <string name="action_yes">"ہاں"</string>
+  <string name="common_about">"بمتعلق"</string>
+  <string name="common_acceptable_use_policy">"قابل قبول استعمال کی سیاست"</string>
+  <string name="common_advanced_settings">"اعلیٰ ترتیبات"</string>
+  <string name="common_analytics">"تجزیات"</string>
+  <string name="common_appearance">"ظہور"</string>
+  <string name="common_audio">"صوت"</string>
+  <string name="common_blocked_users">"مسدود صارفین"</string>
+  <string name="common_bubbles">"بلبلے"</string>
+  <string name="common_call_started">"مکالمہ شروع"</string>
+  <string name="common_chat_backup">"گفتگو کا پشتارہ"</string>
+  <string name="common_copyright">"حقوقِ طبع و نشر"</string>
+  <string name="common_creating_room">"کمرہ تخلیق کررہاہے…"</string>
+  <string name="common_current_user_left_room">"کمرہ چھوڑ لیا"</string>
+  <string name="common_dark">"اندھیرا"</string>
+  <string name="common_decryption_error">"رمزکشائی کی خرابی"</string>
+  <string name="common_developer_options">"مطور اختیارات"</string>
+  <string name="common_direct_chat">"براہ راست گفتگو"</string>
+  <string name="common_do_not_show_this_again">"اسے دوبارہ نہ دکھائیں"</string>
+  <string name="common_edited_suffix">"(تدوین شدہ)"</string>
+  <string name="common_editing">"تدوین"</string>
+  <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_encryption_enabled">"مرموزکاری فعال ہے"</string>
+  <string name="common_enter_your_pin">"اپنا PIN درج کریں"</string>
+  <string name="common_error">"خرابی"</string>
+  <string name="common_error_registering_pusher_android">"کوئی نقص واقع ہوا ہے، ہوسکتا ہے کہ آپ کو نئے پیغامات کی اطلاعات موصول نہ ہوں۔ براہ کرم ترتیبات سے اطلاعات کا ازالہ کریں۔
+
+وجہ: %1$s۔"</string>
+  <string name="common_everyone">"ہر کوئی"</string>
+  <string name="common_failed">"ناکام"</string>
+  <string name="common_favourite">"پسندیدہ"</string>
+  <string name="common_favourited">"پسندیدہ"</string>
+  <string name="common_file">"مسل"</string>
+  <string name="common_file_saved_on_disk_android">"مسل تنزیلات میں محفوظ کر دی"</string>
+  <string name="common_forward_message">"پیغام آگے بھیجیں"</string>
+  <string name="common_gif">"GIF"</string>
+  <string name="common_image">"تصویر"</string>
+  <string name="common_in_reply_to">"%1$s کے جواب میں"</string>
+  <string name="common_install_apk_android">"APK تنصیب کریں"</string>
+  <string name="common_invite_unknown_profile">"یہ میٹرکس شناخت نہیں مل سکتی، تو ہو سکتا ہے کہ دعوت نامہ موصول نہ ہو۔"</string>
+  <string name="common_leaving_room">"کمرہ چھوڑنا"</string>
+  <string name="common_light">"روشنی"</string>
+  <string name="common_link_copied_to_clipboard">"ربط تختہ تراشہ پر نقل کردا گیا"</string>
+  <string name="common_loading">"لاد رہا ہے…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d دیگر"</item>
+    <item quantity="other">"%d دیگر"</item>
+  </plurals>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d رکن"</item>
+    <item quantity="other">"%1$d اراکین"</item>
+  </plurals>
+  <string name="common_message">"پیغام"</string>
+  <string name="common_message_actions">"پیغام کے اعمال"</string>
+  <string name="common_message_layout">"ترتیب پیغام"</string>
+  <string name="common_message_removed">"پیغام ہٹا دیا گیا"</string>
+  <string name="common_modern">"جدید"</string>
+  <string name="common_mute">"خاموش کریں"</string>
+  <string name="common_no_results">"کوئی نتائج نہیں"</string>
+  <string name="common_no_room_name">"کمرے کا کوئی نام نہیں"</string>
+  <string name="common_offline">"پرے خط"</string>
+  <string name="common_open_source_licenses">"کھلا ماخذ رخصات"</string>
+  <string name="common_or">"یا"</string>
+  <string name="common_password">"لفظ عبور"</string>
+  <string name="common_people">"لوگ"</string>
+  <string name="common_permalink">"مستقل ربط"</string>
+  <string name="common_permission">"اجازت"</string>
+  <string name="common_please_wait">"براہ کرم انتظار کریں…"</string>
+  <string name="common_poll_end_confirmation">"کیا آپ واقعی اس رائے شماری کو ختم کرنا چاہتے ہیں؟"</string>
+  <string name="common_poll_summary">"رائے شماری: %1$s"</string>
+  <string name="common_poll_total_votes">"ک آراء: %1$s"</string>
+  <string name="common_poll_undisclosed_text">"رائے شماری ختم ہونے کے بعد نتائج ظاہر ہوں گے"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d رائے"</item>
+    <item quantity="other">"%d آراء"</item>
+  </plurals>
+  <string name="common_privacy_policy">"سیاستِ نجیت"</string>
+  <string name="common_reaction">"ردعمل"</string>
+  <string name="common_reactions">"ردود عمل"</string>
+  <string name="common_recovery_key">"بازیابی کی کلید"</string>
+  <string name="common_refreshing">"تاکہ کر رہا ہے…"</string>
+  <string name="common_replying_to">"%1$s کا جواب دے رہے ہیں"</string>
+  <string name="common_report_a_bug">"ایک خطاء کی اطلاع دیں"</string>
+  <string name="common_report_a_problem">"کسی مسئلے کی اطلاع دیں"</string>
+  <string name="common_report_submitted">"گزارش جمع ہوگئی"</string>
+  <string name="common_rich_text_editor">"امیر مدیرِ متن"</string>
+  <string name="common_room">"کمرہ"</string>
+  <string name="common_room_name">"کمرے کا نام"</string>
+  <string name="common_room_name_placeholder">"e.g. your project name"</string>
+  <string name="common_saved_changes">"محفوظ شدہ تبدیلیاں"</string>
+  <string name="common_saving">"محفوظ کر رہا ہے"</string>
+  <string name="common_screen_lock">"صفحۂ نمائش قفل"</string>
+  <string name="common_search_for_someone">"کسی کیلئے تلاش کریں"</string>
+  <string name="common_search_results">"تلاش کے نتائج"</string>
+  <string name="common_security">"حفاظت"</string>
+  <string name="common_seen_by">"دیکھا گیا بہ"</string>
+  <string name="common_send_to">"بھیجیں تا"</string>
+  <string name="common_sending">"بھیج رہا ہے…"</string>
+  <string name="common_sending_failed">"بھیجنا ناکام"</string>
+  <string name="common_sent">"ارسال کردہ"</string>
+  <string name="common_server_not_supported">"خادم تعاون یافتہ نہیں"</string>
+  <string name="common_server_url">"خادم عنوان"</string>
+  <string name="common_settings">"ترتیبات"</string>
+  <string name="common_shared_location">"مشترکہ مقام"</string>
+  <string name="common_signing_out">"خارج ہو رہا ہے"</string>
+  <string name="common_something_went_wrong">"کچھ غلط ہو گیا"</string>
+  <string name="common_starting_chat">"گفتگو شروع کر رہا ہے۔۔۔"</string>
+  <string name="common_sticker">"برچسب"</string>
+  <string name="common_success">"کامیابی"</string>
+  <string name="common_suggestions">"تجاویز"</string>
+  <string name="common_syncing">"ہمسات سازی"</string>
+  <string name="common_system">"نظام"</string>
+  <string name="common_text">"متن"</string>
+  <string name="common_third_party_notices">"فریق ثالث کے اشعارات"</string>
+  <string name="common_thread">"دھاگہ"</string>
+  <string name="common_topic">"موضوع"</string>
+  <string name="common_topic_placeholder">"یہ کمرہ کس کے بارے میں ہے؟"</string>
+  <string name="common_unable_to_decrypt">"رمزکشائی کرنے سے قاصر"</string>
+  <string name="common_unable_to_decrypt_no_access">"آپ کو اس پیغام تک رسائی حاصل نہیں"</string>
+  <string name="common_unable_to_invite_message">"دعوت نامے ایک یا زیادہ صارفین کو نہیں بھیجے جا سکے۔"</string>
+  <string name="common_unable_to_invite_title">"دعوت نامہ بھیجنے سے قاصر"</string>
+  <string name="common_unlock">"غیر مقفل کریں"</string>
+  <string name="common_unmute">"غیر خاموش کریں"</string>
+  <string name="common_unsupported_event">"غیر تعاون یافتہ واقعہ"</string>
+  <string name="common_username">"صارف نام"</string>
+  <string name="common_verification_cancelled">"توثیق منسوخ کردہ"</string>
+  <string name="common_verification_complete">"توثیق مکمل"</string>
+  <string name="common_verify_device">"آلہ کی توثیق کریں"</string>
+  <string name="common_video">"ویڈیو"</string>
+  <string name="common_voice_message">"صوتی پیغام"</string>
+  <string name="common_waiting">"منتظر…"</string>
+  <string name="common_waiting_for_decryption_key">"اس پیغام کا منتظر"</string>
+  <string name="dialog_title_confirmation">"تصدیق"</string>
+  <string name="dialog_title_error">"خرابی"</string>
+  <string name="dialog_title_success">"کامیابی"</string>
+  <string name="dialog_title_warning">"انتباہ"</string>
+  <string name="dialog_unsaved_changes_description_android">"آپ کی تبدیلیاں محفوظ نہیں کی گئیں۔ کیا آپ کو یقین ہے کہ آپ واپس جانا چاہتے ہیں؟"</string>
+  <string name="dialog_unsaved_changes_title">"تبدیلیاں محفوظ کریں؟"</string>
+  <string name="error_failed_creating_the_permalink">"مستقل ربط تخلیق کرنا ناکام"</string>
+  <string name="error_failed_loading_map">"%1$s نقشہ لاد نہیں سکا۔ برائے مہربانی بعد میں دوبارہ کوشش کریں۔"</string>
+  <string name="error_failed_loading_messages">"پیغامات لادنا ناکام"</string>
+  <string name="error_failed_locating_user">"%1$s آپ کے مقام تک رسائی حاصل نہیں کر سکا۔ برائے مہربانی بعد میں دوبارہ کوشش کریں۔"</string>
+  <string name="error_failed_uploading_voice_message">"آپکا صوتی پیغام رفع کرنے میں ناکام۔"</string>
+  <string name="error_message_not_found">"پیغام نہیں ملا"</string>
+  <string name="error_missing_location_auth_android">"%1$sآپ کے مقام تک رسائی کی اجازت نہیں ہے۔ آپ ترتیبات میں رسائی کو فعال کر سکتے ہیں۔"</string>
+  <string name="error_missing_location_rationale_android">"%1$s کو آپ کے مقام تک رسائی حاصل کرنے کی اجازت نہیں ہے۔ نیچے رسائی کو فعال کریں۔"</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s کو آپ کے صوتگر تک رسائی حاصل کرنے کی اجازت نہیں ہے۔ صوتی پیغام ثبت کرنے کیلئے رسائی فعال کریں۔"</string>
+  <string name="error_some_messages_have_not_been_sent">"کچھ پیغامات ارسال نہیں ہوئے"</string>
+  <string name="error_unknown">"معذرت، ایک خرابی واقع ہوگئی"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"اس آلہ پر اس مرموز کردہ پیغام کی صداقت کی ضمانت نہیں دی جا سکتی۔"</string>
+  <string name="event_shield_reason_sent_in_clear">"مرموز کردہ نہیں۔"</string>
+  <string name="event_shield_reason_unknown_device">"کسی نامعلوم یا حذف شدہ آلے کے ذریعے مرموز کردہ۔"</string>
+  <string name="event_shield_reason_unsigned_device">"کسی ایسے آلے کے ذریعے مرموز کردہ جس کی توثیق اسکے مالک سے نہیں ہوئی۔"</string>
+  <string name="event_shield_reason_unverified_identity">"ایک غیر توثیق شدہ صارف کے ذریعے مرموز کردہ۔"</string>
+  <string name="invite_friends_rich_title">"🔐️ %1$s پر میرے ساتھ شامل ہوں"</string>
+  <string name="invite_friends_text">"ارے، مجھ سے %1$s پر بات کریں: %2$s"</string>
+  <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <string name="preference_rageshake">"خطاء کی اطلاع دینے کیلئے غصے سے ہلائیں"</string>
+  <string name="screen_media_picker_error_failed_selection">"وسائط منتخب کرنا ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"وسائط کا معالجہ برائے ترفیع ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"وسائط رفع کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d مثبوتہ پیغام"</item>
+    <item quantity="other">"%1$d مثبوتہ پیغامات"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"مثبوتہ پیغامات"</string>
+  <string name="screen_room_error_failed_processing_media">"وسائط کا معالجہ برائے ترفیع ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"صارف کی تفصیلات بازیافت نہیں ہوسکیں"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s از %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s مثبتہ پیغامات"</string>
+  <string name="screen_room_pinned_banner_loading_description">"پیغام لاد رہا ہے…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"تمام ملاحظہ کریں"</string>
+  <string name="screen_room_title">"گفتگو"</string>
+  <string name="screen_share_location_title">"مقام کا اشتراک کریں"</string>
+  <string name="screen_share_my_location_action">"میرے مقام کا اشتراک کریں"</string>
+  <string name="screen_share_open_apple_maps">"ایپل میپس میں کھولیں"</string>
+  <string name="screen_share_open_google_maps">"گوگل میپس میں کھولیں۔ل"</string>
+  <string name="screen_share_open_osm_maps">"اوپن اسٹریٹ میپ میں کھولیں"</string>
+  <string name="screen_share_this_location_action">"اس مقام کا اشتراک کریں"</string>
+  <string name="screen_view_location_title">"مقام"</string>
+  <string name="settings_version_number">"نسخہ %1$s (%2$s)"</string>
+  <string name="test_language_identifier">"ur"</string>
+</resources>

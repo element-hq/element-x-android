@@ -8,8 +8,8 @@
   <string name="screen_advanced_settings_element_call_base_url">"URL base para Element Call personalizado"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Define um URL base para a Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL inválido, certifica-te de que incluis o protocolo (http/https) e o endereço correto."</string>
-  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Esconder avatares nos pedidos de acesso a salas"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Esconder pré-visualizações de multimédia na cronologia"</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Ocultar avatares nos pedidos de acesso a salas"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Ocultar pré-visualizações de multimédia na cronologia"</string>
   <string name="screen_advanced_settings_media_compression_description">"Carrega fotos e vídeos mais rapidamente e reduz a utilização de dados"</string>
   <string name="screen_advanced_settings_media_compression_title">"Otimiza a qualidade da mídia"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderação e Segurança"</string>
@@ -19,6 +19,11 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Se desativada, os teus recibos de leitura não serão enviados a ninguém. Continuas a receber recibos de leitura de outros utilizadores."</string>
   <string name="screen_advanced_settings_share_presence">"Partilhar presença"</string>
   <string name="screen_advanced_settings_share_presence_description">"Se desativado, não poderás enviar ou receber recibos de leitura ou notificações de escrita."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Ocultar sempre"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Mostrar sempre"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Em salas privadas"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Multimédia oculta pode sempre ser exibida tocando-lhe"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Mostrar multimédia na cronologia"</string>
   <string name="screen_advanced_settings_view_source_description">"Ativa a opção para ver a origem da mensagem na cronologia."</string>
   <string name="screen_blocked_users_empty">"Não tens nenhum utilizador bloqueado"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Desbloquear"</string>
@@ -58,6 +63,7 @@ Se prosseguires, algumas delas podem ser alteradas."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"configurações do sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificações do sistema desativadas"</string>
   <string name="screen_notification_settings_title">"Notificações"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Histórico de notificações"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Resolução de problemas"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Corrigir notificações"</string>
 </resources>

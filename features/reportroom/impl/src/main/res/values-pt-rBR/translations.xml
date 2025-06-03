@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"Sua denúncia foi enviada com sucesso, mas encontramos um problema ao tentar sair da sala. Por favor, tente novamente."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Não foi possível deixar a sala"</string>
+  <string name="screen_report_room_reason_footer">"Denuncie esta sala ao seu administrador. Se as mensagens estiverem criptografadas, seu administrador não poderá lê-las."</string>
+  <string name="screen_report_room_reason_placeholder">"Descreva o motivo para denunciar…"</string>
+  <string name="screen_report_room_title">"Denunciar sala"</string>
+</resources>

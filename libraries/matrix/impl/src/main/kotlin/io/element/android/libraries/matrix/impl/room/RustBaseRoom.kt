@@ -137,10 +137,11 @@ class RustBaseRoom(
     }
 
     override suspend fun leave(): Result<Unit> = withContext(roomDispatcher) {
+        val membershipBeforeLeft = roomInfoFlow.value.currentUserMembership
         runCatching {
             innerRoom.leave()
         }.onSuccess {
-            roomMembershipObserver.notifyUserLeftRoom(roomId)
+            roomMembershipObserver.notifyUserLeftRoom(roomId, membershipBeforeLeft)
         }
     }
 

@@ -16,6 +16,10 @@
   <string name="screen_change_server_error_invalid_homeserver">"Не вдалося під\'єднатися до цього домашнього сервера. Перевірте правильність введеної URL-адреси домашнього сервера. Якщо URL-адреса правильна, зверніться по додаткову допомогу до адміністратора домашнього сервера."</string>
   <string name="screen_change_server_error_invalid_well_known">"Сервер недоступний через помилку у файлі well-known:
 %1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Вибраний постачальник облікових записів не підтримує sliding sync. Щоб користуватися %1$s необхідно оновити сервер."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s не дозволено під\'єднуватися до %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Цей застосунок налаштовано так, щоб дозволити: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Постачальник облікового запису %1$s не дозволений."</string>
   <string name="screen_change_server_form_header">"URL-адреса домашнього сервера"</string>
   <string name="screen_change_server_form_notice">"Введіть адресу домену."</string>
   <string name="screen_change_server_subtitle">"Яка адреса вашого сервера?"</string>

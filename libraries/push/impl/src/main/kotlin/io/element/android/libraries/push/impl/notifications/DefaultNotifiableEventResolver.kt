@@ -11,10 +11,10 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -61,10 +61,14 @@ private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.No
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
 interface NotifiableEventResolver {
-    suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): Result<ResolvedPushEvent>
+    suspend fun resolveEvents(
+        sessionId: SessionId,
+        notificationEventRequests: List<NotificationEventRequest>
+    ): Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>
 }
 
 @ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
 class DefaultNotifiableEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
@@ -75,29 +79,34 @@ class DefaultNotifiableEventResolver @Inject constructor(
     private val callNotificationEventResolver: CallNotificationEventResolver,
     private val appPreferencesStore: AppPreferencesStore,
 ) : NotifiableEventResolver {
-    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): Result<ResolvedPushEvent> {
-        // Restore session
-        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return Result.failure(
-            ResolvingException("Unable to restore session for $sessionId")
-        )
-        val notificationService = client.notificationService()
-        val notificationData = notificationService.getNotification(
-            roomId = roomId,
-            eventId = eventId,
-        ).onFailure {
-            Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
+    override suspend fun resolveEvents(
+        sessionId: SessionId,
+        notificationEventRequests: List<NotificationEventRequest>
+    ): Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>> {
+        Timber.d("Queueing notifications: $notificationEventRequests")
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
+            return Result.failure(IllegalStateException("Couldn't get or restore client for session $sessionId"))
         }
+        val ids = notificationEventRequests.groupBy { it.roomId }.mapValues { (_, value) -> value.map { it.eventId } }
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
-        return notificationData.flatMap {
-            if (it == null) {
-                Timber.tag(loggerTag.value).d("No notification data found for event $eventId")
-                return@flatMap Result.failure(ResolvingException("Unable to resolve event $eventId"))
-            } else {
-                Timber.tag(loggerTag.value).d("Found notification item for $eventId")
-                it.asNotifiableEvent(client, sessionId)
+        val notifications = client.notificationService().getNotifications(ids).mapCatching { map ->
+            map.mapValues { (_, notificationData) ->
+                notificationData.asNotifiableEvent(client, sessionId)
             }
         }
+
+        return Result.success(
+            notificationEventRequests.associate {
+                val notificationData = notifications.getOrNull()?.get(it.eventId)
+                if (notificationData != null) {
+                    it to notificationData
+                } else {
+                    // TODO once the SDK can actually return what went wrong, we should return it here instead of this generic error
+                    it to Result.failure(ResolvingException("No notification data for ${it.roomId} - ${it.eventId}"))
+                }
+            }
+        )
     }
 
     private suspend fun NotificationData.asNotifiableEvent(

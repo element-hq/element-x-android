@@ -513,7 +513,17 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - dismissing the progress dialog stops media upload with media queue`() = runTest {
         val onDoneListenerResult = lambdaRecorder<Unit> {}
-        val presenter = createAttachmentsPreviewPresenter(mediaUploadOnSendQueueEnabled = true, onDoneListener = onDoneListenerResult)
+        val presenter = createAttachmentsPreviewPresenter(
+            room = FakeJoinedRoom(
+                liveTimeline = FakeTimeline().apply {
+                    sendFileLambda = { _, _, _, _, _, _ ->
+                        Result.success(FakeMediaUploadHandler())
+                    }
+                }
+            ),
+            mediaUploadOnSendQueueEnabled = true,
+            onDoneListener = onDoneListenerResult,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {

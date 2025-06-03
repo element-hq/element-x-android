@@ -48,7 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -59,7 +59,7 @@ fun PinnedMessagesListView(
     state: PinnedMessagesListState,
     onBackClick: () -> Unit,
     onEventClick: (event: TimelineItem.Event) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     modifier: Modifier = Modifier,
@@ -115,7 +115,7 @@ private fun PinnedMessagesListTopBar(
 private fun PinnedMessagesListContent(
     state: PinnedMessagesListState,
     onEventClick: (event: TimelineItem.Event) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onErrorDismiss: () -> Unit,
@@ -171,7 +171,7 @@ private fun PinnedMessagesListEmpty(
 private fun PinnedMessagesListLoaded(
     state: PinnedMessagesListState.Filled,
     onEventClick: (event: TimelineItem.Event) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     modifier: Modifier = Modifier,

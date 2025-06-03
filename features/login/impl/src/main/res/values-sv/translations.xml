@@ -14,9 +14,14 @@
   <string name="screen_change_account_provider_subtitle">"Använd en annan kontoleverantör, till exempel din egen privata server eller ett jobbkonto."</string>
   <string name="screen_change_account_provider_title">"Byt kontoleverantör"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Vi kunde inte nå den här hemservern. Kontrollera att du har angett hemserverns URL korrekt. Om URL:en är korrekt kontaktar du administratören för hemservern för ytterligare hjälp."</string>
-  <string name="screen_change_server_error_invalid_well_known">"Sliding Sync är inte tillgängligt på grund av ett problem i well-known-filen:
+  <string name="screen_change_server_error_invalid_well_known">"Sliding Sync är inte tillgängligt på grund av ett problem i .well-known-filen:
 %1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Den valda kontoleverantören stöder inte sliding sync. En uppgradering till servern behövs för att använda %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s får inte ansluta till %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Den här appen har konfigurerats för att tillåta: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Kontoleverantör %1$s är inte tillåten."</string>
   <string name="screen_change_server_form_header">"Hemserverns URL"</string>
+  <string name="screen_change_server_form_notice">"Ange en domänadress."</string>
   <string name="screen_change_server_subtitle">"Vad är adressen till din server?"</string>
   <string name="screen_change_server_title">"Välj din server"</string>
   <string name="screen_create_account_title">"Skapa konto"</string>
@@ -30,6 +35,7 @@
   <string name="screen_login_title">"Välkommen tillbaka!"</string>
   <string name="screen_login_title_with_homeserver">"Logga in på %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Logga in manuellt"</string>
+  <string name="screen_onboarding_sign_in_to">"Logga in på %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Logga in med QR-kod"</string>
   <string name="screen_onboarding_sign_up">"Skapa konto"</string>
   <string name="screen_onboarding_welcome_message">"Välkommen till den snabbaste %1$s någonsin. Superladdad för snabbhet och enkelhet."</string>
@@ -83,5 +89,6 @@ Prova att logga in manuellt eller skanna QR-koden med en annan enhet."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix är ett öppet nätverk för säker, decentraliserad kommunikation."</string>
   <string name="screen_server_confirmation_message_register">"Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev."</string>
   <string name="screen_server_confirmation_title_login">"Du är på väg att logga in på %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Välj kontoleverantör"</string>
   <string name="screen_server_confirmation_title_register">"Du är på väg att skapa ett konto på %1$s"</string>
 </resources>

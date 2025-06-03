@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Odstrániť a zakázať člena"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Zakázať"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Nebudú sa môcť pripojiť k tejto miestnosti znova ani ak budú pozvaní."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Ste si istý, že chcete zakázať tohto člena?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Zakazuje sa %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Odstrániť"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"V prípade pozvania sa budú môcť znova pripojiť k tejto miestnosti."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Ste si istý, že chcete odstrániť tohto člena?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Zobraziť profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Odstrániť z miestnosti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Odstrániť člena a zakázať vstup v budúcnosti?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Odstraňuje sa %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Zrušiť zákaz prístupu do miestnosti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Zrušiť zákaz"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"V prípade pozvania by sa mohli opäť pripojiť k miestnosti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Naozaj chcete zrušiť zablokovanie tohto člena?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Zrušenie zákazu pre %1$s"</string>
+</resources>

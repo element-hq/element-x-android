@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"Histórico de push"</string>
   <string name="troubleshoot_notifications_screen_action">"Execute testes"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Execute os testes novamente"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Alguns testes falharam. Verifique os detalhes."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Execute os testes para detetar qualquer problema na sua configuração que possa fazer com que as notificações não se comportem como esperado."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Tentativa de corrigir"</string>
+  <string name="troubleshoot_notifications_screen_success">"Todos os testes foram aprovados com sucesso."</string>
+  <string name="troubleshoot_notifications_screen_title">"Solucionar problemas de notificações"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Alguns testes exigem sua atenção. Verifique os detalhes."</string>
 </resources>

@@ -22,7 +22,7 @@
     <item quantity="one">"%d Einladung"</item>
     <item quantity="other">"%d Einladungen"</item>
   </plurals>
-  <string name="notification_invite_body">"Du wurdest zu einem Chat eingeladen"</string>
+  <string name="notification_invite_body">"Sie wurden zu einem Chat eingeladen"</string>
   <string name="notification_invite_body_with_sender">"%1$s hat dich zum Chatten eingeladen"</string>
   <string name="notification_mentioned_you_body">"Hat Dich erwähnt: %1$s"</string>
   <string name="notification_new_messages">"Neue Nachrichten"</string>
@@ -37,7 +37,7 @@
   <string name="notification_room_invite_body_with_sender">"%1$s hat dich eingeladen, dem Chatroom beizutreten"</string>
   <string name="notification_sender_me">"Ich"</string>
   <string name="notification_sender_mention_reply">"%1$s hat Dich erwähnt oder geantwortet"</string>
-  <string name="notification_test_push_notification_content">"Du siehst dir die Benachrichtigung an! Klicke hier!"</string>
+  <string name="notification_test_push_notification_content">"Sie sehen die Benachrichtigung! Klicken Sie hier!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -55,17 +55,17 @@
   <string name="push_distributor_firebase_android">"Google-Dienste"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Keine gültigen Google Play-Dienste gefunden. Benachrichtigungen funktionieren möglicherweise nicht richtig."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Ermittele den Namen des aktuellen Anbieters."</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Kein Push-Anbieter ausgewählt."</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_success">"Aktueller Push-Anbieter:%1$s."</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_title">"Aktueller Push-Anbieter"</string>
-  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Stelle sicher, dass die Anwendung mindestens einen Push-Anbieter hat."</string>
-  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Keine Push-Anbieter gefunden."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Kein Pushanbieter ausgewählt."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Aktueller Pushanbieter: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Aktueller Pushanbieter"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Stellen Sie sicher, dass die Anwendung mindestens einen Pushanbieter unterstützt."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Keine Unterstützung für Pushanbieter gefunden."</string>
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
     <item quantity="one">"%1$d Push-Anbieter gefunden: %2$s"</item>
     <item quantity="other">"%1$d Push-Anbieter gefunden: %2$s"</item>
   </plurals>
-  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Die Anwendung wurde mit Unterstützung für Folgendes erstellt: %1$s"</string>
-  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Push-Anbieter erkennen"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Die Anwendung bietet Unterstützung für: %1$s"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Unterstützung für Pushanbieter"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Prüfe, ob die Anwendung Benachrichtigungen anzeigen kann."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Die Benachrichtigung wurde nicht angeklickt."</string>
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Die Benachrichtigung kann nicht angezeigt werden."</string>

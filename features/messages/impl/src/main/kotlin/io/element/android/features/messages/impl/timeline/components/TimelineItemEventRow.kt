@@ -87,6 +87,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToView
 import io.element.android.libraries.matrix.ui.messages.reply.eventId
@@ -122,7 +125,7 @@ fun TimelineItemEventRow(
     onLongClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
@@ -160,7 +163,12 @@ fun TimelineItemEventRow(
     }
 
     fun onUserDataClick() {
-        onUserDataClick(event.senderId)
+        val sender = MatrixUser(
+            userId = event.senderId,
+            displayName = event.senderProfile.getDisplayName(),
+            avatarUrl = event.senderProfile.getAvatarUrl(),
+        )
+        onUserDataClick(sender)
     }
 
     fun inReplyToClick() {

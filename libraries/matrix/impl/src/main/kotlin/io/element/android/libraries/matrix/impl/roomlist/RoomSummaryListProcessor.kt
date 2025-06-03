@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
-import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -95,18 +95,14 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private suspend fun buildSummaryForRoomListEntry(entry: RoomListItem): RoomSummary {
-        return buildRoomSummaryForRoomListItem(entry)
+    private suspend fun buildSummaryForRoomListEntry(entry: Room): RoomSummary {
+        return entry.use { roomSummaryDetailsFactory.create(room = it) }
     }
 
     private suspend fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary? {
-        return roomListService.roomOrNull(identifier)?.use { roomListItem ->
-            buildRoomSummaryForRoomListItem(roomListItem)
+        return roomListService.roomOrNull(identifier)?.let { room ->
+            buildSummaryForRoomListEntry(room)
         }
-    }
-
-    private suspend fun buildRoomSummaryForRoomListItem(roomListItem: RoomListItem): RoomSummary {
-        return roomSummaryDetailsFactory.create(roomListItem = roomListItem)
     }
 
     private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(coroutineContext) {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Remover e banir participante"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Banir"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Não poderão voltar a entrar nesta sala, mesmo se forem convidados."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Tens a certeza que queres banir este participante?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"A banir %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Remover"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Poderão entrar na sala novamente se convidados."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Tens a certeza que queres remover este membro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Ver perfil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Remover da sala"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Remover participante e proibir que entre no futuro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"A remover %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Anular banimento da sala"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Anular banimento"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Poderão entrar novamente na sala se forem convidados"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Tens a certeza que queres anular o banimento deste utilizador?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"A anular banimento de %1$s"</string>
+</resources>

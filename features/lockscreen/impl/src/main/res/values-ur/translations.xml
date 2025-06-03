@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"زیست سنجی تصدیق"</string>
+  <string name="screen_app_lock_biometric_unlock">"زیست سنجی فتحِ قفل"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"زیست سنجی کے ساتھ فتح قفل کریں"</string>
+  <string name="screen_app_lock_forgot_pin">"‏PIN بھول گئے؟"</string>
+  <string name="screen_app_lock_settings_change_pin">"PIN رمز بدلیں"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"زیست سنجی فتحِ قفل کی اجازت دیں"</string>
+  <string name="screen_app_lock_settings_remove_pin">"PIN ہٹائیں"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"کیا آپ کو یقین ہے کہ آپ PIN ہٹانا چاہتے ہیں؟"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"PIN ہٹائیں؟"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"%1$s کی اجازت دیں"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"میں اس کے بجائے PIN استعمال کروں گا"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"اپنے آپ کو کچھ وقت بچائیں اور ہر بار اطلاقیے کو غیر مقفل کرنے کے لئے %1$s کا استعمال کریں۔"</string>
+  <string name="screen_app_lock_setup_choose_pin">"PIN چنیں"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"PIN کی تصدیق کریں"</string>
+  <string name="screen_app_lock_setup_pin_context">"اپنی گفتگوہا میں اضافی سلامتی شامل کرنے کیلئے %1$s مقفل کریں۔
+
+کوئی یادگار چیز چنیں۔ اگر آپ اس PIN کو بھول گئے، آپ طلاقیے سے خارج ہوجائیں گے۔"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"حفاظتی وجوہات کی بنا پر آپ اسے اپنے PIN رمز کے طور پر منتخب نہیں کر سکتے"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"ایک مختلف PIN چنیں"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"برائے مہربانی ایک ہی PIN دو بار درج کریں۔"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINs مماثل نہیں ہیں"</string>
+  <string name="screen_app_lock_signout_alert_message">"آگے بڑھنے کیلئے آپکو دوبارہ داخل ہونے اور ایک نیا PIN بنانے کی ضرورت ہوگی۔"</string>
+  <string name="screen_app_lock_signout_alert_title">"آپکو خارج کیا جا رہا ہے"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"آپکے پاس %1$d غیر مقفل کرنے کی کوشش ہے"</item>
+    <item quantity="other">"آپکے پاس %1$d غیر مقفل کرنے کی کوششیں ہیں"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"غلط PIN۔ آپ کے پاس %1$d مزید موقع ہے"</item>
+    <item quantity="other">"غلط PIN۔ آپ کے پاس %1$d مزید موقعے ہیں"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"زیست سنجی استعمال کریں"</string>
+  <string name="screen_app_lock_use_pin_android">"PIN استعمال کریں"</string>
+  <string name="screen_signout_in_progress_dialog_content">"خارج ہورہاہے…"</string>
+</resources>

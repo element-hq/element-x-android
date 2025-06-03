@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Eemalda ja sea suhtluskeeld"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Sea suhtluskeeld"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Ta ei saa selle jututoaga liituda isegi kutse olemasolul."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Kas sa oled kindel, et soovid sellele kasutajale seada suhtluskeelu?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Seame kasutajale %1$s suhtluskeelu"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Eemalda"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Uue kutse saamisel on tal võimalik selle jututoaga uuesti liituda."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Kas sa oled kindel, et soovid selle osaleja eemaldada?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Vaata profiili"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Eemalda kasutaja jututoast"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Kas eemaldama kasutaja ja seame talle tulevikuks suhtluskeelu?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Eemaldame kasutajat %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Eemalda suhtluskeeld jututoas"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Eemalda suhtluskeeld"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Ta võib kutse saamisel liituda jututoaga uuesti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Kas oled kindel, et soovid selle liikme suhtluskeelu eemaldada?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Eemaldame suhtluskeelu kasutajalt %1$s"</string>
+</resources>

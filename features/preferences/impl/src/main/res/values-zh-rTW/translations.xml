@@ -63,6 +63,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系統設定"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"已關閉系統通知"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"推播通知歷史紀錄"</string>
   <string name="troubleshoot_notifications_entry_point_section">"疑難排解"</string>
   <string name="troubleshoot_notifications_entry_point_title">"疑難排解通知"</string>
 </resources>

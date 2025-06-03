@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Keluarkan dan cekal anggota"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Cekal"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Mereka tidak akan dapat bergabung ke ruangan ini lagi jika diundang."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Apakah Anda yakin ingin mencekal anggota ini?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Mencekal %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Tampilkan profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Keluarkan dari ruangan"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Keluarkan pengguna dan cekal pengguna bergabung lagi di masa mendatang?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Mengeluarkan %1$s…"</string>
+</resources>

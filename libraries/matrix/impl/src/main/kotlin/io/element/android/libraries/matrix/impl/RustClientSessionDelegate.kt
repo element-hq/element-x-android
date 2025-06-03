@@ -120,10 +120,6 @@ class RustClientSessionDelegate(
         }
     }
 
-    override fun didRefreshTokens() {
-        // This is done in `saveSessionInKeychain(Session)` instead.
-    }
-
     override fun retrieveSessionFromKeychain(userId: String): Session {
         // This should never be called, as it's only used for multi-process setups
         error("retrieveSessionFromKeychain should never be called for Android")

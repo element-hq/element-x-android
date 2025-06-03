@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.telephoto.zoomableimage)
     implementation(libs.matrix.emojibase.bindings)
     implementation(projects.features.knockrequests.api)
+    implementation(projects.features.roommembermoderation.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -93,7 +94,6 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.robolectric)
     testImplementation(projects.features.poll.test)
-    testImplementation(projects.features.poll.impl)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testImplementation(projects.libraries.eventformatter.test)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
