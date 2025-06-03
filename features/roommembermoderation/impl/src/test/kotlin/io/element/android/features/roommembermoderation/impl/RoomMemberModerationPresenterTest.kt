@@ -18,6 +18,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
@@ -137,6 +138,28 @@ class RoomMemberModerationPresenterTest {
                 ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
                 ModerationActionState(action = ModerationAction.KickUser, isEnabled = false),
                 ModerationActionState(action = ModerationAction.BanUser, isEnabled = false),
+            )
+        }
+    }
+
+    @Test
+    fun `show actions when canBan=true, canKick=true, userRole=Moderator and target is Banned`() = runTest {
+        val room = aJoinedRoom(
+            canBan = true,
+            canKick = true,
+            myUserRole = RoomMember.Role.MODERATOR,
+            targetRoomMember = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.BAN)
+        )
+        createRoomMemberModerationPresenter(room = room).test {
+            val initialState = awaitState()
+            initialState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(targetUser))
+            skipItems(2)
+            val updatedState = awaitState()
+            assertThat(updatedState.selectedUser).isEqualTo(targetUser)
+            assertThat(updatedState.actions).containsExactly(
+                ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
+                ModerationActionState(action = ModerationAction.KickUser, isEnabled = false),
+                ModerationActionState(action = ModerationAction.UnbanUser, isEnabled = true),
             )
         }
     }
