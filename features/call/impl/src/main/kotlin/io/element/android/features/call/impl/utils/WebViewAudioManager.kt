@@ -17,7 +17,6 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -25,7 +24,6 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * This class manages the audio devices for a WebView.
@@ -136,6 +134,8 @@ class WebViewAudioManager(
      */
     private var previousSelectedDevice: AudioDeviceInfo? = null
 
+    private var hasRegisteredCallbacks = false
+
     /**
      * Marks if the WebView audio is in call mode or not.
      */
@@ -168,23 +168,7 @@ class WebViewAudioManager(
             AudioManager.MODE_NORMAL
         }
 
-        MainScope().launch {
-            // If we register the audio device callback immediately, the webview doesn't seem to be ready
-            // and we end up with the wrong audio stream being used for controlling the volume (media instead of call)
-            // 3 seconds is a magic number that seems to work well, but it might need to be adjusted
-            // Ideally we'd have a callback for this 'audio stream ready' event, but it doesn't exist yet
-            delay(3.seconds)
-
-            // Registering the audio devices changed callback will also set the default audio device
-            audioManager.registerAudioDeviceCallback(audioDeviceCallback, null)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                audioManager.addOnCommunicationDeviceChangedListener(Executors.newSingleThreadExecutor(), commsDeviceChangedListener)
-            }
-        }
-
-        setAvailableAudioDevices()
-        setWebViewOnAudioDeviceSelectedCallback()
+        setWebViewAndroidNativeBridge()
     }
 
     /**
@@ -197,18 +181,24 @@ class WebViewAudioManager(
             Timber.w("Audio: tried to disable webview in-call audio mode while already disabled")
             return
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            audioManager.removeOnCommunicationDeviceChangedListener(commsDeviceChangedListener)
-            audioManager.clearCommunicationDevice()
-        }
-
-        audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
 
         if (proximitySensorWakeLock?.isHeld == true) {
             proximitySensorWakeLock?.release()
         }
 
         audioManager.mode = AudioManager.MODE_NORMAL
+
+        if (!hasRegisteredCallbacks) {
+            Timber.w("Audio: tried to disable webview in-call audio mode without registering callbacks")
+            return
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            audioManager.clearCommunicationDevice()
+            audioManager.removeOnCommunicationDeviceChangedListener(commsDeviceChangedListener)
+        }
+
+        audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
     }
 
     /**
@@ -217,13 +207,30 @@ class WebViewAudioManager(
      * This should be called when the WebView is created to ensure that the callback is set before any audio device selection is made.
      */
     private fun registerWebViewDeviceSelectedCallback() {
-        val webViewAudioDeviceSelectedCallback = WebViewAudioOutputCallback { selectedDeviceId ->
-            Timber.d("Audio device selected in webview, id: $selectedDeviceId")
-            previousSelectedDevice = listAudioDevices().find { it.id.toString() == selectedDeviceId }
-            audioManager.selectAudioDevice(selectedDeviceId)
-        }
-        Timber.d("Setting onAudioDeviceSelectedCallback javascript interface in webview")
-        webView.addJavascriptInterface(webViewAudioDeviceSelectedCallback, "onAudioDeviceSelectedCallback")
+        val webViewAudioDeviceSelectedCallback = AndroidWebViewAudioBridge(
+            onAudioDeviceSelected = { selectedDeviceId ->
+                Timber.d("Audio device selected in webview, id: $selectedDeviceId")
+                previousSelectedDevice = listAudioDevices().find { it.id.toString() == selectedDeviceId }
+                audioManager.selectAudioDevice(selectedDeviceId)
+            },
+            onAudioTrackReady = {
+                MainScope().launch {
+                    // Calling this ahead of time makes the default audio device to not use the right audio stream
+                    setAvailableAudioDevices()
+
+                    // Registering the audio devices changed callback will also set the default audio device
+                    audioManager.registerAudioDeviceCallback(audioDeviceCallback, null)
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        audioManager.addOnCommunicationDeviceChangedListener(Executors.newSingleThreadExecutor(), commsDeviceChangedListener)
+                    }
+
+                    hasRegisteredCallbacks = true
+                }
+            }
+        )
+        Timber.d("Setting androidNativeBridge javascript interface in webview")
+        webView.addJavascriptInterface(webViewAudioDeviceSelectedCallback, "androidNativeBridge")
     }
 
     /**
@@ -231,9 +238,11 @@ class WebViewAudioManager(
      *
      * It should be called with some delay after [registerWebViewDeviceSelectedCallback].
      */
-    private fun setWebViewOnAudioDeviceSelectedCallback() {
+    private fun setWebViewAndroidNativeBridge() {
+        Timber.d("Adding callback in controls.onAudioTrackReady")
+        webView.evaluateJavascript("controls.onAudioTrackReady = () => { console.log('SET TRACK READY SET'); androidNativeBridge.onTrackReady(); };", null)
         Timber.d("Adding callback in controls.onOutputDeviceSelect")
-        webView.evaluateJavascript("controls.onOutputDeviceSelect = (id) => { onAudioDeviceSelectedCallback.setOutputDevice(id); };", null)
+        webView.evaluateJavascript("controls.onOutputDeviceSelect = (id) => { androidNativeBridge.setOutputDevice(id); };", null)
     }
 
     /**
@@ -363,13 +372,23 @@ class WebViewAudioManager(
  * This class is used to handle the audio device selection in the WebView.
  * It listens for the audio device selection event and calls the callback with the selected device ID.
  */
-private class WebViewAudioOutputCallback(
-    private val callback: (String) -> Unit,
+private class AndroidWebViewAudioBridge(
+    private val onAudioDeviceSelected: (String) -> Unit,
+    private val onAudioTrackReady: () -> Unit,
 ) {
     @JavascriptInterface
     fun setOutputDevice(id: String) {
         Timber.d("Audio device selected in webview, id: $id")
-        callback(id)
+        onAudioDeviceSelected(id)
+    }
+
+    @JavascriptInterface
+    fun onTrackReady() {
+        // This method can be used to notify the WebView that the audio track is ready
+        // It can be used to start playing audio or to update the UI
+        Timber.d("Audio track is ready")
+
+        onAudioTrackReady()
     }
 }
 
