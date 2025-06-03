@@ -17,6 +17,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -24,6 +25,7 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * This class manages the audio devices for a WebView.
@@ -63,15 +65,11 @@ class WebViewAudioManager(
      * This listener tracks the current communication device and updates the WebView when it changes.
      */
     private val commsDeviceChangedListener = AudioManager.OnCommunicationDeviceChangedListener { device ->
-        if (device?.id == expectedNewCommunicationDeviceId) {
-            if (device != null) {
-                expectedNewCommunicationDeviceId = null
-                Timber.d("Audio device changed, type: ${device.type}")
-                updateSelectedAudioDeviceInWebView(device.id.toString())
-            } else {
-                Timber.d("No audio device selected")
-            }
-        } else {
+        if (device != null && device.id == expectedNewCommunicationDeviceId) {
+            expectedNewCommunicationDeviceId = null
+            Timber.d("Audio device changed, type: ${device.type}")
+            updateSelectedAudioDeviceInWebView(device.id.toString())
+        } else if (device != null && device.id != expectedNewCommunicationDeviceId) {
             // We were expecting a device change but it didn't happen, so we should retry
             val expectedDeviceId = expectedNewCommunicationDeviceId
             if (expectedDeviceId != null) {
@@ -79,6 +77,10 @@ class WebViewAudioManager(
                 expectedNewCommunicationDeviceId = null
                 audioManager.selectAudioDevice(expectedDeviceId.toString())
             }
+        } else {
+            Timber.d("Audio device cleared")
+            expectedNewCommunicationDeviceId = null
+            audioManager.selectAudioDevice(null)
         }
     }
 
@@ -156,7 +158,6 @@ class WebViewAudioManager(
 
         Timber.d("Audio: enabling webview in-call audio mode")
 
-        // TODO double check used audio stream
         audioManager.mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // Set 'voice call' mode so volume keys actually control the call volume
             AudioManager.MODE_IN_COMMUNICATION
@@ -165,14 +166,22 @@ class WebViewAudioManager(
             AudioManager.MODE_NORMAL
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            audioManager.addOnCommunicationDeviceChangedListener(Executors.newSingleThreadExecutor(), commsDeviceChangedListener)
+        MainScope().launch {
+            // If we register the audio device callback immediately, the webview doesn't seem to be ready
+            // and we end up with the wrong audio stream being used for controlling the volume (media instead of call)
+            // 3 seconds is a magic number that seems to work well, but it might need to be adjusted
+            // Ideally we'd have a callback for this 'audio stream ready' event, but it doesn't exist yet
+            delay(3.seconds)
+
+            // Registering the audio devices changed callback will also set the default audio device
+            audioManager.registerAudioDeviceCallback(audioDeviceCallback, null)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                audioManager.addOnCommunicationDeviceChangedListener(Executors.newSingleThreadExecutor(), commsDeviceChangedListener)
+            }
         }
 
-        audioManager.registerAudioDeviceCallback(audioDeviceCallback, null)
-
         setAvailableAudioDevices()
-        selectDefaultAudioDevice()
         setWebViewOnAudioDeviceSelectedCallback()
     }
 
@@ -186,10 +195,12 @@ class WebViewAudioManager(
             Timber.w("Audio: tried to disable webview in-call audio mode while already disabled")
             return
         }
-        audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             audioManager.removeOnCommunicationDeviceChangedListener(commsDeviceChangedListener)
+            audioManager.clearCommunicationDevice()
         }
+
+        audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
 
         if (proximitySensorWakeLock?.isHeld == true) {
             proximitySensorWakeLock?.release()
@@ -316,9 +327,8 @@ class WebViewAudioManager(
         currentDeviceId = device?.id
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (device != null) {
-                if (device != communicationDevice) {
+                Timber.d("Setting communication device: ${device.id} - ${deviceName(device.type, device.productName.toString())}")
                 setCommunicationDevice(device)
-                }
             } else {
                 audioManager.clearCommunicationDevice()
             }
@@ -333,6 +343,8 @@ class WebViewAudioManager(
                 isBluetoothScoOn = false
             }
         }
+
+        expectedNewCommunicationDeviceId = null
 
         @Suppress("WakeLock", "WakeLockTimeout")
         if (device?.type == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE && proximitySensorWakeLock?.isHeld == false) {
