@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
-import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -28,10 +27,12 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.TimelineConfiguration
+import org.matrix.rustcomponents.sdk.TimelineFilter
+import org.matrix.rustcomponents.sdk.TimelineFocus
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
@@ -39,7 +40,6 @@ import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
 class RustRoomFactory(
     private val sessionId: SessionId,
     private val deviceId: DeviceId,
-    private val innerClient: Client,
     private val notificationSettingsService: NotificationSettingsService,
     private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
@@ -79,14 +79,9 @@ class RustRoomFactory(
                 Timber.d("Room factory is destroyed, returning null for $roomId")
                 return@withContext null
             }
-            val roomListItem = awaitRoomListItem(roomId) ?: return@withContext null
-            getBaseRoom(roomListItem)
+            val room = awaitRoomInRoomList(roomId) ?: return@withContext null
+            getBaseRoom(room)
         }
-    }
-
-    private suspend fun getBaseRoom(roomListItem: RoomListItem): RustBaseRoom? {
-        val sdkRoom = innerClient.getRoom(roomListItem.id()) ?: return null
-        return getBaseRoom(sdkRoom)
     }
 
     private suspend fun getBaseRoom(sdkRoom: Room): RustBaseRoom {
@@ -110,18 +105,27 @@ class RustRoomFactory(
                 Timber.d("Room factory is destroyed, returning null for $roomId")
                 return@withContext null
             }
-            val roomListItem = awaitRoomListItem(roomId) ?: return@withContext null
+            val sdkRoom = awaitRoomInRoomList(roomId) ?: return@withContext null
 
-            if (roomListItem.membership() == Membership.JOINED) {
-                // Init the live timeline in the SDK from the RoomListItem
-                val sdkRoom = roomListItem.fullRoomWithTimeline(eventFilters)
+            if (sdkRoom.membership() == Membership.JOINED) {
+                // Init the live timeline in the SDK from the Room
+                val timeline = sdkRoom.timelineWithConfiguration(
+                    TimelineConfiguration(
+                        focus = TimelineFocus.Live,
+                        filter = eventFilters?.let(TimelineFilter::EventTypeFilter) ?: TimelineFilter.All,
+                        internalIdPrefix = "live",
+                        dateDividerMode = DateDividerMode.DAILY,
+                        trackReadReceipts = true,
+                        reportUtds = true,
+                    )
+                )
 
                 GetRoomResult.Joined(
                     JoinedRustRoom(
                         baseRoom = getBaseRoom(sdkRoom),
                         notificationSettingsService = notificationSettingsService,
                         roomContentForwarder = roomContentForwarder,
-                        liveInnerTimeline = sdkRoom.timeline(),
+                        liveInnerTimeline = timeline,
                         coroutineDispatchers = dispatchers,
                         systemClock = systemClock,
                         featureFlagService = featureFlagService,
@@ -129,7 +133,7 @@ class RustRoomFactory(
                 )
             } else {
                 val preview = try {
-                    roomListItem.previewRoom(via = emptyList())
+                    sdkRoom.previewRoom(via = emptyList())
                 } catch (e: Exception) {
                     Timber.e(e, "Failed to get room preview for $roomId")
                     return@withContext null
@@ -138,7 +142,7 @@ class RustRoomFactory(
                 GetRoomResult.NotJoined(
                     NotJoinedRustRoom(
                         sessionId = sessionId,
-                        localRoom = getBaseRoom(roomListItem),
+                        localRoom = getBaseRoom(sdkRoom),
                         previewInfo = RoomPreviewInfoMapper.map(preview.info()),
                     )
                 )
@@ -147,22 +151,22 @@ class RustRoomFactory(
     }
 
     /**
-     * Get the Rust room list item for a room, retrying after the room list is loaded if necessary.
+     * Get the Rust room for a room, retrying after the room list is loaded if necessary.
      */
-    private suspend fun awaitRoomListItem(roomId: RoomId): RoomListItem? {
-        var roomListItem = innerRoomListService.roomOrNull(roomId.value)
-        if (roomListItem == null) {
+    private suspend fun awaitRoomInRoomList(roomId: RoomId): Room? {
+        var sdkRoom = innerRoomListService.roomOrNull(roomId.value)
+        if (sdkRoom == null) {
             // ... otherwise, lets wait for the SS to load all rooms and check again.
             roomListService.allRooms.awaitLoaded()
-            roomListItem = innerRoomListService.roomOrNull(roomId.value)
+            sdkRoom = innerRoomListService.roomOrNull(roomId.value)
         }
 
-        if (roomListItem == null) {
+        if (sdkRoom == null) {
             Timber.d("Room not found for $roomId")
             return null
         }
 
-        return roomListItem
+        return sdkRoom
     }
 }
 

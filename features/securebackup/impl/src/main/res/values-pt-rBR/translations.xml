@@ -4,11 +4,28 @@
   <string name="screen_chat_backup_key_backup_action_enable">"Ativar o backup"</string>
   <string name="screen_chat_backup_key_backup_description">"Armazene sua identidade criptográfica e chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em quaisquer novos dispositivos.%1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Armazenamento de chaves"</string>
+  <string name="screen_chat_backup_key_storage_disabled_error">"O armazenamento de chaves deve ser ativado para configurar a recuperação."</string>
+  <string name="screen_chat_backup_key_storage_toggle_description">"Carregar chaves a partir deste dispositivo"</string>
+  <string name="screen_chat_backup_key_storage_toggle_title">"Permita o armazenamento de chaves"</string>
   <string name="screen_chat_backup_recovery_action_change">"Alterar chave de recuperação"</string>
+  <string name="screen_chat_backup_recovery_action_change_description">"Recupere sua identidade criptográfica e o histórico de mensagens com uma chave de recuperação, caso você tenha perdido todos os dispositivos existentes."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Insira a chave de recuperação"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Seu armazenamento de chaves está fora de sincronia no momento."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurar a recuperação"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Tenha acesso às suas mensagens criptografadas se você perder todos os seus dispositivos ou for desconectado do %1$s em qualquer lugar."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Abrir %1$s em um dispositivo desktop"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Inicie sessão na sua conta novamente"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Quando solicitado a verificar seu dispositivo, selecione %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"\"Redefinir tudo\""</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Siga as instruções para criar uma nova chave de recuperação"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">"Salve sua nova chave de recuperação em um gerenciador de senhas ou em uma nota criptografada"</string>
+  <string name="screen_create_new_recovery_key_title">"Redefinir a criptografia da sua conta usando outro dispositivo"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Continuar redefinindo"</string>
+  <string name="screen_encryption_reset_bullet_1">"Os detalhes da sua conta, contatos, preferências e lista de bate-papo serão mantidos"</string>
+  <string name="screen_encryption_reset_bullet_2">"Você perderá qualquer histórico de mensagens armazenado somente no servidor"</string>
+  <string name="screen_encryption_reset_bullet_3">"Você precisará verificar todos os seus dispositivos e contatos existentes novamente."</string>
+  <string name="screen_encryption_reset_footer">"Redefina sua identidade somente se você não tiver acesso a outro dispositivo conectado e se tiver perdido sua chave de recuperação."</string>
+  <string name="screen_encryption_reset_title">"Não consegue confirmar? Você precisará redefinir sua identidade."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Desligar"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Você perderá suas mensagens criptografadas se estiver desconectado de todos os dispositivos."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Tem certeza de que deseja desativar o backup?"</string>
@@ -21,6 +38,7 @@
   <string name="screen_recovery_key_change_generate_key_description">"Não compartilhe isso com ninguém!"</string>
   <string name="screen_recovery_key_change_success">"Chave de recuperação alterada"</string>
   <string name="screen_recovery_key_change_title">"Alterar chave de recuperação?"</string>
+  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Crie uma nova chave de recuperação"</string>
   <string name="screen_recovery_key_confirm_description">"Certifique-se de que ninguém possa ver essa tela!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Tente novamente para confirmar o acesso ao seu armazenamento de chaves."</string>
   <string name="screen_recovery_key_confirm_error_title">"Chave de recuperação incorreta"</string>
@@ -28,6 +46,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Inserir…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Perdeu sua chave de recuperação?"</string>
   <string name="screen_recovery_key_confirm_success">"Chave de recuperação confirmada"</string>
+  <string name="screen_recovery_key_confirm_title">"Digite sua chave de recuperação"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Chave de recuperação copiada"</string>
   <string name="screen_recovery_key_generating_key">"Gerando…"</string>
   <string name="screen_recovery_key_save_action">"Salvar chave de recuperação"</string>
@@ -41,5 +60,11 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Não compartilhe isso com ninguém!"</string>
   <string name="screen_recovery_key_setup_success">"Configuração de recuperação bem-sucedida"</string>
   <string name="screen_recovery_key_setup_title">"Configurar a recuperação"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Sim, redefinir agora"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Esse processo é irreversível."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Você tem certeza de que deseja redefinir sua identidade?"</string>
+  <string name="screen_reset_encryption_password_error">"Ocorreu um erro desconhecido. Verifique se a senha da sua conta está correta e tente novamente."</string>
   <string name="screen_reset_encryption_password_placeholder">"Inserir…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Confirme que você deseja redefinir sua identidade."</string>
+  <string name="screen_reset_encryption_password_title">"Digite a senha de sua conta para continuar"</string>
 </resources>

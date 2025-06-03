@@ -24,7 +24,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -34,7 +34,7 @@ class PinUnlockPresenterTest {
 
     @Test
     fun `present - success verify flow`() = runTest {
-        val presenter = createPinUnlockPresenter(this)
+        val presenter = createPinUnlockPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -71,7 +71,7 @@ class PinUnlockPresenterTest {
 
     @Test
     fun `present - failure verify flow`() = runTest {
-        val presenter = createPinUnlockPresenter(this)
+        val presenter = createPinUnlockPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -100,7 +100,7 @@ class PinUnlockPresenterTest {
     fun `present - forgot pin flow`() = runTest {
         val signOutLambda = lambdaRecorder<Boolean, Unit> {}
         val signOut = FakeLogoutUseCase(signOutLambda)
-        val presenter = createPinUnlockPresenter(this, logoutUseCase = signOut)
+        val presenter = createPinUnlockPresenter(logoutUseCase = signOut)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -135,8 +135,7 @@ class PinUnlockPresenterTest {
         dataOrNull()?.assertText(text)
     }
 
-    private suspend fun createPinUnlockPresenter(
-        scope: CoroutineScope,
+    private suspend fun TestScope.createPinUnlockPresenter(
         biometricAuthenticatorManager: BiometricAuthenticatorManager = FakeBiometricAuthenticatorManager(),
         callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
         logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = { "" }),
@@ -149,7 +148,7 @@ class PinUnlockPresenterTest {
             pinCodeManager = pinCodeManager,
             biometricAuthenticatorManager = biometricAuthenticatorManager,
             logoutUseCase = logoutUseCase,
-            coroutineScope = scope,
+            coroutineScope = this,
             pinUnlockHelper = PinUnlockHelper(biometricAuthenticatorManager, pinCodeManager),
         )
     }

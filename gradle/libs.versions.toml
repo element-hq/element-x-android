@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.10.0"
+android_gradle_plugin = "8.10.1"
 kotlin = "2.1.21"
 kotlinpoet = "2.2.0"
 ksp = "2.1.21-2.0.1"
@@ -40,12 +40,12 @@ serialization_json = "1.8.1"
 coil = "3.1.0"
 showkase = "1.0.3"
 appyx = "1.7.0"
-sqldelight = "2.0.2"
+sqldelight = "2.1.0"
 wysiwyg = "2.38.3"
 telephoto = "0.15.1"
 
 # Dependency analysis
-dependencyAnalysis = "2.17.0"
+dependencyAnalysis = "2.18.0"
 
 # DI
 dagger = "2.56.2"
@@ -169,7 +169,7 @@ jsoup = "org.jsoup:jsoup:1.20.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.1.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.5.21"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.5.29"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -177,7 +177,7 @@ sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
 sqlite = "androidx.sqlite:sqlite-ktx:2.5.1"
-unifiedpush = "com.github.UnifiedPush:android-connector:2.4.0"
+unifiedpush = "org.unifiedpush.android:connector:3.0.9"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.11.2"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
@@ -190,7 +190,7 @@ opusencoder = "io.element.android:opusencoder:1.1.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.15.0"
+posthog = "com.posthog:posthog-android:3.16.0"
 sentry = "io.sentry:sentry-android:8.12.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
@@ -207,7 +207,7 @@ anvil_compiler_api = { module = "dev.zacsweers.anvil:compiler-api", version.ref 
 anvil_compiler_utils = { module = "dev.zacsweers.anvil:compiler-utils", version.ref = "anvil" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.9.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.12.0"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }

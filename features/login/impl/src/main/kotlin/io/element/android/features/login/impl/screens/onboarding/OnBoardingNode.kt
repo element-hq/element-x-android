@@ -34,7 +34,7 @@ class OnBoardingNode @AssistedInject constructor(
 ) {
     interface Callback : Plugin {
         fun onSignUp()
-        fun onSignIn()
+        fun onSignIn(mustChooseAccountProvider: Boolean)
         fun onSignInWithQrCode()
         fun onReportProblem()
         fun onLoginPasswordNeeded()
@@ -53,8 +53,8 @@ class OnBoardingNode @AssistedInject constructor(
         params = params,
     )
 
-    private fun onSignIn() {
-        plugins<Callback>().forEach { it.onSignIn() }
+    private fun onSignIn(mustChooseAccountProvider: Boolean) {
+        plugins<Callback>().forEach { it.onSignIn(mustChooseAccountProvider) }
     }
 
     private fun onSignUp() {

@@ -4,7 +4,10 @@
   <string name="rich_text_editor_bullet_list">"Alternar lista de marcadores"</string>
   <string name="rich_text_editor_close_formatting_options">"Fechar opções de formatação"</string>
   <string name="rich_text_editor_code_block">"Alternar bloco de código"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Adicionar uma legenda"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Mensagem criptografada…"</string>
   <string name="rich_text_editor_composer_placeholder">"Mensagem…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Mensagem não criptografada…"</string>
   <string name="rich_text_editor_create_link">"Criar um link"</string>
   <string name="rich_text_editor_edit_link">"Editar link"</string>
   <string name="rich_text_editor_format_bold">"Aplicar negrito"</string>

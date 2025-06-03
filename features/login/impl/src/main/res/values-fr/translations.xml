@@ -87,5 +87,6 @@
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix est un réseau ouvert pour une communication sécurisée et décentralisée."</string>
   <string name="screen_server_confirmation_message_register">"C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails."</string>
   <string name="screen_server_confirmation_title_login">"Vous êtes sur le point de vous connecter à %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Choisissez un fournisseur de compte"</string>
   <string name="screen_server_confirmation_title_register">"Vous êtes sur le point de créer un compte sur %1$s"</string>
 </resources>

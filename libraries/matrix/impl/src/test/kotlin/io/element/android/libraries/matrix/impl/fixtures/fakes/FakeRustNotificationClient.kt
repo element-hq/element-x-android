@@ -7,15 +7,15 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import io.element.android.tests.testutils.simulateLongTask
 import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationItem
+import org.matrix.rustcomponents.sdk.NotificationItemsRequest
 
 class FakeRustNotificationClient(
-    var notificationItemResult: NotificationItem? = null
+    var notificationItemResult: Map<String, NotificationItem> = emptyMap(),
 ) : NotificationClient(NoPointer) {
-    override suspend fun getNotification(roomId: String, eventId: String): NotificationItem? = simulateLongTask {
-        notificationItemResult
+    override suspend fun getNotifications(requests: List<NotificationItemsRequest>): Map<String, NotificationItem> {
+        return notificationItemResult
     }
 }

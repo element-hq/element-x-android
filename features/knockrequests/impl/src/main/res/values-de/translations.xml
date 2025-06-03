@@ -11,7 +11,7 @@
   <string name="screen_knock_requests_list_accept_failed_alert_title">"Die Anfrage konnte nicht akzeptiert werden"</string>
   <string name="screen_knock_requests_list_accept_loading_title">"Beitrittsanfrage annehmen"</string>
   <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ja, ablehnen und sperren"</string>
-  <string name="screen_knock_requests_list_ban_alert_description">"Sind Sie sicher, dass Sie %1$s ablehnen und  sperren möchten ? Dieser Benutzer kann keinen erneuten Zugriff auf diesen Raum anfordern."</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Sind Sie sicher, dass Sie %1$s ablehnen und sperren möchten?Dieser Benutzer kann keine erneute Zulassung auf diesen Chatroom anfordern."</string>
   <string name="screen_knock_requests_list_ban_alert_title">"Ablehnen und Zugriff verbieten"</string>
   <string name="screen_knock_requests_list_ban_loading_title">"Ablehnung und Sperrung des Zugriffs"</string>
   <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ja, ablehnen"</string>

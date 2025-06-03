@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustNotificat
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
@@ -28,12 +29,12 @@ class RustNotificationServiceTest {
     @Test
     fun test() = runTest {
         val notificationClient = FakeRustNotificationClient(
-            notificationItemResult = aRustNotificationItem(),
+            notificationItemResult = mapOf(AN_EVENT_ID.value to aRustNotificationItem()),
         )
         val sut = createRustNotificationService(
             notificationClient = notificationClient,
         )
-        val result = sut.getNotification(A_ROOM_ID, AN_EVENT_ID).getOrThrow()!!
+        val result = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!
         assertThat(result.isEncrypted).isTrue()
         assertThat(result.content).isEqualTo(
             NotificationContent.MessageLike.RoomMessage(
@@ -51,6 +52,7 @@ class RustNotificationServiceTest {
         clock: SystemClock = FakeSystemClock(),
     ) =
         RustNotificationService(
+            sessionId = A_SESSION_ID,
             notificationClient = notificationClient,
             dispatchers = testCoroutineDispatchers(),
             clock = clock,

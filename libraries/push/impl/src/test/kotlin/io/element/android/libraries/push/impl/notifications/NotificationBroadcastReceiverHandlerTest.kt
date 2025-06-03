@@ -41,6 +41,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.push.FakeOnNotifiableEventReceived
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
@@ -353,8 +354,8 @@ class NotificationBroadcastReceiverHandlerTest {
                 )
             )
         }
-        val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
-        val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)
+        val onNotifiableEventsReceivedResult = lambdaRecorder<List<NotifiableEvent>, Unit> { _ -> }
+        val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceivedResult = onNotifiableEventsReceivedResult)
         val sut = createNotificationBroadcastReceiverHandler(
             joinedRoom = joinedRoom,
             onNotifiableEventReceived = onNotifiableEventReceived,
@@ -370,7 +371,7 @@ class NotificationBroadcastReceiverHandlerTest {
         sendMessage.assertions()
             .isCalledOnce()
             .with(value(A_MESSAGE), value(null), value(emptyList<IntentionalMention>()))
-        onNotifiableEventReceivedResult.assertions()
+        onNotifiableEventsReceivedResult.assertions()
             .isCalledOnce()
         replyMessage.assertions()
             .isNeverCalled()
@@ -420,8 +421,8 @@ class NotificationBroadcastReceiverHandlerTest {
                 )
             )
         }
-        val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
-        val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)
+        val onNotifiableEventsReceivedResult = lambdaRecorder<List<NotifiableEvent>, Unit> { _ -> }
+        val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceivedResult = onNotifiableEventsReceivedResult)
         val sut = createNotificationBroadcastReceiverHandler(
             joinedRoom = joinedRoom,
             onNotifiableEventReceived = onNotifiableEventReceived,
@@ -438,7 +439,7 @@ class NotificationBroadcastReceiverHandlerTest {
         runCurrent()
         sendMessage.assertions()
             .isNeverCalled()
-        onNotifiableEventReceivedResult.assertions()
+        onNotifiableEventsReceivedResult.assertions()
             .isCalledOnce()
         replyMessage.assertions()
             .isCalledOnce()
@@ -477,6 +478,7 @@ class NotificationBroadcastReceiverHandlerTest {
         onNotifiableEventReceived: OnNotifiableEventReceived = FakeOnNotifiableEventReceived(),
         stringProvider: StringProvider = FakeStringProvider(),
         replyMessageExtractor: ReplyMessageExtractor = FakeReplyMessageExtractor(),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ): NotificationBroadcastReceiverHandler {
         return NotificationBroadcastReceiverHandler(
             appCoroutineScope = this,
@@ -494,6 +496,7 @@ class NotificationBroadcastReceiverHandlerTest {
             onNotifiableEventReceived = onNotifiableEventReceived,
             stringProvider = stringProvider,
             replyMessageExtractor = replyMessageExtractor,
+            activeRoomsHolder = activeRoomsHolder,
         )
     }
 }

@@ -30,6 +30,7 @@
     <locale android:name="sv"/>
     <locale android:name="tr"/>
     <locale android:name="uk"/>
+    <locale android:name="ur"/>
     <locale android:name="uz"/>
     <locale android:name="zh-CN"/>
     <locale android:name="zh-TW"/>

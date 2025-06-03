@@ -94,7 +94,6 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.robolectric)
     testImplementation(projects.features.poll.test)
-    testImplementation(projects.features.poll.impl)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testImplementation(projects.libraries.eventformatter.test)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)

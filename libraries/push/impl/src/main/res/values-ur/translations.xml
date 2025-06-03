@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"مکالمہ"</string>
+  <string name="notification_channel_listening_for_events">"واقعات کیلئے سن رہا ہے"</string>
+  <string name="notification_channel_noisy">"صاخب اطلاعات"</string>
+  <string name="notification_channel_ringing_calls">"بجنے والے مکالمات"</string>
+  <string name="notification_channel_silent">"خاموش اطلاعات"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d پیغام"</item>
+    <item quantity="other">"%1$s: %2$d پیغامات"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d اطلاع"</item>
+    <item quantity="other">"%d اطلاعات"</item>
+  </plurals>
+  <string name="notification_fallback_content">"اطلاع"</string>
+  <string name="notification_incoming_call">"📹 آنے والا مکالمہ"</string>
+  <string name="notification_inline_reply_failed">"** بھیجنے میں ناکام - براہ کرم کمرہ کھولیں"</string>
+  <string name="notification_invitation_action_join">"شامل ہوں"</string>
+  <string name="notification_invitation_action_reject">"مسترد کریں"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d دعوت نامہ"</item>
+    <item quantity="other">"%d دعوت نامے"</item>
+  </plurals>
+  <string name="notification_invite_body">"آپ کو گفتگو کیلئے مدعو کیا"</string>
+  <string name="notification_mentioned_you_body">"آپ کا تذکرہ کیا: %1$s"</string>
+  <string name="notification_new_messages">"نئے پیغامات"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d نیا پیغام"</item>
+    <item quantity="other">"%d نئے پیغامات"</item>
+  </plurals>
+  <string name="notification_reaction_body">"%1$s کے ساتھ ردعمل کیا"</string>
+  <string name="notification_room_action_mark_as_read">"بطور مقروءہ نشانزد کریں"</string>
+  <string name="notification_room_action_quick_reply">"فوری جواب"</string>
+  <string name="notification_room_invite_body">"آپ کو کمرے میں شامل ہونے کی دعوت دی"</string>
+  <string name="notification_sender_me">"میں"</string>
+  <string name="notification_test_push_notification_content">"آپ اطلاع دیکھ رہے ہیں! مجھے دبائیں!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d غیر مقروءہ مطلع پیغام"</item>
+    <item quantity="other">"%d غیر مقروءہ مطلع پیغامات"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s اور %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%2$s میں %1$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%2$s اور %3$s میں %1$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d کمرہ"</item>
+    <item quantity="other">"%d کمرے"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"پس منظر مطابقت پذیری"</string>
+  <string name="push_distributor_firebase_android">"گوگل سروسز"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"کوئی درست گوگل پلے سروسز نہیں ملی۔ ہو سکتا ہے اطلاعات ٹھیک سے کام نہ کریں۔"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"موجودہ فراہم کنندہ کا نام حاصل کریں۔"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"کوئی دھکا فراہم کنندہ منتخب نہیں کیا گیا"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"موجودہ دھکا فراہم کنندہ: %1$s۔"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"موجودہ دھکا فراہم کنندہ"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"یقینی بنائیں کہ اطلاقیہ کم از کم ایک دھکا فراہم کنندہ کی حمایت کرتا ہے۔"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"کوئی دھکا فراہم کنندہ حمایت نہیں ملی۔"</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"پایا %1$d دھکا فراہم کنندہ: %2$s"</item>
+    <item quantity="other">"پائے %1$d دھکا فراہم کنندگان: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"دھکا فراہم کنندہ حمایت"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"پڑتال کریں کہ اطلاقیہ اطلاع دکھا سکتا ہے"</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"یہ اطلاع نہیں دبائی گئی"</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"اطلاع ظاہر نہیں کرسکتا"</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"یہ اطلاع دبا دی گئی ہے!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"اطلاع دکھائیں"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"برائے مہربانی جانچ جاری رکھنے کیلئے اطلاع پر دبائیں"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"اس بات کو یقینی بنائیں کہ اطلاقیے کو دھکا موصول ہو رہا ہے۔"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"نقص: دھکا کنندہ نے درخواست مسترد کردی ہے۔"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"نقص: %1$s۔"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"نقص، دھکا جانچ نہیں سکتا"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"نقص، دھکے کے انتظار میں نفذ الوقت"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"دھکئی حلقۂ رجوعیہ نے %1$d مث لیا"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"دھکئی حلقۂ رجوعیہ جانچیں"</string>
+</resources>

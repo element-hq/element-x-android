@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"کمرے میں شامل ہوں"</string>
+  <string name="screen_join_room_knock_action">"شامل ہونے کی درخواست بھیجیں"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s ابھی تک خالی جگہوں کی حمایت نہیں کرتا۔ آپ جال پر خالی جگہوں تک رسائی حاصل کرسکتے ہیں۔"</string>
+  <string name="screen_join_room_space_not_supported_title">"ابھی تک جگہیں تعاون یافتہ نہیں"</string>
+  <string name="screen_join_room_subtitle_knock">"نیچے دیئے گئے کلید پر دبائیں اور کمرے کے منتظم کو مطلع کیا جائے گا۔ منظور ہونے کے بعد آپ گفتگو میں شامل ہو سکیں گے۔"</string>
+  <string name="screen_join_room_subtitle_no_preview">"پیغام کی سرگزشت دیکھنے کے لیے آپ کا اس کمرے کا رکن ہونا ضروری ہے۔"</string>
+  <string name="screen_join_room_title_knock">"اس کمرے میں شامل ہونا چاہتے ہیں؟"</string>
+  <string name="screen_join_room_title_no_preview">"پیش منظر دستیاب نہیں ہے"</string>
+</resources>

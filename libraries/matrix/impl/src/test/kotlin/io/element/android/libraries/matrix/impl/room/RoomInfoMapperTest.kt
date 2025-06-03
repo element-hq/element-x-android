@@ -54,7 +54,7 @@ class RoomInfoMapperTest {
                     isPublic = false,
                     isSpace = false,
                     joinRule = RustJoinRule.Invite,
-                    tombstone = null,
+                    successorRoom = null,
                     isFavourite = false,
                     canonicalAlias = A_ROOM_ALIAS.value,
                     alternativeAliases = listOf(A_ROOM_ALIAS.value),
@@ -90,7 +90,6 @@ class RoomInfoMapperTest {
                 isDirect = true,
                 isEncrypted = true,
                 isSpace = false,
-                tombstone = null,
                 isFavorite = false,
                 joinRule = JoinRule.Invite,
                 canonicalAlias = A_ROOM_ALIAS,
@@ -120,6 +119,7 @@ class RoomInfoMapperTest {
                 numUnreadNotifications = 13L,
                 numUnreadMentions = 14L,
                 historyVisibility = RoomHistoryVisibility.Joined,
+                successorRoom = null
             )
         )
     }
@@ -139,7 +139,7 @@ class RoomInfoMapperTest {
                     isPublic = true,
                     joinRule = null,
                     isSpace = false,
-                    tombstone = null,
+                    successorRoom = null,
                     isFavourite = true,
                     canonicalAlias = null,
                     alternativeAliases = emptyList(),
@@ -175,7 +175,7 @@ class RoomInfoMapperTest {
                 isDirect = false,
                 joinRule = null,
                 isSpace = false,
-                tombstone = null,
+                successorRoom = null,
                 isFavorite = true,
                 canonicalAlias = null,
                 alternativeAliases = emptyList<RoomAlias>().toPersistentList(),

@@ -38,6 +38,9 @@ internal fun CallMenuItem(
     modifier: Modifier = Modifier,
 ) {
     when (roomCallState) {
+        RoomCallState.Unavailable -> {
+            Box(modifier)
+        }
         is RoomCallState.StandBy -> {
             StandByCallMenuItem(
                 roomCallState = roomCallState,

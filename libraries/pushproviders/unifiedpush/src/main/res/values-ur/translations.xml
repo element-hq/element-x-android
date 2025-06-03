@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"یقینی بنائیں کہ UnifiedPush تقسیم کاران دستیاب ہیں۔"</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"کوئی دھکا تقسیم کاران نہیں ملے۔"</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"%1$d تقسیم کار ملا: %2$s۔"</item>
+    <item quantity="other">"%1$d تقسیم کاران ملے: %2$s۔"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"UnifiedPush کی پڑتال کریں"</string>
+</resources>

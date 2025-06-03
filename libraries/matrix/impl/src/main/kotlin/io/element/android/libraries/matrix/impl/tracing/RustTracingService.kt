@@ -53,4 +53,5 @@ fun TracingConfiguration.map(): org.matrix.rustcomponents.sdk.TracingConfigurati
     extraTargets = extraTargets,
     traceLogPacks = traceLogPacks.map(),
     writeToFiles = writesToFilesConfiguration.toTracingFileConfiguration(),
+    sentryDsn = null,
 )
