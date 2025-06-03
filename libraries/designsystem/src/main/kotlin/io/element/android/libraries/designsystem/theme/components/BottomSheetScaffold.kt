@@ -10,19 +10,18 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import io.element.android.libraries.designsystem.theme.components.bottomsheet.BottomSheetScaffoldState
-import io.element.android.libraries.designsystem.theme.components.bottomsheet.CustomBottomSheetScaffold
-import io.element.android.libraries.designsystem.theme.components.bottomsheet.rememberBottomSheetScaffoldState
 
 @Composable
 @ExperimentalMaterial3Api
@@ -44,7 +43,7 @@ fun BottomSheetScaffold(
     contentColor: Color = contentColorFor(containerColor),
     content: @Composable (PaddingValues) -> Unit
 ) {
-    CustomBottomSheetScaffold(
+    androidx.compose.material3.BottomSheetScaffold(
         sheetContent = sheetContent,
         modifier = modifier,
         scaffoldState = scaffoldState,

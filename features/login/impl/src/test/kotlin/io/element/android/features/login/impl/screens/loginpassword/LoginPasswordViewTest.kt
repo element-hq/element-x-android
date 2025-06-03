@@ -8,17 +8,21 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.matrix.test.A_PASSWORD
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -120,15 +124,15 @@ class LoginPasswordViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.onNodeWithText(A_PASSWORD).assertDoesNotExist()
+        rule.onNodeWithTag(TestTags.loginPassword.value).assert(hasText("••••••••"))
         // Show password
         val a11yShowPassword = rule.activity.getString(CommonStrings.a11y_show_password)
         rule.onNodeWithContentDescription(a11yShowPassword).performClick()
-        rule.onNodeWithText(A_PASSWORD).assertExists()
+        rule.onNodeWithTag(TestTags.loginPassword.value).assert(hasText(A_PASSWORD))
         // Hide password
         val a11yHidePassword = rule.activity.getString(CommonStrings.a11y_hide_password)
         rule.onNodeWithContentDescription(a11yHidePassword).performClick()
-        rule.onNodeWithText(A_PASSWORD).assertDoesNotExist()
+        rule.onNodeWithTag(TestTags.loginPassword.value).assert(hasText("••••••••"))
     }
 
     @Test

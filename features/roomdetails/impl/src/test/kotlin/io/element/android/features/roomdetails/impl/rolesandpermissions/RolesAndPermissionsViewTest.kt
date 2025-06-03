@@ -21,6 +21,7 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledTimes
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.setSafeContent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -159,14 +160,14 @@ class RolesAndPermissionsViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRolesAndPermissionsView(
     state: RolesAndPermissionsState = aRolesAndPermissionsState(
-         eventSink = EventsRecorder(expectEvents = false),
+        eventSink = EventsRecorder(expectEvents = false),
     ),
     goBack: () -> Unit = EnsureNeverCalled(),
     openAdminList: () -> Unit = EnsureNeverCalled(),
     openModeratorList: () -> Unit = EnsureNeverCalled(),
     openPermissionScreens: () -> Unit = EnsureNeverCalled(),
 ) {
-    setContent {
+    setSafeContent {
         RolesAndPermissionsView(
             state = state,
             rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {
