@@ -102,7 +102,7 @@ fun TimelineItemImageView(
                             }
                         ),
                     model = content.thumbnailMediaRequestData,
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                     contentDescription = description,
                     onState = { isLoaded = it is AsyncImagePainter.State.Success },

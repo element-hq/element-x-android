@@ -59,13 +59,11 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -92,9 +90,10 @@ import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.vanniktech.blurhash.BlurHash
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
+import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -489,14 +488,13 @@ internal fun BloomPreview() {
                             scrolledContainerColor = Color.Black.copy(alpha = 0.05f),
                         ),
                         navigationIcon = {
-                            Image(
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .size(32.dp)
-                                    .clip(CircleShape),
-                                painter = painterResource(id = R.drawable.sample_avatar),
-                                contentScale = ContentScale.Crop,
-                                contentDescription = null
+                            Avatar(
+                                avatarData = AvatarData(
+                                    id = "sample-avatar",
+                                    name = "sample",
+                                    url = "aURL",
+                                    size = AvatarSize.CurrentUserTopBar,
+                                ),
                             )
                         },
                         actions = {

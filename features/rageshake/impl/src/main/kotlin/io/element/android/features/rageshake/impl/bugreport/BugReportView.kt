@@ -41,7 +41,6 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -74,8 +73,8 @@ fun BugReportView(
                 TextField(
                     value = descriptionFieldState,
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
+                        .fillMaxWidth()
+                        .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
                     enabled = isFormEnabled,
                     placeholder = stringResource(id = R.string.screen_bug_report_editor_placeholder),
                     supportingText = stringResource(id = R.string.screen_bug_report_editor_description),
@@ -139,7 +138,6 @@ fun BugReportView(
                             modifier = Modifier.fillMaxWidth(fraction = 0.5f),
                             model = model,
                             contentDescription = null,
-                            placeholder = debugPlaceholderBackground(),
                         )
                     }
                 }
@@ -152,8 +150,8 @@ fun BugReportView(
                     enabled = state.submitEnabled,
                     showProgress = state.sending.isLoading(),
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp, bottom = 16.dp)
+                        .fillMaxWidth()
+                        .padding(top = 24.dp, bottom = 16.dp)
                 )
             }
         }
