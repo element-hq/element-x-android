@@ -15,7 +15,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.ui.room.observeRoomMemberIdentityStateChange
+import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ class IdentityChangeStatePresenter @Inject constructor(
     override fun present(): IdentityChangeState {
         val coroutineScope = rememberCoroutineScope()
         val roomMemberIdentityStateChange by produceState(persistentListOf()) {
-            observeRoomMemberIdentityStateChange(room)
+            room.roomMemberIdentityStateChange(waitForEncryption = true).collect { value = it }
         }
 
         fun handleEvent(event: IdentityChangeEvent) {

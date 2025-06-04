@@ -66,7 +66,7 @@ class RoomMemberListPresenter @Inject constructor(
         val roomModerationState = roomMembersModerationPresenter.present()
 
         val roomMemberIdentityStates by produceState(persistentMapOf<UserId, IdentityState>()) {
-            room.roomMemberIdentityStateChange()
+            room.roomMemberIdentityStateChange(waitForEncryption = true)
                 .onEach { identities ->
                     value = identities.associateBy({ it.identityRoomMember.userId }, { it.identityState }).toPersistentMap()
                 }
