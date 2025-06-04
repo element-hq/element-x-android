@@ -112,6 +112,17 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    EnableKeyShareOnInvite(
+        key = "feature.enableKeyShareOnInvite",
+        title = "Share encrypted history with other users when sending an invite",
+        description = "When inviting another user to an encrypted room, share encrypted history with that user, and"+
+            " accept encrypted history from other users." +
+            "\nRequires an app restart to take effect." +
+            "\n\nWARNING: this feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on" +
+            " production accounts.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     Knock(
         key = "feature.knock",
         title = "Ask to join",

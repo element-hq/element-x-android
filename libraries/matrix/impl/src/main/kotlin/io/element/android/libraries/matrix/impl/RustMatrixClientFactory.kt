@@ -125,6 +125,7 @@ class RustMatrixClientFactory @Inject constructor(
                     TrustRequirement.UNTRUSTED
                 }
             )
+            .enableShareHistoryOnInvite(featureFlagService.isFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite))
             .run {
                 // Apply sliding sync version settings
                 when (slidingSyncType) {
