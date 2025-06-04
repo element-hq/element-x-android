@@ -9,6 +9,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Intent
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -36,6 +37,7 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("NotificationBroadcastReceiverHandler", LoggerTag.NotificationLoggerTag)
 
 class NotificationBroadcastReceiverHandler @Inject constructor(
+    @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
     private val sessionPreferencesStore: SessionPreferencesStoreFactory,

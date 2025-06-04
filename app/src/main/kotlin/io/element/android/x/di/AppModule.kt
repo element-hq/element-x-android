@@ -27,6 +27,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.x.BuildConfig
 import io.element.android.x.R
 import kotlinx.coroutines.CoroutineName
@@ -56,6 +57,7 @@ object AppModule {
     }
 
     @Provides
+    @AppCoroutineScope
     @SingleIn(AppScope::class)
     fun providesAppCoroutineScope(): CoroutineScope {
         return MainScope() + CoroutineName("ElementX Scope")

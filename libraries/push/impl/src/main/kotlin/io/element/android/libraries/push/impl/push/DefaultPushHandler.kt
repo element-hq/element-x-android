@@ -14,6 +14,7 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.history.onDiagnosticPush
@@ -58,6 +59,7 @@ class DefaultPushHandler @Inject constructor(
     private val notificationChannels: NotificationChannels,
     private val pushHistoryService: PushHistoryService,
     private val resolverQueue: NotificationResolverQueue,
+    @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
 ) : PushHandler {
     init {

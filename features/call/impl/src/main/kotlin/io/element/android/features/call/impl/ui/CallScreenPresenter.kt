@@ -32,6 +32,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -64,6 +65,7 @@ class CallScreenPresenter @AssistedInject constructor(
     private val languageTagProvider: LanguageTagProvider,
     private val appForegroundStateService: AppForegroundStateService,
     private val activeRoomsHolder: ActiveRoomsHolder,
+    @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
