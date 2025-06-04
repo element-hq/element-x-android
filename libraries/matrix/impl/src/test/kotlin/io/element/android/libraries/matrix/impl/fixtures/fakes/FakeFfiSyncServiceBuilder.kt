@@ -11,7 +11,7 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 
-class FakeRustSyncServiceBuilder : SyncServiceBuilder(NoPointer) {
+class FakeFfiSyncServiceBuilder : SyncServiceBuilder(NoPointer) {
     override fun withOfflineMode(): SyncServiceBuilder = this
-    override suspend fun finish(): SyncService = FakeRustSyncService()
+    override suspend fun finish(): SyncService = FakeFfiSyncService()
 }

@@ -8,6 +8,6 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import org.matrix.rustcomponents.sdk.NoPointer
-import org.matrix.rustcomponents.sdk.RoomList
+import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 
-class FakeRustRoomList : RoomList(NoPointer)
+class FakeFfiTimelineEventTypeFilter : TimelineEventTypeFilter(NoPointer)

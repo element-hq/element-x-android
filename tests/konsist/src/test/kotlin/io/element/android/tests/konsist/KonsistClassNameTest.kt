@@ -15,6 +15,7 @@ import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
 import com.lemonappdev.konsist.api.ext.list.withAnnotationNamed
 import com.lemonappdev.konsist.api.ext.list.withNameContaining
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
+import com.lemonappdev.konsist.api.ext.list.withPackage
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.ext.list.withoutNameStartingWith
 import com.lemonappdev.konsist.api.verify.assertEmpty
@@ -104,6 +105,17 @@ class KonsistClassNameTest {
                 }
             }
         assertThat(failingCases).isEqualTo(failingCasesList.size)
+    }
+
+    @Test
+    fun `All Classes that override a class from the Ffi layer must have 'FakeFfi' prefix`() {
+        Konsist.scopeFromTest()
+            .classes()
+            .withPackage("io.element.android.libraries.matrix.impl.fixtures.fakes")
+            .assertTrue { klass ->
+                val parentName = klass.parents().firstOrNull()?.name.orEmpty()
+                klass.name == "FakeFfi$parentName"
+            }
     }
 
     @Test

@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
 import io.element.android.libraries.matrix.api.core.ThreadId
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineEvent
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineEvent
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import org.matrix.rustcomponents.sdk.JoinRule
@@ -65,7 +65,7 @@ fun aRustNotificationRoomInfo(
 )
 
 fun aRustNotificationEventTimeline(
-    event: TimelineEvent = FakeRustTimelineEvent(),
+    event: TimelineEvent = FakeFfiTimelineEvent(),
 ) = NotificationEvent.Timeline(
     event = event,
 )

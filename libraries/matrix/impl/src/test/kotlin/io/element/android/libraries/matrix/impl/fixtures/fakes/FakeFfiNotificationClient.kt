@@ -12,7 +12,7 @@ import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationItem
 import org.matrix.rustcomponents.sdk.NotificationItemsRequest
 
-class FakeRustNotificationClient(
+class FakeFfiNotificationClient(
     var notificationItemResult: Map<String, NotificationItem> = emptyMap(),
 ) : NotificationClient(NoPointer) {
     override suspend fun getNotifications(requests: List<NotificationItemsRequest>): Map<String, NotificationItem> {

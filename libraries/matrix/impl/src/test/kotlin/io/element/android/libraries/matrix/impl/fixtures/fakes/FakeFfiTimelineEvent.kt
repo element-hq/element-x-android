@@ -14,7 +14,7 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventType
 
-class FakeRustTimelineEvent(
+class FakeFfiTimelineEvent(
     val timestamp: ULong = A_FAKE_TIMESTAMP.toULong(),
     val timelineEventType: TimelineEventType = aRustTimelineEventTypeMessageLike(),
     val senderId: String = A_USER_ID_2.value,

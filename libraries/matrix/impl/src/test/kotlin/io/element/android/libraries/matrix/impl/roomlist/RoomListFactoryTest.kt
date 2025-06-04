@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomList
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomList
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.coroutines.EmptyCoroutineContext
@@ -17,14 +17,14 @@ class RoomListFactoryTest {
     @Test
     fun `createRoomList should work`() = runTest {
         val sut = RoomListFactory(
-            innerRoomListService = FakeRustRoomListService(),
+            innerRoomListService = FakeFfiRoomListService(),
             sessionCoroutineScope = backgroundScope,
         )
         sut.createRoomList(
             pageSize = 10,
             coroutineContext = EmptyCoroutineContext,
         ) {
-            FakeRustRoomList()
+            FakeFfiRoomList()
         }
     }
 }

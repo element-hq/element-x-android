@@ -14,7 +14,7 @@ import org.matrix.rustcomponents.sdk.RoomDirectorySearchEntriesListener
 import org.matrix.rustcomponents.sdk.RoomDirectorySearchEntryUpdate
 import org.matrix.rustcomponents.sdk.TaskHandle
 
-class FakeRustRoomDirectorySearch(
+class FakeFfiRoomDirectorySearch(
     var isAtLastPage: Boolean = false,
 ) : RoomDirectorySearch(NoPointer) {
     override suspend fun isAtLastPage(): Boolean {
@@ -28,7 +28,7 @@ class FakeRustRoomDirectorySearch(
 
     override suspend fun results(listener: RoomDirectorySearchEntriesListener): TaskHandle {
         this.listener = listener
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
 
     fun emitResult(roomEntriesUpdate: List<RoomDirectorySearchEntryUpdate>) {

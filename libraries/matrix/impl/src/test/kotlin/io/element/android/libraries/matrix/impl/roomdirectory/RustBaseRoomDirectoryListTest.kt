@@ -11,7 +11,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomDescription
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomDirectorySearch
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomDirectorySearch
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -26,7 +26,7 @@ import org.matrix.rustcomponents.sdk.RoomDirectorySearchEntryUpdate
 class RustBaseRoomDirectoryListTest {
     @Test
     fun `check that the state emits the expected values`() = runTest {
-        val roomDirectorySearch = FakeRustRoomDirectorySearch()
+        val roomDirectorySearch = FakeFfiRoomDirectorySearch()
         val mapper = RoomDescriptionMapper()
         val sut = createRustRoomDirectoryList(
             roomDirectorySearch = roomDirectorySearch,
@@ -78,7 +78,7 @@ class RustBaseRoomDirectoryListTest {
     }
 
     private fun TestScope.createRustRoomDirectoryList(
-        roomDirectorySearch: RoomDirectorySearch = FakeRustRoomDirectorySearch(),
+        roomDirectorySearch: RoomDirectorySearch = FakeFfiRoomDirectorySearch(),
     ) = RustRoomDirectoryList(
         inner = roomDirectorySearch,
         coroutineScope = backgroundScope,

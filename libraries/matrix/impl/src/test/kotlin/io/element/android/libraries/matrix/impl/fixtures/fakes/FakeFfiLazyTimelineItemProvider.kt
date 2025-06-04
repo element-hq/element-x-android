@@ -14,7 +14,7 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.SendHandle
 import org.matrix.rustcomponents.sdk.ShieldState
 
-class FakeRustLazyTimelineItemProvider(
+class FakeFfiLazyTimelineItemProvider(
     private val debugInfo: EventTimelineItemDebugInfo = anEventTimelineItemDebugInfo(),
     private val shieldsState: ShieldState? = null,
 ) : LazyTimelineItemProvider(NoPointer) {

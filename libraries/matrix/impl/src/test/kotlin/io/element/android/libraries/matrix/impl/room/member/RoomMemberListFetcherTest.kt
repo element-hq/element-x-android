@@ -12,8 +12,8 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomMember
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoom
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomMembersIterator
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoom
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomMembersIterator
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.CACHE
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.CACHE_AND_SERVER
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.SERVER
@@ -28,8 +28,8 @@ import org.junit.Test
 class RoomMemberListFetcherTest {
     @Test
     fun `fetchRoomMembers with CACHE source - emits cached members, if any`() = runTest {
-        val room = FakeRustRoom(getMembersNoSync = {
-            FakeRustRoomMembersIterator(
+        val room = FakeFfiRoom(getMembersNoSync = {
+            FakeFfiRoomMembersIterator(
                 listOf(
                     aRustRoomMember(A_USER_ID),
                     aRustRoomMember(A_USER_ID_2),
@@ -55,8 +55,8 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with CACHE source - emits empty list, if no members exist`() = runTest {
-        val room = FakeRustRoom(getMembersNoSync = {
-            FakeRustRoomMembersIterator(emptyList())
+        val room = FakeFfiRoom(getMembersNoSync = {
+            FakeFfiRoomMembersIterator(emptyList())
         })
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
@@ -70,7 +70,7 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with CACHE source - emits Error on error found`() = runTest {
-        val room = FakeRustRoom(getMembersNoSync = {
+        val room = FakeFfiRoom(getMembersNoSync = {
             error("Some unexpected issue")
         })
 
@@ -85,8 +85,8 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with CACHE source - emits all items at once`() = runTest {
-        val room = FakeRustRoom(getMembersNoSync = {
-            FakeRustRoomMembersIterator(
+        val room = FakeFfiRoom(getMembersNoSync = {
+            FakeFfiRoomMembersIterator(
                 listOf(
                     aRustRoomMember(A_USER_ID),
                     aRustRoomMember(A_USER_ID_2),
@@ -112,8 +112,8 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with SERVER source - emits only new members, if any`() = runTest {
-        val room = FakeRustRoom(getMembers = {
-            FakeRustRoomMembersIterator(
+        val room = FakeFfiRoom(getMembers = {
+            FakeFfiRoomMembersIterator(
                 listOf(
                     aRustRoomMember(A_USER_ID),
                     aRustRoomMember(A_USER_ID_2),
@@ -134,7 +134,7 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with SERVER source - on error it emits an Error item`() = runTest {
-        val room = FakeRustRoom(getMembers = { error("An unexpected error") })
+        val room = FakeFfiRoom(getMembers = { error("An unexpected error") })
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
         fetcher.membersFlow.test {
@@ -148,12 +148,12 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with CACHE_AND_SERVER source - returns cached items first, then new ones`() = runTest {
-        val room = FakeRustRoom(
+        val room = FakeFfiRoom(
             getMembersNoSync = {
-                FakeRustRoomMembersIterator(listOf(aRustRoomMember(A_USER_ID_4)))
+                FakeFfiRoomMembersIterator(listOf(aRustRoomMember(A_USER_ID_4)))
             },
             getMembers = {
-                FakeRustRoomMembersIterator(
+                FakeFfiRoomMembersIterator(
                     listOf(
                         aRustRoomMember(A_USER_ID),
                         aRustRoomMember(A_USER_ID_2),

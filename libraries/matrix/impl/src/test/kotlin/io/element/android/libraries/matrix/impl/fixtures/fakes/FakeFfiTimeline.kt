@@ -15,11 +15,11 @@ import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
 import uniffi.matrix_sdk.RoomPaginationStatus
 
-class FakeRustTimeline : Timeline(NoPointer) {
+class FakeFfiTimeline : Timeline(NoPointer) {
     private var listener: TimelineListener? = null
     override suspend fun addListener(listener: TimelineListener): TaskHandle {
         this.listener = listener
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
 
     fun emitDiff(diff: List<TimelineDiff>) {
@@ -29,7 +29,7 @@ class FakeRustTimeline : Timeline(NoPointer) {
     private var paginationStatusListener: PaginationStatusListener? = null
     override suspend fun subscribeToBackPaginationStatus(listener: PaginationStatusListener): TaskHandle {
         this.paginationStatusListener = listener
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
 
     fun emitPaginationStatus(status: RoomPaginationStatus) {

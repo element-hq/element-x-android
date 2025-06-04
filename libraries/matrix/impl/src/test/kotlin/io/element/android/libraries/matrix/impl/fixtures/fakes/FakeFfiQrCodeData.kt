@@ -11,7 +11,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.QrCodeData
 
-class FakeQrCodeData(
+class FakeFfiQrCodeData(
     private val serverNameResult: () -> String? = { lambdaError() },
 ) : QrCodeData(NoPointer) {
     override fun serverName(): String? {

@@ -20,7 +20,7 @@ import uniffi.matrix_sdk.BackupDownloadStrategy
 import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.TrustRequirement
 
-class FakeRustClientBuilder : ClientBuilder(NoPointer) {
+class FakeFfiClientBuilder : ClientBuilder(NoPointer) {
     override fun addRootCertificates(certificates: List<ByteArray>) = this
     override fun autoEnableBackups(autoEnableBackups: Boolean) = this
     override fun autoEnableCrossSigning(autoEnableCrossSigning: Boolean) = this
@@ -43,10 +43,10 @@ class FakeRustClientBuilder : ClientBuilder(NoPointer) {
     override fun username(username: String) = this
 
     override suspend fun buildWithQrCode(qrCodeData: QrCodeData, oidcConfiguration: OidcConfiguration, progressListener: QrLoginProgressListener): Client {
-        return FakeRustClient()
+        return FakeFfiClient()
     }
 
     override suspend fun build(): Client {
-        return FakeRustClient(withUtdHook = {})
+        return FakeFfiClient(withUtdHook = {})
     }
 }

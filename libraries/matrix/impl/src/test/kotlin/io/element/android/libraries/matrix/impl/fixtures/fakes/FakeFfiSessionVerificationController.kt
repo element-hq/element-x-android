@@ -11,6 +11,6 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 
-class FakeRustSessionVerificationController : SessionVerificationController(NoPointer) {
+class FakeFfiSessionVerificationController : SessionVerificationController(NoPointer) {
     override fun setDelegate(delegate: SessionVerificationControllerDelegate?) {}
 }
