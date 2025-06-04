@@ -372,7 +372,6 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laadime sõnumit…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Näita kõiki"</string>
   <string name="screen_room_title">"Vestlus"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Liitumispalve on saadetud"</string>
   <string name="screen_share_location_title">"Jaga asukohta"</string>
   <string name="screen_share_my_location_action">"Jaga minu asukohta"</string>
   <string name="screen_share_open_apple_maps">"Ava Apple Mapsis"</string>

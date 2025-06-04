@@ -11,7 +11,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Baztertu txata"</string>
   <string name="screen_invites_empty_list">"Ez dago gonbidapenik"</string>
   <string name="screen_invites_invited_you">"%1$s(e)k (%2$s) gonbidatu zaitu"</string>
-  <string name="screen_join_room_knock_sent_title">"Sartzeko eskaera bidali da"</string>
   <string name="screen_migration_message">"Behin egin beharreko prozesua da; eskerrik asko itxaroteagatik."</string>
   <string name="screen_migration_title">"Zure kontua konfiguratzen."</string>
   <string name="screen_roomlist_a11y_create_message">"Sortu elkarrizketa edo gela berria"</string>
@@ -33,6 +32,7 @@ Oraingoz, iragazkiak desautatu ditzakezu zure gainerako txatak ikusteko"</string
   <string name="screen_roomlist_filter_unreads">"Irakurri gabeak"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Bejondeizula!
 Ez duzu irakurri gabeko mezurik!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Sartzeko eskaera bidali da"</string>
   <string name="screen_roomlist_main_space_title">"Txatak"</string>
   <string name="screen_roomlist_mark_as_read">"Markatu irakurritzat"</string>
   <string name="screen_roomlist_mark_as_unread">"Markatu irakurri gabetzat"</string>

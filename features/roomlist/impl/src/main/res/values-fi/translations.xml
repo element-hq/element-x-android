@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Hylkää keskustelu"</string>
   <string name="screen_invites_empty_list">"Ei kutsuja"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) kutsui sinut"</string>
-  <string name="screen_join_room_knock_sent_title">"Liittymispyyntö lähetetty"</string>
   <string name="screen_migration_message">"Tämä on kertaluonteinen prosessi, kiitos odottamisesta."</string>
   <string name="screen_migration_title">"Tiliä määritetään."</string>
   <string name="screen_roomlist_a11y_create_message">"Luo uusi keskustelu tai huone"</string>
@@ -37,6 +36,7 @@ Toistaiseksi voit poistaa suodattimien valinnan, jotta näet muut keskustelut."<
   <string name="screen_roomlist_filter_unreads">"Lukemattomat"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Onnittelut!
 Sinulla ei ole lukemattomia viestejä!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Liittymispyyntö lähetetty"</string>
   <string name="screen_roomlist_main_space_title">"Keskustelut"</string>
   <string name="screen_roomlist_mark_as_read">"Merkitse luetuksi"</string>
   <string name="screen_roomlist_mark_as_unread">"Merkitse lukemattomaksi"</string>

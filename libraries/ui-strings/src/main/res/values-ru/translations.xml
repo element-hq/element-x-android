@@ -378,7 +378,6 @@
   <string name="screen_room_pinned_banner_loading_description">"Загрузка сообщения…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Посмотреть все"</string>
   <string name="screen_room_title">"Чат"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Запрос на присоединение отправлен"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
   <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>

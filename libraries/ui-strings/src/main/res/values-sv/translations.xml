@@ -372,7 +372,6 @@ Anledning:%1$s."</string>
   <string name="screen_room_pinned_banner_loading_description">"Laddar meddelande …"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Visa alla"</string>
   <string name="screen_room_title">"Chatt"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Begäran om att gå med skickad"</string>
   <string name="screen_share_location_title">"Dela plats"</string>
   <string name="screen_share_my_location_action">"Dela min plats"</string>
   <string name="screen_share_open_apple_maps">"Öppna i Apple Maps"</string>

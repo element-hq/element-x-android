@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Rechazar el chat"</string>
   <string name="screen_invites_empty_list">"Sin invitaciones"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) te invitó"</string>
-  <string name="screen_join_room_knock_sent_title">"Solicitud de unión enviada"</string>
   <string name="screen_migration_message">"Este proceso solo se hace una vez, gracias por esperar."</string>
   <string name="screen_migration_title">"Configura tu cuenta"</string>
   <string name="screen_roomlist_a11y_create_message">"Crear una nueva conversación o sala"</string>
@@ -37,6 +36,7 @@ Por ahora, puedes deseleccionar los filtros para ver tus otros chats"</string>
   <string name="screen_roomlist_filter_unreads">"No leídos"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"¡Felicidades!
 ¡No tienes ningún mensaje sin leer!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Solicitud de unión enviada"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Marcar como leído"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como no leído"</string>
