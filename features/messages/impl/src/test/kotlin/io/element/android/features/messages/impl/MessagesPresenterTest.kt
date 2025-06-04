@@ -139,10 +139,10 @@ class MessagesPresenterTest {
                 canRedactOtherResult = { Result.success(true) },
                 canUserJoinCallResult = { Result.success(true) },
                 canUserPinUnpinResult = { Result.success(true) },
+                markAsReadResult = { lambdaError() }
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
-        assertThat(room.baseRoom.markAsReadCalls).isEmpty()
         val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             runCurrent()
@@ -848,12 +848,12 @@ class MessagesPresenterTest {
     fun `present - permission to redact other`() = runTest {
         val joinedRoom = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canRedactOtherResult = { Result.success(true) },
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(false) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ),
+                canRedactOtherResult = { Result.success(true) },
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(false) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+            ),
             typingNoticeResult = { Result.success(Unit) },
         )
         val presenter = createMessagesPresenter(joinedRoom = joinedRoom)
@@ -897,12 +897,12 @@ class MessagesPresenterTest {
         val timeline = FakeTimeline()
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ),
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(true) },
+                canRedactOtherResult = { Result.success(true) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+            ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -937,12 +937,12 @@ class MessagesPresenterTest {
         val analyticsService = FakeAnalyticsService()
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ),
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(true) },
+                canRedactOtherResult = { Result.success(true) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+            ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -1096,12 +1096,12 @@ class MessagesPresenterTest {
         }
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ),
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(true) },
+                canRedactOtherResult = { Result.success(true) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+            ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -1134,16 +1134,16 @@ class MessagesPresenterTest {
     fun `present - when room is encrypted and a DM, the DM user's identity state is fetched onResume`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            sessionId = A_SESSION_ID,
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-            initialRoomInfo = aRoomInfo(isDirect = true, isEncrypted = true)
-        ).apply {
-            givenRoomMembersState(RoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
-        },
+                sessionId = A_SESSION_ID,
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(true) },
+                canRedactOtherResult = { Result.success(true) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+                initialRoomInfo = aRoomInfo(isDirect = true, isEncrypted = true)
+            ).apply {
+                givenRoomMembersState(RoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
+            },
             typingNoticeResult = { Result.success(Unit) },
         )
         val encryptionService = FakeEncryptionService(getUserIdentityResult = { Result.success(IdentityState.Verified) })

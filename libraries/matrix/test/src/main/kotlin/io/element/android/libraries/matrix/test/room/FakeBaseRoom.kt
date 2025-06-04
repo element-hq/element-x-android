@@ -54,6 +54,7 @@ class FakeBaseRoom(
     private val canUserJoinCallResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val canUserPinUnpinResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
+    private val markAsReadResult: (ReceiptType) -> Result<Unit> = { Result.success(Unit) },
     private val powerLevelsResult: () -> Result<RoomPowerLevels> = { lambdaError() },
     private val leaveRoomLambda: () -> Result<Unit> = { lambdaError() },
     private val updateMembersResult: () -> Unit = { lambdaError() },
@@ -183,11 +184,8 @@ class FakeBaseRoom(
         return setIsFavoriteResult(isFavorite)
     }
 
-    val markAsReadCalls = mutableListOf<ReceiptType>()
-
     override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> {
-        markAsReadCalls.add(receiptType)
-        return Result.success(Unit)
+        return markAsReadResult(receiptType)
     }
 
     var setUnreadFlagCalls = mutableListOf<Boolean>()
