@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -183,6 +184,53 @@ class OnboardingViewTest {
         )
         val text = rule.activity.getString(CommonStrings.common_report_a_problem)
         rule.onNodeWithText(text).assertDoesNotExist()
+    }
+
+    @Test
+    fun `when success PasswordLogin - the expected callback is invoked and the event is received`() {
+        val eventSink = EventsRecorder<OnBoardingEvents>()
+        ensureCalledOnce { callback ->
+            rule.setOnboardingView(
+                state = anOnBoardingState(
+                    loginMode = AsyncData.Success(LoginMode.PasswordLogin),
+                    eventSink = eventSink,
+                ),
+                onNeedLoginPassword = callback,
+            )
+        }
+        eventSink.assertSingle(OnBoardingEvents.ClearError)
+    }
+
+    @Test
+    fun `when success Oidc - the expected callback is invoked and the event is received`() {
+        val eventSink = EventsRecorder<OnBoardingEvents>()
+        val oidcDetails = OidcDetails("aUrl")
+        ensureCalledOnceWithParam(oidcDetails) { callback ->
+            rule.setOnboardingView(
+                state = anOnBoardingState(
+                    loginMode = AsyncData.Success(LoginMode.Oidc(oidcDetails)),
+                    eventSink = eventSink,
+                ),
+                onOidcDetails = callback,
+            )
+        }
+        eventSink.assertSingle(OnBoardingEvents.ClearError)
+    }
+
+    @Test
+    fun `when success AccountCreation - the expected callback is invoked and the event is received`() {
+        val eventSink = EventsRecorder<OnBoardingEvents>()
+        val oidcDetails = OidcDetails("aUrl")
+        ensureCalledOnceWithParam(oidcDetails.url) { callback ->
+            rule.setOnboardingView(
+                state = anOnBoardingState(
+                    loginMode = AsyncData.Success(LoginMode.AccountCreation("aUrl")),
+                    eventSink = eventSink,
+                ),
+                onCreateAccountContinue = callback,
+            )
+        }
+        eventSink.assertSingle(OnBoardingEvents.ClearError)
     }
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setOnboardingView(
