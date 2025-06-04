@@ -270,6 +270,7 @@ class MessagesPresenter @AssistedInject constructor(
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             dmUserVerificationState = dmUserVerificationState,
             roomMemberModerationState = roomMemberModerationState,
+            successorRoom = roomInfo.successorRoom,
             eventSink = { handleEvents(it) }
         )
     }

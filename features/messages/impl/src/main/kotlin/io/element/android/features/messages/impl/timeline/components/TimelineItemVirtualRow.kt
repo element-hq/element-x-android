@@ -41,7 +41,7 @@ fun TimelineItemVirtualRow(
         when (virtual.model) {
             is TimelineItemDaySeparatorModel -> TimelineItemDaySeparatorView(virtual.model)
             TimelineItemReadMarkerModel -> TimelineItemReadMarkerView()
-            TimelineItemRoomBeginningModel -> TimelineItemRoomBeginningView(roomName = timelineRoomInfo.name)
+            TimelineItemRoomBeginningModel -> TimelineItemRoomBeginningView(predecessorRoom = timelineRoomInfo.predecessorRoom, roomName = timelineRoomInfo.name)
             is TimelineItemLoadingIndicatorModel -> {
                 TimelineLoadingMoreIndicator(virtual.model.direction)
                 val latestEventSink by rememberUpdatedState(eventSink)

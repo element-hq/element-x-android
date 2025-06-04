@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import kotlinx.coroutines.CoroutineScope
@@ -54,6 +55,8 @@ interface BaseRoom : Closeable {
      * Get the latest room info we have received from the SDK stream.
      */
     fun info(): RoomInfo = roomInfoFlow.value
+
+    fun predecessorRoom(): PredecessorRoom?
 
     /**
      * A one-to-one is a room with exactly 2 members.
@@ -234,7 +237,6 @@ interface BaseRoom : Closeable {
      * @param reason - The reason the room is being reported.
      */
     suspend fun reportRoom(reason: String?): Result<Unit>
-
     /**
      * Destroy the room and release all resources associated to it.
      */

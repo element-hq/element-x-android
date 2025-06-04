@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.BaseRoom
@@ -141,6 +142,15 @@ class MessagesNode @AssistedInject constructor(
 
     private fun onUserDataClick(userId: UserId) {
         callbacks.forEach { it.onUserDataClick(userId) }
+    }
+
+    private fun onRoomDataClick(
+        activity: Activity,
+        eventSink: (TimelineEvents) -> Unit,
+        roomId: RoomId
+    ) {
+        val roomLink = PermalinkData.RoomLink(roomId.toRoomIdOrAlias())
+        handleRoomLinkClick(activity, roomLink, eventSink)
     }
 
     private fun onLinkClick(
@@ -250,6 +260,7 @@ class MessagesNode @AssistedInject constructor(
                 onRoomDetailsClick = this::onRoomDetailsClick,
                 onEventContentClick = this::onEventClick,
                 onUserDataClick = this::onUserDataClick,
+                onRoomDataClick = {roomId -> onRoomDataClick(activity, state.timelineState.eventSink, roomId) },
                 onLinkClick = { url, customTab -> onLinkClick(activity, isDark, url, state.timelineState.eventSink, customTab) },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
