@@ -10,6 +10,7 @@ package io.element.android.features.cachecleaner.impl
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.cachecleaner.api.CacheCleaner
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.CacheDirectory
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +34,7 @@ class DefaultCacheCleaner @Inject constructor(
 
     override fun clearCache() {
         scope.launch(dispatchers.io) {
-            runCatching {
+            runCatchingExceptions {
                 SUBDIRS_TO_CLEANUP.forEach {
                     File(cacheDir.path, it).apply {
                         if (exists()) {

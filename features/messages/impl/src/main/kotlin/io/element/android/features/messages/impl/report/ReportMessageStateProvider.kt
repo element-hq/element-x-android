@@ -17,7 +17,7 @@ open class ReportMessageStateProvider : PreviewParameterProvider<ReportMessageSt
             aReportMessageState(reason = "This user is making the chat very toxic."),
             aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true),
             aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = AsyncAction.Loading),
-            aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = AsyncAction.Failure(Throwable("error"))),
+            aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = AsyncAction.Failure(RuntimeException("error"))),
             aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = AsyncAction.Success(Unit)),
             // Add other states here
         )

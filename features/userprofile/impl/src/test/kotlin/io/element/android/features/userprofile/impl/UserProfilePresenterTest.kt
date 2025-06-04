@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -215,7 +214,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - BlockUser with error`() = runTest {
         val matrixClient = createFakeMatrixClient(
-            ignoreUserResult = { Result.failure(A_THROWABLE) }
+            ignoreUserResult = { Result.failure(AN_EXCEPTION) }
         )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
@@ -223,7 +222,7 @@ class UserProfilePresenterTest {
             initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
-            assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(A_THROWABLE)
+            assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(AN_EXCEPTION)
             // Clear error
             initialState.eventSink(UserProfileEvents.ClearBlockUserError)
             assertThat(awaitItem().isBlocked).isEqualTo(AsyncData.Success(false))
@@ -233,7 +232,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - UnblockUser with error`() = runTest {
         val matrixClient = createFakeMatrixClient(
-            unIgnoreUserResult = { Result.failure(A_THROWABLE) }
+            unIgnoreUserResult = { Result.failure(AN_EXCEPTION) }
         )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
@@ -241,7 +240,7 @@ class UserProfilePresenterTest {
             initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
-            assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(A_THROWABLE)
+            assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(AN_EXCEPTION)
             // Clear error
             initialState.eventSink(UserProfileEvents.ClearBlockUserError)
             assertThat(awaitItem().isBlocked).isEqualTo(AsyncData.Success(true))
@@ -265,7 +264,7 @@ class UserProfilePresenterTest {
 
     @Test
     fun `present - start DM action failure scenario`() = runTest {
-        val startDMFailureResult = AsyncAction.Failure(A_THROWABLE)
+        val startDMFailureResult = AsyncAction.Failure(AN_EXCEPTION)
         val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
             actionState.value = startDMFailureResult
         }

@@ -258,7 +258,7 @@ class RoomDetailsPresenterTest {
     @Test
     fun `present - initial state when canInvite errors`() = runTest {
         val room = aJoinedRoom(
-            canInviteResult = { Result.failure(Throwable("Whoops")) },
+            canInviteResult = { Result.failure(RuntimeException("Whoops")) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
         )
@@ -277,7 +277,7 @@ class RoomDetailsPresenterTest {
                 when (stateEventType) {
                     StateEventType.ROOM_TOPIC -> Result.success(true)
                     StateEventType.ROOM_NAME -> Result.success(false)
-                    else -> Result.failure(Throwable("Whelp"))
+                    else -> Result.failure(RuntimeException("Whelp"))
                 }
             },
             canBanResult = { Result.success(false) },
@@ -306,7 +306,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_TOPIC,
                     StateEventType.ROOM_NAME,
                     StateEventType.ROOM_AVATAR -> Result.success(true)
-                    else -> Result.failure(Throwable("Whelp"))
+                    else -> Result.failure(RuntimeException("Whelp"))
                 }
             },
             canKickResult = { Result.success(false) },
@@ -357,7 +357,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_AVATAR,
                     StateEventType.ROOM_TOPIC,
                     StateEventType.ROOM_NAME -> Result.success(true)
-                    else -> Result.failure(Throwable("Whelp"))
+                    else -> Result.failure(RuntimeException("Whelp"))
                 }
             },
             userDisplayNameResult = { Result.success(A_USER_NAME) },
@@ -403,7 +403,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_TOPIC,
                     StateEventType.ROOM_NAME,
                     StateEventType.ROOM_AVATAR -> Result.success(true)
-                    else -> Result.failure(Throwable("Whelp"))
+                    else -> Result.failure(RuntimeException("Whelp"))
                 }
             },
             canKickResult = {
@@ -436,7 +436,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_TOPIC,
                     StateEventType.ROOM_NAME,
                     StateEventType.ROOM_AVATAR -> Result.success(false)
-                    else -> Result.failure(Throwable("Whelp"))
+                    else -> Result.failure(RuntimeException("Whelp"))
                 }
             },
             canBanResult = {
@@ -468,7 +468,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_AVATAR,
                     StateEventType.ROOM_NAME -> Result.success(true)
                     StateEventType.ROOM_TOPIC -> Result.success(false)
-                    else -> Result.failure(Throwable("Whelp"))
+                    else -> Result.failure(RuntimeException("Whelp"))
                 }
             },
             canKickResult = {
@@ -500,7 +500,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_AVATAR,
                     StateEventType.ROOM_TOPIC,
                     StateEventType.ROOM_NAME -> Result.success(true)
-                    else -> Result.failure(Throwable("Whelp"))
+                    else -> Result.failure(RuntimeException("Whelp"))
                 }
             },
             canKickResult = {

@@ -36,5 +36,9 @@ class FakeRustTimeline : Timeline(NoPointer) {
         paginationStatusListener!!.onUpdate(status)
     }
 
+    override suspend fun paginateBackwards(numEvents: UShort): Boolean {
+        return true
+    }
+
     override suspend fun fetchMembers() = Unit
 }

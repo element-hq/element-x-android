@@ -562,7 +562,7 @@ import kotlin.time.Duration.Companion.seconds
                 liveTimeline = FakeTimeline(
                     timelineItems = flowOf(emptyList()),
                 ),
-                createTimelineResult = { Result.failure(Throwable("An error")) },
+                createTimelineResult = { Result.failure(RuntimeException("An error")) },
                 baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
             )
         )

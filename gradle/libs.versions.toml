@@ -37,6 +37,7 @@ datetime = "0.6.2"
 serialization_json = "1.8.1"
 
 #other
+detekt = "1.23.8"
 coil = "3.1.0"
 showkase = "1.0.3"
 appyx = "1.7.1"
@@ -152,6 +153,8 @@ test_parameter_injector = "com.google.testparameterinjector:test-parameter-injec
 test_robolectric = "org.robolectric:robolectric:4.14.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.6.1"
+test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
+test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -231,7 +234,7 @@ kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
-detekt = "io.gitlab.arturbosch.detekt:1.23.8"
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = "org.jlleitschuh.gradle.ktlint:12.3.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:12.1.1"

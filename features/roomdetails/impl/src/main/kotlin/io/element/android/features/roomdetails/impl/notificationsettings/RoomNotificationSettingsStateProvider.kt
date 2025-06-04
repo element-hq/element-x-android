@@ -19,9 +19,9 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
             aRoomNotificationSettingsState(),
             aRoomNotificationSettingsState(isDefault = false),
             aRoomNotificationSettingsState(setNotificationSettingAction = AsyncAction.Loading),
-            aRoomNotificationSettingsState(setNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
+            aRoomNotificationSettingsState(setNotificationSettingAction = AsyncAction.Failure(RuntimeException("error"))),
             aRoomNotificationSettingsState(restoreDefaultAction = AsyncAction.Loading),
-            aRoomNotificationSettingsState(restoreDefaultAction = AsyncAction.Failure(Throwable("error"))),
+            aRoomNotificationSettingsState(restoreDefaultAction = AsyncAction.Failure(RuntimeException("error"))),
             aRoomNotificationSettingsState(displayMentionsOnlyDisclaimer = true)
         )
 

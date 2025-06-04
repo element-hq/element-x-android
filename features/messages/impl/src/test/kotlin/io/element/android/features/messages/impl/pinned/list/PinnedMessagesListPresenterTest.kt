@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.A_THROWABLE
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
@@ -157,7 +157,7 @@ class PinnedMessagesListPresenterTest {
     @Test
     fun `present - unpin event`() = runTest {
         val successUnpinEventLambda = lambdaRecorder { _: EventId? -> Result.success(true) }
-        val failureUnpinEventLambda = lambdaRecorder { _: EventId? -> Result.failure<Boolean>(A_THROWABLE) }
+        val failureUnpinEventLambda = lambdaRecorder { _: EventId? -> Result.failure<Boolean>(AN_EXCEPTION) }
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val analyticsService = FakeAnalyticsService()
         val room = FakeJoinedRoom(

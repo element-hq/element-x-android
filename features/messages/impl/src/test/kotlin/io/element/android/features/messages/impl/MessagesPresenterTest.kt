@@ -62,11 +62,11 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransa
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
-import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -744,7 +744,7 @@ class MessagesPresenterTest {
                 canUserPinUnpinResult = { Result.success(true) },
             ),
             typingNoticeResult = { Result.success(Unit) },
-            inviteUserResult = { Result.failure(Throwable("Oops!")) },
+            inviteUserResult = { Result.failure(RuntimeException("Oops!")) },
         )
         room.givenRoomMembersState(
             RoomMembersState.Ready(
@@ -892,7 +892,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action pin`() = runTest {
         val successPinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
-        val failurePinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
+        val failurePinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(AN_EXCEPTION) }
         val analyticsService = FakeAnalyticsService()
         val timeline = FakeTimeline()
         val room = FakeJoinedRoom(
@@ -932,7 +932,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action unpin`() = runTest {
         val successUnpinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
-        val failureUnpinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
+        val failureUnpinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(AN_EXCEPTION) }
         val timeline = FakeTimeline()
         val analyticsService = FakeAnalyticsService()
         val room = FakeJoinedRoom(
