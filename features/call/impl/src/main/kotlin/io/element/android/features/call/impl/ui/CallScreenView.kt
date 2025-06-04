@@ -134,11 +134,13 @@ internal fun CallScreenView(
                 AsyncData.Uninitialized,
                 is AsyncData.Loading ->
                     ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
-                is AsyncData.Failure ->
+                is AsyncData.Failure -> {
+                    Timber.e(state.urlState.error, "WebView failed to load URL: ${state.urlState.error.message}")
                     ErrorDialog(
                         content = state.urlState.error.message.orEmpty(),
                         onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
                     )
+                }
                 is AsyncData.Success -> Unit
             }
         }

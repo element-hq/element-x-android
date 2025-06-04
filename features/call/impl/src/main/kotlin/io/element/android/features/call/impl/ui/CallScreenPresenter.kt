@@ -212,6 +212,7 @@ class CallScreenPresenter @AssistedInject constructor(
                         theme = theme,
                     ).getOrThrow()
                     callWidgetDriver.value = result.driver
+                    Timber.d("Call widget driver initialized for sessionId: ${inputs.sessionId}, roomId: ${inputs.roomId}")
                     result.url
                 }
             }

@@ -181,6 +181,9 @@ class DefaultActiveCallManager @Inject constructor(
             Timber.tag(tag).w("Call type $callType does not match the active call type, ignoring")
             return
         }
+
+        Timber.tag(tag).d("Hung up call: $callType")
+
         cancelIncomingCallNotification()
         if (activeWakeLock?.isHeld == true) {
             Timber.tag(tag).d("Releasing partial wakelock after hang up")
@@ -191,6 +194,8 @@ class DefaultActiveCallManager @Inject constructor(
     }
 
     override suspend fun joinedCall(callType: CallType) = mutex.withLock {
+        Timber.tag(tag).d("Joined call: $callType")
+
         cancelIncomingCallNotification()
         if (activeWakeLock?.isHeld == true) {
             Timber.tag(tag).d("Releasing partial wakelock after joining call")
