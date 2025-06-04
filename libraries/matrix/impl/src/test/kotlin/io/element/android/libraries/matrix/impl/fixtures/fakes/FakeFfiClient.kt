@@ -30,12 +30,12 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 import org.matrix.rustcomponents.sdk.UserProfile
 
-class FakeRustClient(
+class FakeFfiClient(
     private val userId: String = A_USER_ID.value,
     private val deviceId: String = A_DEVICE_ID.value,
-    private val notificationClient: NotificationClient = FakeRustNotificationClient(),
-    private val notificationSettings: NotificationSettings = FakeRustNotificationSettings(),
-    private val encryption: Encryption = FakeRustEncryption(),
+    private val notificationClient: NotificationClient = FakeFfiNotificationClient(),
+    private val notificationSettings: NotificationSettings = FakeFfiNotificationSettings(),
+    private val encryption: Encryption = FakeFfiEncryption(),
     private val session: Session = aRustSession(),
     private val clearCachesResult: () -> Unit = { lambdaError() },
     private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
@@ -47,11 +47,11 @@ class FakeRustClient(
     override suspend fun getNotificationSettings(): NotificationSettings = notificationSettings
     override fun encryption(): Encryption = encryption
     override fun session(): Session = session
-    override fun setDelegate(delegate: ClientDelegate?): TaskHandle = FakeRustTaskHandle()
+    override fun setDelegate(delegate: ClientDelegate?): TaskHandle = FakeFfiTaskHandle()
     override suspend fun cachedAvatarUrl(): String? = null
     override suspend fun restoreSession(session: Session) = Unit
-    override fun syncService(): SyncServiceBuilder = FakeRustSyncServiceBuilder()
-    override fun roomDirectorySearch(): RoomDirectorySearch = FakeRustRoomDirectorySearch()
+    override fun syncService(): SyncServiceBuilder = FakeFfiSyncServiceBuilder()
+    override fun roomDirectorySearch(): RoomDirectorySearch = FakeFfiRoomDirectorySearch()
     override suspend fun setPusher(
         identifiers: PusherIdentifiers,
         kind: PusherKind,
@@ -64,12 +64,12 @@ class FakeRustClient(
     override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
     override suspend fun clearCaches() = simulateLongTask { clearCachesResult() }
     override suspend fun setUtdDelegate(utdDelegate: UnableToDecryptDelegate) = withUtdHook(utdDelegate)
-    override suspend fun getSessionVerificationController(): SessionVerificationController = FakeRustSessionVerificationController()
+    override suspend fun getSessionVerificationController(): SessionVerificationController = FakeFfiSessionVerificationController()
     override suspend fun ignoredUsers(): List<String> {
         return emptyList()
     }
     override fun subscribeToIgnoredUsers(listener: IgnoredUsersListener): TaskHandle {
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
 
     override suspend fun getProfile(userId: String): UserProfile {

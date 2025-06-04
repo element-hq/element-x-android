@@ -13,12 +13,12 @@ import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.SyncServiceStateObserver
 import org.matrix.rustcomponents.sdk.TaskHandle
 
-class FakeRustSyncService(
-    private val roomListService: RoomListService = FakeRustRoomListService(),
+class FakeFfiSyncService(
+    private val roomListService: RoomListService = FakeFfiRoomListService(),
 ) : SyncService(NoPointer) {
     override fun roomListService(): RoomListService = roomListService
     override fun state(listener: SyncServiceStateObserver): TaskHandle {
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
     override suspend fun stop() {}
 }

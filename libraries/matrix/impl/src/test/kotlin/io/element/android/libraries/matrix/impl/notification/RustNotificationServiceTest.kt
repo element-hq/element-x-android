@@ -11,7 +11,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustNotificationItem
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustNotificationClient
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiNotificationClient
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -28,7 +28,7 @@ import org.matrix.rustcomponents.sdk.NotificationClient
 class RustNotificationServiceTest {
     @Test
     fun test() = runTest {
-        val notificationClient = FakeRustNotificationClient(
+        val notificationClient = FakeFfiNotificationClient(
             notificationItemResult = mapOf(AN_EVENT_ID.value to aRustNotificationItem()),
         )
         val sut = createRustNotificationService(
@@ -48,7 +48,7 @@ class RustNotificationServiceTest {
     }
 
     private fun TestScope.createRustNotificationService(
-        notificationClient: NotificationClient = FakeRustNotificationClient(),
+        notificationClient: NotificationClient = FakeFfiNotificationClient(),
         clock: SystemClock = FakeSystemClock(),
     ) =
         RustNotificationService(

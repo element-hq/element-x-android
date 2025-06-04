@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.impl.auth.qrlogin
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeQrCodeData
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiQrCodeData
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import org.junit.Test
 
@@ -16,7 +16,7 @@ class SdkQrCodeLoginDataTest {
     @Test
     fun `getServer reads the value from the Rust side, null case`() {
         val sut = SdkQrCodeLoginData(
-            rustQrCodeData = FakeQrCodeData(
+            rustQrCodeData = FakeFfiQrCodeData(
                 serverNameResult = { null },
             ),
         )
@@ -26,7 +26,7 @@ class SdkQrCodeLoginDataTest {
     @Test
     fun `getServer reads the value from the Rust side`() {
         val sut = SdkQrCodeLoginData(
-            rustQrCodeData = FakeQrCodeData(
+            rustQrCodeData = FakeFfiQrCodeData(
                 serverNameResult = { A_HOMESERVER_URL },
             ),
         )

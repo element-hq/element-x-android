@@ -14,9 +14,9 @@ import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 
-class FakeRustTimelineDiff(
+class FakeFfiTimelineDiff(
     private val change: TimelineChange,
-    private val item: TimelineItem? = FakeRustTimelineItem()
+    private val item: TimelineItem? = FakeFfiTimelineItem()
 ) : TimelineDiff(NoPointer) {
     override fun change() = change
     override fun append(): List<TimelineItem>? = item?.let { listOf(it) }

@@ -14,8 +14,8 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoom
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoom
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListService
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -41,7 +41,7 @@ class RustBaseRoomTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val rustBaseRoom = createRustBaseRoom(
             initialRoomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.JOINED),
-            innerRoom = FakeRustRoom(
+            innerRoom = FakeFfiRoom(
                 leaveLambda = {
                     // Simulate a successful leave
                 }
@@ -61,7 +61,7 @@ class RustBaseRoomTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val rustBaseRoom = createRustBaseRoom(
             initialRoomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.KNOCKED),
-            innerRoom = FakeRustRoom(
+            innerRoom = FakeFfiRoom(
                 leaveLambda = {
                     // Simulate a successful leave
                 }
@@ -81,7 +81,7 @@ class RustBaseRoomTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val rustBaseRoom = createRustBaseRoom(
             initialRoomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.INVITED),
-            innerRoom = FakeRustRoom(
+            innerRoom = FakeFfiRoom(
                 leaveLambda = {
                     // Simulate a successful leave
                 }
@@ -101,7 +101,7 @@ class RustBaseRoomTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val rustBaseRoom = createRustBaseRoom(
             initialRoomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.INVITED),
-            innerRoom = FakeRustRoom(
+            innerRoom = FakeFfiRoom(
                 leaveLambda = { error("Leave failed") }
             ),
             roomMembershipObserver = roomMembershipObserver,
@@ -127,7 +127,7 @@ class RustBaseRoomTest {
 
     private fun TestScope.createRustBaseRoom(
         initialRoomInfo: RoomInfo = aRoomInfo(),
-        innerRoom: FakeRustRoom = FakeRustRoom(),
+        innerRoom: FakeFfiRoom = FakeFfiRoom(),
         roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
     ): RustBaseRoom {
         val dispatchers = testCoroutineDispatchers()
@@ -137,7 +137,7 @@ class RustBaseRoomTest {
             innerRoom = innerRoom,
             coroutineDispatchers = dispatchers,
             roomSyncSubscriber = RoomSyncSubscriber(
-                roomListService = FakeRustRoomListService(),
+                roomListService = FakeFfiRoomListService(),
                 dispatchers = dispatchers,
             ),
             roomMembershipObserver = roomMembershipObserver,

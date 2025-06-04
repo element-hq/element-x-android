@@ -13,7 +13,7 @@ import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineUniqueId
 import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 
-class FakeRustTimelineItem(
+class FakeFfiTimelineItem(
     private val asEventResult: EventTimelineItem? = null,
 ) : TimelineItem(NoPointer) {
     override fun asEvent(): EventTimelineItem? = asEventResult

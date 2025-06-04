@@ -17,7 +17,7 @@ import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
 
-class FakeRustRoom(
+class FakeFfiRoom(
     private val roomId: RoomId = A_ROOM_ID,
     private val getMembers: () -> RoomMembersIterator = { lambdaError() },
     private val getMembersNoSync: () -> RoomMembersIterator = { lambdaError() },

@@ -15,9 +15,9 @@ import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicatorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 
-class FakeRustRoomListService : RoomListService(NoPointer) {
+class FakeFfiRoomListService : RoomListService(NoPointer) {
     override suspend fun allRooms(): RoomList {
-        return FakeRustRoomList()
+        return FakeFfiRoomList()
     }
 
     private var listener: RoomListServiceSyncIndicatorListener? = null
@@ -27,7 +27,7 @@ class FakeRustRoomListService : RoomListService(NoPointer) {
         listener: RoomListServiceSyncIndicatorListener,
     ): TaskHandle {
         this.listener = listener
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
 
     fun emitRoomListServiceSyncIndicator(syncIndicator: RoomListServiceSyncIndicator) {
@@ -35,6 +35,6 @@ class FakeRustRoomListService : RoomListService(NoPointer) {
     }
 
     override fun state(listener: RoomListServiceStateListener): TaskHandle {
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
 }

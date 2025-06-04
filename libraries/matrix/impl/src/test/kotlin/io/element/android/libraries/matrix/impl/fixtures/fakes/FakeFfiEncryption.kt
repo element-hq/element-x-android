@@ -17,13 +17,13 @@ import org.matrix.rustcomponents.sdk.RecoveryStateListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.VerificationStateListener
 
-class FakeRustEncryption : Encryption(NoPointer) {
+class FakeFfiEncryption : Encryption(NoPointer) {
     override fun verificationStateListener(listener: VerificationStateListener): TaskHandle {
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
 
     override fun recoveryStateListener(listener: RecoveryStateListener): TaskHandle {
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
 
     override suspend fun waitForE2eeInitializationTasks() = simulateLongTask {}
@@ -41,6 +41,6 @@ class FakeRustEncryption : Encryption(NoPointer) {
     }
 
     override fun backupStateListener(listener: BackupStateListener): TaskHandle {
-        return FakeRustTaskHandle()
+        return FakeFfiTaskHandle()
     }
 }

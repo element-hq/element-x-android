@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.NoPointer
 
-class FakeRustHomeserverLoginDetails(
+class FakeFfiHomeserverLoginDetails(
     private val url: String = "https://example.org",
     private val supportsPasswordLogin: Boolean = true,
     private val supportsOidcLogin: Boolean = false

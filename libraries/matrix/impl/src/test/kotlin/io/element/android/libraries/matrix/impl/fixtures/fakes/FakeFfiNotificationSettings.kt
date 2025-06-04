@@ -13,7 +13,7 @@ import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
 import org.matrix.rustcomponents.sdk.RoomNotificationSettings
 
-class FakeRustNotificationSettings(
+class FakeFfiNotificationSettings(
     private val roomNotificationSettings: RoomNotificationSettings = aRustRoomNotificationSettings(),
 ) : NotificationSettings(NoPointer) {
     private var delegate: NotificationSettingsDelegate? = null
