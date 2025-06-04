@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -27,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -40,7 +38,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun VideoItemView(
     video: MediaItem.Video,
@@ -48,16 +45,10 @@ fun VideoItemView(
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bgColor = if (LocalInspectionMode.current) {
-        ElementTheme.colors.bgDecorative2
-    } else {
-        Color.Transparent
-    }
     Box(
         modifier = modifier
             .aspectRatio(1f)
-            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-            .background(bgColor),
+            .combinedClickable(onClick = onClick, onLongClick = onLongClick),
     ) {
         var isLoaded by remember { mutableStateOf(false) }
         AsyncImage(

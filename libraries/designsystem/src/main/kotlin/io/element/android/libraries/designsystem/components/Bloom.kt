@@ -102,6 +102,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Dispatchers
@@ -464,7 +465,9 @@ internal fun BloomPreview() {
     var topAppBarHeight by remember { mutableIntStateOf(-1) }
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
-    ElementPreview {
+    ElementPreview(
+        drawableFallbackForImages = CommonDrawables.sample_avatar,
+    ) {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
