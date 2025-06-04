@@ -8,7 +8,6 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.content.Intent
-import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -224,7 +223,12 @@ class NotificationBroadcastReceiverHandlerTest {
             getLambda = getLambda
         )
         val clearMessagesForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
-        val joinedRoom = FakeJoinedRoom()
+        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                markAsReadResult = markAsReadResult,
+            ),
+        )
         val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMessagesForRoomLambda = clearMessagesForRoomLambda,
         )
@@ -243,7 +247,7 @@ class NotificationBroadcastReceiverHandlerTest {
         clearMessagesForRoomLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID), value(A_ROOM_ID))
-        assertThat(joinedRoom.baseRoom.markAsReadCalls).isEqualTo(listOf(expectedReceiptType))
+        markAsReadResult.assertions().isCalledOnce().with(value(expectedReceiptType))
     }
 
     @Test

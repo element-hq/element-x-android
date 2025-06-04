@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListService
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,7 +25,7 @@ import org.matrix.rustcomponents.sdk.RoomListService as RustRoomListService
 class RustBaseRoomListServiceTest {
     @Test
     fun `syncIndicator should emit the expected values`() = runTest {
-        val roomListService = FakeRustRoomListService()
+        val roomListService = FakeFfiRoomListService()
         val sut = createRustRoomListService(
             roomListService = roomListService,
         )
@@ -42,7 +42,7 @@ class RustBaseRoomListServiceTest {
 }
 
 private fun TestScope.createRustRoomListService(
-    roomListService: RustRoomListService = FakeRustRoomListService(),
+    roomListService: RustRoomListService = FakeFfiRoomListService(),
 ) = RustRoomListService(
     innerRoomListService = roomListService,
     sessionDispatcher = StandardTestDispatcher(testScheduler),

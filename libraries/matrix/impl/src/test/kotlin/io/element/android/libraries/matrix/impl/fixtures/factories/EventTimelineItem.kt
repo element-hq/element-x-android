@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustLazyTimelineItemProvider
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiLazyTimelineItemProvider
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import org.matrix.rustcomponents.sdk.EventOrTransactionId
@@ -50,7 +50,7 @@ fun aRustEventTimelineItem(
     readReceipts = readReceipts,
     origin = origin,
     localCreatedAt = localCreatedAt,
-    lazyProvider = FakeRustLazyTimelineItemProvider(
+    lazyProvider = FakeFfiLazyTimelineItemProvider(
         debugInfo = debugInfo,
         shieldsState = shieldsState,
     )

@@ -26,6 +26,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.securebackup.impl.reset.password.ResetIdentityPasswordNode
 import io.element.android.features.securebackup.impl.reset.root.ResetIdentityRootNode
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
@@ -38,7 +39,6 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
-import io.element.android.libraries.oidc.api.OidcEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -53,7 +53,6 @@ class ResetIdentityFlowNode @AssistedInject constructor(
     private val resetIdentityFlowManager: ResetIdentityFlowManager,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
-    private val oidcEntryPoint: OidcEntryPoint,
 ) : BaseFlowNode<ResetIdentityFlowNode.NavTarget>(
     backstack = BackStack(initialElement = NavTarget.Root, savedStateMap = buildContext.savedStateMap),
     buildContext = buildContext,
@@ -69,12 +68,10 @@ class ResetIdentityFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object ResetPassword : NavTarget
-
-        @Parcelize
-        data class ResetOidc(val url: String) : NavTarget
     }
 
     private lateinit var activity: Activity
+    private var darkTheme: Boolean = false
     private var resetJob: Job? = null
 
     override fun onBuilt() {
@@ -82,7 +79,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
 
         lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStart(owner: LifecycleOwner) {
-                // If the custom tab was opened, we need to cancel the reset job
+                // If the custom tab / Web browser was opened, we need to cancel the reset job
                 // when we come back to the node if the reset wasn't successful
                 sessionCoroutineScope.launch {
                     cancelResetJob()
@@ -117,9 +114,6 @@ class ResetIdentityFlowNode @AssistedInject constructor(
                     listOf(ResetIdentityPasswordNode.Inputs(handle))
                 )
             }
-            is NavTarget.ResetOidc -> {
-                oidcEntryPoint.createFallbackWebViewNode(this, buildContext, navTarget.url)
-            }
         }
     }
 
@@ -137,11 +131,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
                                 Timber.d("No reset handle return, the reset is done.")
                             }
                             is IdentityOidcResetHandle -> {
-                                if (oidcEntryPoint.canUseCustomTab()) {
-                                    activity.openUrlInChromeCustomTab(null, false, handle.url)
-                                } else {
-                                    backstack.push(NavTarget.ResetOidc(handle.url))
-                                }
+                                activity.openUrlInChromeCustomTab(null, darkTheme, handle.url)
                                 resetJob = launch { handle.resetOidc() }
                             }
                             is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
@@ -164,7 +154,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
         if (!this::activity.isInitialized) {
             activity = requireNotNull(LocalActivity.current)
         }
-
+        darkTheme = !ElementTheme.isLightTheme
         val startResetState by resetIdentityFlowManager.currentHandleFlow.collectAsState()
         if (startResetState.isLoading()) {
             ProgressDialog(

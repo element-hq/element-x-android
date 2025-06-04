@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.roomdirectory
 
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustClient
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -15,7 +15,7 @@ import org.junit.Test
 class RustBaseRoomDirectoryServiceTest {
     @Test
     fun test() = runTest {
-        val client = FakeRustClient()
+        val client = FakeFfiClient()
         val sut = RustRoomDirectoryService(
             client = client,
             sessionDispatcher = StandardTestDispatcher(testScheduler),
