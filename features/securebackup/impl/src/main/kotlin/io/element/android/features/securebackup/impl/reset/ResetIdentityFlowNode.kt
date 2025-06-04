@@ -35,6 +35,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 import io.element.android.libraries.oidc.api.OidcEntryPoint
@@ -50,7 +51,8 @@ class ResetIdentityFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val resetIdentityFlowManager: ResetIdentityFlowManager,
-    private val coroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val oidcEntryPoint: OidcEntryPoint,
 ) : BaseFlowNode<ResetIdentityFlowNode.NavTarget>(
     backstack = BackStack(initialElement = NavTarget.Root, savedStateMap = buildContext.savedStateMap),
@@ -82,7 +84,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
             override fun onStart(owner: LifecycleOwner) {
                 // If the custom tab was opened, we need to cancel the reset job
                 // when we come back to the node if the reset wasn't successful
-                coroutineScope.launch {
+                sessionCoroutineScope.launch {
                     cancelResetJob()
 
                     resetIdentityFlowManager.whenResetIsDone {
@@ -93,7 +95,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
 
             override fun onDestroy(owner: LifecycleOwner) {
                 // Make sure we cancel the reset job when the node is destroyed, just in case
-                coroutineScope.launch { cancelResetJob() }
+                sessionCoroutineScope.launch { cancelResetJob() }
             }
         })
     }
@@ -103,7 +105,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
             is NavTarget.Root -> {
                 val callback = object : ResetIdentityRootNode.Callback {
                     override fun onContinue() {
-                        coroutineScope.startReset()
+                        sessionCoroutineScope.startReset()
                     }
                 }
                 createNode<ResetIdentityRootNode>(buildContext, listOf(callback))
@@ -167,7 +169,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
         if (startResetState.isLoading()) {
             ProgressDialog(
                 properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
-                onDismissRequest = { coroutineScope.launch { cancelResetJob() } }
+                onDismissRequest = { sessionCoroutineScope.launch { cancelResetJob() } }
             )
         }
 

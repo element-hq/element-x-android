@@ -18,6 +18,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -31,7 +32,8 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class SharePresenter @AssistedInject constructor(
     @Assisted private val intent: Intent,
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val shareIntentHandler: ShareIntentHandler,
     private val matrixClient: MatrixClient,
     private val mediaPreProcessor: MediaPreProcessor,
@@ -46,7 +48,7 @@ class SharePresenter @AssistedInject constructor(
     private val shareActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
 
     fun onRoomSelected(roomIds: List<RoomId>) {
-        appCoroutineScope.share(intent, roomIds)
+        sessionCoroutineScope.share(intent, roomIds)
     }
 
     @Composable

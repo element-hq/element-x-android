@@ -23,6 +23,7 @@ import io.element.android.features.poll.impl.history.model.PollHistoryFilter
 import io.element.android.features.poll.impl.history.model.PollHistoryItems
 import io.element.android.features.poll.impl.history.model.PollHistoryItemsFactory
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +32,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PollHistoryPresenter @Inject constructor(
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
     private val pollHistoryItemFactory: PollHistoryItemsFactory,
@@ -64,10 +66,10 @@ class PollHistoryPresenter @Inject constructor(
                 is PollHistoryEvents.LoadMore -> {
                     coroutineScope.loadMore(timeline)
                 }
-                is PollHistoryEvents.SelectPollAnswer -> appCoroutineScope.launch {
+                is PollHistoryEvents.SelectPollAnswer -> sessionCoroutineScope.launch {
                     sendPollResponseAction.execute(pollStartId = event.pollStartId, answerId = event.answerId)
                 }
-                is PollHistoryEvents.EndPoll -> appCoroutineScope.launch {
+                is PollHistoryEvents.EndPoll -> sessionCoroutineScope.launch {
                     endPollAction.execute(pollStartId = event.pollStartId)
                 }
                 is PollHistoryEvents.SelectFilter -> {

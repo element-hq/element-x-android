@@ -44,6 +44,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
@@ -98,7 +99,8 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 class MessageComposerPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
@@ -200,7 +202,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         DisposableEffect(Unit) {
             // Declare that the user is not typing anymore when the composer is disposed
             onDispose {
-                appCoroutineScope.launch {
+                sessionCoroutineScope.launch {
                     if (sendTypingNotifications) {
                         room.typingNotice(false)
                     }
@@ -236,12 +238,12 @@ class MessageComposerPresenter @AssistedInject constructor(
                     }
                 }
                 is MessageComposerEvents.SendMessage -> {
-                    appCoroutineScope.sendMessage(
+                    sessionCoroutineScope.sendMessage(
                         markdownTextEditorState = markdownTextEditorState,
                         richTextEditorState = richTextEditorState,
                     )
                 }
-                is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
+                is MessageComposerEvents.SendUri -> sessionCoroutineScope.sendAttachment(
                     attachment = Attachment.Media(
                         localMedia = localMediaFactory.createFromUri(
                             uri = event.uri,
@@ -338,7 +340,7 @@ class MessageComposerPresenter @AssistedInject constructor(
                 }
                 MessageComposerEvents.SaveDraft -> {
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
-                    appCoroutineScope.updateDraft(draft, isVolatile = false)
+                    sessionCoroutineScope.updateDraft(draft, isVolatile = false)
                 }
             }
         }

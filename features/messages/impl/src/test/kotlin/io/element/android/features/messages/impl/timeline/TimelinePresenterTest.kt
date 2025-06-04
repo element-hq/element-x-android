@@ -679,7 +679,7 @@ import kotlin.time.Duration.Companion.seconds
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
             room = room,
             dispatchers = testCoroutineDispatchers(),
-            appScope = this,
+            sessionCoroutineScope = this,
             navigator = messagesNavigator,
             redactedVoiceMessageManager = redactedVoiceMessageManager,
             endPollAction = endPollAction,

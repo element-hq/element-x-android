@@ -236,7 +236,7 @@ fun TestScope.createVoiceMessagePresenter(
     mediaSource: MediaSource = MediaSource(contentUri),
 ) = VoiceMessagePresenter(
     analyticsService = analyticsService,
-    scope = this,
+    sessionCoroutineScope = this,
     player = DefaultVoiceMessagePlayer(
         mediaPlayer = mediaPlayer,
         voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },

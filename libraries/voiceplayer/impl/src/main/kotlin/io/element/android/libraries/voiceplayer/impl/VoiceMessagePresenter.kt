@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class VoiceMessagePresenter(
     private val analyticsService: AnalyticsService,
-    private val scope: CoroutineScope,
+    private val sessionCoroutineScope: CoroutineScope,
     private val player: VoiceMessagePlayer,
     private val eventId: EventId?,
     private val duration: Duration,
@@ -92,7 +92,7 @@ class VoiceMessagePresenter(
                     } else if (playerState.isReady) {
                         player.play()
                     } else {
-                        scope.launch {
+                        sessionCoroutineScope.launch {
                             play.runUpdatingState(
                                 errorTransform = {
                                     analyticsService.trackError(

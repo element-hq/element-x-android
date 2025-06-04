@@ -30,6 +30,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -50,7 +51,8 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     private val messagesEntryPoint: MessagesEntryPoint,
     private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val matrixClient: MatrixClient,
     private val activeRoomsHolder: ActiveRoomsHolder,
     roomComponentFactory: RoomComponentFactory,
@@ -92,7 +94,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
                 trackVisitedRoom()
             },
             onResume = {
-                appCoroutineScope.launch {
+                sessionCoroutineScope.launch {
                     inputs.room.subscribeToSync()
                 }
             },

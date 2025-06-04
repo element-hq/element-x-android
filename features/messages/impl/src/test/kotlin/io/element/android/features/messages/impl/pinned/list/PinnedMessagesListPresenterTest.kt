@@ -337,7 +337,7 @@ class PinnedMessagesListPresenterTest {
             actionListPresenter = { anActionListState() },
             linkPresenter = { aLinkState() },
             analyticsService = analyticsService,
-            appCoroutineScope = this,
+            sessionCoroutineScope = this,
         )
     }
 }

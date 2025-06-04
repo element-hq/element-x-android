@@ -50,6 +50,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -69,7 +70,8 @@ import kotlinx.coroutines.launch
 class MessagesNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val coroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val room: BaseRoom,
     private val analyticsService: AnalyticsService,
     messageComposerPresenterFactory: MessageComposerPresenter.Factory,
@@ -115,7 +117,7 @@ class MessagesNode @AssistedInject constructor(
         super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
-                coroutineScope.launch { analyticsService.capture(room.toAnalyticsViewRoom()) }
+                sessionCoroutineScope.launch { analyticsService.capture(room.toAnalyticsViewRoom()) }
             },
             onDestroy = {
                 mediaPlayer.close()
