@@ -38,6 +38,7 @@ import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -66,7 +67,8 @@ class TimelinePresenter @AssistedInject constructor(
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
     private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
-    private val appScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     @Assisted private val navigator: MessagesNavigator,
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
     private val sendPollResponseAction: SendPollResponseAction,
@@ -135,7 +137,7 @@ class TimelinePresenter @AssistedInject constructor(
                             newEventState.value = NewEventState.None
                         }
                         Timber.d("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
-                        appScope.sendReadReceiptIfNeeded(
+                        sessionCoroutineScope.sendReadReceiptIfNeeded(
                             firstVisibleIndex = event.firstIndex,
                             timelineItems = timelineItems,
                             lastReadReceiptId = lastReadReceiptId,
@@ -145,13 +147,13 @@ class TimelinePresenter @AssistedInject constructor(
                         newEventState.value = NewEventState.None
                     }
                 }
-                is TimelineEvents.SelectPollAnswer -> appScope.launch {
+                is TimelineEvents.SelectPollAnswer -> sessionCoroutineScope.launch {
                     sendPollResponseAction.execute(
                         pollStartId = event.pollStartId,
                         answerId = event.answerId
                     )
                 }
-                is TimelineEvents.EndPoll -> appScope.launch {
+                is TimelineEvents.EndPoll -> sessionCoroutineScope.launch {
                     endPollAction.execute(
                         pollStartId = event.pollStartId,
                     )

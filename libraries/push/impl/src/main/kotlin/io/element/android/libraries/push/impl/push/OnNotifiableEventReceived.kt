@@ -9,6 +9,7 @@ package io.element.android.libraries.push.impl.push
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
@@ -23,6 +24,7 @@ interface OnNotifiableEventReceived {
 @ContributesBinding(AppScope::class)
 class DefaultOnNotifiableEventReceived @Inject constructor(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
+    @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
 ) : OnNotifiableEventReceived {

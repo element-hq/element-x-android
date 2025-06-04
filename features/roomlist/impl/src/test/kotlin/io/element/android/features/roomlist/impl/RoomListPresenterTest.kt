@@ -701,7 +701,7 @@ class RoomListPresenterTest {
             ),
             coroutineDispatchers = testCoroutineDispatchers(),
             notificationSettingsService = client.notificationSettingsService(),
-            appScope = backgroundScope,
+            sessionCoroutineScope = backgroundScope,
             dateTimeObserver = FakeDateTimeObserver(),
         ),
         featureFlagService = featureFlagService,

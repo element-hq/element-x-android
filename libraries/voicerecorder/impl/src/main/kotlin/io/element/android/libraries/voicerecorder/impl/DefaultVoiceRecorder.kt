@@ -15,6 +15,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.libraries.voicerecorder.impl.audio.Audio
@@ -51,10 +52,11 @@ class DefaultVoiceRecorder @Inject constructor(
     private val config: AudioConfig,
     private val fileConfig: VoiceFileConfig,
     private val audioLevelCalculator: AudioLevelCalculator,
-    appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    sessionCoroutineScope: CoroutineScope,
 ) : VoiceRecorder {
     private val voiceCoroutineScope by lazy {
-        appCoroutineScope.childScope(dispatchers.io, "VoiceRecorder-${UUID.randomUUID()}")
+        sessionCoroutineScope.childScope(dispatchers.io, "VoiceRecorder-${UUID.randomUUID()}")
     }
 
     private var outputFile: File? = null

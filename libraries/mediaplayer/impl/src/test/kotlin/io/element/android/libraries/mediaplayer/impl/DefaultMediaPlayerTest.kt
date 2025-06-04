@@ -423,7 +423,7 @@ class DefaultMediaPlayerTest {
         audioFocus: AudioFocus = FakeAudioFocus(),
     ): DefaultMediaPlayer = DefaultMediaPlayer(
         player = simplePlayer,
-        coroutineScope = backgroundScope,
+        sessionCoroutineScope = backgroundScope,
         audioFocus = audioFocus,
     )
 }

@@ -10,6 +10,7 @@ package io.element.android.libraries.voiceplayer.impl
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.voiceplayer.api.VoiceMessagePresenterFactory
@@ -22,7 +23,8 @@ import kotlin.time.Duration
 @ContributesBinding(RoomScope::class)
 class DefaultVoiceMessagePresenterFactory @Inject constructor(
     private val analyticsService: AnalyticsService,
-    private val scope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val voiceMessagePlayerFactory: VoiceMessagePlayer.Factory,
 ) : VoiceMessagePresenterFactory {
     override fun createVoiceMessagePresenter(
@@ -41,7 +43,7 @@ class DefaultVoiceMessagePresenterFactory @Inject constructor(
 
         return VoiceMessagePresenter(
             analyticsService = analyticsService,
-            scope = scope,
+            sessionCoroutineScope = sessionCoroutineScope,
             player = player,
             eventId = eventId,
             duration = duration,

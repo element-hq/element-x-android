@@ -13,6 +13,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.CacheDirectory
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -24,7 +25,8 @@ import javax.inject.Inject
  */
 @ContributesBinding(AppScope::class)
 class DefaultCacheCleaner @Inject constructor(
-    private val scope: CoroutineScope,
+    @AppCoroutineScope
+    private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     @CacheDirectory private val cacheDir: File,
 ) : CacheCleaner {
@@ -33,7 +35,7 @@ class DefaultCacheCleaner @Inject constructor(
     }
 
     override fun clearCache() {
-        scope.launch(dispatchers.io) {
+        coroutineScope.launch(dispatchers.io) {
             runCatchingExceptions {
                 SUBDIRS_TO_CLEANUP.forEach {
                     File(cacheDir.path, it).apply {

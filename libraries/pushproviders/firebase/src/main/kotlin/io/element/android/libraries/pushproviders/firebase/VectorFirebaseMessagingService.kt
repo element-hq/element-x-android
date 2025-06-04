@@ -11,6 +11,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.pushproviders.api.PushHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -23,6 +24,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var firebaseNewTokenHandler: FirebaseNewTokenHandler
     @Inject lateinit var pushParser: FirebasePushParser
     @Inject lateinit var pushHandler: PushHandler
+    @AppCoroutineScope
     @Inject lateinit var coroutineScope: CoroutineScope
 
     override fun onCreate() {

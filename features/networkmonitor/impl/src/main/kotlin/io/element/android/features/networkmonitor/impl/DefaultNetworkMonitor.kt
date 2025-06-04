@@ -19,6 +19,7 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
@@ -38,6 +39,7 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 class DefaultNetworkMonitor @Inject constructor(
     @ApplicationContext context: Context,
+    @AppCoroutineScope
     appCoroutineScope: CoroutineScope,
 ) : NetworkMonitor {
     private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
