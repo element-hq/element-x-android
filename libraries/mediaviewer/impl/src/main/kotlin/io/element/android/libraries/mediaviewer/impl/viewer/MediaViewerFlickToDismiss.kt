@@ -18,11 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.theme.ElementTheme
 import kotlinx.coroutines.delay
+import me.saket.telephoto.ExperimentalTelephotoApi
 import me.saket.telephoto.flick.FlickToDismiss
 import me.saket.telephoto.flick.FlickToDismissState
 import me.saket.telephoto.flick.rememberFlickToDismissState
 import kotlin.time.Duration
 
+@OptIn(ExperimentalTelephotoApi::class)
 @Composable
 fun MediaViewerFlickToDismiss(
     onDismiss: () -> Unit,
