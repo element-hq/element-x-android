@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Remover e banir membro"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Banir"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Eles não poderão entrar nesta sala novamente se forem convidados."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Tem certeza de que quer banir este membro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Banindo %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Remover"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Eles poderão entrar nesta sala novamente se forem convidados."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Tem certeza de que deseja remover este membro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Ver perfil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Remover da sala"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Remover membro e banir de entrar novamente no futuro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Removendo %1$s…"</string>
+</resources>

@@ -20,7 +20,7 @@ media3 = "1.7.1"
 camera = "1.4.2"
 
 # Compose
-compose_bom = "2025.04.00"
+compose_bom = "2025.05.01"
 composecompiler = "1.5.15"
 
 # Coroutines
@@ -40,7 +40,7 @@ serialization_json = "1.8.1"
 detekt = "1.23.8"
 coil = "3.1.0"
 showkase = "1.0.3"
-appyx = "1.7.0"
+appyx = "1.7.1"
 sqldelight = "2.1.0"
 wysiwyg = "2.38.3"
 telephoto = "0.15.1"
@@ -172,7 +172,7 @@ jsoup = "org.jsoup:jsoup:1.20.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.1.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.5.26"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.6.3"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -194,7 +194,7 @@ zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.16.0"
-sentry = "io.sentry:sentry-android:8.12.0"
+sentry = "io.sentry:sentry-android:8.13.2"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 

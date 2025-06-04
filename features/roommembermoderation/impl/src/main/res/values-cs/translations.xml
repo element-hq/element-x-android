@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Odebrat a vykázat člena"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Vykázat"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Nebudou se moci znovu připojit k této místnosti, pokud budou pozváni."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Jste si jisti, že chcete vykázat tohoto člena?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Vykazování %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Odebrat"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Budou moci znovu vstoupit do této místnosti, pokud budou pozváni."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Opravdu chcete tohoto člena odebrat?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Zobrazit profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Odebrat z místnosti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Odebrat člena a zakázat mu připojení v budoucnu?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Odstraňování %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Zrušit vykázání z místnosti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Zrušit vykázání"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Pokud by byli pozváni, mohli by se znovu připojit do místnosti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Opravdu chcete zrušit vykázání tohoto člena?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Rušení vykázání %1$s"</string>
+</resources>

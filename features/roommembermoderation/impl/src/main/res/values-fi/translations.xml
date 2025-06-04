@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Poista jäsen huoneesta ja anna porttikielto"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Anna porttikielto"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"He eivät voi enää liittyä tähän huoneeseen, jos heidät kutsutaan."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Haluatko varmasti antaa tälle jäsenelle porttikiellon?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Annetaan porttikieltoa käyttäjälle %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Poista"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"He voivat liittyä tähän huoneeseen uudelleen, jos heidät kutsutaan."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Haluatko varmasti poistaa tämän jäsenen?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Näytä profiili"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Poista huoneesta"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Poistetaanko jäsen huoneesta ja kielletäänkö heitä liittymästä tulevaisuudessa?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Poistetaan käyttäjää %1$s huoneesta…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Poista porttikielto huoneesta"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Poista porttikielto"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"He voivat liittyä huoneeseen uudelleen, jos heidät kutsutaan"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Haluatko varmasti poistaa tämän jäsenen porttikiellon?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Poistetaan käyttäjän %1$s porttikieltoa"</string>
+</resources>

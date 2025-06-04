@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Eliminați și interziceți membrul"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Interzicere"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Nu se vor putea alătura din nou acestei camere dacă sunt invitați."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Sunteți sigur că doriți să interziceți acest membru?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Se interzice %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Vizualizare profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Înlăturați membrul"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Înlăturați membrul și interziceți-i să se alăture în viitor?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Se elimină %1$s"</string>
+</resources>

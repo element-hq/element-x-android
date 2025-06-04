@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Sacar y vetar a un miembro"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Vetar"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"No podrán volver a unirse a esta sala si son invitados."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"¿Estás seguro de que quieres vetar a este miembro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Vetando a %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Echar"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Podrá volver a unirse a esta sala si se le invita."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"¿Seguro que quieres echar a este miembro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Ver perfil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Sacar de la sala"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"¿Sacar al miembro y prohibirle unirse en el futuro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Eliminando %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Eliminar veto en la sala"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Eliminar veto"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Podría volver a unirse a la sala si se le invita"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"¿Seguro que quieres levantarle el veto a este miembro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Levantando veto a %1$s"</string>
+</resources>

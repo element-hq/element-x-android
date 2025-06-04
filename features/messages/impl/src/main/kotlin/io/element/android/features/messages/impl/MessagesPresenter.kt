@@ -50,6 +50,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -104,6 +106,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
     private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
     private val roomCallStatePresenter: Presenter<RoomCallState>,
+    private val roomMemberModerationPresenter: Presenter<RoomMemberModerationState>,
     private val syncService: SyncService,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
@@ -144,7 +147,7 @@ class MessagesPresenter @AssistedInject constructor(
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
         val pinnedMessagesBannerState = pinnedMessagesBannerPresenter.present()
         val roomCallState = roomCallStatePresenter.present()
-
+        val roomMemberModerationState = roomMemberModerationPresenter.present()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
         val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
@@ -234,6 +237,9 @@ class MessagesPresenter @AssistedInject constructor(
                     }
                 }
                 is MessagesEvents.Dismiss -> actionListState.eventSink(ActionListEvents.Clear)
+                is MessagesEvents.OnUserClicked -> {
+                    roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.user))
+                }
             }
         }
 
@@ -263,6 +269,7 @@ class MessagesPresenter @AssistedInject constructor(
             roomCallState = roomCallState,
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             dmUserVerificationState = dmUserVerificationState,
+            roomMemberModerationState = roomMemberModerationState,
             eventSink = { handleEvents(it) }
         )
     }
