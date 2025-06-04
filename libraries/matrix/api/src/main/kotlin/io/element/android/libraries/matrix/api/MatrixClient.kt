@@ -55,7 +55,7 @@ interface MatrixClient {
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
     suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom?
     suspend fun getRoom(roomId: RoomId): BaseRoom?
-    suspend fun findDM(userId: UserId): RoomId?
+    suspend fun findDM(userId: UserId): Result<RoomId?>
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>

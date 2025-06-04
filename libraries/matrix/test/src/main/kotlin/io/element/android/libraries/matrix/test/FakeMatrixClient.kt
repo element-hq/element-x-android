@@ -103,7 +103,7 @@ class FakeMatrixClient(
 
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
-    private var findDmResult: RoomId? = A_ROOM_ID
+    private var findDmResult: Result<RoomId?> = Result.success(A_ROOM_ID)
     private val getRoomResults = mutableMapOf<RoomId, BaseRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
@@ -133,7 +133,7 @@ class FakeMatrixClient(
         return getRoomResults[roomId] as? JoinedRoom
     }
 
-    override suspend fun findDM(userId: UserId): RoomId? {
+    override suspend fun findDM(userId: UserId): Result<RoomId?> {
         return findDmResult
     }
 
@@ -248,7 +248,7 @@ class FakeMatrixClient(
         createDmResult = result
     }
 
-    fun givenFindDmResult(result: RoomId?) {
+    fun givenFindDmResult(result: Result<RoomId?>) {
         findDmResult = result
     }
 

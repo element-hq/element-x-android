@@ -297,8 +297,10 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun findDM(userId: UserId): RoomId? = withContext(sessionDispatcher) {
-        innerClient.getDmRoom(userId.value)?.use { RoomId(it.id()) }
+    override suspend fun findDM(userId: UserId): Result<RoomId?> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.getDmRoom(userId.value)?.use { RoomId(it.id()) }
+        }
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
