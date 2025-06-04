@@ -119,9 +119,26 @@ import kotlin.time.Duration.Companion.seconds
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `present - on scroll finished mark a room as read if the first visible index is 0`() = runTest(StandardTestDispatcher()) {
+    fun `present - on scroll finished mark a room as read if the first visible index is 0 - read private`() {
+        `present - on scroll finished mark a room as read if the first visible index is 0`(
+            isSendPublicReadReceiptsEnabled = false,
+            expectedReceiptType = ReceiptType.READ_PRIVATE,
+        )
+    }
+
+    @Test
+    fun `present - on scroll finished mark a room as read if the first visible index is 0 - read`() {
+        `present - on scroll finished mark a room as read if the first visible index is 0`(
+            isSendPublicReadReceiptsEnabled = true,
+            expectedReceiptType = ReceiptType.READ,
+        )
+    }
+
+    private fun `present - on scroll finished mark a room as read if the first visible index is 0`(
+        isSendPublicReadReceiptsEnabled: Boolean,
+        expectedReceiptType: ReceiptType,
+    ) = runTest(StandardTestDispatcher()) {
         val timeline = FakeTimeline(
             timelineItems = flowOf(
                 listOf(
@@ -129,11 +146,15 @@ import kotlin.time.Duration.Companion.seconds
                 )
             )
         )
+        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
         val room = FakeJoinedRoom(
             liveTimeline = timeline,
-            baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) })
+            baseRoom = FakeBaseRoom(
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                markAsReadResult = markAsReadResult,
+            )
         )
-        val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
+        val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = isSendPublicReadReceiptsEnabled)
         val presenter = createTimelinePresenter(
             timeline = timeline,
             room = room,
@@ -145,7 +166,9 @@ import kotlin.time.Duration.Companion.seconds
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
             runCurrent()
-            assertThat(room.baseRoom.markAsReadCalls).isNotEmpty()
+            assert(markAsReadResult)
+                .isCalledOnce()
+                .with(value(expectedReceiptType))
             cancelAndIgnoreRemainingEvents()
         }
     }
