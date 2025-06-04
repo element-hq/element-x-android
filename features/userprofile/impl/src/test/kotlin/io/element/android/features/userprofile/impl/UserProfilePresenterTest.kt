@@ -142,7 +142,6 @@ class UserProfilePresenterTest {
                 givenGetRoomResult(A_ROOM_ID, room)
             }
             givenFindDmResult(Result.success(dmRoom))
-            givenFindDmResult(Result.success(dmRoom))
         }
         val presenter = createUserProfilePresenter(
             userId = A_USER_ID_2,
