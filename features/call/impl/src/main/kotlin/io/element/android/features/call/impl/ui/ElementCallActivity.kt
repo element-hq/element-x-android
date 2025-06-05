@@ -97,6 +97,8 @@ class ElementCallActivity :
 
         pictureInPicturePresenter.setPipView(this)
 
+        Timber.d("Created ElementCallActivity with call type: ${webViewTarget.value}")
+
         setContent {
             val pipState = pictureInPicturePresenter.present()
             ListenToAndroidEvents(pipState)

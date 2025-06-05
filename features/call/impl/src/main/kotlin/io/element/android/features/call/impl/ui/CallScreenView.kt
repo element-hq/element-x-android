@@ -134,11 +134,13 @@ internal fun CallScreenView(
                 AsyncData.Uninitialized,
                 is AsyncData.Loading ->
                     ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
-                is AsyncData.Failure ->
+                is AsyncData.Failure -> {
+                    Timber.e(state.urlState.error, "WebView failed to load URL: ${state.urlState.error.message}")
                     ErrorDialog(
                         content = state.urlState.error.message.orEmpty(),
                         onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
                     )
+                }
                 is AsyncData.Success -> Unit
             }
         }
@@ -242,6 +244,20 @@ private fun WebView.setup(
                 ConsoleMessage.MessageLevel.WARNING -> Log.WARN
                 else -> Log.DEBUG
             }
+
+            val message = buildString {
+                append(consoleMessage.sourceId())
+                append(":")
+                append(consoleMessage.lineNumber())
+                append(" ")
+                append(consoleMessage.message())
+            }
+
+            if (message.contains("password=")) {
+                // Avoid logging any messages that contain "password" to prevent leaking sensitive information
+                return true
+            }
+
             Timber.tag("WebView").log(
                 priority = priority,
                 message = buildString {
