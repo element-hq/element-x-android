@@ -244,6 +244,20 @@ private fun WebView.setup(
                 ConsoleMessage.MessageLevel.WARNING -> Log.WARN
                 else -> Log.DEBUG
             }
+
+            val message = buildString {
+                append(consoleMessage.sourceId())
+                append(":")
+                append(consoleMessage.lineNumber())
+                append(" ")
+                append(consoleMessage.message())
+            }
+
+            if (message.contains("password=")) {
+                // Avoid logging any messages that contain "password" to prevent leaking sensitive information
+                return true
+            }
+
             Timber.tag("WebView").log(
                 priority = priority,
                 message = buildString {
