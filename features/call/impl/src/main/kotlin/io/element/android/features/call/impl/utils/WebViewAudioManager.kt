@@ -213,7 +213,7 @@ class WebViewAudioManager(
                 previousSelectedDevice = listAudioDevices().find { it.id.toString() == selectedDeviceId }
                 audioManager.selectAudioDevice(selectedDeviceId)
             },
-            onAudioTrackReady = {
+            onAudioPlaybackStarted = {
                 MainScope().launch {
                     // Calling this ahead of time makes the default audio device to not use the right audio stream
                     setAvailableAudioDevices()
@@ -239,8 +239,8 @@ class WebViewAudioManager(
      * It should be called with some delay after [registerWebViewDeviceSelectedCallback].
      */
     private fun setWebViewAndroidNativeBridge() {
-        Timber.d("Adding callback in controls.onAudioTrackReady")
-        webView.evaluateJavascript("controls.onAudioTrackReady = () => { console.log('SET TRACK READY SET'); androidNativeBridge.onTrackReady(); };", null)
+        Timber.d("Adding callback in controls.onAudioPlaybackStarted")
+        webView.evaluateJavascript("controls.onAudioPlaybackStarted = () => { console.log('SET TRACK READY SET'); androidNativeBridge.onTrackReady(); };", null)
         Timber.d("Adding callback in controls.onOutputDeviceSelect")
         webView.evaluateJavascript("controls.onOutputDeviceSelect = (id) => { androidNativeBridge.setOutputDevice(id); };", null)
     }
@@ -374,7 +374,7 @@ class WebViewAudioManager(
  */
 private class AndroidWebViewAudioBridge(
     private val onAudioDeviceSelected: (String) -> Unit,
-    private val onAudioTrackReady: () -> Unit,
+    private val onAudioPlaybackStarted: () -> Unit,
 ) {
     @JavascriptInterface
     fun setOutputDevice(id: String) {
@@ -388,7 +388,7 @@ private class AndroidWebViewAudioBridge(
         // It can be used to start playing audio or to update the UI
         Timber.d("Audio track is ready")
 
-        onAudioTrackReady()
+        onAudioPlaybackStarted()
     }
 }
 
