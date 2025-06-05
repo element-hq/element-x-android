@@ -72,7 +72,15 @@ class RustMediaLoader(
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
                         filename = filename,
-                        mimeType = mimeType?.takeIf { MimeTypes.hasSubtype(it) } ?: MimeTypes.OctetStream,
+                        mimeType = when {
+                            mimeType == null -> MimeTypes.OctetStream
+                            MimeTypes.hasSubtype(mimeType) -> mimeType
+                            // Fallback to a default mime type based on the main type, so that the SDK can create a file with the correct extension.
+                            mimeType == MimeTypes.Images -> MimeTypes.Jpeg
+                            mimeType == MimeTypes.Videos -> MimeTypes.Mp4
+                            mimeType == MimeTypes.Audio -> MimeTypes.Mp3
+                            else -> MimeTypes.OctetStream
+                        },
                         useCache = useCache,
                         tempDir = cacheDirectory.path,
                     )
