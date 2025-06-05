@@ -122,7 +122,7 @@ fun TimelineItemVideoView(
                             height = content.thumbnailHeight?.toLong() ?: MAX_THUMBNAIL_HEIGHT,
                         )
                     ),
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                     contentDescription = description,
                     onState = { isLoaded = it is AsyncImagePainter.State.Success },

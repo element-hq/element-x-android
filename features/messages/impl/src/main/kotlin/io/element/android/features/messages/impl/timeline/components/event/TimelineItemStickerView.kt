@@ -76,7 +76,7 @@ fun TimelineItemStickerView(
                             mimeType = content.mimeType,
                         ),
                     ),
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                     contentDescription = description,
                     onState = { isLoaded = it is AsyncImagePainter.State.Success },
