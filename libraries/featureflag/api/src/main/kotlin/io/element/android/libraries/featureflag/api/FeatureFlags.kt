@@ -114,9 +114,9 @@ enum class FeatureFlags(
     ),
     EnableKeyShareOnInvite(
         key = "feature.enableKeyShareOnInvite",
-        title = "Share encrypted history with other users when sending an invite",
-        description = "When inviting another user to an encrypted room, share encrypted history with that user, and"+
-            " accept encrypted history from other users." +
+        title = "Share encrypted history with new members",
+        description = "When inviting a user to an encrypted room that has history visibility set to \"shared\"," +
+            " share encrypted history with that user, and accept encrypted history when you are invited to such a room." +
             "\nRequires an app restart to take effect." +
             "\n\nWARNING: this feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on" +
             " production accounts.",
