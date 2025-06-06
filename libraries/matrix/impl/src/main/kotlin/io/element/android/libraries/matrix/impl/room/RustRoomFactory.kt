@@ -51,12 +51,11 @@ class RustRoomFactory(
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val featureFlagService: FeatureFlagService,
     private val roomMembershipObserver: RoomMembershipObserver,
+    private val roomInfoMapper: RoomInfoMapper,
 ) {
     private val dispatcher = dispatchers.io.limitedParallelism(1)
     private val mutex = Mutex()
     private val isDestroyed: AtomicBoolean = AtomicBoolean(false)
-
-    private val roomInfoMapper = RoomInfoMapper()
 
     private val eventFilters = TimelineConfig.excludedEvents
         .takeIf { it.isNotEmpty() }

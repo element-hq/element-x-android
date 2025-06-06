@@ -13,7 +13,6 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.impl.analytics.toAnalyticsJoinedRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import javax.inject.Inject
@@ -39,15 +38,10 @@ class DefaultJoinRoom @Inject constructor(
             is RoomIdOrAlias.Alias -> {
                 client.joinRoomByIdOrAlias(roomIdOrAlias, serverNames = emptyList())
             }
-        }.onSuccess { roomSummary ->
-            client.captureJoinedRoomAnalytics(roomSummary, trigger)
+        }.onSuccess { roomInfo ->
+            if (roomInfo != null) {
+                analyticsService.capture(roomInfo.toAnalyticsJoinedRoom(trigger))
+            }
         }.map { }
-    }
-
-    private suspend fun MatrixClient.captureJoinedRoomAnalytics(roomSummary: RoomSummary?, trigger: JoinedRoom.Trigger) {
-        if (roomSummary == null) return
-        getRoom(roomSummary.roomId)?.use { room ->
-            analyticsService.capture(room.toAnalyticsJoinedRoom(trigger))
-        }
     }
 }
