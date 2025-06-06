@@ -242,7 +242,7 @@ class WebViewAudioManager(
      */
     private fun setWebViewAndroidNativeBridge() {
         Timber.d("Adding callback in controls.onAudioPlaybackStarted")
-        webView.evaluateJavascript("controls.onAudioPlaybackStarted = () => { console.log('SET TRACK READY SET'); androidNativeBridge.onTrackReady(); };", null)
+        webView.evaluateJavascript("controls.onAudioPlaybackStarted = () => { androidNativeBridge.onTrackReady(); };", null)
         Timber.d("Adding callback in controls.onOutputDeviceSelect")
         webView.evaluateJavascript("controls.onOutputDeviceSelect = (id) => { androidNativeBridge.setOutputDevice(id); };", null)
     }
