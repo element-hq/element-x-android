@@ -8,10 +8,6 @@
 package io.element.android.features.call.impl.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.media.AudioDeviceCallback
-import android.media.AudioDeviceInfo
-import android.media.AudioManager
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.ConsoleMessage
@@ -28,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,17 +32,15 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.getSystemService
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.call.impl.R
 import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PictureInPictureStateProvider
 import io.element.android.features.call.impl.pip.aPictureInPictureState
+import io.element.android.features.call.impl.utils.WebViewAudioManager
 import io.element.android.features.call.impl.utils.WebViewPipController
 import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
-import io.element.android.libraries.androidutils.compat.disableExternalAudioDevice
-import io.element.android.libraries.androidutils.compat.enableExternalAudioDevice
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -108,6 +103,8 @@ internal fun CallScreenView(
                 onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
             )
         } else {
+            var webViewAudioManager by remember { mutableStateOf<WebViewAudioManager?>(null) }
+            val coroutineScope = rememberCoroutineScope()
             CallWebView(
                 modifier = Modifier
                     .padding(padding)
@@ -120,14 +117,27 @@ internal fun CallScreenView(
                     val callback: RequestPermissionCallback = { request.grant(it) }
                     requestPermissions(androidPermissions.toTypedArray(), callback)
                 },
-                onWebViewCreate = { webView ->
+                onCreateWebView = { webView ->
                     val interceptor = WebViewWidgetMessageInterceptor(
                         webView = webView,
+                        onUrlLoaded = { url ->
+                            if (webViewAudioManager?.isInCallMode?.get() == false) {
+                                Timber.d("URL $url is loaded, starting in-call audio mode")
+                                webViewAudioManager?.onCallStarted()
+                            } else {
+                                Timber.d("Can't start in-call audio mode since the app is already in it.")
+                            }
+                        },
                         onError = { state.eventSink(CallScreenEvents.OnWebViewError(it)) },
                     )
+                    webViewAudioManager = WebViewAudioManager(webView, coroutineScope)
                     state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
                     val pipController = WebViewPipController(webView)
                     pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
+                },
+                onDestroyWebView = {
+                    // Reset audio mode
+                    webViewAudioManager?.onCallStopped()
                 }
             )
             when (state.urlState) {
@@ -152,7 +162,8 @@ private fun CallWebView(
     url: AsyncData<String>,
     userAgent: String,
     onPermissionsRequest: (PermissionRequest) -> Unit,
-    onWebViewCreate: (WebView) -> Unit,
+    onCreateWebView: (WebView) -> Unit,
+    onDestroyWebView: (WebView) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (LocalInspectionMode.current) {
@@ -160,13 +171,11 @@ private fun CallWebView(
             Text("WebView - can't be previewed")
         }
     } else {
-        var audioDeviceCallback: AudioDeviceCallback? by remember { mutableStateOf(null) }
         AndroidView(
             modifier = modifier,
             factory = { context ->
-                audioDeviceCallback = context.setupAudioConfiguration()
                 WebView(context).apply {
-                    onWebViewCreate(this)
+                    onCreateWebView(this)
                     setup(userAgent, onPermissionsRequest)
                 }
             },
@@ -176,39 +185,11 @@ private fun CallWebView(
                 }
             },
             onRelease = { webView ->
-                // Reset audio mode
-                webView.context.releaseAudioConfiguration(audioDeviceCallback)
+                onDestroyWebView(webView)
                 webView.destroy()
             }
         )
     }
-}
-
-private fun Context.setupAudioConfiguration(): AudioDeviceCallback? {
-    val audioManager = getSystemService<AudioManager>() ?: return null
-    // Set 'voice call' mode so volume keys actually control the call volume
-    audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
-    audioManager.enableExternalAudioDevice()
-    return object : AudioDeviceCallback() {
-        override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>?) {
-            Timber.d("Audio devices added")
-            audioManager.enableExternalAudioDevice()
-        }
-
-        override fun onAudioDevicesRemoved(removedDevices: Array<out AudioDeviceInfo>?) {
-            Timber.d("Audio devices removed")
-            audioManager.enableExternalAudioDevice()
-        }
-    }.also {
-        audioManager.registerAudioDeviceCallback(it, null)
-    }
-}
-
-private fun Context.releaseAudioConfiguration(audioDeviceCallback: AudioDeviceCallback?) {
-    val audioManager = getSystemService<AudioManager>() ?: return
-    audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
-    audioManager.disableExternalAudioDevice()
-    audioManager.mode = AudioManager.MODE_NORMAL
 }
 
 @SuppressLint("SetJavaScriptEnabled")
