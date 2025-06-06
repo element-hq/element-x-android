@@ -16,7 +16,8 @@ import android.os.PowerManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.core.content.getSystemService
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -35,6 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 class WebViewAudioManager(
     private val webView: WebView,
+    private val coroutineScope: CoroutineScope,
 ) {
     // The list of device types that are considered as communication devices, sorted by likelihood of it being used for communication.
     private val wantedDeviceTypes = listOf(
@@ -214,7 +216,7 @@ class WebViewAudioManager(
                 audioManager.selectAudioDevice(selectedDeviceId)
             },
             onAudioPlaybackStarted = {
-                MainScope().launch {
+                coroutineScope.launch(Dispatchers.Main) {
                     // Calling this ahead of time makes the default audio device to not use the right audio stream
                     setAvailableAudioDevices()
 
@@ -307,7 +309,9 @@ class WebViewAudioManager(
      * @param deviceId The id of the selected audio device.
      */
     private fun updateSelectedAudioDeviceInWebView(deviceId: String) {
-        MainScope().launch { webView.evaluateJavascript("controls.setOutputDevice('$deviceId');", null) }
+        coroutineScope.launch(Dispatchers.Main) {
+            webView.evaluateJavascript("controls.setOutputDevice('$deviceId');", null)
+        }
     }
 
     /**
