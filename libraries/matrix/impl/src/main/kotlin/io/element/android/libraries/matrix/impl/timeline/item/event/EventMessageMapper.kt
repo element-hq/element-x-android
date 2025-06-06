@@ -31,6 +31,9 @@ import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
 import org.matrix.rustcomponents.sdk.MessageType as RustMessageType
 
+// https://github.com/Johennes/matrix-spec-proposals/blob/johannes/msgtype-galleries/proposals/4274-inline-media-galleries.md#unstable-prefix
+private const val MSG_TYPE_GALLERY_UNSTABLE = "dm.filament.gallery"
+
 class EventMessageMapper {
     private val inReplyToMapper by lazy { InReplyToMapper(TimelineEventContentMapper()) }
 
@@ -111,6 +114,10 @@ class EventMessageMapper {
         }
         is MessageType.Other -> {
             OtherMessageType(type.msgtype, type.body)
+        }
+        is MessageType.Gallery -> {
+            // TODO expose the GalleryType.
+            OtherMessageType(MSG_TYPE_GALLERY_UNSTABLE, type.content.body)
         }
     }
 }
