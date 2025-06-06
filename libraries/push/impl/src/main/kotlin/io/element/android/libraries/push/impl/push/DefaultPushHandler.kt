@@ -75,21 +75,34 @@ class DefaultPushHandler @Inject constructor(
                 for (request in requests) {
                     // Log the result of the push notification event
                     val result = resolvedEvents[request]
-                    if (result?.isSuccess == true) {
-                        pushHistoryService.onSuccess(
-                            providerInfo = request.providerInfo,
-                            eventId = request.eventId,
-                            roomId = request.roomId,
-                            sessionId = request.sessionId,
-                            comment = "Push handled successfully",
-                        )
-                    } else {
+                    if (result == null) {
                         pushHistoryService.onUnableToResolveEvent(
                             providerInfo = request.providerInfo,
                             eventId = request.eventId,
                             roomId = request.roomId,
                             sessionId = request.sessionId,
-                            reason = "Push not handled",
+                            reason = "Push not handled: no result found for request",
+                        )
+                    } else {
+                        result.fold(
+                            onSuccess = {
+                                pushHistoryService.onSuccess(
+                                    providerInfo = request.providerInfo,
+                                    eventId = request.eventId,
+                                    roomId = request.roomId,
+                                    sessionId = request.sessionId,
+                                    comment = "Push handled successfully",
+                                )
+                            },
+                            onFailure = { exception ->
+                                pushHistoryService.onUnableToResolveEvent(
+                                    providerInfo = request.providerInfo,
+                                    eventId = request.eventId,
+                                    roomId = request.roomId,
+                                    sessionId = request.sessionId,
+                                    reason = exception.message ?: exception.javaClass.simpleName,
+                                )
+                            }
                         )
                     }
                 }
