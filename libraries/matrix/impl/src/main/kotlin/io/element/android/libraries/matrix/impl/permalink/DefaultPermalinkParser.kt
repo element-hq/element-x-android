@@ -29,6 +29,7 @@ import javax.inject.Inject
  * element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks
  * or matrix.to permalinks (e.g. https://matrix.to/#/@chagai95:matrix.org)
  * or client permalinks (e.g. <clientPermalinkBaseUrl>user/@chagai95:matrix.org)
+ * or matrix: permalinks (e.g. matrix:u/chagai95:matrix.org)
  */
 @ContributesBinding(AppScope::class)
 class DefaultPermalinkParser @Inject constructor(
@@ -40,10 +41,15 @@ class DefaultPermalinkParser @Inject constructor(
      */
     override fun parse(uriString: String): PermalinkData {
         val uri = uriString.toUri()
-        // the client or element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the
-        // mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
-        // so convert URI to matrix.to to simplify parsing process
-        val matrixToUri = matrixToConverter.convert(uri) ?: return PermalinkData.FallbackLink(uri)
+        val matrixToUri = if (uri.scheme == "matrix") {
+            // take matrix: URI as is to [parseMatrixEntityFrom]
+            uri
+        } else {
+            // the client or element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the
+            // mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
+            // so convert URI to matrix.to to simplify parsing process
+            matrixToConverter.convert(uri) ?: return PermalinkData.FallbackLink(uri)
+        }
 
         val result = runCatchingExceptions {
             parseMatrixEntityFrom(matrixToUri.toString())
