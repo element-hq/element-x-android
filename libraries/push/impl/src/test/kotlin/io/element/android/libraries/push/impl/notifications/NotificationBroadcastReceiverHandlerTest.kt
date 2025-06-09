@@ -14,9 +14,9 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.IntentionalMention
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.room.message.replyInThread
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -262,7 +262,7 @@ class NotificationBroadcastReceiverHandlerTest {
 
     @Test
     fun `Test join room`() = runTest {
-        val joinRoom = lambdaRecorder<RoomId, Result<RoomSummary?>> { _ -> Result.success(null) }
+        val joinRoom = lambdaRecorder<RoomId, Result<RoomInfo?>> { _ -> Result.success(null) }
         val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
         val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda,
@@ -471,7 +471,7 @@ class NotificationBroadcastReceiverHandlerTest {
 
     private fun TestScope.createNotificationBroadcastReceiverHandler(
         joinedRoom: FakeJoinedRoom? = FakeJoinedRoom(),
-        joinRoom: (RoomId) -> Result<RoomSummary?> = { lambdaError() },
+        joinRoom: (RoomId) -> Result<RoomInfo?> = { lambdaError() },
         matrixClient: MatrixClient? = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, joinedRoom)
             joinRoomLambda = joinRoom
