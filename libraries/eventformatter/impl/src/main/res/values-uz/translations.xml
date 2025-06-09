@@ -24,7 +24,7 @@
   <string name="state_event_room_invite_you">"%1$ssizni taklif qildi"</string>
   <string name="state_event_room_join">"%1$sxonaga qo\'shildi"</string>
   <string name="state_event_room_join_by_you">"Siz xonaga qo\'shildingiz"</string>
-  <string name="state_event_room_knock">"%1$s qo\'shilishni so\'radi"</string>
+  <string name="state_event_room_knock">"%1$s qoʻshilishni soʻradi"</string>
   <string name="state_event_room_knock_accepted">"%1$s %2$sga qo\'shilishga ruxsat berdi"</string>
   <string name="state_event_room_knock_accepted_by_you">"Siz %1$sga qo\'shilishaga ruxsat berdingiz"</string>
   <string name="state_event_room_knock_by_you">"Siz qoʻshilishni soʻragansiz"</string>

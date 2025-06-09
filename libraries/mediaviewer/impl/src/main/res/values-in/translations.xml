@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Berkas ini akan dihapus dari ruangan dan anggota tidak akan memiliki akses ke sana."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Hapus berkas?"</string>
+  <string name="screen_media_browser_download_error_message">"Periksa koneksi internet Anda dan coba lagi."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Dokumen, berkas audio, dan pesan suara yang diunggah ke ruangan ini akan ditampilkan di sini."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Belum ada berkas yang diunggah"</string>
+  <string name="screen_media_browser_list_loading_files">"Memuat berkas…"</string>
+  <string name="screen_media_browser_list_loading_media">"Memuat media…"</string>
+  <string name="screen_media_browser_list_mode_files">"Berkas"</string>
+  <string name="screen_media_browser_list_mode_media">"Media"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Gambar dan video yang diunggah ke ruangan ini akan ditampilkan di sini."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Belum ada media yang diunggah"</string>
+  <string name="screen_media_browser_title">"Media dan berkas"</string>
+  <string name="screen_media_details_file_format">"Format berkas"</string>
+  <string name="screen_media_details_filename">"Nama berkas"</string>
+  <string name="screen_media_details_uploaded_by">"Diunggah oleh"</string>
+  <string name="screen_media_details_uploaded_on">"Diunggah pada"</string>
+</resources>

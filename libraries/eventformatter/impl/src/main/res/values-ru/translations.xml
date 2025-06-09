@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"Вы удалили изображение комнаты"</string>
   <string name="state_event_room_ban">"%1$s заблокировал %2$s"</string>
   <string name="state_event_room_ban_by_you">"Вы заблокировали %1$s"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"Вы заблокировали %1$s: %2$s"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s заблокирован %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s создал комнату"</string>
   <string name="state_event_room_created_by_you">"Вы создали комнату"</string>
   <string name="state_event_room_invite">"%1$s пригласил %2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"Вы отклонили приглашение"</string>
   <string name="state_event_room_remove">"%1$s удалил %2$s"</string>
   <string name="state_event_room_remove_by_you">"Вы удалили %1$s"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"Вы удалили %1$s: %2$s"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s удален %2$s: %3$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s отправила приглашение %2$s присоединиться к комнате"</string>
   <string name="state_event_room_third_party_invite_by_you">"Вы отправили приглашение присоединиться к комнате %1$s"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s отозвал приглашение %2$s присоединиться к комнате"</string>

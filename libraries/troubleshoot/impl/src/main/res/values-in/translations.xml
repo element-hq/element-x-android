@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Jalankan tes"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Jalankan tes lagi"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Beberapa tes gagal. Silakan periksa detailnya."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Jalankan pengujian untuk mendeteksi masalah apa pun dalam konfigurasi Anda yang mungkin membuat notifikasi tidak berperilaku seperti yang diharapkan."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Mencoba untuk memperbaiki"</string>
+  <string name="troubleshoot_notifications_screen_success">"Semua tes berhasil dilalui."</string>
+  <string name="troubleshoot_notifications_screen_title">"Pecahkan masalah notifikasi"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Beberapa tes membutuhkan perhatian Anda. Silakan periksa detailnya."</string>
+</resources>

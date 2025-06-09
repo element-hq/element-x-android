@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Ya, terima semua"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Apakah Anda yakin ingin menerima semua permintaan untuk bergabung?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Terima semua permintaan"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Terima semua"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Kami tidak dapat menerima semua permintaan. Apakah Anda ingin mencoba lagi?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Gagal menerima semua permintaan"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Menerima semua permintaan untuk bergabung"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Kami tidak dapat menerima permintaan ini. Apakah Anda ingin mencoba lagi?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Gagal menerima permintaan"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Menerima permintaan untuk bergabung"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ya, tolak dan cekal"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Apakah Anda yakin ingin menolak dan mencekal %1$s? Pengguna ini tidak akan dapat meminta akses untuk bergabung ke ruangan ini lagi."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Tolak dan cekal akses"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Menolak dan mencekal akses"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ya, tolak"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Apakah Anda yakin ingin menolak permintaan %1$s untuk bergabung ke ruangan ini?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Tolak akses"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Tolak dan cekal"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Kami tidak dapat menolak permintaan ini. Apakah Anda ingin mencoba lagi?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Gagal menolak permintaan"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Menolak permintaan untuk bergabung"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Ketika seseorang akan meminta untuk bergabung dengan ruangan, Anda akan dapat melihat permintaan mereka di sini."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Tidak ada permintaan yang tertunda untuk bergabung"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Memuat permintaan untuk bergabung…"</string>
+  <string name="screen_knock_requests_list_title">"Permintaan untuk bergabung"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="other">"%1$s +%2$d lainnya ingin bergabung ke ruangan ini"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Lihat semua"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Terima"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s ingin bergabung ke ruangan ini"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Lihat"</string>
+</resources>
