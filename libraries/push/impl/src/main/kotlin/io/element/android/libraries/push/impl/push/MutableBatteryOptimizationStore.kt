@@ -22,10 +22,10 @@ class DefaultMutableBatteryOptimizationStore @Inject constructor(
     private val defaultPushDataStore: DefaultPushDataStore,
 ) : MutableBatteryOptimizationStore {
     override suspend fun showBatteryOptimizationBanner() {
-        defaultPushDataStore.setBatteryOptimizationBannerState(1)
+        defaultPushDataStore.setBatteryOptimizationBannerState(DefaultPushDataStore.BATTERY_OPTIMIZATION_BANNER_STATE_SHOW)
     }
 
     override suspend fun onOptimizationBannerDismissed() {
-        defaultPushDataStore.setBatteryOptimizationBannerState(2)
+        defaultPushDataStore.setBatteryOptimizationBannerState(DefaultPushDataStore.BATTERY_OPTIMIZATION_BANNER_STATE_DISMISSED)
     }
 }
