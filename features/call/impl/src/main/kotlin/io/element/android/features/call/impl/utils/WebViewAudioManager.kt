@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,23 +67,26 @@ class WebViewAudioManager(
     /**
      * This listener tracks the current communication device and updates the WebView when it changes.
      */
-    private val commsDeviceChangedListener = AudioManager.OnCommunicationDeviceChangedListener { device ->
-        if (device != null && device.id == expectedNewCommunicationDeviceId) {
-            expectedNewCommunicationDeviceId = null
-            Timber.d("Audio device changed, type: ${device.type}")
-            updateSelectedAudioDeviceInWebView(device.id.toString())
-        } else if (device != null && device.id != expectedNewCommunicationDeviceId) {
-            // We were expecting a device change but it didn't happen, so we should retry
-            val expectedDeviceId = expectedNewCommunicationDeviceId
-            if (expectedDeviceId != null) {
-                // Remove the expected id so we only retry once
+    @get:RequiresApi(Build.VERSION_CODES.S)
+    private val commsDeviceChangedListener by lazy {
+        AudioManager.OnCommunicationDeviceChangedListener { device ->
+            if (device != null && device.id == expectedNewCommunicationDeviceId) {
                 expectedNewCommunicationDeviceId = null
-                audioManager.selectAudioDevice(expectedDeviceId.toString())
+                Timber.d("Audio device changed, type: ${device.type}")
+                updateSelectedAudioDeviceInWebView(device.id.toString())
+            } else if (device != null && device.id != expectedNewCommunicationDeviceId) {
+                // We were expecting a device change but it didn't happen, so we should retry
+                val expectedDeviceId = expectedNewCommunicationDeviceId
+                if (expectedDeviceId != null) {
+                    // Remove the expected id so we only retry once
+                    expectedNewCommunicationDeviceId = null
+                    audioManager.selectAudioDevice(expectedDeviceId.toString())
+                }
+            } else {
+                Timber.d("Audio device cleared")
+                expectedNewCommunicationDeviceId = null
+                audioManager.selectAudioDevice(null)
             }
-        } else {
-            Timber.d("Audio device cleared")
-            expectedNewCommunicationDeviceId = null
-            audioManager.selectAudioDevice(null)
         }
     }
 
