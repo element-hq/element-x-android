@@ -1539,7 +1539,7 @@ class MessageComposerPresenterTest {
         draftService: ComposerDraftService = FakeComposerDraftService(),
     ) = MessageComposerPresenter(
         navigator = navigator,
-        appCoroutineScope = this,
+        sessionCoroutineScope = this,
         room = room,
         mediaPickerProvider = pickerProvider,
         featureFlagService = featureFlagService,

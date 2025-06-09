@@ -24,7 +24,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -41,8 +40,11 @@ import io.element.android.features.messages.impl.messagecomposer.suggestions.Sug
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
@@ -97,7 +99,8 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 class MessageComposerPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
@@ -165,13 +168,13 @@ class MessageComposerPresenter @AssistedInject constructor(
             handlePickedMedia(uri, mimeType)
         }
         val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri ->
-            handlePickedMedia(uri)
+            handlePickedMedia(uri, MimeTypes.OctetStream)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
-            handlePickedMedia(uri, MimeTypes.IMAGE_JPEG)
+            handlePickedMedia(uri, MimeTypes.Jpeg)
         }
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
-            handlePickedMedia(uri, MimeTypes.VIDEO_MP4)
+            handlePickedMedia(uri, MimeTypes.Mp4)
         }
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
@@ -199,7 +202,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         DisposableEffect(Unit) {
             // Declare that the user is not typing anymore when the composer is disposed
             onDispose {
-                appCoroutineScope.launch {
+                sessionCoroutineScope.launch {
                     if (sendTypingNotifications) {
                         room.typingNotice(false)
                     }
@@ -235,12 +238,12 @@ class MessageComposerPresenter @AssistedInject constructor(
                     }
                 }
                 is MessageComposerEvents.SendMessage -> {
-                    appCoroutineScope.sendMessage(
+                    sessionCoroutineScope.sendMessage(
                         markdownTextEditorState = markdownTextEditorState,
                         richTextEditorState = richTextEditorState,
                     )
                 }
-                is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
+                is MessageComposerEvents.SendUri -> sessionCoroutineScope.sendAttachment(
                     attachment = Attachment.Media(
                         localMedia = localMediaFactory.createFromUri(
                             uri = event.uri,
@@ -337,7 +340,7 @@ class MessageComposerPresenter @AssistedInject constructor(
                 }
                 MessageComposerEvents.SaveDraft -> {
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
-                    appCoroutineScope.updateDraft(draft, isVolatile = false)
+                    sessionCoroutineScope.updateDraft(draft, isVolatile = false)
                 }
             }
         }
@@ -512,7 +515,7 @@ class MessageComposerPresenter @AssistedInject constructor(
     private suspend fun sendMedia(
         uri: Uri,
         mimeType: String,
-    ) = runCatching {
+    ) = runCatchingExceptions {
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,

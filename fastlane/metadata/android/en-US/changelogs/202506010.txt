@@ -1,0 +1,2 @@
+Main changes in this version: fix audio devices and volume selection in Element Call, improves moderation features.
+Full changelog: https://github.com/element-hq/element-x-android/releases

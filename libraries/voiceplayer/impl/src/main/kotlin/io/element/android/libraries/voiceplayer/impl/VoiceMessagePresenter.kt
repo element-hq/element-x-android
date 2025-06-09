@@ -17,6 +17,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.extensions.flatMap
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.utils.time.formatShort
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvents
@@ -30,7 +31,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class VoiceMessagePresenter(
     private val analyticsService: AnalyticsService,
-    private val scope: CoroutineScope,
+    private val sessionCoroutineScope: CoroutineScope,
     private val player: VoiceMessagePlayer,
     private val eventId: EventId?,
     private val duration: Duration,
@@ -91,7 +92,7 @@ class VoiceMessagePresenter(
                     } else if (playerState.isReady) {
                         player.play()
                     } else {
-                        scope.launch {
+                        sessionCoroutineScope.launch {
                             play.runUpdatingState(
                                 errorTransform = {
                                     analyticsService.trackError(
@@ -101,7 +102,7 @@ class VoiceMessagePresenter(
                                 },
                             ) {
                                 player.prepare().flatMap {
-                                    runCatching { player.play() }
+                                    runCatchingExceptions { player.play() }
                                 }
                             }
                         }

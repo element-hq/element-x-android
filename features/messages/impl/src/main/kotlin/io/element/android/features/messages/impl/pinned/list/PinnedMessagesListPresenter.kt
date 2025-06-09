@@ -38,6 +38,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
@@ -67,7 +68,8 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private val linkPresenter: Presenter<LinkState>,
     private val snackbarDispatcher: SnackbarDispatcher,
     @Assisted private val actionListPresenter: Presenter<ActionListState>,
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
 ) : Presenter<PinnedMessagesListState> {
     @AssistedFactory
@@ -123,7 +125,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
 
         fun handleEvents(event: PinnedMessagesListEvents) {
             when (event) {
-                is PinnedMessagesListEvents.HandleAction -> appCoroutineScope.handleTimelineAction(event.action, event.event)
+                is PinnedMessagesListEvents.HandleAction -> sessionCoroutineScope.handleTimelineAction(event.action, event.event)
             }
         }
 

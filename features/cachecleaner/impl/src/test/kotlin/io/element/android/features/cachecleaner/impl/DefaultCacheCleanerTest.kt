@@ -55,7 +55,7 @@ class DefaultCacheCleanerTest {
     }
 
     private fun TestScope.aCacheCleaner() = DefaultCacheCleaner(
-        scope = this,
+        coroutineScope = this,
         dispatchers = this.testCoroutineDispatchers(true),
         cacheDir = temporaryFolder.root,
     )

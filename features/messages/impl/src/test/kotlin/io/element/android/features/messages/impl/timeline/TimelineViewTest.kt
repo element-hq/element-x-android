@@ -187,7 +187,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     forceJumpToBottomVisibility: Boolean = false,
 ) {
-    setSafeContent {
+    setSafeContent(clearAndroidUiDispatcher = true) {
         TimelineView(
             state = state,
             timelineProtectionState = timelineProtectionState,

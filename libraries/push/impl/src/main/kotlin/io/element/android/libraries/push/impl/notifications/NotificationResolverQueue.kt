@@ -9,6 +9,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -34,6 +35,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @SingleIn(AppScope::class)
 class NotificationResolverQueue @Inject constructor(
     private val notifiableEventResolver: NotifiableEventResolver,
+    @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
 ) {
     companion object {

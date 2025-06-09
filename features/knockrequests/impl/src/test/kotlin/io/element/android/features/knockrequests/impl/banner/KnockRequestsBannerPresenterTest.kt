@@ -238,6 +238,6 @@ private fun TestScope.createKnockRequestsBannerPresenter(
     )
     return KnockRequestsBannerPresenter(
         knockRequestsService = knockRequestsService,
-        appCoroutineScope = this,
+        sessionCoroutineScope = this,
     )
 }

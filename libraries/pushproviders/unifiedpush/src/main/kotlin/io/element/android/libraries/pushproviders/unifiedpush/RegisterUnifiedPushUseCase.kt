@@ -35,6 +35,7 @@ class DefaultRegisterUnifiedPushUseCase @Inject constructor(
         // VectorUnifiedPushMessagingReceiver.onNewEndpoint
         UnifiedPush.register(context = context, instance = clientSecret)
         // Wait for VectorUnifiedPushMessagingReceiver.onNewEndpoint to proceed
+        @Suppress("RunCatchingNotAllowed")
         return runCatching {
             withTimeout(30.seconds) {
                 val result = endpointRegistrationHandler.state

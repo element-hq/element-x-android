@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -40,7 +41,7 @@ class DefaultFileSave @Inject constructor(
         path: String,
     ) {
         withContext(dispatchers.io) {
-            runCatching {
+            runCatchingExceptions {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     saveOnDiskUsingMediaStore(path)
                 } else {

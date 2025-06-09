@@ -56,6 +56,7 @@ import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -387,7 +388,7 @@ class MessagesPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.reinviteOtherUser(inviteProgress: MutableState<AsyncData<Unit>>) = launch(dispatchers.io) {
         inviteProgress.value = AsyncData.Loading()
-        runCatching {
+        runCatchingExceptions {
             val memberList = when (val memberState = room.membersStateFlow.value) {
                 is RoomMembersState.Ready -> memberState.roomMembers
                 is RoomMembersState.Error -> memberState.prevRoomMembers.orEmpty()

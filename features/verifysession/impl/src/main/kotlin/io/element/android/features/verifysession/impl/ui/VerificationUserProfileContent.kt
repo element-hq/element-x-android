@@ -28,6 +28,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.UserId
 
 @Composable
@@ -42,7 +43,8 @@ fun VerificationUserProfileContent(
     }
 
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(ElementTheme.colors.bgSubtleSecondary)
             .padding(12.dp),
@@ -64,7 +66,9 @@ fun VerificationUserProfileContent(
 
 @PreviewsDayNight
 @Composable
-internal fun VerificationUserProfileContentPreview() = ElementPreview {
+internal fun VerificationUserProfileContentPreview() = ElementPreview(
+    drawableFallbackForImages = CommonDrawables.sample_avatar
+) {
     VerificationUserProfileContent(
         userId = UserId("@alice:example.com"),
         displayName = "Alice",

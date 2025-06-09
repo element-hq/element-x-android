@@ -46,14 +46,18 @@ class RoomCallStatePresenter @Inject constructor(
                 (currentCall as? CurrentCall.RoomCall)?.roomId == room.roomId
             }
         }
-        val callState = when {
-            isAvailable.not() -> RoomCallState.Unavailable
-            roomInfo.hasRoomCall -> RoomCallState.OnGoing(
-                canJoinCall = canJoinCall,
-                isUserInTheCall = isUserInTheCall,
-                isUserLocallyInTheCall = isUserLocallyInTheCall,
-            )
-            else -> RoomCallState.StandBy(canStartCall = canJoinCall)
+        val callState by remember {
+            derivedStateOf {
+                when {
+                    isAvailable.not() -> RoomCallState.Unavailable
+                    roomInfo.hasRoomCall -> RoomCallState.OnGoing(
+                        canJoinCall = canJoinCall,
+                        isUserInTheCall = isUserInTheCall,
+                        isUserLocallyInTheCall = isUserLocallyInTheCall,
+                    )
+                    else -> RoomCallState.StandBy(canStartCall = canJoinCall)
+                }
+            }
         }
         return callState
     }

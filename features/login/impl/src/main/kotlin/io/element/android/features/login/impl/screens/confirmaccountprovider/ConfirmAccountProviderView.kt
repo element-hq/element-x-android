@@ -88,7 +88,7 @@ fun ConfirmAccountProviderView(
                 TextButton(
                     text = stringResource(id = R.string.screen_account_provider_change),
                     onClick = onChange,
-                    enabled = true,
+                    enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.loginChangeServer)

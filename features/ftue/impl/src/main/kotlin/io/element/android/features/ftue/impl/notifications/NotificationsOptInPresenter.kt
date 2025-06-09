@@ -16,6 +16,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -27,6 +28,7 @@ import kotlinx.coroutines.launch
 class NotificationsOptInPresenter @AssistedInject constructor(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     @Assisted private val callback: NotificationsOptInNode.Callback,
+    @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val permissionStateProvider: PermissionStateProvider,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,

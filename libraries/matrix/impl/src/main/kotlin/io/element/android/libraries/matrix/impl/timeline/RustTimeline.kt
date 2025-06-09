@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
@@ -165,7 +166,7 @@ class RustTimeline(
     override val membershipChangeEventReceived: Flow<Unit> = timelineDiffProcessor.membershipChangeEventReceived
 
     override suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.sendReadReceipt(receiptType.toRustReceiptType(), eventId.value)
         }
     }
@@ -181,7 +182,7 @@ class RustTimeline(
     override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = withContext(NonCancellable) {
         withContext(dispatcher) {
             initLatch.await()
-            runCatching {
+            runCatchingExceptions {
                 if (!canPaginate(direction)) throw TimelineException.CannotPaginate
                 updatePaginationStatus(direction) { it.copy(isPaginating = true) }
                 when (direction) {
@@ -275,14 +276,14 @@ class RustTimeline(
         intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> = withContext(dispatcher) {
         MessageEventContent.from(body, htmlBody, intentionalMentions).use { content ->
-            runCatching<Unit> {
+            runCatchingExceptions<Unit> {
                 inner.send(content)
             }
         }
     }
 
     override suspend fun redactEvent(eventOrTransactionId: EventOrTransactionId, reason: String?): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.redactEvent(
                 eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
                 reason = reason,
@@ -296,7 +297,7 @@ class RustTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             val editedContent = EditedContent.RoomMessage(
                 content = MessageEventContent.from(
                     body = body,
@@ -316,7 +317,7 @@ class RustTimeline(
         caption: String?,
         formattedCaption: String?,
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching<Unit> {
+        runCatchingExceptions<Unit> {
             val editedContent = EditedContent.MediaCaption(
                 caption = caption,
                 formattedCaption = formattedCaption?.let {
@@ -340,7 +341,7 @@ class RustTimeline(
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             val msg = MessageEventContent.from(body, htmlBody, intentionalMentions)
             inner.sendReply(
                 msg = msg,
@@ -462,7 +463,7 @@ class RustTimeline(
     }
 
     override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.toggleReaction(
                 key = emoji,
                 itemId = eventOrTransactionId.toRustEventOrTransactionId(),
@@ -471,7 +472,7 @@ class RustTimeline(
     }
 
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             roomContentForwarder.forward(fromTimeline = inner, eventId = eventId, toRoomIds = roomIds)
         }.onFailure {
             Timber.e(it)
@@ -485,7 +486,7 @@ class RustTimeline(
         zoomLevel: Int?,
         assetType: AssetType?,
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.sendLocation(
                 body = body,
                 geoUri = geoUri,
@@ -528,7 +529,7 @@ class RustTimeline(
         maxSelections: Int,
         pollKind: PollKind,
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.createPoll(
                 question = question,
                 answers = answers,
@@ -545,7 +546,7 @@ class RustTimeline(
         maxSelections: Int,
         pollKind: PollKind,
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             val editedContent = EditedContent.PollStart(
                 pollData = PollData(
                     question = question,
@@ -565,7 +566,7 @@ class RustTimeline(
         pollStartId: EventId,
         answers: List<String>
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.sendPollResponse(
                 pollStartEventId = pollStartId.value,
                 answers = answers,
@@ -577,7 +578,7 @@ class RustTimeline(
         pollStartId: EventId,
         text: String
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.endPoll(
                 pollStartEventId = pollStartId.value,
                 text = text,
@@ -586,7 +587,7 @@ class RustTimeline(
     }
 
     private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
-        return runCatching {
+        return runCatchingExceptions {
             MediaUploadHandlerImpl(files, handle())
         }
     }
@@ -609,19 +610,19 @@ class RustTimeline(
     }
 
     override suspend fun pinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.pinEvent(eventId = eventId.value)
         }
     }
 
     override suspend fun unpinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.unpinEvent(eventId = eventId.value)
         }
     }
 
     private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+        runCatchingExceptions {
             inner.fetchDetailsForEvent(eventId.value)
         }
     }

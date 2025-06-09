@@ -337,6 +337,7 @@ class DefaultMediaPlayerTest {
                     duration = null,
                 )
             )
+            @Suppress("RunCatchingNotAllowed")
             val result = runCatching {
                 sut.setMedia("uri", "mediaId", "mimeType", 12)
             }
@@ -422,7 +423,7 @@ class DefaultMediaPlayerTest {
         audioFocus: AudioFocus = FakeAudioFocus(),
     ): DefaultMediaPlayer = DefaultMediaPlayer(
         player = simplePlayer,
-        coroutineScope = backgroundScope,
+        sessionCoroutineScope = backgroundScope,
         audioFocus = audioFocus,
     )
 }

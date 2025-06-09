@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -22,16 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImageItemView(
     image: MediaItem.Image,
@@ -39,16 +35,10 @@ fun ImageItemView(
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bgColor = if (LocalInspectionMode.current) {
-        ElementTheme.colors.bgDecorative1
-    } else {
-        Color.Transparent
-    }
     Box(
         modifier = modifier
             .aspectRatio(1f)
-            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-            .background(bgColor),
+            .combinedClickable(onClick = onClick, onLongClick = onLongClick),
     ) {
         var isLoaded by remember { mutableStateOf(false) }
         AsyncImage(

@@ -108,7 +108,7 @@ class KnockRequestsListViewTest {
         rule.setKnockRequestsListView(
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(knockRequests),
-                asyncAction = AsyncAction.Failure(Throwable("Failed to accept all")),
+                asyncAction = AsyncAction.Failure(RuntimeException("Failed to accept all")),
                 currentAction = KnockRequestsAction.AcceptAll,
                 eventSink = eventsRecorder,
             ),
@@ -124,7 +124,7 @@ class KnockRequestsListViewTest {
         rule.setKnockRequestsListView(
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(knockRequests),
-                asyncAction = AsyncAction.Failure(Throwable("Failed to accept all")),
+                asyncAction = AsyncAction.Failure(RuntimeException("Failed to accept all")),
                 currentAction = KnockRequestsAction.AcceptAll,
                 eventSink = eventsRecorder,
             ),

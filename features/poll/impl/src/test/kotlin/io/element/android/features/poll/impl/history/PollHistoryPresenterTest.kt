@@ -163,7 +163,7 @@ class PollHistoryPresenterTest {
         ),
     ): PollHistoryPresenter {
         return PollHistoryPresenter(
-            appCoroutineScope = this,
+            sessionCoroutineScope = this,
             sendPollResponseAction = sendPollResponseAction,
             endPollAction = endPollAction,
             pollHistoryItemFactory = pollHistoryItemFactory,

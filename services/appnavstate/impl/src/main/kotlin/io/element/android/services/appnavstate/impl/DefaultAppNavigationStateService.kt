@@ -11,6 +11,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
@@ -36,7 +37,8 @@ private val loggerTag = LoggerTag("Navigation")
 @SingleIn(AppScope::class)
 class DefaultAppNavigationStateService @Inject constructor(
     private val appForegroundStateService: AppForegroundStateService,
-    private val coroutineScope: CoroutineScope,
+    @AppCoroutineScope
+    coroutineScope: CoroutineScope,
 ) : AppNavigationStateService {
     private val state = MutableStateFlow(
         AppNavigationState(

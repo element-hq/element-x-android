@@ -49,7 +49,7 @@ class DefaultCallWidgetSettingsProvider @Inject constructor(
             sentryEnvironment = if (buildMeta.buildType == BuildType.RELEASE) "RELEASE" else "DEBUG",
             parentUrl = null,
             hideHeader = true,
-            controlledMediaDevices = false,
+            controlledMediaDevices = true,
         )
         val rustWidgetSettings = newVirtualElementCallWidget(options)
         return MatrixWidgetSettings.fromRustWidgetSettings(rustWidgetSettings)

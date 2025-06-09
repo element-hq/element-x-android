@@ -22,10 +22,10 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
-import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.alias.FakeRoomAliasHelper
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -274,7 +274,7 @@ class ConfigureBaseRoomPresenterTest {
             createRoomDataStore.setAvatarUri(Uri.parse(AN_URI_FROM_GALLERY))
             skipItems(1)
             mediaPreProcessor.givenResult(Result.success(MediaUploadInfo.Image(mockk(), mockk(), mockk())))
-            matrixClient.givenUploadMediaResult(Result.failure(A_THROWABLE))
+            matrixClient.givenUploadMediaResult(Result.failure(AN_EXCEPTION))
 
             initialState.eventSink(ConfigureRoomEvents.CreateRoom)
             assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -298,7 +298,7 @@ class ConfigureBaseRoomPresenterTest {
         )
         presenter.test {
             val initialState = initialState()
-            val createRoomResult = Result.failure<RoomId>(A_THROWABLE)
+            val createRoomResult = Result.failure<RoomId>(AN_EXCEPTION)
 
             fakeMatrixClient.givenCreateRoomResult(createRoomResult)
 

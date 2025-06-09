@@ -10,6 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.local.pdf
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +36,7 @@ class PdfRendererManager(
         coroutineScope.launch {
             mutex.withLock {
                 withContext(Dispatchers.IO) {
-                    pdfRenderer = runCatching {
+                    pdfRenderer = runCatchingExceptions {
                         PdfRenderer(parcelFileDescriptor)
                     }.fold(
                         onSuccess = { pdfRenderer ->

@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.verification
 
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -100,7 +101,6 @@ class RustSessionVerificationService(
     init {
         // Instantiate the verification controller when possible, this is needed to get incoming verification requests
         sessionCoroutineScope.launch {
-            // Needed to avoid crashes on unit tests due to the Rust SDK not being available
             tryOrNull {
                 encryptionService.waitForE2eeInitializationTasks()
                 initVerificationControllerIfNeeded()
@@ -152,7 +152,7 @@ class RustSessionVerificationService(
     }
 
     private suspend fun tryOrFail(block: suspend () -> Unit) {
-        runCatching {
+        runCatchingExceptions {
             // Ensure the block cannot be cancelled, else if the Rust SDK emit a new state during the API execution,
             // the state machine may cancel the api call.
             withContext(NonCancellable) {
@@ -184,7 +184,7 @@ class RustSessionVerificationService(
         sessionCoroutineScope.launch {
             // Ideally this should be `verificationController?.isVerified().orFalse()` but for some reason it returns false if run immediately
             // It also sometimes unexpectedly fails to report the session as verified, so we have to handle that possibility and fail if needed
-            runCatching {
+            runCatchingExceptions {
                 withTimeout(20.seconds) {
                     // Wait until the SDK reports the state as verified
                     sessionVerifiedStatus.first { it == SessionVerifiedStatus.Verified }
@@ -252,7 +252,7 @@ class RustSessionVerificationService(
     }
 
     private fun updateVerificationStatus() {
-        runCatching {
+        runCatchingExceptions {
             _sessionVerifiedStatus.value = encryptionService.verificationState().map()
             Timber.d("New verification status: ${_sessionVerifiedStatus.value}")
         }

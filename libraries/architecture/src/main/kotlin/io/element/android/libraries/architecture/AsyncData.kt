@@ -9,6 +9,7 @@ package io.element.android.libraries.architecture
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -93,7 +94,7 @@ suspend inline fun <T> MutableState<AsyncData<T>>.runCatchingUpdatingState(
     state = this,
     errorTransform = errorTransform,
     resultBlock = {
-        runCatching {
+        runCatchingExceptions {
             block()
         }
     },
@@ -106,7 +107,7 @@ suspend inline fun <T> (suspend () -> T).runCatchingUpdatingState(
     state = state,
     errorTransform = errorTransform,
     resultBlock = {
-        runCatching {
+        runCatchingExceptions {
             this()
         }
     },

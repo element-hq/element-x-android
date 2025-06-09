@@ -25,11 +25,11 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.NotJoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -103,7 +103,7 @@ class FakeMatrixClient(
 
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
-    private var findDmResult: RoomId? = A_ROOM_ID
+    private var findDmResult: Result<RoomId?> = Result.success(A_ROOM_ID)
     private val getRoomResults = mutableMapOf<RoomId, BaseRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
@@ -111,17 +111,17 @@ class FakeMatrixClient(
     private var setDisplayNameResult: Result<Unit> = Result.success(Unit)
     private var uploadAvatarResult: Result<Unit> = Result.success(Unit)
     private var removeAvatarResult: Result<Unit> = Result.success(Unit)
-    var joinRoomLambda: (RoomId) -> Result<RoomSummary?> = {
+    var joinRoomLambda: (RoomId) -> Result<RoomInfo?> = {
         Result.success(null)
     }
-    var joinRoomByIdOrAliasLambda: (RoomIdOrAlias, List<String>) -> Result<RoomSummary?> = { _, _ ->
+    var joinRoomByIdOrAliasLambda: (RoomIdOrAlias, List<String>) -> Result<RoomInfo?> = { _, _ ->
         Result.success(null)
     }
-    var knockRoomLambda: (RoomIdOrAlias, String, List<String>) -> Result<RoomSummary?> = { _, _, _ ->
+    var knockRoomLambda: (RoomIdOrAlias, String, List<String>) -> Result<RoomInfo?> = { _, _, _ ->
         Result.success(null)
     }
-    var getRoomSummaryFlowLambda = { _: RoomIdOrAlias ->
-        flowOf<Optional<RoomSummary>>(Optional.empty())
+    var getRoomInfoFlowLambda = { _: RoomId ->
+        flowOf<Optional<RoomInfo>>(Optional.empty())
     }
     var logoutLambda: (Boolean, Boolean) -> Unit = { _, _ -> }
 
@@ -133,7 +133,7 @@ class FakeMatrixClient(
         return getRoomResults[roomId] as? JoinedRoom
     }
 
-    override suspend fun findDM(userId: UserId): RoomId? {
+    override suspend fun findDM(userId: UserId): Result<RoomId?> {
         return findDmResult
     }
 
@@ -216,13 +216,13 @@ class FakeMatrixClient(
         return removeAvatarResult
     }
 
-    override suspend fun joinRoom(roomId: RoomId): Result<RoomSummary?> = joinRoomLambda(roomId)
+    override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = joinRoomLambda(roomId)
 
-    override suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomSummary?> {
+    override suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomInfo?> {
         return joinRoomByIdOrAliasLambda(roomIdOrAlias, serverNames)
     }
 
-    override suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomSummary?> {
+    override suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomInfo?> {
         return knockRoomLambda(roomIdOrAlias, message, serverNames)
     }
 
@@ -248,7 +248,7 @@ class FakeMatrixClient(
         createDmResult = result
     }
 
-    fun givenFindDmResult(result: RoomId?) {
+    fun givenFindDmResult(result: Result<RoomId?>) {
         findDmResult = result
     }
 
@@ -304,7 +304,7 @@ class FakeMatrixClient(
         return Result.success(visitedRoomsId)
     }
 
-    override fun getRoomSummaryFlow(roomIdOrAlias: RoomIdOrAlias) = getRoomSummaryFlowLambda(roomIdOrAlias)
+    override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
 
     var setAllSendQueuesEnabledLambda = lambdaRecorder(ensureNeverCalled = true) { _: Boolean ->
         // no-op

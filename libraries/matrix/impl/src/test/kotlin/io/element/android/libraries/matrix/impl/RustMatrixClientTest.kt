@@ -9,8 +9,8 @@ package io.element.android.libraries.matrix.impl
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustClient
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustSyncService
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventTypeFilterFactory
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -40,7 +40,7 @@ class RustMatrixClientTest {
         val clearCachesResult = lambdaRecorder<Unit> { }
         val closeResult = lambdaRecorder<Unit> { }
         val client = createRustMatrixClient(
-            client = FakeRustClient(
+            client = FakeFfiClient(
                 clearCachesResult = clearCachesResult,
                 closeResult = closeResult,
             )
@@ -52,7 +52,7 @@ class RustMatrixClientTest {
     }
 
     private fun TestScope.createRustMatrixClient(
-        client: Client = FakeRustClient(),
+        client: Client = FakeFfiClient(),
         sessionStore: SessionStore = InMemorySessionStore(),
     ) = RustMatrixClient(
         innerClient = client,
@@ -62,7 +62,7 @@ class RustMatrixClientTest {
         sessionDelegate = aRustClientSessionDelegate(
             sessionStore = sessionStore,
         ),
-        innerSyncService = FakeRustSyncService(),
+        innerSyncService = FakeFfiSyncService(),
         dispatchers = testCoroutineDispatchers(),
         baseCacheDirectory = File(""),
         clock = FakeSystemClock(),

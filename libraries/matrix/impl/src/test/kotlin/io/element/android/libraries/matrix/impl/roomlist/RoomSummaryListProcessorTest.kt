@@ -10,8 +10,8 @@ package io.element.android.libraries.matrix.impl.roomlist
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoom
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoom
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListService
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3
@@ -170,14 +170,14 @@ class RoomSummaryListProcessorTest {
         assertThat(summaries.value[index].roomId).isEqualTo(A_ROOM_ID_3)
     }
 
-    private fun aRustRoom(roomId: RoomId = A_ROOM_ID) = FakeRustRoom(
+    private fun aRustRoom(roomId: RoomId = A_ROOM_ID) = FakeFfiRoom(
         roomId = roomId,
         latestEventLambda = { null },
     )
 
     private fun TestScope.createProcessor() = RoomSummaryListProcessor(
         summaries,
-        FakeRustRoomListService(),
+        FakeFfiRoomListService(),
         coroutineContext = StandardTestDispatcher(testScheduler),
         roomSummaryDetailsFactory = RoomSummaryFactory(),
     )

@@ -15,6 +15,7 @@ import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -37,7 +38,8 @@ import kotlin.time.Duration.Companion.seconds
 @SingleIn(RoomScope::class)
 class DefaultMediaPlayer @Inject constructor(
     private val player: SimplePlayer,
-    private val coroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val audioFocus: AudioFocus,
 ) : MediaPlayer {
     private val listener = object : SimplePlayer.Listener {
@@ -50,7 +52,7 @@ class DefaultMediaPlayer @Inject constructor(
                 )
             }
             if (isPlaying) {
-                job = coroutineScope.launch { updateCurrentPosition() }
+                job = sessionCoroutineScope.launch { updateCurrentPosition() }
             } else {
                 audioFocus.releaseAudioFocus()
                 job?.cancel()

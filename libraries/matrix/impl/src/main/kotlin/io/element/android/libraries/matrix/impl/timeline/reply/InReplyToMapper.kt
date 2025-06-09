@@ -12,8 +12,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.map
+import org.matrix.rustcomponents.sdk.EmbeddedEventDetails
 import org.matrix.rustcomponents.sdk.InReplyToDetails
-import org.matrix.rustcomponents.sdk.RepliedToEventDetails
 
 class InReplyToMapper(
     private val timelineEventContentMapper: TimelineEventContentMapper,
@@ -21,7 +21,7 @@ class InReplyToMapper(
     fun map(inReplyToDetails: InReplyToDetails): InReplyTo {
         val inReplyToId = EventId(inReplyToDetails.eventId())
         return when (val event = inReplyToDetails.event()) {
-            is RepliedToEventDetails.Ready -> {
+            is EmbeddedEventDetails.Ready -> {
                 InReplyTo.Ready(
                     eventId = inReplyToId,
                     content = timelineEventContentMapper.map(event.content),
@@ -29,14 +29,14 @@ class InReplyToMapper(
                     senderProfile = event.senderProfile.map(),
                 )
             }
-            is RepliedToEventDetails.Error -> InReplyTo.Error(
+            is EmbeddedEventDetails.Error -> InReplyTo.Error(
                 eventId = inReplyToId,
                 message = event.message,
             )
-            RepliedToEventDetails.Pending -> InReplyTo.Pending(
+            EmbeddedEventDetails.Pending -> InReplyTo.Pending(
                 eventId = inReplyToId,
             )
-            is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(
+            is EmbeddedEventDetails.Unavailable -> InReplyTo.NotLoaded(
                 eventId = inReplyToId
             )
         }

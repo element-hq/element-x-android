@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.auth
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -91,7 +92,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> = withContext(coroutineDispatchers.io) {
-        runCatching {
+        runCatchingExceptions {
             val sessionData = sessionStore.getSession(sessionId.value)
             if (sessionData != null) {
                 if (sessionData.isTokenValid) {
@@ -126,7 +127,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     override suspend fun setHomeserver(homeserver: String): Result<Unit> =
         withContext(coroutineDispatchers.io) {
             val emptySessionPath = rotateSessionPath()
-            runCatching {
+            runCatchingExceptions {
                 val client = makeClient(sessionPaths = emptySessionPath) {
                     serverNameOrHomeserverUrl(homeserver)
                 }
@@ -144,7 +145,7 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     override suspend fun login(username: String, password: String): Result<SessionId> =
         withContext(coroutineDispatchers.io) {
-            runCatching {
+            runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
                 client.login(username, password, "Element X Android", null)
@@ -170,7 +171,7 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     override suspend fun importCreatedSession(externalSession: ExternalSession): Result<SessionId> =
         withContext(coroutineDispatchers.io) {
-            runCatching {
+            runCatchingExceptions {
                 currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
                 val sessionData = externalSession.toSessionData(
@@ -192,7 +193,7 @@ class RustMatrixAuthenticationService @Inject constructor(
         loginHint: String?,
     ): Result<OidcDetails> {
         return withContext(coroutineDispatchers.io) {
-            runCatching {
+            runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val oAuthAuthorizationData = client.urlForOidc(
                     oidcConfiguration = oidcConfigurationProvider.get(),
@@ -211,7 +212,7 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     override suspend fun cancelOidcLogin(): Result<Unit> {
         return withContext(coroutineDispatchers.io) {
-            runCatching {
+            runCatchingExceptions {
                 pendingOAuthAuthorizationData?.use {
                     currentClient?.abortOidcAuth(it)
                 }
@@ -228,7 +229,7 @@ class RustMatrixAuthenticationService @Inject constructor(
      */
     override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> {
         return withContext(coroutineDispatchers.io) {
-            runCatching {
+            runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
                 client.loginWithOidcCallback(callbackUrl)
@@ -268,7 +269,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                     progress(state.toStep())
                 }
             }
-            runCatching {
+            runCatchingExceptions {
                 val client = makeQrCodeLoginClient(
                     sessionPaths = emptySessionPaths,
                     passphrase = pendingPassphrase,

@@ -16,9 +16,9 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimeline
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineDiff
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListService
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimeline
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineDiff
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -40,7 +40,7 @@ import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 class RustTimelineTest {
     @Test
     fun `ensure that the timeline emits new loading item when pagination does not bring new events`() = runTest {
-        val inner = FakeRustTimeline()
+        val inner = FakeFfiTimeline()
         val systemClock = FakeSystemClock()
         val sut = createRustTimeline(
             inner = inner,
@@ -51,7 +51,7 @@ class RustTimelineTest {
             runCurrent()
             inner.emitDiff(
                 listOf(
-                    FakeRustTimelineDiff(
+                    FakeFfiTimelineDiff(
                         item = null,
                         change = TimelineChange.RESET,
                     )
@@ -106,7 +106,7 @@ private fun TestScope.createRustTimeline(
     joinedRoom: JoinedRoom = FakeJoinedRoom().apply { givenRoomInfo(aRoomInfo()) },
     coroutineScope: CoroutineScope = backgroundScope,
     dispatcher: CoroutineDispatcher = testCoroutineDispatchers().io,
-    roomContentForwarder: RoomContentForwarder = RoomContentForwarder(FakeRustRoomListService()),
+    roomContentForwarder: RoomContentForwarder = RoomContentForwarder(FakeFfiRoomListService()),
     featureFlagsService: FeatureFlagService = FakeFeatureFlagService(),
     onNewSyncedEvent: () -> Unit = {},
 ): RustTimeline {
