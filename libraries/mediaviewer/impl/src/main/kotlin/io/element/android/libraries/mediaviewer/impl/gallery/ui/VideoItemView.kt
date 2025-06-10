@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun VideoItemView(
     video: MediaItem.Video,
