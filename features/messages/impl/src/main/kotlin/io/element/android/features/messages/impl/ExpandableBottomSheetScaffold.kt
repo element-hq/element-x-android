@@ -10,7 +10,10 @@
 package io.element.android.features.messages.impl
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -112,7 +115,7 @@ internal fun ExpandableBottomSheetScaffold(
     }
 
     SubcomposeLayout(
-        modifier = modifier,
+        modifier = modifier.windowInsetsPadding(WindowInsets.ime),
         measurePolicy = { constraints: Constraints ->
             val sheetContentSub = subcompose(Slot.SheetContent(sheetContentKey)) { sheetContent(true) }.map {
                 it.measure(Constraints(maxWidth = constraints.maxWidth))
@@ -123,7 +126,7 @@ internal fun ExpandableBottomSheetScaffold(
             val dragHandleHeight = dragHandleSub?.height?.toDp() ?: 0.dp
 
             val maxHeight = constraints.maxHeight.toDp()
-            val contentHeight = sheetContentSub.height.toDp() + dragHandleHeight
+            val contentHeight = sheetContentSub.measuredHeight.toDp() + dragHandleHeight
 
             contentOverflows = contentHeight > maxHeight
 
@@ -140,7 +143,7 @@ internal fun ExpandableBottomSheetScaffold(
                         measurePolicy = { measurables, constraints ->
                             val constraintHeight = constraints.maxHeight
                             val offset = tryOrNull { scaffoldState.bottomSheetState.requireOffset() } ?: 0f
-                            val height = Integer.max(0, constraintHeight - offset.roundToInt())
+                            val height = Integer.max(peekHeight.roundToPx(), constraintHeight - offset.roundToInt())
                             val top = measurables[0].measure(
                                 constraints.copy(
                                     minHeight = height,
