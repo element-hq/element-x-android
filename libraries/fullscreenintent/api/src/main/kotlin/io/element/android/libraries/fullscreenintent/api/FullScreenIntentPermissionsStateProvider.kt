@@ -10,11 +10,9 @@ package io.element.android.libraries.fullscreenintent.api
 fun aFullScreenIntentPermissionsState(
     permissionGranted: Boolean = true,
     shouldDisplay: Boolean = false,
-    openFullScreenIntentSettings: () -> Unit = {},
-    dismissFullScreenIntentBanner: () -> Unit = {},
+    eventSink: (FullScreenIntentPermissionsEvents) -> Unit = {},
 ) = FullScreenIntentPermissionsState(
     permissionGranted = permissionGranted,
     shouldDisplayBanner = shouldDisplay,
-    openFullScreenIntentSettings = openFullScreenIntentSettings,
-    dismissFullScreenIntentBanner = dismissFullScreenIntentBanner,
+    eventSink = eventSink,
 )
