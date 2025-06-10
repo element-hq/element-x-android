@@ -29,7 +29,6 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
-import io.element.android.tests.testutils.setSafeContent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
@@ -53,7 +52,7 @@ class RoomListViewTest {
         eventsRecorder.assertList(
             listOf(
                 RoomListEvents.UpdateVisibleRange(IntRange.EMPTY),
-                RoomListEvents.UpdateVisibleRange(0..2),
+                RoomListEvents.UpdateVisibleRange(0 until 2),
             )
         )
     }
@@ -274,7 +273,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
     onReportRoomClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onDeclineInviteAndBlockUser: (RoomListRoomSummary) -> Unit = EnsureNeverCalledWithParam(),
 ) {
-    setSafeContent {
+    setContent {
         RoomListView(
             state = state,
             onRoomClick = onRoomClick,

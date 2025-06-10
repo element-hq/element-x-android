@@ -68,7 +68,6 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
-import io.element.android.tests.testutils.setSafeContent
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
@@ -568,9 +567,11 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     onViewAllPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
 ) {
-    setSafeContent {
+    setContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
-        CompositionLocalProvider(LocalInspectionMode provides true) {
+        CompositionLocalProvider(
+            LocalInspectionMode provides true
+        ) {
             MessagesView(
                 state = state,
                 onBackClick = onBackClick,

@@ -19,7 +19,6 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
-import io.element.android.tests.testutils.setSafeContent
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -61,7 +60,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
     onDelete: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onDismiss: () -> Unit = EnsureNeverCalled(),
 ) {
-    setSafeContent {
+    setContent {
         MediaDeleteConfirmationBottomSheet(
             state = state,
             onDelete = onDelete,

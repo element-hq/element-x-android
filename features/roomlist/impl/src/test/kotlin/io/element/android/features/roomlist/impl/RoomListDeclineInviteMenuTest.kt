@@ -16,7 +16,6 @@ import io.element.android.tests.testutils.EnsureCalledOnceWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
-import io.element.android.tests.testutils.setSafeContent
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,7 +28,7 @@ class RoomListDeclineInviteMenuTest {
     fun `clicking on decline emits the expected Events`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val menu = RoomListState.DeclineInviteMenu.Shown(roomSummary = aRoomListRoomSummary())
-        rule.setSafeContent {
+        rule.setContent {
             RoomListDeclineInviteMenu(
                 menu = menu,
                 canReportRoom = false,
@@ -50,7 +49,7 @@ class RoomListDeclineInviteMenuTest {
     fun `clicking on decline and block when canReportRoom=true, it emits the expected Events and callback`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val menu = RoomListState.DeclineInviteMenu.Shown(roomSummary = aRoomListRoomSummary())
-        rule.setSafeContent {
+        rule.setContent {
             RoomListDeclineInviteMenu(
                 menu = menu,
                 canReportRoom = true,
@@ -67,7 +66,7 @@ class RoomListDeclineInviteMenuTest {
     fun `clicking on decline and block when canReportRoom=false, it emits the expected Events`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val menu = RoomListState.DeclineInviteMenu.Shown(roomSummary = aRoomListRoomSummary())
-        rule.setSafeContent {
+        rule.setContent {
             RoomListDeclineInviteMenu(
                 menu = menu,
                 canReportRoom = false,
@@ -87,7 +86,7 @@ class RoomListDeclineInviteMenuTest {
     fun `clicking on cancel emits the expected Event`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val menu = RoomListState.DeclineInviteMenu.Shown(roomSummary = aRoomListRoomSummary())
-        rule.setSafeContent {
+        rule.setContent {
             RoomListDeclineInviteMenu(
                 menu = menu,
                 canReportRoom = false,

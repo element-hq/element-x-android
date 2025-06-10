@@ -24,12 +24,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentType
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,6 +39,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyVisualTransformation
+import io.element.android.libraries.designsystem.modifiers.autofill
 import io.element.android.libraries.designsystem.modifiers.clickableIfNotNull
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -187,9 +186,10 @@ private fun RecoveryKeyFormContent(
         modifier = Modifier
             .fillMaxWidth()
             .testTag(TestTags.recoveryKey)
-            .semantics {
-                contentType = ContentType.Password
-            },
+            .autofill(
+                autofillTypes = listOf(AutofillType.Password),
+                onFill = { onChange(it) },
+            ),
         minLines = 2,
         value = state.formattedRecoveryKey.orEmpty(),
         onValueChange = onChange,

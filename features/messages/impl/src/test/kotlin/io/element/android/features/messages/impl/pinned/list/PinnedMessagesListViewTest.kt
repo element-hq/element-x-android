@@ -103,7 +103,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinne
     onLinkClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
     onLinkLongClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
 ) {
-    setSafeContent(clearAndroidUiDispatcher = true) {
+    setSafeContent {
         PinnedMessagesListView(
             state = state,
             onBackClick = onBackClick,

@@ -22,7 +22,6 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnceWithTwoParams
 import io.element.android.tests.testutils.pressTag
-import io.element.android.tests.testutils.setSafeContent
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -218,7 +217,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomM
     state: InternalRoomMemberModerationState,
     onSelectAction: (ModerationAction, MatrixUser) -> Unit = EnsureNeverCalledWithTwoParams(),
 ) {
-    setSafeContent {
+    setContent {
         RoomMemberModerationView(
             state = state,
             onSelectAction = onSelectAction,
