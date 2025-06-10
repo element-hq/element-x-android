@@ -9,10 +9,12 @@ package io.element.android.libraries.designsystem.utils
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 
 @Composable
+@ReadOnlyComposable
 fun WindowInsets.copy(
     top: Int? = null,
     right: Int? = null,

@@ -30,6 +30,7 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -394,6 +395,7 @@ private fun VerifiedUserSendFailureView(
     modifier: Modifier = Modifier,
 ) {
     @Composable
+    @ReadOnlyComposable
     fun VerifiedUserSendFailure.headline(): String {
         return when (this) {
             is None -> ""
