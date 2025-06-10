@@ -161,14 +161,16 @@ class JoinedRustRoom(
                 maxEventsToLoad = 100u,
                 maxConcurrentRequests = 10u,
             )
-            is CreateTimelineParams.MediaOnly -> TimelineFocus.Live
+            is CreateTimelineParams.MediaOnly -> TimelineFocus.Live(hideThreadedEvents = false)
             is CreateTimelineParams.Focused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
+                hideThreadedEvents = false,
             )
             is CreateTimelineParams.MediaOnlyFocused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
+                hideThreadedEvents = false,
             )
         }
 
@@ -427,7 +429,7 @@ class JoinedRustRoom(
         }
     }
 
-    override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun sendCallNotificationIfNeeded(): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
             innerRoom.sendCallNotificationIfNeeded()
         }
