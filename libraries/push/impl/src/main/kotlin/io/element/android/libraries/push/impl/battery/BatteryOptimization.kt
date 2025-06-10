@@ -57,14 +57,28 @@ class AndroidBatteryOptimization @Inject constructor(
 
     @SuppressLint("BatteryLife")
     override fun requestDisablingBatteryOptimization(): Boolean {
+        val ignoreBatteryOptimizationsResult = launchAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, withData = true)
+        if (ignoreBatteryOptimizationsResult) {
+            return true
+        }
+        // Open settings as a fallback if the first attempt fails
+        return launchAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS, withData = false)
+    }
+
+    private fun launchAction(
+        action: String,
+        withData: Boolean,
+    ): Boolean {
         val intent = Intent()
-        intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-        intent.data = ("package:" + context.packageName).toUri()
+        intent.action = action
+        if (withData) {
+            intent.data = ("package:" + context.packageName).toUri()
+        }
         return try {
             externalIntentLauncher.launch(intent)
             true
         } catch (exception: ActivityNotFoundException) {
-            Timber.w(exception, "Cannot request ignoring battery optimizations.")
+            Timber.w(exception, "Cannot launch intent with action $action.")
             false
         }
     }
