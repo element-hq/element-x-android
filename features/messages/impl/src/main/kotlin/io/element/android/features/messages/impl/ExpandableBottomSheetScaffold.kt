@@ -123,7 +123,7 @@ internal fun ExpandableBottomSheetScaffold(
             val dragHandleHeight = dragHandleSub?.height?.toDp() ?: 0.dp
 
             val maxHeight = constraints.maxHeight.toDp()
-            val contentHeight = sheetContentSub.height.toDp() + dragHandleHeight
+            val contentHeight = sheetContentSub.measuredHeight.toDp() + dragHandleHeight
 
             contentOverflows = contentHeight > maxHeight
 
@@ -140,7 +140,7 @@ internal fun ExpandableBottomSheetScaffold(
                         measurePolicy = { measurables, constraints ->
                             val constraintHeight = constraints.maxHeight
                             val offset = tryOrNull { scaffoldState.bottomSheetState.requireOffset() } ?: 0f
-                            val height = Integer.max(0, constraintHeight - offset.roundToInt())
+                            val height = Integer.max(peekHeight.roundToPx(), constraintHeight - offset.roundToInt())
                             val top = measurables[0].measure(
                                 constraints.copy(
                                     minHeight = height,

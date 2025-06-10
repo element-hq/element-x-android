@@ -449,7 +449,8 @@ private fun TextFormattingLayout(
         }
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Box(
