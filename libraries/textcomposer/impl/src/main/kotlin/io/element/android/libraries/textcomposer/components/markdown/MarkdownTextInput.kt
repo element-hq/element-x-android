@@ -118,6 +118,11 @@ fun MarkdownTextInput(
                         )
                     }
                     state.requestFocusAction = { this.requestFocus() }
+                } else {
+                    isEnabled = false
+                    isFocusable = false
+                    isFocusableInTouchMode = false
+                    isClickable = false
                 }
             }
         },
