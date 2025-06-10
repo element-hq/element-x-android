@@ -10,7 +10,10 @@
 package io.element.android.features.messages.impl
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -112,7 +115,7 @@ internal fun ExpandableBottomSheetScaffold(
     }
 
     SubcomposeLayout(
-        modifier = modifier,
+        modifier = modifier.windowInsetsPadding(WindowInsets.ime),
         measurePolicy = { constraints: Constraints ->
             val sheetContentSub = subcompose(Slot.SheetContent(sheetContentKey)) { sheetContent(true) }.map {
                 it.measure(Constraints(maxWidth = constraints.maxWidth))
