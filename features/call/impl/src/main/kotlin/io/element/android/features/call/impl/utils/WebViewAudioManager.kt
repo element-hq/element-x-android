@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -26,6 +27,7 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * This class manages the audio devices for a WebView.
@@ -221,6 +223,10 @@ class WebViewAudioManager(
             },
             onAudioPlaybackStarted = {
                 coroutineScope.launch(Dispatchers.Main) {
+                    // Even with the callback, it seems like starting the audio takes a bit on the webview side,
+                    // so we add an extra delay here to make sure it's ready
+                    delay(500.milliseconds)
+
                     // Calling this ahead of time makes the default audio device to not use the right audio stream
                     setAvailableAudioDevices()
 
