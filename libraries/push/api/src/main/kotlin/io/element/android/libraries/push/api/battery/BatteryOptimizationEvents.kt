@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.push.api.battery
 
-data class BatteryOptimizationState(
-    val shouldDisplayBanner: Boolean,
-    val eventSink: (BatteryOptimizationEvents) -> Unit,
-)
+sealed interface BatteryOptimizationEvents {
+    data object Dismiss : BatteryOptimizationEvents
+    data object DoAction : BatteryOptimizationEvents
+}

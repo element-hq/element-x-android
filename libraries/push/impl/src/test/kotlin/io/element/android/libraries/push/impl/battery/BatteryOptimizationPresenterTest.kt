@@ -9,6 +9,7 @@ package io.element.android.libraries.push.impl.battery
 
 import androidx.lifecycle.Lifecycle
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.push.api.battery.BatteryOptimizationEvents
 import io.element.android.libraries.push.impl.push.FakeMutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.store.InMemoryPushDataStore
@@ -96,7 +97,7 @@ class BatteryOptimizationPresenterTest {
             assertThat(initialState.shouldDisplayBanner).isFalse()
             val displayedItem = awaitItem()
             assertThat(displayedItem.shouldDisplayBanner).isTrue()
-            displayedItem.dismiss()
+            displayedItem.eventSink(BatteryOptimizationEvents.Dismiss)
             onOptimizationBannerDismissedResult.assertions().isCalledOnce()
         }
     }
@@ -122,7 +123,7 @@ class BatteryOptimizationPresenterTest {
             assertThat(initialState.shouldDisplayBanner).isFalse()
             val displayedItem = awaitItem()
             assertThat(displayedItem.shouldDisplayBanner).isTrue()
-            displayedItem.openSettings(null)
+            displayedItem.eventSink(BatteryOptimizationEvents.DoAction)
             requestDisablingBatteryOptimizationResult.assertions().isCalledOnce()
             onOptimizationBannerDismissedResult.assertions().isCalledOnce()
         }
@@ -148,7 +149,7 @@ class BatteryOptimizationPresenterTest {
             assertThat(initialState.shouldDisplayBanner).isFalse()
             val displayedItem = awaitItem()
             assertThat(displayedItem.shouldDisplayBanner).isTrue()
-            displayedItem.openSettings(null)
+            displayedItem.eventSink(BatteryOptimizationEvents.DoAction)
             requestDisablingBatteryOptimizationResult.assertions().isCalledOnce()
             batteryOptimization.isIgnoringBatteryOptimizationsResult = true
             lifeCycleOwner.givenState(Lifecycle.State.RESUMED)

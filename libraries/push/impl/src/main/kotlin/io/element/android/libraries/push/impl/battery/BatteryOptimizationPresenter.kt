@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.push.api.battery.BatteryOptimizationEvents
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.store.PushDataStore
@@ -45,22 +46,26 @@ class BatteryOptimizationPresenter @Inject constructor(
             onPauseOrDispose {}
         }
 
-        return BatteryOptimizationState(
-            shouldDisplayBanner = localShouldDisplayBanner && storeShouldDisplayBanner && !isSystemIgnoringBatteryOptimizations,
-            dismiss = {
-                coroutineScope.launch {
+        fun handleEvents(event: BatteryOptimizationEvents) {
+            when (event) {
+                BatteryOptimizationEvents.Dismiss -> coroutineScope.launch {
                     mutableBatteryOptimizationStore.onOptimizationBannerDismissed()
                 }
-            },
-            openSettings = { activity ->
-                isRequestSent = true
-                if (batteryOptimization.requestDisablingBatteryOptimization(activity).not()) {
-                    // If not able to perform the request, ensure that we do not display the banner again
-                    coroutineScope.launch {
-                        mutableBatteryOptimizationStore.onOptimizationBannerDismissed()
+                BatteryOptimizationEvents.DoAction -> {
+                    isRequestSent = true
+                    if (batteryOptimization.requestDisablingBatteryOptimization().not()) {
+                        // If not able to perform the request, ensure that we do not display the banner again
+                        coroutineScope.launch {
+                            mutableBatteryOptimizationStore.onOptimizationBannerDismissed()
+                        }
                     }
                 }
             }
+        }
+
+        return BatteryOptimizationState(
+            shouldDisplayBanner = localShouldDisplayBanner && storeShouldDisplayBanner && !isSystemIgnoringBatteryOptimizations,
+            eventSink = ::handleEvents,
         )
     }
 }

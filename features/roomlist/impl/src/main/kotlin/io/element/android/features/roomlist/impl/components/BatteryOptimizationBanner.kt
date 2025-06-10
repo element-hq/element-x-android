@@ -7,13 +7,13 @@
 
 package io.element.android.features.roomlist.impl.components
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.libraries.designsystem.components.Announcement
 import io.element.android.libraries.designsystem.components.AnnouncementType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.push.api.battery.BatteryOptimizationEvents
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 
@@ -22,7 +22,6 @@ internal fun BatteryOptimizationBanner(
     state: BatteryOptimizationState,
     modifier: Modifier = Modifier,
 ) {
-    val activity = LocalActivity.current
     Announcement(
         modifier = modifier.roomListBannerPadding(),
         // TODO Localazy
@@ -30,8 +29,8 @@ internal fun BatteryOptimizationBanner(
         description = "To be sure to receive all the notifications, it can help to disable the battery optimization for this application.",
         type = AnnouncementType.Actionable(
             actionText = "Yes, disable",
-            onActionClick = { state.openSettings(activity) },
-            onDismissClick = state.dismiss,
+            onActionClick = { state.eventSink(BatteryOptimizationEvents.DoAction) },
+            onDismissClick = { state.eventSink(BatteryOptimizationEvents.Dismiss) },
         ),
     )
 }

@@ -8,7 +8,6 @@
 package io.element.android.libraries.push.impl.battery
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -19,6 +18,7 @@ import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,16 +39,16 @@ interface BatteryOptimization {
      * This will open the system settings where the user can disable battery optimizations.
      * See https://developer.android.com/training/monitoring-device-state/doze-standby#exemption-cases
      *
-     * @param activity The activity from which to start the settings intent.
      * @return true if the intent was successfully started, false if the activity was not found
      */
-    fun requestDisablingBatteryOptimization(activity: Activity?): Boolean
+    fun requestDisablingBatteryOptimization(): Boolean
 }
 
 @ContributesBinding(AppScope::class)
 class AndroidBatteryOptimization @Inject constructor(
     @ApplicationContext
     private val context: Context,
+    private val externalIntentLauncher: ExternalIntentLauncher,
 ) : BatteryOptimization {
     override fun isIgnoringBatteryOptimizations(): Boolean {
         return context.getSystemService<PowerManager>()
@@ -56,13 +56,12 @@ class AndroidBatteryOptimization @Inject constructor(
     }
 
     @SuppressLint("BatteryLife")
-    override fun requestDisablingBatteryOptimization(activity: Activity?): Boolean {
-        activity ?: return false
+    override fun requestDisablingBatteryOptimization(): Boolean {
         val intent = Intent()
         intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
         intent.data = ("package:" + context.packageName).toUri()
         return try {
-            activity.startActivity(intent)
+            externalIntentLauncher.launch(intent)
             true
         } catch (exception: ActivityNotFoundException) {
             Timber.w(exception, "Cannot request ignoring battery optimizations.")

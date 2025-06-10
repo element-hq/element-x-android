@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.push.impl.battery
 
-import android.app.Activity
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeBatteryOptimization(
@@ -18,7 +17,7 @@ class FakeBatteryOptimization(
         return isIgnoringBatteryOptimizationsResult
     }
 
-    override fun requestDisablingBatteryOptimization(activity: Activity?): Boolean {
+    override fun requestDisablingBatteryOptimization(): Boolean {
         return requestDisablingBatteryOptimizationResult()
     }
 }

@@ -7,14 +7,10 @@
 
 package io.element.android.libraries.push.api.battery
 
-import android.app.Activity
-
 fun aBatteryOptimizationState(
     shouldDisplayBanner: Boolean = false,
-    dismiss: () -> Unit = {},
-    openSettings: (Activity?) -> Unit = {},
+    eventSink: (BatteryOptimizationEvents) -> Unit = {},
 ) = BatteryOptimizationState(
     shouldDisplayBanner = shouldDisplayBanner,
-    dismiss = dismiss,
-    openSettings = openSettings,
+    eventSink = eventSink,
 )
