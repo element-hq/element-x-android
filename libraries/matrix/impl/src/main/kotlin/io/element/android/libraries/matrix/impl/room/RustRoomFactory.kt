@@ -110,7 +110,7 @@ class RustRoomFactory(
                 // Init the live timeline in the SDK from the Room
                 val timeline = sdkRoom.timelineWithConfiguration(
                     TimelineConfiguration(
-                        focus = TimelineFocus.Live,
+                        focus = TimelineFocus.Live(hideThreadedEvents = false),
                         filter = eventFilters?.let(TimelineFilter::EventTypeFilter) ?: TimelineFilter.All,
                         internalIdPrefix = "live",
                         dateDividerMode = DateDividerMode.DAILY,
