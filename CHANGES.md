@@ -1,3 +1,45 @@
+## What's Changed
+### ✨ Features
+* Enable support for Android Auto. by @bmarty in https://github.com/element-hq/element-x-android/pull/4818
+* Element Call: Add audio output selector handled by Android by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4663
+### 🙌 Improvements
+* Oidc: Fallback to external browser instead of using Webview by @bmarty in https://github.com/element-hq/element-x-android/pull/4808
+* change (room member moderation) : update icon to match figma by @ganfra in https://github.com/element-hq/element-x-android/pull/4837
+### 🐛 Bugfixes
+* Fix login flow by @bmarty in https://github.com/element-hq/element-x-android/pull/4813
+* fix: When sending media as files use the `octet-stream` type by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4815
+* fix: Make `Client.findDM` return a `Result` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4816
+* Mark room as fully read when user goes back to the room list. by @bmarty in https://github.com/element-hq/element-x-android/pull/2687
+* fix (identity change) :  RoomMemberIdentityStateChange in non encrypted room by @ganfra in https://github.com/element-hq/element-x-android/pull/4824
+* Fix room and user avatar downloaded with a `.bin` extension. by @bmarty in https://github.com/element-hq/element-x-android/pull/4830
+* Log the push resolving failure reason if available by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4835
+### 🧱 Build
+* Update Gradle Wrapper from 8.14.1 to 8.14.2 by @ElementBot in https://github.com/element-hq/element-x-android/pull/4831
+### Dependency upgrades
+* fix(deps): update dependency androidx.compose:compose-bom to v2025.04.01 by @renovate in https://github.com/element-hq/element-x-android/pull/4631
+* fix(deps): update dependency androidx.compose:compose-bom to v2025.05.01 by @renovate in https://github.com/element-hq/element-x-android/pull/4814
+* fix(deps): update dependency io.sentry:sentry-android to v8.13.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4780
+* fix(deps): update appyx to v1.7.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4672
+* fix(deps): update telephoto to v0.16.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4749
+* fix(deps): update coil to v3.2.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4712
+* fix(deps): update dependency androidx.webkit:webkit to v1.14.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4823
+* fix(deps): update dependency com.posthog:posthog-android to v3.17.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4827
+* fix(deps): update dependency io.element.android:element-call-embedded to v0.12.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4832
+* fix(deps): update dependency com.google.firebase:firebase-bom to v33.15.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4833
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v11.10.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4825
+* fix(deps): update lifecycle to v2.9.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4822
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.6.6 by @renovate in https://github.com/element-hq/element-x-android/pull/4834
+* fix(deps): update dependency io.element.android:opusencoder to v1.2.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4836
+### Others
+* Add `catchingExceptions` method to replace `runCatching` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4797
+* Rename classes overriding classes from the FFI layer. by @bmarty in https://github.com/element-hq/element-x-android/pull/4817
+* Fix coroutine scope by @bmarty in https://github.com/element-hq/element-x-android/pull/4820
+* Add extra logs the 'send call notification' flow by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4819
+* misc (matrix) : use innerClient.subscribeToRoomInfo sdk method by @ganfra in https://github.com/element-hq/element-x-android/pull/4838
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.06.0...v25.06.1
+
 Changes in Element X v25.06.0
 =============================
 

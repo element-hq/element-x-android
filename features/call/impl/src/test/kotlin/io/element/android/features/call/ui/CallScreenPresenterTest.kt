@@ -83,7 +83,7 @@ import kotlin.time.Duration.Companion.seconds
 
     @Test
     fun `present - with CallType RoomCall sets call as active, loads URL, runs WidgetDriver and notifies the other clients a call started`() = runTest {
-        val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Boolean>> { Result.success(true) }
         val syncService = FakeSyncService(SyncState.Running)
         val fakeRoom = FakeJoinedRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
         val client = FakeMatrixClient(syncService = syncService).apply {
