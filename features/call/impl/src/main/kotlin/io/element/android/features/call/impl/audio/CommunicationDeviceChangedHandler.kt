@@ -14,8 +14,8 @@ import timber.log.Timber
 import java.util.concurrent.Executors
 
 open class CommunicationDeviceChangedHandler {
-    open fun start(listener: CommunicationDeviceChangedHandlerListener) = Unit
-    open fun stop() = Unit
+    open fun start(listener: CommunicationDeviceChangedHandlerListener) {}
+    open fun stop() {}
 }
 
 interface CommunicationDeviceChangedHandlerListener {
