@@ -23,6 +23,7 @@
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Всегда показывать"</string>
   <string name="screen_advanced_settings_show_media_timeline_private_rooms">"В личных комнатах"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"Скрытый медиафайл всегда можно отобразить, нажав на него."</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Показать медиафайлы в хронологии"</string>
   <string name="screen_advanced_settings_view_source_description">"Включить опцию просмотра источника сообщения в ленте."</string>
   <string name="screen_blocked_users_empty">"У вас нет заблокированных пользователей"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Разблокировать"</string>
@@ -62,6 +63,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"настройки системы"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>
   <string name="screen_notification_settings_title">"Уведомления"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"История уведомлений"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Устранение неполадок"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Уведомления об устранении неполадок"</string>
 </resources>

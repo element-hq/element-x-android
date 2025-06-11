@@ -371,8 +371,13 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>
   <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
+  <string name="screen_room_timeline_tombstoned_room_action">"Jump to new room"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"This room has been replaced and is no longer active"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"See old messages"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"This room is a continuation of another room"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Request to join sent"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"This room has been upgraded"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>

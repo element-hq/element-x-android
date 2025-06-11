@@ -3,7 +3,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Necesitarás una dirección de sala para que sea visible en el directorio."</string>
   <string name="screen_edit_room_address_title">"Dirección de la sala"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Se ha producido un error al actualizar la configuración de notificaciones."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Tu servidor principal no admite esta opción en salas cifradas, puede que no recibas notificaciones en algunas salas."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Tu servidor base no admite esta opción en salas cifradas, puede que no recibas notificaciones de algunas salas."</string>
   <string name="screen_polls_history_title">"Encuestas"</string>
   <string name="screen_room_change_permissions_administrators">"Solo administradores"</string>
   <string name="screen_room_change_permissions_ban_people">"Vetar personas"</string>
@@ -74,7 +74,7 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Sacar y vetar a un miembro"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Solo eliminar miembro"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Quitar veto"</string>
-  <string name="screen_room_member_list_manage_member_unban_message">"Podrán volver a unirse a esta sala si son invitados de nuevo."</string>
+  <string name="screen_room_member_list_manage_member_unban_message">"Podrá volver a unirse a esta sala si se le invita."</string>
   <string name="screen_room_member_list_manage_member_unban_title">"Quitar veto al usuario"</string>
   <string name="screen_room_member_list_mode_banned">"Vetados"</string>
   <string name="screen_room_member_list_mode_members">"Miembros"</string>
@@ -93,7 +93,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Se ha producido un error al cargar la configuración de las notificaciones."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"No se pudo restaurar el modo predeterminado, por favor vuelve a intentarlo de nuevo."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"No se pudo cambiar el modo, por favor inténtalo de nuevo."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Tu servidor principal no admite esta opción en salas cifradas, no recibirás notificaciones en esta sala."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Tu servidor base no admite esta opción en salas cifradas, no recibirás notificaciones de esta sala."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Todos los mensajes"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Únicamente Menciones y Palabras clave"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"En esta sala, notificarme por"</string>

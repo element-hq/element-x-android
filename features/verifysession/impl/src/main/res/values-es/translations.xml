@@ -18,7 +18,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Comparar números"</string>
   <string name="screen_session_verification_complete_subtitle">"Tu nueva sesión ya está verificada. Tienes acceso a tus mensajes cifrados y otros usuarios lo considerarán de confianza."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Ahora puedes confiar en la identidad de este usuario al enviar o recibir mensajes."</string>
-  <string name="screen_session_verification_enter_recovery_key">"Introduzca la clave de recuperación"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Introduce la clave de recuperación"</string>
   <string name="screen_session_verification_failed_subtitle">"O bien se agotó el tiempo de solicitud, se rechazó la solicitud o hubo una discrepancia en la verificación."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Demuestra que eres tú para acceder a tu historial de mensajes cifrados."</string>
   <string name="screen_session_verification_open_existing_session_title">"Abrir una sesión existente"</string>

@@ -71,7 +71,7 @@
     <item quantity="one">"%1$d personne"</item>
     <item quantity="other">"%1$d personnes"</item>
   </plurals>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Retirer et bannir ce membre"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Bannir du salon"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Retirer le membre uniquement"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Débannir"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Il pourra rejoindre le salon à nouveau si il est invité."</string>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Pastikan distributor UnifiedPush tersedia."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Tidak ada distributor notifikasi dorongan yang ditemukan."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="other">"%1$d distributor ditemukan: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Periksa UnifiedPush"</string>
+</resources>
