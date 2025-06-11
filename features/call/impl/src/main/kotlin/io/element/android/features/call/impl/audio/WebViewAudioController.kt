@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 /**
- * See [Element Call controls docs.](https://github.com/element-hq/element-call/blob/livekit/docs/controls.md#audio-devices)
+ * See [Element Call controls docs](https://github.com/element-hq/element-call/blob/livekit/docs/controls.md#audio-devices).
  */
 class WebViewAudioController(
     private val coroutineScope: CoroutineScope,

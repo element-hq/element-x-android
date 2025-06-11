@@ -29,7 +29,7 @@ class CommunicationDeviceChangedHandlerImpl31(
     private var listener: CommunicationDeviceChangedHandlerListener? = null
 
     /**
-     * This listener tracks the current communication device and updates the WebView when it changes.
+     * This listener tracks the current communication device and invokes the listener when it changes.
      */
     private val commsDeviceChangedListener by lazy {
         AudioManager.OnCommunicationDeviceChangedListener { device ->
