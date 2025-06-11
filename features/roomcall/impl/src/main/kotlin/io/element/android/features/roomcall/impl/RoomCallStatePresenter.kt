@@ -15,7 +15,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.api.CurrentCallService
-import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -25,12 +25,12 @@ import javax.inject.Inject
 class RoomCallStatePresenter @Inject constructor(
     private val room: JoinedRoom,
     private val currentCallService: CurrentCallService,
-    private val enterpriseService: EnterpriseService,
+    private val sessionEnterpriseService: SessionEnterpriseService,
 ) : Presenter<RoomCallState> {
     @Composable
     override fun present(): RoomCallState {
         val isAvailable by produceState(false) {
-            value = enterpriseService.isElementCallAvailable()
+            value = sessionEnterpriseService.isElementCallAvailable()
         }
         val roomInfo by room.roomInfoFlow.collectAsState()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
