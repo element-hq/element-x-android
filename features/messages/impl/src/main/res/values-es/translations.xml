@@ -9,8 +9,8 @@
   <string name="emoji_picker_category_places">"Viajes y lugares"</string>
   <string name="emoji_picker_category_symbols">"Símbolos"</string>
   <string name="screen_report_content_block_user">"Bloquear usuario"</string>
-  <string name="screen_report_content_block_user_hint">"Marque si quieres ocultar todos los mensajes actuales y futuros de este usuario"</string>
-  <string name="screen_report_content_explanation">"Este mensaje se notificará al administrador de su homeserver. No podrán leer ningún mensaje cifrado."</string>
+  <string name="screen_report_content_block_user_hint">"Marca esta casilla si quieres ocultar todos los mensajes actuales y futuros de este usuario"</string>
+  <string name="screen_report_content_explanation">"Se denunciará este mensaje al administrador de tu servidor base. No será capaz de leer ningún mensaje cifrado."</string>
   <string name="screen_report_content_hint">"Motivo para denunciar este contenido"</string>
   <string name="screen_room_attachment_source_camera">"Cámara"</string>
   <string name="screen_room_attachment_source_camera_photo">"Hacer foto"</string>

@@ -377,7 +377,13 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
   <string name="screen_room_pinned_banner_loading_description">"Načítání zprávy…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Zobrazit vše"</string>
+  <string name="screen_room_timeline_tombstoned_room_action">"Přejít do nové místnosti"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Tato místnost byla nahrazena a již není aktivní"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Zobrazit staré zprávy"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Tato místnost je pokračováním jiné místnosti"</string>
   <string name="screen_room_title">"Chat"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Žádost o vstup odeslána"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Tato místnost byla aktualizována"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>
   <string name="screen_share_my_location_action">"Sdílet moji polohu"</string>
   <string name="screen_share_open_apple_maps">"Otevřít v Mapách Apple"</string>

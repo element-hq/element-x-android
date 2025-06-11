@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Oʻchirish"</string>
   <string name="a11y_hide_password">"Parolni yashirish"</string>
   <string name="a11y_notifications_mentions_only">"Faqat eslatmalar"</string>

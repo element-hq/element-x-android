@@ -371,7 +371,13 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s kitűzött üzenet"</string>
   <string name="screen_room_pinned_banner_loading_description">"Üzenet betöltése…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Összes megtekintése"</string>
+  <string name="screen_room_timeline_tombstoned_room_action">"Ugrás az új szobába"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Ezt a szobát lecserélték, és már nem aktív."</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Régi üzenetek megtekintése"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Ez a szoba egy másik szoba folytatása"</string>
   <string name="screen_room_title">"Csevegés"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Csatlakozási kérés elküldve"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"A szoba verzióját frissítették"</string>
   <string name="screen_share_location_title">"Hely megosztása"</string>
   <string name="screen_share_my_location_action">"Saját hely megosztása"</string>
   <string name="screen_share_open_apple_maps">"Megnyitás az Apple Mapsben"</string>

@@ -8,6 +8,7 @@
 package io.element.android.libraries.designsystem.text
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.TextUnit
  * Can be used for instance to use Dp unit for text.
  */
 @Composable
+@ReadOnlyComposable
 fun Dp.toSp(): TextUnit = with(LocalDensity.current) { toSp() }
 
 /**
@@ -24,22 +26,26 @@ fun Dp.toSp(): TextUnit = with(LocalDensity.current) { toSp() }
  * Can be used for instance to use Sp unit for size.
  */
 @Composable
+@ReadOnlyComposable
 fun TextUnit.toDp(): Dp = with(LocalDensity.current) { toDp() }
 
 /**
  * Convert Px value to Dp, regarding current density.
  */
 @Composable
+@ReadOnlyComposable
 fun Int.toDp(): Dp = with(LocalDensity.current) { toDp() }
 
 /**
  * Convert Dp value to pixels, regarding current density.
  */
 @Composable
+@ReadOnlyComposable
 fun Dp.toPx(): Float = with(LocalDensity.current) { toPx() }
 
 /**
  * Convert Dp value to pixels, regarding current density.
  */
 @Composable
+@ReadOnlyComposable
 fun Dp.roundToPx(): Int = with(LocalDensity.current) { roundToPx() }

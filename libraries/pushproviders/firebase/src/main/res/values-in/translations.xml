@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Pastikan bahwa Firebase tersedia."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase tidak tersedia."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase tersedia."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Periksa Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Pastikan token Firebase tersedia."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Token Firebase tidak diketahui."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Token Firebase: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Periksa token Firebase"</string>
+</resources>

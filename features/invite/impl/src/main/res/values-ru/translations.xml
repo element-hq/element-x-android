@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Вы не увидите сообщений или приглашений в комнату от этого пользователя"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Заблокировать пользователя"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Сообщите об этой комнате своему поставщику учетной записи."</string>
   <string name="screen_decline_and_block_report_user_reason_placeholder">"Опишите причину жалобы…"</string>
   <string name="screen_decline_and_block_title">"Отклонить и заблокировать"</string>
   <string name="screen_invites_decline_chat_message">"Вы уверены, что хотите отклонить приглашение в %1$s?"</string>

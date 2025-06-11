@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_bottom_sheet_manage_room_member_ban">"Retirer et bannir ce membre"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Bannir du salon"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Bannir"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Il ne pourra pas rejoindre le salon à nouveau, même si il est invité."</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Êtes-vous certain de vouloir bannir ce membre ?"</string>

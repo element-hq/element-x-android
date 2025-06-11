@@ -64,6 +64,7 @@
     <item quantity="one">"Se encontró %1$d proveedor de push: %2$s"</item>
     <item quantity="other">"Se encontraron %1$d proveedores de push: %2$s"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"La aplicación se compiló con compatibilidad para: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Detectar proveedores de push"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Verificar que la aplicación pueda mostrar notificaciones."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"No se ha hecho clic en la notificación."</string>
