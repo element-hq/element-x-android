@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +38,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun TimelineItemCallNotifyView(
     event: TimelineItem.Event,

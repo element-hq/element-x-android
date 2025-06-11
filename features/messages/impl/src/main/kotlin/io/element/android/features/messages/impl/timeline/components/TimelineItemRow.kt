@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,7 +47,6 @@ import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlin.time.DurationUnit
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun TimelineItemRow(
     timelineItem: TimelineItem,

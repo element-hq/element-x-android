@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,6 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 
 private val CORNER_RADIUS = 8.dp
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MessageStateEventContainer(
     @Suppress("UNUSED_PARAMETER") isHighlighted: Boolean,

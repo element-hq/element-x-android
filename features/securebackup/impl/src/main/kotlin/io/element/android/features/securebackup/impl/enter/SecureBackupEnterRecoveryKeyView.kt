@@ -7,7 +7,6 @@
 
 package io.element.android.features.securebackup.impl.enter
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
@@ -71,7 +70,7 @@ fun SecureBackupEnterRecoveryKeyView(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Content(
     state: SecureBackupEnterRecoveryKeyState,
