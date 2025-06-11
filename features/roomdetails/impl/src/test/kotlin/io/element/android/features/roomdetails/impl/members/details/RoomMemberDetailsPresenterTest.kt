@@ -78,8 +78,8 @@ class RoomMemberDetailsPresenterTest {
             avatarUrl = "Alice Avatar url",
         )
         val room = aJoinedRoom(
-            userDisplayNameResult = { Result.failure(Throwable()) },
-            userAvatarUrlResult = { Result.failure(Throwable()) },
+            userDisplayNameResult = { Result.failure(RuntimeException()) },
+            userAvatarUrlResult = { Result.failure(RuntimeException()) },
             getUpdatedMemberResult = { Result.failure(AN_EXCEPTION) },
         ).apply {
             givenRoomMembersState(RoomMembersState.Ready(persistentListOf(roomMember)))

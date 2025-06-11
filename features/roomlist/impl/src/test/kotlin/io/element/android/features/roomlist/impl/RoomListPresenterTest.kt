@@ -504,9 +504,18 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - check that the room is marked as read with correct RR and as unread`() = runTest {
-        val room = FakeBaseRoom()
-        val room2 = FakeBaseRoom(roomId = A_ROOM_ID_2)
-        val room3 = FakeBaseRoom(roomId = A_ROOM_ID_3)
+        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
+        val markAsReadResult3 = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
+        val room = FakeBaseRoom(
+            markAsReadResult = markAsReadResult,
+        )
+        val room2 = FakeBaseRoom(
+            roomId = A_ROOM_ID_2,
+        )
+        val room3 = FakeBaseRoom(
+            roomId = A_ROOM_ID_3,
+            markAsReadResult = markAsReadResult3,
+        )
         val allRooms = setOf(room, room2, room3)
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val matrixClient = FakeMatrixClient().apply {
@@ -530,21 +539,19 @@ class RoomListPresenterTest {
         }.test {
             val initialState = awaitItem()
             allRooms.forEach {
-                assertThat(it.markAsReadCalls).isEmpty()
                 assertThat(it.setUnreadFlagCalls).isEmpty()
             }
             initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
-            assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ))
+            markAsReadResult.assertions().isCalledOnce().with(value(ReceiptType.READ))
             assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false))
             clearMessagesForRoomLambda.assertions().isCalledOnce()
                 .with(value(A_SESSION_ID), value(A_ROOM_ID))
             initialState.eventSink.invoke(RoomListEvents.MarkAsUnread(A_ROOM_ID_2))
-            assertThat(room2.markAsReadCalls).isEmpty()
             assertThat(room2.setUnreadFlagCalls).isEqualTo(listOf(true))
             // Test again with private read receipts
             sessionPreferencesStore.setSendPublicReadReceipts(false)
             initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID_3))
-            assertThat(room3.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ_PRIVATE))
+            markAsReadResult3.assertions().isCalledOnce().with(value(ReceiptType.READ_PRIVATE))
             assertThat(room3.setUnreadFlagCalls).isEqualTo(listOf(false))
             clearMessagesForRoomLambda.assertions().isCalledExactly(2)
                 .withSequence(
@@ -694,7 +701,7 @@ class RoomListPresenterTest {
             ),
             coroutineDispatchers = testCoroutineDispatchers(),
             notificationSettingsService = client.notificationSettingsService(),
-            appScope = backgroundScope,
+            sessionCoroutineScope = backgroundScope,
             dateTimeObserver = FakeDateTimeObserver(),
         ),
         featureFlagService = featureFlagService,

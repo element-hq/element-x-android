@@ -7,6 +7,7 @@
 
 package io.element.android.features.poll.impl.data
 
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -22,7 +23,7 @@ class PollRepository @Inject constructor(
     private val room: JoinedRoom,
     private val timelineProvider: TimelineProvider,
 ) {
-    suspend fun getPoll(eventId: EventId): Result<PollContent> = runCatching {
+    suspend fun getPoll(eventId: EventId): Result<PollContent> = runCatchingExceptions {
         timelineProvider
             .getActiveTimeline()
             .timelineItems

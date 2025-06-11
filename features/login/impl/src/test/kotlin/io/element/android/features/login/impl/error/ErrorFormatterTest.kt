@@ -17,7 +17,7 @@ class ErrorFormatterTest {
     // region loginError
     @Test
     fun `loginError - invalid unknown error returns unknown error message`() {
-        val error = Throwable("Some unknown error")
+        val error = RuntimeException("Some unknown error")
         assertThat(loginError(error)).isEqualTo(CommonStrings.error_unknown)
     }
 

@@ -17,6 +17,7 @@ import androidx.core.text.inSpans
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.push.impl.notifications.ActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.NotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.factories.DefaultNotificationCreator
@@ -36,6 +37,7 @@ interface OnRedactedEventReceived {
 class DefaultOnRedactedEventReceived @Inject constructor(
     private val activeNotificationsProvider: ActiveNotificationsProvider,
     private val notificationDisplayer: NotificationDisplayer,
+    @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
     @ApplicationContext private val context: Context,
     private val stringProvider: StringProvider,

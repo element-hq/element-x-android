@@ -109,7 +109,7 @@ class JoinedRoomLoadedFlowNodeTest {
         messagesEntryPoint = messagesEntryPoint,
         roomDetailsEntryPoint = roomDetailsEntryPoint,
         appNavigationStateService = FakeAppNavigationStateService(),
-        appCoroutineScope = this,
+        sessionCoroutineScope = this,
         roomComponentFactory = FakeRoomComponentFactory(),
         matrixClient = FakeMatrixClient(),
         activeRoomsHolder = activeRoomsHolder,

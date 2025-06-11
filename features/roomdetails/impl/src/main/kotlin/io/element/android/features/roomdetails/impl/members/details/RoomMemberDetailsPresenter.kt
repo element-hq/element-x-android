@@ -9,6 +9,7 @@ package io.element.android.features.roomdetails.impl.members.details
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -33,9 +34,7 @@ import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -86,31 +85,30 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
 
         val userProfileState = userProfilePresenter.present()
 
-        val identityStateChanges by produceState<IdentityStateChange?>(initialValue = null) {
-            room.roomInfoFlow.filter { it.isEncrypted == true }
-                .flatMapLatest {
-                    // Fetch the initial identity state manually
-                    val identityState = encryptionService.getUserIdentity(roomMemberId).getOrNull()
-                    value = identityState?.let { IdentityStateChange(roomMemberId, it) }
+        val identityStateChanges = produceState<IdentityStateChange?>(initialValue = null) {
+            // Fetch the initial identity state manually
+            val identityState = encryptionService.getUserIdentity(roomMemberId).getOrNull()
+            value = identityState?.let { IdentityStateChange(roomMemberId, it) }
 
-                    // Subscribe to the identity changes
-                    room.roomMemberIdentityStateChange()
-                        .map { it.find { it.identityRoomMember.userId == roomMemberId } }
-                        .map { roomMemberIdentityStateChange ->
-                            // If we didn't receive any info, manually fetch it
-                            roomMemberIdentityStateChange?.identityState ?: encryptionService.getUserIdentity(roomMemberId).getOrNull()
-                        }
-                        .filterNotNull()
+            // Subscribe to the identity changes
+            room.roomMemberIdentityStateChange(waitForEncryption = false)
+                .map { it.find { it.identityRoomMember.userId == roomMemberId } }
+                .map { roomMemberIdentityStateChange ->
+                    // If we didn't receive any info, manually fetch it
+                    roomMemberIdentityStateChange?.identityState ?: encryptionService.getUserIdentity(roomMemberId).getOrNull()
                 }
+                .filterNotNull()
                 .collect { value = IdentityStateChange(roomMemberId, it) }
         }
 
-        val verificationState = remember(identityStateChanges) {
-            when (identityStateChanges?.identityState) {
-                IdentityState.VerificationViolation -> UserProfileVerificationState.VERIFICATION_VIOLATION
-                IdentityState.Verified -> UserProfileVerificationState.VERIFIED
-                IdentityState.Pinned, IdentityState.PinViolation -> UserProfileVerificationState.UNVERIFIED
-                else -> UserProfileVerificationState.UNKNOWN
+        val verificationState by remember {
+            derivedStateOf {
+                when (identityStateChanges.value?.identityState) {
+                    IdentityState.VerificationViolation -> UserProfileVerificationState.VERIFICATION_VIOLATION
+                    IdentityState.Verified -> UserProfileVerificationState.VERIFIED
+                    IdentityState.Pinned, IdentityState.PinViolation -> UserProfileVerificationState.UNVERIFIED
+                    else -> UserProfileVerificationState.UNKNOWN
+                }
             }
         }
 

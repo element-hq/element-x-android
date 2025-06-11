@@ -97,6 +97,6 @@ class ForwardMessagesPresenterTest {
     ) = ForwardMessagesPresenter(
         eventId = eventId.value,
         timelineProvider = LiveTimelineProvider(fakeRoom),
-        appCoroutineScope = this,
+        sessionCoroutineScope = this,
     )
 }

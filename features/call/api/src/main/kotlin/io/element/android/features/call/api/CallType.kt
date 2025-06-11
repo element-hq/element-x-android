@@ -15,11 +15,19 @@ import kotlinx.parcelize.Parcelize
 
 sealed interface CallType : NodeInputs, Parcelable {
     @Parcelize
-    data class ExternalUrl(val url: String) : CallType
+    data class ExternalUrl(val url: String) : CallType {
+        override fun toString(): String {
+            return "ExternalUrl"
+        }
+    }
 
     @Parcelize
     data class RoomCall(
         val sessionId: SessionId,
         val roomId: RoomId,
-    ) : CallType
+    ) : CallType {
+        override fun toString(): String {
+            return "RoomCall(sessionId=$sessionId, roomId=$roomId)"
+        }
+    }
 }

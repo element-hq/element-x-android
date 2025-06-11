@@ -29,7 +29,6 @@ import coil3.request.ImageRequest
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 
@@ -55,7 +54,7 @@ fun UnsavedAvatar(
         AsyncImage(
             modifier = commonModifier,
             model = model,
-            placeholder = debugPlaceholderBackground(ColorPainter(MaterialTheme.colorScheme.surfaceVariant)),
+            placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
             contentScale = ContentScale.Crop,
             contentDescription = null,
         )

@@ -11,12 +11,10 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
-import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembersState
@@ -24,7 +22,6 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
-import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,12 +39,12 @@ class RoomMemberListPresenterTest {
     fun `member loading is done automatically on start, but is async`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            updateMembersResult = { Result.success(Unit) },
-            canInviteResult = { Result.success(true) }
-        ).apply {
-            // Needed to avoid discarding the loaded members as a partial and invalid result
-            givenRoomInfo(aRoomInfo(joinedMembersCount = 2))
-        }
+                updateMembersResult = { Result.success(Unit) },
+                canInviteResult = { Result.success(true) }
+            ).apply {
+                // Needed to avoid discarding the loaded members as a partial and invalid result
+                givenRoomInfo(aRoomInfo(joinedMembersCount = 2))
+            }
         )
         val presenter = createPresenter(joinedRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -97,9 +94,9 @@ class RoomMemberListPresenterTest {
         val presenter = createPresenter(
             joinedRoom = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
-                updateMembersResult = { Result.success(Unit) },
-                canInviteResult = { Result.success(true) }
-            )
+                    updateMembersResult = { Result.success(Unit) },
+                    canInviteResult = { Result.success(true) }
+                )
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -189,7 +186,7 @@ class RoomMemberListPresenterTest {
         val presenter = createPresenter(
             joinedRoom = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
-                    canInviteResult = { Result.failure(Throwable("Eek")) },
+                    canInviteResult = { Result.failure(RuntimeException("Eek")) },
                     updateMembersResult = { Result.success(Unit) }
                 )
             )
@@ -204,12 +201,12 @@ class RoomMemberListPresenterTest {
     }
 
     @Test
-    fun `present - RoomMemberSelected by default opens the room member details through the navigator`() = runTest {
-        val navigator = FakeRoomMemberListNavigator()
-        val roomMembersModerationStateLambda = { aRoomMembersModerationState(canDisplayModerationActions = false) }
+    fun `present - RoomMemberSelected will open the moderation options when target user is not banned`() = runTest {
+        val roomMemberModerationPresenter = Presenter {
+            aRoomMemberModerationState(canBan = true, canKick = true)
+        }
         val presenter = createPresenter(
-            roomMembersModerationStateLambda = roomMembersModerationStateLambda,
-            navigator = navigator,
+            roomMemberModerationPresenter = roomMemberModerationPresenter,
             joinedRoom = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
                     updateMembersResult = { Result.success(Unit) },
@@ -222,46 +219,7 @@ class RoomMemberListPresenterTest {
         }.test {
             skipItems(1)
             awaitItem().eventSink(RoomMemberListEvents.RoomMemberSelected(aVictor()))
-            assertThat(navigator.openRoomMemberDetailsCallCount).isEqualTo(1)
         }
-    }
-
-    @Test
-    fun `present - RoomMemberSelected will open the moderation options if the current user can use them`() = runTest {
-        val navigator = FakeRoomMemberListNavigator()
-        val eventsRecorder = EventsRecorder<RoomMembersModerationEvents>()
-        val roomMembersModerationStateLambda = {
-            aRoomMembersModerationState(
-                canDisplayModerationActions = true,
-                eventSink = eventsRecorder,
-            )
-        }
-        val presenter = createPresenter(
-            roomMembersModerationStateLambda = roomMembersModerationStateLambda,
-            navigator = navigator,
-            joinedRoom = FakeJoinedRoom(
-                baseRoom = FakeBaseRoom(
-                    updateMembersResult = { Result.success(Unit) },
-                    canInviteResult = { Result.success(true) }
-                )
-            )
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            awaitItem().eventSink(RoomMemberListEvents.RoomMemberSelected(aVictor()))
-            eventsRecorder.assertSingle(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
-        }
-    }
-}
-
-private class FakeRoomMemberListNavigator : RoomMemberListNavigator {
-    var openRoomMemberDetailsCallCount = 0
-        private set
-
-    override fun openRoomMemberDetails(roomMemberId: UserId) {
-        openRoomMemberDetailsCallCount++
     }
 }
 
@@ -277,19 +235,19 @@ private fun TestScope.createDataSource(
 private fun TestScope.createPresenter(
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
     joinedRoom: JoinedRoom = FakeJoinedRoom(
-            baseRoom = FakeBaseRoom(
+        baseRoom = FakeBaseRoom(
             updateMembersResult = { Result.success(Unit) }
         )
     ),
     roomMemberListDataSource: RoomMemberListDataSource = createDataSource(coroutineDispatchers = coroutineDispatchers),
-    roomMembersModerationStateLambda: () -> RoomMembersModerationState = { aRoomMembersModerationState() },
     encryptedService: FakeEncryptionService = FakeEncryptionService(),
-    navigator: RoomMemberListNavigator = object : RoomMemberListNavigator {}
+    roomMemberModerationPresenter: Presenter<RoomMemberModerationState> = Presenter {
+        aRoomMemberModerationState()
+    },
 ) = RoomMemberListPresenter(
     room = joinedRoom,
     roomMemberListDataSource = roomMemberListDataSource,
     coroutineDispatchers = coroutineDispatchers,
-    roomMembersModerationPresenter = { roomMembersModerationStateLambda() },
+    roomMembersModerationPresenter = roomMemberModerationPresenter,
     encryptionService = encryptedService,
-    navigator = navigator,
 )

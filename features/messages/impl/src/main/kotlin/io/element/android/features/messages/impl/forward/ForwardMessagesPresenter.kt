@@ -16,6 +16,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
@@ -28,7 +29,8 @@ import kotlinx.coroutines.launch
 class ForwardMessagesPresenter @AssistedInject constructor(
     @Assisted eventId: String,
     @Assisted private val timelineProvider: TimelineProvider,
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<ForwardMessagesState> {
     private val eventId: EventId = EventId(eventId)
 
@@ -40,7 +42,7 @@ class ForwardMessagesPresenter @AssistedInject constructor(
     private val forwardingActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
 
     fun onRoomSelected(roomIds: List<RoomId>) {
-        appCoroutineScope.forwardEvent(eventId, roomIds.toPersistentList(), forwardingActionState)
+        sessionCoroutineScope.forwardEvent(eventId, roomIds.toPersistentList(), forwardingActionState)
     }
 
     @Composable

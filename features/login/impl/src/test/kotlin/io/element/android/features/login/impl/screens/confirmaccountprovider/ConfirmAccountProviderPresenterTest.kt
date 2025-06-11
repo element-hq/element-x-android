@@ -22,9 +22,9 @@ import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticat
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_OIDC
-import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
@@ -118,7 +118,7 @@ class ConfirmAccountProviderPresenterTest {
             assertThat(successState.submitEnabled).isFalse()
             assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
             assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
-            authenticationService.givenOidcCancelError(A_THROWABLE)
+            authenticationService.givenOidcCancelError(AN_EXCEPTION)
             defaultOidcActionFlow.post(OidcAction.GoBack)
             val cancelFailureState = awaitItem()
             assertThat(cancelFailureState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
@@ -173,7 +173,7 @@ class ConfirmAccountProviderPresenterTest {
             assertThat(successState.submitEnabled).isFalse()
             assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
             assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
-            authenticationService.givenLoginError(A_THROWABLE)
+            authenticationService.givenLoginError(AN_EXCEPTION)
             defaultOidcActionFlow.post(OidcAction.Success("aUrl"))
             val cancelLoadingState = awaitItem()
             assertThat(cancelLoadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
@@ -225,7 +225,7 @@ class ConfirmAccountProviderPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            authenticationService.givenChangeServerError(Throwable())
+            authenticationService.givenChangeServerError(RuntimeException())
             initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
             skipItems(1) // Loading
             val failureState = awaitItem()
@@ -246,7 +246,7 @@ class ConfirmAccountProviderPresenterTest {
             val initialState = awaitItem()
 
             // Submit will return an error
-            authenticationService.givenChangeServerError(A_THROWABLE)
+            authenticationService.givenChangeServerError(AN_EXCEPTION)
             initialState.eventSink(ConfirmAccountProviderEvents.Continue)
 
             skipItems(1) // Loading

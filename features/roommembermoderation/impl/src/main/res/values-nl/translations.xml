@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Lid verwijderen en verbannen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Verbannen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Ze kunnen niet meer toetreden tot deze kamer als ze worden uitgenodigd."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Weet je zeker dat je dit lid wilt verbannen?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s verbannen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Profiel bekijken"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Verwijderen uit kamer"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Lid verwijderen en toekomstige deelname verbieden?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s wordt verwijderd…"</string>
+</resources>

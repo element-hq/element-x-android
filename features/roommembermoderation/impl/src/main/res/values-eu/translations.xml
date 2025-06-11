@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Kendu kidea eta ezarri debekua"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Ezarri debekua"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Ziur kide honi debekua ezarri nahi diozula?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s(r)i debekua ezartzen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Ikusi profila"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Kendu gelatik"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Kidea kendu eta etorkizunean sartzea debekatu?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s kentzen…"</string>
+</resources>

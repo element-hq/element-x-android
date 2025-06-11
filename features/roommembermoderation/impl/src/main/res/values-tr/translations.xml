@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Üyeyi çıkar ve yasakla"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Yasakla"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Davet edilseler bile bu odaya tekrar katılamazlar."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Bu üyeyi yasaklamak istediğinize emin misiniz?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Yasaklanıyor %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Profili görüntüle"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Odadan çıkar"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Üyeyi çıkarın ve gelecekte katılmasını yasaklayın?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Kaldırılıyor %1$s…"</string>
+</resources>

@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
@@ -34,7 +35,7 @@ class RustMediaLoader(
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> =
         withContext(mediaDispatcher) {
-            runCatching {
+            runCatchingExceptions {
                 source.toRustMediaSource().use { source ->
                     innerClient.getMediaContent(source)
                 }
@@ -48,7 +49,7 @@ class RustMediaLoader(
         height: Long
     ): Result<ByteArray> =
         withContext(mediaDispatcher) {
-            runCatching {
+            runCatchingExceptions {
                 source.toRustMediaSource().use { mediaSource ->
                     innerClient.getMediaThumbnail(
                         mediaSource = mediaSource,
@@ -66,12 +67,20 @@ class RustMediaLoader(
         useCache: Boolean,
     ): Result<MediaFile> =
         withContext(mediaDispatcher) {
-            runCatching {
+            runCatchingExceptions {
                 source.toRustMediaSource().use { mediaSource ->
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
                         filename = filename,
-                        mimeType = mimeType?.takeIf { MimeTypes.hasSubtype(it) } ?: MimeTypes.OctetStream,
+                        mimeType = when {
+                            mimeType == null -> MimeTypes.OctetStream
+                            MimeTypes.hasSubtype(mimeType) -> mimeType
+                            // Fallback to a default mime type based on the main type, so that the SDK can create a file with the correct extension.
+                            mimeType == MimeTypes.Images -> MimeTypes.Jpeg
+                            mimeType == MimeTypes.Videos -> MimeTypes.Mp4
+                            mimeType == MimeTypes.Audio -> MimeTypes.Mp3
+                            else -> MimeTypes.OctetStream
+                        },
                         useCache = useCache,
                         tempDir = cacheDirectory.path,
                     )

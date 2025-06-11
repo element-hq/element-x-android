@@ -174,7 +174,7 @@ class RoomDetailsPresenter @Inject constructor(
         }
 
         val hasMemberVerificationViolations by produceState(false) {
-            room.roomMemberIdentityStateChange()
+            room.roomMemberIdentityStateChange(waitForEncryption = true)
                 .onEach { identities -> value = identities.any { it.identityState == IdentityState.VerificationViolation } }
                 .launchIn(this)
         }

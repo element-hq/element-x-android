@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Αφαίρεση και αποκλεισμός μέλους"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Αποκλεισμός"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Δεν θα μπορεί να συμμετέχει ξανά σε αυτό το δωμάτιο εάν προσκληθεί."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Θες σίγουρα να αποκλείσεις αυτό το μέλος;"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Αποκλεισμός %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Αφαίρεση"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Θα μπορούν να συμμετάσχουν ξανά σε αυτό το δωμάτιο εάν προσκληθούν."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Είστε βέβαιοι ότι θέλετε να αφαιρέσετε αυτό το μέλος;"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Προβολή προφίλ"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Αφαίρεση από το δωμάτιο"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Αφαίρεση μέλους και απαγόρευση συμμετοχής στο μέλλον;"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Αφαίρεση %1$s…"</string>
+</resources>

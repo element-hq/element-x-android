@@ -14,6 +14,7 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -48,6 +49,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
     private val notificationRenderer: NotificationRenderer,
     private val appNavigationStateService: AppNavigationStateService,
+    @AppCoroutineScope
     coroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
@@ -208,7 +210,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
     private suspend fun MatrixClient.getSafeUserProfile(): MatrixUser {
         return tryOrNull(
-            onError = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
+            onException = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
             operation = {
                 val profile = getUserProfile().getOrNull()
                 // displayName cannot be empty else NotificationCompat.MessagingStyle() will crash

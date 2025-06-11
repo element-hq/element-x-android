@@ -37,6 +37,7 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -61,11 +62,11 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransa
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
-import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -138,10 +139,10 @@ class MessagesPresenterTest {
                 canRedactOtherResult = { Result.success(true) },
                 canUserJoinCallResult = { Result.success(true) },
                 canUserPinUnpinResult = { Result.success(true) },
+                markAsReadResult = { lambdaError() }
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
-        assertThat(room.baseRoom.markAsReadCalls).isEmpty()
         val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             runCurrent()
@@ -743,7 +744,7 @@ class MessagesPresenterTest {
                 canUserPinUnpinResult = { Result.success(true) },
             ),
             typingNoticeResult = { Result.success(Unit) },
-            inviteUserResult = { Result.failure(Throwable("Oops!")) },
+            inviteUserResult = { Result.failure(RuntimeException("Oops!")) },
         )
         room.givenRoomMembersState(
             RoomMembersState.Ready(
@@ -847,12 +848,12 @@ class MessagesPresenterTest {
     fun `present - permission to redact other`() = runTest {
         val joinedRoom = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canRedactOtherResult = { Result.success(true) },
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(false) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ),
+                canRedactOtherResult = { Result.success(true) },
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(false) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+            ),
             typingNoticeResult = { Result.success(Unit) },
         )
         val presenter = createMessagesPresenter(joinedRoom = joinedRoom)
@@ -891,17 +892,17 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action pin`() = runTest {
         val successPinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
-        val failurePinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
+        val failurePinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(AN_EXCEPTION) }
         val analyticsService = FakeAnalyticsService()
         val timeline = FakeTimeline()
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ),
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(true) },
+                canRedactOtherResult = { Result.success(true) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+            ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -931,17 +932,17 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action unpin`() = runTest {
         val successUnpinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
-        val failureUnpinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
+        val failureUnpinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(AN_EXCEPTION) }
         val timeline = FakeTimeline()
         val analyticsService = FakeAnalyticsService()
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ),
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(true) },
+                canRedactOtherResult = { Result.success(true) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+            ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -1095,12 +1096,12 @@ class MessagesPresenterTest {
         }
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ),
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(true) },
+                canRedactOtherResult = { Result.success(true) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+            ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -1133,16 +1134,16 @@ class MessagesPresenterTest {
     fun `present - when room is encrypted and a DM, the DM user's identity state is fetched onResume`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            sessionId = A_SESSION_ID,
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-            initialRoomInfo = aRoomInfo(isDirect = true, isEncrypted = true)
-        ).apply {
-            givenRoomMembersState(RoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
-        },
+                sessionId = A_SESSION_ID,
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                canRedactOwnResult = { Result.success(true) },
+                canRedactOtherResult = { Result.success(true) },
+                canUserJoinCallResult = { Result.success(true) },
+                canUserPinUnpinResult = { Result.success(true) },
+                initialRoomInfo = aRoomInfo(isDirect = true, isEncrypted = true)
+            ).apply {
+                givenRoomMembersState(RoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
+            },
             typingNoticeResult = { Result.success(Unit) },
         )
         val encryptionService = FakeEncryptionService(getUserIdentityResult = { Result.success(IdentityState.Verified) })
@@ -1188,6 +1189,9 @@ class MessagesPresenterTest {
                 textEditorState = aTextEditorStateMarkdown(initialText = "", initialFocus = false)
             )
         },
+        roomMemberModerationPresenter: Presenter<RoomMemberModerationState> = Presenter {
+            aRoomMemberModerationState()
+        },
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         actionListEventSink: (ActionListEvents) -> Unit = {},
     ): MessagesPresenter {
@@ -1205,6 +1209,7 @@ class MessagesPresenterTest {
             linkPresenter = { aLinkState() },
             pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
             roomCallStatePresenter = { aStandByCallState() },
+            roomMemberModerationPresenter = roomMemberModerationPresenter,
             syncService = FakeSyncService(),
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,

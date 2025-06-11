@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
@@ -554,8 +555,11 @@ private fun ThumbnailView(
                 source = thumbnailSource,
                 kind = MediaRequestData.Kind.File(mediaInfo.filename, mediaInfo.mimeType)
             )
+            val alpha = if (LocalInspectionMode.current) 0.1f else 1f
             AsyncImage(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(alpha),
                 model = mediaRequestData,
                 contentScale = ContentScale.Fit,
                 contentDescription = null,

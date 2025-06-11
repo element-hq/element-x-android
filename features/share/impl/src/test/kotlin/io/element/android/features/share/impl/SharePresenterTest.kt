@@ -169,7 +169,7 @@ class SharePresenterTest {
     ): SharePresenter {
         return SharePresenter(
             intent = intent,
-            appCoroutineScope = this,
+            sessionCoroutineScope = this,
             shareIntentHandler = shareIntentHandler,
             matrixClient = matrixClient,
             mediaPreProcessor = mediaPreProcessor,

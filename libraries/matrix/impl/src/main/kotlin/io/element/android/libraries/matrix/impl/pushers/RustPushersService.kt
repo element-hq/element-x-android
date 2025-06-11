@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.pushers
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
@@ -26,7 +27,7 @@ class RustPushersService(
 ) : PushersService {
     override suspend fun setHttpPusher(setHttpPusherData: SetHttpPusherData): Result<Unit> {
         return withContext(dispatchers.io) {
-            runCatching {
+            runCatchingExceptions {
                 client.setPusher(
                     identifiers = PusherIdentifiers(
                         pushkey = setHttpPusherData.pushKey,
@@ -51,7 +52,7 @@ class RustPushersService(
 
     override suspend fun unsetHttpPusher(unsetHttpPusherData: UnsetHttpPusherData): Result<Unit> {
         return withContext(dispatchers.io) {
-            runCatching {
+            runCatchingExceptions {
                 client.deletePusher(
                     identifiers = PusherIdentifiers(
                         pushkey = unsetHttpPusherData.pushKey,

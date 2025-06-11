@@ -7,11 +7,11 @@
 
 package io.element.android.libraries.matrix.impl
 
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustClientBuilder
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuilder
 import org.matrix.rustcomponents.sdk.ClientBuilder
 
 class FakeClientBuilderProvider : ClientBuilderProvider {
     override fun provide(): ClientBuilder {
-        return FakeRustClientBuilder()
+        return FakeFfiClientBuilder()
     }
 }

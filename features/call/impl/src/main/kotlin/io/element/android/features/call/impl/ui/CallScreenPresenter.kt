@@ -32,6 +32,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -49,6 +50,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import timber.log.Timber
 import java.util.UUID
 
 class CallScreenPresenter @AssistedInject constructor(
@@ -64,6 +66,7 @@ class CallScreenPresenter @AssistedInject constructor(
     private val languageTagProvider: LanguageTagProvider,
     private val appForegroundStateService: AppForegroundStateService,
     private val activeRoomsHolder: ActiveRoomsHolder,
+    @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
@@ -211,6 +214,7 @@ class CallScreenPresenter @AssistedInject constructor(
                         theme = theme,
                     ).getOrThrow()
                     callWidgetDriver.value = result.driver
+                    Timber.d("Call widget driver initialized for sessionId: ${inputs.sessionId}, roomId: ${inputs.roomId}")
                     result.url
                 }
             }
@@ -221,10 +225,12 @@ class CallScreenPresenter @AssistedInject constructor(
     private fun HandleMatrixClientSyncState() {
         val coroutineScope = rememberCoroutineScope()
         DisposableEffect(Unit) {
-            val client = (callType as? CallType.RoomCall)?.sessionId?.let {
-                matrixClientsProvider.getOrNull(it)
-            } ?: return@DisposableEffect onDispose { }
+            val roomCallType = callType as? CallType.RoomCall ?: return@DisposableEffect onDispose {}
+            val client = matrixClientsProvider.getOrNull(roomCallType.sessionId) ?: return@DisposableEffect onDispose {
+                Timber.w("No MatrixClient found for sessionId, can't send call notification: ${roomCallType.sessionId}")
+            }
             coroutineScope.launch {
+                Timber.d("Observing sync state in-call for sessionId: ${roomCallType.sessionId}")
                 client.syncService().syncState
                     .collect { state ->
                         if (state == SyncState.Running) {
@@ -235,6 +241,7 @@ class CallScreenPresenter @AssistedInject constructor(
                     }
             }
             onDispose {
+                Timber.d("Stopped observing sync state in-call for sessionId: ${roomCallType.sessionId}")
                 // Make sure we mark the call as ended in the app state
                 appForegroundStateService.updateIsInCallState(false)
             }
@@ -242,12 +249,29 @@ class CallScreenPresenter @AssistedInject constructor(
     }
 
     private suspend fun MatrixClient.notifyCallStartIfNeeded(roomId: RoomId) {
-        if (!notifiedCallStart) {
-            val activeRoomForSession = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)
-            val sendCallNotificationResult = activeRoomForSession?.sendCallNotificationIfNeeded()
-                ?: getJoinedRoom(roomId)?.use { it.sendCallNotificationIfNeeded() }
-            sendCallNotificationResult?.onSuccess { notifiedCallStart = true }
+        if (notifiedCallStart) return
+
+        val activeRoomForSession = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)
+        val sendCallNotificationResult = if (activeRoomForSession != null) {
+            Timber.d("Notifying call start for room $roomId. Has room call: ${activeRoomForSession.info().hasRoomCall}")
+            activeRoomForSession.sendCallNotificationIfNeeded()
+        } else {
+            // Instantiate the room from the session and roomId and send the notification
+            getJoinedRoom(roomId)?.use { room ->
+                Timber.d("Notifying call start for room $roomId. Has room call: ${room.info().hasRoomCall}")
+                room.sendCallNotificationIfNeeded()
+            } ?: run {
+                Timber.w("No room found for session $sessionId and room $roomId, skipping call notification.")
+                return
+            }
         }
+
+        sendCallNotificationResult.fold(
+            onSuccess = { notifiedCallStart = true },
+            onFailure = { error ->
+                Timber.e(error, "Failed to send call notification for room $roomId.")
+            }
+        )
     }
 
     private fun parseMessage(message: String): WidgetMessage? {

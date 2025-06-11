@@ -32,6 +32,7 @@ import androidx.core.net.toFile
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.system.startInstallFromSourceIntent
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
@@ -83,7 +84,7 @@ class AndroidLocalMediaActions @Inject constructor(
 
     override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
-        runCatching {
+        runCatchingExceptions {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveOnDiskUsingMediaStore(localMedia)
             } else {
@@ -98,7 +99,7 @@ class AndroidLocalMediaActions @Inject constructor(
 
     override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
-        runCatching {
+        runCatchingExceptions {
             val shareableUri = localMedia.toShareableUri()
             val shareMediaIntent = Intent(Intent.ACTION_SEND)
                 .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -117,7 +118,7 @@ class AndroidLocalMediaActions @Inject constructor(
 
     override suspend fun open(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
-        runCatching {
+        runCatchingExceptions {
             when (localMedia.info.mimeType) {
                 MimeTypes.Apk -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

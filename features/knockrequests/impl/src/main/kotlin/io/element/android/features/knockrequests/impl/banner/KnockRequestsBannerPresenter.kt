@@ -18,6 +18,7 @@ import io.element.android.features.knockrequests.impl.data.KnockRequestPresentab
 import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -28,7 +29,8 @@ private const val ACCEPT_ERROR_DISPLAY_DURATION = 1500L
 
 class KnockRequestsBannerPresenter @Inject constructor(
     private val knockRequestsService: KnockRequestsService,
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<KnockRequestsBannerState> {
     @Composable
     override fun present(): KnockRequestsBannerState {
@@ -52,13 +54,13 @@ class KnockRequestsBannerPresenter @Inject constructor(
         fun handleEvents(event: KnockRequestsBannerEvents) {
             when (event) {
                 is KnockRequestsBannerEvents.AcceptSingleRequest -> {
-                    appCoroutineScope.acceptSingleKnockRequest(
+                    sessionCoroutineScope.acceptSingleKnockRequest(
                         knockRequests = knockRequests,
                         displayAcceptError = showAcceptError,
                     )
                 }
                 is KnockRequestsBannerEvents.Dismiss -> {
-                    appCoroutineScope.launch {
+                    sessionCoroutineScope.launch {
                         knockRequestsService.markAllKnockRequestsAsSeen()
                     }
                 }

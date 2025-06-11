@@ -51,12 +51,11 @@ class RustRoomFactory(
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val featureFlagService: FeatureFlagService,
     private val roomMembershipObserver: RoomMembershipObserver,
+    private val roomInfoMapper: RoomInfoMapper,
 ) {
     private val dispatcher = dispatchers.io.limitedParallelism(1)
     private val mutex = Mutex()
     private val isDestroyed: AtomicBoolean = AtomicBoolean(false)
-
-    private val roomInfoMapper = RoomInfoMapper()
 
     private val eventFilters = TimelineConfig.excludedEvents
         .takeIf { it.isNotEmpty() }
@@ -111,7 +110,7 @@ class RustRoomFactory(
                 // Init the live timeline in the SDK from the Room
                 val timeline = sdkRoom.timelineWithConfiguration(
                     TimelineConfiguration(
-                        focus = TimelineFocus.Live,
+                        focus = TimelineFocus.Live(hideThreadedEvents = false),
                         filter = eventFilters?.let(TimelineFilter::EventTypeFilter) ?: TimelineFilter.All,
                         internalIdPrefix = "live",
                         dateDividerMode = DateDividerMode.DAILY,

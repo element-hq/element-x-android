@@ -11,9 +11,9 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustEventTimelineItem
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimeline
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineDiff
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineItem
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimeline
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineDiff
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineItem
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.CompletableDeferred
@@ -35,7 +35,7 @@ class TimelineItemsSubscriberTest {
     fun `when timeline emits an empty list of items, the flow must emits an empty list`() = runTest {
         val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
             MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
-        val timeline = FakeRustTimeline()
+        val timeline = FakeFfiTimeline()
         val timelineItemsSubscriber = createTimelineItemsSubscriber(
             timeline = timeline,
             timelineItems = timelineItems,
@@ -44,7 +44,7 @@ class TimelineItemsSubscriberTest {
             timelineItemsSubscriber.subscribeIfNeeded()
             // Wait for the listener to be set.
             runCurrent()
-            timeline.emitDiff(listOf(FakeRustTimelineDiff(item = null, change = TimelineChange.RESET)))
+            timeline.emitDiff(listOf(FakeFfiTimelineDiff(item = null, change = TimelineChange.RESET)))
             val final = awaitItem()
             assertThat(final).isEmpty()
             timelineItemsSubscriber.unsubscribeIfNeeded()
@@ -55,7 +55,7 @@ class TimelineItemsSubscriberTest {
     fun `when timeline emits a non empty list of items, the flow must emits a non empty list`() = runTest {
         val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
             MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
-        val timeline = FakeRustTimeline()
+        val timeline = FakeFfiTimeline()
         val timelineItemsSubscriber = createTimelineItemsSubscriber(
             timeline = timeline,
             timelineItems = timelineItems,
@@ -64,7 +64,7 @@ class TimelineItemsSubscriberTest {
             timelineItemsSubscriber.subscribeIfNeeded()
             // Wait for the listener to be set.
             runCurrent()
-            timeline.emitDiff(listOf(FakeRustTimelineDiff(item = FakeRustTimelineItem(), change = TimelineChange.RESET)))
+            timeline.emitDiff(listOf(FakeFfiTimelineDiff(item = FakeFfiTimelineItem(), change = TimelineChange.RESET)))
             val final = awaitItem()
             assertThat(final).isNotEmpty()
             timelineItemsSubscriber.unsubscribeIfNeeded()
@@ -75,7 +75,7 @@ class TimelineItemsSubscriberTest {
     fun `when timeline emits an item with SYNC origin, the callback onNewSyncedEvent is invoked`() = runTest {
         val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
             MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
-        val timeline = FakeRustTimeline()
+        val timeline = FakeFfiTimeline()
         val onNewSyncedEventRecorder = lambdaRecorder<Unit> { }
         val timelineItemsSubscriber = createTimelineItemsSubscriber(
             timeline = timeline,
@@ -88,8 +88,8 @@ class TimelineItemsSubscriberTest {
             runCurrent()
             timeline.emitDiff(
                 listOf(
-                    FakeRustTimelineDiff(
-                        item = FakeRustTimelineItem(
+                    FakeFfiTimelineDiff(
+                        item = FakeFfiTimelineItem(
                             asEventResult = aRustEventTimelineItem(origin = EventItemOrigin.SYNC),
                         ),
                         change = TimelineChange.RESET,
@@ -114,7 +114,7 @@ class TimelineItemsSubscriberTest {
 }
 
 private fun TestScope.createTimelineItemsSubscriber(
-    timeline: Timeline = FakeRustTimeline(),
+    timeline: Timeline = FakeFfiTimeline(),
     timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> = MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE),
     initLatch: CompletableDeferred<Unit> = CompletableDeferred(),
     isTimelineInitialized: MutableStateFlow<Boolean> = MutableStateFlow(false),

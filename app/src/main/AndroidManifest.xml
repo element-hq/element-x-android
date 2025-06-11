@@ -25,6 +25,10 @@
         android:theme="@style/Theme.ElementX"
         tools:targetApi="33">
 
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
@@ -117,6 +121,17 @@
 
                 <data android:scheme="https" />
                 <data android:host="matrix.to" />
+            </intent-filter>
+            <!--
+              matrix: links
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="matrix" />
             </intent-filter>
             <!--
               links from matrix.to website

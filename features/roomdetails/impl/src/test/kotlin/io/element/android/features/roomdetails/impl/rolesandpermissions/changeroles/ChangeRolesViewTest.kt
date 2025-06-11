@@ -17,6 +17,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.toMatrixUser
@@ -41,7 +42,7 @@ class ChangeRolesViewTest {
 
     @Test
     fun `passing a 'USER' role throws an exception`() {
-        val exception = runCatching {
+        val exception = runCatchingExceptions {
             rule.setChangeRolesContent(
                 state = aChangeRolesState(
                     role = RoomMember.Role.USER,

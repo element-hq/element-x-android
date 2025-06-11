@@ -55,7 +55,7 @@ class FakeJoinedRoom(
     private val roomNotificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
     private var createTimelineResult: (CreateTimelineParams) -> Result<Timeline> = { lambdaError() },
     private val editMessageLambda: (EventId, String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
-    private val sendCallNotificationIfNeededResult: () -> Result<Unit> = { lambdaError() },
+    private val sendCallNotificationIfNeededResult: () -> Result<Boolean> = { lambdaError() },
     private val progressCallbackValues: List<Pair<Long, Long>> = emptyList(),
     private val generateWidgetWebViewUrlResult: (MatrixWidgetSettings, String, String?, String?) -> Result<String> = { _, _, _, _ -> lambdaError() },
     private val getWidgetDriverResult: (MatrixWidgetSettings) -> Result<MatrixWidgetDriver> = { lambdaError() },
@@ -207,7 +207,7 @@ class FakeJoinedRoom(
         return getWidgetDriverResult(widgetSettings)
     }
 
-    override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = simulateLongTask {
+    override suspend fun sendCallNotificationIfNeeded(): Result<Boolean> = simulateLongTask {
         sendCallNotificationIfNeededResult()
     }
 

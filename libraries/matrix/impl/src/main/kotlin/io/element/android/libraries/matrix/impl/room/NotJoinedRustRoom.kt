@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.room
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
@@ -20,8 +21,8 @@ class NotJoinedRustRoom(
     override val localRoom: RustBaseRoom?,
     override val previewInfo: RoomPreviewInfo,
 ) : NotJoinedRoom {
-    override suspend fun membershipDetails(): Result<RoomMembershipDetails?> = runCatching {
-        val room = localRoom?.innerRoom ?: return@runCatching null
+    override suspend fun membershipDetails(): Result<RoomMembershipDetails?> = runCatchingExceptions {
+        val room = localRoom?.innerRoom ?: return@runCatchingExceptions null
         val (ownMember, senderInfo) = room.memberWithSenderInfo(sessionId.value)
         RoomMembershipDetails(
             currentUserMember = RoomMemberMapper.map(ownMember),

@@ -81,6 +81,8 @@ fun LoginModeView(
                 LoginMode.PasswordLogin -> onNeedLoginPassword()
                 is LoginMode.AccountCreation -> onCreateAccountContinue(loginModeData.url)
             }
+            // Also clear the data, to let the next screen be able to go back
+            onClearError()
         }
         AsyncData.Uninitialized -> Unit
     }

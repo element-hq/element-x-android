@@ -18,17 +18,24 @@ suspend fun MatrixClient.startDM(
     userId: UserId,
     createIfDmDoesNotExist: Boolean,
 ): StartDMResult {
-    val existingDM = findDM(userId)
-    return if (existingDM != null) {
-        StartDMResult.Success(existingDM, isNew = false)
-    } else if (createIfDmDoesNotExist) {
-        createDM(userId).fold(
-            { StartDMResult.Success(it, isNew = true) },
-            { StartDMResult.Failure(it) }
+    return findDM(userId)
+        .fold(
+            onSuccess = { existingDM ->
+                if (existingDM != null) {
+                    StartDMResult.Success(existingDM, isNew = false)
+                } else if (createIfDmDoesNotExist) {
+                    createDM(userId).fold(
+                        { StartDMResult.Success(it, isNew = true) },
+                        { StartDMResult.Failure(it) }
+                    )
+                } else {
+                    StartDMResult.DmDoesNotExist
+                }
+            },
+            onFailure = { error ->
+                StartDMResult.Failure(error)
+            }
         )
-    } else {
-        StartDMResult.DmDoesNotExist
-    }
 }
 
 sealed interface StartDMResult {
