@@ -237,7 +237,7 @@ anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = "org.jlleitschuh.gradle.ktlint:12.3.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:12.1.2"
+dependencycheck = "org.owasp.dependencycheck:12.1.3"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.5"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
