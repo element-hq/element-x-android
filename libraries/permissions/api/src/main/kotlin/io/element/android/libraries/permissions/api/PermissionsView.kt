@@ -9,6 +9,7 @@ package io.element.android.libraries.permissions.api
 
 import android.Manifest
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -41,6 +42,7 @@ fun PermissionsView(
 }
 
 @Composable
+@ReadOnlyComposable
 private fun String.toDialogContent(): String {
     return when (this) {
         Manifest.permission.POST_NOTIFICATIONS -> stringResource(id = R.string.dialog_permission_notification)

@@ -9,6 +9,7 @@ package io.element.android.features.login.impl.error
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
@@ -21,6 +22,7 @@ sealed class ChangeServerError : Throwable() {
         val messageStr: String? = null,
     ) : ChangeServerError() {
         @Composable
+        @ReadOnlyComposable
         fun message(): String = messageStr ?: stringResource(messageId ?: CommonStrings.error_unknown)
     }
 
