@@ -178,6 +178,9 @@ class TimelinePresenter @AssistedInject constructor(
                 is TimelineEvents.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvents.ComputeForMessage(event.event))
                 }
+                is TimelineEvents.NavigateToRoom -> {
+                    navigator.onNavigateToRoom(event.roomId)
+                }
             }
         }
 

@@ -123,7 +123,6 @@ fun MessagesView(
     onRoomDetailsClick: () -> Unit,
     onEventContentClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
-    onRoomDataClick: (RoomId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
@@ -210,11 +209,10 @@ fun MessagesView(
             MessagesViewContent(
                 state = state,
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding),
+                    .padding(padding)
+                    .consumeWindowInsets(padding),
                 onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
-                onRoomSuccessorClicked = onRoomDataClick,
                 onUserDataClick = {
                     hidingKeyboard {
                         state.eventSink(MessagesEvents.OnUserClicked(it))
@@ -305,7 +303,6 @@ private fun MessagesViewContent(
     state: MessagesState,
     onContentClick: (TimelineItem.Event) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
-    onRoomSuccessorClicked: (RoomId) -> Unit,
     onLinkClick: (Link, Boolean) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
@@ -323,9 +320,9 @@ private fun MessagesViewContent(
 ) {
     Box(
         modifier = modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .imePadding(),
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .imePadding(),
     ) {
         AttachmentsBottomSheet(
             state = state.composerState,
@@ -417,7 +414,9 @@ private fun MessagesViewContent(
                 MessagesViewComposerBottomSheetContents(
                     subcomposing = subcomposing,
                     state = state,
-                    onRoomSuccessorClicked = onRoomSuccessorClicked,
+                    onRoomSuccessorClick = { roomId ->
+                        state.timelineState.eventSink(TimelineEvents.NavigateToRoom(roomId = roomId))
+                    },
                     onLinkClick = { url, customTab -> onLinkClick(Link(url), customTab) },
                 )
             },
@@ -432,12 +431,12 @@ private fun MessagesViewContent(
 private fun MessagesViewComposerBottomSheetContents(
     subcomposing: Boolean,
     state: MessagesState,
-    onRoomSuccessorClicked: (RoomId) -> Unit,
+    onRoomSuccessorClick: (RoomId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
 ) {
     when {
         state.successorRoom != null -> {
-            SuccessorRoomBanner(roomSuccessor = state.successorRoom, onRoomSuccessorClicked = onRoomSuccessorClicked)
+            SuccessorRoomBanner(roomSuccessor = state.successorRoom, onRoomSuccessorClick = onRoomSuccessorClick)
         }
         state.userEventPermissions.canSendMessage -> {
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -508,8 +507,8 @@ private fun MessagesViewTopBar(
             val roundedCornerShape = RoundedCornerShape(8.dp)
             Row(
                 modifier = Modifier
-                        .clip(roundedCornerShape)
-                        .clickable { onRoomDetailsClick() },
+                    .clip(roundedCornerShape)
+                    .clickable { onRoomDetailsClick() },
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -605,17 +604,17 @@ private fun CantSendMessageBanner() {
 
 @Composable
 private fun SuccessorRoomBanner(
-    modifier: Modifier = Modifier,
     roomSuccessor: SuccessorRoom,
-    onRoomSuccessorClicked: (RoomId) -> Unit
+    onRoomSuccessorClick: (RoomId) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ComposerAlertMolecule(
         avatar = null,
-        content = "This room has been replaced and is no longer active".toAnnotatedString(),
-        onSubmitClick = { onRoomSuccessorClicked(roomSuccessor.roomId)},
+        content = stringResource(R.string.screen_room_timeline_tombstoned_room_message).toAnnotatedString(),
+        onSubmitClick = { onRoomSuccessorClick(roomSuccessor.roomId) },
         modifier = modifier,
         isCritical = false,
-        submitText = "Jump to new room"
+        submitText = stringResource(R.string.screen_room_timeline_tombstoned_room_action)
     )
 }
 
@@ -628,7 +627,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
         onUserDataClick = {},
-        onRoomDataClick = { },
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
         onCreatePollClick = {},

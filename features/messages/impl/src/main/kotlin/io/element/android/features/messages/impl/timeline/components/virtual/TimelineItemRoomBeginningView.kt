@@ -31,28 +31,28 @@ import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 
 @Composable
 fun TimelineItemRoomBeginningView(
-    predecessorRoom: PredecessorRoom?,
     roomName: String?,
+    predecessorRoom: PredecessorRoom?,
+    onPredecessorRoomClick: (RoomId) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier =modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
-        if(predecessorRoom != null) {
+        if (predecessorRoom != null) {
             ComposerAlertMolecule(
                 avatar = null,
-                content = "This room is a continuation of another room".toAnnotatedString(),
-                onSubmitClick = { },
-                modifier = modifier,
+                content = stringResource(R.string.screen_room_timeline_upgraded_room_message).toAnnotatedString(),
+                onSubmitClick = { onPredecessorRoomClick(predecessorRoom.roomId) },
                 isCritical = false,
-                submitText = "See old messages"
+                submitText = stringResource(R.string.screen_room_timeline_upgraded_room_action)
             )
         }
 
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
             contentAlignment = Alignment.Center,
         ) {
             val text = if (roomName == null) {
@@ -70,22 +70,24 @@ fun TimelineItemRoomBeginningView(
     }
 }
 
-
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemRoomBeginningViewPreview() = ElementPreview {
-    Column(verticalArrangement = spacedBy(16.dp)){
+    Column(verticalArrangement = spacedBy(16.dp)) {
         TimelineItemRoomBeginningView(
             predecessorRoom = null,
             roomName = null,
+            onPredecessorRoomClick = {},
         )
         TimelineItemRoomBeginningView(
             predecessorRoom = null,
             roomName = "Room Name",
+            onPredecessorRoomClick = {},
         )
         TimelineItemRoomBeginningView(
-            predecessorRoom = PredecessorRoom(RoomId("!roomId:matrix.org"),EventId("\$eventId:matrix.org") ),
+            predecessorRoom = PredecessorRoom(RoomId("!roomId:matrix.org"), EventId("\$eventId:matrix.org")),
             roomName = "Room Name",
+            onPredecessorRoomClick = {},
         )
     }
 }
