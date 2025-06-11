@@ -119,7 +119,6 @@ fun TimelineItemEventRow(
     timelineProtectionState: TimelineProtectionState,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
-    isHighlighted: Boolean,
     onEventClick: () -> Unit,
     onLongClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
@@ -195,7 +194,6 @@ fun TimelineItemEventRow(
                     TimelineItemEventRowContent(
                         event = event,
                         timelineProtectionState = timelineProtectionState,
-                        isHighlighted = isHighlighted,
                         timelineRoomInfo = timelineRoomInfo,
                         interactionSource = interactionSource,
                         onContentClick = onContentClick,
@@ -229,7 +227,6 @@ fun TimelineItemEventRow(
             TimelineItemEventRowContent(
                 event = event,
                 timelineProtectionState = timelineProtectionState,
-                isHighlighted = isHighlighted,
                 timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
                 onContentClick = onContentClick,
@@ -284,7 +281,6 @@ private fun SwipeSensitivity(
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
     timelineProtectionState: TimelineProtectionState,
-    isHighlighted: Boolean,
     timelineRoomInfo: TimelineRoomInfo,
     interactionSource: MutableInteractionSource,
     onContentClick: () -> Unit,
@@ -338,7 +334,6 @@ private fun TimelineItemEventRowContent(
         val bubbleState = BubbleState(
             groupPosition = event.groupPosition,
             isMine = event.isMine,
-            isHighlighted = isHighlighted,
             timelineRoomInfo = timelineRoomInfo,
         )
         MessageEventBubble(

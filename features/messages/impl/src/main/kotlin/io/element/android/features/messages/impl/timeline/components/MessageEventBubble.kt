@@ -182,7 +182,7 @@ internal fun MessageEventBubblePreview(@PreviewParameter(BubbleStateProvider::cl
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = "${state.groupPosition.javaClass.simpleName} m:${state.isMine.to01()} h:${state.isHighlighted.to01()}",
+                    text = "${state.groupPosition.javaClass.simpleName} isMine:${state.isMine.to01()}",
                     style = ElementTheme.typography.fontBodyXsRegular,
                 )
             }

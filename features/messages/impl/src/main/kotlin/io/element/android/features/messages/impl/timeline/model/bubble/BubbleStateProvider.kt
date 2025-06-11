@@ -21,15 +21,11 @@ open class BubbleStateProvider : PreviewParameterProvider<BubbleState> {
             TimelineItemGroupPosition.None,
         ).map { groupPosition ->
             sequenceOf(false, true).map { isMine ->
-                sequenceOf(false, true).map { isHighlighted ->
-                    aBubbleState(
-                        groupPosition = groupPosition,
-                        isMine = isMine,
-                        isHighlighted = isHighlighted,
-                    )
-                }
+                aBubbleState(
+                    groupPosition = groupPosition,
+                    isMine = isMine,
+                )
             }
-                .flatten()
         }
             .flatten()
 }
@@ -37,11 +33,9 @@ open class BubbleStateProvider : PreviewParameterProvider<BubbleState> {
 internal fun aBubbleState(
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.First,
     isMine: Boolean = false,
-    isHighlighted: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
 ) = BubbleState(
     groupPosition = groupPosition,
     isMine = isMine,
-    isHighlighted = isHighlighted,
     timelineRoomInfo = timelineRoomInfo,
 )
