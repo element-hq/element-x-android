@@ -273,9 +273,11 @@ class WebViewAudioManager(
             // On Android 11 and lower, we don't have the concept of communication devices
             // We have to call the right methods based on the device type
             if (device != null) {
+                @Suppress("DEPRECATION")
                 audioManager.isSpeakerphoneOn = device.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER
                 audioManager.isBluetoothScoOn = device.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO
             } else {
+                @Suppress("DEPRECATION")
                 audioManager.isSpeakerphoneOn = false
                 audioManager.isBluetoothScoOn = false
             }
