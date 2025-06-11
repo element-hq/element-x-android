@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl
 
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -20,6 +21,7 @@ class FakeMessagesNavigator(
     private val onReportContentClickLambda: (eventId: EventId, senderId: UserId) -> Unit = { _, _ -> lambdaError() },
     private val onEditPollClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
     private val onPreviewAttachmentLambda: (attachments: ImmutableList<Attachment>) -> Unit = { _ -> lambdaError() },
+    private val onNavigateToRoomLambda: (roomId: RoomId) -> Unit = { _ -> lambdaError() }
 ) : MessagesNavigator {
     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
         onShowEventDebugInfoClickLambda(eventId, debugInfo)
@@ -39,5 +41,9 @@ class FakeMessagesNavigator(
 
     override fun onPreviewAttachment(attachments: ImmutableList<Attachment>) {
         onPreviewAttachmentLambda(attachments)
+    }
+
+    override fun onNavigateToRoom(roomId: RoomId) {
+        onNavigateToRoomLambda(roomId)
     }
 }

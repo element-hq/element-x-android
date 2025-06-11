@@ -88,6 +88,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             ),
             aMessagesState(roomName = AsyncData.Success("A DM with a very looong name"), dmUserVerificationState = IdentityState.Verified),
             aMessagesState(roomName = AsyncData.Success("A DM with a very looong name"), dmUserVerificationState = IdentityState.VerificationViolation),
+            aMessagesState(successorRoom = SuccessorRoom(RoomId("!id:domain"), null)),
         )
 }
 
