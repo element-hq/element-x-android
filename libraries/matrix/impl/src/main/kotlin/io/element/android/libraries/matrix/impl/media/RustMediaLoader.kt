@@ -32,7 +32,6 @@ class RustMediaLoader(
             if (!exists()) mkdirs() // Must always ensure that this directory exists because "Clear cache" does not restart an app's process.
         }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> =
         withContext(mediaDispatcher) {
             runCatchingExceptions {
@@ -42,7 +41,6 @@ class RustMediaLoader(
             }
         }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun loadMediaThumbnail(
         source: MediaSource,
         width: Long,
