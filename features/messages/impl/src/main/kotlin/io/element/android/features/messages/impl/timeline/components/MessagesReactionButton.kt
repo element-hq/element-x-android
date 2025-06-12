@@ -9,7 +9,6 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
@@ -50,7 +49,6 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 @Suppress("ModifierClickableOrder") // This is needed to display the right ripple shape
 fun MessagesReactionButton(
     onClick: () -> Unit,

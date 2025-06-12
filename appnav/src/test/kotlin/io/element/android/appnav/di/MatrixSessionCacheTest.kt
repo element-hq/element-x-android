@@ -16,7 +16,6 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -29,7 +28,6 @@ class MatrixSessionCacheTest {
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isNull()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `test getSyncOrchestratorOrNull`() = runTest {
         val fakeAuthenticationService = FakeMatrixAuthenticationService()

@@ -19,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -60,7 +59,6 @@ private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
  * @param lineWidth The width of the waveform lines.
  * @param linePadding The padding between waveform lines.
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WaveformPlaybackView(
     playbackProgress: Float,

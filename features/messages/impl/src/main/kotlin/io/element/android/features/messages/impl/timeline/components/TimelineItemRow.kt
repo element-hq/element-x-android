@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,7 +47,6 @@ import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlin.time.DurationUnit
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun TimelineItemRow(
     timelineItem: TimelineItem,
@@ -113,7 +111,6 @@ internal fun TimelineItemRow(
                             event = timelineItem,
                             renderReadReceipts = renderReadReceipts,
                             isLastOutgoingMessage = isLastOutgoingMessage,
-                            isHighlighted = timelineItem.isEvent(focusedEventId),
                             onClick = { onContentClick(timelineItem) },
                             onReadReceiptsClick = onReadReceiptClick,
                             onLongClick = { onLongClick(timelineItem) },
@@ -157,7 +154,6 @@ internal fun TimelineItemRow(
                             renderReadReceipts = renderReadReceipts,
                             timelineProtectionState = timelineProtectionState,
                             isLastOutgoingMessage = isLastOutgoingMessage,
-                            isHighlighted = timelineItem.isEvent(focusedEventId),
                             onEventClick = { onContentClick(timelineItem) },
                             onLongClick = { onLongClick(timelineItem) },
                             onLinkClick = onLinkClick,
