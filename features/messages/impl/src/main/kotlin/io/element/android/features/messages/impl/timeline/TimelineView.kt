@@ -76,8 +76,6 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -225,7 +223,6 @@ private fun MessageShieldDialog(state: TimelineState) {
     )
 }
 
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @Composable
 private fun TimelinePrefetchingHelper(
     lazyListState: LazyListState,

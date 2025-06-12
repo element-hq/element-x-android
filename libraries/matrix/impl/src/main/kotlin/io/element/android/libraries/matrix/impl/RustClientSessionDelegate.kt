@@ -13,7 +13,6 @@ import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
@@ -29,7 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * IMPORTANT: you must set the [client] property as soon as possible so [didReceiveAuthError] can work properly.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class RustClientSessionDelegate(
     private val sessionStore: SessionStore,
     private val appCoroutineScope: CoroutineScope,

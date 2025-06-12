@@ -13,7 +13,6 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.use
@@ -25,7 +24,6 @@ class RustMediaLoader(
     dispatchers: CoroutineDispatchers,
     private val innerClient: Client,
 ) : MatrixMediaLoader {
-    @OptIn(ExperimentalCoroutinesApi::class)
     private val mediaDispatcher = dispatchers.io.limitedParallelism(32)
     private val cacheDirectory
         get() = File(baseCacheDirectory, "temp/media").apply {
