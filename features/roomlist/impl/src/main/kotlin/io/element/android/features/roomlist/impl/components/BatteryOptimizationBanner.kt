@@ -9,6 +9,8 @@ package io.element.android.features.roomlist.impl.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.Announcement
 import io.element.android.libraries.designsystem.components.AnnouncementType
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -24,11 +26,10 @@ internal fun BatteryOptimizationBanner(
 ) {
     Announcement(
         modifier = modifier.roomListBannerPadding(),
-        // TODO Localazy
-        title = "Notification tip",
-        description = "To be sure to receive all the notifications, it can help to disable the battery optimization for this application.",
+        title = stringResource(R.string.banner_battery_optimization_title_android),
+        description = stringResource(R.string.banner_battery_optimization_content_android),
         type = AnnouncementType.Actionable(
-            actionText = "Yes, disable",
+            actionText = stringResource(R.string.banner_battery_optimization_submit_android),
             onActionClick = { state.eventSink(BatteryOptimizationEvents.DoAction) },
             onDismissClick = { state.eventSink(BatteryOptimizationEvents.Dismiss) },
         ),
