@@ -127,6 +127,12 @@ class WebViewAudioManager(
         }
     }
 
+    private val legacyBluetoothAudioHelper = LegacyBluetoothAudioHelper(
+        context = webView.context,
+        audioManager = audioManager,
+        coroutineScope = coroutineScope,
+    )
+
     /**
      * The currently used audio device id.
      */
@@ -206,6 +212,10 @@ class WebViewAudioManager(
             audioManager.removeOnCommunicationDeviceChangedListener(commsDeviceChangedListener)
         }
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            legacyBluetoothAudioHelper.stopConnection()
+        }
+
         audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
     }
 
@@ -225,7 +235,7 @@ class WebViewAudioManager(
                 coroutineScope.launch(Dispatchers.Main) {
                     // Even with the callback, it seems like starting the audio takes a bit on the webview side,
                     // so we add an extra delay here to make sure it's ready
-                    delay(500.milliseconds)
+                    delay(2000.milliseconds)
 
                     // Calling this ahead of time makes the default audio device to not use the right audio stream
                     setAvailableAudioDevices()
@@ -361,8 +371,21 @@ class WebViewAudioManager(
             // On Android 11 and lower, we don't have the concept of communication devices
             // We have to call the right methods based on the device type
             if (device != null) {
-                isSpeakerphoneOn = device.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER
-                isBluetoothScoOn = device.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO
+                val isDeviceBluetooth = device.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO
+
+                if (isDeviceBluetooth && legacyBluetoothAudioHelper.connectionState.value == BluetoothHeadsetConnectionState.DISCONNECTED) {
+                    println("Starting Bluetooth SCO connection for device: ${device.id} - ${deviceName(device.type, device.productName.toString())}")
+                    isSpeakerphoneOn = false
+                    legacyBluetoothAudioHelper.startConnection()
+                } else if (isDeviceBluetooth && legacyBluetoothAudioHelper.connectionState.value == BluetoothHeadsetConnectionState.CONNECTING) {
+                    println("Bluetooth SCO connection is already in progress for device: ${device.id} - ${deviceName(device.type, device.productName.toString())}")
+                } else if (!isDeviceBluetooth && legacyBluetoothAudioHelper.connectionState.value != BluetoothHeadsetConnectionState.DISCONNECTED) {
+                    println("Stopping Bluetooth SCO connection for device: ${device.id} - ${deviceName(device.type, device.productName.toString())}")
+                    legacyBluetoothAudioHelper.stopConnection()
+                    isSpeakerphoneOn = device.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER
+                } else {
+                    isSpeakerphoneOn = device.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER
+                }
             } else {
                 isSpeakerphoneOn = false
                 isBluetoothScoOn = false

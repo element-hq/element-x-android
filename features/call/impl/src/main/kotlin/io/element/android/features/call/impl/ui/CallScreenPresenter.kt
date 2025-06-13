@@ -44,6 +44,7 @@ import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -52,6 +53,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import timber.log.Timber
 import java.util.UUID
+import kotlin.time.Duration.Companion.seconds
 
 class CallScreenPresenter @AssistedInject constructor(
     @Assisted private val callType: CallType,
@@ -165,6 +167,13 @@ class CallScreenPresenter @AssistedInject constructor(
                         // If the call was joined, we need to hang up first. Then the UI will be dismissed automatically.
                         sendHangupMessage(widgetId, interceptor)
                         isJoinedCall = false
+
+                        coroutineScope.launch {
+                            // Wait a few seconds to receive a confirmation that the call has been hung up
+                            // If we don't receive it, we close the screen anyway
+                            delay(2.seconds)
+                            close(callWidgetDriver.value, navigator)
+                        }
                     } else {
                         coroutineScope.launch {
                             close(callWidgetDriver.value, navigator)
