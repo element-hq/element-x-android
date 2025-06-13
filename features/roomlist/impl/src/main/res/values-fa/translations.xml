@@ -11,7 +11,6 @@
   <string name="screen_invites_decline_direct_chat_title">"رد گپ"</string>
   <string name="screen_invites_empty_list">"بدون دعوت"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) دعوتتان کرد"</string>
-  <string name="screen_join_room_knock_sent_title">"درخواست پیوستن فرستاده شد"</string>
   <string name="screen_migration_message">"فرایندی یک باره است. ممنون از شکیباییتان."</string>
   <string name="screen_migration_title">"برپایی حسابتان."</string>
   <string name="screen_roomlist_a11y_create_message">"ایجاد اتاق یا گفت‌وگویی جدید"</string>
@@ -31,6 +30,7 @@
   <string name="screen_roomlist_filter_unreads">"نخوانده‌ها"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"تبریک!
 هیچ پیام نخوانده‌ای ندارید!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"درخواست پیوستن فرستاده شد"</string>
   <string name="screen_roomlist_main_space_title">"گپ‌ها"</string>
   <string name="screen_roomlist_mark_as_read">"علامت‌گذاری به عنوان خوانده شده"</string>
   <string name="screen_roomlist_mark_as_unread">"نشان به ناخوانده"</string>

@@ -359,7 +359,6 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Caricamento messaggio…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Mostra tutti"</string>
   <string name="screen_room_title">"Conversazione"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Richiesta di accesso inviata"</string>
   <string name="screen_share_location_title">"Condividi posizione"</string>
   <string name="screen_share_my_location_action">"Condividi la mia posizione"</string>
   <string name="screen_share_open_apple_maps">"Apri in Apple Maps"</string>

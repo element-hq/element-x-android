@@ -378,7 +378,6 @@
   <string name="screen_room_pinned_banner_loading_description">"Завантаження повідомлення…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Переглянути всі"</string>
   <string name="screen_room_title">"Бесіда"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Запит на приєднання надіслано"</string>
   <string name="screen_share_location_title">"Поділитися розташуванням"</string>
   <string name="screen_share_my_location_action">"Поділитися моїм розташуванням"</string>
   <string name="screen_share_open_apple_maps">"Відкрити в Apple Maps"</string>

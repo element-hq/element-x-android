@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Rejeitar conversa"</string>
   <string name="screen_invites_empty_list">"Sem convites"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) convidou-te"</string>
-  <string name="screen_join_room_knock_sent_title">"Pedido de adesão enviado"</string>
   <string name="screen_migration_message">"Este processo só acontece uma única vez, obrigado por esperares."</string>
   <string name="screen_migration_title">"A configurar a tua conta…"</string>
   <string name="screen_roomlist_a11y_create_message">"Criar uma nova conversa ou sala"</string>
@@ -37,6 +36,7 @@ Por enquanto, podes anular a seleção dos filtros para veres as tuas outras con
   <string name="screen_roomlist_filter_unreads">"Por ler"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Parabéns!
 Não tens nenhuma mensagem por ler!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Pedido de adesão enviado"</string>
   <string name="screen_roomlist_main_space_title">"Conversas"</string>
   <string name="screen_roomlist_mark_as_read">"Marcar como lida"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como não lida"</string>

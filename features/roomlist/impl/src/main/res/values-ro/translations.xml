@@ -13,7 +13,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Refuzați conversația"</string>
   <string name="screen_invites_empty_list">"Nicio invitație"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) v-a invitat."</string>
-  <string name="screen_join_room_knock_sent_title">"Cererea de alăturare a fost trimisă"</string>
   <string name="screen_migration_message">"Acesta este un proces care se desfășoară o singură dată, vă mulțumim pentru așteptare."</string>
   <string name="screen_migration_title">"Contul dumneavoastră se configurează"</string>
   <string name="screen_roomlist_a11y_create_message">"Creați o conversație sau o cameră nouă"</string>
@@ -35,6 +34,7 @@ Deocamdată, puteți deselecta filtrele pentru a vedea celelalte chat-uri"</stri
   <string name="screen_roomlist_filter_unreads">"Necitite"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Felicitari!
 Nu aveți mesaje necitite!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Cererea de alăturare a fost trimisă"</string>
   <string name="screen_roomlist_main_space_title">"Toate conversatiile"</string>
   <string name="screen_roomlist_mark_as_read">"Marcați ca citită"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcați ca necitită"</string>

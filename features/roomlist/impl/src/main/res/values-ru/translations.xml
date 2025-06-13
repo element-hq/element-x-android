@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Отклонить чат"</string>
   <string name="screen_invites_empty_list">"Нет приглашений"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) пригласил вас"</string>
-  <string name="screen_join_room_knock_sent_title">"Запрос на присоединение отправлен"</string>
   <string name="screen_migration_message">"Это одноразовый процесс, спасибо, что подождали."</string>
   <string name="screen_migration_title">"Настройка учетной записи."</string>
   <string name="screen_roomlist_a11y_create_message">"Создайте новую беседу или комнату"</string>
@@ -37,6 +36,7 @@
   <string name="screen_roomlist_filter_unreads">"Непрочитанные"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Поздравляем!
 У вас нет непрочитанных сообщений!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Запрос на присоединение отправлен"</string>
   <string name="screen_roomlist_main_space_title">"Все чаты"</string>
   <string name="screen_roomlist_mark_as_read">"Пометить как прочитанное"</string>
   <string name="screen_roomlist_mark_as_unread">"Отметить как непрочитанное"</string>

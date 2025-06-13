@@ -372,7 +372,6 @@
   <string name="screen_room_pinned_banner_loading_description">"Φόρτωση μηνύματος…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Προβολή Όλων"</string>
   <string name="screen_room_title">"Συνομιλία"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Το αίτημα συμμετοχής στάλθηκε"</string>
   <string name="screen_share_location_title">"Κοινή χρήση τοποθεσίας"</string>
   <string name="screen_share_my_location_action">"Κοινή χρήση της τοποθεσίας μου"</string>
   <string name="screen_share_open_apple_maps">"Άνοιγμα στο Apple Maps"</string>

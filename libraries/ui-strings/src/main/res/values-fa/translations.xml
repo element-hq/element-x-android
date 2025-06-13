@@ -323,7 +323,6 @@
   <string name="screen_room_pinned_banner_loading_description">"بار کردن پشام‌ها…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"نمایش همه"</string>
   <string name="screen_room_title">"گپ"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"درخواست پیوستن فرستاده شد"</string>
   <string name="screen_share_location_title">"هم‌رسانی موقعیت"</string>
   <string name="screen_share_my_location_action">"هم‌رسانی مکانم"</string>
   <string name="screen_share_open_apple_maps">"گشودن در نقشه‌های اپل"</string>

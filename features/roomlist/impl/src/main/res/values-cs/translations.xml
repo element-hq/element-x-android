@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Odmítnout chat"</string>
   <string name="screen_invites_empty_list">"Žádné pozvánky"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) vás pozval(a)"</string>
-  <string name="screen_join_room_knock_sent_title">"Žádost o vstup odeslána"</string>
   <string name="screen_migration_message">"Jedná se o jednorázový proces, prosíme o strpení."</string>
   <string name="screen_migration_title">"Nastavení vašeho účtu"</string>
   <string name="screen_roomlist_a11y_create_message">"Vytvořte novou konverzaci nebo místnost"</string>
@@ -37,9 +36,11 @@ Prozatím můžete zrušit výběr filtrů, abyste viděli své další chaty"</
   <string name="screen_roomlist_filter_unreads">"Nepřečtené"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulujeme!
 Nemáte žádné nepřečtené zprávy!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Žádost o vstup odeslána"</string>
   <string name="screen_roomlist_main_space_title">"Všechny chaty"</string>
   <string name="screen_roomlist_mark_as_read">"Označit jako přečtené"</string>
   <string name="screen_roomlist_mark_as_unread">"Označit jako nepřečtené"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Tato místnost byla aktualizována"</string>
   <string name="session_verification_banner_message">"Zdá se, že používáte nové zařízení. Ověřte přihlášení, abyste měli přístup k zašifrovaným zprávám."</string>
   <string name="session_verification_banner_title">"Ověřte, že jste to vy"</string>
 </resources>

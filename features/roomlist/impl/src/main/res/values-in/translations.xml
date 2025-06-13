@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Tolak obrolan"</string>
   <string name="screen_invites_empty_list">"Tidak ada undangan"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) mengundang Anda"</string>
-  <string name="screen_join_room_knock_sent_title">"Permintaan untuk bergabung dikirim"</string>
   <string name="screen_migration_message">"Ini adalah proses satu kali, terima kasih telah menunggu."</string>
   <string name="screen_migration_title">"Menyiapkan akun Anda."</string>
   <string name="screen_roomlist_a11y_create_message">"Buat percakapan atau ruangan baru"</string>
@@ -37,6 +36,7 @@ Untuk sementara, Anda dapat membatalkan pilihan saringan untuk melihat percakapa
   <string name="screen_roomlist_filter_unreads">"Belum dibaca"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Selamat!
 Anda tidak memiliki pesan yang belum dibaca!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Permintaan untuk bergabung dikirim"</string>
   <string name="screen_roomlist_main_space_title">"Semua Obrolan"</string>
   <string name="screen_roomlist_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>

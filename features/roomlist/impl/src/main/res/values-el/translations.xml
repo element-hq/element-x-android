@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Απόρριψη συνομιλίας"</string>
   <string name="screen_invites_empty_list">"Χωρίς προσκλήσεις"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) σέ προσκάλεσε"</string>
-  <string name="screen_join_room_knock_sent_title">"Το αίτημα συμμετοχής στάλθηκε"</string>
   <string name="screen_migration_message">"Αυτή είναι μια εφάπαξ διαδικασία, ευχαριστώ που περίμενες."</string>
   <string name="screen_migration_title">"Ρύθμιση του λογαριασμού σου."</string>
   <string name="screen_roomlist_a11y_create_message">"Δημιουργία νέας συνομιλίας ή δωματίου"</string>
@@ -37,6 +36,7 @@
   <string name="screen_roomlist_filter_unreads">"Μη αναγνωσμένα"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Συγχαρητήρια!
 Δεν έχεις μη αναγνωσμένα μηνύματα!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Το αίτημα συμμετοχής στάλθηκε"</string>
   <string name="screen_roomlist_main_space_title">"Συνομιλίες"</string>
   <string name="screen_roomlist_mark_as_read">"Επισήμανση ως αναγνωσμένου"</string>
   <string name="screen_roomlist_mark_as_unread">"Επισήμανση ως μη αναγνωσμένου"</string>

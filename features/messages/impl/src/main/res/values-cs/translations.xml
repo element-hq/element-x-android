@@ -43,6 +43,10 @@
     <item quantity="few">"%1$d změny místnosti"</item>
     <item quantity="other">"%1$d změn místnosti"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Přejít do nové místnosti"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Tato místnost byla nahrazena a již není aktivní"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Zobrazit staré zprávy"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Tato místnost je pokračováním jiné místnosti"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s a %3$d další"</item>
     <item quantity="few">"%1$s, %2$s a %3$d další"</item>

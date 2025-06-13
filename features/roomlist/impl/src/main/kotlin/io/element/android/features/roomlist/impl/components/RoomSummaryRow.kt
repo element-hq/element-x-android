@@ -148,7 +148,7 @@ internal fun RoomSummaryRow(
                         Spacer(modifier = Modifier.height(4.dp))
                     }
                     Text(
-                        text = stringResource(id = R.string.screen_join_room_knock_sent_title),
+                        text = stringResource(id = R.string.screen_roomlist_knock_event_sent_description),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = ElementTheme.typography.fontBodyMdRegular,

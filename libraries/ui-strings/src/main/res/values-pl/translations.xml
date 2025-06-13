@@ -378,7 +378,6 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Wczytywanie wiadomości…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Wyświetl wszystkie"</string>
   <string name="screen_room_title">"Czat"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Wysłano prośbę o dołączenie"</string>
   <string name="screen_share_location_title">"Udostępnij lokalizację"</string>
   <string name="screen_share_my_location_action">"Udostępnij moją lokalizację"</string>
   <string name="screen_share_open_apple_maps">"Otwórz w Apple Maps"</string>

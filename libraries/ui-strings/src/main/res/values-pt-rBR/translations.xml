@@ -372,7 +372,6 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Carregando mensagem…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Ver tudo"</string>
   <string name="screen_room_title">"Bate-papo"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Pedido de adesão enviado"</string>
   <string name="screen_share_location_title">"Compartilhar localização"</string>
   <string name="screen_share_my_location_action">"Compartilhar minha localização"</string>
   <string name="screen_share_open_apple_maps">"Abrir no Apple Maps"</string>

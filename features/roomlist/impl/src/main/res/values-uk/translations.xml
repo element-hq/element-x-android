@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Відхилити бесіду"</string>
   <string name="screen_invites_empty_list">"Немає запрошень"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрошує вас"</string>
-  <string name="screen_join_room_knock_sent_title">"Запит на приєднання надіслано"</string>
   <string name="screen_migration_message">"Це одноразовий процес, дякую за очікування."</string>
   <string name="screen_migration_title">"Налаштування облікового запису."</string>
   <string name="screen_roomlist_a11y_create_message">"Створити нову розмову або кімнату"</string>
@@ -37,6 +36,7 @@
   <string name="screen_roomlist_filter_unreads">"Непрочитані"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Вітаємо!
 У вас немає непрочитаних повідомлень!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Запит на приєднання надіслано"</string>
   <string name="screen_roomlist_main_space_title">"Бесіди"</string>
   <string name="screen_roomlist_mark_as_read">"Позначити прочитаним"</string>
   <string name="screen_roomlist_mark_as_unread">"Позначити непрочитаним"</string>

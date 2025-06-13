@@ -330,7 +330,6 @@ Arrazoia: %1$s."</string>
   <string name="screen_room_pinned_banner_loading_description">"Mezua kargatzen…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Ikusi guztia"</string>
   <string name="screen_room_title">"Txata"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Sartzeko eskaera bidali da"</string>
   <string name="screen_share_location_title">"Partekatu kokapena"</string>
   <string name="screen_share_my_location_action">"Partekatu nire kokapena"</string>
   <string name="screen_share_open_apple_maps">"Ireki Apple Maps-en"</string>
