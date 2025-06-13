@@ -34,11 +34,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.call.impl.R
+import io.element.android.features.call.impl.audio.WebViewAudioManager
 import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PictureInPictureStateProvider
 import io.element.android.features.call.impl.pip.aPictureInPictureState
-import io.element.android.features.call.impl.utils.WebViewAudioManager
 import io.element.android.features.call.impl.utils.WebViewPipController
 import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
 import io.element.android.libraries.architecture.AsyncData
