@@ -370,7 +370,7 @@ fun Modifier.avatarBloom(
         val initialsBitmap = initialsBitmap(
             width = BloomDefaults.ENCODE_SIZE_PX.toDp(),
             height = BloomDefaults.ENCODE_SIZE_PX.toDp(),
-            text = avatarData.initial,
+            text = avatarData.initialLetter,
             textColor = avatarColors.foreground,
             backgroundColor = avatarColors.background,
         )
