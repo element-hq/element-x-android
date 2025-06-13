@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
@@ -45,7 +46,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun SuggestionsPickerView(
     roomId: RoomId,
     roomName: String?,
-    roomAvatarData: AvatarData?,
+    roomAvatarData: AvatarData,
     suggestions: ImmutableList<ResolvedSuggestion>,
     onSelectSuggestion: (ResolvedSuggestion) -> Unit,
     modifier: Modifier = Modifier,
@@ -155,7 +156,7 @@ internal fun SuggestionsPickerViewPreview() {
         SuggestionsPickerView(
             roomId = RoomId("!room:matrix.org"),
             roomName = "Room",
-            roomAvatarData = null,
+            roomAvatarData = anAvatarData(),
             suggestions = persistentListOf(
                 ResolvedSuggestion.AtRoom,
                 ResolvedSuggestion.Member(roomMember),

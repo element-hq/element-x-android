@@ -48,7 +48,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.MatrixBadgeRow
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
+import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
 import io.element.android.libraries.designsystem.components.avatar.DmAvatars
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
@@ -138,6 +138,7 @@ fun RoomDetailsView(
                         roomName = state.roomName,
                         roomAlias = state.roomAlias,
                         heroes = state.heroes,
+                        isTombstoned = state.isTombstoned,
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
@@ -380,6 +381,7 @@ private fun RoomHeaderSection(
     roomName: String,
     roomAlias: RoomAlias?,
     heroes: ImmutableList<MatrixUser>,
+    isTombstoned: Boolean,
     openAvatarPreview: (url: String) -> Unit,
     onSubtitleClick: (String) -> Unit,
 ) {
@@ -389,11 +391,12 @@ private fun RoomHeaderSection(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        CompositeAvatar(
+        RoomAvatar(
             avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomHeader),
             heroes = heroes.map { user ->
                 user.getAvatarData(size = AvatarSize.RoomHeader)
             }.toPersistentList(),
+            isTombstoned = isTombstoned,
             modifier = Modifier
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.roomDetailAvatar)

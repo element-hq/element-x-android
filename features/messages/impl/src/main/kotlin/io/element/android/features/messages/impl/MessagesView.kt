@@ -86,7 +86,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertM
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
+import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -196,6 +196,7 @@ fun MessagesView(
                 MessagesViewTopBar(
                     roomName = state.roomName.dataOrNull(),
                     roomAvatar = state.roomAvatar.dataOrNull(),
+                    isTombstoned = state.isTombstoned,
                     heroes = state.heroes,
                     roomCallState = state.roomCallState,
                     dmUserIdentityState = state.dmUserVerificationState,
@@ -492,6 +493,7 @@ private fun MessagesViewComposerBottomSheetContents(
 private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
+    isTombstoned: Boolean,
     heroes: ImmutableList<AvatarData>,
     roomCallState: RoomCallState,
     dmUserIdentityState: IdentityState?,
@@ -517,6 +519,7 @@ private fun MessagesViewTopBar(
                     RoomAvatarAndNameRow(
                         roomName = roomName,
                         roomAvatar = roomAvatar,
+                        isTombstoned = isTombstoned,
                         heroes = heroes,
                         modifier = titleModifier
                     )
@@ -562,15 +565,17 @@ private fun RoomAvatarAndNameRow(
     roomName: String,
     roomAvatar: AvatarData,
     heroes: ImmutableList<AvatarData>,
+    isTombstoned: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CompositeAvatar(
+        RoomAvatar(
             avatarData = roomAvatar,
             heroes = heroes,
+            isTombstoned = isTombstoned,
         )
         Text(
             modifier = Modifier.padding(horizontal = 8.dp),
