@@ -38,6 +38,7 @@ import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PictureInPictureStateProvider
 import io.element.android.features.call.impl.pip.aPictureInPictureState
+import io.element.android.features.call.impl.utils.InvalidAudioDeviceReason
 import io.element.android.features.call.impl.utils.WebViewAudioManager
 import io.element.android.features.call.impl.utils.WebViewPipController
 import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
@@ -105,6 +106,14 @@ internal fun CallScreenView(
         } else {
             var webViewAudioManager by remember { mutableStateOf<WebViewAudioManager?>(null) }
             val coroutineScope = rememberCoroutineScope()
+
+            var invalidAudioDeviceReason by remember { mutableStateOf<InvalidAudioDeviceReason?>(null) }
+            invalidAudioDeviceReason?.let {
+                InvalidAudioDeviceDialog(invalidAudioDeviceReason = it) {
+                    invalidAudioDeviceReason = null
+                }
+            }
+
             CallWebView(
                 modifier = Modifier
                     .padding(padding)
@@ -130,7 +139,11 @@ internal fun CallScreenView(
                         },
                         onError = { state.eventSink(CallScreenEvents.OnWebViewError(it)) },
                     )
-                    webViewAudioManager = WebViewAudioManager(webView, coroutineScope)
+                    webViewAudioManager = WebViewAudioManager(
+                        webView = webView,
+                        coroutineScope = coroutineScope,
+                        onInvalidAudioDeviceAdded = { invalidAudioDeviceReason = it },
+                    )
                     state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
                     val pipController = WebViewPipController(webView)
                     pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
@@ -155,6 +168,22 @@ internal fun CallScreenView(
             }
         }
     }
+}
+
+@Composable
+private fun InvalidAudioDeviceDialog(
+    invalidAudioDeviceReason: InvalidAudioDeviceReason,
+    onDismiss: () -> Unit,
+) {
+    ErrorDialog(
+        content = when (invalidAudioDeviceReason) {
+            InvalidAudioDeviceReason.BT_AUDIO_DEVICE_DISABLED -> {
+                // TODO: use a string resource when available
+                "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device."
+            }
+        },
+        onSubmit = onDismiss,
+    )
 }
 
 @Composable
@@ -276,4 +305,10 @@ internal fun CallScreenPipViewPreview(
         pipState = state,
         requestPermissions = { _, _ -> },
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun InvalidAudioDeviceDialogPreview() = ElementPreview {
+    InvalidAudioDeviceDialog(invalidAudioDeviceReason = InvalidAudioDeviceReason.BT_AUDIO_DEVICE_DISABLED) {}
 }
