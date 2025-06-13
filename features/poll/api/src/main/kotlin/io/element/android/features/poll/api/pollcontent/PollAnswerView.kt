@@ -56,7 +56,9 @@ internal fun PollAnswerView(
             append(nbVotesText)
             if (answerItem.votesCount != 0) {
                 append(sentenceDelimiter)
-                append(stringResource(R.string.a11y_polls_percent_of_total, (answerItem.percentage * 100).toInt()))
+                (answerItem.percentage * 100).toInt().let { percent ->
+                    append(pluralStringResource(R.plurals.a11y_polls_percent_of_total, percent, percent))
+                }
             }
             if (answerItem.isWinner) {
                 append(sentenceDelimiter)
