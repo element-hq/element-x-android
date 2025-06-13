@@ -178,8 +178,7 @@ private fun InvalidAudioDeviceDialog(
     ErrorDialog(
         content = when (invalidAudioDeviceReason) {
             InvalidAudioDeviceReason.BT_AUDIO_DEVICE_DISABLED -> {
-                // TODO: use a string resource when available
-                "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device."
+                stringResource(R.string.call_invalid_audio_device_bluetooth_devices_disabled)
             }
         },
         onSubmit = onDismiss,
