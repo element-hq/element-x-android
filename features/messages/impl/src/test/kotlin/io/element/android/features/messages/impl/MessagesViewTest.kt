@@ -391,7 +391,10 @@ class MessagesViewTest {
         rule.setMessagesView(
             state = state,
         )
-        rule.onAllNodesWithText("👍️").onFirst().performClick()
+        rule.onAllNodesWithText(
+            text = "👍️",
+            useUnmergedTree = true,
+        ).onFirst().performClick()
         eventsRecorder.assertSingle(MessagesEvents.ToggleReaction("👍️", timelineItem.eventOrTransactionId))
     }
 
@@ -411,7 +414,10 @@ class MessagesViewTest {
         rule.setMessagesView(
             state = state,
         )
-        rule.onAllNodesWithText("👍️").onFirst().performTouchInput { longClick() }
+        rule.onAllNodesWithText(
+            text = "👍️",
+            useUnmergedTree = true,
+        ).onFirst().performTouchInput { longClick() }
         eventsRecorder.assertSingle(ReactionSummaryEvents.ShowReactionSummary(timelineItem.eventId!!, timelineItem.reactionsState.reactions, "👍️"))
     }
 

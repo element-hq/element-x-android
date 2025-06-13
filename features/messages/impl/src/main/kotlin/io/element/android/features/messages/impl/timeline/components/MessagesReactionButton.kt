@@ -28,7 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,6 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 @Suppress("ModifierClickableOrder") // This is needed to display the right ripple shape
@@ -68,6 +73,47 @@ fun MessagesReactionButton(
         buttonColor
     }
 
+    val a11yText = when (content) {
+        is MessagesReactionsButtonContent.Icon -> stringResource(id = R.string.screen_room_timeline_add_reaction)
+        is MessagesReactionsButtonContent.Text -> content.text
+        is MessagesReactionsButtonContent.Reaction -> {
+            val reaction = if (content.reaction.key.startsWith("mxc://")) {
+                stringResource(CommonStrings.common_an_image)
+            } else {
+                content.reaction.key
+            }
+            if (content.isHighlighted) {
+                if (content.reaction.count == 1) {
+                    stringResource(R.string.screen_room_timeline_reaction_you_a11y, reaction)
+                } else {
+                    pluralStringResource(
+                        R.plurals.screen_room_timeline_reaction_including_you_a11y,
+                        content.reaction.count - 1,
+                        content.reaction.count - 1,
+                        reaction,
+                    )
+                }
+            } else {
+                pluralStringResource(
+                    R.plurals.screen_room_timeline_reaction_a11y,
+                    content.reaction.count,
+                    content.reaction.count,
+                    reaction,
+                )
+            }
+        }
+    }
+
+    val a11yClickLabel = if (content is MessagesReactionsButtonContent.Reaction) {
+        if (content.isHighlighted) {
+            stringResource(id = CommonStrings.a11y_remove_reaction_with, content.reaction.key)
+        } else {
+            stringResource(id = CommonStrings.a11y_react_with, content.reaction.key)
+        }
+    } else {
+        ""
+    }
+
     Surface(
         modifier = modifier
             .background(Color.Transparent)
@@ -86,7 +132,18 @@ fun MessagesReactionButton(
             // Inner border, to highlight when selected
             .border(BorderStroke(1.dp, borderColor), RoundedCornerShape(corner = CornerSize(12.dp)))
             .background(buttonColor, RoundedCornerShape(corner = CornerSize(12.dp)))
-            .padding(vertical = 4.dp, horizontal = 10.dp),
+            .padding(vertical = 4.dp, horizontal = 10.dp)
+            .clearAndSetSemantics {
+                contentDescription = a11yText
+                if (content is MessagesReactionsButtonContent.Reaction) {
+                    onClick(
+                        label = a11yClickLabel
+                    ) {
+                        onClick()
+                        true
+                    }
+                }
+            },
         color = buttonColor
     ) {
         when (content) {
