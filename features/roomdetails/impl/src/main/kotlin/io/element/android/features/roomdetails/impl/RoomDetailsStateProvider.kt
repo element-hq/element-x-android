@@ -53,6 +53,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(knockRequestsCount = null, canShowKnockRequests = true),
             aRoomDetailsState(knockRequestsCount = 4, canShowKnockRequests = true),
             aRoomDetailsState(hasMemberVerificationViolations = true),
+            aRoomDetailsState(isTombstoned = true),
             aDmRoomDetailsState(dmRoomMemberVerificationState = UserProfileVerificationState.VERIFIED),
             aDmRoomDetailsState(dmRoomMemberVerificationState = UserProfileVerificationState.VERIFICATION_VIOLATION),
             // Add other state here
@@ -118,6 +119,7 @@ fun aRoomDetailsState(
     canShowSecurityAndPrivacy: Boolean = true,
     hasMemberVerificationViolations: Boolean = false,
     canReportRoom: Boolean = true,
+    isTombstoned: Boolean = false,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -148,6 +150,7 @@ fun aRoomDetailsState(
     canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
     hasMemberVerificationViolations = hasMemberVerificationViolations,
     canReportRoom = canReportRoom,
+    isTombstoned = isTombstoned,
     eventSink = eventSink,
 )
 

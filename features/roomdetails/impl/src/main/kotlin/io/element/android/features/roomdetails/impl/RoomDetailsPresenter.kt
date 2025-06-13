@@ -210,6 +210,7 @@ class RoomDetailsPresenter @Inject constructor(
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             hasMemberVerificationViolations = hasMemberVerificationViolations,
             canReportRoom = canReportRoom,
+            isTombstoned = roomInfo.successorRoom != null,
             eventSink = ::handleEvents,
         )
     }

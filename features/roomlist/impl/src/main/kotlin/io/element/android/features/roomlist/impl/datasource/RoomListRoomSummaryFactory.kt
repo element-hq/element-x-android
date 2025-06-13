@@ -67,6 +67,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             heroes = roomInfo.heroes.map { user ->
                 user.getAvatarData(size = AvatarSize.RoomListItem)
             }.toImmutableList(),
+            isTombstoned = roomInfo.successorRoom != null,
         )
     }
 }
