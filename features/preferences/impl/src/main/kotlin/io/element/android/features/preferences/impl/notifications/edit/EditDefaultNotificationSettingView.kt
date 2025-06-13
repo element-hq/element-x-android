@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
-import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
+import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -97,7 +97,7 @@ fun EditDefaultNotificationSettingView(
                             Text(text = subtitle)
                         },
                         leadingContent = ListItemContent.Custom {
-                            CompositeAvatar(
+                            RoomAvatar(
                                 avatarData = summary.avatarData,
                                 heroes = summary.heroesAvatar,
                             )

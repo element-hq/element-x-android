@@ -110,7 +110,7 @@ class MessagesViewTest {
                 state = state,
                 onRoomDetailsClick = callback,
             )
-            rule.onNodeWithText(state.roomName.dataOrNull().orEmpty(), useUnmergedTree = true).performClick()
+            rule.onNodeWithText(state.roomName.orEmpty(), useUnmergedTree = true).performClick()
         }
     }
 
