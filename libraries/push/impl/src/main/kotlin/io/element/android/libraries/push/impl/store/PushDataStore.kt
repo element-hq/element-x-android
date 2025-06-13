@@ -11,6 +11,7 @@ import io.element.android.libraries.push.api.history.PushHistoryItem
 import kotlinx.coroutines.flow.Flow
 
 interface PushDataStore {
+    val shouldDisplayBatteryOptimizationBannerFlow: Flow<Boolean>
     val pushCounterFlow: Flow<Int>
 
     /**

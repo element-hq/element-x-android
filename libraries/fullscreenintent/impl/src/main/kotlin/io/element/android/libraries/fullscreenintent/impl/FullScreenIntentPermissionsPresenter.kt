@@ -23,6 +23,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvents
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
@@ -60,15 +61,20 @@ class FullScreenIntentPermissionsPresenter @Inject constructor(
         val coroutineScope = rememberCoroutineScope()
         val isGranted = notificationManagerCompat.canUseFullScreenIntent()
         val isBannerDismissed by isFullScreenIntentBannerDismissed.collectAsState(initial = true)
+
+        fun handleEvents(event: FullScreenIntentPermissionsEvents) {
+            when (event) {
+                FullScreenIntentPermissionsEvents.Dismiss -> coroutineScope.launch {
+                    dismissFullScreenIntentBanner()
+                }
+                FullScreenIntentPermissionsEvents.OpenSettings -> openFullScreenIntentSettings()
+            }
+        }
+
         return FullScreenIntentPermissionsState(
             permissionGranted = isGranted,
             shouldDisplayBanner = !isBannerDismissed && !isGranted,
-            dismissFullScreenIntentBanner = {
-                coroutineScope.launch {
-                    dismissFullScreenIntentBanner()
-                }
-            },
-            openFullScreenIntentSettings = ::openFullScreenIntentSettings,
+            eventSink = ::handleEvents,
         )
     }
 

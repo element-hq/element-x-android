@@ -10,16 +10,25 @@ package io.element.android.libraries.push.impl.di
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesTo
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.push.api.battery.BatteryOptimizationState
+import io.element.android.libraries.push.impl.battery.BatteryOptimizationPresenter
 
 @Module
 @ContributesTo(AppScope::class)
-object PushModule {
-    @Provides
-    fun provideNotificationCompatManager(@ApplicationContext context: Context): NotificationManagerCompat {
-        return NotificationManagerCompat.from(context)
+interface PushModule {
+    companion object {
+        @Provides
+        fun provideNotificationCompatManager(@ApplicationContext context: Context): NotificationManagerCompat {
+            return NotificationManagerCompat.from(context)
+        }
     }
+
+    @Binds
+    fun bindBatteryOptimizationPresenter(presenter: BatteryOptimizationPresenter): Presenter<BatteryOptimizationState>
 }

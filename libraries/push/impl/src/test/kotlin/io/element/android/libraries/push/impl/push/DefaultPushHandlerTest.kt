@@ -86,7 +86,7 @@ class DefaultPushHandlerTest {
     fun `when classical PushData is received, the notification drawer is informed`() = runTest {
         val aNotifiableMessageEvent = aNotifiableMessageEvent()
         val notifiableEventResult =
-            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _, ->
+            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
                 val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
                 Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
             }
@@ -268,11 +268,35 @@ class DefaultPushHandlerTest {
         }
 
     @Test
-    fun `when classical PushData is received, but not able to resolve the event, nothing happen`() =
+    fun `when classical PushData is received, but a failure occurs (session not found), nothing happen`() {
+        `test notification resolver failure`(
+            notificationResolveResult = { _ ->
+                Result.failure(ResolvingException("Unable to restore session"))
+            },
+            shouldSetOptimizationBatteryBanner = false,
+        )
+    }
+
+    @Test
+    fun `when classical PushData is received, but not able to resolve the event, the banner to disable battery optimization will be displayed`() {
+        `test notification resolver failure`(
+            notificationResolveResult = { requests: List<NotificationEventRequest> ->
+                Result.success(
+                    requests.associateWith { Result.failure(ResolvingException("Unable to resolve event")) }
+                )
+            },
+            shouldSetOptimizationBatteryBanner = true,
+        )
+    }
+
+    private fun `test notification resolver failure`(
+        notificationResolveResult: (List<NotificationEventRequest>) -> Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>,
+        shouldSetOptimizationBatteryBanner: Boolean,
+    ) {
         runTest {
             val notifiableEventResult =
-                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
-                    Result.failure(ResolvingException("Unable to resolve"))
+                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, requests ->
+                    notificationResolveResult(requests)
                 }
             val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
             val incrementPushCounterResult = lambdaRecorder<Unit> {}
@@ -286,6 +310,7 @@ class DefaultPushHandlerTest {
             val pushHistoryService = FakePushHistoryService(
                 onPushReceivedResult = onPushReceivedResult,
             )
+            val showBatteryOptimizationBannerResult = lambdaRecorder<Unit> {}
             val defaultPushHandler = createDefaultPushHandler(
                 onNotifiableEventsReceived = onNotifiableEventsReceived,
                 notifiableEventsResult = notifiableEventResult,
@@ -297,6 +322,9 @@ class DefaultPushHandlerTest {
                     getUserIdFromSecretResult = { A_USER_ID }
                 ),
                 incrementPushCounterResult = incrementPushCounterResult,
+                mutableBatteryOptimizationStore = FakeMutableBatteryOptimizationStore(
+                    showBatteryOptimizationBannerResult = showBatteryOptimizationBannerResult,
+                ),
                 pushHistoryService = pushHistoryService,
             )
             defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
@@ -313,7 +341,15 @@ class DefaultPushHandlerTest {
             onPushReceivedResult.assertions()
                 .isCalledOnce()
                 .with(any(), value(AN_EVENT_ID), value(A_ROOM_ID), value(A_USER_ID), value(false), value(true), any())
+            showBatteryOptimizationBannerResult.assertions().let {
+                if (shouldSetOptimizationBatteryBanner) {
+                    it.isCalledOnce()
+                } else {
+                    it.isNeverCalled()
+                }
+            }
         }
+    }
 
     @Test
     fun `when ringing call PushData is received, the incoming call will be handled`() = runTest {
@@ -542,7 +578,7 @@ class DefaultPushHandlerTest {
     fun `when receiving several push notifications at the same time, those are batched before being processed`() = runTest {
         val aNotifiableMessageEvent = aNotifiableMessageEvent()
         val notifiableEventResult =
-            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _, ->
+            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
                 val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
                 Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
             }
@@ -595,8 +631,9 @@ class DefaultPushHandlerTest {
         onNotifiableEventsReceived: (List<NotifiableEvent>) -> Unit = { lambdaError() },
         onRedactedEventsReceived: (List<ResolvedPushEvent.Redaction>) -> Unit = { lambdaError() },
         notifiableEventsResult: (SessionId, List<NotificationEventRequest>) -> Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>> =
-            { _, _, -> lambdaError() },
+            { _, _ -> lambdaError() },
         incrementPushCounterResult: () -> Unit = { lambdaError() },
+        mutableBatteryOptimizationStore: MutableBatteryOptimizationStore = FakeMutableBatteryOptimizationStore(),
         userPushStore: UserPushStore = FakeUserPushStore(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
         buildMeta: BuildMeta = aBuildMeta(),
@@ -614,6 +651,7 @@ class DefaultPushHandlerTest {
                     incrementPushCounterResult()
                 }
             },
+            mutableBatteryOptimizationStore = mutableBatteryOptimizationStore,
             userPushStoreFactory = FakeUserPushStoreFactory { userPushStore },
             pushClientSecret = pushClientSecret,
             buildMeta = buildMeta,

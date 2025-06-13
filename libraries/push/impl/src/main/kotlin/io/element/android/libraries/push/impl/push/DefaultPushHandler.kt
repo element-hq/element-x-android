@@ -50,6 +50,7 @@ class DefaultPushHandler @Inject constructor(
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
     private val onRedactedEventReceived: OnRedactedEventReceived,
     private val incrementPushDataStore: IncrementPushDataStore,
+    private val mutableBatteryOptimizationStore: MutableBatteryOptimizationStore,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushClientSecret: PushClientSecret,
     private val buildMeta: BuildMeta,
@@ -102,6 +103,7 @@ class DefaultPushHandler @Inject constructor(
                                     sessionId = request.sessionId,
                                     reason = exception.message ?: exception.javaClass.simpleName,
                                 )
+                                mutableBatteryOptimizationStore.showBatteryOptimizationBanner()
                             }
                         )
                     }

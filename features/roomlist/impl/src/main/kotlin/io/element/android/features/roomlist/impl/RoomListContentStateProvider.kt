@@ -12,6 +12,8 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.push.api.battery.BatteryOptimizationState
+import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentSet
@@ -31,10 +33,12 @@ internal fun aRoomsContentState(
     securityBannerState: SecurityBannerState = SecurityBannerState.None,
     summaries: ImmutableList<RoomListRoomSummary> = aRoomListRoomSummaryList(),
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
+    batteryOptimizationState: BatteryOptimizationState = aBatteryOptimizationState(),
     seenRoomInvites: Set<RoomId> = emptySet(),
 ) = RoomListContentState.Rooms(
     securityBannerState = securityBannerState,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
+    batteryOptimizationState = batteryOptimizationState,
     summaries = summaries,
     seenRoomInvites = seenRoomInvites.toPersistentSet(),
 )
