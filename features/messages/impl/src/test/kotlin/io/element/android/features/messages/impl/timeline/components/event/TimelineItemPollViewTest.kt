@@ -47,7 +47,10 @@ class TimelineItemPollViewTest {
             )
         }
         val answer = content.answerItems[answerIndex].answer
-        rule.onNode(hasText(answer.text)).performClick()
+        rule.onNode(
+            matcher = hasText(answer.text),
+            useUnmergedTree = true,
+        ).performClick()
         eventsRecorder.assertSingle(TimelineEvents.SelectPollAnswer(content.eventId!!, answer.id))
     }
 

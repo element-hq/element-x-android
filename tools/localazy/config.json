@@ -243,6 +243,12 @@
       ]
     },
     {
+      "name" : ":features:poll:api",
+      "includeRegex" : [
+        "a11y\\.polls\\..*"
+      ]
+    },
+    {
       "name" : ":features:securebackup:impl",
       "includeRegex" : [
         "screen_chat_backup_.*",
