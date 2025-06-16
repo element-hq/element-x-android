@@ -179,7 +179,7 @@ jarsigner -keystore "${keystore}" -keypass "${keyStorePassword}" "${signedBundle
 printf "\n================================================================================\n"
 printf "Signed path: ${signedBundlePath}\n"
 
-bundletool build-apks --bundle=${signedBundlePath} --output=${signedApksPath} --mode=universal
+bundletool build-apks --bundle=${signedBundlePath} --output=${signedApksPath} --mode=universal -ks="${keystore}" --ks-key-alias=efael
 
 #printf "\n================================================================================\n"
 #printf "Please check the information below:\n"
