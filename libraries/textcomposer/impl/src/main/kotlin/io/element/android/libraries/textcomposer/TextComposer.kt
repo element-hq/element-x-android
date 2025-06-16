@@ -112,7 +112,6 @@ fun TextComposer(
     resolveAtRoomMentionDisplay: () -> TextDisplay,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
-    subcomposing: Boolean = false,
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -172,11 +171,10 @@ fun TextComposer(
     } else {
         when (state) {
             is TextEditorState.Rich -> {
-                remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
+                remember(state.richTextEditorState, composerMode, onResetComposerMode, onError) {
                     @Composable {
                         TextInput(
                             state = state.richTextEditorState,
-                            subcomposing = subcomposing,
                             placeholder = placeholder,
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
@@ -197,11 +195,9 @@ fun TextComposer(
                         onResetComposerMode = onResetComposerMode,
                         placeholder = placeholder,
                         showPlaceholder = state.state.text.value().isEmpty(),
-                        subcomposing = subcomposing,
                     ) {
                         MarkdownTextInput(
                             state = state.state,
-                            subcomposing = subcomposing,
                             onTyping = onTyping,
                             onReceiveSuggestion = onReceiveSuggestion,
                             richTextEditorStyle = style,
@@ -316,13 +312,11 @@ fun TextComposer(
         )
     }
 
-    if (!subcomposing) {
-        SoftKeyboardEffect(composerMode, onRequestFocus) {
-            it is MessageComposerMode.Special
-        }
-
-        SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
+    SoftKeyboardEffect(composerMode, onRequestFocus) {
+        it is MessageComposerMode.Special
     }
+
+    SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
 
     val latestOnReceiveSuggestion by rememberUpdatedState(onReceiveSuggestion)
     if (state is TextEditorState.Rich) {
@@ -435,9 +429,8 @@ private fun TextFormattingLayout(
     sendButton: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val bottomPadding = with(LocalDensity.current) { WindowInsets.systemBars.getBottom(this).toDp() + 8.dp }
     Column(
-        modifier = modifier.padding(vertical = 4.dp).padding(bottom = bottomPadding),
+        modifier = modifier.padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         if (isRoomEncrypted == false) {
@@ -482,7 +475,6 @@ private fun TextInputBox(
     onResetComposerMode: () -> Unit,
     placeholder: String,
     showPlaceholder: Boolean,
-    subcomposing: Boolean,
     textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
@@ -507,8 +499,7 @@ private fun TextInputBox(
         Box(
             modifier = Modifier
                 .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
-                .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
+                .then(Modifier.testTag(TestTags.textEditor)),
             contentAlignment = Alignment.CenterStart,
         ) {
             // Placeholder
@@ -549,7 +540,6 @@ private fun TextInputBox(
 @Composable
 private fun TextInput(
     state: RichTextEditorState,
-    subcomposing: Boolean,
     placeholder: String,
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
@@ -564,13 +554,12 @@ private fun TextInput(
         onResetComposerMode = onResetComposerMode,
         placeholder = placeholder,
         showPlaceholder = state.messageHtml.isEmpty(),
-        subcomposing = subcomposing,
     ) {
         RichTextEditor(
             state = state,
             // Disable most of the editor functionality if it's just being measured for a subcomposition.
             // This prevents it gaining focus and mutating the state.
-            registerStateUpdates = !subcomposing,
+            registerStateUpdates = true,
             modifier = Modifier
                 .padding(top = 6.dp, bottom = 6.dp)
                 .fillMaxWidth(),
