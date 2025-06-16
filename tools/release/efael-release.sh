@@ -153,7 +153,7 @@ targetPath="./tmp/Element/${version}"
 gplayTargetPath="${targetPath}/gplay"
 unsignedBundlePath="${gplayTargetPath}/app-gplay-release.aab"
 signedBundlePath="${gplayTargetPath}/app-gplay-release-signed.aab"
-signedApkPath="${gplayTargetPath}/app-gplay-release-signed.apk"
+signedApksPath="${gplayTargetPath}/app-gplay-release-signed.apks"
 
 ./gradlew bundleGplayRelease
 mkdir -p "${gplayTargetPath}"
@@ -179,7 +179,7 @@ jarsigner -keystore "${keystore}" -keypass "${keyStorePassword}" "${signedBundle
 printf "\n================================================================================\n"
 printf "Signed path: ${signedBundlePath}\n"
 
-bundletool build-apks --bundle=${signedBundlePath} --output=${signedApkPath} --mode=universal
+bundletool build-apks --bundle=${signedBundlePath} --output=${signedApksPath} --mode=universal
 
 #printf "\n================================================================================\n"
 #printf "Please check the information below:\n"
