@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Skjul stemmer"</string>
   <string name="screen_create_poll_answer_hint">"Alternativ %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Endringene dine er ikke lagret. Er du sikker på at du vil gå tilbake?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Slett alternativet %1$s"</string>
   <string name="screen_create_poll_question_desc">"Spørsmål eller emne"</string>
   <string name="screen_create_poll_question_hint">"Hva handler avstemningen om?"</string>
   <string name="screen_create_poll_title">"Opprett avstemning"</string>

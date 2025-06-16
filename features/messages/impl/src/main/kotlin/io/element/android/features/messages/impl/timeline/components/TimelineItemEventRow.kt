@@ -32,7 +32,6 @@ import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalViewConfiguration
@@ -120,7 +119,6 @@ fun TimelineItemEventRow(
     timelineProtectionState: TimelineProtectionState,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
-    isHighlighted: Boolean,
     onEventClick: () -> Unit,
     onLongClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
@@ -196,7 +194,6 @@ fun TimelineItemEventRow(
                     TimelineItemEventRowContent(
                         event = event,
                         timelineProtectionState = timelineProtectionState,
-                        isHighlighted = isHighlighted,
                         timelineRoomInfo = timelineRoomInfo,
                         interactionSource = interactionSource,
                         onContentClick = onContentClick,
@@ -230,7 +227,6 @@ fun TimelineItemEventRow(
             TimelineItemEventRowContent(
                 event = event,
                 timelineProtectionState = timelineProtectionState,
-                isHighlighted = isHighlighted,
                 timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
                 onContentClick = onContentClick,
@@ -281,12 +277,10 @@ private fun SwipeSensitivity(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
     timelineProtectionState: TimelineProtectionState,
-    isHighlighted: Boolean,
     timelineRoomInfo: TimelineRoomInfo,
     interactionSource: MutableInteractionSource,
     onContentClick: () -> Unit,
@@ -340,7 +334,6 @@ private fun TimelineItemEventRowContent(
         val bubbleState = BubbleState(
             groupPosition = event.groupPosition,
             isMine = event.isMine,
-            isHighlighted = isHighlighted,
             timelineRoomInfo = timelineRoomInfo,
         )
         MessageEventBubble(

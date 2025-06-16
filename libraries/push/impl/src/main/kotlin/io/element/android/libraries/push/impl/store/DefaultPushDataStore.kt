@@ -43,14 +43,40 @@ class DefaultPushDataStore @Inject constructor(
 ) : PushDataStore {
     private val pushCounter = intPreferencesKey("push_counter")
 
+    /**
+     * Integer preference to track the state of the battery optimization banner.
+     * Possible values:
+     * [BATTERY_OPTIMIZATION_BANNER_STATE_INIT]: Should not show the banner
+     * [BATTERY_OPTIMIZATION_BANNER_STATE_SHOW]: Should show the banner
+     * [BATTERY_OPTIMIZATION_BANNER_STATE_DISMISSED]: Banner has been shown and user has dismissed it
+     */
+    private val batteryOptimizationBannerState = intPreferencesKey("battery_optimization_banner_state")
+
     override val pushCounterFlow: Flow<Int> = context.dataStore.data.map { preferences ->
         preferences[pushCounter] ?: 0
+    }
+
+    @Suppress("UnnecessaryParentheses")
+    override val shouldDisplayBatteryOptimizationBannerFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        (preferences[batteryOptimizationBannerState] ?: BATTERY_OPTIMIZATION_BANNER_STATE_INIT) == BATTERY_OPTIMIZATION_BANNER_STATE_SHOW
     }
 
     suspend fun incrementPushCounter() {
         context.dataStore.edit { settings ->
             val currentCounterValue = settings[pushCounter] ?: 0
             settings[pushCounter] = currentCounterValue + 1
+        }
+    }
+
+    suspend fun setBatteryOptimizationBannerState(newState: Int) {
+        context.dataStore.edit { settings ->
+            val currentValue = settings[batteryOptimizationBannerState] ?: BATTERY_OPTIMIZATION_BANNER_STATE_INIT
+            settings[batteryOptimizationBannerState] = when (currentValue) {
+                BATTERY_OPTIMIZATION_BANNER_STATE_INIT,
+                BATTERY_OPTIMIZATION_BANNER_STATE_SHOW -> newState
+                BATTERY_OPTIMIZATION_BANNER_STATE_DISMISSED -> currentValue
+                else -> error("Invalid value for showBatteryOptimizationBanner: $currentValue")
+            }
         }
     }
 
@@ -83,5 +109,11 @@ class DefaultPushDataStore @Inject constructor(
         context.dataStore.edit {
             it.clear()
         }
+    }
+
+    companion object {
+        const val BATTERY_OPTIMIZATION_BANNER_STATE_INIT = 0
+        const val BATTERY_OPTIMIZATION_BANNER_STATE_SHOW = 1
+        const val BATTERY_OPTIMIZATION_BANNER_STATE_DISMISSED = 2
     }
 }

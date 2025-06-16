@@ -104,24 +104,28 @@ internal fun TextFormatting(
     ) {
         FormattingOption(
             state = state.actions[ComposerAction.BOLD].toButtonState(),
+            toggleable = true,
             onClick = { onInlineFormatClick(InlineFormat.Bold) },
             imageVector = CompoundIcons.Bold(),
             contentDescription = stringResource(R.string.rich_text_editor_format_bold)
         )
         FormattingOption(
             state = state.actions[ComposerAction.ITALIC].toButtonState(),
+            toggleable = true,
             onClick = { onInlineFormatClick(InlineFormat.Italic) },
             imageVector = CompoundIcons.Italic(),
             contentDescription = stringResource(R.string.rich_text_editor_format_italic)
         )
         FormattingOption(
             state = state.actions[ComposerAction.UNDERLINE].toButtonState(),
+            toggleable = true,
             onClick = { onInlineFormatClick(InlineFormat.Underline) },
             imageVector = CompoundIcons.Underline(),
             contentDescription = stringResource(R.string.rich_text_editor_format_underline)
         )
         FormattingOption(
             state = state.actions[ComposerAction.STRIKE_THROUGH].toButtonState(),
+            toggleable = true,
             onClick = { onInlineFormatClick(InlineFormat.StrikeThrough) },
             imageVector = CompoundIcons.Strikethrough(),
             contentDescription = stringResource(R.string.rich_text_editor_format_strikethrough)
@@ -141,6 +145,7 @@ internal fun TextFormatting(
 
         FormattingOption(
             state = state.actions[ComposerAction.LINK].toButtonState(),
+            toggleable = true,
             onClick = { linkDialogAction = state.linkAction },
             imageVector = CompoundIcons.Link(),
             contentDescription = stringResource(R.string.rich_text_editor_link)
@@ -148,42 +153,49 @@ internal fun TextFormatting(
 
         FormattingOption(
             state = state.actions[ComposerAction.UNORDERED_LIST].toButtonState(),
+            toggleable = true,
             onClick = { onToggleListClick(ordered = false) },
             imageVector = CompoundIcons.ListBulleted(),
             contentDescription = stringResource(R.string.rich_text_editor_bullet_list)
         )
         FormattingOption(
             state = state.actions[ComposerAction.ORDERED_LIST].toButtonState(),
+            toggleable = true,
             onClick = { onToggleListClick(ordered = true) },
             imageVector = CompoundIcons.ListNumbered(),
             contentDescription = stringResource(R.string.rich_text_editor_numbered_list)
         )
         FormattingOption(
             state = state.actions[ComposerAction.INDENT].toButtonState(),
+            toggleable = false,
             onClick = { onIndentClick() },
             imageVector = CompoundIcons.IndentIncrease(),
             contentDescription = stringResource(R.string.rich_text_editor_indent)
         )
         FormattingOption(
             state = state.actions[ComposerAction.UNINDENT].toButtonState(),
+            toggleable = false,
             onClick = { onUnindentClick() },
             imageVector = CompoundIcons.IndentDecrease(),
             contentDescription = stringResource(R.string.rich_text_editor_unindent)
         )
         FormattingOption(
             state = state.actions[ComposerAction.INLINE_CODE].toButtonState(),
+            toggleable = true,
             onClick = { onInlineFormatClick(InlineFormat.InlineCode) },
             imageVector = CompoundIcons.InlineCode(),
             contentDescription = stringResource(R.string.rich_text_editor_inline_code)
         )
         FormattingOption(
             state = state.actions[ComposerAction.CODE_BLOCK].toButtonState(),
+            toggleable = true,
             onClick = { onCodeBlockClick() },
             imageVector = CompoundIcons.Code(),
             contentDescription = stringResource(R.string.rich_text_editor_code_block)
         )
         FormattingOption(
             state = state.actions[ComposerAction.QUOTE].toButtonState(),
+            toggleable = true,
             onClick = { onQuoteClick() },
             imageVector = CompoundIcons.Quote(),
             contentDescription = stringResource(R.string.rich_text_editor_quote)

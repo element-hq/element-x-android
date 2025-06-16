@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Hide votes"</string>
   <string name="screen_create_poll_answer_hint">"Option %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Your changes have not been saved. Are you sure you want to go back?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Delete option %1$s"</string>
   <string name="screen_create_poll_question_desc">"Question or topic"</string>
   <string name="screen_create_poll_question_hint">"What is the poll about?"</string>
   <string name="screen_create_poll_title">"Create Poll"</string>

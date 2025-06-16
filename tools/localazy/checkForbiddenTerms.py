@@ -23,6 +23,7 @@ forbiddenTerms = {
         "screen_onboarding_welcome_title",
         # Contains "Element Call"
         "screen_incoming_call_subtitle_android",
+        "call_invalid_audio_device_bluetooth_devices_disabled",
         # Contains "Element X"
         "screen_room_timeline_legacy_call",
     ]

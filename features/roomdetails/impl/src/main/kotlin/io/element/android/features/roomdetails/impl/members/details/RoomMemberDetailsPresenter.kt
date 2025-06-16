@@ -33,7 +33,6 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -55,7 +54,6 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
 
     private val userProfilePresenter = userProfilePresenterFactory.create(roomMemberId)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Composable
     override fun present(): UserProfileState {
         val coroutineScope = rememberCoroutineScope()

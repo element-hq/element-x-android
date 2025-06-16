@@ -11,6 +11,10 @@ import android.webkit.WebView
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+/**
+ * Documentation about the `controls` command can be found here:
+ * https://github.com/element-hq/element-call/blob/livekit/docs/controls.md#picture-in-picture
+ */
 class WebViewPipController(
     private val webView: WebView,
 ) : PipController {

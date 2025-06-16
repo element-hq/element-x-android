@@ -3,5 +3,6 @@
   <string name="call_foreground_service_channel_title_android">"Pågående samtale"</string>
   <string name="call_foreground_service_message_android">"Trykk for å gå tilbake til samtalen"</string>
   <string name="call_foreground_service_title_android">"☎️ Samtale pågår"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Call støtter ikke bruk av Bluetooth-lydenheter i denne Android-versjonen. Velg en annen lydenhet."</string>
   <string name="screen_incoming_call_subtitle_android">"Innkommende Element-anrop"</string>
 </resources>

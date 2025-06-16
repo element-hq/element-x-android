@@ -169,6 +169,7 @@
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
         "banner\\.set_up_recovery\\..*",
+        "banner\\.battery_optimization\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
         "screen_invites_.*"
@@ -241,6 +242,12 @@
         "screen_create_poll_.*",
         "screen_edit_poll_.*",
         "screen_polls_history_.*"
+      ]
+    },
+    {
+      "name" : ":features:poll:api",
+      "includeRegex" : [
+        "a11y\\.polls\\..*"
       ]
     },
     {

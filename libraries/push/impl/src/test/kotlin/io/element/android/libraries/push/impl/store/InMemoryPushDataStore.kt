@@ -15,11 +15,15 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class InMemoryPushDataStore(
     initialPushCounter: Int = 0,
+    initialShouldDisplayBatteryOptimizationBanner: Boolean = false,
     initialPushHistoryItems: List<PushHistoryItem> = emptyList(),
     private val resetResult: () -> Unit = { lambdaError() }
 ) : PushDataStore {
     private val mutablePushCounterFlow = MutableStateFlow(initialPushCounter)
     override val pushCounterFlow: Flow<Int> = mutablePushCounterFlow.asStateFlow()
+
+    private val mutableShouldDisplayBatteryOptimizationBannerFlow = MutableStateFlow(initialShouldDisplayBatteryOptimizationBanner)
+    override val shouldDisplayBatteryOptimizationBannerFlow: Flow<Boolean> = mutableShouldDisplayBatteryOptimizationBannerFlow.asStateFlow()
 
     private val mutablePushHistoryItemsFlow = MutableStateFlow(initialPushHistoryItems)
 
