@@ -63,6 +63,7 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -185,7 +186,7 @@ class MessagesNode @AssistedInject constructor(
                 eventSink(TimelineEvents.FocusOnEvent(eventId))
             } else {
                 // Click on the same room, ignore
-                context.sameRoomToast()
+                displaySameRoomToast()
             }
         } else {
             callbacks.forEach { it.onPermalinkClick(roomLink) }
@@ -214,7 +215,7 @@ class MessagesNode @AssistedInject constructor(
 
     override fun onNavigateToRoom(roomId: RoomId) {
         if (roomId == room.roomId) {
-            context.sameRoomToast()
+            displaySameRoomToast()
         } else {
             val permalinkData = PermalinkData.RoomLink(roomId.toRoomIdOrAlias())
             callbacks.forEach { it.onPermalinkClick(permalinkData) }
@@ -241,8 +242,8 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onViewKnockRequests() }
     }
 
-    private fun Context.sameRoomToast() {
-        context.toast("Already viewing this room!")
+    private fun displaySameRoomToast() {
+        context.toast(CommonStrings.screen_room_permalink_same_room_android)
     }
 
     @Composable
