@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_key_backup_action_disable">"Slett nøkkellagring"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Slå på sikkerhetskopiering"</string>
   <string name="screen_chat_backup_key_backup_description">"Lagre din kryptografiske identitet og meldingsnøkler sikkert på serveren. Dette gjør at du kan se meldingshistorikken din på alle nye enheter. %1$s."</string>
+  <string name="screen_chat_backup_key_backup_title">"Nøkkellagring"</string>
+  <string name="screen_chat_backup_key_storage_disabled_error">"Nøkkellagring må være slått på for å konfigurere gjenoppretting."</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"Last opp nøkler fra denne enheten"</string>
+  <string name="screen_chat_backup_key_storage_toggle_title">"Tillat nøkkellagring"</string>
   <string name="screen_chat_backup_recovery_action_change">"Endre gjenopprettingsnøkkel"</string>
   <string name="screen_chat_backup_recovery_action_change_description">"Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine brukte enheter."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Skriv inn gjenopprettingsnøkkel"</string>
+  <string name="screen_chat_backup_recovery_action_confirm_description">"Nøkkellagringen din er for øyeblikket ikke synkronisert."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Konfigurer gjenoppretting"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Få tilgang til de krypterte meldingene dine hvis du mister alle enhetene dine eller blir logget ut av %1$s overalt."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Åpne %1$s på en datamaskin"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Logg på kontoen din igjen"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Når du blir bedt om å verifisere din enhet, velger du %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_3_reset_all">"Tilbakestill alt"</string>
@@ -23,8 +29,10 @@
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Slå av"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Du mister de krypterte meldingene dine hvis du er logget ut av alle enheter."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Er du sikker på at du vil slå av sikkerhetskopiering?"</string>
+  <string name="screen_key_backup_disable_description">"Sletting av nøkkellagring vil fjerne din kryptografiske identitet og meldingsnøkler fra serveren og deaktivere følgende sikkerhetsfunksjoner:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Du vil ikke ha kryptert meldingshistorikk på nye enheter"</string>
   <string name="screen_key_backup_disable_description_point_2">"Du mister tilgangen til de krypterte meldingene dine hvis du er logget ut av %1$s overalt"</string>
+  <string name="screen_key_backup_disable_title">"Er du sikker på at du vil slå av nøkkellagring og slette den?"</string>
   <string name="screen_recovery_key_change_description">"Få en ny gjenopprettingsnøkkel hvis du har mistet den eksisterende. Etter at du har endret gjenopprettingsnøkkelen, vil den gamle ikke lenger fungere."</string>
   <string name="screen_recovery_key_change_generate_key">"Generer en ny gjenopprettingsnøkkel"</string>
   <string name="screen_recovery_key_change_generate_key_description">"Ikke del dette med noen!"</string>
@@ -32,8 +40,10 @@
   <string name="screen_recovery_key_change_title">"Endre gjenopprettingsnøkkelen?"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Opprett ny gjenopprettingsnøkkel"</string>
   <string name="screen_recovery_key_confirm_description">"Sørg for at ingen kan se denne skjermen!"</string>
+  <string name="screen_recovery_key_confirm_error_content">"Prøv igjen for å verifisere tilgangen til nøkkellageret ditt."</string>
   <string name="screen_recovery_key_confirm_error_title">"Feil gjenopprettingsnøkkel"</string>
   <string name="screen_recovery_key_confirm_key_description">"Hvis du har en sikkerhetsnøkkel eller sikkerhetsfrase, vil dette også fungere."</string>
+  <string name="screen_recovery_key_confirm_key_placeholder">"Angi…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Har du mistet gjenopprettingsnøkkelen?"</string>
   <string name="screen_recovery_key_confirm_success">"Gjenopprettingsnøkkel bekreftet"</string>
   <string name="screen_recovery_key_confirm_title">"Skriv inn gjenopprettingsnøkkelen din"</string>
@@ -45,6 +55,7 @@
   <string name="screen_recovery_key_save_title">"Lagre gjenopprettingsnøkkelen på et trygt sted"</string>
   <string name="screen_recovery_key_setup_confirmation_description">"Du vil ikke ha tilgang til den nye gjenopprettingsnøkkelen etter dette trinnet."</string>
   <string name="screen_recovery_key_setup_confirmation_title">"Har du lagret gjenopprettingsnøkkelen din?"</string>
+  <string name="screen_recovery_key_setup_description">"Nøkkellagringen din er beskyttet av en gjenopprettingsnøkkel. Hvis du trenger en ny gjenopprettingsnøkkel etter konfigureringen, kan du opprette den på nytt ved å velge «Endre gjenopprettingsnøkkel»."</string>
   <string name="screen_recovery_key_setup_generate_key">"Generer gjenopprettingsnøkkelen din"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"Ikke del dette med noen!"</string>
   <string name="screen_recovery_key_setup_success">"Gjenopprettingsoppsett vellykket"</string>
@@ -53,6 +64,7 @@
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Denne prosessen kan ikke angres."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Er du sikker på at du vil tilbakestille identiteten din?"</string>
   <string name="screen_reset_encryption_password_error">"En ukjent feil har oppstått. Vennligst sjekk at passordet ditt er riktig og prøv igjen."</string>
+  <string name="screen_reset_encryption_password_placeholder">"Angi…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Bekreft at du vil tilbakestille identiteten din."</string>
   <string name="screen_reset_encryption_password_title">"Skriv inn passordet til kontoen din for å fortsette"</string>
 </resources>

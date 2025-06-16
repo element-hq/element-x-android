@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"اختیار شامل کریں"</string>
+  <string name="screen_create_poll_anonymous_desc">"رائے شماری کے بعد ہی نتائج ظاہر کریں"</string>
+  <string name="screen_create_poll_anonymous_headline">"آراء چھپائیں"</string>
+  <string name="screen_create_poll_answer_hint">"اختیار %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"آپ کی تبدیلیاں محفوظ نہیں کی گئیں۔ کیا آپ کو یقین ہے کہ آپ واپس جانا چاہتے ہیں؟"</string>
+  <string name="screen_create_poll_question_desc">"سوال یا موضوع"</string>
+  <string name="screen_create_poll_question_hint">"رائے شماری کس بارے میں ہے؟"</string>
+  <string name="screen_create_poll_title">"رائے شماری بنائیں"</string>
+  <string name="screen_edit_poll_delete_confirmation">"کیا آپ کو یقین ہے کہ آپ اس رائے شماری کو حذف کرنا چاہتے ہیں؟"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"رائے شماری حذف کریں"</string>
+  <string name="screen_edit_poll_title">"رائے شماری میں ترمیم کریں"</string>
+  <string name="screen_polls_history_empty_ongoing">"کوئی جاری رائے شماری ہا نہیں مل سکے۔"</string>
+  <string name="screen_polls_history_empty_past">"ماضی کے کوئی رائے شماری ہا نہیں مل سکے۔"</string>
+  <string name="screen_polls_history_filter_ongoing">"جاری"</string>
+  <string name="screen_polls_history_filter_past">"ماضی"</string>
+  <string name="screen_polls_history_title">"رائے شماری ہا"</string>
+</resources>

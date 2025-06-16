@@ -8,14 +8,21 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.auth.OidcConfig
+import io.element.android.libraries.matrix.test.auth.FAKE_REDIRECT_URL
+import io.element.android.libraries.matrix.test.auth.FakeOidcRedirectUrlProvider
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import org.junit.Test
-import java.io.File
 
 class OidcConfigurationProviderTest {
     @Test
     fun get() {
-        val result = OidcConfigurationProvider(File("/base")).get()
-        assertThat(result.redirectUri).isEqualTo(OidcConfig.REDIRECT_URI)
+        val result = OidcConfigurationProvider(
+            buildMeta = aBuildMeta(
+                applicationName = "myName",
+            ),
+            oidcRedirectUrlProvider = FakeOidcRedirectUrlProvider(),
+        ).get()
+        assertThat(result.clientName).isEqualTo("myName")
+        assertThat(result.redirectUri).isEqualTo(FAKE_REDIRECT_URL)
     }
 }

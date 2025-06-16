@@ -66,7 +66,9 @@ class ConfigureRoomPresenter @Inject constructor(
         val cameraPermissionState = cameraPermissionPresenter.present()
         val createRoomConfig by dataStore.createRoomConfigWithInvites.collectAsState(CreateRoomConfig())
         val homeserverName = remember { matrixClient.userIdServerName() }
-        val isKnockFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(initial = false)
+        val isKnockFeatureEnabled by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
+        }.collectAsState(initial = false)
         val roomAddressValidity = remember {
             mutableStateOf<RoomAddressValidity>(RoomAddressValidity.Unknown)
         }

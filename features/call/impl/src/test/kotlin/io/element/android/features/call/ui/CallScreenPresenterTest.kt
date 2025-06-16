@@ -26,12 +26,13 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.analytics.test.FakeScreenTracker
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule
@@ -44,12 +45,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
-class CallScreenPresenterTest {
+@OptIn(ExperimentalCoroutinesApi::class) class CallScreenPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -66,7 +69,8 @@ class CallScreenPresenterTest {
             presenter.present()
         }.test {
             // Wait until the URL is loaded
-            skipItems(1)
+            advanceTimeBy(1.seconds)
+            skipItems(2)
             val initialState = awaitItem()
             assertThat(initialState.urlState).isEqualTo(AsyncData.Success("https://call.element.io"))
             assertThat(initialState.webViewError).isNull()
@@ -79,9 +83,9 @@ class CallScreenPresenterTest {
 
     @Test
     fun `present - with CallType RoomCall sets call as active, loads URL, runs WidgetDriver and notifies the other clients a call started`() = runTest {
-        val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Boolean>> { Result.success(true) }
         val syncService = FakeSyncService(SyncState.Running)
-        val fakeRoom = FakeMatrixRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
+        val fakeRoom = FakeJoinedRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
         val client = FakeMatrixClient(syncService = syncService).apply {
             givenGetRoomResult(A_ROOM_ID, fakeRoom)
         }
@@ -101,16 +105,23 @@ class CallScreenPresenterTest {
             presenter.present()
         }.test {
             // Wait until the URL is loaded
+            advanceTimeBy(1.seconds)
             skipItems(1)
+
             joinedCallLambda.assertions().isCalledOnce()
             val initialState = awaitItem()
-            assertThat(initialState.urlState).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(initialState.urlState).isInstanceOf(AsyncData.Loading::class.java)
             assertThat(initialState.isCallActive).isFalse()
             assertThat(initialState.isInWidgetMode).isTrue()
             assertThat(widgetProvider.getWidgetCalled).isTrue()
             assertThat(widgetDriver.runCalledCount).isEqualTo(1)
             analyticsLambda.assertions().isCalledOnce().with(value(MobileScreen.ScreenName.RoomCall))
             sendCallNotificationIfNeededLambda.assertions().isCalledOnce()
+
+            // Wait until the WidgetDriver is loaded
+            skipItems(1)
+
+            assertThat(awaitItem().urlState).isInstanceOf(AsyncData.Success::class.java)
         }
     }
 
@@ -126,6 +137,9 @@ class CallScreenPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            // Give it time to load the URL and WidgetDriver
+            advanceTimeBy(1.seconds)
+
             val initialState = awaitItem()
             initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
 
@@ -141,7 +155,6 @@ class CallScreenPresenterTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - hang up event closes the screen and stops the widget driver`() = runTest(UnconfinedTestDispatcher()) {
         val navigator = FakeCallScreenNavigator()
@@ -158,11 +171,15 @@ class CallScreenPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+
+            // Give it time to load the URL and WidgetDriver
+            advanceTimeBy(1.seconds)
+
             initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
 
             initialState.eventSink(CallScreenEvents.Hangup)
 
-            // Let background coroutines run
+            // Let background coroutines run and the widget drive be received
             runCurrent()
 
             assertThat(navigator.closeCalled).isTrue()
@@ -172,7 +189,6 @@ class CallScreenPresenterTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - a received close message closes the screen and stops the widget driver`() = runTest(UnconfinedTestDispatcher()) {
         val navigator = FakeCallScreenNavigator()
@@ -189,11 +205,16 @@ class CallScreenPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+
+            // Give it time to load the URL and WidgetDriver
+            advanceTimeBy(1.seconds)
+
             initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
 
             messageInterceptor.givenInterceptedMessage("""{"action":"io.element.close","api":"fromWidget","widgetId":"1","requestId":"1"}""")
 
             // Let background coroutines run
+            advanceTimeBy(1.seconds)
             runCurrent()
 
             assertThat(navigator.closeCalled).isTrue()
@@ -218,7 +239,9 @@ class CallScreenPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
+            // Give it time to load the URL and WidgetDriver
+            advanceTimeBy(1.seconds)
+            skipItems(2)
             val initialState = awaitItem()
             assertThat(initialState.isCallActive).isFalse()
             initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
@@ -235,7 +258,7 @@ class CallScreenPresenterTest {
                     }
                 """.trimIndent()
             )
-            skipItems(1)
+            skipItems(2)
             val finalState = awaitItem()
             assertThat(finalState.isCallActive).isTrue()
         }
@@ -300,7 +323,8 @@ class CallScreenPresenterTest {
             presenter.present()
         }.test {
             // Wait until the URL is loaded
-            skipItems(1)
+            advanceTimeBy(1.seconds)
+            skipItems(2)
             val initialState = awaitItem()
             initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
             val finalState = awaitItem()
@@ -329,6 +353,8 @@ class CallScreenPresenterTest {
             initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
             val finalState = awaitItem()
             assertThat(finalState.webViewError).isNull()
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -342,6 +368,7 @@ class CallScreenPresenterTest {
         activeCallManager: FakeActiveCallManager = FakeActiveCallManager(),
         screenTracker: ScreenTracker = FakeScreenTracker(),
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ): CallScreenPresenter {
         val userAgentProvider = object : UserAgentProvider {
             override fun provide(): String {
@@ -361,6 +388,8 @@ class CallScreenPresenterTest {
             screenTracker = screenTracker,
             languageTagProvider = FakeLanguageTagProvider("en-US"),
             appForegroundStateService = appForegroundStateService,
+            appCoroutineScope = backgroundScope,
+            activeRoomsHolder = activeRoomsHolder,
         )
     }
 }

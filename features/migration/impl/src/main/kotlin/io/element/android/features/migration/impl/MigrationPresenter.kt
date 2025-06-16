@@ -33,7 +33,9 @@ class MigrationPresenter @Inject constructor(
 
     @Composable
     override fun present(): MigrationState {
-        val migrationStoreVersion by migrationStore.applicationMigrationVersion().collectAsState(initial = null)
+        val migrationStoreVersion by remember {
+            migrationStore.applicationMigrationVersion()
+        }.collectAsState(initial = null)
         var migrationAction: AsyncData<Unit> by remember { mutableStateOf(AsyncData.Uninitialized) }
 
         // Uncomment this block to run the migration everytime

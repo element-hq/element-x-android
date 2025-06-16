@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Löschen"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d eingegebene Ziffer"</item>
     <item quantity="other">"%1$d eingegebene Ziffern"</item>
   </plurals>
   <string name="a11y_hide_password">"Passwort verbergen"</string>
+  <string name="a11y_join_call">"Anruf beitreten"</string>
   <string name="a11y_jump_to_bottom">"Nach unten springen"</string>
   <string name="a11y_notifications_mentions_only">"Nur Erwähnungen"</string>
   <string name="a11y_notifications_muted">"Stummgeschaltet"</string>
   <string name="a11y_page_n">"Seite %1$d"</string>
   <string name="a11y_pause">"Pausieren"</string>
+  <string name="a11y_paused_voice_message">"Sprachnachricht, Dauer:%1$s, aktuelle Position: %2$s"</string>
   <string name="a11y_pin_field">"PIN-Feld"</string>
   <string name="a11y_play">"Abspielen"</string>
   <string name="a11y_poll">"Umfrage"</string>
@@ -30,6 +33,7 @@
   <string name="a11y_start_call">"Anruf starten"</string>
   <string name="a11y_user_menu">"Benutzermenü"</string>
   <string name="a11y_view_details">"Details anzeigen"</string>
+  <string name="a11y_voice_message">"Sprachnachricht, Dauer: %1$s"</string>
   <string name="a11y_voice_message_record">"Sprachnachricht aufnehmen."</string>
   <string name="a11y_voice_message_stop_recording">"Aufnahme beenden"</string>
   <string name="action_accept">"Akzeptieren"</string>
@@ -38,7 +42,7 @@
   <string name="action_back">"Zurück"</string>
   <string name="action_call">"Anruf"</string>
   <string name="action_cancel">"Abbrechen"</string>
-  <string name="action_cancel_for_now">"Jetzt abbrechen"</string>
+  <string name="action_cancel_for_now">"Vorerst abbrechen"</string>
   <string name="action_choose_photo">"Foto auswählen"</string>
   <string name="action_clear">"Löschen"</string>
   <string name="action_close">"Schließen"</string>
@@ -54,11 +58,13 @@
   <string name="action_create">"Erstellen"</string>
   <string name="action_create_a_room">"Raum erstellen"</string>
   <string name="action_deactivate">"Deaktivieren"</string>
-  <string name="action_deactivate_account">"Benutzerkonto deaktivieren"</string>
+  <string name="action_deactivate_account">"Nutzerkonto deaktivieren"</string>
   <string name="action_decline">"Ablehnen"</string>
+  <string name="action_decline_and_block">"Ablehnen und blockieren"</string>
   <string name="action_delete_poll">"Umfrage löschen"</string>
   <string name="action_disable">"Deaktivieren"</string>
   <string name="action_discard">"Verwerfen"</string>
+  <string name="action_dismiss">"Schließen"</string>
   <string name="action_done">"Erledigt"</string>
   <string name="action_edit">"Bearbeiten"</string>
   <string name="action_edit_caption">"Bildunterschrift bearbeiten"</string>
@@ -71,8 +77,8 @@
   <string name="action_go_back">"Zurück"</string>
   <string name="action_ignore">"Ignorieren"</string>
   <string name="action_invite">"Einladen"</string>
-  <string name="action_invite_friends">"Personen einladen"</string>
-  <string name="action_invite_friends_to_app">"Zu %1$s einladen"</string>
+  <string name="action_invite_friends">"Nutzer einladen"</string>
+  <string name="action_invite_friends_to_app">"Lade Personen in %1$s ein"</string>
   <string name="action_invite_people_to_app">"Lade Personen in %1$s ein"</string>
   <string name="action_invites_list">"Einladungen"</string>
   <string name="action_join">"Beitreten"</string>
@@ -80,7 +86,7 @@
   <string name="action_leave">"Verlassen"</string>
   <string name="action_leave_conversation">"Unterhaltung verlassen"</string>
   <string name="action_leave_room">"Verlassen"</string>
-  <string name="action_load_more">"Mehr laden …"</string>
+  <string name="action_load_more">"Mehr laden…"</string>
   <string name="action_manage_account">"Konto verwalten"</string>
   <string name="action_manage_devices">"Geräte verwalten"</string>
   <string name="action_message">"Nachricht"</string>
@@ -100,8 +106,11 @@
   <string name="action_remove_message">"Nachricht löschen"</string>
   <string name="action_reply">"Antworten"</string>
   <string name="action_reply_in_thread">"Im Thread antworten"</string>
+  <string name="action_report">"Bericht"</string>
   <string name="action_report_bug">"Fehler melden"</string>
   <string name="action_report_content">"Inhalt melden"</string>
+  <string name="action_report_dm">"Konversation melden"</string>
+  <string name="action_report_room">"Chatroom melden"</string>
   <string name="action_reset">"Zurücksetzen"</string>
   <string name="action_reset_identity">"Identität zurücksetzen"</string>
   <string name="action_retry">"Erneut versuchen"</string>
@@ -125,11 +134,11 @@
   <string name="action_tap_for_options">"Für Optionen tippen"</string>
   <string name="action_try_again">"Erneut versuchen"</string>
   <string name="action_unpin">"Lösen"</string>
-  <string name="action_view_in_timeline">"Im Chatverlauf anzeigen"</string>
+  <string name="action_view_in_timeline">"Im Nachrichtenverlauf anzeigen"</string>
   <string name="action_view_source">"Quellcode anzeigen"</string>
   <string name="action_yes">"Ja"</string>
   <string name="action_yes_try_again">"Ja, versuchen Sie es noch einmal"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Dein Server unterstützt jetzt ein neues, schnelleres Protokoll. Melde dich ab und melde dich wieder an, um zu aktualisieren. Wenn du das jetzt tust, vermeidest du eine erzwungene Abmeldung, wenn das alte Protokoll später entfernt wird."</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Ihr Server unterstützt jetzt ein neues, schnelleres Protokoll. Melden Sie sich ab und wieder an, um die Verbindung zu aktualisieren. Wenn Sie das jetzt tun, vermeiden Sie eine erzwungene Abmeldung, wenn das alte Protokoll später entfernt wird."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Aktualisierung verfügbar"</string>
   <string name="common_about">"Über"</string>
   <string name="common_acceptable_use_policy">"Nutzungsrichtlinie"</string>
@@ -158,14 +167,14 @@
   <string name="common_downloading">"Herunterladen"</string>
   <string name="common_edited_suffix">"(bearbeitet)"</string>
   <string name="common_editing">"Bearbeitung"</string>
-  <string name="common_editing_caption">"Bearbeitung der Bildunterschrift"</string>
+  <string name="common_editing_caption">"Bildunterschrift bearbeiten"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_empty_file">"Leere Datei"</string>
   <string name="common_encryption">"Verschlüsselung"</string>
   <string name="common_encryption_enabled">"Verschlüsselung aktiviert"</string>
   <string name="common_enter_your_pin">"PIN eingeben"</string>
   <string name="common_error">"Fehler"</string>
-  <string name="common_error_registering_pusher_android">"Es ist ein Fehler aufgetreten, du erhältst möglicherweise keine Benachrichtigungen für neue Nachrichten. Bitte behebe das Problem mit den Benachrichtigungen in den Einstellungen.
+  <string name="common_error_registering_pusher_android">"Es ist ein Fehler aufgetreten. Sie erhalten eventuell keine Benachrichtigungen für neue Nachrichten. Bitte diagnostizieren Sie das Benachrichtigungsproblem in den Einstellungen.
 
 Grund: %1$s."</string>
   <string name="common_everyone">"Alle"</string>
@@ -182,13 +191,17 @@ Grund: %1$s."</string>
   <string name="common_image">"Bild"</string>
   <string name="common_in_reply_to">"Als Antwort auf %1$s"</string>
   <string name="common_install_apk_android">"APK installieren"</string>
-  <string name="common_invite_unknown_profile">"Diese Matrix-ID kann nicht gefunden werden, daher wird die Einladung möglicherweise nicht empfangen."</string>
+  <string name="common_invite_unknown_profile">"Diese Matrix Kennung wurde nicht gefunden, daher wird die Einladung möglicherweise nicht empfangen."</string>
   <string name="common_leaving_room">"Raum verlassen"</string>
   <string name="common_light">"Hell"</string>
   <string name="common_line_copied_to_clipboard">"Zeile in die Zwischenablage kopiert"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
   <string name="common_loading">"Laden…"</string>
   <string name="common_loading_more">"Mehr wird geladen…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d weitere"</item>
+    <item quantity="other">"%d weitere"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d Mitglied"</item>
     <item quantity="other">"%1$d Mitglieder"</item>
@@ -202,6 +215,7 @@ Grund: %1$s."</string>
   <string name="common_name_and_id">"%1$s(%2$s)"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
   <string name="common_no_room_name">"Kein Raumname"</string>
+  <string name="common_not_encrypted">"Nicht verschlüsselt"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Open-Source-Lizenzen"</string>
   <string name="common_or">"oder"</string>
@@ -210,11 +224,12 @@ Grund: %1$s."</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Erlaubnis"</string>
   <string name="common_pinned">"Fixiert"</string>
-  <string name="common_please_wait">"Bitte warten …"</string>
-  <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
+  <string name="common_please_check_internet_connection">"Bitte überprüfen Sie Ihre Internetverbindung"</string>
+  <string name="common_please_wait">"Bitte warten…"</string>
+  <string name="common_poll_end_confirmation">"Sind Sie sicher, dass Sie diese Umfrage beenden möchten?"</string>
   <string name="common_poll_summary">"Umfrage: %1$s"</string>
   <string name="common_poll_total_votes">"Stimmen insgesamt: %1$s"</string>
-  <string name="common_poll_undisclosed_text">"Die Ergebnisse werden nach Ende der Umfrage angezeigt"</string>
+  <string name="common_poll_undisclosed_text">"Ergebnisse werden nach Ende der Umfrage angezeigt"</string>
   <plurals name="common_poll_votes_count">
     <item quantity="one">"%d Stimme"</item>
     <item quantity="other">"%d Stimmen"</item>
@@ -222,6 +237,7 @@ Grund: %1$s."</string>
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
+  <string name="common_reason">"Grund"</string>
   <string name="common_recovery_key">"Wiederherstellungsschlüssel"</string>
   <string name="common_refreshing">"Wird erneuert…"</string>
   <string name="common_replying_to">"%1$s antworten"</string>
@@ -249,6 +265,7 @@ Grund: %1$s."</string>
   <string name="common_shared_location">"Geteilter Standort"</string>
   <string name="common_signing_out">"Abmelden"</string>
   <string name="common_something_went_wrong">"Es ist ein Fehler aufgetreten."</string>
+  <string name="common_something_went_wrong_message">"Wir sind auf ein Problem gestoßen. Bitte versuchen Sie es erneut."</string>
   <string name="common_starting_chat">"Chat wird gestartet…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Erfolg"</string>
@@ -262,7 +279,7 @@ Grund: %1$s."</string>
   <string name="common_topic_placeholder">"Worum geht es in diesem Raum?"</string>
   <string name="common_unable_to_decrypt">"Entschlüsselung nicht möglich"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Von einem ungesicherten Gerät gesendet"</string>
-  <string name="common_unable_to_decrypt_no_access">"Du hast kein Recht diese Nachricht zu lesen."</string>
+  <string name="common_unable_to_decrypt_no_access">"Sie haben keinen Zugriff auf diese Nachricht"</string>
   <string name="common_unable_to_decrypt_verification_violation">"Die verifizierte Identität des Senders hat sich geändert"</string>
   <string name="common_unable_to_invite_message">"Einladungen konnten nicht an einen oder mehrere Benutzer gesendet werden."</string>
   <string name="common_unable_to_invite_title">"Einladung(en) konnte(n) nicht gesendet werden"</string>
@@ -283,21 +300,23 @@ Grund: %1$s."</string>
   <string name="common_waiting">"Warten…"</string>
   <string name="common_waiting_for_decryption_key">"Warte auf diese Nachricht"</string>
   <string name="common_you">"Sie"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s\'s Identität has sich offenbar geändert. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s Identität hat sich offenbar geändert. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s\'s Identität has sich geändert. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s Identität hat sich geändert. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"Die verifizierte Identität von %1$s hat sich geändert."</string>
-  <string name="crypto_identity_change_verification_violation_new">"Die verifizierte Identität von %1$s\'s %2$s hat sich geändert. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Die Identität von %1$s hat sich geändert."</string>
+  <string name="crypto_identity_change_verification_violation_new">"Die Identität von %1$s\'s %2$s hat sich geändert. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Verifizierung zurückziehen"</string>
   <string name="dialog_confirm_link_message">"Der Link%1$s führt Sie zu einer anderen Seite%2$s. 
 
 Möchten Sie wirklich fortfahren?"</string>
   <string name="dialog_confirm_link_title">"Überprüfen Sie diesen Link noch einmal"</string>
+  <string name="dialog_room_reported">"Chatroom gemeldet"</string>
+  <string name="dialog_room_reported_and_left">"Gemeldet und Zimmer verlassen"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_error">"Fehler"</string>
   <string name="dialog_title_success">"Erfolg"</string>
   <string name="dialog_title_warning">"Warnung"</string>
-  <string name="dialog_unsaved_changes_description_android">"Deine Änderungen wurden nicht gespeichert. Bist du sicher, dass du zurückgehen willst?"</string>
+  <string name="dialog_unsaved_changes_description_android">"Ihre Änderungen wurden nicht gespeichert. Sind Sie sicher, dass Sie zurückgehen wollen?"</string>
   <string name="dialog_unsaved_changes_title">"Änderungen speichern?"</string>
   <string name="error_account_creation_not_possible">"Dein Homeserver muss aktualisiert werden, um den Matrix Authentication Services und die Erstellung von Konten zu unterstützen."</string>
   <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Permalinks"</string>
@@ -335,13 +354,13 @@ Möchten Sie wirklich fortfahren?"</string>
     <item quantity="other">"%1$d fixierte Nachrichten"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fixierte Nachrichten"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"Du wirst jetzt zu deinem %1$s Konto geleitet, um deine Identität zurückzusetzen. Danach wirst du zur App zurückgebracht."</string>
-  <string name="screen_reset_identity_confirmation_title">"Kannst du das nicht bestätigen? Gehe zu deinem Konto, um deine Identität zurückzusetzen."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Sie werden jetzt zu Ihrem %1$s Konto geleitet, um Ihre Identität zurückzusetzen. Danach werden Sie zur App zurückgebracht."</string>
+  <string name="screen_reset_identity_confirmation_title">"Bestätigung unmöglich? Gehen Sie zu Ihrem Konto, um Ihre Identität zurückzusetzen."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Verifizierung zurückziehen und senden"</string>
-  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kannst deine Verifizierung zurückziehen und diese Nachricht trotzdem senden, oder du kannst sie vorerst abbrechen und es später noch einmal versuchen, nachdem du %1$s erneut verifiziert hast."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Deine Nachricht wurde nicht gesendet, da sich die verifizierte Identität von %1$s geändert hat"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Sie können Ihre Verifizierung widerrufen und diese Nachricht trotzdem senden. Oder Sie brechen vorerst ab und versuchen es noch einmal, nachdem Sie %1$s erneut verifiziert haben."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Ihre Nachricht wurde nicht gesendet, da die verifizierte Identität von %1$s zurückgesetzt wurde"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Nachricht trotzdem senden"</string>
-  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s verwendet wenigstens ein nicht verifiziertes Gerät. Du kannst die Nachricht trotzdem verschicken, oder vorerst abbrechen und später erneut versuchen, nachdem %2$s alle Geräte verifiziert hat."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s verwendet mindestens ein nicht verifiziertes Gerät. Sie können die Nachricht trotzdem verschicken, oder Sie können vorerst abbrechen und es später erneut versuchen, nachdem %2$s alle Geräte verifiziert hat."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Deine Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Mindestens eines Ihrer Geräte ist nicht verifiziert worden. Sie können die Nachricht trotzdem senden, oder den Vorgang zunächst abbrechen und es später erneut versuchen, nachdem Sie alle Ihrer Geräte verifiziert haben."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ihre Nachricht wurde nicht geschickt, da Sie eines oder mehrere Ihrer Geräte nicht verifiziert haben."</string>
@@ -361,13 +380,13 @@ Möchten Sie wirklich fortfahren?"</string>
   <string name="screen_share_open_osm_maps">"In OpenStreetMap öffnen"</string>
   <string name="screen_share_this_location_action">"Diesen Standort teilen"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$s geändert hat."</string>
-  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat"</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Die Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Die Nachricht wurde nicht gesendet, weil Sie eines oder mehrere Ihrer Geräte nicht verifiziert haben."</string>
   <string name="screen_view_location_title">"Standort"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Der Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar"</string>
-  <string name="timeline_decryption_failure_historical_event_unverified_device">"Sie müssen dieses Gerät verifizieren, um auf den Nachrichtenverlauf zugreifen zu können"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Für den Zugriff auf den kompletten Nachrichtenverlauf müssen Sie dieses Gerät verifizieren"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sie haben keinen Zugriff auf diese Nachricht"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nachricht kann nicht entschlüsselt werden"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Diese Nachricht wurde entweder blockiert, weil Ihr Gerät nicht verifiziert ist oder weil der Absender Ihre Identität überprüfen muss."</string>

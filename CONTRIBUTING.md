@@ -2,8 +2,8 @@
 
 <!--- TOC -->
 
-* [Contributing code to Matrix](#contributing-code-to-matrix)
 * [Developer onboarding](#developer-onboarding)
+* [Contributing code to Matrix](#contributing-code-to-matrix)
 * [Android Studio settings](#android-studio-settings)
 * [Compilation](#compilation)
 * [Strings](#strings)
@@ -28,17 +28,17 @@
 
 <!--- END -->
 
-## Contributing code to Matrix
-
-Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md
-
-Element X Android support can be found in this room: [![Element X Android Matrix room #element-x-android:matrix.org](https://img.shields.io/matrix/element-x-android:matrix.org.svg?label=%23element-x-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-android:matrix.org).
-
-The rest of the document contains specific rules for Matrix Android projects
-
 ## Developer onboarding
 
 For a detailed overview of the project, see [Developer Onboarding](./docs/_developer_onboarding.md).
+
+## Contributing code to Matrix
+
+If instead of contributing to the Element X Android project, you want to contribute to Synapse, the homeserver implementation, please read the [Synapse contribution guide](https://element-hq.github.io/synapse/latest/development/contributing_guide.html).
+
+Element X Android support can be found in this room: [![Element X Android Matrix room #element-x-android:matrix.org](https://img.shields.io/matrix/element-x-android:matrix.org.svg?label=%23element-x-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-android:matrix.org).
+
+The rest of the document contains specific rules for Matrix Android projects.
 
 ## Android Studio settings
 

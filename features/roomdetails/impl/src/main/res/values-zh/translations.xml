@@ -66,27 +66,18 @@
   <string name="screen_room_details_title">"聊天室信息"</string>
   <string name="screen_room_details_topic_title">"主题"</string>
   <string name="screen_room_details_updating_room">"正在更新聊天室……"</string>
-  <string name="screen_room_member_list_ban_member_confirmation_action">"封禁"</string>
-  <string name="screen_room_member_list_ban_member_confirmation_description">"即使受到邀请，他们也无法再次加入聊天室。"</string>
-  <string name="screen_room_member_list_ban_member_confirmation_title">"您确定要封禁该成员吗？"</string>
   <string name="screen_room_member_list_banned_empty">"此聊天室里没有被封禁的用户。"</string>
-  <string name="screen_room_member_list_banning_user">"封禁 %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="other">"%1$d 人"</item>
   </plurals>
-  <string name="screen_room_member_list_manage_member_ban">"移除并封禁成员"</string>
-  <string name="screen_room_member_list_manage_member_remove">"从聊天室移除"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"移除并封禁成员"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"仅移除成员"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_title">"删除成员并禁止重新加入？"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"取消封禁"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"如果受到邀请，他们可以重新加入聊天室。"</string>
   <string name="screen_room_member_list_manage_member_unban_title">"解封用户"</string>
-  <string name="screen_room_member_list_manage_member_user_info">"查看个人资料"</string>
   <string name="screen_room_member_list_mode_banned">"已封禁用户"</string>
   <string name="screen_room_member_list_mode_members">"成员"</string>
   <string name="screen_room_member_list_pending_header_title">"待处理"</string>
-  <string name="screen_room_member_list_removing_user">"正在移除 %1$s……"</string>
   <string name="screen_room_member_list_role_administrator">"管理员"</string>
   <string name="screen_room_member_list_role_moderator">"协管员"</string>
   <string name="screen_room_member_list_room_members_header_title">"聊天室成员"</string>

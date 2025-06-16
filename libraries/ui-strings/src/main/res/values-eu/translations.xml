@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Abatarra"</string>
   <string name="a11y_delete">"Ezabatu"</string>
   <string name="a11y_hide_password">"Ezkutatu pasahitza"</string>
+  <string name="a11y_join_call">"Batu deira"</string>
   <string name="a11y_jump_to_bottom">"Joan behera"</string>
   <string name="a11y_notifications_mentions_only">"Aipamenak soilik"</string>
   <string name="a11y_notifications_muted">"Mutututa"</string>
   <string name="a11y_page_n">"%1$d. orria"</string>
   <string name="a11y_pause">"Eten"</string>
+  <string name="a11y_paused_voice_message">"Ahots-mezua, iraupena: %1$s, uneko posizioa: %2$s"</string>
   <string name="a11y_pin_field">"PINaren eremua"</string>
   <string name="a11y_play">"Erreproduzitu"</string>
   <string name="a11y_poll">"Inkesta"</string>
@@ -26,6 +29,7 @@
   <string name="a11y_start_call">"Hasi dei bat"</string>
   <string name="a11y_user_menu">"Erabiltzailea-menua"</string>
   <string name="a11y_view_details">"Ikusi xehetasunak"</string>
+  <string name="a11y_voice_message">"Ahots-mezua, iraupena: %1$s"</string>
   <string name="a11y_voice_message_record">"Grabatu ahots-mezua."</string>
   <string name="a11y_voice_message_stop_recording">"Utzi grabatzeari"</string>
   <string name="action_accept">"Onartu"</string>
@@ -52,9 +56,11 @@
   <string name="action_deactivate">"Desaktibatu"</string>
   <string name="action_deactivate_account">"Desaktibatu kontua"</string>
   <string name="action_decline">"Ukatu"</string>
+  <string name="action_decline_and_block">"Baztertu eta blokeatu"</string>
   <string name="action_delete_poll">"Ezabatu inkesta"</string>
   <string name="action_disable">"Desgaitu"</string>
   <string name="action_discard">"Baztertu"</string>
+  <string name="action_dismiss">"Baztertu"</string>
   <string name="action_done">"Eginda"</string>
   <string name="action_edit">"Editatu"</string>
   <string name="action_edit_caption">"Editatu testua"</string>
@@ -96,8 +102,11 @@
   <string name="action_remove_message">"Kendu mezua"</string>
   <string name="action_reply">"Erantzun"</string>
   <string name="action_reply_in_thread">"Erantzun harian"</string>
+  <string name="action_report">"Salatu"</string>
   <string name="action_report_bug">"Eman errore baten berri"</string>
   <string name="action_report_content">"Salatu edukia"</string>
+  <string name="action_report_dm">"Salatu elkarrizketa"</string>
+  <string name="action_report_room">"Salatu gela"</string>
   <string name="action_reset">"Berrezarri"</string>
   <string name="action_reset_identity">"Berrezarri identitatea"</string>
   <string name="action_retry">"Saiatu berriro"</string>
@@ -125,6 +134,7 @@
   <string name="action_view_source">"Ikusi iturburua"</string>
   <string name="action_yes">"Bai"</string>
   <string name="action_yes_try_again">"Bai, saiatu berriro"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Orain zure zerbitzaria protokolo berri eta azkarrago batekin da bateragarria. Amaitu saioa eta hasi berriro protokolo berria erabiltzeko. Orain eginez gero, etorkizunean protokolo zaharra kentzen denean ez zaizu behartutako saioa ixtera."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Bertsio-berritzea eskuragarri"</string>
   <string name="common_about">"Honi buruz"</string>
   <string name="common_adding_caption">"Testua gehitzen"</string>
@@ -178,20 +188,27 @@ Arrazoia: %1$s."</string>
   <string name="common_invite_unknown_profile">"Matrix IDa ezin da topatu eta, beraz, litekeena da gonbidapena ez jasotzea."</string>
   <string name="common_leaving_room">"Gelatik ateratzen"</string>
   <string name="common_light">"Argia"</string>
+  <string name="common_line_copied_to_clipboard">"Lerroa arbelean kopiatu da"</string>
   <string name="common_link_copied_to_clipboard">"Esteka arbelean kopiatu da"</string>
   <string name="common_loading">"Kargatzen…"</string>
   <string name="common_loading_more">"Gehiago kargatzen…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"beste %d"</item>
+    <item quantity="other">"beste %d"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"Kide %1$d"</item>
     <item quantity="other">"%1$d kide"</item>
   </plurals>
   <string name="common_message">"Mezua"</string>
+  <string name="common_message_actions">"Mezuen ekintzak"</string>
   <string name="common_message_layout">"Mezuen antolaketa"</string>
   <string name="common_message_removed">"Mezua kendu da"</string>
   <string name="common_modern">"Modernoa"</string>
   <string name="common_mute">"Mututu"</string>
   <string name="common_no_results">"Emaitzarik ez"</string>
   <string name="common_no_room_name">"Gelak ez du izenik"</string>
+  <string name="common_not_encrypted">"Zifratu gabe"</string>
   <string name="common_offline">"Deskonektatuta"</string>
   <string name="common_open_source_licenses">"Kode irekiko lizentziak"</string>
   <string name="common_or">"edo"</string>
@@ -200,6 +217,7 @@ Arrazoia: %1$s."</string>
   <string name="common_permalink">"Esteka iraunkorra"</string>
   <string name="common_permission">"Baimena"</string>
   <string name="common_pinned">"Finkatuta"</string>
+  <string name="common_please_check_internet_connection">"Egiaztatu Interneteko konexioa"</string>
   <string name="common_please_wait">"Itxaron…"</string>
   <string name="common_poll_end_confirmation">"Ziur inkesta hau amaitu nahi duzula?"</string>
   <string name="common_poll_summary">"Inkesta:%1$s"</string>
@@ -212,6 +230,7 @@ Arrazoia: %1$s."</string>
   <string name="common_privacy_policy">"Pribatutasun-politika"</string>
   <string name="common_reaction">"Erreakzioa"</string>
   <string name="common_reactions">"Erreakzioak"</string>
+  <string name="common_reason">"Arrazoia"</string>
   <string name="common_recovery_key">"Berreskuratze-gakoa"</string>
   <string name="common_refreshing">"Freskatzen…"</string>
   <string name="common_replying_to">"%1$s(r)i erantzuten"</string>
@@ -231,6 +250,7 @@ Arrazoia: %1$s."</string>
   <string name="common_seen_by">"Ikusi du"</string>
   <string name="common_send_to">"Bidali"</string>
   <string name="common_sending">"Bidaltzen…"</string>
+  <string name="common_sending_failed">"Bidalketak huts egin du"</string>
   <string name="common_sent">"Bidalita"</string>
   <string name="common_server_not_supported">"Zerbitzaria ez da bateragarria"</string>
   <string name="common_server_url">"Zerbitzariaren URLa"</string>
@@ -275,6 +295,9 @@ Arrazoia: %1$s."</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s(r)en %2$s identitatea berrezarri da. %3$s"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s(r)en identitatea berrezarri da."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s(r)en %2$s identitatea berrezarri da. %3$s"</string>
+  <string name="dialog_confirm_link_title">"Egiaztatu honako esteka"</string>
+  <string name="dialog_room_reported">"Gela salatu da"</string>
+  <string name="dialog_room_reported_and_left">"Gela salatu eta utzi da"</string>
   <string name="dialog_title_confirmation">"Baieztapena"</string>
   <string name="dialog_title_error">"Errorea"</string>
   <string name="dialog_title_success">"Arrakasta"</string>
@@ -285,10 +308,12 @@ Arrazoia: %1$s."</string>
   <string name="error_failed_loading_map">"%1$s ezin izan da mapa kargatu. Saiatu berriro geroago."</string>
   <string name="error_failed_loading_messages">"Huts egin du mezuak kargatzeak"</string>
   <string name="error_failed_locating_user">"%1$s ezin izan da zure kokapena atzitu. Saiatu berriro geroago."</string>
+  <string name="error_failed_uploading_voice_message">"Ahots-mezua igotzeak huts egin du"</string>
   <string name="error_message_not_found">"Ez da mezua aurkitu"</string>
   <string name="error_missing_location_auth_android">"%1$sek ez du zure kokapena atzitzeko baimenik. Sarbidea Ezarpenetan gaitu dezakezu."</string>
   <string name="error_missing_location_rationale_android">"%1$sek ez du zure kokapena atzitzeko baimenik. Gaitu sarbidea behean."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s(e)k ez du mikrofonoa atzitzeko baimenik. Gaitu sarbidea ahots-mezua grabatzeko."</string>
+  <string name="error_network_or_server_issue">"Sarearen edo zerbitzariaren arazoren bategatik izan daiteke."</string>
   <string name="error_room_address_already_exists">"Gela badago lehendik ere. Saiatu gelaren helbidearen eremua editatzen edo aldatu gelaren izena"</string>
   <string name="error_room_address_invalid_symbols">"Karaktere batzuk ez daude baimenduta. Hizkiak, zifrak, eta ondorengo ikurrak onartzen dira bakarrik: ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Mezu batzuk ez dira bidali"</string>
@@ -315,4 +340,6 @@ Arrazoia: %1$s."</string>
   <string name="screen_view_location_title">"Kokapena"</string>
   <string name="settings_version_number">"Bertsioa: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"eu"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Iraganeko mezuak ez daude gailu honetan eskuragarri"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Ezin da mezua deszifratu"</string>
 </resources>

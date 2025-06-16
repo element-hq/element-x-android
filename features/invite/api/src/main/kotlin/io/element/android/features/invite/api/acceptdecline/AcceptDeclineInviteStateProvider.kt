@@ -1,0 +1,48 @@
+/*
+ * Copyright 2024 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.features.invite.api.acceptdecline
+
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.invite.api.InviteData
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.core.RoomId
+
+open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDeclineInviteState> {
+    override val values: Sequence<AcceptDeclineInviteState>
+        get() = sequenceOf(
+            anAcceptDeclineInviteState(),
+            anAcceptDeclineInviteState(
+                declineAction = ConfirmingDeclineInvite(
+                    InviteData(roomId = RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
+                    blockUser = false,
+                ),
+            ),
+            anAcceptDeclineInviteState(
+                declineAction = ConfirmingDeclineInvite(
+                    InviteData(roomId = RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
+                    blockUser = true,
+                ),
+            ),
+            anAcceptDeclineInviteState(
+                acceptAction = AsyncAction.Failure(RuntimeException("Error while accepting invite")),
+            ),
+            anAcceptDeclineInviteState(
+                declineAction = AsyncAction.Failure(RuntimeException("Error while declining invite")),
+            ),
+        )
+}
+
+fun anAcceptDeclineInviteState(
+    acceptAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    declineAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    eventSink: (AcceptDeclineInviteEvents) -> Unit = {}
+) = AcceptDeclineInviteState(
+    acceptAction = acceptAction,
+    declineAction = declineAction,
+    eventSink = eventSink,
+)

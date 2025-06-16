@@ -12,9 +12,9 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvents
-import io.element.android.features.rageshake.test.rageshake.A_SENSITIVITY
-import io.element.android.features.rageshake.test.rageshake.FakeRageShake
-import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
+import io.element.android.features.rageshake.impl.rageshake.A_SENSITIVITY
+import io.element.android.features.rageshake.impl.rageshake.FakeRageShake
+import io.element.android.features.rageshake.impl.rageshake.FakeRageshakeDataStore
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -28,7 +28,8 @@ class RageshakePreferencesPresenterTest {
     fun `present - initial state available`() = runTest {
         val presenter = DefaultRageshakePreferencesPresenter(
             FakeRageShake(isAvailableValue = true),
-            FakeRageshakeDataStore(isEnabled = true)
+            FakeRageshakeDataStore(isEnabled = true),
+            rageshakeFeatureAvailability = { true },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -44,7 +45,8 @@ class RageshakePreferencesPresenterTest {
     fun `present - initial state not available`() = runTest {
         val presenter = DefaultRageshakePreferencesPresenter(
             FakeRageShake(isAvailableValue = false),
-            FakeRageshakeDataStore(isEnabled = true)
+            FakeRageshakeDataStore(isEnabled = true),
+            rageshakeFeatureAvailability = { true },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -60,7 +62,8 @@ class RageshakePreferencesPresenterTest {
     fun `present - enable and disable`() = runTest {
         val presenter = DefaultRageshakePreferencesPresenter(
             FakeRageShake(isAvailableValue = true),
-            FakeRageshakeDataStore(isEnabled = true)
+            FakeRageshakeDataStore(isEnabled = true),
+            rageshakeFeatureAvailability = { true },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -79,7 +82,8 @@ class RageshakePreferencesPresenterTest {
     fun `present - set sensitivity`() = runTest {
         val presenter = DefaultRageshakePreferencesPresenter(
             FakeRageShake(isAvailableValue = true),
-            FakeRageshakeDataStore(isEnabled = true)
+            FakeRageshakeDataStore(isEnabled = true),
+            rageshakeFeatureAvailability = { true },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

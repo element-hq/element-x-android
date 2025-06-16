@@ -30,7 +30,7 @@ class DefaultMessageParser @Inject constructor(
         val parser = Json { ignoreUnknownKeys = true }
         val response = parser.decodeFromString(MobileRegistrationResponse.serializer(), message)
         val userId = response.userId ?: error("No user ID in response")
-        val homeServer = response.homeServer ?: accountProviderDataSource.flow().value.url
+        val homeServer = response.homeServer ?: accountProviderDataSource.flow.value.url
         val accessToken = response.accessToken ?: error("No access token in response")
         val deviceId = response.deviceId ?: error("No device ID in response")
         return ExternalSession(

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Vous ne verrez aucun messages ou invitation à un salon de la part de cet utilisateur"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Bloquer l’utilisateur"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Signalez ce salon à votre fournisseur de compte."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Décrivez la raison du signalement…"</string>
+  <string name="screen_decline_and_block_title">"Refuser et bloquer"</string>
   <string name="screen_invites_decline_chat_message">"Êtes-vous sûr de vouloir décliner l’invitation à rejoindre %1$s ?"</string>
   <string name="screen_invites_decline_chat_title">"Refuser l’invitation"</string>
   <string name="screen_invites_decline_direct_chat_message">"Êtes-vous sûr de vouloir refuser cette discussion privée avec %1$s ?"</string>

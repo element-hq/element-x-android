@@ -12,6 +12,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.api.LoginParams
+import io.element.android.features.login.test.FakeLoginIntentResolver
 import io.element.android.libraries.deeplink.DeepLinkCreator
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.deeplink.DeeplinkParser
@@ -22,10 +24,8 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.oidc.api.OidcAction
-import io.element.android.libraries.oidc.impl.DefaultOidcIntentResolver
-import io.element.android.libraries.oidc.impl.OidcUrlParser
+import io.element.android.libraries.oidc.test.FakeOidcIntentResolver
 import io.element.android.tests.testutils.lambda.lambdaError
-import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -115,11 +115,13 @@ class IntentResolverTest {
     }
 
     @Test
-    fun `test resolve oidc go back`() {
-        val sut = createIntentResolver()
+    fun `test resolve oidc`() {
+        val sut = createIntentResolver(
+            oidcIntentResolverResult = { OidcAction.GoBack },
+        )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_VIEW
-            data = "io.element:/callback?error=access_denied&state=IFF1UETGye2ZA8pO".toUri()
+            data = "io.element.android:/?error=access_denied&state=IFF1UETGye2ZA8pO".toUri()
         }
         val result = sut.resolve(intent)
         assertThat(result).isEqualTo(
@@ -130,41 +132,14 @@ class IntentResolverTest {
     }
 
     @Test
-    fun `test resolve oidc success`() {
-        val sut = createIntentResolver()
-        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
-            action = Intent.ACTION_VIEW
-            data = "io.element:/callback?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB".toUri()
-        }
-        val result = sut.resolve(intent)
-        assertThat(result).isEqualTo(
-            ResolvedIntent.Oidc(
-                oidcAction = OidcAction.Success(
-                    url = "io.element:/callback?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB"
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `test resolve oidc invalid`() {
-        val sut = createIntentResolver()
-        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
-            action = Intent.ACTION_VIEW
-            data = "io.element:/callback/invalid".toUri()
-        }
-        assertThrows(IllegalStateException::class.java) {
-            sut.resolve(intent)
-        }
-    }
-
-    @Test
     fun `test resolve external permalink`() {
         val permalinkData = PermalinkData.UserLink(
             userId = UserId("@alice:matrix.org")
         )
         val sut = createIntentResolver(
-            permalinkParserResult = { permalinkData }
+            loginIntentResolverResult = { null },
+            permalinkParserResult = { permalinkData },
+            oidcIntentResolverResult = { null },
         )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_VIEW
@@ -181,7 +156,9 @@ class IntentResolverTest {
     @Test
     fun `test resolve external permalink, FallbackLink should be ignored`() {
         val sut = createIntentResolver(
-            permalinkParserResult = { PermalinkData.FallbackLink(Uri.parse("https://matrix.org")) }
+            permalinkParserResult = { PermalinkData.FallbackLink(Uri.parse("https://matrix.org")) },
+            loginIntentResolverResult = { null },
+            oidcIntentResolverResult = { null },
         )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_VIEW
@@ -197,7 +174,8 @@ class IntentResolverTest {
             userId = UserId("@alice:matrix.org")
         )
         val sut = createIntentResolver(
-            permalinkParserResult = { permalinkData }
+            permalinkParserResult = { permalinkData },
+            oidcIntentResolverResult = { null },
         )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_BATTERY_LOW
@@ -209,7 +187,9 @@ class IntentResolverTest {
 
     @Test
     fun `test incoming share simple`() {
-        val sut = createIntentResolver()
+        val sut = createIntentResolver(
+            oidcIntentResolverResult = { null },
+        )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_SEND
         }
@@ -219,7 +199,9 @@ class IntentResolverTest {
 
     @Test
     fun `test incoming share multiple`() {
-        val sut = createIntentResolver()
+        val sut = createIntentResolver(
+            oidcIntentResolverResult = { null },
+        )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_SEND_MULTIPLE
         }
@@ -230,7 +212,9 @@ class IntentResolverTest {
     @Test
     fun `test resolve invalid`() {
         val sut = createIntentResolver(
-            permalinkParserResult = { PermalinkData.FallbackLink(Uri.parse("https://matrix.org")) }
+            permalinkParserResult = { PermalinkData.FallbackLink(Uri.parse("https://matrix.org")) },
+            loginIntentResolverResult = { null },
+            oidcIntentResolverResult = { null },
         )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_VIEW
@@ -240,13 +224,33 @@ class IntentResolverTest {
         assertThat(result).isNull()
     }
 
+    @Test
+    fun `test resolve login param`() {
+        val aLoginParams = LoginParams("accountProvider", null)
+        val sut = createIntentResolver(
+            loginIntentResolverResult = { aLoginParams },
+            oidcIntentResolverResult = { null },
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            data = "".toUri()
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isEqualTo(ResolvedIntent.Login(aLoginParams))
+    }
+
     private fun createIntentResolver(
-        permalinkParserResult: () -> PermalinkData = { lambdaError() }
+        permalinkParserResult: (String) -> PermalinkData = { lambdaError() },
+        loginIntentResolverResult: (String) -> LoginParams? = { lambdaError() },
+        oidcIntentResolverResult: (Intent) -> OidcAction? = { lambdaError() },
     ): IntentResolver {
         return IntentResolver(
             deeplinkParser = DeeplinkParser(),
-            oidcIntentResolver = DefaultOidcIntentResolver(
-                oidcUrlParser = OidcUrlParser()
+            loginIntentResolver = FakeLoginIntentResolver(
+                parseResult = loginIntentResolverResult,
+            ),
+            oidcIntentResolver = FakeOidcIntentResolver(
+                resolveResult = oidcIntentResolverResult,
             ),
             permalinkParser = FakePermalinkParser(
                 result = permalinkParserResult

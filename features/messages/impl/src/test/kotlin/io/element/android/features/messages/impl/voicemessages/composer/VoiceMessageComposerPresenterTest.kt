@@ -21,8 +21,10 @@ import io.element.android.features.messages.impl.messagecomposer.aReplyMode
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.AudioInfo
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -44,6 +46,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -60,14 +63,16 @@ class VoiceMessageComposerPresenterTest {
     )
     private val analyticsService = FakeAnalyticsService()
     private val sendVoiceMessageResult =
-        lambdaRecorder<File, AudioInfo, List<Float>, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _ ->
+        lambdaRecorder<File, AudioInfo, List<Float>, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
-    private val matrixRoom = FakeMatrixRoom(
-        sendVoiceMessageResult = sendVoiceMessageResult
+    private val joinedRoom = FakeJoinedRoom(
+        liveTimeline = FakeTimeline().apply {
+            sendVoiceMessageLambda = sendVoiceMessageResult
+        },
     )
     private val mediaPreProcessor = FakeMediaPreProcessor().apply { givenAudioResult() }
-    private val mediaSender = MediaSender(mediaPreProcessor, matrixRoom, InMemorySessionPreferencesStore())
+    private val mediaSender = MediaSender(mediaPreProcessor, joinedRoom, InMemorySessionPreferencesStore())
     private val messageComposerContext = FakeMessageComposerContext()
 
     companion object {
@@ -294,7 +299,6 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecorderEvent(VoiceMessageRecorderEvent.Stop))
             awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
             assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState().toSendingState())
-
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             sendVoiceMessageResult.assertions().isCalledOnce()
@@ -316,7 +320,7 @@ class VoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvents.RecorderEvent(VoiceMessageRecorderEvent.Stop))
             awaitItem().eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
             skipItems(1) // Sending state
-
+            advanceUntilIdle()
             // Now reply with a voice message
             messageComposerContext.composerMode = aReplyMode()
             awaitItem().eventSink(VoiceMessageComposerEvents.RecorderEvent(VoiceMessageRecorderEvent.Start))
@@ -652,7 +656,7 @@ class VoiceMessageComposerPresenterTest {
         permissionsPresenter: PermissionsPresenter = createFakePermissionsPresenter(),
     ): VoiceMessageComposerPresenter {
         return VoiceMessageComposerPresenter(
-            this,
+            backgroundScope,
             voiceRecorder,
             analyticsService,
             mediaSender,

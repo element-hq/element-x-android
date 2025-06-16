@@ -8,14 +8,22 @@
   <string name="screen_advanced_settings_element_call_base_url">"Користувацька URL-адреса Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Встановіть URL-адресу для Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Неправильна URL-адреса. Переконайтеся, що ви вказали протокол (http/https) та правильну адресу."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Сховати аватари у запитах на запрошення до кімнат"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Сховати попередній перегляд медіа у стрічці"</string>
   <string name="screen_advanced_settings_media_compression_description">"Швидше завантажуйте фотографії та відео та зменшуйте використання даних"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимізуйте медіаякість"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерування й безпека"</string>
   <string name="screen_advanced_settings_push_provider_android">"Постачальник push-сповіщень"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Вимкніть редактор розширеного тексту, щоб вводити Markdown вручну."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Читати журнали"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Якщо вимкнено, ваші сповіщення про прочитання нікому не надсилатимуться. Ви все одно отримуватимете сповіщення про прочитання від інших користувачів."</string>
   <string name="screen_advanced_settings_share_presence">"Поділіться присутністю"</string>
   <string name="screen_advanced_settings_share_presence_description">"Якщо цей параметр вимкнено, ви не зможете надсилати й отримувати звіти про прочитання чи сповіщення про введення тексту."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Завжди ховати"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Завжди показувати"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"У приватних кімнатах"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Сховані медіа завжди можна переглянути, натиснувши на нього"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Показувати медіа у стрічці"</string>
   <string name="screen_advanced_settings_view_source_description">"Увімкнути опцію для перегляду коду повідомлення в стрічці"</string>
   <string name="screen_blocked_users_empty">"У вас немає заблокованих користувачів."</string>
   <string name="screen_blocked_users_unblock_alert_action">"Розблокувати"</string>
@@ -55,6 +63,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системні налаштування"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системні сповіщення вимкнені"</string>
   <string name="screen_notification_settings_title">"Сповіщення"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Історія push-сповіщень"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Усунення несправностей"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Усунення неполадок сповіщень"</string>
 </resources>

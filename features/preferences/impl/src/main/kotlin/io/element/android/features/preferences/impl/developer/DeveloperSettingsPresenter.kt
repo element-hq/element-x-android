@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
@@ -28,15 +29,20 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.net.URL
@@ -66,17 +72,21 @@ class DeveloperSettingsPresenter @Inject constructor(
         val clearCacheAction = remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
-        val customElementCallBaseUrl by appPreferencesStore
-            .getCustomElementCallBaseUrlFlow()
-            .collectAsState(initial = null)
-        val hideImagesAndVideos by appPreferencesStore
-            .doesHideImagesAndVideosFlow()
-            .collectAsState(initial = false)
+        val customElementCallBaseUrl by remember {
+            appPreferencesStore
+                .getCustomElementCallBaseUrlFlow()
+        }.collectAsState(initial = null)
 
         val tracingLogLevelFlow = remember {
             appPreferencesStore.getTracingLogLevelFlow().map { AsyncData.Success(it.toLogLevelItem()) }
         }
         val tracingLogLevel by tracingLogLevelFlow.collectAsState(initial = AsyncData.Uninitialized)
+        val tracingLogPacks by produceState(persistentListOf<TraceLogPack>()) {
+            appPreferencesStore.getTracingLogPacksFlow()
+                // Sort the entries alphabetically by its title
+                .map { it.sortedBy { it.title }.toPersistentList() }
+                .collectLatest { value = it }
+        }
 
         LaunchedEffect(Unit) {
             FeatureFlags.entries
@@ -115,11 +125,17 @@ class DeveloperSettingsPresenter @Inject constructor(
                     appPreferencesStore.setCustomElementCallBaseUrl(urlToSave)
                 }
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
-                is DeveloperSettingsEvents.SetHideImagesAndVideos -> coroutineScope.launch {
-                    appPreferencesStore.setHideImagesAndVideos(event.value)
-                }
                 is DeveloperSettingsEvents.SetTracingLogLevel -> coroutineScope.launch {
                     appPreferencesStore.setTracingLogLevel(event.logLevel.toLogLevel())
+                }
+                is DeveloperSettingsEvents.ToggleTracingLogPack -> coroutineScope.launch {
+                    val currentPacks = tracingLogPacks.toMutableSet()
+                    if (currentPacks.contains(event.logPack)) {
+                        currentPacks.remove(event.logPack)
+                    } else {
+                        currentPacks.add(event.logPack)
+                    }
+                    appPreferencesStore.setTracingLogPacks(currentPacks)
                 }
             }
         }
@@ -133,8 +149,8 @@ class DeveloperSettingsPresenter @Inject constructor(
                 baseUrl = customElementCallBaseUrl,
                 validator = ::customElementCallUrlValidator,
             ),
-            hideImagesAndVideos = hideImagesAndVideos,
             tracingLogLevel = tracingLogLevel,
+            tracingLogPacks = tracingLogPacks,
             eventSink = ::handleEvents
         )
     }
@@ -186,8 +202,8 @@ class DeveloperSettingsPresenter @Inject constructor(
 }
 
 private fun customElementCallUrlValidator(url: String?): Boolean {
-    return runCatching {
-        if (url.isNullOrEmpty()) return@runCatching
+    return runCatchingExceptions {
+        if (url.isNullOrEmpty()) return@runCatchingExceptions
         val parsedUrl = URL(url)
         if (parsedUrl.protocol !in listOf("http", "https")) error("Incorrect protocol")
         if (parsedUrl.host.isNullOrBlank()) error("Missing host")

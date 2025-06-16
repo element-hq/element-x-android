@@ -12,7 +12,7 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Wiederherstellungsschlüssel eingeben"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Dein Schlüssel ist derzeit nicht synchronisiert."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Wiederherstellung einrichten"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Erhalte Zugriff auf deine verschlüsselten Nachrichten, wenn du alle deine Geräte verlierst oder von %1$s überall abgemeldet bist."</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Erhalten Sie Zugriff auf Ihre verschlüsselten Nachrichten, wenn Sie all Ihre Geräte verlieren oder von %1$s überall abgemeldet sind."</string>
   <string name="screen_create_new_recovery_key_list_item_1">
     "Öffne "
     <b>"%1$s"</b>
@@ -20,7 +20,7 @@
     <b>"Desktop-Gerät"</b>
   </string>
   <string name="screen_create_new_recovery_key_list_item_2">"Melde dich erneut bei deinem Konto an"</string>
-  <string name="screen_create_new_recovery_key_list_item_3">"Wenn du aufgefordert wirst dein Gerät zu verifizieren, wähle \"%1$s\"."</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Wenn Sie aufgefordert werden, Ihr Gerät zu verifizieren, wählen Sie \"%1$s\""</string>
   <string name="screen_create_new_recovery_key_list_item_3_reset_all">"Alles zurücksetzen"</string>
   <string name="screen_create_new_recovery_key_list_item_4">"Folge den Anweisungen, um einen neuen Wiederherstellungsschlüssel zu erstellen"</string>
   <string name="screen_create_new_recovery_key_list_item_5">
@@ -35,18 +35,18 @@
   </string>
   <string name="screen_encryption_reset_action_continue_reset">"Zurücksetzen fortsetzen"</string>
   <string name="screen_encryption_reset_bullet_1">"Deine Kontodaten, Kontakte, Einstellungen und die Liste der Chats bleiben erhalten"</string>
-  <string name="screen_encryption_reset_bullet_2">"Du verlierst alle deine bisherigen Nachrichten sofern sie nicht auf einem anderen Gerät vorliegen"</string>
-  <string name="screen_encryption_reset_bullet_3">"Du musst alle deine bestehenden Geräte und Kontakte erneut verifizieren."</string>
+  <string name="screen_encryption_reset_bullet_2">"Sie verlieren jeglichen Nachrichtenverlauf, der nur auf dem Server gespeichert ist"</string>
+  <string name="screen_encryption_reset_bullet_3">"Sie müssen dann alle Ihre vorhandenen Geräte und Kontakte erneut verifizieren"</string>
   <string name="screen_encryption_reset_footer">"Setzen Sie Ihre Identität nur dann zurück, wenn Sie keinen Zugriff auf ein anderes Ihrer angemeldeten Geräte und auch Ihren Wiederherstellungsschlüssel verloren haben."</string>
-  <string name="screen_encryption_reset_title">"Sie können es nicht bestätigen? Dann müssen Sie Ihre Identität zurücksetzen."</string>
+  <string name="screen_encryption_reset_title">"Bestätigung unmöglich? Dann müssen Sie Ihre Identität zurücksetzen."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Ausschalten"</string>
-  <string name="screen_key_backup_disable_confirmation_description">"Du verlierst deine verschlüsselten Nachrichten, wenn du auf allen Geräten abgemeldet bist."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du das Backup deaktivieren willst?"</string>
-  <string name="screen_key_backup_disable_description">"Wenn du das Backup deaktivierst, wird dein aktuelles Schlüssel Backup für die Verschlüsselung entfernt und andere Sicherheitsfunktionen werden deaktiviert. Das bedeutet:"</string>
-  <string name="screen_key_backup_disable_description_point_1">"Keinen Nachrichtenverlauf für verschlüsselte Nachrichten auf neuen Geräten ."</string>
-  <string name="screen_key_backup_disable_description_point_2">"Verlust des Zugriffs auf Deine verschlüsselten Nachrichten, wenn Du Dich überall von %1$s abmeldest"</string>
-  <string name="screen_key_backup_disable_title">"Bist du sicher, dass du das Backup deaktivieren willst?"</string>
-  <string name="screen_recovery_key_change_description">"Hier kannst Du einen neuen Wiederherstellungsschlüssel erstellen. Nachdem Du einen neuen Wiederherstellungsschlüssel erstellt hast, funktioniert dein alter Schlüssel nicht mehr."</string>
+  <string name="screen_key_backup_disable_confirmation_description">"Sie verlieren Ihre verschlüsselten Nachrichten, wenn Sie von allen Ihren Geräten abgemeldet sind."</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Sind Sie sicher, dass Sie das Backup deaktivieren möchten?"</string>
+  <string name="screen_key_backup_disable_description">"Mit dem Löschen des Schlüsselspeichers werden Ihre kryptografische Identität und Ihre Nachrichtenschlüssel vom Server entfernt und die folgenden Sicherheitsfunktionen werden deaktiviert:"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Keinen Nachrichtenverlauf für verschlüsselte Nachrichten auf neuen Geräten."</string>
+  <string name="screen_key_backup_disable_description_point_2">"Sie verlieren den Zugriff auf Ihre verschlüsselten Nachrichten, wenn Sie von %1$s überall abgemeldet sind"</string>
+  <string name="screen_key_backup_disable_title">"Möchten Sie die Schlüsselspeicherung wirklich deaktivieren und entfernen?"</string>
+  <string name="screen_recovery_key_change_description">"Falls Sie Ihren alten Wiederherstellungsschlüssel verloren haben, erstellen Sie einen neuen. Danach funktioniert Ihr alter Schlüssel nicht mehr."</string>
   <string name="screen_recovery_key_change_generate_key">"Wiederherstellungsschlüssel erstellen"</string>
   <string name="screen_recovery_key_change_generate_key_description">"Geben Sie dies an niemanden weiter!"</string>
   <string name="screen_recovery_key_change_success">"Wiederherstellungsschlüssel geändert"</string>
@@ -61,7 +61,7 @@
   <string name="screen_recovery_key_confirm_error_title">"Falscher Wiederherstellungsschlüssel"</string>
   <string name="screen_recovery_key_confirm_key_description">"Dies funktioniert auch mit einem Sicherheitsschlüssel oder Sicherheitsphrase."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Eingeben…"</string>
-  <string name="screen_recovery_key_confirm_lost_recovery_key">"Hast du deinen Wiederherstellungschlüssel vergessen?"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Wiederherstellungschlüssel vergessen?"</string>
   <string name="screen_recovery_key_confirm_success">"Wiederherstellungsschlüssel bestätigt"</string>
   <string name="screen_recovery_key_confirm_title">"Geben Sie Ihren Wiederherstellungsschlüssel ein"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Wiederherstellungsschlüssel kopiert"</string>
@@ -70,18 +70,18 @@
   <string name="screen_recovery_key_save_description">"Schreiben Sie Ihren Wiederherstellungsschlüssel in eine verschlüsselte Datei, oder in einem Passwort-Manager oder in einem Safe. "</string>
   <string name="screen_recovery_key_save_key_description">"Tippe, um den Wiederherstellungsschlüssel zu kopieren"</string>
   <string name="screen_recovery_key_save_title">"Speichere deinen Wiederherstellungsschlüssel"</string>
-  <string name="screen_recovery_key_setup_confirmation_description">"Nach diesem Schritt kannst du nicht mehr auf deinen neuen Wiederherstellungsschlüssel zugreifen."</string>
-  <string name="screen_recovery_key_setup_confirmation_title">"Hast du deinen Wiederherstellungsschlüssel gespeichert?"</string>
-  <string name="screen_recovery_key_setup_description">"Dein Chat-Backup ist durch einen Wiederherstellungsschlüssel geschützt. Wenn du nach der Einrichtung einen neuen Wiederherstellungsschlüssel brauchst, kannst du ihn über die Option \"Wiederherstellungsschlüssel ändern\" neu erstellen."</string>
+  <string name="screen_recovery_key_setup_confirmation_description">"Nach diesem Schritt können Sie nicht mehr auf Ihren neuen Wiederherstellungsschlüssel zugreifen."</string>
+  <string name="screen_recovery_key_setup_confirmation_title">"Haben Sie Ihren Wiederherstellungsschlüssel gespeichert?"</string>
+  <string name="screen_recovery_key_setup_description">"Ihr Schlüsselbackup ist durch einen Wiederherstellungsschlüssel geschützt. Wenn Sie nach der Installation einen neuen Wiederherstellungsschlüssel benötigen, können Sie einen neuen kreiern, indem Sie „Wiederherstellungsschlüssel erstellen“ auswählen."</string>
   <string name="screen_recovery_key_setup_generate_key">"Wiederherstellungsschlüssel erstellen"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"Geben Sie dies an niemanden weiter!"</string>
   <string name="screen_recovery_key_setup_success">"Einrichtung der Wiederherstellung erfolgreich"</string>
   <string name="screen_recovery_key_setup_title">"Wiederherstellung einrichten"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Ja, zurücksetzen"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Das Zurücksetzen kann nicht rückgängig gemacht werden."</string>
-  <string name="screen_reset_encryption_confirmation_alert_title">"Bist du sicher, dass du deine Identität zurücksetzen möchtest?"</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Möchten Sie Ihre kryptografische Identität wirklich zurücksetzen?"</string>
   <string name="screen_reset_encryption_password_error">"Es ist ein unbekannter Fehler aufgetreten. Bitte überprüfe das Passwort deines Kontos und versuche es erneut."</string>
   <string name="screen_reset_encryption_password_placeholder">"Eingeben…"</string>
-  <string name="screen_reset_encryption_password_subtitle">"Bestätige, dass du deine Identität zurücksetzen möchtest."</string>
+  <string name="screen_reset_encryption_password_subtitle">"Bestätigen Sie, dass Sie Ihre Identität zurücksetzen möchten."</string>
   <string name="screen_reset_encryption_password_title">"Gib dein Passwort ein, um fortzufahren"</string>
 </resources>

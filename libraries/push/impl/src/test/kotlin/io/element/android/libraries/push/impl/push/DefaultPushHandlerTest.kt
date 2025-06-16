@@ -28,7 +28,12 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.push.impl.history.FakePushHistoryService
+import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
+import io.element.android.libraries.push.impl.notifications.NotificationEventRequest
+import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
+import io.element.android.libraries.push.impl.notifications.ResolvingException
 import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
@@ -42,24 +47,55 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.matching
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.time.Instant
+import kotlin.time.Duration.Companion.milliseconds
+
+private const val A_PUSHER_INFO = "info"
 
 class DefaultPushHandlerTest {
+    @Test
+    fun `check handleInvalid behavior`() = runTest {
+        val incrementPushCounterResult = lambdaRecorder<Unit> {}
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
+        val defaultPushHandler = createDefaultPushHandler(
+            incrementPushCounterResult = incrementPushCounterResult,
+            pushHistoryService = pushHistoryService,
+        )
+        defaultPushHandler.handleInvalid(A_PUSHER_INFO, "data")
+        incrementPushCounterResult.assertions()
+            .isCalledOnce()
+        onPushReceivedResult.assertions()
+            .isCalledOnce()
+            .with(value(A_PUSHER_INFO), value(null), value(null), value(null), value(false), value(false), value("Invalid or ignored push data:\ndata"))
+    }
+
     @Test
     fun `when classical PushData is received, the notification drawer is informed`() = runTest {
         val aNotifiableMessageEvent = aNotifiableMessageEvent()
         val notifiableEventResult =
-            lambdaRecorder<SessionId, RoomId, EventId, ResolvedPushEvent> { _, _, _ ->
-                ResolvedPushEvent.Event(aNotifiableMessageEvent)
+            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _, ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
             }
-        val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
         val incrementPushCounterResult = lambdaRecorder<Unit> {}
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
         val aPushData = PushData(
             eventId = AN_EVENT_ID,
             roomId = A_ROOM_ID,
@@ -67,22 +103,28 @@ class DefaultPushHandlerTest {
             clientSecret = A_SECRET,
         )
         val defaultPushHandler = createDefaultPushHandler(
-            onNotifiableEventReceived = onNotifiableEventReceived,
-            notifiableEventResult = notifiableEventResult,
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+            notifiableEventsResult = notifiableEventResult,
             pushClientSecret = FakePushClientSecret(
                 getUserIdFromSecretResult = { A_USER_ID }
             ),
-            incrementPushCounterResult = incrementPushCounterResult
+            incrementPushCounterResult = incrementPushCounterResult,
+            pushHistoryService = pushHistoryService,
         )
-        defaultPushHandler.handle(aPushData)
+        defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+        advanceTimeBy(300.milliseconds)
+
         incrementPushCounterResult.assertions()
             .isCalledOnce()
         notifiableEventResult.assertions()
             .isCalledOnce()
-            .with(value(A_USER_ID), value(A_ROOM_ID), value(AN_EVENT_ID))
-        onNotifiableEventReceived.assertions()
+            .with(value(A_USER_ID), any())
+        onNotifiableEventsReceived.assertions()
             .isCalledOnce()
-            .with(value(aNotifiableMessageEvent))
+            .with(value(listOf(aNotifiableMessageEvent)))
+        onPushReceivedResult.assertions()
+            .isCalledOnce()
     }
 
     @Test
@@ -90,10 +132,11 @@ class DefaultPushHandlerTest {
         runTest {
             val aNotifiableMessageEvent = aNotifiableMessageEvent()
             val notifiableEventResult =
-                lambdaRecorder<SessionId, RoomId, EventId, ResolvedPushEvent.Event> { _, _, _ ->
-                    ResolvedPushEvent.Event(aNotifiableMessageEvent)
+                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
+                    val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                    Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
                 }
-            val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+            val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
             val incrementPushCounterResult = lambdaRecorder<Unit> {}
             val aPushData = PushData(
                 eventId = AN_EVENT_ID,
@@ -101,24 +144,34 @@ class DefaultPushHandlerTest {
                 unread = 0,
                 clientSecret = A_SECRET,
             )
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+            val pushHistoryService = FakePushHistoryService(
+                onPushReceivedResult = onPushReceivedResult,
+            )
             val defaultPushHandler = createDefaultPushHandler(
-                onNotifiableEventReceived = onNotifiableEventReceived,
-                notifiableEventResult = notifiableEventResult,
+                onNotifiableEventsReceived = onNotifiableEventsReceived,
+                notifiableEventsResult = notifiableEventResult,
                 pushClientSecret = FakePushClientSecret(
                     getUserIdFromSecretResult = { A_USER_ID }
                 ),
                 userPushStore = FakeUserPushStore().apply {
                     setNotificationEnabledForDevice(false)
                 },
-                incrementPushCounterResult = incrementPushCounterResult
+                incrementPushCounterResult = incrementPushCounterResult,
+                pushHistoryService = pushHistoryService,
             )
-            defaultPushHandler.handle(aPushData)
+            defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+            advanceTimeBy(300.milliseconds)
+
             incrementPushCounterResult.assertions()
                 .isCalledOnce()
             notifiableEventResult.assertions()
                 .isCalledOnce()
-            onNotifiableEventReceived.assertions()
+            onNotifiableEventsReceived.assertions()
                 .isNeverCalled()
+            onPushReceivedResult.assertions()
+                .isCalledOnce()
         }
 
     @Test
@@ -126,10 +179,11 @@ class DefaultPushHandlerTest {
         runTest {
             val aNotifiableMessageEvent = aNotifiableMessageEvent()
             val notifiableEventResult =
-                lambdaRecorder<SessionId, RoomId, EventId, ResolvedPushEvent.Event> { _, _, _ ->
-                    ResolvedPushEvent.Event(aNotifiableMessageEvent)
+                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
+                    val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                    Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
                 }
-            val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+            val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
             val incrementPushCounterResult = lambdaRecorder<Unit> {}
             val aPushData = PushData(
                 eventId = AN_EVENT_ID,
@@ -137,26 +191,36 @@ class DefaultPushHandlerTest {
                 unread = 0,
                 clientSecret = A_SECRET,
             )
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+            val pushHistoryService = FakePushHistoryService(
+                onPushReceivedResult = onPushReceivedResult,
+            )
             val defaultPushHandler = createDefaultPushHandler(
-                onNotifiableEventReceived = onNotifiableEventReceived,
-                notifiableEventResult = notifiableEventResult,
+                onNotifiableEventsReceived = onNotifiableEventsReceived,
+                notifiableEventsResult = notifiableEventResult,
                 pushClientSecret = FakePushClientSecret(
                     getUserIdFromSecretResult = { null }
                 ),
                 matrixAuthenticationService = FakeMatrixAuthenticationService().apply {
                     getLatestSessionIdLambda = { A_USER_ID }
                 },
-                incrementPushCounterResult = incrementPushCounterResult
+                incrementPushCounterResult = incrementPushCounterResult,
+                pushHistoryService = pushHistoryService,
             )
-            defaultPushHandler.handle(aPushData)
+            defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+            advanceTimeBy(300.milliseconds)
+
             incrementPushCounterResult.assertions()
                 .isCalledOnce()
             notifiableEventResult.assertions()
                 .isCalledOnce()
-                .with(value(A_USER_ID), value(A_ROOM_ID), value(AN_EVENT_ID))
-            onNotifiableEventReceived.assertions()
+                .with(value(A_USER_ID), any())
+            onNotifiableEventsReceived.assertions()
                 .isCalledOnce()
-                .with(value(aNotifiableMessageEvent))
+                .with(value(listOf(aNotifiableMessageEvent)))
+            onPushReceivedResult.assertions()
+                .isCalledOnce()
         }
 
     @Test
@@ -164,10 +228,11 @@ class DefaultPushHandlerTest {
         runTest {
             val aNotifiableMessageEvent = aNotifiableMessageEvent()
             val notifiableEventResult =
-                lambdaRecorder<SessionId, RoomId, EventId, ResolvedPushEvent.Event> { _, _, _ ->
-                    ResolvedPushEvent.Event(aNotifiableMessageEvent)
+                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
+                    val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                    Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
                 }
-            val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+            val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
             val incrementPushCounterResult = lambdaRecorder<Unit> {}
             val aPushData = PushData(
                 eventId = AN_EVENT_ID,
@@ -175,32 +240,41 @@ class DefaultPushHandlerTest {
                 unread = 0,
                 clientSecret = A_SECRET,
             )
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+            val pushHistoryService = FakePushHistoryService(
+                onPushReceivedResult = onPushReceivedResult,
+            )
             val defaultPushHandler = createDefaultPushHandler(
-                onNotifiableEventReceived = onNotifiableEventReceived,
-                notifiableEventResult = notifiableEventResult,
+                onNotifiableEventsReceived = onNotifiableEventsReceived,
+                notifiableEventsResult = notifiableEventResult,
                 pushClientSecret = FakePushClientSecret(
                     getUserIdFromSecretResult = { null }
                 ),
                 matrixAuthenticationService = FakeMatrixAuthenticationService().apply {
                     getLatestSessionIdLambda = { null }
                 },
-                incrementPushCounterResult = incrementPushCounterResult
+                incrementPushCounterResult = incrementPushCounterResult,
+                pushHistoryService = pushHistoryService,
             )
-            defaultPushHandler.handle(aPushData)
+            defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
             incrementPushCounterResult.assertions()
                 .isCalledOnce()
             notifiableEventResult.assertions()
                 .isNeverCalled()
-            onNotifiableEventReceived.assertions()
+            onNotifiableEventsReceived.assertions()
                 .isNeverCalled()
+            onPushReceivedResult.assertions()
+                .isCalledOnce()
         }
 
     @Test
     fun `when classical PushData is received, but not able to resolve the event, nothing happen`() =
         runTest {
             val notifiableEventResult =
-                lambdaRecorder<SessionId, RoomId, EventId, ResolvedPushEvent.Event?> { _, _, _ -> null }
-            val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
+                    Result.failure(ResolvingException("Unable to resolve"))
+                }
+            val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
             val incrementPushCounterResult = lambdaRecorder<Unit> {}
             val aPushData = PushData(
                 eventId = AN_EVENT_ID,
@@ -208,9 +282,13 @@ class DefaultPushHandlerTest {
                 unread = 0,
                 clientSecret = A_SECRET,
             )
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+            val pushHistoryService = FakePushHistoryService(
+                onPushReceivedResult = onPushReceivedResult,
+            )
             val defaultPushHandler = createDefaultPushHandler(
-                onNotifiableEventReceived = onNotifiableEventReceived,
-                notifiableEventResult = notifiableEventResult,
+                onNotifiableEventsReceived = onNotifiableEventsReceived,
+                notifiableEventsResult = notifiableEventResult,
                 buildMeta = aBuildMeta(
                     // Also test `lowPrivacyLoggingEnabled = false` here
                     lowPrivacyLoggingEnabled = false
@@ -218,16 +296,23 @@ class DefaultPushHandlerTest {
                 pushClientSecret = FakePushClientSecret(
                     getUserIdFromSecretResult = { A_USER_ID }
                 ),
-                incrementPushCounterResult = incrementPushCounterResult
+                incrementPushCounterResult = incrementPushCounterResult,
+                pushHistoryService = pushHistoryService,
             )
-            defaultPushHandler.handle(aPushData)
+            defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+            advanceTimeBy(300.milliseconds)
+
             incrementPushCounterResult.assertions()
                 .isCalledOnce()
             notifiableEventResult.assertions()
                 .isCalledOnce()
-                .with(value(A_USER_ID), value(A_ROOM_ID), value(AN_EVENT_ID))
-            onNotifiableEventReceived.assertions()
+                .with(value(A_USER_ID), any())
+            onNotifiableEventsReceived.assertions()
                 .isNeverCalled()
+            onPushReceivedResult.assertions()
+                .isCalledOnce()
+                .with(any(), value(AN_EVENT_ID), value(A_ROOM_ID), value(A_USER_ID), value(false), value(true), any())
         }
 
     @Test
@@ -250,21 +335,39 @@ class DefaultPushHandlerTest {
             Unit,
             > { _, _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
-        val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
         val defaultPushHandler = createDefaultPushHandler(
             elementCallEntryPoint = elementCallEntryPoint,
-            notifiableEventResult = { _, _, _ ->
-                ResolvedPushEvent.Event(aNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().toEpochMilli()))
+            notifiableEventsResult = { _, _ ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(
+                    mapOf(
+                        request to Result.success(
+                            ResolvedPushEvent.Event(
+                                aNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().toEpochMilli())
+                            )
+                        )
+                    )
+                )
             },
             incrementPushCounterResult = {},
             pushClientSecret = FakePushClientSecret(
                 getUserIdFromSecretResult = { A_USER_ID }
             ),
-            onNotifiableEventReceived = onNotifiableEventReceived,
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+            pushHistoryService = pushHistoryService,
         )
-        defaultPushHandler.handle(aPushData)
+        defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+        advanceTimeBy(300.milliseconds)
+
         handleIncomingCallLambda.assertions().isCalledOnce()
-        onNotifiableEventReceived.assertions().isCalledOnce()
+        onNotifiableEventsReceived.assertions().isNeverCalled()
+        onPushReceivedResult.assertions().isCalledOnce()
     }
 
     @Test
@@ -275,7 +378,7 @@ class DefaultPushHandlerTest {
             unread = 0,
             clientSecret = A_SECRET,
         )
-        val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
         val handleIncomingCallLambda = lambdaRecorder<
             CallType.RoomCall,
             EventId,
@@ -288,21 +391,30 @@ class DefaultPushHandlerTest {
             Unit,
             > { _, _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
         val defaultPushHandler = createDefaultPushHandler(
             elementCallEntryPoint = elementCallEntryPoint,
-            onNotifiableEventReceived = onNotifiableEventReceived,
-            notifiableEventResult = { _, _, _ ->
-                ResolvedPushEvent.Event(aNotifiableMessageEvent(type = EventType.CALL_NOTIFY))
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+            notifiableEventsResult = { _, _ ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent(type = EventType.CALL_NOTIFY)))))
             },
             incrementPushCounterResult = {},
             pushClientSecret = FakePushClientSecret(
                 getUserIdFromSecretResult = { A_USER_ID }
             ),
+            pushHistoryService = pushHistoryService,
         )
-        defaultPushHandler.handle(aPushData)
+        defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+        advanceTimeBy(300.milliseconds)
 
         handleIncomingCallLambda.assertions().isNeverCalled()
-        onNotifiableEventReceived.assertions().isCalledOnce()
+        onNotifiableEventsReceived.assertions().isCalledOnce()
+        onPushReceivedResult.assertions().isCalledOnce()
     }
 
     @Test
@@ -313,7 +425,7 @@ class DefaultPushHandlerTest {
             unread = 0,
             clientSecret = A_SECRET,
         )
-        val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
         val handleIncomingCallLambda = lambdaRecorder<
             CallType.RoomCall,
             EventId,
@@ -326,11 +438,16 @@ class DefaultPushHandlerTest {
             Unit,
             > { _, _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
         val defaultPushHandler = createDefaultPushHandler(
             elementCallEntryPoint = elementCallEntryPoint,
-            onNotifiableEventReceived = onNotifiableEventReceived,
-            notifiableEventResult = { _, _, _ ->
-                ResolvedPushEvent.Event(aNotifiableCallEvent())
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+            notifiableEventsResult = { _, _ ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableCallEvent()))))
             },
             incrementPushCounterResult = {},
             userPushStore = FakeUserPushStore().apply {
@@ -339,10 +456,15 @@ class DefaultPushHandlerTest {
             pushClientSecret = FakePushClientSecret(
                 getUserIdFromSecretResult = { A_USER_ID }
             ),
+            pushHistoryService = pushHistoryService,
         )
-        defaultPushHandler.handle(aPushData)
+        defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+        advanceTimeBy(300.milliseconds)
+
         handleIncomingCallLambda.assertions().isCalledOnce()
-        onNotifiableEventReceived.assertions().isCalledOnce()
+        onNotifiableEventsReceived.assertions().isNeverCalled()
+        onPushReceivedResult.assertions().isCalledOnce()
     }
 
     @Test
@@ -359,21 +481,34 @@ class DefaultPushHandlerTest {
             redactedEventId = AN_EVENT_ID_2,
             reason = null
         )
-        val onRedactedEventReceived = lambdaRecorder<ResolvedPushEvent.Redaction, Unit> { }
+        val onRedactedEventReceived = lambdaRecorder<List<ResolvedPushEvent.Redaction>, Unit> { }
         val incrementPushCounterResult = lambdaRecorder<Unit> {}
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
         val defaultPushHandler = createDefaultPushHandler(
-            onRedactedEventReceived = onRedactedEventReceived,
+            onRedactedEventsReceived = onRedactedEventReceived,
             incrementPushCounterResult = incrementPushCounterResult,
-            notifiableEventResult = { _, _, _ -> aRedaction },
+            notifiableEventsResult = { _, _ ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(aRedaction)))
+            },
             pushClientSecret = FakePushClientSecret(
                 getUserIdFromSecretResult = { A_USER_ID }
             ),
+            pushHistoryService = pushHistoryService,
         )
-        defaultPushHandler.handle(aPushData)
+        defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+        advanceTimeBy(300.milliseconds)
+
         incrementPushCounterResult.assertions()
             .isCalledOnce()
         onRedactedEventReceived.assertions().isCalledOnce()
-            .with(value(aRedaction))
+            .with(value(listOf(aRedaction)))
+        onPushReceivedResult.assertions()
+            .isCalledOnce()
     }
 
     @Test
@@ -386,20 +521,81 @@ class DefaultPushHandlerTest {
                 clientSecret = A_SECRET,
             )
             val diagnosticPushHandler = DiagnosticPushHandler()
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+            val pushHistoryService = FakePushHistoryService(
+                onPushReceivedResult = onPushReceivedResult,
+            )
             val defaultPushHandler = createDefaultPushHandler(
                 diagnosticPushHandler = diagnosticPushHandler,
-                incrementPushCounterResult = { }
+                incrementPushCounterResult = { },
+                pushHistoryService = pushHistoryService,
             )
             diagnosticPushHandler.state.test {
-                defaultPushHandler.handle(aPushData)
+                defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
                 awaitItem()
             }
+            onPushReceivedResult.assertions()
+                .isCalledOnce()
         }
 
-    private fun createDefaultPushHandler(
-        onNotifiableEventReceived: (NotifiableEvent) -> Unit = { lambdaError() },
-        onRedactedEventReceived: (ResolvedPushEvent.Redaction) -> Unit = { lambdaError() },
-        notifiableEventResult: (SessionId, RoomId, EventId) -> ResolvedPushEvent? = { _, _, _ -> lambdaError() },
+    @Test
+    fun `when receiving several push notifications at the same time, those are batched before being processed`() = runTest {
+        val aNotifiableMessageEvent = aNotifiableMessageEvent()
+        val notifiableEventResult =
+            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _, ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
+            }
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val incrementPushCounterResult = lambdaRecorder<Unit> {}
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
+        val aPushData = PushData(
+            eventId = AN_EVENT_ID,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+        val anotherPushData = PushData(
+            eventId = AN_EVENT_ID_2,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+        val defaultPushHandler = createDefaultPushHandler(
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+            notifiableEventsResult = notifiableEventResult,
+            pushClientSecret = FakePushClientSecret(
+                getUserIdFromSecretResult = { A_USER_ID }
+            ),
+            incrementPushCounterResult = incrementPushCounterResult,
+            pushHistoryService = pushHistoryService,
+        )
+        defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+        defaultPushHandler.handle(anotherPushData, A_PUSHER_INFO)
+
+        advanceTimeBy(300.milliseconds)
+
+        incrementPushCounterResult.assertions()
+            .isCalledExactly(2)
+        notifiableEventResult.assertions()
+            .isCalledOnce()
+            .with(value(A_USER_ID), matching<List<NotificationEventRequest>> { requests ->
+                requests.size == 2 && requests.first().eventId == AN_EVENT_ID && requests.last().eventId == AN_EVENT_ID_2
+            })
+        onNotifiableEventsReceived.assertions()
+            .isCalledOnce()
+        onPushReceivedResult.assertions()
+            .isCalledExactly(2)
+    }
+
+    private fun TestScope.createDefaultPushHandler(
+        onNotifiableEventsReceived: (List<NotifiableEvent>) -> Unit = { lambdaError() },
+        onRedactedEventsReceived: (List<ResolvedPushEvent.Redaction>) -> Unit = { lambdaError() },
+        notifiableEventsResult: (SessionId, List<NotificationEventRequest>) -> Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>> =
+            { _, _, -> lambdaError() },
         incrementPushCounterResult: () -> Unit = { lambdaError() },
         userPushStore: UserPushStore = FakeUserPushStore(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
@@ -408,11 +604,11 @@ class DefaultPushHandlerTest {
         diagnosticPushHandler: DiagnosticPushHandler = DiagnosticPushHandler(),
         elementCallEntryPoint: FakeElementCallEntryPoint = FakeElementCallEntryPoint(),
         notificationChannels: FakeNotificationChannels = FakeNotificationChannels(),
+        pushHistoryService: PushHistoryService = FakePushHistoryService(),
     ): DefaultPushHandler {
         return DefaultPushHandler(
-            onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceived),
-            onRedactedEventReceived = FakeOnRedactedEventReceived(onRedactedEventReceived),
-            notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventResult),
+            onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceived),
+            onRedactedEventReceived = FakeOnRedactedEventReceived(onRedactedEventsReceived),
             incrementPushDataStore = object : IncrementPushDataStore {
                 override suspend fun incrementPushCounter() {
                     incrementPushCounterResult()
@@ -425,6 +621,9 @@ class DefaultPushHandlerTest {
             diagnosticPushHandler = diagnosticPushHandler,
             elementCallEntryPoint = elementCallEntryPoint,
             notificationChannels = notificationChannels,
+            pushHistoryService = pushHistoryService,
+            resolverQueue = NotificationResolverQueue(notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventsResult), backgroundScope),
+            appCoroutineScope = backgroundScope,
         )
     }
 }

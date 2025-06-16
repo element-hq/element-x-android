@@ -18,12 +18,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -106,6 +109,7 @@ fun TextComposer(
     onReceiveSuggestion: (Suggestion?) -> Unit,
     onSelectRichContent: ((Uri) -> Unit)?,
     resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
+    resolveAtRoomMentionDisplay: () -> TextDisplay,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -147,6 +151,7 @@ fun TextComposer(
                     IconColorButton(
                         onClick = onAddAttachment,
                         imageVector = CompoundIcons.Plus(),
+                        contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
                     )
                 }
             }
@@ -176,7 +181,7 @@ fun TextComposer(
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
                             resolveMentionDisplay = resolveMentionDisplay,
-                            resolveRoomMentionDisplay = { resolveMentionDisplay("@room", "#") },
+                            resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
                             onError = onError,
                             onTyping = onTyping,
                             onSelectRichContent = onSelectRichContent,
@@ -291,6 +296,7 @@ fun TextComposer(
                 IconColorButton(
                     onClick = onDismissTextFormatting,
                     imageVector = CompoundIcons.Close(),
+                    contentDescription = stringResource(CommonStrings.action_close),
                 )
             },
             textFormatting = textFormattingOptions,
@@ -429,8 +435,9 @@ private fun TextFormattingLayout(
     sendButton: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val bottomPadding = with(LocalDensity.current) { WindowInsets.systemBars.getBottom(this).toDp() + 8.dp }
     Column(
-        modifier = modifier.padding(vertical = 4.dp),
+        modifier = modifier.padding(vertical = 4.dp).padding(bottom = bottomPadding),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         if (isRoomEncrypted == false) {
@@ -930,6 +937,7 @@ private fun ATextComposer(
         onTyping = {},
         onReceiveSuggestion = {},
         resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
+        resolveAtRoomMentionDisplay = { TextDisplay.Plain },
         onSelectRichContent = null,
     )
 }

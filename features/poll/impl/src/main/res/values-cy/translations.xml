@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Ychwanegu dewis"</string>
+  <string name="screen_create_poll_anonymous_desc">"Dangos canlyniadau dim ond ar ôl i\'r pleidleisio ddod i ben"</string>
+  <string name="screen_create_poll_anonymous_headline">"Cuddio pleidleisiau"</string>
+  <string name="screen_create_poll_answer_hint">"Dewis %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Dyw eich newidiadau heb gael eu cadw. Ydych chi\'n siŵr eich bod am fynd nôl?"</string>
+  <string name="screen_create_poll_question_desc">"Cwestiwn neu bwnc"</string>
+  <string name="screen_create_poll_question_hint">"Am beth mae\'r bleidlais?"</string>
+  <string name="screen_create_poll_title">"Creu Pleidlais"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Ydych chi\'n siŵr eich bod am ddileu\'r bleidlais hon?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Dileu Pleidlais"</string>
+  <string name="screen_edit_poll_title">"Golygu pleidlais"</string>
+  <string name="screen_polls_history_empty_ongoing">"Methu dod o hyd i unrhyw bleidleisiau cyfredol."</string>
+  <string name="screen_polls_history_empty_past">"Methu dod o hyd i unrhyw bleidleisiau blaenorol."</string>
+  <string name="screen_polls_history_filter_ongoing">"Parhaus"</string>
+  <string name="screen_polls_history_filter_past">"Gorffennol"</string>
+  <string name="screen_polls_history_title">"Pleidleisiau"</string>
+</resources>

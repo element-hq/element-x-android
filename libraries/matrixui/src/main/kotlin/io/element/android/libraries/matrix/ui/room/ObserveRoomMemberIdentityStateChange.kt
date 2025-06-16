@@ -7,35 +7,34 @@
 
 package io.element.android.libraries.matrix.ui.room
 
-import androidx.compose.runtime.ProduceStateScope
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.flow
 
 @OptIn(ExperimentalCoroutinesApi::class)
-fun MatrixRoom.roomMemberIdentityStateChange(): Flow<ImmutableList<RoomMemberIdentityStateChange>> {
-    return roomInfoFlow
-        .filter {
-            // Room cannot become unencrypted, so we can just apply a filter here.
-            it.isEncrypted == true
+fun JoinedRoom.roomMemberIdentityStateChange(waitForEncryption: Boolean): Flow<ImmutableList<RoomMemberIdentityStateChange>> {
+    val encryptionChangeFlow = flow {
+        if (waitForEncryption) {
+            // Room cannot become unencrypted, so it's ok to use first here
+            roomInfoFlow.first { roomInfo -> roomInfo.isEncrypted == true }
         }
-        .distinctUntilChanged()
+        emit(Unit)
+    }
+    return encryptionChangeFlow
         .flatMapLatest {
             combine(identityStateChangesFlow, membersStateFlow) { identityStateChanges, membersState ->
                 identityStateChanges.map { identityStateChange ->
@@ -50,14 +49,6 @@ fun MatrixRoom.roomMemberIdentityStateChange(): Flow<ImmutableList<RoomMemberIde
                 }.toPersistentList()
             }.distinctUntilChanged()
         }
-}
-
-fun ProduceStateScope<PersistentList<RoomMemberIdentityStateChange>>.observeRoomMemberIdentityStateChange(room: MatrixRoom) {
-    room.roomMemberIdentityStateChange()
-        .onEach { roomMemberIdentityStateChanges ->
-            value = roomMemberIdentityStateChanges.toPersistentList()
-        }
-        .launchIn(this)
 }
 
 private fun RoomMember.toIdentityRoomMember() = IdentityRoomMember(

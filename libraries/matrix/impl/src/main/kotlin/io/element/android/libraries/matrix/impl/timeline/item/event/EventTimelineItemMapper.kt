@@ -28,6 +28,7 @@ import org.matrix.rustcomponents.sdk.EventOrTransactionId
 import org.matrix.rustcomponents.sdk.QueueWedgeError
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.ShieldState
+import org.matrix.rustcomponents.sdk.TimelineItemContent
 import uniffi.matrix_sdk_common.ShieldStateCode
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
@@ -48,7 +49,7 @@ class EventTimelineItemMapper(
             isOwn = isOwn,
             isRemote = isRemote,
             localSendState = localSendState?.map(),
-            reactions = reactions.map(),
+            reactions = (content as? TimelineItemContent.MsgLike)?.content?.reactions.map(),
             receipts = readReceipts.map(),
             sender = UserId(sender),
             senderProfile = senderProfile.map(),

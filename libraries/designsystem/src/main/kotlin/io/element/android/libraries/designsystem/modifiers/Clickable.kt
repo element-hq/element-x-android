@@ -8,12 +8,24 @@
 package io.element.android.libraries.designsystem.modifiers
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 
-fun Modifier.clickableIfNotNull(onClick: (() -> Unit)? = null): Modifier = then(
+fun Modifier.clickableIfNotNull(onClick: (() -> Unit)? = null): Modifier = this.then(
     if (onClick != null) {
         Modifier.clickable { onClick() }
     } else {
         Modifier
     }
 )
+
+fun Modifier.niceClickable(
+    onClick: () -> Unit,
+): Modifier {
+    return clip(RoundedCornerShape(4.dp))
+        .clickable { onClick() }
+        .padding(horizontal = 4.dp)
+}

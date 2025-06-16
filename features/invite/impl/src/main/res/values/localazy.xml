@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"You will not see any messages or room invites from this user"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Block user"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Report this room to your account provider."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Describe the reason to report…"</string>
+  <string name="screen_decline_and_block_title">"Decline and block"</string>
   <string name="screen_invites_decline_chat_message">"Are you sure you want to decline the invitation to join %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Decline invite"</string>
   <string name="screen_invites_decline_direct_chat_message">"Are you sure you want to decline this private chat with %1$s?"</string>

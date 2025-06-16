@@ -7,7 +7,9 @@
 
 package io.element.android.libraries.preferences.api.store
 
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import kotlinx.coroutines.flow.Flow
 
 interface AppPreferencesStore {
@@ -20,11 +22,17 @@ interface AppPreferencesStore {
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 
-    suspend fun setHideImagesAndVideos(value: Boolean)
-    fun doesHideImagesAndVideosFlow(): Flow<Boolean>
+    suspend fun setHideInviteAvatars(value: Boolean)
+    fun getHideInviteAvatarsFlow(): Flow<Boolean>
+
+    suspend fun setTimelineMediaPreviewValue(value: MediaPreviewValue)
+    fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue>
 
     suspend fun setTracingLogLevel(logLevel: LogLevel)
     fun getTracingLogLevelFlow(): Flow<LogLevel>
+
+    suspend fun setTracingLogPacks(targets: Set<TraceLogPack>)
+    fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>>
 
     suspend fun reset()
 }

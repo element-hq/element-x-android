@@ -16,9 +16,7 @@
   <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此服务器。请检查您输入的服务器网址是否正确。如果 URL 正确，请联系您的服务器管理员寻求进一步帮助。"</string>
   <string name="screen_change_server_error_invalid_well_known">"由于 Well Known 文件中的问题，Sliding Sync 不可用：
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"该服务器目前不支持 Sliding Sync。"</string>
   <string name="screen_change_server_form_header">"服务器网址"</string>
-  <string name="screen_change_server_form_notice">"您只能连接到支持 Sliding Sync 的现有服务器。您的服务器管理员需要对其进行配置。%1$s"</string>
   <string name="screen_change_server_subtitle">"您的服务器地址是什么？"</string>
   <string name="screen_change_server_title">"选择服务器"</string>
   <string name="screen_create_account_title">"创建账户"</string>
@@ -31,6 +29,12 @@
   <string name="screen_login_subtitle">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
   <string name="screen_login_title">"欢迎回来！"</string>
   <string name="screen_login_title_with_homeserver">"登录到 %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"手动登录"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"使用二维码登录"</string>
+  <string name="screen_onboarding_sign_up">"创建账户"</string>
+  <string name="screen_onboarding_welcome_message">"欢迎使用 %1$s，快而简约的消息应用。"</string>
+  <string name="screen_onboarding_welcome_subtitle">"欢迎使用 %1$s，速度与简洁的极致。"</string>
+  <string name="screen_onboarding_welcome_title">"融入您的 Element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"建立安全连接"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"无法与新设备建立安全连接。您现有的设备仍然安全，无需担心。"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"现在怎么办？"</string>

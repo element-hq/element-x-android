@@ -7,9 +7,11 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineEvent
+import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineEvent
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import org.matrix.rustcomponents.sdk.JoinRule
 import org.matrix.rustcomponents.sdk.NotificationEvent
 import org.matrix.rustcomponents.sdk.NotificationItem
 import org.matrix.rustcomponents.sdk.NotificationRoomInfo
@@ -22,12 +24,14 @@ fun aRustNotificationItem(
     roomInfo: NotificationRoomInfo = aRustNotificationRoomInfo(),
     isNoisy: Boolean? = false,
     hasMention: Boolean? = false,
+    threadId: ThreadId? = null,
 ) = NotificationItem(
     event = event,
     senderInfo = senderInfo,
     roomInfo = roomInfo,
     isNoisy = isNoisy,
     hasMention = hasMention,
+    threadId = threadId?.value,
 )
 
 fun aRustNotificationSenderInfo(
@@ -47,6 +51,8 @@ fun aRustNotificationRoomInfo(
     joinedMembersCount: ULong = 2u,
     isEncrypted: Boolean? = true,
     isDirect: Boolean = false,
+    joinRule: JoinRule? = null,
+    isPublic: Boolean = true,
 ) = NotificationRoomInfo(
     displayName = displayName,
     avatarUrl = avatarUrl,
@@ -54,10 +60,12 @@ fun aRustNotificationRoomInfo(
     joinedMembersCount = joinedMembersCount,
     isEncrypted = isEncrypted,
     isDirect = isDirect,
+    joinRule = joinRule,
+    isPublic = isPublic,
 )
 
 fun aRustNotificationEventTimeline(
-    event: TimelineEvent = FakeRustTimelineEvent(),
+    event: TimelineEvent = FakeFfiTimelineEvent(),
 ) = NotificationEvent.Timeline(
     event = event,
 )

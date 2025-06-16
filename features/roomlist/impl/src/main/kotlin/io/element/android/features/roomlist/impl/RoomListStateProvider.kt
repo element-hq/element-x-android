@@ -8,8 +8,8 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.invite.api.response.AcceptDeclineInviteState
-import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.logout.api.direct.DirectLogoutState
@@ -54,12 +54,16 @@ internal fun aRoomListState(
     hasNetworkConnection: Boolean = true,
     snackbarMessage: SnackbarMessage? = null,
     contextMenu: RoomListState.ContextMenu = RoomListState.ContextMenu.Hidden,
+    declineInviteMenu: RoomListState.DeclineInviteMenu = RoomListState.DeclineInviteMenu.Hidden,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     searchState: RoomListSearchState = aRoomListSearchState(),
     filtersState: RoomListFiltersState = aRoomListFiltersState(),
+    canReportBug: Boolean = true,
     contentState: RoomListContentState = aRoomsContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
+    hideInvitesAvatars: Boolean = false,
+    canReportRoom: Boolean = true,
     eventSink: (RoomListEvents) -> Unit = {}
 ) = RoomListState(
     matrixUser = matrixUser,
@@ -67,12 +71,16 @@ internal fun aRoomListState(
     hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = snackbarMessage,
     contextMenu = contextMenu,
+    declineInviteMenu = declineInviteMenu,
     leaveRoomState = leaveRoomState,
     filtersState = filtersState,
+    canReportBug = canReportBug,
     searchState = searchState,
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
     directLogoutState = directLogoutState,
+    hideInvitesAvatars = hideInvitesAvatars,
+    canReportRoom = canReportRoom,
     eventSink = eventSink,
 )
 

@@ -28,7 +28,6 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.appnav.room.joined.LoadingRoomNodeView
-import io.element.android.appnav.room.joined.LoadingRoomState
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
 import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
@@ -43,13 +42,11 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
-import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
-import io.element.android.libraries.matrix.api.getRoomInfoFlow
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isOnline
+import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -125,7 +122,7 @@ class RoomFlowNode @AssistedInject constructor(
     }
 
     private fun subscribeToRoomInfoFlow(roomId: RoomId, serverNames: List<String>) {
-        val roomInfoFlow = client.getRoomInfoFlow(roomIdOrAlias = roomId.toRoomIdOrAlias())
+        val roomInfoFlow = client.getRoomInfoFlow(roomId)
         val isSpaceFlow = roomInfoFlow.map { it.getOrNull()?.isSpace.orFalse() }.distinctUntilChanged()
         val currentMembershipFlow = roomInfoFlow.map { it.getOrNull()?.currentUserMembership }.distinctUntilChanged()
         combine(currentMembershipFlow, isSpaceFlow) { membership, isSpace ->
@@ -211,7 +208,7 @@ class RoomFlowNode @AssistedInject constructor(
     }
 
     private fun loadingNode(buildContext: BuildContext) = node(buildContext) { modifier ->
-        val isOnline by syncService.isOnline().collectAsState()
+        val isOnline by syncService.isOnline.collectAsState()
         LoadingRoomNodeView(
             state = LoadingRoomState.Loading,
             hasNetworkConnection = isOnline,

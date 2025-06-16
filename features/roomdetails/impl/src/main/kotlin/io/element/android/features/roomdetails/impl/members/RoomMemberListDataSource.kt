@@ -9,14 +9,14 @@ package io.element.android.features.roomdetails.impl.members
 
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RoomMemberListDataSource @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
     suspend fun search(query: String): List<RoomMember> = withContext(coroutineDispatchers.io) {

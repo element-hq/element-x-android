@@ -14,11 +14,14 @@
   <string name="screen_change_account_provider_subtitle">"Käytä toista palveluntarjoajaa, kuten omaa yksityistä palvelintasi tai työpaikkaasi."</string>
   <string name="screen_change_account_provider_title">"Vaihda palveluntarjoajaa"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään."</string>
-  <string name="screen_change_server_error_invalid_well_known">"Sliding sync ei ole saatavilla well-known tiedostossa olevan ongelman vuoksi:
+  <string name="screen_change_server_error_invalid_well_known">"Palvelin ei ole saatavilla .well-known tiedostossa olevan ongelman vuoksi:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Tämä palvelin ei tällä hetkellä tue sliding syncia."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Valitsemasi palveluntarjoaja ei tue sliding syncia. Palvelimen päivitys tarvitaan %1$s -sovelluksen käyttämiseen."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s ei saa yhdistää %2$s -palvelimeen."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Tämä sovellus on määritetty sallimaan: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Palveluntarjoaja %1$s ei ole sallittu."</string>
   <string name="screen_change_server_form_header">"Kotipalvelimen osoite"</string>
-  <string name="screen_change_server_form_notice">"Voit yhdistää vain olemassa olevaan palvelimeen, joka tukee sliding syncia. Kotipalvelimesi ylläpitäjän on otettava se käyttöön. %1$s"</string>
+  <string name="screen_change_server_form_notice">"Anna verkkotunnuksen osoite."</string>
   <string name="screen_change_server_subtitle">"Mikä on palvelimesi osoite?"</string>
   <string name="screen_change_server_title">"Valitse palvelimesi"</string>
   <string name="screen_create_account_title">"Luo tili"</string>
@@ -31,6 +34,13 @@
   <string name="screen_login_subtitle">"Matrix on avoin verkko turvallista, hajautettua viestintää varten."</string>
   <string name="screen_login_title">"Tervetuloa takaisin!"</string>
   <string name="screen_login_title_with_homeserver">"Kirjaudu sisään %1$s -palvelimelle"</string>
+  <string name="screen_onboarding_sign_in_manually">"Kirjaudu sisään manuaalisesti"</string>
+  <string name="screen_onboarding_sign_in_to">"Kirjaudu sisään %1$s -palvelimelle"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Kirjaudu sisään QR-koodilla"</string>
+  <string name="screen_onboarding_sign_up">"Luo tili"</string>
+  <string name="screen_onboarding_welcome_message">"Tervetuloa kaikkien aikojen nopeimpaan %1$s -sovellukseen. Ahdettu nopeudella ja yksinkertaisuudella."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Tervetuloa %1$s -sovellukseen. Ahdettu nopeudella ja yksinkertaisuudella."</string>
+  <string name="screen_onboarding_welcome_title">"Ole elementissäsi"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Muodostetaan turvallista yhteyttä"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Turvallista yhteyttä uuteen laitteeseen ei voitu muodostaa. Olemassa olevat laitteesi ovat edelleen turvassa, eikä sinun tarvitse huolehtia niistä."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Mitä nyt?"</string>
@@ -79,5 +89,6 @@ Yritä kirjautua sisään manuaalisesti tai skannaa QR-koodi toisella laitteella
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix on avoin verkko turvallista, hajautettua viestintää varten."</string>
   <string name="screen_server_confirmation_message_register">"Keskustelusi asuvat täällä — aivan kuten aivan kuten käyttäisit sähköpostipalveluntarjoajaa sähköpostiesi säilyttämiseen."</string>
   <string name="screen_server_confirmation_title_login">"Olet kirjautumassa sisään %1$s-palvelimelle"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Valitse palveluntarjoaja"</string>
   <string name="screen_server_confirmation_title_register">"Olet luomassa tiliä %1$s-palvelimelle"</string>
 </resources>

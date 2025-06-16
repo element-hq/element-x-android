@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Bydd y ffeil hon yn cael ei thynnu o\'r ystafell a bydd gan aelodau ddim mynediad iddi."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Dileu ffeil?"</string>
+  <string name="screen_media_browser_download_error_message">"Gwiriwch eich cysylltiad rhyngrwyd a rhowch gynnig arall arni."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Bydd dogfennau, ffeiliau sain, a negeseuon llais llwythwyd i\'r ystafell hon yn cael eu dangos yma."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Dim ffeiliau wedi\'u llwytho eto"</string>
+  <string name="screen_media_browser_list_loading_files">"Wrthi\'n llwytho ffeiliau…"</string>
+  <string name="screen_media_browser_list_loading_media">"Wrthi\'n llwytho cyfryngau…"</string>
+  <string name="screen_media_browser_list_mode_files">"Ffeiliau"</string>
+  <string name="screen_media_browser_list_mode_media">"Cyfryngau"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Bydd delweddau a fideos llwythwyd i\'r ystafell hon yn cael eu dangos yma."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Dim cyfrwng wedi\'i llwytho eto"</string>
+  <string name="screen_media_browser_title">"Cyfryngau a ffeiliau"</string>
+  <string name="screen_media_details_file_format">"Fformat ffeil"</string>
+  <string name="screen_media_details_filename">"Enw\'r ffeil"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Dim mwy o ffeiliau i\'w dangos"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Dim mwy o gyfryngau i\'w dangos"</string>
+  <string name="screen_media_details_uploaded_by">"Llwythwyd gan"</string>
+  <string name="screen_media_details_uploaded_on">"Llwythwyd i fyny ar"</string>
+</resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="dialog_permission_camera">"Damit die Anwendung die Kamera verwenden kann, erteile bitte die Erlaubnis in den Systemeinstellungen."</string>
+  <string name="dialog_permission_camera">"Damit die Anwendung die Kamera verwenden kann, erteilen Sie bitte die Erlaubnis in den Systemeinstellungen."</string>
   <string name="dialog_permission_generic">"Bitte erteile die Erlaubnis in den Systemeinstellungen."</string>
-  <string name="dialog_permission_microphone">"Damit die Anwendung das Mikrofon verwenden kann, erteile bitte die Erlaubnis in den Systemeinstellungen."</string>
-  <string name="dialog_permission_notification">"Damit die Anwendung Benachrichtigungen anzeigen kann, erteile bitte die Erlaubnis in den Systemeinstellungen."</string>
+  <string name="dialog_permission_microphone">"Damit die Anwendung das Mikrofon verwenden kann, erteilen Sie bitte die Erlaubnis in den Systemeinstellungen."</string>
+  <string name="dialog_permission_notification">"Damit Benachrichtigungen angezeigt werden können, gewähren Sie der App bitte die Erlaubnis in den Systemeinstellungen."</string>
 </resources>

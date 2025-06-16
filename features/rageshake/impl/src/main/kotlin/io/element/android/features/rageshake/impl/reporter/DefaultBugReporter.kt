@@ -13,10 +13,10 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.RageshakeConfig
-import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
-import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
+import io.element.android.features.rageshake.impl.crash.CrashDataStore
+import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
 import io.element.android.libraries.androidutils.file.compressFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -308,7 +308,7 @@ class DefaultBugReporter @Inject constructor(
      */
     private fun getLogFiles(): List<File> {
         return tryOrNull(
-            onError = { Timber.e(it, "## getLogFiles() failed") }
+            onException = { Timber.e(it, "## getLogFiles() failed") }
         ) {
             val logDirectory = logDirectory()
             logDirectory.listFiles()?.toList()

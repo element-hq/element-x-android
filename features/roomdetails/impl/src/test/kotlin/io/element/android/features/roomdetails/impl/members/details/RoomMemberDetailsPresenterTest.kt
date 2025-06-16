@@ -11,24 +11,27 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.aMatrixRoom
+import io.element.android.features.roomdetails.impl.aJoinedRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.aUserProfileState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -36,6 +39,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -48,12 +52,12 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - returns the room member's data, then updates it if needed`() = runTest {
         val roomMember = aRoomMember(displayName = "Alice")
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
             getUpdatedMemberResult = { Result.success(roomMember) },
         ).apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
+            givenRoomMembersState(RoomMembersState.Ready(persistentListOf(roomMember)))
         }
         val presenter = createRoomMemberDetailsPresenter(
             room = room,
@@ -75,12 +79,12 @@ class RoomMemberDetailsPresenterTest {
             displayName = "Alice",
             avatarUrl = "Alice Avatar url",
         )
-        val room = aMatrixRoom(
-            userDisplayNameResult = { Result.failure(Throwable()) },
-            userAvatarUrlResult = { Result.failure(Throwable()) },
+        val room = aJoinedRoom(
+            userDisplayNameResult = { Result.failure(RuntimeException()) },
+            userAvatarUrlResult = { Result.failure(RuntimeException()) },
             getUpdatedMemberResult = { Result.failure(AN_EXCEPTION) },
         ).apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
+            givenRoomMembersState(RoomMembersState.Ready(persistentListOf(roomMember)))
         }
 
         val presenter = createRoomMemberDetailsPresenter(
@@ -98,12 +102,12 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - will fallback to original data if the updated data is null`() = runTest {
         val roomMember = aRoomMember(displayName = "Alice")
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             userDisplayNameResult = { Result.success(null) },
             userAvatarUrlResult = { Result.success(null) },
             getUpdatedMemberResult = { Result.success(roomMember) }
         ).apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
+            givenRoomMembersState(RoomMembersState.Ready(persistentListOf(roomMember)))
         }
         val presenter = createRoomMemberDetailsPresenter(
             room = room,
@@ -119,7 +123,7 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - will fallback to user profile if user is not a member of the room`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             userDisplayNameResult = { Result.failure(Exception("Not a member!")) },
             userAvatarUrlResult = { Result.failure(Exception("Not a member!")) },
             getUpdatedMemberResult = { Result.failure(AN_EXCEPTION) },
@@ -142,7 +146,7 @@ class RoomMemberDetailsPresenterTest {
             displayName = null,
             avatarUrl = null,
         )
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             userDisplayNameResult = { Result.success(null) },
             userAvatarUrlResult = { Result.success(null) },
             getUpdatedMemberResult = { Result.success(roomMember) },
@@ -169,11 +173,13 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - when user's identity is verified, the value in the state is VERIFIED`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
             initialRoomInfo = aRoomInfo(isEncrypted = true),
+        )
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(IdentityState.Verified) },
@@ -188,11 +194,13 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - when user's identity is unknown, the value in the state is UNKNOWN`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
             initialRoomInfo = aRoomInfo(isEncrypted = true),
+        )
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(null) },
@@ -207,11 +215,13 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - when user's identity is pinned, the value in the state is UNVERIFIED`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
             initialRoomInfo = aRoomInfo(isEncrypted = true),
+        )
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(IdentityState.Pinned) },
@@ -226,11 +236,13 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - when user's identity is pin violation, the value in the state is UNVERIFIED`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
             initialRoomInfo = aRoomInfo(isEncrypted = true),
+        )
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(IdentityState.PinViolation) },
@@ -245,11 +257,13 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - when user's identity has a verification violation, the value in the state is VERIFICATION_VIOLATION`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
             initialRoomInfo = aRoomInfo(isEncrypted = true),
+        )
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(IdentityState.VerificationViolation) },
@@ -264,11 +278,15 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - user identity updates in real time if the room is encrypted`() = runTest {
-        val room = FakeMatrixRoom(
+        val identityStateChanges = MutableStateFlow(emptyList<IdentityStateChange>())
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
             initialRoomInfo = aRoomInfo(isEncrypted = true),
+        ),
+            identityStateChangesFlow = identityStateChanges,
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(null) },
@@ -280,24 +298,28 @@ class RoomMemberDetailsPresenterTest {
 
             room.emitSyncUpdate()
 
-            room.emitIdentityStateChanges(listOf(IdentityStateChange(A_USER_ID, IdentityState.Pinned)))
+            identityStateChanges.emit(listOf(IdentityStateChange(A_USER_ID, IdentityState.Pinned)))
             consumeItemsUntilPredicate { it.verificationState == UserProfileVerificationState.UNVERIFIED }
 
-            room.emitIdentityStateChanges(listOf(IdentityStateChange(A_USER_ID, IdentityState.Verified)))
+            identityStateChanges.emit(listOf(IdentityStateChange(A_USER_ID, IdentityState.Verified)))
             consumeItemsUntilPredicate { it.verificationState == UserProfileVerificationState.VERIFIED }
 
-            room.emitIdentityStateChanges(listOf(IdentityStateChange(A_USER_ID, IdentityState.VerificationViolation)))
+            identityStateChanges.emit(listOf(IdentityStateChange(A_USER_ID, IdentityState.VerificationViolation)))
             consumeItemsUntilPredicate { it.verificationState == UserProfileVerificationState.VERIFICATION_VIOLATION }
         }
     }
 
     @Test
     fun `present - user identity can't update in real time if the room is not encrypted`() = runTest {
-        val room = FakeMatrixRoom(
+        val identityStateChanges = MutableStateFlow(emptyList<IdentityStateChange>())
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
             initialRoomInfo = aRoomInfo(isEncrypted = false),
+        ),
+            identityStateChangesFlow = identityStateChanges,
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(null) },
@@ -308,7 +330,7 @@ class RoomMemberDetailsPresenterTest {
             assertThat(awaitItem().verificationState).isEqualTo(UserProfileVerificationState.UNKNOWN)
 
             room.emitSyncUpdate()
-            room.emitIdentityStateChanges(listOf(IdentityStateChange(A_USER_ID, IdentityState.Pinned)))
+            identityStateChanges.emit(listOf(IdentityStateChange(A_USER_ID, IdentityState.Pinned)))
 
             // No new events emitted
             ensureAllEventsConsumed()
@@ -317,11 +339,13 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - handles WithdrawVerification action`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
             initialRoomInfo = aRoomInfo(isEncrypted = true),
+        )
         )
         val withdrawVerificationResult = lambdaRecorder<UserId, Result<Unit>> { Result.success(Unit) }
         val encryptionService = FakeEncryptionService(
@@ -343,7 +367,7 @@ class RoomMemberDetailsPresenterTest {
 
     private fun createRoomMemberDetailsPresenter(
         buildMeta: BuildMeta = aBuildMeta(),
-        room: MatrixRoom,
+        room: JoinedRoom,
         userProfilePresenterFactory: UserProfilePresenterFactory = UserProfilePresenterFactory {
             Presenter {
                 aUserProfileState(
@@ -353,6 +377,7 @@ class RoomMemberDetailsPresenterTest {
             }
         },
         encryptionService: FakeEncryptionService = FakeEncryptionService(getUserIdentityResult = { Result.success(null) }),
+        clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
     ): RoomMemberDetailsPresenter {
         return RoomMemberDetailsPresenter(
             roomMemberId = UserId("@alice:server.org"),
@@ -360,6 +385,7 @@ class RoomMemberDetailsPresenterTest {
             room = room,
             userProfilePresenterFactory = userProfilePresenterFactory,
             encryptionService = encryptionService,
+            clipboardHelper = clipboardHelper,
         )
     }
 }

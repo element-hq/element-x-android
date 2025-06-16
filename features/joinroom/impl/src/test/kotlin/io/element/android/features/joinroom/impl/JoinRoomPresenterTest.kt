@@ -9,9 +9,13 @@ package io.element.android.features.joinroom.impl
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
-import io.element.android.features.invite.api.response.AcceptDeclineInviteState
-import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.features.invite.api.InviteData
+import io.element.android.features.invite.api.SeenInvitesStore
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
+import io.element.android.features.invite.api.toInviteData
+import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.joinroom.impl.di.CancelKnockRoom
 import io.element.android.features.joinroom.impl.di.ForgetRoom
 import io.element.android.features.joinroom.impl.di.KnockRoom
@@ -19,6 +23,8 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -39,19 +45,22 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomPreview
 import io.element.android.libraries.matrix.test.room.aRoomPreviewInfo
-import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
+import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.matrix.ui.model.toInviteSender
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -79,46 +88,56 @@ class JoinRoomPresenterTest {
 
     @Test
     fun `present - when room is joined then content state is filled with his data`() = runTest {
-        val roomSummary = aRoomSummary()
-        val matrixClient = FakeMatrixClient().apply {
-            getRoomSummaryFlowLambda = { _ ->
-                flowOf(Optional.of(roomSummary))
+        val roomInfo = aRoomInfo()
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
             }
         }
         val presenter = createJoinRoomPresenter(
             matrixClient = matrixClient
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 val contentState = state.contentState as ContentState.Loaded
                 assertThat(contentState.roomId).isEqualTo(A_ROOM_ID)
-                assertThat(contentState.name).isEqualTo(roomSummary.info.name)
-                assertThat(contentState.topic).isEqualTo(roomSummary.info.topic)
-                assertThat(contentState.alias).isEqualTo(roomSummary.info.canonicalAlias)
-                assertThat(contentState.numberOfMembers).isEqualTo(roomSummary.info.joinedMembersCount)
-                assertThat(contentState.isDm).isEqualTo(roomSummary.info.isDirect)
-                assertThat(contentState.roomAvatarUrl).isEqualTo(roomSummary.info.avatarUrl)
+                assertThat(contentState.name).isEqualTo(roomInfo.name)
+                assertThat(contentState.topic).isEqualTo(roomInfo.topic)
+                assertThat(contentState.alias).isEqualTo(roomInfo.canonicalAlias)
+                assertThat(contentState.numberOfMembers).isEqualTo(roomInfo.joinedMembersCount)
+                assertThat(contentState.isDm).isEqualTo(roomInfo.isDirect)
+                assertThat(contentState.roomAvatarUrl).isEqualTo(roomInfo.avatarUrl)
             }
         }
     }
 
     @Test
     fun `present - when room is invited then join authorization is equal to invited`() = runTest {
-        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.INVITED)
-        val matrixClient = FakeMatrixClient().apply {
-            getRoomSummaryFlowLambda = { _ ->
-                flowOf(Optional.of(roomSummary))
+        val roomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.INVITED)
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
             }
         }
+        val seenInvitesStore = InMemorySeenInvitesStore()
         val presenter = createJoinRoomPresenter(
-            matrixClient = matrixClient
+            matrixClient = matrixClient,
+            seenInvitesStore = seenInvitesStore,
         )
+        val inviteData = roomInfo.toInviteData()
+        assertThat(seenInvitesStore.seenRoomIds().first()).isEmpty()
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
-                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(null))
+                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(inviteData, null))
             }
+            // Check that the roomId is stored in the seen invites store
+            assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(roomInfo.id)
         }
     }
 
@@ -126,22 +145,60 @@ class JoinRoomPresenterTest {
     fun `present - when room is invited then join authorization is equal to invited, an inviter is provided`() = runTest {
         val inviter = aRoomMember(userId = UserId("@bob:example.com"), displayName = "Bob")
         val expectedInviteSender = inviter.toInviteSender()
-        val roomSummary = aRoomSummary(
+        val roomInfo = aRoomInfo(
             currentUserMembership = CurrentUserMembership.INVITED,
+            joinedMembersCount = 5,
             inviter = inviter,
         )
-        val matrixClient = FakeMatrixClient().apply {
-            getRoomSummaryFlowLambda = { _ ->
-                flowOf(Optional.of(roomSummary))
+        val inviteData = roomInfo.toInviteData()
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
             }
         }
         val presenter = createJoinRoomPresenter(
             matrixClient = matrixClient
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
-                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(expectedInviteSender))
+                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(inviteData, expectedInviteSender))
+                assertThat((state.contentState as ContentState.Loaded).numberOfMembers).isEqualTo(5)
+            }
+        }
+    }
+
+    @Test
+    fun `present - when room is invited read the number of member from the room preview`() = runTest {
+        val roomInfo = aRoomInfo(
+            currentUserMembership = CurrentUserMembership.INVITED,
+            // It seems that the SDK does not provide this value.
+            joinedMembersCount = 0,
+        )
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            numberOfJoinedMembers = 10,
+                        )
+                    )
+                )
+            },
+        ).apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
+            }
+        }
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient
+        )
+        presenter.test {
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat((state.contentState as ContentState.Loaded).numberOfMembers).isEqualTo(10)
             }
         }
     }
@@ -152,12 +209,13 @@ class JoinRoomPresenterTest {
         val acceptDeclinePresenter = Presenter {
             anAcceptDeclineInviteState(eventSink = eventSinkRecorder)
         }
-        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.INVITED)
+        val roomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.INVITED)
         val matrixClient = FakeMatrixClient().apply {
-            getRoomSummaryFlowLambda = { _ ->
-                flowOf(Optional.of(roomSummary))
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
             }
         }
+        val inviteData = roomInfo.toInviteData()
         val presenter = createJoinRoomPresenter(
             matrixClient = matrixClient,
             acceptDeclineInvitePresenter = acceptDeclinePresenter
@@ -166,16 +224,14 @@ class JoinRoomPresenterTest {
             skipItems(1)
 
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.AcceptInvite)
-                state.eventSink(JoinRoomEvents.DeclineInvite(false))
-
-                val inviteData = state.contentState.toInviteData()
+                state.eventSink(JoinRoomEvents.AcceptInvite(inviteData))
+                state.eventSink(JoinRoomEvents.DeclineInvite(inviteData, false))
 
                 assert(eventSinkRecorder)
                     .isCalledExactly(2)
                     .withSequence(
                         listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
-                        listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData))),
+                        listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = true))),
                     )
             }
         }
@@ -187,7 +243,11 @@ class JoinRoomPresenterTest {
         val joinRoomLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String>, _: JoinedRoom.Trigger ->
             Result.success(Unit)
         }
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
         val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
             trigger = aTrigger,
             serverNames = A_SERVER_LIST,
             joinRoomLambda = joinRoomLambda,
@@ -211,7 +271,11 @@ class JoinRoomPresenterTest {
 
     @Test
     fun `present - when room is joined with error, it is possible to clear the error`() = runTest {
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
         val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
             joinRoomLambda = { _, _, _ ->
                 Result.failure(AN_EXCEPTION)
             },
@@ -240,7 +304,7 @@ class JoinRoomPresenterTest {
         val presenter = createJoinRoomPresenter(
             roomDescription = Optional.of(roomDescription),
             joinRoomLambda = { _, _, _ ->
-                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden"))
+                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden", null))
             },
         )
         presenter.test {
@@ -258,12 +322,11 @@ class JoinRoomPresenterTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - when room is banned, then join authorization is equal to IsBanned`() = runTest {
-        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.BANNED, joinRule = JoinRule.Public)
+        val roomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.BANNED, joinRule = JoinRule.Public)
         val matrixClient = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getNotJoinedRoomResult = { _, _ ->
                 Result.success(
                     aRoomPreview(
                         info = aRoomPreviewInfo(
@@ -283,8 +346,8 @@ class JoinRoomPresenterTest {
                 )
             }
         ).apply {
-            getRoomSummaryFlowLambda = { _ ->
-                flowOf(Optional.of(roomSummary))
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
             }
         }
         val presenter = createJoinRoomPresenter(
@@ -306,17 +369,19 @@ class JoinRoomPresenterTest {
 
     @Test
     fun `present - when room is left and public then join authorization is equal to canJoin`() = runTest {
-        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.LEFT, joinRule = JoinRule.Public)
-        val matrixClient = FakeMatrixClient().apply {
-            getRoomSummaryFlowLambda = { _ ->
-                flowOf(Optional.of(roomSummary))
+        val roomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.LEFT, joinRule = JoinRule.Public)
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
             }
         }
         val presenter = createJoinRoomPresenter(
             matrixClient = matrixClient
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.CanJoin)
             }
@@ -325,17 +390,19 @@ class JoinRoomPresenterTest {
 
     @Test
     fun `present - when room is left and join rule null then join authorization is equal to Unknown`() = runTest {
-        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.LEFT, joinRule = null)
-        val matrixClient = FakeMatrixClient().apply {
-            getRoomSummaryFlowLambda = { _ ->
-                flowOf(Optional.of(roomSummary))
+        val roomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.LEFT, joinRule = null)
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
             }
         }
         val presenter = createJoinRoomPresenter(
             matrixClient = matrixClient
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.Unknown)
             }
@@ -429,7 +496,13 @@ class JoinRoomPresenterTest {
             Result.failure<Unit>(RuntimeException("Failed to knock room $roomIdOrAlias"))
         }
         val fakeKnockRoom = FakeKnockRoom(knockRoomSuccess)
-        val presenter = createJoinRoomPresenter(knockRoom = fakeKnockRoom)
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
+            knockRoom = fakeKnockRoom,
+        )
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
@@ -468,7 +541,13 @@ class JoinRoomPresenterTest {
             Result.failure<Unit>(RuntimeException("Failed to knock room $roomId"))
         }
         val cancelKnockRoom = FakeCancelKnockRoom(cancelKnockRoomSuccess)
-        val presenter = createJoinRoomPresenter(cancelKnockRoom = cancelKnockRoom)
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
+            cancelKnockRoom = cancelKnockRoom,
+        )
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
@@ -506,7 +585,13 @@ class JoinRoomPresenterTest {
             Result.failure<Unit>(RuntimeException("Failed to forget room"))
         }
         val fakeForgetRoom = FakeForgetRoom(forgetRoomSuccess)
-        val presenter = createJoinRoomPresenter(forgetRoom = fakeForgetRoom)
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
+            forgetRoom = fakeForgetRoom,
+        )
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
@@ -534,9 +619,9 @@ class JoinRoomPresenterTest {
     }
 
     @Test
-    fun `present - when room is not known RoomPreview is loaded`() = runTest {
+    fun `present - when room is not known RoomPreview is loaded - membership null`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getNotJoinedRoomResult = { _, _ ->
                 Result.success(
                     aRoomPreview(
                         info = aRoomPreviewInfo(
@@ -579,9 +664,196 @@ class JoinRoomPresenterTest {
     }
 
     @Test
+    fun `present - when room is not known RoomPreview is loaded - membership INVITED`() = runTest {
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            roomId = A_ROOM_ID,
+                            canonicalAlias = RoomAlias("#alias:matrix.org"),
+                            name = "Room name",
+                            topic = "Room topic",
+                            avatarUrl = "avatarUrl",
+                            numberOfJoinedMembers = 2,
+                            isSpace = false,
+                            isHistoryWorldReadable = false,
+                            joinRule = JoinRule.Public,
+                            currentUserMembership = CurrentUserMembership.INVITED,
+                        ),
+                        roomMembershipDetails = {
+                            Result.success(
+                                RoomMembershipDetails(
+                                    currentUserMember = aRoomMember(userId = A_USER_ID, displayName = "Alice"),
+                                    senderMember = aRoomMember(userId = A_USER_ID_2, displayName = "Bob"),
+                                )
+                            )
+                        }
+                    )
+                )
+            }
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(
+                    ContentState.Loaded(
+                        roomId = A_ROOM_ID,
+                        name = "Room name",
+                        topic = "Room topic",
+                        alias = RoomAlias("#alias:matrix.org"),
+                        numberOfMembers = 2,
+                        isDm = false,
+                        roomType = RoomType.Room,
+                        roomAvatarUrl = "avatarUrl",
+                        joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(
+                            inviteData = InviteData(
+                                roomId = A_ROOM_ID,
+                                roomName = "Room name",
+                                isDm = false,
+                            ),
+                            inviteSender = InviteSender(
+                                userId = A_USER_ID_2,
+                                displayName = "Bob",
+                                avatarData = AvatarData(
+                                    id = A_USER_ID_2.value,
+                                    name = "Bob",
+                                    size = AvatarSize.InviteSender,
+                                ),
+                                membershipChangeReason = null,
+                            ),
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `present - when room is not known RoomPreview is loaded - membership BANNED`() = runTest {
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            roomId = A_ROOM_ID,
+                            canonicalAlias = RoomAlias("#alias:matrix.org"),
+                            name = null,
+                            topic = "Room topic",
+                            avatarUrl = "avatarUrl",
+                            numberOfJoinedMembers = 2,
+                            isSpace = false,
+                            isHistoryWorldReadable = false,
+                            joinRule = JoinRule.Public,
+                            currentUserMembership = CurrentUserMembership.BANNED,
+                        ),
+                        roomMembershipDetails = {
+                            Result.success(
+                                RoomMembershipDetails(
+                                    currentUserMember = aRoomMember(userId = A_USER_ID, displayName = "Alice"),
+                                    senderMember = aRoomMember(userId = A_USER_ID_2, displayName = "Bob"),
+                                )
+                            )
+                        }
+                    )
+                )
+            }
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(
+                    ContentState.Loaded(
+                        roomId = A_ROOM_ID,
+                        name = null,
+                        topic = "Room topic",
+                        alias = RoomAlias("#alias:matrix.org"),
+                        numberOfMembers = 2,
+                        isDm = false,
+                        roomType = RoomType.Room,
+                        roomAvatarUrl = "avatarUrl",
+                        joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(
+                            banSender = InviteSender(
+                                userId = A_USER_ID_2,
+                                displayName = "Bob",
+                                avatarData = AvatarData(
+                                    id = A_USER_ID_2.value,
+                                    name = "Bob",
+                                    size = AvatarSize.InviteSender,
+                                ),
+                                membershipChangeReason = null,
+                            ),
+                            reason = null,
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `present - when room is not known RoomPreview is loaded - membership KNOCKED`() = runTest {
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            roomId = A_ROOM_ID,
+                            canonicalAlias = RoomAlias("#alias:matrix.org"),
+                            name = "Room name",
+                            topic = "Room topic",
+                            avatarUrl = "avatarUrl",
+                            numberOfJoinedMembers = 2,
+                            isSpace = false,
+                            isHistoryWorldReadable = false,
+                            joinRule = JoinRule.Public,
+                            currentUserMembership = CurrentUserMembership.KNOCKED,
+                        ),
+                        roomMembershipDetails = {
+                            Result.success(
+                                RoomMembershipDetails(
+                                    currentUserMember = aRoomMember(userId = A_USER_ID, displayName = "Alice"),
+                                    senderMember = aRoomMember(userId = A_USER_ID_2, displayName = "Bob"),
+                                )
+                            )
+                        }
+                    )
+                )
+            }
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(
+                    ContentState.Loaded(
+                        roomId = A_ROOM_ID,
+                        name = "Room name",
+                        topic = "Room topic",
+                        alias = RoomAlias("#alias:matrix.org"),
+                        numberOfMembers = 2,
+                        isDm = false,
+                        roomType = RoomType.Room,
+                        roomAvatarUrl = "avatarUrl",
+                        joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
     fun `present - when room is not known RoomPreview is loaded as Private`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getNotJoinedRoomResult = { _, _ ->
                 Result.success(
                     aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Private))
                 )
@@ -601,7 +873,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as Custom`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getNotJoinedRoomResult = { _, _ ->
                 Result.success(
                     aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Custom("custom")))
                 )
@@ -621,7 +893,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as Invite`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getNotJoinedRoomResult = { _, _ ->
                 Result.success(
                     aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Invite))
                 )
@@ -641,7 +913,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as KnockRestricted`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getNotJoinedRoomResult = { _, _ ->
                 Result.success(
                     aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.KnockRestricted(emptyList())))
                 )
@@ -661,7 +933,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as Restricted`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getNotJoinedRoomResult = { _, _ ->
                 Result.success(
                     aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Restricted(emptyList())))
                 )
@@ -681,7 +953,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as Space`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getNotJoinedRoomResult = { _, _ ->
                 Result.success(
                     aRoomPreview(info = aRoomPreviewInfo(isSpace = true))
                 )
@@ -701,7 +973,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getNotJoinedRoomResult = { _, _ ->
                 Result.failure(AN_EXCEPTION)
             }
         )
@@ -729,10 +1001,35 @@ class JoinRoomPresenterTest {
     }
 
     @Test
+    fun `present - when room is not known RoomPreview is loaded with error - dismiss`() = runTest {
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.failure(AN_EXCEPTION)
+            }
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(
+                    ContentState.Failure(error = AN_EXCEPTION)
+                )
+                state.eventSink(JoinRoomEvents.DismissErrorAndHideContent)
+            }
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(ContentState.Dismissing)
+            }
+        }
+    }
+
+    @Test
     fun `present - when room is not known RoomPreview is loaded with error Forbidden`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
-                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden"))
+            getNotJoinedRoomResult = { _, _ ->
+                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden", null))
             }
         )
         val presenter = createJoinRoomPresenter(
@@ -759,7 +1056,9 @@ class JoinRoomPresenterTest {
         cancelKnockRoom: CancelKnockRoom = FakeCancelKnockRoom(),
         forgetRoom: ForgetRoom = FakeForgetRoom(),
         buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
-        acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() }
+        acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
     ): JoinRoomPresenter {
         return JoinRoomPresenter(
             roomId = roomId,
@@ -773,7 +1072,9 @@ class JoinRoomPresenterTest {
             cancelKnockRoom = cancelKnockRoom,
             forgetRoom = forgetRoom,
             buildMeta = buildMeta,
-            acceptDeclineInvitePresenter = acceptDeclineInvitePresenter
+            acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
+            appPreferencesStore = appPreferencesStore,
+            seenInvitesStore = seenInvitesStore,
         )
     }
 

@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.matrix.impl.room.member
 
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -42,8 +42,8 @@ internal class RoomMemberListFetcher(
     private val updatedRoomMemberMutex = Mutex()
     private val roomId = room.id()
 
-    private val _membersFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
-    val membersFlow: StateFlow<MatrixRoomMembersState> = _membersFlow
+    private val _membersFlow = MutableStateFlow<RoomMembersState>(RoomMembersState.Unknown)
+    val membersFlow: StateFlow<RoomMembersState> = _membersFlow
 
     /**
      * Fetches the room members for the given room.
@@ -75,16 +75,16 @@ internal class RoomMemberListFetcher(
         }
     }
 
-    private suspend fun MutableStateFlow<MatrixRoomMembersState>.fetchCachedRoomMembers(asPendingState: Boolean = true) {
+    private suspend fun MutableStateFlow<RoomMembersState>.fetchCachedRoomMembers(asPendingState: Boolean = true) {
         Timber.i("Loading cached members for room $roomId")
         try {
             // Send current member list with pending state to notify the UI that we are loading new members
             emit(pendingWithCurrentMembers())
             val members = parseAndEmitMembers(room.membersNoSync())
             val newState = if (asPendingState) {
-                MatrixRoomMembersState.Pending(prevRoomMembers = members)
+                RoomMembersState.Pending(prevRoomMembers = members)
             } else {
-                MatrixRoomMembersState.Ready(members)
+                RoomMembersState.Ready(members)
             }
             emit(newState)
         } catch (exception: CancellationException) {
@@ -92,22 +92,22 @@ internal class RoomMemberListFetcher(
             throw exception
         } catch (exception: Exception) {
             Timber.e(exception, "Failed to load cached members for room $roomId")
-            emit(MatrixRoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList()))
+            emit(RoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList()))
         }
     }
 
-    private suspend fun MutableStateFlow<MatrixRoomMembersState>.fetchRemoteRoomMembers() {
+    private suspend fun MutableStateFlow<RoomMembersState>.fetchRemoteRoomMembers() {
         try {
             // Send current member list with pending state to notify the UI that we are loading new members
             emit(pendingWithCurrentMembers())
             // Start loading new members
-            emit(MatrixRoomMembersState.Ready(parseAndEmitMembers(room.members())))
+            emit(RoomMembersState.Ready(parseAndEmitMembers(room.members())))
         } catch (exception: CancellationException) {
             Timber.d("Cancelled loading updated members for room $roomId")
             throw exception
         } catch (exception: Exception) {
             Timber.e(exception, "Failed to load updated members for room $roomId")
-            emit(MatrixRoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList()))
+            emit(RoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList()))
         }
     }
 
@@ -129,5 +129,5 @@ internal class RoomMemberListFetcher(
         }
     }
 
-    private fun pendingWithCurrentMembers() = MatrixRoomMembersState.Pending(_membersFlow.value.roomMembers().orEmpty().toImmutableList())
+    private fun pendingWithCurrentMembers() = RoomMembersState.Pending(_membersFlow.value.roomMembers().orEmpty().toImmutableList())
 }

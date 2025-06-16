@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Veikla"</string>
+  <string name="emoji_picker_category_flags">"Vėliavos"</string>
+  <string name="emoji_picker_category_foods">"Maistas ir Gėrimai"</string>
+  <string name="emoji_picker_category_nature">"Gyvūnai ir Gamta"</string>
+  <string name="emoji_picker_category_objects">"Objektai"</string>
+  <string name="emoji_picker_category_people">"Šypsenėlės ir Žmonės"</string>
+  <string name="emoji_picker_category_places">"Kelionės ir Vietovės"</string>
+  <string name="emoji_picker_category_symbols">"Simboliai"</string>
+  <string name="screen_report_content_block_user">"Blokuoti vartotoją"</string>
+  <string name="screen_report_content_block_user_hint">"Pažymėkite, jei norite paslėpti visas esamas ir būsimas šio vartotojo žinutes"</string>
+  <string name="screen_report_content_explanation">"Apie šią žinutę bus pranešta Jūsų serverio administracijai. Jie negalės perskaityti jokių užšifruotų žinučių."</string>
+  <string name="screen_report_content_hint">"Skundo dėl šio turinio priežastis"</string>
+  <string name="screen_room_attachment_source_camera">"Kamera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Fotografuoti"</string>
+  <string name="screen_room_attachment_source_camera_video">"Įrašyti vaizdo įrašą"</string>
+  <string name="screen_room_attachment_source_files">"Priedas"</string>
+  <string name="screen_room_attachment_source_gallery">"Nuotraukų ir vaizdo įrašų biblioteka"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Tai yra %1$s pradžia."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Tai yra šio pokalbio pradžia."</string>
+  <string name="screen_room_timeline_read_marker_title">"Naujų"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$d kambario pakeitimas"</item>
+    <item quantity="few">"%1$d kambario pakeitimai"</item>
+    <item quantity="other">"%1$d kambario pakeitimų"</item>
+  </plurals>
+</resources>

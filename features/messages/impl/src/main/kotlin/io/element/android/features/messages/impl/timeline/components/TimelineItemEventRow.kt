@@ -23,8 +23,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -39,10 +39,10 @@ import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -87,13 +87,18 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToView
 import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -120,7 +125,7 @@ fun TimelineItemEventRow(
     onLongClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
@@ -158,7 +163,12 @@ fun TimelineItemEventRow(
     }
 
     fun onUserDataClick() {
-        onUserDataClick(event.senderId)
+        val sender = MatrixUser(
+            userId = event.senderId,
+            displayName = event.senderProfile.getDisplayName(),
+            avatarUrl = event.senderProfile.getAvatarUrl(),
+        )
+        onUserDataClick(sender)
     }
 
     fun inReplyToClick() {
@@ -243,7 +253,7 @@ fun TimelineItemEventRow(
             ),
             renderReadReceipts = renderReadReceipts,
             onReadReceiptsClick = { onReadReceiptClick(event) },
-            modifier = Modifier.padding(top = 4.dp),
+            modifier = Modifier.padding(top = 4.dp)
         )
     }
 }
@@ -314,6 +324,7 @@ private fun TimelineItemEventRowContent(
                 event.senderId,
                 event.senderProfile,
                 event.senderAvatar,
+                onUserDataClick,
                 Modifier
                     .constrainAs(sender) {
                         top.linkTo(parent.top)
@@ -321,13 +332,7 @@ private fun TimelineItemEventRowContent(
                         start.linkTo(parent.start)
                     }
                     .padding(horizontal = 16.dp)
-                    .zIndex(1f)
-                    .clickable(onClick = onUserDataClick)
-                    // This is redundant when using talkback
-                    .clearAndSetSemantics {
-                        invisibleToUser()
-                        testTag = TestTags.timelineItemSenderInfo.value
-                    }
+                    .zIndex(1f),
             )
         }
 
@@ -425,13 +430,31 @@ private fun MessageSenderInformation(
     senderId: UserId,
     senderProfile: ProfileTimelineDetails,
     senderAvatar: AvatarData,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
-    Row(modifier = modifier) {
-        Avatar(senderAvatar)
-        Spacer(modifier = Modifier.width(4.dp))
+    Row(
+        modifier = modifier
+            // Add external clickable modifier with no indicator so the touch target is larger than just the display name
+            .clickable(onClick = onClick, enabled = true, interactionSource = remember { MutableInteractionSource() }, indication = null)
+            .clearAndSetSemantics {
+                hideFromAccessibility()
+            }
+    ) {
+        Avatar(
+            modifier = Modifier
+                .testTag(TestTags.timelineItemSenderAvatar)
+                .clip(CircleShape)
+                .clickable(onClick = onClick),
+            avatarData = senderAvatar,
+        )
         SenderName(
+            modifier = Modifier
+                .testTag(TestTags.timelineItemSenderName)
+                .clip(RoundedCornerShape(6.dp))
+                .clickable(onClick = onClick)
+                .padding(horizontal = 4.dp),
             senderId = senderId,
             senderProfile = senderProfile,
             senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
@@ -580,7 +603,10 @@ private fun MessageEventBubbleContent(
                 timestampPosition = timestampPosition,
                 eventSink = eventSink,
                 canShrinkContent = canShrinkContent,
-                modifier = timestampLayoutModifier,
+                modifier = timestampLayoutModifier.semantics(mergeDescendants = false) {
+                    isTraversalGroup = true
+                    traversalIndex = -1f
+                },
                 content = { onContentLayoutChange ->
                     eventContentView(contentModifier, onContentLayoutChange)
                 }
@@ -592,17 +618,23 @@ private fun MessageEventBubbleContent(
             val inReplyToModifier = Modifier
                 .padding(top = topPadding, start = 8.dp, end = 8.dp)
                 .clip(RoundedCornerShape(6.dp))
-                // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
-                .clickable(onClick = inReplyToClick)
+
+            val talkbackCompatModifier = if (isTalkbackActive()) {
+                // Use z-index to make the replied to text being read after the message
+                // Usually, you'd use traversalIndex for that, but it's not working for some reason
+                inReplyToModifier.zIndex(1f)
+            } else {
+                inReplyToModifier.clickable(onClick = inReplyToClick)
+            }
             InReplyToView(
                 inReplyTo = inReplyTo,
                 hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
-                modifier = inReplyToModifier,
+                modifier = talkbackCompatModifier,
             )
         }
         if (inReplyToDetails != null) {
             // Use SubComposeLayout only if necessary as it can have consequences on the performance.
-            EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
+            EqualWidthColumn(spacing = 8.dp) {
                 threadDecoration()
                 inReplyTo(inReplyToDetails)
                 contentWithTimestamp()
@@ -636,9 +668,7 @@ private fun MessageEventBubbleContent(
         paddingBehaviour = paddingBehaviour,
         inReplyToDetails = event.inReplyTo,
         canShrinkContent = event.content is TimelineItemVoiceContent,
-        modifier = bubbleModifier.semantics(mergeDescendants = true) {
-            contentDescription = event.safeSenderName
-        }
+        modifier = bubbleModifier,
     )
 }
 

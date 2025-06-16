@@ -46,6 +46,7 @@ import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -59,6 +60,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun RoomListContentView(
     contentState: RoomListContentState,
     filtersState: RoomListFiltersState,
+    hideInvitesAvatars: Boolean,
     eventSink: (RoomListEvents) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
@@ -85,6 +87,7 @@ fun RoomListContentView(
             is RoomListContentState.Rooms -> {
                 RoomsView(
                     state = contentState,
+                    hideInvitesAvatars = hideInvitesAvatars,
                     filtersState = filtersState,
                     eventSink = eventSink,
                     onSetUpRecoveryClick = onSetUpRecoveryClick,
@@ -155,6 +158,7 @@ private fun EmptyView(
 @Composable
 private fun RoomsView(
     state: RoomListContentState.Rooms,
+    hideInvitesAvatars: Boolean,
     filtersState: RoomListFiltersState,
     eventSink: (RoomListEvents) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
@@ -170,6 +174,7 @@ private fun RoomsView(
     } else {
         RoomsViewList(
             state = state,
+            hideInvitesAvatars = hideInvitesAvatars,
             eventSink = eventSink,
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
@@ -182,6 +187,7 @@ private fun RoomsView(
 @Composable
 private fun RoomsViewList(
     state: RoomListContentState.Rooms,
+    hideInvitesAvatars: Boolean,
     eventSink: (RoomListEvents) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
@@ -240,6 +246,9 @@ private fun RoomsViewList(
             RoomSummaryRow(
                 isDebugBuild = state.isDebugBuild,
                 room = room,
+                hideInviteAvatars = hideInvitesAvatars,
+                isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
+                    state.seenRoomInvites.contains(room.roomId),
                 onClick = onRoomClick,
                 eventSink = eventSink,
             )
@@ -301,6 +310,7 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
         filtersState = aRoomListFiltersState(
             filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) }
         ),
+        hideInvitesAvatars = false,
         eventSink = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},

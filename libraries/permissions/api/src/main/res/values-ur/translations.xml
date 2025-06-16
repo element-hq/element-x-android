@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"اطلاقیے کو تصویرگر استعمال کرنے دینے کے لیے، برائے مہربانی نظام کی ترتیبات میں اجازت دیں۔"</string>
+  <string name="dialog_permission_generic">"برائے مہربانی نظام کی ترتیبات میں اجازت دیں۔"</string>
+  <string name="dialog_permission_microphone">"اطلاقیے کو صوتگر استعمال کرنے دینے کے لیے، برائے مہربانی نظام کی ترتیبات میں اجازت دیں۔"</string>
+  <string name="dialog_permission_notification">"اطلاقیے کو اطلاعات ظاہر کرنے دینے کے لیے، برائے مہربانی نظام کی ترتیبات میں اجازت دیں۔"</string>
+</resources>

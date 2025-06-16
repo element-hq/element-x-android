@@ -16,11 +16,11 @@ import io.element.android.libraries.core.extensions.orEmpty
 
 @Stable
 class StableCharSequence(initialText: CharSequence = "") {
-    private var value by mutableStateOf<SpannableString>(SpannableString(initialText))
+    private var value by mutableStateOf<SpannableString>(SpannableString.valueOf(initialText))
     private var needsDisplaying by mutableStateOf(false)
 
     fun update(newText: CharSequence?, needsDisplaying: Boolean) {
-        value = SpannableString(newText.orEmpty())
+        value = SpannableString.valueOf(newText.orEmpty())
         this.needsDisplaying = needsDisplaying
     }
 

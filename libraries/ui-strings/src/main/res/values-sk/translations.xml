@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Obrázok"</string>
   <string name="a11y_delete">"Vymazať"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d zadaná číslica"</item>
@@ -7,11 +8,13 @@
     <item quantity="other">"%1$d zadaných číslic"</item>
   </plurals>
   <string name="a11y_hide_password">"Skryť heslo"</string>
+  <string name="a11y_join_call">"Pripojiť sa k hovoru"</string>
   <string name="a11y_jump_to_bottom">"Prejsť na spodok"</string>
   <string name="a11y_notifications_mentions_only">"Iba zmienky"</string>
   <string name="a11y_notifications_muted">"Stlmené"</string>
   <string name="a11y_page_n">"Strana %1$d"</string>
   <string name="a11y_pause">"Pozastaviť"</string>
+  <string name="a11y_paused_voice_message">"Hlasová správa, dĺžka:%1$s, aktuálna pozícia: %2$s"</string>
   <string name="a11y_pin_field">"Pole PIN"</string>
   <string name="a11y_play">"Prehrať"</string>
   <string name="a11y_poll">"Anketa"</string>
@@ -32,6 +35,7 @@
   <string name="a11y_start_call">"Začať hovor"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
   <string name="a11y_view_details">"Zobraziť podrobnosti"</string>
+  <string name="a11y_voice_message">"Hlasová správa, dĺžka: %1$s"</string>
   <string name="a11y_voice_message_record">"Nahrať hlasovú správu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastaviť nahrávanie"</string>
   <string name="action_accept">"Prijať"</string>
@@ -58,9 +62,11 @@
   <string name="action_deactivate">"Deaktivovať"</string>
   <string name="action_deactivate_account">"Deaktivovať účet"</string>
   <string name="action_decline">"Odmietnuť"</string>
+  <string name="action_decline_and_block">"Odmietnuť a zablokovať"</string>
   <string name="action_delete_poll">"Odstrániť anketu"</string>
   <string name="action_disable">"Vypnúť"</string>
   <string name="action_discard">"Zahodiť"</string>
+  <string name="action_dismiss">"Zamietnuť"</string>
   <string name="action_done">"Hotovo"</string>
   <string name="action_edit">"Upraviť"</string>
   <string name="action_edit_caption">"Upraviť titulok"</string>
@@ -102,8 +108,11 @@
   <string name="action_remove_message">"Odstrániť správu"</string>
   <string name="action_reply">"Odpovedať"</string>
   <string name="action_reply_in_thread">"Odpovedať vo vlákne"</string>
+  <string name="action_report">"Nahlásiť"</string>
   <string name="action_report_bug">"Nahlásiť chybu"</string>
   <string name="action_report_content">"Nahlásiť obsah"</string>
+  <string name="action_report_dm">"Nahlásiť konverzáciu"</string>
+  <string name="action_report_room">"Nahlásiť miestnosť"</string>
   <string name="action_reset">"Obnoviť"</string>
   <string name="action_reset_identity">"Obnoviť identitu"</string>
   <string name="action_retry">"Skúsiť znova"</string>
@@ -191,6 +200,11 @@ Dôvod: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
   <string name="common_loading">"Načítava sa…"</string>
   <string name="common_loading_more">"Načítava sa viac…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d ďalší"</item>
+    <item quantity="few">"%d ďalší"</item>
+    <item quantity="other">"%d ďalších"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d člen"</item>
     <item quantity="few">"%1$d členovia"</item>
@@ -205,6 +219,7 @@ Dôvod: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Žiadne výsledky"</string>
   <string name="common_no_room_name">"Žiadny názov miestnosti"</string>
+  <string name="common_not_encrypted">"Nešifrované"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Licencie s otvoreným zdrojom"</string>
   <string name="common_or">"alebo"</string>
@@ -213,6 +228,7 @@ Dôvod: %1$s."</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
   <string name="common_permission">"Povolenie"</string>
   <string name="common_pinned">"Pripnuté"</string>
+  <string name="common_please_check_internet_connection">"Skontrolujte si prosím vaše pripojenie k internetu"</string>
   <string name="common_please_wait">"Prosím, počkajte…"</string>
   <string name="common_poll_end_confirmation">"Ste si istí, že chcete ukončiť túto anketu?"</string>
   <string name="common_poll_summary">"Anketa: %1$s"</string>
@@ -226,6 +242,7 @@ Dôvod: %1$s."</string>
   <string name="common_privacy_policy">"Zásady ochrany osobných údajov"</string>
   <string name="common_reaction">"Reakcia"</string>
   <string name="common_reactions">"Reakcie"</string>
+  <string name="common_reason">"Dôvod"</string>
   <string name="common_recovery_key">"Kľúč na obnovenie"</string>
   <string name="common_refreshing">"Obnovuje sa…"</string>
   <string name="common_replying_to">"Odpoveď na %1$s"</string>
@@ -253,6 +270,7 @@ Dôvod: %1$s."</string>
   <string name="common_shared_location">"Zdieľaná poloha"</string>
   <string name="common_signing_out">"Odhlasovanie"</string>
   <string name="common_something_went_wrong">"Niečo sa pokazilo"</string>
+  <string name="common_something_went_wrong_message">"Vyskytol sa problém. Skúste to prosím znova."</string>
   <string name="common_starting_chat">"Spustenie konverzácie…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspech"</string>
@@ -267,7 +285,7 @@ Dôvod: %1$s."</string>
   <string name="common_unable_to_decrypt">"Nie je možné dešifrovať"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Odoslané z nezabezpečeného zariadenia"</string>
   <string name="common_unable_to_decrypt_no_access">"Nemáte prístup k tejto správe"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Overená totožnosť odosielateľa sa zmenila"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Overená totožnosť odosielateľa bola obnovená"</string>
   <string name="common_unable_to_invite_message">"Pozvánky nebolo možné odoslať jednému alebo viacerým používateľom."</string>
   <string name="common_unable_to_invite_title">"Nie je možné odoslať pozvánku/ky"</string>
   <string name="common_unlock">"Odomknúť"</string>
@@ -287,16 +305,18 @@ Dôvod: %1$s."</string>
   <string name="common_waiting">"Čaká sa…"</string>
   <string name="common_waiting_for_decryption_key">"Čaká sa na dešifrovací kľúč"</string>
   <string name="common_you">"Vy"</string>
-  <string name="crypto_identity_change_pin_violation">"Zdá sa, že totožnosť používateľa %1$s sa zmenila.%2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Zdá sa, že identita %2$s používateľa %1$s sa zmenila. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Totožnosť používateľa %1$s sa obnovila.%2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Totožnosť používateľa %1$s %2$s bola obnovená. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"Overená totožnosť používateľa %1$s sa zmenila."</string>
-  <string name="crypto_identity_change_verification_violation_new">"Overená identita používateľa %1$s %2$s sa zmenila. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Totožnosť používateľa %1$s bola obnovená."</string>
+  <string name="crypto_identity_change_verification_violation_new">"Totožnosť používateľa %1$s %2$s bola obnovená. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušiť overenie"</string>
   <string name="dialog_confirm_link_message">"Odkaz %1$s vás presmeruje na inú stránku %2$s
 
 Naozaj chcete pokračovať?"</string>
   <string name="dialog_confirm_link_title">"Dôkladne skontrolujte tento odkaz"</string>
+  <string name="dialog_room_reported">"Miestnosť nahlásená"</string>
+  <string name="dialog_room_reported_and_left">"Nahlásili ste a opustili ste miestnosť"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>
@@ -343,7 +363,7 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Chystáte sa prejsť na svoj %1$s účet, aby ste obnovili svoju identitu. Potom budete vrátení späť do aplikácie."</string>
   <string name="screen_reset_identity_confirmation_title">"Neviete potvrdiť? Prejdite do svojho účtu a obnovte svoju identitu."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Odvolať overenie a odoslať"</string>
-  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Svoje overenie môžete odvolať a odoslať túto správu aj tak, alebo ju môžete zatiaľ zrušiť a po opätovnom overení to skúsiť znova %1$s ."</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Svoje overenie môžete odvolať a odoslať túto správu aj tak, alebo ju môžete zatiaľ zrušiť a po opätovnom overení to skúsiť znova %1$s."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"Vaša správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$s."</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Odoslať správu aj tak"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s používa jedno alebo viac neoverených zariadení. Správu môžete odoslať aj tak, alebo ju môžete zatiaľ zrušiť a skúsiť to znova neskôr po %2$s overení všetkých zariadení."</string>

@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -76,7 +77,7 @@ class MediaViewerDataSource(
     }
 
     @VisibleForTesting
-    fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
+    internal fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
         return galleryDataSource.groupedMediaItemsFlow()
             .map { groupedItems ->
                 when (groupedItems) {
@@ -173,7 +174,7 @@ class MediaViewerDataSource(
             .onSuccess { mediaFile ->
                 mediaFiles.add(mediaFile)
             }
-            .mapCatching { mediaFile ->
+            .mapCatchingExceptions { mediaFile ->
                 localMediaFactory.createFromMediaFile(
                     mediaFile = mediaFile,
                     mediaInfo = data.mediaInfo

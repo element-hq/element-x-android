@@ -71,6 +71,7 @@
     <item quantity="few">"Znaleziono %1$d dostawców push: %2$s"</item>
     <item quantity="many">"Znaleziono %1$d dostawców push: %2$s"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplikacja została zbudowana ze wsparciem dla: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Wykryj dostawców powiadomień push"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Sprawdź, czy aplikacja może wyświetlać powiadomienie."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Powiadomienie nie zostało kliknięte."</string>

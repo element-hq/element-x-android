@@ -31,7 +31,7 @@ class RustMatrixClientFactoryTest {
         val sut = createRustMatrixClientFactory()
         val result = sut.create(aSessionData())
         assertThat(result.sessionId).isEqualTo(SessionId("@alice:server.org"))
-        result.close()
+        result.destroy()
     }
 }
 

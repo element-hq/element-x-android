@@ -27,15 +27,16 @@ import io.element.android.libraries.matrix.ui.model.InviteSender
 @Composable
 fun InviteSenderView(
     inviteSender: InviteSender,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    hideAvatarImage: Boolean = false,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier,
     ) {
         Box(modifier = Modifier.padding(vertical = 2.dp)) {
-        Avatar(avatarData = inviteSender.avatarData)
-            }
+            Avatar(avatarData = inviteSender.avatarData, hideImage = hideAvatarImage)
+        }
         Text(
             text = inviteSender.annotatedString(),
             style = ElementTheme.typography.fontBodyMdRegular,

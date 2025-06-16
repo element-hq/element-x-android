@@ -21,7 +21,7 @@ open class EditDefaultNotificationSettingStateProvider : PreviewParameterProvide
             anEditDefaultNotificationSettingsState(),
             anEditDefaultNotificationSettingsState(isOneToOne = true),
             anEditDefaultNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Loading),
-            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
+            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(RuntimeException("error"))),
             anEditDefaultNotificationSettingsState(displayMentionsOnlyDisclaimer = true),
         )
 }

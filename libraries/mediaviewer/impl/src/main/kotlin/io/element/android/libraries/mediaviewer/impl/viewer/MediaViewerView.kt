@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
@@ -51,6 +52,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
@@ -91,6 +93,7 @@ fun MediaViewerView(
     state: MediaViewerState,
     textFileViewer: TextFileViewer,
     onBackClick: () -> Unit,
+    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -142,8 +145,13 @@ fun MediaViewerView(
                     Box(
                         modifier = Modifier.fillMaxSize()
                     ) {
+                        val isDisplayed = remember(pagerState.settledPage) {
+                            // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
+                            // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
+                            page == pagerState.settledPage
+                        }
                         MediaViewerPage(
-                            isDisplayed = page == pagerState.settledPage,
+                            isDisplayed = isDisplayed,
                             showOverlay = showOverlay,
                             bottomPaddingInPixels = bottomPaddingInPixels,
                             data = dataForPage,
@@ -157,7 +165,9 @@ fun MediaViewerView(
                             },
                             onShowOverlayChange = {
                                 showOverlay = it
-                            }
+                            },
+                            audioFocus = audioFocus,
+                            isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
                         )
                         // Bottom bar
                         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
@@ -273,10 +283,12 @@ private fun MediaViewerPage(
     bottomPaddingInPixels: Int,
     data: MediaViewerPageData.MediaViewerData,
     textFileViewer: TextFileViewer,
+    isUserSelected: Boolean,
     onDismiss: () -> Unit,
     onRetry: () -> Unit,
     onDismissError: () -> Unit,
     onShowOverlayChange: (Boolean) -> Unit,
+    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
     val currentShowOverlay by rememberUpdatedState(showOverlay)
@@ -328,6 +340,8 @@ private fun MediaViewerPage(
                             currentOnShowOverlayChange(!currentShowOverlay)
                         }
                     },
+                    isUserSelected = isUserSelected,
+                    audioFocus = audioFocus,
                 )
                 ThumbnailView(
                     mediaInfo = data.mediaInfo,
@@ -541,8 +555,11 @@ private fun ThumbnailView(
                 source = thumbnailSource,
                 kind = MediaRequestData.Kind.File(mediaInfo.filename, mediaInfo.mimeType)
             )
+            val alpha = if (LocalInspectionMode.current) 0.1f else 1f
             AsyncImage(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(alpha),
                 model = mediaRequestData,
                 contentScale = ContentScale.Fit,
                 contentDescription = null,
@@ -570,7 +587,8 @@ private fun ErrorView(
 internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
+        audioFocus = null,
         textFileViewer = { _, _ -> },
-        onBackClick = {}
+        onBackClick = {},
     )
 }

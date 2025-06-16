@@ -10,8 +10,8 @@ package io.element.android.libraries.matrix.api.room.recent
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -52,6 +52,6 @@ suspend fun MatrixClient.getRecentDirectRooms(
     return result
 }
 
-suspend fun MatrixRoom.isJoined(): Boolean {
+suspend fun BaseRoom.isJoined(): Boolean {
     return roomInfoFlow.first().currentUserMembership == CurrentUserMembership.JOINED
 }

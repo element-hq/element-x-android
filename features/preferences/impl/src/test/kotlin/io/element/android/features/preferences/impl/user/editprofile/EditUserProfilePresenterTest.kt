@@ -397,7 +397,7 @@ class EditUserProfilePresenterTest {
             ),
         )
         fakePickerProvider.givenResult(anotherAvatarUri)
-        fakeMediaPreProcessor.givenResult(Result.failure(Throwable("Oh no")))
+        fakeMediaPreProcessor.givenResult(Result.failure(RuntimeException("Oh no")))
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -414,7 +414,7 @@ class EditUserProfilePresenterTest {
     fun `present - sets save action to failure if name update fails`() = runTest {
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
         val matrixClient = FakeMatrixClient().apply {
-            givenSetDisplayNameResult(Result.failure(Throwable("!")))
+            givenSetDisplayNameResult(Result.failure(RuntimeException("!")))
         }
         saveAndAssertFailure(user, matrixClient, EditUserProfileEvents.UpdateDisplayName("New name"))
     }
@@ -423,7 +423,7 @@ class EditUserProfilePresenterTest {
     fun `present - sets save action to failure if removing avatar fails`() = runTest {
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
         val matrixClient = FakeMatrixClient().apply {
-            givenRemoveAvatarResult(Result.failure(Throwable("!")))
+            givenRemoveAvatarResult(Result.failure(RuntimeException("!")))
         }
         saveAndAssertFailure(user, matrixClient, EditUserProfileEvents.HandleAvatarAction(AvatarAction.Remove))
     }
@@ -433,7 +433,7 @@ class EditUserProfilePresenterTest {
         givenPickerReturnsFile()
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
         val matrixClient = FakeMatrixClient().apply {
-            givenUploadAvatarResult(Result.failure(Throwable("!")))
+            givenUploadAvatarResult(Result.failure(RuntimeException("!")))
         }
         saveAndAssertFailure(user, matrixClient, EditUserProfileEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
     }
@@ -443,7 +443,7 @@ class EditUserProfilePresenterTest {
         givenPickerReturnsFile()
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
         val matrixClient = FakeMatrixClient().apply {
-            givenSetDisplayNameResult(Result.failure(Throwable("!")))
+            givenSetDisplayNameResult(Result.failure(RuntimeException("!")))
         }
         val presenter = createEditUserProfilePresenter(matrixUser = user, matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {

@@ -22,12 +22,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershi
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
-import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import org.matrix.rustcomponents.sdk.MsgLikeKind
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import org.matrix.rustcomponents.sdk.use
 import uniffi.matrix_sdk_ui.RoomPinnedEventsChange
@@ -55,8 +55,43 @@ class TimelineEventContentMapper(
                         error = it.error
                     )
                 }
-                is TimelineItemContent.Message -> {
-                    eventMessageMapper.map(it.content)
+                is TimelineItemContent.MsgLike -> {
+                    when (val kind = it.content.kind) {
+                        is MsgLikeKind.Message -> {
+                            val inReplyTo = it.content.inReplyTo
+                            val isThreaded = it.content.threadRoot != null
+                            eventMessageMapper.map(kind, inReplyTo, isThreaded)
+                        }
+                        is MsgLikeKind.Redacted -> {
+                            RedactedContent
+                        }
+                        is MsgLikeKind.Poll -> {
+                            PollContent(
+                                question = kind.question,
+                                kind = kind.kind.map(),
+                                maxSelections = kind.maxSelections,
+                                answers = kind.answers.map { answer -> answer.map() }.toImmutableList(),
+                                votes = kind.votes.mapValues { vote ->
+                                    vote.value.map { userId -> UserId(userId) }.toImmutableList()
+                                }.toImmutableMap(),
+                                endTime = kind.endTime,
+                                isEdited = kind.hasBeenEdited,
+                            )
+                        }
+                        is MsgLikeKind.UnableToDecrypt -> {
+                            UnableToDecryptContent(
+                                data = kind.msg.map()
+                            )
+                        }
+                        is MsgLikeKind.Sticker -> {
+                            StickerContent(
+                                filename = kind.body,
+                                body = null,
+                                info = kind.info.map(),
+                                source = kind.source.map(),
+                            )
+                        }
+                    }
                 }
                 is TimelineItemContent.ProfileChange -> {
                     ProfileChangeContent(
@@ -66,14 +101,12 @@ class TimelineEventContentMapper(
                         prevAvatarUrl = it.prevAvatarUrl
                     )
                 }
-                TimelineItemContent.RedactedMessage -> {
-                    RedactedContent
-                }
                 is TimelineItemContent.RoomMembership -> {
                     RoomMembershipContent(
                         userId = UserId(it.userId),
                         userDisplayName = it.userDisplayName,
-                        change = it.change?.map()
+                        change = it.change?.map(),
+                        reason = it.reason,
                     )
                 }
                 is TimelineItemContent.State -> {
@@ -82,35 +115,8 @@ class TimelineEventContentMapper(
                         content = it.content.map()
                     )
                 }
-                is TimelineItemContent.Sticker -> {
-                    StickerContent(
-                        filename = it.body,
-                        body = null,
-                        info = it.info.map(),
-                        source = it.source.map(),
-                    )
-                }
-                is TimelineItemContent.Poll -> {
-                    PollContent(
-                        question = it.question,
-                        kind = it.kind.map(),
-                        maxSelections = it.maxSelections,
-                        answers = it.answers.map { answer -> answer.map() }.toImmutableList(),
-                        votes = it.votes.mapValues { vote ->
-                            vote.value.map { userId -> UserId(userId) }.toImmutableList()
-                        }.toImmutableMap(),
-                        endTime = it.endTime,
-                        isEdited = it.hasBeenEdited,
-                    )
-                }
-                is TimelineItemContent.UnableToDecrypt -> {
-                    UnableToDecryptContent(
-                        data = it.msg.map()
-                    )
-                }
                 is TimelineItemContent.CallInvite -> LegacyCallInviteContent
                 is TimelineItemContent.CallNotify -> CallNotifyContent
-                else -> UnknownContent
             }
         }
     }

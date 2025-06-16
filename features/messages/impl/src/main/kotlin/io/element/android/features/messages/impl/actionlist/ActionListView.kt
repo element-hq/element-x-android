@@ -39,6 +39,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -188,6 +190,7 @@ private fun ActionListViewContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
+                                .clearAndSetSemantics {},
                         )
                         if (target.event.messageShield != null) {
                             MessageShieldView(
@@ -347,12 +350,21 @@ private fun EmojiReactionsRow(
         )
         for (emoji in defaultEmojis) {
             val isHighlighted = highlightedEmojis.contains(emoji)
-            EmojiButton(emoji, isHighlighted, onEmojiReactionClick)
+            EmojiButton(
+                modifier = Modifier
+                    // Make it appear after the more useful actions for the accessibility service
+                    .semantics {
+                        traversalIndex = 1f
+                    },
+                emoji = emoji,
+                isHighlighted = isHighlighted,
+                onClick = onEmojiReactionClick
+            )
         }
         Box(
             modifier = Modifier
                 .size(48.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = CompoundIcons.ReactionAdd(),
@@ -366,6 +378,10 @@ private fun EmojiReactionsRow(
                         indication = ripple(bounded = false, radius = emojiRippleRadius),
                         interactionSource = remember { MutableInteractionSource() }
                     )
+                    // Make it appear after the more useful actions for the accessibility service
+                    .semantics {
+                        traversalIndex = 1f
+                    }
             )
         }
     }
@@ -413,6 +429,7 @@ private fun EmojiButton(
     emoji: String,
     isHighlighted: Boolean,
     onClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (isHighlighted) {
         ElementTheme.colors.bgActionPrimaryRest
@@ -425,10 +442,16 @@ private fun EmojiButton(
         stringResource(id = CommonStrings.a11y_react_with, emoji)
     }
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(48.dp)
             .background(backgroundColor, CircleShape)
-            .clearAndSetSemantics {
+            .clickable(
+                enabled = true,
+                onClick = { onClick(emoji) },
+                indication = ripple(bounded = false, radius = emojiRippleRadius),
+                interactionSource = remember { MutableInteractionSource() }
+            )
+            .semantics {
                 contentDescription = description
             },
         contentAlignment = Alignment.Center
@@ -436,13 +459,6 @@ private fun EmojiButton(
         Text(
             emoji,
             style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 24.dp.toSp(), color = Color.White),
-            modifier = Modifier
-                .clickable(
-                    enabled = true,
-                    onClick = { onClick(emoji) },
-                    indication = ripple(bounded = false, radius = emojiRippleRadius),
-                    interactionSource = remember { MutableInteractionSource() }
-                )
         )
     }
 }

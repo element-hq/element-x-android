@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.designsystem.preview
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,12 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 @Suppress("ModifierMissing")
 fun ElementThemedPreview(
     showBackground: Boolean = true,
     vertical: Boolean = true,
+    @DrawableRes
+    drawableFallbackForImages: Int = CommonDrawables.sample_background,
     content: @Composable () -> Unit,
 ) {
     Box(
@@ -37,12 +41,14 @@ fun ElementThemedPreview(
                 ElementPreview(
                     darkTheme = false,
                     showBackground = showBackground,
+                    drawableFallbackForImages = drawableFallbackForImages,
                     content = content,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 ElementPreview(
                     darkTheme = true,
                     showBackground = showBackground,
+                    drawableFallbackForImages = drawableFallbackForImages,
                     content = content
                 )
             }
@@ -51,12 +57,14 @@ fun ElementThemedPreview(
                 ElementPreview(
                     darkTheme = false,
                     showBackground = showBackground,
+                    drawableFallbackForImages = drawableFallbackForImages,
                     content = content,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 ElementPreview(
                     darkTheme = true,
                     showBackground = showBackground,
+                    drawableFallbackForImages = drawableFallbackForImages,
                     content = content
                 )
             }

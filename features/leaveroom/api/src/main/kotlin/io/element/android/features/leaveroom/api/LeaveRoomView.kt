@@ -40,9 +40,9 @@ private fun LeaveRoomConfirmationDialog(
         is LeaveRoomState.Confirmation.Hidden -> {}
 
         is LeaveRoomState.Confirmation.Dm -> LeaveRoomConfirmationDialog(
-            text = R.string.leave_conversation_alert_subtitle,
+            text = R.string.leave_room_alert_private_subtitle,
             roomId = state.confirmation.roomId,
-            isDm = true,
+            isDm = false,
             eventSink = state.eventSink,
         )
 

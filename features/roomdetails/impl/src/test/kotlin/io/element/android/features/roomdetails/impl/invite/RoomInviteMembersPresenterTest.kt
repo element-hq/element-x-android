@@ -11,20 +11,20 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.aMatrixRoom
+import io.element.android.features.roomdetails.impl.aRoom
 import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.usersearch.api.UserSearchResult
@@ -50,7 +50,7 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             buildMeta = buildMeta,
             userRepository = FakeUserRepository(),
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(FakeBaseRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
@@ -73,7 +73,7 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             buildMeta = buildMeta,
             userRepository = FakeUserRepository(),
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(FakeBaseRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
@@ -96,7 +96,7 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             buildMeta = buildMeta,
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(FakeBaseRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -124,7 +124,7 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             buildMeta = buildMeta,
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(FakeBaseRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -166,9 +166,9 @@ internal class RoomInviteMembersPresenterTest {
             buildMeta = buildMeta,
             userRepository = repository,
             roomMemberListDataSource = createDataSource(
-                matrixRoom = FakeMatrixRoom().apply {
+                room = FakeBaseRoom().apply {
                     givenRoomMembersState(
-                        MatrixRoomMembersState.Ready(
+                        RoomMembersState.Ready(
                             persistentListOf(
                                 aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
                                 aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
@@ -227,9 +227,9 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             buildMeta = buildMeta,
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom().apply {
+            roomMemberListDataSource = createDataSource(FakeBaseRoom().apply {
                 givenRoomMembersState(
-                    MatrixRoomMembersState.Ready(
+                    RoomMembersState.Ready(
                         persistentListOf(
                             aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
                             aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
@@ -305,7 +305,7 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             buildMeta = buildMeta,
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(FakeBaseRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -347,7 +347,7 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             buildMeta = buildMeta,
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(FakeBaseRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -408,11 +408,11 @@ internal class RoomInviteMembersPresenterTest {
     }
 
     private fun TestScope.createDataSource(
-        matrixRoom: MatrixRoom = aMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        room: BaseRoom = aRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
         },
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
-    ) = RoomMemberListDataSource(matrixRoom, coroutineDispatchers)
+    ) = RoomMemberListDataSource(room, coroutineDispatchers)
 
     private fun SearchBarResultState<ImmutableList<InvitableUser>>.users() =
         (this as? SearchBarResultState.Results<ImmutableList<InvitableUser>>)?.results.orEmpty()

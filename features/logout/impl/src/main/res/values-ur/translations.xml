@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"کیا آپ واقعی خارج ہونا چاہتے ہیں؟"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"خارج ہوں"</string>
+  <string name="screen_signout_confirmation_dialog_title">"خارج ہوں"</string>
+  <string name="screen_signout_in_progress_dialog_content">"خارج ہورہاہے…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"آپ اپنے آخری جلسے سے خارج ہونے والے ہیں۔ اگر آپ ابھی خارج ہوجاتے ہیں تو آپ اپنے مرموز کردہ پیغامات تک رسائی سے محروم ہو جائیں گے۔"</string>
+  <string name="screen_signout_key_backup_disabled_title">"آپنے پشتارہ بند کردیا ہے"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"جب آپ پرے خط تھے تب بھی آپ کی کلیدوں کا پشتارہ کیا جا رہا تھا۔ دوبارہ جڑیں تاکہ خارج ہونے سے پہلے آپ کی کلیدوں کا پشتارہ کیا جا سکے۔"</string>
+  <string name="screen_signout_key_backup_offline_title">"آپکی کلیدوں کا ابھی بھی پشتارہ کیا جا رہا ہے۔"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"برائے مہربانی خارج ہونے سے پہلے اسکے مکمل ہونے کا انتظار کریں"</string>
+  <string name="screen_signout_key_backup_ongoing_title">"آپکی کلیدوں کا ابھی بھی پشتارہ کیا جا رہا ہے۔"</string>
+  <string name="screen_signout_preference_item">"خارج ہوں"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"آپ اپنے آخری جلسے سے خارج ہونے والے ہیں۔ اگر آپ ابھی خارج ہوجاتے ہیں تو آپ اپنے مرموز کردہ پیغامات تک رسائی سے محروم ہو جائیں گے۔"</string>
+  <string name="screen_signout_recovery_disabled_title">"بازیابی غیر مرتب"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"آپ اپنے آخری جلسے سے خارج ہونے والے ہیں۔ اگر آپ ابھی خارج ہوجاتے ہیں تو ہوسکتا ہے کہ آپ اپنے مرموز کردہ پیغامات تک رسائی سے محروم ہو جائیں گے۔"</string>
+  <string name="screen_signout_save_recovery_key_title">"کیا آپ نے اپنی بازیابی کی کلید محفوظ کی ہے؟"</string>
+</resources>

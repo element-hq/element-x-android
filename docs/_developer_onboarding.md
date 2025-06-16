@@ -10,7 +10,7 @@
     * [Sync](#sync)
   * [Rust SDK](#rust-sdk)
     * [Matrix Rust Component Kotlin](#matrix-rust-component-kotlin)
-    * [Build the SDK locally](#build-the-sdk-locally)
+    * [Building the SDK locally](#building-the-sdk-locally)
   * [The Android project](#the-android-project)
   * [Application](#application)
     * [Jetpack Compose](#jetpack-compose)
@@ -107,7 +107,7 @@ This is the goal of https://github.com/matrix-org/matrix-rust-components-kotlin.
 This repository is used for distributing kotlin releases of the Matrix Rust SDK.
 It'll provide the corresponding aar and also publish them on maven.
 
-Most of the time you want to use the releases made on maven with gradle:
+Most of the time **you want to use the releases made on maven with gradle**:
 
 ```groovy
 implementation("org.matrix.rustcomponents:sdk-android:latest-version")
@@ -115,7 +115,9 @@ implementation("org.matrix.rustcomponents:sdk-android:latest-version")
 
 You can also have access to the aars through the [release](https://github.com/matrix-org/matrix-rust-components-kotlin/releases) page.
 
-#### Build the SDK locally
+#### Building the SDK locally
+
+If you want to make changes to the SDK or test them before integrating it with your codebase, you can build the SDK locally too.
 
 Prerequisites:
 * Install the Android NDK (Native Development Kit). To do this from within
@@ -273,7 +275,7 @@ Follow these steps to install and configure the plugin and templates:
 
 1. Install the AS plugin for generating modules :
    [Generate Module from Template](https://plugins.jetbrains.com/plugin/13586-generate-module-from-template)
-2. Run the script `tools/templates/generate_templates.sh` to generate the template zip file
+2. From repository root, run `./tools/templates/generate_templates.sh` to generate the template zip file
 3. Import file templates in AS :
    - Navigate to File/Manage IDE Settings/Import Settings
    - Pick the `tmp/file_templates.zip` files

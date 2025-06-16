@@ -53,6 +53,8 @@ dependencies {
     implementation(projects.features.roomcall.api)
     implementation(projects.features.knockrequests.api)
     implementation(projects.features.verifysession.api)
+    implementation(projects.features.reportroom.api)
+    implementation(projects.features.roommembermoderation.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

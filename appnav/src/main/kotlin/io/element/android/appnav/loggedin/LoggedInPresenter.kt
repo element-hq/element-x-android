@@ -21,6 +21,7 @@ import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -30,7 +31,6 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.push.api.PushService
@@ -79,7 +79,7 @@ class LoggedInPresenter @Inject constructor(
                 .launchIn(this)
         }
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
-        val isOnline by syncService.isOnline().collectAsState()
+        val isOnline by syncService.isOnline.collectAsState()
         val showSyncSpinner by remember {
             derivedStateOf {
                 isOnline && syncIndicator == RoomListService.SyncIndicator.Show
@@ -126,7 +126,7 @@ class LoggedInPresenter @Inject constructor(
     }
 
     // Force the user to log out if they were using the proxy sliding sync as it's no longer supported by the SDK
-    private suspend fun MatrixClient.needsForcedNativeSlidingSyncMigration(): Result<Boolean> = runCatching {
+    private suspend fun MatrixClient.needsForcedNativeSlidingSyncMigration(): Result<Boolean> = runCatchingExceptions {
         val currentSlidingSyncVersion = currentSlidingSyncVersion().getOrThrow()
         currentSlidingSyncVersion == SlidingSyncVersion.Proxy
     }

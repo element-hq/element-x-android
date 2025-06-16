@@ -18,9 +18,8 @@ import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SERVER_LIST
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
-import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -30,10 +29,10 @@ import org.junit.Test
 class DefaultJoinRoomTest {
     @Test
     fun `when using roomId and there is no server names, the classic join room API is used`() = runTest {
-        val roomSummary = aRoomSummary()
-        val joinRoomLambda = lambdaRecorder { _: RoomId -> Result.success(roomSummary) }
-        val joinRoomByIdOrAliasLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String> -> Result.success(roomSummary) }
-        val roomResult = FakeMatrixRoom().apply {
+        val roomInfo = aRoomInfo()
+        val joinRoomLambda = lambdaRecorder { _: RoomId -> Result.success(roomInfo) }
+        val joinRoomByIdOrAliasLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String> -> Result.success(roomInfo) }
+        val roomResult = FakeBaseRoom().apply {
             givenRoomInfo(aRoomInfo())
         }
         val aTrigger = JoinedRoom.Trigger.MobilePermalink
@@ -67,10 +66,10 @@ class DefaultJoinRoomTest {
 
     @Test
     fun `when using roomId and server names are available, joinRoomByIdOrAlias API is used`() = runTest {
-        val roomSummary = aRoomSummary()
-        val joinRoomLambda = lambdaRecorder { _: RoomId -> Result.success(roomSummary) }
-        val joinRoomByIdOrAliasLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String> -> Result.success(roomSummary) }
-        val roomResult = FakeMatrixRoom().apply {
+        val roomInfo = aRoomInfo()
+        val joinRoomLambda = lambdaRecorder { _: RoomId -> Result.success(roomInfo) }
+        val joinRoomByIdOrAliasLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String> -> Result.success(roomInfo) }
+        val roomResult = FakeBaseRoom().apply {
             givenRoomInfo(aRoomInfo())
         }
         val aTrigger = JoinedRoom.Trigger.MobilePermalink
@@ -105,10 +104,10 @@ class DefaultJoinRoomTest {
 
     @Test
     fun `when using roomAlias, joinRoomByIdOrAlias API is used`() = runTest {
-        val roomSummary = aRoomSummary()
-        val joinRoomLambda = lambdaRecorder { _: RoomId -> Result.success(roomSummary) }
-        val joinRoomByIdOrAliasLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String> -> Result.success(roomSummary) }
-        val roomResult = FakeMatrixRoom().apply {
+        val roomInfo = aRoomInfo()
+        val joinRoomLambda = lambdaRecorder { _: RoomId -> Result.success(roomInfo) }
+        val joinRoomByIdOrAliasLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String> -> Result.success(roomInfo) }
+        val roomResult = FakeBaseRoom().apply {
             givenRoomInfo(aRoomInfo())
         }
         val aTrigger = JoinedRoom.Trigger.MobilePermalink

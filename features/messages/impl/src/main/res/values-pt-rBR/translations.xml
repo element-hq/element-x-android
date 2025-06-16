@@ -21,6 +21,7 @@
   <string name="screen_room_attachment_source_poll">"Enquete"</string>
   <string name="screen_room_attachment_text_formatting">"Formatação de texto"</string>
   <string name="screen_room_encrypted_history_banner">"O histórico de mensagens não está disponível no momento."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"O histórico de mensagens não está disponível nesta sala. Verifique este dispositivo para ver seu histórico de mensagens."</string>
   <string name="screen_room_invite_again_alert_message">"Gostaria de convidá-los de volta?"</string>
   <string name="screen_room_invite_again_alert_title">"Você está sozinho neste chat"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notificar a sala inteira"</string>
@@ -30,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Adicionar emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Este é o início do %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Este é o início desta conversa."</string>
+  <string name="screen_room_timeline_legacy_call">"Chamada não suportada. Pergunte se o chamador pode usar o novo aplicativo Element X."</string>
   <string name="screen_room_timeline_less_reactions">"Mostrar menos"</string>
   <string name="screen_room_timeline_message_copied">"Mensagem copiada"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Você não tem permissão para postar nesta sala"</string>

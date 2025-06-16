@@ -7,9 +7,10 @@
 
 package io.element.android.features.poll.impl.data
 
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.getActiveTimeline
@@ -19,10 +20,10 @@ import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class PollRepository @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val timelineProvider: TimelineProvider,
 ) {
-    suspend fun getPoll(eventId: EventId): Result<PollContent> = runCatching {
+    suspend fun getPoll(eventId: EventId): Result<PollContent> = runCatchingExceptions {
         timelineProvider
             .getActiveTimeline()
             .timelineItems
@@ -41,7 +42,7 @@ class PollRepository @Inject constructor(
         pollKind: PollKind,
         maxSelections: Int,
     ): Result<Unit> = when (existingPollId) {
-        null -> room.createPoll(
+        null -> room.liveTimeline.createPoll(
             question = question,
             answers = answers,
             maxSelections = maxSelections,

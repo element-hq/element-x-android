@@ -8,30 +8,15 @@
 package io.element.android.features.location.impl
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.location.api.R
-import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.features.location.api.BuildConfig
 import org.junit.Test
 
 class DefaultLocationServiceTest {
     @Test
-    fun `if apiKey is empty, isServiceAvailable should return false`() {
-        val fakeStringProvider = FakeStringProvider(
-            defaultResult = ""
+    fun `isServiceAvailable should return value depending on BuildConfig MAPTILER_API_KEY`() {
+        val locationService = DefaultLocationService()
+        assertThat(locationService.isServiceAvailable()).isEqualTo(
+            BuildConfig.MAPTILER_API_KEY.isNotEmpty()
         )
-        val locationService = DefaultLocationService(
-            stringProvider = fakeStringProvider,
-        )
-        assertThat(locationService.isServiceAvailable()).isFalse()
-        assertThat(fakeStringProvider.lastResIdParam).isEqualTo(R.string.maptiler_api_key)
-    }
-
-    @Test
-    fun `if apiKey is not empty, isServiceAvailable should return true`() {
-        val locationService = DefaultLocationService(
-            stringProvider = FakeStringProvider(
-                defaultResult = "aKey"
-            )
-        )
-        assertThat(locationService.isServiceAvailable()).isTrue()
     }
 }

@@ -57,7 +57,6 @@ import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
-import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.matrix.ui.model.InviteSender
@@ -70,6 +69,8 @@ internal val minHeight = 84.dp
 internal fun RoomSummaryRow(
     isDebugBuild: Boolean,
     room: RoomListRoomSummary,
+    hideInviteAvatars: Boolean,
+    isInviteSeen: Boolean,
     onClick: (RoomListRoomSummary) -> Unit,
     eventSink: (RoomListEvents) -> Unit,
     modifier: Modifier = Modifier,
@@ -82,18 +83,20 @@ internal fun RoomSummaryRow(
             RoomSummaryDisplayType.INVITE -> {
                 RoomSummaryScaffoldRow(
                     room = room,
+                    hideAvatarImage = hideInviteAvatars,
                     onClick = onClick,
                     onLongClick = {
                         Timber.d("Long click on invite room")
                     },
                 ) {
-                    InviteNameAndIndicatorRow(name = room.name)
-                    InviteSubtitle(isDebugBuild = isDebugBuild, isDm = room.isDm, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
+                    InviteNameAndIndicatorRow(name = room.name, isInviteSeen = isInviteSeen)
+                    InviteSubtitle(isDebugBuild = isDebugBuild, isDm = room.isDm, inviteSender = room.inviteSender)
                     if (!room.isDm && room.inviteSender != null) {
                         Spacer(modifier = Modifier.height(4.dp))
                         InviteSenderView(
                             modifier = Modifier.fillMaxWidth(),
                             inviteSender = room.inviteSender,
+                            hideAvatarImage = hideInviteAvatars
                         )
                     }
                     Spacer(modifier = Modifier.height(12.dp))
@@ -102,7 +105,7 @@ internal fun RoomSummaryRow(
                             eventSink(RoomListEvents.AcceptInvite(room))
                         },
                         onDeclineClick = {
-                            eventSink(RoomListEvents.DeclineInvite(room))
+                            eventSink(RoomListEvents.ShowDeclineInviteMenu(room))
                         }
                     )
                 }
@@ -166,6 +169,7 @@ private fun RoomSummaryScaffoldRow(
     onClick: (RoomListRoomSummary) -> Unit,
     onLongClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
+    hideAvatarImage: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val clickModifier = Modifier.combinedClickable(
@@ -186,6 +190,7 @@ private fun RoomSummaryScaffoldRow(
         CompositeAvatar(
             avatarData = room.avatarData,
             heroes = room.heroes,
+            hideAvatarImages = hideAvatarImage,
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(
@@ -234,13 +239,12 @@ private fun InviteSubtitle(
     isDebugBuild: Boolean,
     isDm: Boolean,
     inviteSender: InviteSender?,
-    canonicalAlias: RoomAlias?,
     modifier: Modifier = Modifier
 ) {
     val subtitle = if (isDm) {
         inviteSender?.userId?.value.takeIf { isDebugBuild } // TCHAP hide the Matrix Id in release mode
     } else {
-        canonicalAlias?.value
+        null
     }
     if (subtitle != null) {
         Text(
@@ -304,6 +308,7 @@ private fun LastMessageAndIndicatorRow(
 @Composable
 private fun InviteNameAndIndicatorRow(
     name: String?,
+    isInviteSeen: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -320,9 +325,11 @@ private fun InviteNameAndIndicatorRow(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        UnreadIndicatorAtom(
-            color = ElementTheme.colors.unreadIndicator
-        )
+        if (!isInviteSeen) {
+            UnreadIndicatorAtom(
+                color = ElementTheme.colors.unreadIndicator
+            )
+        }
     }
 }
 
@@ -389,6 +396,9 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider
     RoomSummaryRow(
         isDebugBuild = false,
         room = data,
+        hideInviteAvatars = false,
+        // Set isInviteSeen to true for the preview when the room has name "Bob"
+        isInviteSeen = data.name == "Bob",
         onClick = {},
         eventSink = {},
     )

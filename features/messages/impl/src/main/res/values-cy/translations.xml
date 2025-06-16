@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Gweithgareddau"</string>
+  <string name="emoji_picker_category_flags">"Baneri"</string>
+  <string name="emoji_picker_category_foods">"Bwyd a Diod"</string>
+  <string name="emoji_picker_category_nature">"Anifeiliaid a Natur"</string>
+  <string name="emoji_picker_category_objects">"Gwrthrychau"</string>
+  <string name="emoji_picker_category_people">"Wynebau Hapus a Phobl"</string>
+  <string name="emoji_picker_category_places">"Teithio a Llefydd"</string>
+  <string name="emoji_picker_category_symbols">"Symbolau"</string>
+  <string name="screen_report_content_block_user">"Rhwystro defnyddiwr"</string>
+  <string name="screen_report_content_block_user_hint">"Gwiriwch a ydych am guddio\'r holl negeseuon presennol ac yn y dyfodol gan y defnyddiwr hwn"</string>
+  <string name="screen_report_content_explanation">"Bydd y neges hon yn cael ei hadrodd i weinyddwr eich gweinyddwr cartref. Fyddan nhw ddim yn gallu darllen unrhyw negeseuon wedi\'u hamgryptio."</string>
+  <string name="screen_report_content_hint">"Rheswm dros adrodd am y cynnwys hwn"</string>
+  <string name="screen_room_attachment_source_camera">"Camera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Cymryd llun"</string>
+  <string name="screen_room_attachment_source_camera_video">"Recordio fideo"</string>
+  <string name="screen_room_attachment_source_files">"Atodiad"</string>
+  <string name="screen_room_attachment_source_gallery">"Llyfrgell Ffotograffau a Fideo"</string>
+  <string name="screen_room_attachment_source_location">"Lleoliad"</string>
+  <string name="screen_room_attachment_source_poll">"Pôl"</string>
+  <string name="screen_room_attachment_text_formatting">"Fformatio Testun"</string>
+  <string name="screen_room_encrypted_history_banner">"Nid yw hanes negeseuon ar gael ar hyn o bryd."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Nid yw hanes negeseuon ar gael yn yr ystafell hon. Dilyswch y ddyfais hon i weld hanes eich neges."</string>
+  <string name="screen_room_invite_again_alert_message">"Hoffech chi eu gwahodd yn ôl?"</string>
+  <string name="screen_room_invite_again_alert_title">"Rydych chi ar eich pen eich hun yn y sgwrs hon"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Rhowch wybod i\'r ystafell gyfan"</string>
+  <string name="screen_room_mentions_at_room_title">"Pawb"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Anfon eto"</string>
+  <string name="screen_room_retry_send_menu_title">"Methodd eich neges ag anfon"</string>
+  <string name="screen_room_timeline_add_reaction">"Ychwanegu emoji"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Dyma ddechrau %1$s."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Dyma ddechrau\'r sgwrs hon."</string>
+  <string name="screen_room_timeline_legacy_call">"Galwad heb ei chefnogi. Gofynnwch a all y galwr ddefnyddio\'r ap Element X newydd."</string>
+  <string name="screen_room_timeline_less_reactions">"Dangos llai"</string>
+  <string name="screen_room_timeline_message_copied">"Neges wedi\'i chopïo"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Does gennych chi ddim caniatâd i bostio i\'r ystafell hon"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Dangos llai"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Dangos rhagor"</string>
+  <string name="screen_room_timeline_read_marker_title">"Newydd"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="zero">"%1$d newid ystafelloedd"</item>
+    <item quantity="one">"%1$d newid ystafell"</item>
+    <item quantity="two">"%1$d newid ystafell"</item>
+    <item quantity="few">"%1$d newid ystafell"</item>
+    <item quantity="many">"%1$d newid ystafell"</item>
+    <item quantity="other">"%1$d newid ystafell"</item>
+  </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="zero">"%1$s, %2$s a %3$d arall"</item>
+    <item quantity="one">"%1$s, %2$s a %3$d arall"</item>
+    <item quantity="two">"%1$s, %2$s a %3$d arall"</item>
+    <item quantity="few">"%1$s, %2$s a %3$d arall"</item>
+    <item quantity="many">"%1$s, %2$s a %3$d arall"</item>
+    <item quantity="other">"%1$s, %2$s a %3$d arall"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="zero">"Mae %1$s yn teipio"</item>
+    <item quantity="one">"Mae %1$s yn teipio"</item>
+    <item quantity="two">"Mae %1$s yn teipio"</item>
+    <item quantity="few">"Mae %1$s yn teipio"</item>
+    <item quantity="many">"Mae %1$s yn teipio"</item>
+    <item quantity="other">"Mae %1$s yn teipio"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s a %2$s"</string>
+</resources>

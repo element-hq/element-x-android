@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"کمرے سے محظور کریں"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"محظور کریں"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"اگر وہ مدعو کیا گیا تو وہ دوبارہ اس کمرے میں شامل نہیں ہوسکیں گے۔"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"کیا آپ کو یقین ہے کہ آپ اس رکن کو محظور کرنا چاہتے ہیں؟"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s کو محظور کر رہا ہے"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"نمایہ ملاحظہ کریں"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"کمرے سے ہٹائیں"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"رکن کو ہٹائیں اور مستقبل میں شمولیت پر پابندی لگائیں؟"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s کو ہٹا رہا ہے…"</string>
+</resources>

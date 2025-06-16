@@ -18,6 +18,14 @@ open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerStat
             aChangeServerState(),
             aChangeServerState(changeServerAction = AsyncData.Failure(ChangeServerError.Error(CommonStrings.error_unknown))),
             aChangeServerState(changeServerAction = AsyncData.Failure(ChangeServerError.SlidingSyncAlert)),
+            aChangeServerState(
+                changeServerAction = AsyncData.Failure(
+                    ChangeServerError.UnauthorizedAccountProvider(
+                        unauthorisedAccountProviderTitle = "example.com",
+                        authorisedAccountProviderTitles = listOf("element.io", "element.org"),
+                    )
+                )
+            ),
         )
 }
 

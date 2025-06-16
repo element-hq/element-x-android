@@ -22,6 +22,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -58,9 +59,9 @@ class NotificationSettingsPresenter @Inject constructor(
         val changeNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         val localCoroutineScope = rememberCoroutineScope()
-        val appNotificationsEnabled = userPushStore
-            .getNotificationEnabledForDevice()
-            .collectAsState(initial = false)
+        val appNotificationsEnabled by remember {
+            userPushStore.getNotificationEnabledForDevice()
+        }.collectAsState(initial = false)
 
         val matrixSettings: MutableState<NotificationSettingsState.MatrixSettings> = remember {
             mutableStateOf(NotificationSettingsState.MatrixSettings.Uninitialized)
@@ -158,7 +159,7 @@ class NotificationSettingsPresenter @Inject constructor(
             matrixSettings = matrixSettings.value,
             appSettings = NotificationSettingsState.AppSettings(
                 systemNotificationsEnabled = systemNotificationsEnabled.value,
-                appNotificationsEnabled = appNotificationsEnabled.value
+                appNotificationsEnabled = appNotificationsEnabled,
             ),
             changeNotificationSettingAction = changeNotificationSettingAction.value,
             currentPushDistributor = currentDistributor,
@@ -209,7 +210,7 @@ class NotificationSettingsPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.fixConfigurationMismatch(target: MutableState<NotificationSettingsState.MatrixSettings>) = launch {
-        runCatching {
+        runCatchingExceptions {
             val groupDefaultMode = notificationSettingsService.getDefaultRoomNotificationMode(isEncrypted = false, isOneToOne = false).getOrThrow()
             val encryptedGroupDefaultMode = notificationSettingsService.getDefaultRoomNotificationMode(isEncrypted = true, isOneToOne = false).getOrThrow()
 

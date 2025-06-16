@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"Para garantir que você nunca perca uma chamada importante, por favor altere as suas configurações para permitir notificações em tela cheia enquanto o seu celular estiver bloqueado."</string>
+  <string name="full_screen_intent_banner_title">"Melhore a sua experiência de chamadas"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Escolha como receber notificações"</string>
   <string name="screen_advanced_settings_developer_mode">"Modo de desenvolvedor"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Habilite para ter acesso a recursos e funcionalidades para desenvolvedores."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL base do Element Call personalizado"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Defina um URL base personalizado para Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL inválida, por favor verifique se o protocolo (http/https) e o endereço correto estão presentes."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Oculte avatares em solicitações de convite para salas"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Ocultar visualizações de mídia na linha do tempo"</string>
+  <string name="screen_advanced_settings_media_compression_description">"Faça upload de fotos e vídeos com mais rapidez e reduza o uso de dados"</string>
+  <string name="screen_advanced_settings_media_compression_title">"Otimize a qualidade da mídia"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderação e segurança"</string>
+  <string name="screen_advanced_settings_push_provider_android">"Provedor de notificações por push"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Desative o editor de rich text para digitar Markdown manualmente."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Confirmações de leitura"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Se desligado, suas confirmações de leitura não serão enviadas para ninguém. Você ainda receberá confirmações de leitura de outros usuários."</string>
   <string name="screen_advanced_settings_share_presence">"Compartilhar presença"</string>
   <string name="screen_advanced_settings_share_presence_description">"Se desligado, você não poderá enviar ou receber confirmações de leitura ou notificações de digitação."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Ocultar sempre"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Mostrar sempre"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Em salas privadas"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Uma mídia oculta sempre pode ser exibida se você tocar nela"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Mostrar mídia na linha do tempo"</string>
   <string name="screen_advanced_settings_view_source_description">"Ativar a opção de visualizar o fonte da mensagem na linha do tempo."</string>
   <string name="screen_blocked_users_empty">"Você não tem usuários bloqueados"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Desbloquear"</string>
@@ -40,6 +53,7 @@ Se você continuar, algumas de suas configurações poderão mudar."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"A configuração não foi corrigida, tente novamente."</string>
   <string name="screen_notification_settings_group_chats">"Bate-papos em grupo"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Convites"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Seu servidor doméstico não suporta esta opção em salas criptografadas. Você pode não ser notificado em algumas salas."</string>
   <string name="screen_notification_settings_mentions_section_title">"Menções"</string>
   <string name="screen_notification_settings_mode_all">"Todos"</string>
   <string name="screen_notification_settings_mode_mentions">"Menções"</string>
@@ -49,4 +63,7 @@ Se você continuar, algumas de suas configurações poderão mudar."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"configurações do sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificações do sistema desativadas"</string>
   <string name="screen_notification_settings_title">"Notificações"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Histórico de push"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Solução de problemas"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Solucionar problemas de notificações"</string>
 </resources>

@@ -11,7 +11,9 @@ import android.net.Uri
 import io.element.android.libraries.core.extensions.flatMapCatching
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -21,7 +23,7 @@ import javax.inject.Inject
 
 class MediaSender @Inject constructor(
     private val preProcessor: MediaPreProcessor,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) {
     private val ongoingUploadJobs = ConcurrentHashMap<Job.Key, MediaUploadHandler>()
@@ -46,12 +48,14 @@ class MediaSender @Inject constructor(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<Unit> {
-        return room.sendMedia(
+        return room.liveTimeline.sendMedia(
             uploadInfo = mediaUploadInfo,
             progressCallback = progressCallback,
             caption = caption,
-            formattedCaption = formattedCaption
+            formattedCaption = formattedCaption,
+            replyParameters = replyParameters,
         )
             .handleSendResult()
     }
@@ -61,7 +65,8 @@ class MediaSender @Inject constructor(
         mimeType: String,
         caption: String? = null,
         formattedCaption: String? = null,
-        progressCallback: ProgressCallback? = null
+        progressCallback: ProgressCallback? = null,
+        replyParameters: ReplyParameters? = null,
     ): Result<Unit> {
         val compressIfPossible = sessionPreferencesStore.doesCompressMedia().first()
         return preProcessor
@@ -72,11 +77,12 @@ class MediaSender @Inject constructor(
                 compressIfPossible = compressIfPossible,
             )
             .flatMapCatching { info ->
-                room.sendMedia(
+                room.liveTimeline.sendMedia(
                     uploadInfo = info,
                     progressCallback = progressCallback,
                     caption = caption,
-                    formattedCaption = formattedCaption
+                    formattedCaption = formattedCaption,
+                    replyParameters = replyParameters,
                 )
             }
             .handleSendResult()
@@ -86,7 +92,8 @@ class MediaSender @Inject constructor(
         uri: Uri,
         mimeType: String,
         waveForm: List<Float>,
-        progressCallback: ProgressCallback? = null
+        progressCallback: ProgressCallback? = null,
+        replyParameters: ReplyParameters? = null,
     ): Result<Unit> {
         return preProcessor
             .process(
@@ -102,11 +109,12 @@ class MediaSender @Inject constructor(
                     audioInfo = audioInfo,
                     waveform = waveForm,
                 )
-                room.sendMedia(
+                room.liveTimeline.sendMedia(
                     uploadInfo = newInfo,
                     progressCallback = progressCallback,
                     caption = null,
-                    formattedCaption = null
+                    formattedCaption = null,
+                    replyParameters = replyParameters,
                 )
             }
             .handleSendResult()
@@ -123,11 +131,12 @@ class MediaSender @Inject constructor(
             ongoingUploadJobs.remove(Job)
         }
 
-    private suspend fun MatrixRoom.sendMedia(
+    private suspend fun Timeline.sendMedia(
         uploadInfo: MediaUploadInfo,
         progressCallback: ProgressCallback?,
         caption: String?,
         formattedCaption: String?,
+        replyParameters: ReplyParameters?,
     ): Result<Unit> {
         val handler = when (uploadInfo) {
             is MediaUploadInfo.Image -> {
@@ -137,7 +146,8 @@ class MediaSender @Inject constructor(
                     imageInfo = uploadInfo.imageInfo,
                     caption = caption,
                     formattedCaption = formattedCaption,
-                    progressCallback = progressCallback
+                    progressCallback = progressCallback,
+                    replyParameters = replyParameters,
                 )
             }
             is MediaUploadInfo.Video -> {
@@ -147,7 +157,8 @@ class MediaSender @Inject constructor(
                     videoInfo = uploadInfo.videoInfo,
                     caption = caption,
                     formattedCaption = formattedCaption,
-                    progressCallback = progressCallback
+                    progressCallback = progressCallback,
+                    replyParameters = replyParameters,
                 )
             }
             is MediaUploadInfo.Audio -> {
@@ -156,7 +167,8 @@ class MediaSender @Inject constructor(
                     audioInfo = uploadInfo.audioInfo,
                     caption = caption,
                     formattedCaption = formattedCaption,
-                    progressCallback = progressCallback
+                    progressCallback = progressCallback,
+                    replyParameters = replyParameters,
                 )
             }
             is MediaUploadInfo.VoiceMessage -> {
@@ -164,7 +176,8 @@ class MediaSender @Inject constructor(
                     file = uploadInfo.file,
                     audioInfo = uploadInfo.audioInfo,
                     waveform = uploadInfo.waveform,
-                    progressCallback = progressCallback
+                    progressCallback = progressCallback,
+                    replyParameters = replyParameters,
                 )
             }
             is MediaUploadInfo.AnyFile -> {
@@ -173,13 +186,16 @@ class MediaSender @Inject constructor(
                     fileInfo = uploadInfo.fileInfo,
                     caption = caption,
                     formattedCaption = formattedCaption,
-                    progressCallback = progressCallback
+                    progressCallback = progressCallback,
+                    replyParameters = replyParameters,
                 )
             }
         }
 
+        // We handle the cancellations here manually, so we suppress the warning
+        @Suppress("RunCatchingNotAllowed")
         return handler
-            .flatMapCatching { uploadHandler ->
+            .mapCatching { uploadHandler ->
                 ongoingUploadJobs[Job] = uploadHandler
                 uploadHandler.await()
             }

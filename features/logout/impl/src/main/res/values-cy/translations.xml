@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Ydych chi\'n siŵr eich bod am allgofnodi?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Allgofnodi"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Allgofnodi"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Yn allgofnodi…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Rydych chi ar fin allgofnodi o\'ch sesiwn ddiwethaf. Os byddwch yn allgofnodi nawr, byddwch yn colli mynediad i\'ch negeseuon wedi\'u hamgryptio."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Rydych chi wedi diffodd copïo wrth gefn"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Roedd eich allweddi yn dal i gael eu copïo wrth gefn pan aethoch all-lein. Ailgysylltwch fel bod modd gwneud copi wrth gefn o\'ch allweddi cyn allgofnodi."</string>
+  <string name="screen_signout_key_backup_offline_title">"Mae eich allweddi yn dal i gael eu copïo wrth gefn"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Arhoswch iddo gael ei gwblhau cyn allgofnodi."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Mae eich allweddi yn dal i gael eu copïo wrth gefn"</string>
+  <string name="screen_signout_preference_item">"Allgofnodi"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Rydych chi ar fin allgofnodi o\'ch sesiwn ddiwethaf. Os byddwch yn allgofnodi nawr, byddwch yn colli mynediad i\'ch negeseuon wedi\'u hamgryptio."</string>
+  <string name="screen_signout_recovery_disabled_title">"Adfer heb ei osod"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Rydych chi ar fin allgofnodi o\'ch sesiwn ddiwethaf. Os ydych chi\'n allgofnodi nawr, efallai y byddwch chi\'n colli mynediad i\'ch negeseuon wedi\'u hamgryptio."</string>
+  <string name="screen_signout_save_recovery_key_title">"Ydych chi wedi cadw\'ch allwedd adfer?"</string>
+</resources>

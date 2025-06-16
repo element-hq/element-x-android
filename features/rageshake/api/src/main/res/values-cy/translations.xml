@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"Chwalodd %1$s y tro diwethaf iddo gael ei ddefnyddio. Hoffech chi rannu adroddiad gwall gyda ni?"</string>
+  <string name="rageshake_detection_dialog_content">"Mae\'n ymddangos eich bod yn ysgwyd y ffôn mewn rhwystredigaeth. Hoffech chi agor y sgrin adrodd gwallau?"</string>
+  <string name="settings_rageshake">"Rageshake"</string>
+  <string name="settings_rageshake_detection_threshold">"Trothwy canfod"</string>
+</resources>

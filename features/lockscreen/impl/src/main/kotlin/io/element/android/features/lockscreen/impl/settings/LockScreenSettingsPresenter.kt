@@ -20,6 +20,7 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricAuthentica
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,6 +30,7 @@ class LockScreenSettingsPresenter @Inject constructor(
     private val pinCodeManager: PinCodeManager,
     private val lockScreenStore: LockScreenStore,
     private val biometricAuthenticatorManager: BiometricAuthenticatorManager,
+    @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
 ) : Presenter<LockScreenSettingsState> {
     @Composable
@@ -38,7 +40,9 @@ class LockScreenSettingsPresenter @Inject constructor(
                 value = !lockScreenConfig.isPinMandatory && hasPinCode
             }
         }
-        val isBiometricEnabled by lockScreenStore.isBiometricUnlockAllowed().collectAsState(initial = false)
+        val isBiometricEnabled by remember {
+            lockScreenStore.isBiometricUnlockAllowed()
+        }.collectAsState(initial = false)
         var showRemovePinConfirmation by remember {
             mutableStateOf(false)
         }

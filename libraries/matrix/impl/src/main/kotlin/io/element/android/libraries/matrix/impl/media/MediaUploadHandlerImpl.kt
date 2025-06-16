@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.androidutils.file.safeDelete
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import java.io.File
@@ -17,7 +18,7 @@ class MediaUploadHandlerImpl(
     private val sendAttachmentJoinHandle: SendAttachmentJoinHandle,
 ) : MediaUploadHandler {
     override suspend fun await(): Result<Unit> =
-        runCatching {
+        runCatchingExceptions {
             sendAttachmentJoinHandle.join()
         }
             .also { cleanUpFiles() }

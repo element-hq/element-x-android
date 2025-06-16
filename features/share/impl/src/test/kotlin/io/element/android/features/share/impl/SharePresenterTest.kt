@@ -18,14 +18,17 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.TestScope
@@ -89,11 +92,13 @@ class SharePresenterTest {
 
     @Test
     fun `present - send text ok`() = runTest {
-        val matrixRoom = FakeMatrixRoom(
-            sendMessageResult = { _, _, _ -> Result.success(Unit) },
+        val joinedRoom = FakeJoinedRoom(
+            liveTimeline = FakeTimeline().apply {
+                sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+            },
         )
         val matrixClient = FakeMatrixClient().apply {
-            givenGetRoomResult(A_ROOM_ID, matrixRoom)
+            givenGetRoomResult(A_ROOM_ID, joinedRoom)
         }
         val presenter = createSharePresenter(
             matrixClient = matrixClient,
@@ -116,14 +121,17 @@ class SharePresenterTest {
 
     @Test
     fun `present - send media ok`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+        val sendFileResult =
+            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
-        val matrixRoom = FakeMatrixRoom(
-            sendFileResult = sendFileResult,
+        val joinedRoom = FakeJoinedRoom(
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
         )
         val matrixClient = FakeMatrixClient().apply {
-            givenGetRoomResult(A_ROOM_ID, matrixRoom)
+            givenGetRoomResult(A_ROOM_ID, joinedRoom)
         }
         val presenter = createSharePresenter(
             matrixClient = matrixClient,
@@ -156,15 +164,17 @@ class SharePresenterTest {
         intent: Intent = Intent(),
         shareIntentHandler: ShareIntentHandler = FakeShareIntentHandler(),
         matrixClient: MatrixClient = FakeMatrixClient(),
-        mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor()
+        mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ): SharePresenter {
         return SharePresenter(
             intent = intent,
-            appCoroutineScope = this,
+            sessionCoroutineScope = this,
             shareIntentHandler = shareIntentHandler,
             matrixClient = matrixClient,
             mediaPreProcessor = mediaPreProcessor,
-            InMemorySessionPreferencesStore(),
+            sessionPreferencesStore = InMemorySessionPreferencesStore(),
+            activeRoomsHolder = activeRoomsHolder,
         )
     }
 }

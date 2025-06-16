@@ -22,12 +22,13 @@ import dagger.assisted.AssistedInject
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
@@ -45,7 +46,7 @@ import kotlinx.coroutines.launch
 
 class MediaGalleryPresenter @AssistedInject constructor(
     @Assisted private val navigator: MediaGalleryNavigator,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val mediaGalleryDataSource: MediaGalleryDataSource,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,
@@ -154,7 +155,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
             mimeType = mediaItem.mediaInfo().mimeType,
             filename = mediaItem.mediaInfo().filename
         )
-            .mapCatching { mediaFile ->
+            .mapCatchingExceptions { mediaFile ->
                 localMediaFactory.createFromMediaFile(
                     mediaFile = mediaFile,
                     mediaInfo = mediaItem.mediaInfo()
@@ -164,7 +165,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
 
     private suspend fun saveOnDisk(mediaItem: MediaItem.Event) {
         downloadMedia(mediaItem)
-            .mapCatching { localMedia ->
+            .mapCatchingExceptions { localMedia ->
                 localMediaActions.saveOnDisk(localMedia)
             }
             .onSuccess {
@@ -179,7 +180,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
 
     private suspend fun share(mediaItem: MediaItem.Event) {
         downloadMedia(mediaItem)
-            .mapCatching { localMedia ->
+            .mapCatchingExceptions { localMedia ->
                 localMediaActions.share(localMedia)
             }
             .onFailure {

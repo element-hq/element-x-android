@@ -22,6 +22,7 @@ import androidx.lifecycle.Lifecycle
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -44,7 +45,8 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 class VoiceMessageComposerPresenter @Inject constructor(
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val voiceRecorder: VoiceRecorder,
     private val analyticsService: AnalyticsService,
     private val mediaSender: MediaSender,
@@ -74,11 +76,11 @@ class VoiceMessageComposerPresenter @Inject constructor(
         val onLifecycleEvent = { event: Lifecycle.Event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
-                    appCoroutineScope.finishRecording()
+                    sessionCoroutineScope.finishRecording()
                     player.pause()
                 }
                 Lifecycle.Event.ON_DESTROY -> {
-                    appCoroutineScope.cancelRecording()
+                    sessionCoroutineScope.cancelRecording()
                 }
                 else -> {}
             }
@@ -145,7 +147,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
             isSending = true
             player.pause()
             analyticsService.captureComposerEvent()
-            appCoroutineScope.launch {
+            sessionCoroutineScope.launch {
                 val result = sendMessage(
                     file = finishedState.file,
                     mimeType = finishedState.mimeType,

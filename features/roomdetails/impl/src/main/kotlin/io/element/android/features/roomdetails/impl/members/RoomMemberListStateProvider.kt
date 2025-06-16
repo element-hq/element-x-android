@@ -8,8 +8,8 @@
 package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
-import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
@@ -87,7 +87,7 @@ internal class RoomMemberListStateBannedProvider : PreviewParameterProvider<Room
                         ),
                     )
                 ),
-                moderationState = aRoomMembersModerationState(canDisplayBannedUsers = true),
+                moderationState = aRoomMemberModerationState(),
             ),
             aRoomMemberListState(
                 roomMembers = AsyncData.Loading(
@@ -101,7 +101,7 @@ internal class RoomMemberListStateBannedProvider : PreviewParameterProvider<Room
                         ),
                     )
                 ),
-                moderationState = aRoomMembersModerationState(canDisplayBannedUsers = true),
+                moderationState = aRoomMemberModerationState(),
             ),
             aRoomMemberListState(
                 roomMembers = AsyncData.Success(
@@ -111,7 +111,7 @@ internal class RoomMemberListStateBannedProvider : PreviewParameterProvider<Room
                         banned = persistentListOf(),
                     )
                 ),
-                moderationState = aRoomMembersModerationState(canDisplayBannedUsers = true),
+                moderationState = aRoomMemberModerationState(),
             )
         )
 }
@@ -119,7 +119,7 @@ internal class RoomMemberListStateBannedProvider : PreviewParameterProvider<Room
 internal fun aRoomMemberListState(
     roomMembers: AsyncData<RoomMembers> = AsyncData.Loading(),
     searchResults: SearchBarResultState<AsyncData<RoomMembers>> = SearchBarResultState.Initial(),
-    moderationState: RoomMembersModerationState = aRoomMembersModerationState(),
+    moderationState: RoomMemberModerationState = aRoomMemberModerationState(),
 ) = RoomMemberListState(
     isDebugBuild = false,
     roomMembers = roomMembers,
@@ -130,6 +130,17 @@ internal fun aRoomMemberListState(
     moderationState = moderationState,
     eventSink = {}
 )
+
+fun aRoomMemberModerationState(
+    canBan: Boolean = false,
+    canKick: Boolean = false,
+): RoomMemberModerationState {
+    return object : RoomMemberModerationState {
+        override val canKick: Boolean = canKick
+        override val canBan: Boolean = canBan
+        override val eventSink: (RoomMemberModerationEvents) -> Unit = {}
+    }
+}
 
 fun aRoomMember(
     userId: UserId = UserId("@alice:server.org"),

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"dilysu biometreg"</string>
+  <string name="screen_app_lock_biometric_unlock">"datgloi biometreg"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Datgloi gyda biometreg"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Cadarnhau biometreg"</string>
+  <string name="screen_app_lock_forgot_pin">"Wedi anghofio\'ch PIN?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Newid cod PIN"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Caniatáu datgloi biometreg"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Dileu PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Ydych chi\'n siŵr eich bod am ddileu\'r PIN?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Tynnu\'r PIN?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Caniatáu %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Byddai\'n well gen i ddefnyddio PIN"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Arbedwch beth amser i chi\'ch hun a defnyddiwch %1$s i ddatgloi\'r ap bob tro"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Dewiswch PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Cadarnhau eich PIN"</string>
+  <string name="screen_app_lock_setup_pin_context">"Clowch %1$s i ychwanegu diogelwch ychwanegol i\'ch sgyrsiau.
+
+Dewiswch rywbeth cofiadwy. Os byddwch chi\'n anghofio\'r PIN hwn, byddwch chi\'n cael eich allgofnodi o\'r ap."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Does dim mod dewis hwn fel eich cod PIN am resymau diogelwch"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Dewiswch PIN gwahanol"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Rhowch yr un PIN ddwywaith"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Nid yw\'r PINau\'n cyfateb"</string>
+  <string name="screen_app_lock_signout_alert_message">"Bydd angen i chi ail-fewngofnodi a chreu PIN newydd i barhau"</string>
+  <string name="screen_app_lock_signout_alert_title">"Rydych chi\'n cael eich allgofnodi"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="zero">"Does gennych %1$d ceisiadau i ddatgloi"</item>
+    <item quantity="one">"Mae gennych %1$d cais i ddatgloi"</item>
+    <item quantity="two">"Mae gennych %1$d gais i ddatgloi"</item>
+    <item quantity="few">"Mae gennych %1$d chais i ddatgloi"</item>
+    <item quantity="many">"Mae gennych %1$d chais i ddatgloi"</item>
+    <item quantity="other">"Mae gennych %1$d cais i ddatgloi"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="zero">"PIN anghywir. Does gennych %1$d cais arall"</item>
+    <item quantity="one">"PIN anghywir. Mae gennych %1$d cais arall"</item>
+    <item quantity="two">"PIN anghywir. Mae gennych %1$d gais arall"</item>
+    <item quantity="few">"PIN anghywir. Mae gennych %1$d chais arall"</item>
+    <item quantity="many">"PIN anghywir. Mae gennych %1$d chais arall"</item>
+    <item quantity="other">"PIN anghywir. Mae gennych %1$d cais arall"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"Defnyddio biometreg"</string>
+  <string name="screen_app_lock_use_pin_android">"Defnyddio PIN"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Yn allgofnodi…"</string>
+</resources>

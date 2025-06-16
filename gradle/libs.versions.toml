@@ -3,57 +3,53 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.9.1"
-kotlin = "2.1.10"
-kotlinpoet = "2.1.0"
-ksp = "2.1.10-1.0.31"
+android_gradle_plugin = "8.10.1"
+kotlin = "2.1.21"
+kotlinpoet = "2.2.0"
+ksp = "2.1.21-2.0.1"
 firebaseAppDistribution = "5.1.1"
 
 # AndroidX
-core = "1.15.0"
-# Warning: there is an issue with 1.1.0 and 1.1.1, that I cannot repro on unit test.
-# To repro with the application:
-# Clear the storage of the application and run the app. Nearly each time, there is an infinite loading
-# due to the DefaultMigrationStore not behaving as expected.
-# Stick to 1.0.0 for now, and ensure that this scenario cannot be reproduced when upgrading the version.
-datastore = "1.0.0"
+core = "1.16.0"
+datastore = "1.1.7"
 constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
-lifecycle = "2.8.7"
+lifecycle = "2.9.1"
 activity = "1.10.1"
-media3 = "1.5.1"
-camera = "1.4.1"
+media3 = "1.7.1"
+camera = "1.4.2"
 
 # Compose
-compose_bom = "2025.03.00"
+compose_bom = "2025.05.01"
 composecompiler = "1.5.15"
 
 # Coroutines
-coroutines = "1.10.1"
+coroutines = "1.10.2"
 
 # Accompanist
-accompanist = "0.37.2"
+accompanist = "0.37.3"
 
 # Test
 test_core = "1.6.1"
 
 # Jetbrain
 datetime = "0.6.2"
-serialization_json = "1.8.0"
+serialization_json = "1.8.1"
 
 #other
-coil = "3.1.0"
+detekt = "1.23.8"
+coil = "3.2.0"
 showkase = "1.0.3"
-appyx = "1.6.0"
-sqldelight = "2.0.2"
+appyx = "1.7.1"
+sqldelight = "2.1.0"
 wysiwyg = "2.38.3"
-telephoto = "0.15.1"
+telephoto = "0.16.0"
 
 # Dependency analysis
-dependencyAnalysis = "2.13.2"
+dependencyAnalysis = "2.18.0"
 
 # DI
-dagger = "2.56.1"
+dagger = "2.56.2"
 anvil = "0.4.1"
 
 # Auto service
@@ -77,7 +73,7 @@ kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", ve
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.11.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.15.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -89,7 +85,7 @@ androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
 androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.9.1"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
-androidx_exifinterface = "androidx.exifinterface:exifinterface:1.4.0"
+androidx_exifinterface = "androidx.exifinterface:exifinterface:1.4.1"
 androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx_constraintlayout_compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayout_compose" }
 androidx_camera_lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camera" }
@@ -109,7 +105,7 @@ androidx_activity_activity = { module = "androidx.activity:activity", version.re
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.2.0"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.13.0"
+androidx_webkit = "androidx.webkit:webkit:1.14.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = { module = "androidx.compose.material3:material3" }
@@ -139,7 +135,7 @@ network_okhttp_logging = { module = "com.squareup.okhttp3:logging-interceptor" }
 network_okhttp_okhttp = { module = "com.squareup.okhttp3:okhttp" }
 network_okhttp = { module = "com.squareup.okhttp3:okhttp" }
 network_mockwebserver = { module = "com.squareup.okhttp3:mockwebserver" }
-network_retrofit_bom = "com.squareup.retrofit2:retrofit-bom:2.11.0"
+network_retrofit_bom = "com.squareup.retrofit2:retrofit-bom:3.0.0"
 network_retrofit = { module = "com.squareup.retrofit2:retrofit" }
 network_retrofit_converter_serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization" }
 
@@ -149,14 +145,16 @@ test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.6.2"
-test_mockk = "io.mockk:mockk:1.13.17"
+test_mockk = "io.mockk:mockk:1.14.2"
 test_konsist = "com.lemonappdev:konsist:0.17.3"
 test_turbine = "app.cash.turbine:turbine:1.2.0"
 test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
 test_robolectric = "org.robolectric:robolectric:4.14.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
-test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.5.1"
+test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.6.1"
+test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
+test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -164,44 +162,44 @@ coil_network_okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 coil_compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil_gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil_test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
-compound = { module = "io.element.android:compound-android", version = "25.2.26" }
+compound = { module = "io.element.android:compound-android", version = "25.4.4" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
-kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
+kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
-jsoup = "org.jsoup:jsoup:1.19.1"
+jsoup = "org.jsoup:jsoup:1.20.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
-molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
+molecule-runtime = "app.cash.molecule:molecule-runtime:2.1.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.3.24"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.6.10"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
-sqlite = "androidx.sqlite:sqlite-ktx:2.4.0"
-unifiedpush = "com.github.UnifiedPush:android-connector:2.4.0"
+sqlite = "androidx.sqlite:sqlite-ktx:2.5.1"
+unifiedpush = "org.unifiedpush.android:connector:3.0.9"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.11.2"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.8.4"
+maplibre = "org.maplibre.gl:android-sdk:11.10.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
-opusencoder = "io.element.android:opusencoder:1.1.0"
+opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.12.0"
-sentry = "io.sentry:sentry-android:8.5.0"
+posthog = "com.posthog:posthog-android:3.17.0"
+sentry = "io.sentry:sentry-android:8.13.2"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
 # Emojibase
-matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.3.4"
+matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.4.2"
 sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 
 # Di
@@ -212,7 +210,7 @@ anvil_compiler_api = { module = "dev.zacsweers.anvil:compiler-api", version.ref 
 anvil_compiler_utils = { module = "dev.zacsweers.anvil:compiler-utils", version.ref = "anvil" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.9.0-rc.4"
+element_call_embedded = "io.element.android:element-call-embedded:0.12.2"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
@@ -236,15 +234,15 @@ kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
-detekt = "io.gitlab.arturbosch.detekt:1.23.8"
-ktlint = "org.jlleitschuh.gradle.ktlint:12.2.0"
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+ktlint = "org.jlleitschuh.gradle.ktlint:12.3.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:12.1.0"
+dependencycheck = "org.owasp.dependencycheck:12.1.2"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.5"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
-sonarqube = "org.sonarqube:6.1.0.5360"
+sonarqube = "org.sonarqube:6.2.0.5505"
 licensee = "app.cash.licensee:1.13.0"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

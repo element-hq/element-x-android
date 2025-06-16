@@ -12,6 +12,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
@@ -26,6 +27,7 @@ import javax.inject.Inject
 class ChangeServerPresenter @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
+    private val enterpriseService: EnterpriseService,
 ) : Presenter<ChangeServerState> {
     @Composable
     override fun present(): ChangeServerState {
@@ -53,6 +55,12 @@ class ChangeServerPresenter @Inject constructor(
         changeServerAction: MutableState<AsyncData<Unit>>,
     ) = launch {
         suspend {
+            if (enterpriseService.isAllowedToConnectToHomeserver(data.url).not()) {
+                throw UnauthorizedAccountProviderException(
+                    unauthorisedAccountProviderTitle = data.title,
+                    authorisedAccountProviderTitles = enterpriseService.defaultHomeserverList(),
+                )
+            }
             authenticationService.setHomeserver(data.url).map {
                 authenticationService.getHomeserverDetails().value!!
                 // Valid, remember user choice

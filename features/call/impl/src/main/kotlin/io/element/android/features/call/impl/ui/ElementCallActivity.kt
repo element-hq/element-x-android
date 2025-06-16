@@ -10,10 +10,6 @@ package io.element.android.features.call.impl.ui
 import android.Manifest
 import android.app.PictureInPictureParams
 import android.content.Intent
-import android.content.res.Configuration
-import android.media.AudioAttributes
-import android.media.AudioFocusRequest
-import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Rational
@@ -47,6 +43,8 @@ import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.audio.api.AudioFocus
+import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
@@ -66,19 +64,14 @@ class ElementCallActivity :
     @Inject lateinit var enterpriseService: EnterpriseService
     @Inject lateinit var pictureInPicturePresenter: PictureInPicturePresenter
     @Inject lateinit var buildMeta: BuildMeta
+    @Inject lateinit var audioFocus: AudioFocus
 
     private lateinit var presenter: Presenter<CallScreenState>
 
-    private lateinit var audioManager: AudioManager
-
     private var requestPermissionCallback: RequestPermissionCallback? = null
-
-    private var audiofocusRequest: AudioFocusRequest? = null
-    private var audioFocusChangeListener: AudioManager.OnAudioFocusChangeListener? = null
 
     private val requestPermissionsLauncher = registerPermissionResultLauncher()
 
-    private var isDarkMode = false
     private val webViewTarget = mutableStateOf<CallType?>(null)
 
     private var eventSink: ((CallScreenEvents) -> Unit)? = null
@@ -88,13 +81,14 @@ class ElementCallActivity :
 
         applicationContext.bindings<CallBindings>().inject(this)
 
-        @Suppress("DEPRECATION")
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
-                WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON or
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-        )
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+        } else {
+            @Suppress("DEPRECATION")
+            window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+        }
 
         setCallType(intent)
         // If presenter is not created at this point, it means we have no call to display, the Activity is finishing, so return early
@@ -102,13 +96,9 @@ class ElementCallActivity :
             return
         }
 
-        if (savedInstanceState == null) {
-            updateUiMode(resources.configuration)
-        }
-
         pictureInPicturePresenter.setPipView(this)
 
-        audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        Timber.d("Created ElementCallActivity with call type: ${webViewTarget.value}")
 
         setContent {
             val pipState = pictureInPicturePresenter.present()
@@ -139,7 +129,13 @@ class ElementCallActivity :
     }
 
     private fun setCallIsActive() {
-        requestAudioFocus()
+        audioFocus.requestAudioFocus(
+            requester = AudioFocusRequester.ElementCall,
+            onFocusLost = {
+                // If the audio focus is lost, we do not stop the call.
+                Timber.tag(loggerTag.value).w("Audio focus lost")
+            }
+        )
         CallForegroundService.start(this)
     }
 
@@ -174,11 +170,6 @@ class ElementCallActivity :
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        updateUiMode(newConfig)
-    }
-
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setCallType(intent)
@@ -186,7 +177,7 @@ class ElementCallActivity :
 
     override fun onDestroy() {
         super.onDestroy()
-        releaseAudioFocus()
+        audioFocus.releaseAudioFocus()
         CallForegroundService.stop(this)
         pictureInPicturePresenter.setPipView(null)
     }
@@ -249,50 +240,6 @@ class ElementCallActivity :
             }
             callback(permissionsToGrant.toTypedArray())
             requestPermissionCallback = null
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun requestAudioFocus() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val audioAttributes = AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
-                .build()
-            val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-                .setAudioAttributes(audioAttributes)
-                .build()
-            audioManager.requestAudioFocus(request)
-            audiofocusRequest = request
-        } else {
-            val listener = AudioManager.OnAudioFocusChangeListener { }
-            audioManager.requestAudioFocus(
-                listener,
-                AudioManager.STREAM_VOICE_CALL,
-                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE,
-            )
-            audioFocusChangeListener = listener
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun releaseAudioFocus() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audiofocusRequest?.let { audioManager.abandonAudioFocusRequest(it) }
-        } else {
-            audioFocusChangeListener?.let { audioManager.abandonAudioFocus(it) }
-        }
-    }
-
-    private fun updateUiMode(configuration: Configuration) {
-        val prevDarkMode = isDarkMode
-        val currentNightMode = configuration.uiMode and Configuration.UI_MODE_NIGHT_YES
-        isDarkMode = currentNightMode != 0
-        if (prevDarkMode != isDarkMode) {
-            if (isDarkMode) {
-                window.setBackgroundDrawableResource(android.R.drawable.screen_background_dark)
-            } else {
-                window.setBackgroundDrawableResource(android.R.drawable.screen_background_light)
-            }
         }
     }
 

@@ -10,5 +10,5 @@
   <string name="screen_deactivate_account_list_item_2">"Sie werden aus allen Chatrooms entfernt."</string>
   <string name="screen_deactivate_account_list_item_3">"Löschen Sie Ihre Kontoinformationen von unserem Identitätsserver."</string>
   <string name="screen_deactivate_account_list_item_4">"Gelöschte Nachrichten werden für bereits registrierte Benutzer weiterhin sichtbar sein, wenn sie auch neuen oder nicht registrierten Benutzern nicht mehr zur Verfügung stehen."</string>
-  <string name="screen_deactivate_account_title">"Benutzerkonto deaktivieren"</string>
+  <string name="screen_deactivate_account_title">"Nutzerkonto deaktivieren"</string>
 </resources>

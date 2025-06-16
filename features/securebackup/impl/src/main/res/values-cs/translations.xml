@@ -62,9 +62,9 @@
   <string name="screen_recovery_key_setup_title">"Nastavení obnovy"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Ano, resetovat nyní"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Tento proces je nevratný."</string>
-  <string name="screen_reset_encryption_confirmation_alert_title">"Opravdu chcete obnovit šifrování?"</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Opravdu chcete obnovit svou identitu?"</string>
   <string name="screen_reset_encryption_password_error">"Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu."</string>
   <string name="screen_reset_encryption_password_placeholder">"Zadejte…"</string>
-  <string name="screen_reset_encryption_password_subtitle">"Potvrďte, že chcete obnovit šifrování."</string>
+  <string name="screen_reset_encryption_password_subtitle">"Potvrďte, že chcete obnovit svou identitu."</string>
   <string name="screen_reset_encryption_password_title">"Pro pokračování zadejte heslo k účtu"</string>
 </resources>

@@ -8,16 +8,24 @@
 package io.element.android.libraries.push.impl.notifications
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
+import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.strings.StringProvider
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withTimeoutOrNull
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Helper to resolve a valid [NotifiableEvent] from a [NotificationData].
@@ -30,17 +38,53 @@ interface CallNotificationEventResolver {
      * @param forceNotify `true` to force the notification to be non-ringing, `false` to use the default behaviour. Default is `false`.
      * @return a [NotifiableEvent] if the notification data is a call notification, null otherwise
      */
-    fun resolveEvent(sessionId: SessionId, notificationData: NotificationData, forceNotify: Boolean = false): NotifiableEvent?
+    suspend fun resolveEvent(
+        sessionId: SessionId,
+        notificationData: NotificationData,
+        forceNotify: Boolean = false,
+    ): Result<NotifiableEvent>
 }
 
 @ContributesBinding(AppScope::class)
 class DefaultCallNotificationEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
+    private val appForegroundStateService: AppForegroundStateService,
+    private val clientProvider: MatrixClientProvider,
 ) : CallNotificationEventResolver {
-    override fun resolveEvent(sessionId: SessionId, notificationData: NotificationData, forceNotify: Boolean): NotifiableEvent? {
-        val content = notificationData.content as? NotificationContent.MessageLike.CallNotify ?: return null
-        return notificationData.run {
-            if (NotifiableRingingCallEvent.shouldRing(content.type, timestamp) && !forceNotify) {
+    override suspend fun resolveEvent(
+        sessionId: SessionId,
+        notificationData: NotificationData,
+        forceNotify: Boolean
+    ): Result<NotifiableEvent> = runCatchingExceptions {
+        val content = notificationData.content as? NotificationContent.MessageLike.CallNotify
+            ?: throw ResolvingException("content is not a call notify")
+
+        val previousRingingCallStatus = appForegroundStateService.hasRingingCall.value
+        // We need the sync service working to get the updated room info
+        val isRoomCallActive = runCatchingExceptions {
+            if (content.type == CallNotifyType.RING) {
+                appForegroundStateService.updateHasRingingCall(true)
+
+                val client = clientProvider.getOrRestore(sessionId).getOrNull() ?: throw ResolvingException("Session $sessionId not found")
+                val room = client.getRoom(notificationData.roomId) ?: throw ResolvingException("Room ${notificationData.roomId} not found")
+                // Give a few seconds for the room info flow to catch up with the sync, if needed - this is usually instant
+                val isActive = withTimeoutOrNull(3.seconds) { room.roomInfoFlow.firstOrNull { it.hasRoomCall } }?.hasRoomCall ?: false
+
+                // We no longer need the sync service to be active because of a call notification.
+                appForegroundStateService.updateHasRingingCall(previousRingingCallStatus)
+
+                isActive
+            } else {
+                // If the call notification is not of ringing type, we don't need to check if the call is active
+                false
+            }
+        }.onFailure {
+            // Make sure to reset the hasRingingCall state in case of failure
+            appForegroundStateService.updateHasRingingCall(previousRingingCallStatus)
+        }.getOrDefault(false)
+
+        notificationData.run {
+            if (content.type == CallNotifyType.RING && isRoomCallActive && !forceNotify) {
                 NotifiableRingingCallEvent(
                     sessionId = sessionId,
                     roomId = roomId,
@@ -59,6 +103,7 @@ class DefaultCallNotificationEventResolver @Inject constructor(
                     senderAvatarUrl = senderAvatarUrl,
                 )
             } else {
+                Timber.d("Event $eventId is call notify but should not ring: $isRoomCallActive, notify: ${content.type}")
                 // Create a simple message notification event
                 buildNotifiableMessageEvent(
                     sessionId = sessionId,

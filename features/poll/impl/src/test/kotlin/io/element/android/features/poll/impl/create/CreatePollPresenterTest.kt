@@ -21,12 +21,11 @@ import io.element.android.features.poll.impl.anOngoingPollContent
 import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -52,7 +51,7 @@ class CreatePollPresenterTest {
     private val timeline = FakeTimeline(
         timelineItems = aPollTimelineItems(mapOf(pollEventId to existingPoll))
     )
-    private val fakeMatrixRoom = FakeMatrixRoom(
+    private val fakeJoinedRoom = FakeJoinedRoom(
         liveTimeline = timeline
     )
     private val fakeAnalyticsService = FakeAnalyticsService()
@@ -81,7 +80,7 @@ class CreatePollPresenterTest {
 
     @Test
     fun `in edit mode, if poll doesn't exist, error is tracked and screen is closed`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
             liveTimeline = FakeTimeline()
         )
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(AN_EVENT_ID), room = room)
@@ -121,8 +120,10 @@ class CreatePollPresenterTest {
     fun `create poll sends a poll start event`() = runTest {
         val createPollResult = lambdaRecorder<String, List<String>, Int, PollKind, Result<Unit>> { _, _, _, _ -> Result.success(Unit) }
         val presenter = createCreatePollPresenter(
-            room = FakeMatrixRoom(
-                createPollResult = createPollResult
+            room = FakeJoinedRoom(
+                liveTimeline = FakeTimeline().apply {
+                    createPollLambda = createPollResult
+                },
             ),
             mode = CreatePollMode.NewPoll,
         )
@@ -169,8 +170,10 @@ class CreatePollPresenterTest {
             Result.failure(error)
         }
         val presenter = createCreatePollPresenter(
-            room = FakeMatrixRoom(
-                createPollResult = createPollResult
+            room = FakeJoinedRoom(
+                liveTimeline = FakeTimeline().apply {
+                    createPollLambda = createPollResult
+                },
             ),
             mode = CreatePollMode.NewPoll,
         )
@@ -254,12 +257,8 @@ class CreatePollPresenterTest {
     @Test
     fun `when edit poll fails, error is tracked`() = runTest {
         val error = Exception("cause")
-        val editPollResult = lambdaRecorder { _: EventId, _: String, _: List<String>, _: Int, _: PollKind ->
-            Result.failure<Unit>(error)
-        }
         val presenter = createCreatePollPresenter(
-            room = FakeMatrixRoom(
-                editPollResult = editPollResult,
+            room = FakeJoinedRoom(
                 liveTimeline = timeline,
             ),
             mode = CreatePollMode.EditPoll(pollEventId),
@@ -277,7 +276,7 @@ class CreatePollPresenterTest {
             awaitPollLoaded().eventSink(CreatePollEvents.SetAnswer(0, "A"))
             awaitPollLoaded(newAnswer1 = "A").eventSink(CreatePollEvents.Save)
             advanceUntilIdle() // Wait for the coroutine to finish
-            assert(editPollLambda).isCalledOnce()
+            editPollLambda.assertions().isCalledOnce()
             assertThat(fakeAnalyticsService.capturedEvents).isEmpty()
             assertThat(fakeAnalyticsService.trackedErrors).hasSize(1)
             assertThat(fakeAnalyticsService.trackedErrors).containsExactly(
@@ -551,7 +550,7 @@ class CreatePollPresenterTest {
 
     private fun createCreatePollPresenter(
         mode: CreatePollMode = CreatePollMode.NewPoll,
-        room: MatrixRoom = fakeMatrixRoom,
+        room: FakeJoinedRoom = fakeJoinedRoom,
     ): CreatePollPresenter = CreatePollPresenter(
         repository = PollRepository(room, LiveTimelineProvider(room)),
         analyticsService = fakeAnalyticsService,

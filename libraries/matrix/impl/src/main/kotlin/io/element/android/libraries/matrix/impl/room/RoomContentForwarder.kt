@@ -8,14 +8,15 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.parallelMap
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.ForwardEventException
-import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.timeline.runWithTimelineListenerRegistered
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
+import org.matrix.rustcomponents.sdk.MsgLikeKind
 import org.matrix.rustcomponents.sdk.RoomListService
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineItemContent
@@ -42,17 +43,17 @@ class RoomContentForwarder(
         toRoomIds: List<RoomId>,
         timeoutMs: Long = 5000L
     ) {
-        val content = (fromTimeline.getEventTimelineItemByEventId(eventId.value).content as? TimelineItemContent.Message)?.content
+        val messageLikeContent = (fromTimeline.getEventTimelineItemByEventId(eventId.value).content as? TimelineItemContent.MsgLike)?.content
             ?: throw ForwardEventException(toRoomIds)
 
-        val targetSlidingSyncRooms = toRoomIds.mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
-        val targetRooms = targetSlidingSyncRooms.map { slidingSyncRoom ->
-            slidingSyncRoom.use { it.fullRoomWithTimeline(null) }
-        }
+        val content = (messageLikeContent.kind as? MsgLikeKind.Message)?.content
+            ?: throw ForwardEventException(toRoomIds)
+
+        val targetRooms = toRoomIds.mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
         val failedForwardingTo = mutableSetOf<RoomId>()
         targetRooms.parallelMap { room ->
             room.use { targetRoom ->
-                runCatching {
+                runCatchingExceptions {
                     // Sending a message requires a registered timeline listener
                     targetRoom.timeline().runWithTimelineListenerRegistered {
                         withTimeout(timeoutMs.milliseconds) {

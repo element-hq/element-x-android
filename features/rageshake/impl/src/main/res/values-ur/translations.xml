@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"پردۂ عکس منسلک کریں"</string>
+  <string name="screen_bug_report_contact_me">"اگر آپ کے پاس کوئی متابعہ سوالات ہیں، تو آپ مجھ سے رابطہ کر سکتے ہیں۔"</string>
+  <string name="screen_bug_report_contact_me_title">"مجھ سے رابطہ کریں"</string>
+  <string name="screen_bug_report_edit_screenshot">"پردۂ عکس میں ترمیم کریں"</string>
+  <string name="screen_bug_report_editor_description">"براہ کرم مسئلہ بیان کریں۔ آپ نے کیا کیا؟ آپ کو کیا ہونے کی امید تھی؟ اصل میں کیا ہوا۔ براہ کرم جتنا ہو سکے اس کی تفصیل میں جائیں۔"</string>
+  <string name="screen_bug_report_editor_placeholder">"مسئلہ بیان کریں…"</string>
+  <string name="screen_bug_report_editor_supporting">"اگر ممکن ہو تو، برائے مہربانی بیان انگریزی میں لکھیں۔"</string>
+  <string name="screen_bug_report_error_description_too_short">"تفصیل بہت مختصر ہے، براہ کرم مزید تفصیلات فراہم کریں کہ کیا ہوا۔ شکریہ!"</string>
+  <string name="screen_bug_report_include_crash_logs">"ٹکر کے نوشتے بھیجیں"</string>
+  <string name="screen_bug_report_include_logs">"نوشتہجات کی اجازت دیں۔"</string>
+  <string name="screen_bug_report_include_screenshot">"پردۂ عکس بھیجیں"</string>
+  <string name="screen_bug_report_logs_description">"نوشتہ جات آپکے پیغام کیساتھ شامل کیے جائینگے تاکہ یقینی بنایا جا سکے کہ سب کچھ ٹھیک سے کام کر رہا ہے۔ بغیر نوشتہ جات کے اپنا پیغام بھیجنے کے لیے، اس ترتیب کو بند کریں۔"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$sآخری بار استعمال ہونے پر ٹکرا گیا۔ کیا آپ ہمارے ساتھ ٹکر کی گزارش (رپورٹ) کا اشتراک کرنا چاہیں گے؟"</string>
+  <string name="screen_bug_report_view_logs">"نوشتہ جات ملحوظ کریں"</string>
+</resources>

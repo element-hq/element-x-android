@@ -37,6 +37,8 @@ import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMe
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomcall.api.anOngoingCallState
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -116,6 +118,7 @@ fun aMessagesState(
     roomCallState: RoomCallState = aStandByCallState(),
     pinnedMessagesBannerState: PinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(),
     dmUserVerificationState: IdentityState? = null,
+    roomMemberModerationState: RoomMemberModerationState = aRoomMemberModerationState(),
     eventSink: (MessagesEvents) -> Unit = {},
 ) = MessagesState(
     isDebugBuild = false,
@@ -144,8 +147,18 @@ fun aMessagesState(
     appName = "Tchap",
     pinnedMessagesBannerState = pinnedMessagesBannerState,
     dmUserVerificationState = dmUserVerificationState,
+    roomMemberModerationState = roomMemberModerationState,
     eventSink = eventSink,
 )
+
+fun aRoomMemberModerationState(
+    canKick: Boolean = false,
+    canBan: Boolean = false,
+) = object : RoomMemberModerationState {
+    override val canKick: Boolean = canKick
+    override val canBan: Boolean = canBan
+    override val eventSink: (RoomMemberModerationEvents) -> Unit = {}
+}
 
 fun aUserEventPermissions(
     canRedactOwn: Boolean = false,

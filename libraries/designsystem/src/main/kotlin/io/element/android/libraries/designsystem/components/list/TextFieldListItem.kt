@@ -9,17 +9,14 @@ package io.element.android.libraries.designsystem.components.list
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.TextFieldValidity
 
 @Composable
 fun TextFieldListItem(
@@ -29,26 +26,19 @@ fun TextFieldListItem(
     modifier: Modifier = Modifier,
     error: String? = null,
     maxLines: Int = 1,
+    label: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
-    val textFieldStyle = ElementTheme.materialTypography.bodyLarge
-
-    OutlinedTextField(
+    TextField(
         value = text,
         onValueChange = { onTextChange(it) },
-        placeholder = placeholder?.let { @Composable { Text(it) } },
-        colors = OutlinedTextFieldDefaults.colors(
-            disabledBorderColor = Color.Transparent,
-            errorBorderColor = Color.Transparent,
-            focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent,
-        ),
-        isError = error != null,
-        supportingText = error?.let { @Composable { Text(it) } },
+        placeholder = placeholder,
+        label = label,
+        validity = if (error != null) TextFieldValidity.Invalid else TextFieldValidity.None,
+        supportingText = error,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-        textStyle = textFieldStyle,
         maxLines = maxLines,
         singleLine = maxLines == 1,
         modifier = modifier,
@@ -63,26 +53,19 @@ fun TextFieldListItem(
     modifier: Modifier = Modifier,
     error: String? = null,
     maxLines: Int = 1,
+    label: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
-    val textFieldStyle = ElementTheme.materialTypography.bodyLarge
-
-    OutlinedTextField(
+    TextField(
         value = text,
         onValueChange = { onTextChange(it) },
-        placeholder = placeholder?.let { @Composable { Text(it) } },
-        colors = OutlinedTextFieldDefaults.colors(
-            disabledBorderColor = Color.Transparent,
-            errorBorderColor = Color.Transparent,
-            focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent,
-        ),
-        isError = error != null,
-        supportingText = error?.let { @Composable { Text(it) } },
+        placeholder = placeholder,
+        label = label,
+        validity = if (error != null) TextFieldValidity.Invalid else TextFieldValidity.None,
+        supportingText = error,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-        textStyle = textFieldStyle,
         maxLines = maxLines,
         singleLine = maxLines == 1,
         modifier = modifier,

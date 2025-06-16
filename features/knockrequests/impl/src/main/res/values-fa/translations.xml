@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"بله. پذیرش همه"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"پذیرش همهٔ درخواست‌ها"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"پذیرش همه"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"شکست در پذیرش همهٔ درخواست‌ها"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"پذیرفتن همهٔ درخواست‌های پیوستن"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"شکست در پذیرش درخواست"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"پذیرفتن درخواست پیوستن"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"بله. رد و انسداد"</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"رد و تحریم دسترسی"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"رد کردن و تحریم دسترسی"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"بله. رد شود"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"رد کردن دسترسی"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"رد و تحریم"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"شکتس در رد درخواست"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"در کردن درخواست پیوستن"</string>
+  <string name="screen_knock_requests_list_title">"درخواست‌های پیوستن"</string>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"دیدن همه"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"پذیرش"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s می‌خواهد به این اتاق بپیوندد"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"نما"</string>
 </resources>

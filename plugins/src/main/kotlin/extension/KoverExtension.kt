@@ -49,7 +49,7 @@ private fun Project.kover(action: Action<KoverProjectExtension>) {
 
 fun Project.setupKover() {
     // Create verify all task joining all existing verification tasks
-    task("koverVerifyAll") {
+    tasks.register("koverVerifyAll") {
         group = "verification"
         description = "Verifies the code coverage of all subprojects."
         val dependencies = listOf(":app:koverVerifyGplayDebug") + koverVariants.map { ":app:koverVerify${it.replaceFirstChar(Char::titlecase)}" }
@@ -175,7 +175,7 @@ fun Project.setupKover() {
                         "io.element.android.libraries.maplibre.compose.SaveableCameraPositionState",
                         "io.element.android.libraries.maplibre.compose.SymbolState",
                         "io.element.android.libraries.matrix.api.room.RoomMembershipState",
-                        "io.element.android.libraries.matrix.api.room.MatrixRoomMembersState",
+                        "io.element.android.libraries.matrix.api.room.RoomMembersState",
                         "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*",
                         "io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState*",
                         "io.element.android.libraries.mediaviewer.impl.local.pdf.PdfViewerState",

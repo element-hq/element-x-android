@@ -16,7 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 class ReactionSummaryPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
 ) : Presenter<ReactionSummaryState> {
     @Composable
     override fun present(): ReactionSummaryState {

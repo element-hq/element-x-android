@@ -55,6 +55,7 @@ import io.element.android.libraries.designsystem.components.button.MainActionBut
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
+import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
@@ -69,6 +70,8 @@ import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -104,8 +107,10 @@ fun RoomDetailsView(
     onKnockRequestsClick: () -> Unit,
     onSecurityAndPrivacyClick: () -> Unit,
     onProfileClick: (UserId) -> Unit,
+    onReportRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -115,6 +120,7 @@ fun RoomDetailsView(
                 onActionClick = onActionClick
             )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         Column(
             modifier = Modifier
@@ -135,6 +141,9 @@ fun RoomDetailsView(
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
+                        onSubtitleClick = { subtitle ->
+                            state.eventSink(RoomDetailsEvent.CopyToClipboard(subtitle))
+                        }
                     )
                 }
                 is RoomDetailsType.Dm -> {
@@ -146,6 +155,9 @@ fun RoomDetailsView(
                         openAvatarPreview = { name, avatarUrl ->
                             openAvatarPreview(name, avatarUrl)
                         },
+                        onSubtitleClick = { subtitle ->
+                            state.eventSink(RoomDetailsEvent.CopyToClipboard(subtitle))
+                        }
                     )
                 }
             }
@@ -245,8 +257,9 @@ fun RoomDetailsView(
             }
 
             OtherActionsSection(
-                isDm = state.roomType is RoomDetailsType.Dm,
-                onLeaveRoom = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
+                canReportRoom = state.canReportRoom,
+                onReportRoomClick = onReportRoomClick,
+                onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
             )
         }
     }
@@ -369,6 +382,7 @@ private fun RoomHeaderSection(
     roomAlias: RoomAlias?,
     heroes: ImmutableList<MatrixUser>,
     openAvatarPreview: (url: String) -> Unit,
+    onSubtitleClick: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -385,7 +399,11 @@ private fun RoomHeaderSection(
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.roomDetailAvatar)
         )
-        TitleAndSubtitle(title = roomName, subtitle = roomAlias?.value)
+        TitleAndSubtitle(
+            title = roomName,
+            subtitle = roomAlias?.value,
+            onSubtitleClick = onSubtitleClick,
+        )
     }
 }
 
@@ -396,6 +414,7 @@ private fun DmHeaderSection(
     otherMember: RoomMember,
     roomName: String,
     openAvatarPreview: (name: String, url: String) -> Unit,
+    onSubtitleClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -414,6 +433,7 @@ private fun DmHeaderSection(
             title = roomName,
             // TCHAP hide the Matrix Id in release mode
             subtitle = otherMember.userId.value.takeIf { isDebugBuild },
+            onSubtitleClick = onSubtitleClick,
         )
     }
 }
@@ -422,6 +442,7 @@ private fun DmHeaderSection(
 private fun TitleAndSubtitle(
     title: String,
     subtitle: String?,
+    onSubtitleClick: (String) -> Unit,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(24.dp))
@@ -433,6 +454,7 @@ private fun TitleAndSubtitle(
         if (subtitle != null) {
             Spacer(modifier = Modifier.height(6.dp))
             Text(
+                modifier = Modifier.niceClickable { onSubtitleClick(subtitle) },
                 text = subtitle,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textSecondary,
@@ -615,13 +637,13 @@ private fun PinnedMessagesItem(
         headlineContent = { Text(stringResource(R.string.screen_room_details_pinned_events_row_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Pin())),
         trailingContent =
-        if (pinnedMessagesCount == null) {
-            ListItemContent.Custom {
-                CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(24.dp))
-            }
-        } else {
-            ListItemContent.Text(pinnedMessagesCount.toString())
-        },
+            if (pinnedMessagesCount == null) {
+                ListItemContent.Custom {
+                    CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(24.dp))
+                }
+            } else {
+                ListItemContent.Text(pinnedMessagesCount.toString())
+            },
         onClick = {
             analyticsService.captureInteraction(Interaction.Name.PinnedMessageRoomInfoButton)
             onPinnedMessagesClick()
@@ -652,22 +674,29 @@ private fun MediaGalleryItem(
 }
 
 @Composable
-private fun OtherActionsSection(isDm: Boolean, onLeaveRoom: () -> Unit) {
+private fun OtherActionsSection(
+    canReportRoom: Boolean,
+    onReportRoomClick: () -> Unit,
+    onLeaveRoomClick: () -> Unit,
+) {
     PreferenceCategory(showTopDivider = true) {
+        if (canReportRoom) {
+            ListItem(
+                headlineContent = {
+                    Text(stringResource(CommonStrings.action_report_room))
+                },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
+                style = ListItemStyle.Destructive,
+                onClick = onReportRoomClick,
+            )
+        }
         ListItem(
             headlineContent = {
-                val leaveText = stringResource(
-                    id = if (isDm) {
-                        R.string.screen_room_details_leave_conversation_title
-                    } else {
-                        R.string.screen_room_details_leave_room_title
-                    }
-                )
-                Text(leaveText)
+                Text(stringResource(CommonStrings.action_leave_room))
             },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),
             style = ListItemStyle.Destructive,
-            onClick = onLeaveRoom,
+            onClick = onLeaveRoomClick,
         )
     }
 }
@@ -702,5 +731,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onKnockRequestsClick = {},
         onSecurityAndPrivacyClick = {},
         onProfileClick = {},
+        onReportRoomClick = {},
     )
 }

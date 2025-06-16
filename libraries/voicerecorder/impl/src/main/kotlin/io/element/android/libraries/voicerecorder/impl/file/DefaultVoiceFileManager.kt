@@ -12,7 +12,7 @@ import io.element.android.libraries.core.hash.md5
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class DefaultVoiceFileManager @Inject constructor(
     @CacheDirectory private val cacheDir: File,
     private val config: VoiceFileConfig,
-    room: MatrixRoom,
+    room: BaseRoom,
 ) : VoiceFileManager {
     private val roomId: RoomId = room.roomId
 

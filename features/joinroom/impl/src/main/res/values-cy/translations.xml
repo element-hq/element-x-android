@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Cawsoch eich gwahardd o\'r ystafell hon gan %1$s."</string>
+  <string name="screen_join_room_ban_message">"Cawsoch eich gwahardd o\'r ystafell hon"</string>
+  <string name="screen_join_room_ban_reason">"Rheswm: %1$s."</string>
+  <string name="screen_join_room_cancel_knock_action">"Diddymu cais"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Iawn, diddymu"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Ydych chi\'n siŵr eich bod am ddiddymu\'ch cais i ymuno â\'r ystafell hon?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Diddymu cais i ymuno"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Iawn, gwrthod a rhwystro"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Ydych chi\'n siŵr eich bod am wrthod y gwahoddiad i ymuno â\'r ystafell hon? Bydd hyn hefyd yn atal %1$s rhag cysylltu â chi neu eich gwahodd i ystafelloedd."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Gwrthod gwahoddiad a rhwystro"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Gwrthod a rhwystro"</string>
+  <string name="screen_join_room_fail_message">"Methodd yr ymuno â\'r ystafell."</string>
+  <string name="screen_join_room_fail_reason">"Mae\'r ystafell hon naill ai drwy wahoddiad yn unig neu efallai y bydd cyfyngiadau ar fynediad ar lefel y gofod."</string>
+  <string name="screen_join_room_forget_action">"Anghofiwch yr ystafell hon"</string>
+  <string name="screen_join_room_invite_required_message">"Mae angen gwahoddiad arnoch chi er mwyn ymuno â\'r ystafell hon"</string>
+  <string name="screen_join_room_join_action">"Ymuno â\'r ystafell"</string>
+  <string name="screen_join_room_join_restricted_message">"Efallai y bydd angen i chi gael eich gwahodd neu fod yn aelod o ofod er mwyn ymuno."</string>
+  <string name="screen_join_room_knock_action">"Anfon cais i ymuno"</string>
+  <string name="screen_join_room_knock_message_description">"Neges (dewisol)"</string>
+  <string name="screen_join_room_knock_sent_description">"Byddwch yn derbyn gwahoddiad i ymuno â\'r ystafell os caiff eich cais ei dderbyn."</string>
+  <string name="screen_join_room_knock_sent_title">"Anfonwyd y cais i ymuno"</string>
+  <string name="screen_join_room_loading_alert_message">"Doedd dim modd dangos rhagolwg yr ystafell. Gall hyn fod oherwydd problemau rhwydwaith neu weinydd."</string>
+  <string name="screen_join_room_loading_alert_title">"Doedd dim modd dangos rhagolwg yr ystafell hon"</string>
+  <string name="screen_join_room_space_not_supported_description">"Nid yw %1$s yn cefnogi gofodau eto. Gallwch gael mynediad i ofodau ar y we."</string>
+  <string name="screen_join_room_space_not_supported_title">"Nid yw gofodau\'n cael eu cefnogi eto"</string>
+  <string name="screen_join_room_subtitle_knock">"Cliciwch ar y botwm isod a bydd gweinyddwr ystafell yn cael ei hysbysu. Byddwch yn gallu ymuno â\'r sgwrs ar ôl ei chymeradwyo."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Rhaid i chi fod yn aelod o\'r ystafell hon i weld hanes y neges."</string>
+  <string name="screen_join_room_title_knock">"Eisiau ymuno â\'r ystafell hon?"</string>
+  <string name="screen_join_room_title_no_preview">"Nid yw rhagolwg ar gael"</string>
+</resources>

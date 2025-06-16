@@ -2,7 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_set_up_recovery_submit">"برپایی بازیابی"</string>
   <string name="banner_set_up_recovery_title">"برپایی بازیابی"</string>
-  <string name="confirm_recovery_key_banner_title">"ورود کلید بازیابیتان"</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"ورود کلید بازیابیتان"</string>
+  <string name="confirm_recovery_key_banner_title">"ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده"</string>
   <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
   <string name="screen_invites_decline_chat_message">"مطمئنید که می‌خواهید دعوت پیوستن به %1$s را رد کنید؟"</string>
   <string name="screen_invites_decline_chat_title">"رد دعوت"</string>
@@ -10,6 +11,7 @@
   <string name="screen_invites_decline_direct_chat_title">"رد گپ"</string>
   <string name="screen_invites_empty_list">"بدون دعوت"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) دعوتتان کرد"</string>
+  <string name="screen_join_room_knock_sent_title">"درخواست پیوستن فرستاده شد"</string>
   <string name="screen_migration_message">"فرایندی یک باره است. ممنون از شکیباییتان."</string>
   <string name="screen_migration_title">"برپایی حسابتان."</string>
   <string name="screen_roomlist_a11y_create_message">"ایجاد اتاق یا گفت‌وگویی جدید"</string>

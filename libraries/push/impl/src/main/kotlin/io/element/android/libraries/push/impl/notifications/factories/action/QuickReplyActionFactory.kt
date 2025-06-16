@@ -16,6 +16,7 @@ import androidx.core.app.RemoteInput
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -33,11 +34,11 @@ class QuickReplyActionFactory @Inject constructor(
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
 ) {
-    fun create(roomInfo: RoomEventGroupInfo, threadId: ThreadId?): NotificationCompat.Action? {
+    fun create(roomInfo: RoomEventGroupInfo, eventId: EventId?, threadId: ThreadId?): NotificationCompat.Action? {
         if (!NotificationConfig.SHOW_QUICK_REPLY_ACTION) return null
         val sessionId = roomInfo.sessionId
         val roomId = roomInfo.roomId
-        val replyPendingIntent = buildQuickReplyIntent(sessionId, roomId, threadId)
+        val replyPendingIntent = buildQuickReplyIntent(sessionId, roomId, eventId, threadId)
         val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
             .setLabel(stringProvider.getString(R.string.notification_room_action_quick_reply))
             .build()
@@ -63,6 +64,7 @@ class QuickReplyActionFactory @Inject constructor(
     private fun buildQuickReplyIntent(
         sessionId: SessionId,
         roomId: RoomId,
+        eventId: EventId?,
         threadId: ThreadId?,
     ): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
@@ -70,9 +72,8 @@ class QuickReplyActionFactory @Inject constructor(
         intent.data = createIgnoredUri("quickReply/$sessionId/$roomId" + threadId?.let { "/$it" }.orEmpty())
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
         intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
-        threadId?.let {
-            intent.putExtra(NotificationBroadcastReceiver.KEY_THREAD_ID, it.value)
-        }
+        eventId?.let { intent.putExtra(NotificationBroadcastReceiver.KEY_EVENT_ID, it.value) }
+        threadId?.let { intent.putExtra(NotificationBroadcastReceiver.KEY_THREAD_ID, it.value) }
 
         return PendingIntent.getBroadcast(
             context,

@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"You removed the room avatar"</string>
   <string name="state_event_room_ban">"%1$s banned %2$s"</string>
   <string name="state_event_room_ban_by_you">"You banned %1$s"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"You banned %1$s: %2$s"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s banned %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s created the room"</string>
   <string name="state_event_room_created_by_you">"You created the room"</string>
   <string name="state_event_room_invite">"%1$s invited %2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"You rejected the invitation"</string>
   <string name="state_event_room_remove">"%1$s removed %2$s"</string>
   <string name="state_event_room_remove_by_you">"You removed %1$s"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"You removed %1$s: %2$s"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s removed %2$s: %3$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s sent an invitation to %2$s to join the room"</string>
   <string name="state_event_room_third_party_invite_by_you">"You sent an invitation to %1$s to join the room"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s revoked the invitation for %2$s to join the room"</string>

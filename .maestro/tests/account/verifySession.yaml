@@ -8,6 +8,6 @@ appId: ${MAESTRO_APP_ID}
 - hideKeyboard
 - tapOn: "Continue"
 - extendedWaitUntil:
-    visible: "Device verified"
+    visible: "Verification complete"
     timeout: 30000
 - tapOn: "Continue"

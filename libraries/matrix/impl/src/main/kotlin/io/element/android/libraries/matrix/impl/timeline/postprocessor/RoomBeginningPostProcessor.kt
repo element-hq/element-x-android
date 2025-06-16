@@ -7,8 +7,6 @@
 
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
-import androidx.annotation.VisibleForTesting
-import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -32,55 +30,59 @@ class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
         return when {
             items.isEmpty() -> items
             mode == Timeline.Mode.PINNED_EVENTS -> items
-            isDm -> processForDM(items, roomCreator)
+            isDm -> processForDM(items, roomCreator, hasMoreToLoadBackwards)
             hasMoreToLoadBackwards -> items
             else -> processForRoom(items)
         }
     }
 
     private fun processForRoom(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
-        val roomBeginningItem = createRoomBeginningItem()
-        return listOf(roomBeginningItem) + items
+        // No changes needed, timeline start item is already added by the SDK
+        return items
     }
 
-    private fun processForDM(items: List<MatrixTimelineItem>, roomCreator: UserId?): List<MatrixTimelineItem> {
+    private fun processForDM(items: List<MatrixTimelineItem>, roomCreator: UserId?, hasMoreToLoadBackwards: Boolean): List<MatrixTimelineItem> {
+        val roomBeginningItemIndex = if (!hasMoreToLoadBackwards) {
+            items.indexOfFirst { it is MatrixTimelineItem.Virtual && it.virtual is VirtualTimelineItem.RoomBeginning }.takeIf { it >= 0 }
+        } else {
+            null
+        }
+
         // Find room creation event.
         // This is usually the first MatrixTimelineItem.Event (so index 1, index 0 is a date)
         val roomCreationEventIndex = items.indexOfFirst {
             val stateEventContent = (it as? MatrixTimelineItem.Event)?.event?.content as? StateContent
             stateEventContent?.content is OtherState.RoomCreate
-        }
+        }.takeIf { it >= 0 }
 
         // If the parameter roomCreator is null, the creator is the sender of the RoomCreate Event.
-        val roomCreatorUserId = roomCreator ?: (items.getOrNull(roomCreationEventIndex) as? MatrixTimelineItem.Event)?.event?.sender
+        val roomCreatorUserId = roomCreator ?: roomCreationEventIndex?.let {
+            (items.getOrNull(it) as? MatrixTimelineItem.Event)?.event?.sender
+        }
         // Find self-join event for the room creator.
         // This is usually the second MatrixTimelineItem.Event (so index 2)
         val selfUserJoinedEventIndex = roomCreatorUserId?.let { creatorUserId ->
             items.indexOfFirst {
                 val stateEventContent = (it as? MatrixTimelineItem.Event)?.event?.content as? RoomMembershipContent
                 stateEventContent?.change == MembershipChange.JOINED && stateEventContent.userId == creatorUserId
-            }
-        } ?: -1
+            }.takeIf { it >= 0 }
+        }
 
-        if (roomCreationEventIndex == -1 && selfUserJoinedEventIndex == -1) {
+        val indicesToRemove = listOfNotNull(
+            roomBeginningItemIndex,
+            roomCreationEventIndex,
+            selfUserJoinedEventIndex,
+        )
+        if (indicesToRemove.isEmpty()) {
+            // Nothing to do, return the list as is
             return items
         }
+
         // Remove items at the indices we found
         val newItems = items.toMutableList()
-        if (selfUserJoinedEventIndex in newItems.indices) {
-            newItems.removeAt(selfUserJoinedEventIndex)
-        }
-        if (roomCreationEventIndex in newItems.indices) {
-            newItems.removeAt(roomCreationEventIndex)
+        indicesToRemove.sortedDescending().forEach { index ->
+            newItems.removeAt(index)
         }
         return newItems
-    }
-
-    @VisibleForTesting
-    fun createRoomBeginningItem(): MatrixTimelineItem.Virtual {
-        return MatrixTimelineItem.Virtual(
-            uniqueId = UniqueId("RoomBeginning"),
-            virtual = VirtualTimelineItem.RoomBeginning
-        )
     }
 }

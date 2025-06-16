@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.impl.pushers
 
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustClient
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -18,7 +18,7 @@ class RustPushersServiceTest {
     @Test
     fun `setPusher should invoke the client method`() = runTest {
         val sut = RustPushersService(
-            client = FakeRustClient(),
+            client = FakeFfiClient(),
             dispatchers = testCoroutineDispatchers()
         )
         sut.setHttpPusher(
@@ -29,7 +29,7 @@ class RustPushersServiceTest {
     @Test
     fun `unsetPusher should invoke the client method`() = runTest {
         val sut = RustPushersService(
-            client = FakeRustClient(),
+            client = FakeFfiClient(),
             dispatchers = testCoroutineDispatchers()
         )
         sut.unsetHttpPusher(

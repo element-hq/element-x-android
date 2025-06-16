@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Ystafell newydd"</string>
+  <string name="screen_create_room_add_people_title">"Gwahodd pobl"</string>
+  <string name="screen_create_room_error_creating_room">"Bu gwall wrth greu\'r ystafell"</string>
+  <string name="screen_create_room_private_option_description">"Dim ond pobl wahoddwyd all gael mynediad i\'r ystafell hon. Mae pob neges wedi\'i hamgryptio o\'r dechrau i\'r diwedd."</string>
+  <string name="screen_create_room_private_option_title">"Ystafell breifat"</string>
+  <string name="screen_create_room_public_option_description">"Gall unrhyw un ddod o hyd i\'r ystafell hon.
+Gallwch newid hyn unrhyw bryd yng ngosodiadau ystafell."</string>
+  <string name="screen_create_room_public_option_title">"Ystafell gyhoeddus"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Gall unrhyw un ymuno â\'r ystafell hon"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Unrhyw un"</string>
+  <string name="screen_create_room_room_access_section_header">"Mynediad i\'r Ystafell"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Gall unrhyw un ofyn am gael ymuno â\'r ystafell ond bydd rhaid i weinyddwr neu gymedrolwr dderbyn y cais"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Gofyn i gael ymuno"</string>
+  <string name="screen_create_room_room_address_section_footer">"Er mwyn i\'r ystafell hon fod yn weladwy yn y cyfeiriadur ystafelloedd cyhoeddus, bydd angen cyfeiriad ystafell arnoch."</string>
+  <string name="screen_create_room_room_address_section_title">"Cyfeiriad yr ystafell"</string>
+  <string name="screen_create_room_room_name_label">"Enw\'r ystafell"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Gwelededd yr ystafell"</string>
+  <string name="screen_create_room_title">"Creu ystafell"</string>
+  <string name="screen_create_room_topic_label">"Pwnc (dewisol)"</string>
+  <string name="screen_room_directory_search_title">"Cyfeiriadur ystafelloedd"</string>
+  <string name="screen_start_chat_error_starting_chat">"Digwyddodd gwall wrth geisio cychwyn sgwrs"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Ymuno â\'r ystafell yn ôl cyfeiriad"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Ddim yn gyfeiriad dilys"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Ewch i mewn…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Cafwyd hyd i ystafell gyfatebol"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Heb ganfod yr ystafell"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"e.e. #enw-ystafell:matrix.org"</string>
+</resources>

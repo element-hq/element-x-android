@@ -20,6 +20,7 @@ import extension.allEnterpriseImpl
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
+import extension.buildConfigFieldStr
 import extension.koverDependencies
 import extension.locales
 import extension.setupAnvil
@@ -102,17 +103,28 @@ android {
     }
 
     val baseAppName = BuildTimeConfig.APPLICATION_NAME
-    logger.warnInBox("Building $baseAppName")
+    logger.warnInBox("Building ${defaultConfig.applicationId} ($baseAppName)")
 
     buildTypes {
+        val oidcRedirectSchemeBase = BuildTimeConfig.METADATA_HOST_REVERSED ?: "io.element.android"
         getByName("debug") {
             resValue("string", "app_name", "$baseAppName dbg")
+            resValue(
+                "string",
+                "login_redirect_scheme",
+                "$oidcRedirectSchemeBase.debug",
+            )
             applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
         }
 
         getByName("release") {
             resValue("string", "app_name", baseAppName)
+            resValue(
+                "string",
+                "login_redirect_scheme",
+                oidcRedirectSchemeBase,
+            )
             signingConfig = signingConfigs.getByName("debug")
 
             postprocessing {
@@ -130,6 +142,11 @@ android {
             applicationIdSuffix = ".nightly"
             versionNameSuffix = "-nightly"
             resValue("string", "app_name", "$baseAppName nightly")
+            resValue(
+                "string",
+                "login_redirect_scheme",
+                "$oidcRedirectSchemeBase.nightly",
+            )
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
 
@@ -170,13 +187,13 @@ android {
         create("gplay") {
             dimension = "store"
             isDefault = true
-            buildConfigField("String", "SHORT_FLAVOR_DESCRIPTION", "\"G\"")
-            buildConfigField("String", "FLAVOR_DESCRIPTION", "\"GooglePlay\"")
+            buildConfigFieldStr("SHORT_FLAVOR_DESCRIPTION", "G")
+            buildConfigFieldStr("FLAVOR_DESCRIPTION", "GooglePlay")
         }
         create("fdroid") {
             dimension = "store"
-            buildConfigField("String", "SHORT_FLAVOR_DESCRIPTION", "\"F\"")
-            buildConfigField("String", "FLAVOR_DESCRIPTION", "\"FDroid\"")
+            buildConfigFieldStr("SHORT_FLAVOR_DESCRIPTION", "F")
+            buildConfigFieldStr("FLAVOR_DESCRIPTION", "FDroid")
         }
     }
 }
@@ -283,6 +300,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.services.toolbox.test)
 
     koverDependencies()
 }
@@ -291,14 +309,15 @@ tasks.withType<GenerateBuildConfig>().configureEach {
     outputs.upToDateWhen { false }
     val gitRevision = providers.of(GitRevisionValueSource::class.java) {}.get()
     val gitBranchName = providers.of(GitBranchNameValueSource::class.java) {}.get()
-    android.defaultConfig.buildConfigField("String", "GIT_REVISION", "\"$gitRevision\"")
-    android.defaultConfig.buildConfigField("String", "GIT_BRANCH_NAME", "\"$gitBranchName\"")
+    android.defaultConfig.buildConfigFieldStr("GIT_REVISION", gitRevision)
+    android.defaultConfig.buildConfigFieldStr("GIT_BRANCH_NAME", gitBranchName)
 }
 
 licensee {
     allow("Apache-2.0")
     allow("MIT")
     allow("BSD-2-Clause")
+    allow("BSD-3-Clause")
     allowUrl("https://opensource.org/licenses/MIT")
     allowUrl("https://developer.android.com/studio/terms.html")
     allowUrl("https://www.zetetic.net/sqlcipher/license/")
@@ -332,6 +351,15 @@ fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {
                 AssetCopyTask::outputDirectory,
             )
             copyArtifactsTask.dependsOn("licenseeAndroid$capitalizedVariantName")
+        }
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        dependencySubstitution {
+            val tink = libs.google.tink.get()
+            substitute(module("com.google.crypto.tink:tink")).using(module("${tink.group}:${tink.name}:${tink.version}"))
         }
     }
 }

@@ -28,6 +28,7 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
+import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
@@ -37,7 +38,7 @@ import io.element.android.features.roomdetails.impl.notificationsettings.RoomNot
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
-import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.features.verifysession.api.OutgoingVerificationEntryPoint
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -50,7 +51,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
@@ -64,13 +65,14 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val pollHistoryEntryPoint: PollHistoryEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val analyticsService: AnalyticsService,
     private val messagesEntryPoint: MessagesEntryPoint,
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val mediaGalleryEntryPoint: MediaGalleryEntryPoint,
-    private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val outgoingVerificationEntryPoint: OutgoingVerificationEntryPoint,
+    private val reportRoomEntryPoint: ReportRoomEntryPoint,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -127,6 +129,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class VerifyUser(val userId: UserId) : NavTarget
+
+        @Parcelize
+        data object ReportRoom : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -188,6 +193,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(inputs)
+                    }
+
+                    override fun openReportRoom() {
+                        backstack.push(NavTarget.ReportRoom)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -319,13 +328,13 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 createNode<SecurityAndPrivacyFlowNode>(buildContext)
             }
             is NavTarget.VerifyUser -> {
-                val params = VerifySessionEntryPoint.Params(
+                val params = OutgoingVerificationEntryPoint.Params(
                     showDeviceVerifiedScreen = true,
                     verificationRequest = VerificationRequest.Outgoing.User(userId = navTarget.userId,)
                 )
-                verifySessionEntryPoint.nodeBuilder(this, buildContext)
+                outgoingVerificationEntryPoint.nodeBuilder(this, buildContext)
                     .params(params)
-                    .callback(object : VerifySessionEntryPoint.Callback {
+                    .callback(object : OutgoingVerificationEntryPoint.Callback {
                         override fun onDone() {
                             backstack.pop()
                         }
@@ -339,6 +348,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         }
                     })
                     .build()
+            }
+            is NavTarget.ReportRoom -> {
+                reportRoomEntryPoint.createNode(this, buildContext, room.roomId)
             }
         }
     }

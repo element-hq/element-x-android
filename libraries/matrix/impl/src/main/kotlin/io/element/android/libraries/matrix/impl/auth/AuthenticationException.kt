@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.auth
 
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import org.matrix.rustcomponents.sdk.ClientBuildException
+import org.matrix.rustcomponents.sdk.OidcException
 
 fun Throwable.mapAuthenticationException(): AuthenticationException {
     val message = this.message ?: "Unknown error"
@@ -23,6 +24,13 @@ fun Throwable.mapAuthenticationException(): AuthenticationException {
             is ClientBuildException.WellKnownDeserializationException -> AuthenticationException.Generic(message)
             is ClientBuildException.WellKnownLookupFailed -> AuthenticationException.Generic(message)
             is ClientBuildException.EventCache -> AuthenticationException.Generic(message)
+        }
+        is OidcException -> when (this) {
+            is OidcException.Generic -> AuthenticationException.Oidc(message)
+            is OidcException.CallbackUrlInvalid -> AuthenticationException.Oidc(message)
+            is OidcException.Cancelled -> AuthenticationException.Oidc(message)
+            is OidcException.MetadataInvalid -> AuthenticationException.Oidc(message)
+            is OidcException.NotSupported -> AuthenticationException.Oidc(message)
         }
         else -> AuthenticationException.Generic(message)
     }

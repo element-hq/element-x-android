@@ -9,12 +9,16 @@ package io.element.android.libraries.matrix.api.notification
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 
 data class NotificationData(
+    val sessionId: SessionId,
     val eventId: EventId,
+    val threadId: ThreadId?,
     val roomId: RoomId,
     // mxc url
     val senderAvatarUrl: String?,
@@ -104,7 +108,7 @@ sealed interface NotificationContent {
         data object RoomServerAcl : StateEvent
         data object RoomThirdPartyInvite : StateEvent
         data object RoomTombstone : StateEvent
-        data object RoomTopic : StateEvent
+        data class RoomTopic(val topic: String) : StateEvent
         data object SpaceChild : StateEvent
         data object SpaceParent : StateEvent
     }

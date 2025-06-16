@@ -23,14 +23,14 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.NotJoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -40,12 +40,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import java.io.Closeable
 import java.util.Optional
 
-interface MatrixClient : Closeable {
+interface MatrixClient {
     val sessionId: SessionId
     val deviceId: DeviceId
     val userProfile: StateFlow<MatrixUser>
@@ -53,9 +50,9 @@ interface MatrixClient : Closeable {
     val mediaLoader: MatrixMediaLoader
     val sessionCoroutineScope: CoroutineScope
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
-    suspend fun getRoom(roomId: RoomId): MatrixRoom?
-    suspend fun getPendingRoom(roomId: RoomId): RoomPreview?
-    suspend fun findDM(userId: UserId): RoomId?
+    suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom?
+    suspend fun getRoom(roomId: RoomId): BaseRoom?
+    suspend fun findDM(userId: UserId): Result<RoomId?>
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>
@@ -65,9 +62,9 @@ interface MatrixClient : Closeable {
     suspend fun setDisplayName(displayName: String): Result<Unit>
     suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit>
     suspend fun removeAvatar(): Result<Unit>
-    suspend fun joinRoom(roomId: RoomId): Result<RoomSummary?>
-    suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomSummary?>
-    suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomSummary?>
+    suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?>
+    suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomInfo?>
+    suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomInfo?>
     fun syncService(): SyncService
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService
@@ -99,11 +96,11 @@ interface MatrixClient : Closeable {
     fun roomMembershipObserver(): RoomMembershipObserver
 
     /**
-     * Get a room summary flow for a given room ID or alias.
-     * The flow will emit a new value whenever the room summary is updated.
+     * Get a room info flow for a given room ID.
+     * The flow will emit a new value whenever the room info is updated.
      * The flow will emit Optional.empty item if the room is not found.
      */
-    fun getRoomSummaryFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<RoomSummary>>
+    fun getRoomInfoFlow(roomId: RoomId): Flow<Optional<RoomInfo>>
 
     fun isMe(userId: UserId?) = userId == sessionId
 
@@ -148,7 +145,7 @@ interface MatrixClient : Closeable {
     /**
      * Get a room preview for a given room ID or alias. This is especially useful for rooms that the user is not a member of, or hasn't joined yet.
      */
-    suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview>
+    suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom>
 
     /**
      * Returns the currently used sliding sync version.
@@ -162,17 +159,11 @@ interface MatrixClient : Closeable {
 
     fun canDeactivateAccount(): Boolean
     suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit>
-}
 
-/**
- * Get a room info flow for a given room ID or alias.
- * The flow will emit a new value whenever the room info is updated.
- * The flow will emit Optional.empty item if the room is not found.
- */
-fun MatrixClient.getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<MatrixRoomInfo>> {
-    return getRoomSummaryFlow(roomIdOrAlias)
-        .map { roomSummary -> roomSummary.map { it.info } }
-        .distinctUntilChanged()
+    /**
+     * Check if the user can report a room.
+     */
+    suspend fun canReportRoom(): Boolean
 }
 
 /**

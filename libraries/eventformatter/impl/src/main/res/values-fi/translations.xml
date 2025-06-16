@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"Poistit huoneen avatarin"</string>
   <string name="state_event_room_ban">"%1$s antoi porttikiellon käyttäjälle %2$s"</string>
   <string name="state_event_room_ban_by_you">"Annoit porttikiellon käyttäjälle %1$s"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"Annoit porttikiellon käyttäjälle %1$s: %2$s"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s antoi porttikiellon käyttäjälle %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s loi huoneen"</string>
   <string name="state_event_room_created_by_you">"Loit huoneen"</string>
   <string name="state_event_room_invite">"%1$s kutsui käyttäjän %2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"Hylkäsit kutsun"</string>
   <string name="state_event_room_remove">"%1$s poisti käyttäjän %2$s"</string>
   <string name="state_event_room_remove_by_you">"Poistit käyttäjän %1$s"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"Poistit käyttäjän %1$s: %2$s"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s poisti käyttäjän %2$s: %3$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s kutsui käyttäjän %2$s huoneeseen"</string>
   <string name="state_event_room_third_party_invite_by_you">"Kutsuit käyttäjän %1$s huoneeseen"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s peruutti käyttäjän %2$s kutsun huoneeseen"</string>

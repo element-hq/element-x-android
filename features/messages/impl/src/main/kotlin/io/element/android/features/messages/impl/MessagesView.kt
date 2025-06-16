@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -104,6 +103,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbar
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
@@ -209,7 +209,11 @@ fun MessagesView(
                     .consumeWindowInsets(padding),
                 onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
-                onUserDataClick = { hidingKeyboard { onUserDataClick(it) } },
+                onUserDataClick = {
+                    hidingKeyboard {
+                   state.eventSink(MessagesEvents.OnUserClicked(it))
+                }
+                },
                 onLinkClick = { link, customTab ->
                     if (customTab) {
                         onLinkClick(link.url, true)
@@ -294,7 +298,7 @@ private fun ReinviteDialog(state: MessagesState) {
 private fun MessagesViewContent(
     state: MessagesState,
     onContentClick: (TimelineItem.Event) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link, Boolean) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
@@ -364,7 +368,9 @@ private fun MessagesViewContent(
             },
             content = { paddingValues ->
                 Box(modifier = Modifier.padding(paddingValues)) {
-                    val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberExitOnScrollBehavior()
+                    val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
+                        pinnedMessagesCount = state.pinnedMessagesBannerState.pinnedMessagesCount(),
+                    )
                     TimelineView(
                         state = state.timelineState,
                         timelineProtectionState = state.timelineProtectionState,
@@ -486,14 +492,15 @@ private fun MessagesViewTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
+            val roundedCornerShape = RoundedCornerShape(8.dp)
             Row(
+                modifier = Modifier
+                    .clip(roundedCornerShape)
+                    .clickable { onRoomDetailsClick() },
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val roundedCornerShape = RoundedCornerShape(8.dp)
-                val titleModifier = Modifier
-                    .clip(roundedCornerShape)
-                    .clickable { onRoomDetailsClick() }
+                val titleModifier = Modifier.weight(1f, fill = false)
                 if (roomName != null && roomAvatar != null) {
                     RoomAvatarAndNameRow(
                         roomName = roomName,
@@ -511,7 +518,6 @@ private fun MessagesViewTopBar(
                 when (dmUserIdentityState) {
                     IdentityState.Verified -> {
                         Icon(
-                            modifier = Modifier.requiredWidthIn(min = 16.dp),
                             imageVector = CompoundIcons.Verified(),
                             tint = ElementTheme.colors.iconSuccessPrimary,
                             contentDescription = null,
@@ -519,7 +525,6 @@ private fun MessagesViewTopBar(
                     }
                     IdentityState.VerificationViolation -> {
                         Icon(
-                            modifier = Modifier.requiredWidthIn(min = 16.dp),
                             imageVector = CompoundIcons.ErrorSolid(),
                             tint = ElementTheme.colors.iconCriticalPrimary,
                             contentDescription = null,

@@ -11,9 +11,9 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeOnRedactedEventReceived(
-    private val onRedactedEventReceivedResult: (ResolvedPushEvent.Redaction) -> Unit = { lambdaError() },
+    private val onRedactedEventsReceivedResult: (List<ResolvedPushEvent.Redaction>) -> Unit = { lambdaError() },
 ) : OnRedactedEventReceived {
-    override fun onRedactedEventReceived(redaction: ResolvedPushEvent.Redaction) {
-        onRedactedEventReceivedResult(redaction)
+    override fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>) {
+        onRedactedEventsReceivedResult(redactions)
     }
 }

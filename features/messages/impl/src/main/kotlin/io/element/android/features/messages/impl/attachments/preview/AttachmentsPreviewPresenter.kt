@@ -27,11 +27,13 @@ import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.firstInstanceOf
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.allFiles
@@ -78,8 +80,12 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
-        val allowCaption by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionCreation).collectAsState(initial = false)
-        val showCaptionCompatibilityWarning by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionWarning).collectAsState(initial = false)
+        val allowCaption by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionCreation)
+        }.collectAsState(initial = false)
+        val showCaptionCompatibilityWarning by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionWarning)
+        }.collectAsState(initial = false)
 
         var useSendQueue by remember { mutableStateOf(false) }
         var preprocessMediaJob by remember { mutableStateOf<Job?>(null) }
@@ -123,6 +129,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                                 caption = caption,
                                 sendActionState = sendActionState,
                                 dismissAfterSend = !useSendQueue,
+                                replyParameters = null,
                             )
                         }
                     }
@@ -233,7 +240,8 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         caption: String?,
         sendActionState: MutableState<SendActionState>,
         dismissAfterSend: Boolean,
-    ) = runCatching {
+        replyParameters: ReplyParameters?,
+    ) = runCatchingExceptions {
         val context = coroutineContext
         val progressCallback = object : ProgressCallback {
             override fun onProgress(current: Long, total: Long) {
@@ -247,7 +255,8 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             mediaUploadInfo = mediaUploadInfo,
             caption = caption,
             formattedCaption = null,
-            progressCallback = progressCallback
+            progressCallback = progressCallback,
+            replyParameters = replyParameters,
         ).getOrThrow()
     }.fold(
         onSuccess = {

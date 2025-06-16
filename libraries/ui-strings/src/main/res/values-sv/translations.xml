@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Radera"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d siffra angiven"</item>
     <item quantity="other">"%1$d siffror angivna"</item>
   </plurals>
   <string name="a11y_hide_password">"Dölj lösenord"</string>
+  <string name="a11y_join_call">"Anslut till samtal"</string>
   <string name="a11y_jump_to_bottom">"Hoppa till botten"</string>
   <string name="a11y_notifications_mentions_only">"Endast omnämningar"</string>
   <string name="a11y_notifications_muted">"Tystad"</string>
   <string name="a11y_page_n">"Sida %1$d"</string>
   <string name="a11y_pause">"Pausa"</string>
+  <string name="a11y_paused_voice_message">"Röstmeddelande, varaktighet:%1$s, nuvarande position: %2$s"</string>
   <string name="a11y_pin_field">"PIN-fält"</string>
   <string name="a11y_play">"Spela upp"</string>
   <string name="a11y_poll">"Omröstning"</string>
@@ -30,6 +33,7 @@
   <string name="a11y_start_call">"Starta ett samtal"</string>
   <string name="a11y_user_menu">"Användarmeny"</string>
   <string name="a11y_view_details">"Visa detaljer"</string>
+  <string name="a11y_voice_message">"Röstmeddelande, varaktighet: %1$s"</string>
   <string name="a11y_voice_message_record">"Spela in röstmeddelande."</string>
   <string name="a11y_voice_message_stop_recording">"Stoppa inspelning"</string>
   <string name="action_accept">"Godkänn"</string>
@@ -56,6 +60,7 @@
   <string name="action_deactivate">"Inaktivera"</string>
   <string name="action_deactivate_account">"Inaktivera konto"</string>
   <string name="action_decline">"Neka"</string>
+  <string name="action_decline_and_block">"Avvisa och blockera"</string>
   <string name="action_delete_poll">"Radera omröstning"</string>
   <string name="action_disable">"Inaktivera"</string>
   <string name="action_discard">"Kassera"</string>
@@ -101,8 +106,11 @@
   <string name="action_remove_message">"Ta bort meddelande"</string>
   <string name="action_reply">"Svara"</string>
   <string name="action_reply_in_thread">"Svara i tråd"</string>
+  <string name="action_report">"Anmäl"</string>
   <string name="action_report_bug">"Rapportera bugg"</string>
   <string name="action_report_content">"Rapportera innehåll"</string>
+  <string name="action_report_dm">"Anmäl konversation"</string>
+  <string name="action_report_room">"Anmäl rum"</string>
   <string name="action_reset">"Återställ"</string>
   <string name="action_reset_identity">"Återställ identitet"</string>
   <string name="action_retry">"Försök igen"</string>
@@ -190,6 +198,10 @@ Anledning:%1$s."</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
   <string name="common_loading">"Laddar …"</string>
   <string name="common_loading_more">"Laddar mer …"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d annan"</item>
+    <item quantity="other">"%d andra"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d medlem"</item>
     <item quantity="other">"%1$d medlemmar"</item>
@@ -212,6 +224,7 @@ Anledning:%1$s."</string>
   <string name="common_permalink">"Permalänk"</string>
   <string name="common_permission">"Behörighet"</string>
   <string name="common_pinned">"Fäst"</string>
+  <string name="common_please_check_internet_connection">"Vänligen kontrollera din internetanslutning"</string>
   <string name="common_please_wait">"Vänligen vänta …"</string>
   <string name="common_poll_end_confirmation">"Är du säker på att du vill avsluta den här omröstningen?"</string>
   <string name="common_poll_summary">"Omröstning: %1$s"</string>
@@ -224,6 +237,7 @@ Anledning:%1$s."</string>
   <string name="common_privacy_policy">"Integritetspolicy"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktioner"</string>
+  <string name="common_reason">"Orsak"</string>
   <string name="common_recovery_key">"Återställningsnyckel"</string>
   <string name="common_refreshing">"Uppdaterar …"</string>
   <string name="common_replying_to">"Svarar till %1$s"</string>
@@ -251,6 +265,7 @@ Anledning:%1$s."</string>
   <string name="common_shared_location">"Delade plats"</string>
   <string name="common_signing_out">"Loggar ut"</string>
   <string name="common_something_went_wrong">"Något gick fel"</string>
+  <string name="common_something_went_wrong_message">"Vi stötte på ett problem. Vänligen försök igen."</string>
   <string name="common_starting_chat">"Startar chatt …"</string>
   <string name="common_sticker">"Dekal"</string>
   <string name="common_success">"Lyckades"</string>
@@ -295,6 +310,8 @@ Anledning:%1$s."</string>
 
 Är du säker på att du vill fortsätta?"</string>
   <string name="dialog_confirm_link_title">"Dubbelkolla den här länken"</string>
+  <string name="dialog_room_reported">"Rum anmält"</string>
+  <string name="dialog_room_reported_and_left">"Anmälde och lämnade rummet"</string>
   <string name="dialog_title_confirmation">"Bekräftelse"</string>
   <string name="dialog_title_error">"Fel"</string>
   <string name="dialog_title_success">"Lyckades"</string>

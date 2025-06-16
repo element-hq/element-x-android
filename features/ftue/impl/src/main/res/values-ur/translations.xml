@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"تصدیق نہیں کر سکتے؟"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"ایک نئی بازیابی کلید تخلیق کریں"</string>
+  <string name="screen_identity_confirmation_subtitle">"محفوظ پیغام رسانی ترتیب دینے کیلئے اس آلے کی توثیق کریں۔"</string>
+  <string name="screen_identity_confirmation_title">"اپنی شناخت کی تصدیق کریں"</string>
+  <string name="screen_identity_confirmation_use_another_device">"دوسرا آلہ استعمال کریں"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"بازیابی کلید استعمال کریں"</string>
+  <string name="screen_identity_confirmed_subtitle">"اب آپ محفوظ طریقے سے پیغامات پڑھ یا بھیج سکتے ہیں، اور جسکے ساتھ آپ گفتگو کرتے ہیں وہ بھی اس آلہ پر بھروسہ کر سکتا ہے۔"</string>
+  <string name="screen_identity_confirmed_title">"آلہ توثیق شدہ"</string>
+  <string name="screen_identity_use_another_device">"دوسرا آلہ استعمال کریں"</string>
+  <string name="screen_identity_waiting_on_other_device">"دوسرے آلہ پر منتظر…"</string>
+  <string name="screen_notification_optin_subtitle">"آپ بعد میں اپنی ترتیبات تبدیل کر سکتے ہیں۔"</string>
+  <string name="screen_notification_optin_title">"اطلاعات کی اجازت دیں اور کبھی بھی کسی پیغام سے محروم نہ ہوں۔"</string>
+  <string name="screen_session_verification_enter_recovery_key">"بازیابی کلید درج کریں"</string>
+  <string name="screen_welcome_bullet_1">"مکالمات، رائے شماری، تلاش اور مزید بعد میں اس سال شامل کیا جائے گا۔"</string>
+  <string name="screen_welcome_bullet_2">"مرموز کردہ کمروں کیلئے سرگزشتِ پیغام ابھی دستیاب نہیں ہے"</string>
+  <string name="screen_welcome_bullet_3">"ہم آپ سے سننا پسند کریں گے، ترتیبات کے صفحہ کے ذریعے ہمیں بتائیں کہ آپ کیا سوچتے ہیں۔"</string>
+  <string name="screen_welcome_button">"چلیں!"</string>
+  <string name="screen_welcome_subtitle">"یہ ہے جو آپ کو جاننے کی ضرورت ہے:"</string>
+  <string name="screen_welcome_title">"%1$s میں خوش آمدید!"</string>
+</resources>

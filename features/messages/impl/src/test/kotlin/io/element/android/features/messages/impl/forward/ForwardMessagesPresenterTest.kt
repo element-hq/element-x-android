@@ -15,13 +15,13 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -49,8 +49,8 @@ class ForwardMessagesPresenterTest {
         val timeline = FakeTimeline().apply {
             this.forwardEventLambda = forwardEventLambda
         }
-        val room = FakeMatrixRoom(liveTimeline = timeline)
-        val presenter = aForwardMessagesPresenter(fakeMatrixRoom = room)
+        val room = FakeJoinedRoom(liveTimeline = timeline)
+        val presenter = aForwardMessagesPresenter(fakeRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -73,8 +73,8 @@ class ForwardMessagesPresenterTest {
         val timeline = FakeTimeline().apply {
             this.forwardEventLambda = forwardEventLambda
         }
-        val room = FakeMatrixRoom(liveTimeline = timeline)
-        val presenter = aForwardMessagesPresenter(fakeMatrixRoom = room)
+        val room = FakeJoinedRoom(liveTimeline = timeline)
+        val presenter = aForwardMessagesPresenter(fakeRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -91,13 +91,12 @@ class ForwardMessagesPresenterTest {
         }
     }
 
-    private fun CoroutineScope.aForwardMessagesPresenter(
+    private fun TestScope.aForwardMessagesPresenter(
         eventId: EventId = AN_EVENT_ID,
-        fakeMatrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
-        coroutineScope: CoroutineScope = this,
+        fakeRoom: FakeJoinedRoom = FakeJoinedRoom(),
     ) = ForwardMessagesPresenter(
         eventId = eventId.value,
-        timelineProvider = LiveTimelineProvider(fakeMatrixRoom),
-        appCoroutineScope = coroutineScope,
+        timelineProvider = LiveTimelineProvider(fakeRoom),
+        sessionCoroutineScope = this,
     )
 }

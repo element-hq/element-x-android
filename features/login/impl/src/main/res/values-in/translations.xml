@@ -16,9 +16,7 @@
   <string name="screen_change_server_error_invalid_homeserver">"Kami tidak dapat menjangkau server ini. Periksa apakah Anda telah memasukkan URL homeserver dengan benar. Jika URL sudah benar, hubungi administrator homeserver Anda untuk bantuan lebih lanjut."</string>
   <string name="screen_change_server_error_invalid_well_known">"Sliding sync tidak tersedia karena adanya masalah dalam berkas .well-known:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Server ini saat ini tidak mendukung sinkronisasi geser."</string>
   <string name="screen_change_server_form_header">"URL Homeserver"</string>
-  <string name="screen_change_server_form_notice">"Anda hanya dapat terhubung ke server yang ada yang mendukung sinkronisasi geser. Admin homeserver Anda perlu mengaturnya. %1$s"</string>
   <string name="screen_change_server_subtitle">"Apa alamat server Anda?"</string>
   <string name="screen_change_server_title">"Pilih server Anda"</string>
   <string name="screen_create_account_title">"Buat akun"</string>
@@ -31,6 +29,12 @@
   <string name="screen_login_subtitle">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
   <string name="screen_login_title">"Selamat datang kembali!"</string>
   <string name="screen_login_title_with_homeserver">"Masuk ke %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Masuk secara manual"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Masuk dengan kode QR"</string>
+  <string name="screen_onboarding_sign_up">"Buat akun"</string>
+  <string name="screen_onboarding_welcome_message">"Selamat datang di %1$s tercepat yang pernah ada. Berdaya besar untuk kecepatan dan kesederhanaan."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Selamat datang di %1$s. Berdaya penuh, untuk kecepatan dan kesederhanaan."</string>
+  <string name="screen_onboarding_welcome_title">"Berada di elemen Anda"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Membuat koneksi aman"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Koneksi aman tidak dapat dibuat ke perangkat baru. Perangkat Anda yang ada masih aman dan Anda tidak perlu khawatir tentang mereka."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Apa sekarang?"</string>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Skambinti"</string>
+  <string name="notification_channel_listening_for_events">"Klausomasi įvykių"</string>
+  <string name="notification_channel_noisy">"Triukšmingi pranešimai"</string>
+  <string name="notification_channel_silent">"Tylūs pranešimai"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d žinutė"</item>
+    <item quantity="few">"%1$s: %2$d žinutės"</item>
+    <item quantity="other">"%1$s: %2$d žinučių"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d pranešimas"</item>
+    <item quantity="few">"%d pranešimai"</item>
+    <item quantity="other">"%d pranešimų"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Pranešimas"</string>
+  <string name="notification_inline_reply_failed">"** Nepavyko išsiųsti - prašome atidaryti kambarį"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d kvietimas"</item>
+    <item quantity="few">"%d kvietimai"</item>
+    <item quantity="other">"%d kvietimų"</item>
+  </plurals>
+  <string name="notification_invite_body">"Pakvietė jus bendrauti"</string>
+  <string name="notification_new_messages">"Naujos žinutės"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d nauja žinutė"</item>
+    <item quantity="few">"%d naujos žinutės"</item>
+    <item quantity="other">"%d naujų žinučių"</item>
+  </plurals>
+  <string name="notification_room_action_quick_reply">"Sparčiai atsakyti"</string>
+  <string name="notification_sender_me">"Aš"</string>
+  <string name="notification_test_push_notification_content">"Jūs žiūrite pranešimą! Spustelėkite mane!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d neperskaityta žinutė"</item>
+    <item quantity="few">"%d neperskaitytos žinutės"</item>
+    <item quantity="other">"%d neperskaitytų žinučių"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s ir %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s (%2$s)"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s (%2$s) ir %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d kambaryje"</item>
+    <item quantity="few">"%d kambariuose"</item>
+    <item quantity="other">"%d kambarių"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Sinchronizavimas fone"</string>
+  <string name="push_distributor_firebase_android">"Google Services"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Nerasta veikiančių \"Google Play Services\". Pranešimai gali veikti netinkamai."</string>
+</resources>

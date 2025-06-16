@@ -23,6 +23,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
     implementation(projects.services.toolbox.api)
     implementation(libs.test.turbine)

@@ -13,11 +13,24 @@ import io.element.android.libraries.matrix.api.core.SessionId
 interface EnterpriseService {
     val isEnterpriseBuild: Boolean
     suspend fun isEnterpriseUser(sessionId: SessionId): Boolean
-    fun defaultHomeserver(): String?
+    fun defaultHomeserverList(): List<String>
+    suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
+
+    suspend fun isElementCallAvailable(): Boolean
 
     fun semanticColorsLight(): SemanticColors
     fun semanticColorsDark(): SemanticColors
 
     fun firebasePushGateway(): String?
     fun unifiedPushDefaultPushGateway(): String?
+
+    companion object {
+        const val ANY_ACCOUNT_PROVIDER = "*"
+    }
+}
+
+fun EnterpriseService.canConnectToAnyHomeserver(): Boolean {
+    return defaultHomeserverList().let {
+        it.isEmpty() || it.contains(EnterpriseService.ANY_ACCOUNT_PROVIDER)
+    }
 }

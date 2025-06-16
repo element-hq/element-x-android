@@ -178,8 +178,14 @@ fun CreatePollView(
                         supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
                         trailingContent = ListItemContent.Switch(
                             checked = state.pollKind == PollKind.Undisclosed,
-                            onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
                         ),
+                        onClick = {
+                            state.eventSink(
+                                CreatePollEvents.SetPollKind(
+                                    if (state.pollKind == PollKind.Disclosed) PollKind.Undisclosed else PollKind.Disclosed
+                                )
+                            )
+                        },
                     )
                     if (state.canDelete) {
                         ListItem(

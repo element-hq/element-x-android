@@ -21,10 +21,16 @@ open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
         )
 }
 
-fun anAccountProvider() = AccountProvider(
-    url = AuthenticationConfig.MATRIX_ORG_URL,
-    subtitle = "Matrix.org is an open network for secure, decentralized communication.",
-    isPublic = true,
-    isMatrixOrg = true,
-    isValid = true,
+fun anAccountProvider(
+    url: String = AuthenticationConfig.MATRIX_ORG_URL,
+    subtitle: String? = "Matrix.org is an open network for secure, decentralized communication.",
+    isPublic: Boolean = true,
+    isMatrixOrg: Boolean = true,
+    isValid: Boolean = true,
+) = AccountProvider(
+    url = url,
+    subtitle = subtitle,
+    isPublic = isPublic,
+    isMatrixOrg = isMatrixOrg,
+    isValid = isValid,
 )

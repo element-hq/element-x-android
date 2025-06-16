@@ -38,6 +38,8 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
@@ -55,17 +57,19 @@ fun UserProfileView(
     onVerifyClick: (UserId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(title = { }, navigationIcon = { BackButton(onClick = goBack) })
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .verticalScroll(rememberScrollState())
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .verticalScroll(rememberScrollState())
         ) {
             // TCHAP display a value generated from userId if displayname does not exist
             UserProfileHeaderSection(
@@ -76,6 +80,9 @@ fun UserProfileView(
                 verificationState = state.verificationState,
                 openAvatarPreview = { avatarUrl ->
                     openAvatarPreview(state.userName ?: state.userId.extractedDisplayName, avatarUrl)
+                },
+                onUserIdClick = {
+                    state.eventSink(UserProfileEvents.CopyToClipboard(state.userId.value))
                 },
                 withdrawVerificationClick = { state.eventSink(UserProfileEvents.WithdrawVerification) },
             )

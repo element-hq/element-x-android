@@ -14,8 +14,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
-import io.element.android.compound.theme.Theme
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.compose.LocalAnalyticsService
@@ -29,6 +29,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class AdvancedSettingsViewTest {
@@ -50,28 +51,16 @@ class AdvancedSettingsViewTest {
     }
 
     @Test
-    fun `clicking on Appearance emits the expected event`() {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
-        rule.setAdvancedSettingsView(
-            state = aAdvancedSettingsState(
-                eventSink = eventsRecorder
-            ),
-        )
-        rule.clickOn(CommonStrings.common_appearance)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.ChangeTheme)
-    }
-
-    @Test
     fun `clicking on other theme emits the expected event`() {
         val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
         rule.setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,
-                showChangeThemeDialog = true
             ),
         )
+        rule.clickOn(CommonStrings.common_appearance)
         rule.clickOn(CommonStrings.common_dark)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTheme(Theme.Dark))
+        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTheme(ThemeOption.Dark))
     }
 
     @Test
@@ -139,6 +128,34 @@ class AdvancedSettingsViewTest {
                 )
             )
         )
+    }
+
+    @Test
+    @Config(qualifiers = "h640dp")
+    fun `clicking on hide invite avatars emits the expected event`() {
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                eventSink = eventsRecorder,
+                hideInviteAvatars = false
+            ),
+        )
+        rule.clickOn(R.string.screen_advanced_settings_hide_invite_avatars_toggle_title)
+        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetHideInviteAvatars(true))
+    }
+
+    @Test
+    @Config(qualifiers = "h640dp")
+    fun `clicking on timeline media preview emits the expected event`() {
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                eventSink = eventsRecorder,
+                timelineMediaPreviewValue = MediaPreviewValue.On
+            ),
+        )
+        rule.clickOn(R.string.screen_advanced_settings_show_media_timeline_always_hide)
+        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
     }
 }
 

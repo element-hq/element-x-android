@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_submit">"بازیابی مرتب کریں"</string>
+  <string name="confirm_recovery_key_banner_message">"اپنے کلید کے ذخیرہ اور پیغام کی سرگزشت تک رسائی کو برقرار رکھنے کیلئے اپنی بازیابی کلید کی تصدیق کریں۔"</string>
+  <string name="confirm_recovery_key_banner_title">"آپ کا کلید کا ذخیرہ غیر ہم وقت ساز ہے۔"</string>
+  <string name="full_screen_intent_banner_message">"اس بات کو یقینی بنانے کے لیے کہ آپ کبھی بھی اہم مکالمہ سے محروم نہ ہوں، براہ کرم اپنی ترتیبات تبدیل کریں تاکہ آپ کا ہاتف مقفل ہونے پر مکمل پردۂ نمائش اطلاعات کی اجازت دی جا سکے۔"</string>
+  <string name="full_screen_intent_banner_title">"اپنے مکالمتی تجربے کو احسن کریں"</string>
+  <string name="screen_invites_decline_chat_message">"کیا آپکو یقین ہے کہ آپ %1$s میں شامل ہونے کی درخواست مسترد کرنا چاہتے ہیں؟"</string>
+  <string name="screen_invites_decline_chat_title">"دعوت مسترد کریں"</string>
+  <string name="screen_invites_decline_direct_chat_message">"کیا آپکو یقین ہے کہ آپ %1$s کیساتھ نجی گفتگو مسترد کرنا چاہتے ہیں؟"</string>
+  <string name="screen_invites_decline_direct_chat_title">"گفتگو مسترد کریں"</string>
+  <string name="screen_invites_empty_list">"کوئی دعوت نامے نہیں"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) نے آپ کو مدعو کیا"</string>
+  <string name="screen_migration_message">"یہ ایک بار کا عمل ہے، انتظار کرنے کا شکریہ۔"</string>
+  <string name="screen_migration_title">"آپکا کھاتہ مرتب کر رہا ہے"</string>
+  <string name="screen_roomlist_a11y_create_message">"ایک نئی گفتگو یا کمرہ تخلیق کریں"</string>
+  <string name="screen_roomlist_empty_message">"کسی کو پیغام بھیج کر شروع کریں۔"</string>
+  <string name="screen_roomlist_empty_title">"ابھی تک کوئی گفتگوئیں نہیں ہیں۔"</string>
+  <string name="screen_roomlist_filter_favourites">"پسندیدگان"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"آپ گفتگو کی ترتیبات میں اپنے پسندیدہ میں گفتگو شامل کر سکتے ہیں۔
+ ابھی کے لیے، آپ اپنی دوسری گفتگوئیں دیکھنے کے لیے مرشحات کو غیر منتخب کر سکتے ہیں۔"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"آپ کے پاس ابھی تک پسندیدہ گفتگوئیں نہیں ہیں"</string>
+  <string name="screen_roomlist_filter_invites">"دعوت نامے"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"آپ کے پاس کوئی زیر التوا دعوتیں نہیں ہیں۔"</string>
+  <string name="screen_roomlist_filter_low_priority">"کم ترجیحی"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"آپ اپنی دیگر گفتگئہں دیکھنے کیلئے مرشحات کو غیر منتخب کرسکتے ہیں"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"آپ کے پاس اس انتخاب کے لیے گفتگو ئیں نہیں ہیں۔"</string>
+  <string name="screen_roomlist_filter_people">"لوگ"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"آپ کے پاس ابھی تک کوئی براہ راست پیغامات نہیں ہے۔"</string>
+  <string name="screen_roomlist_filter_rooms">"کمرے"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"آپ ابھی تک کسی کمرے میں نہیں ہیں"</string>
+  <string name="screen_roomlist_filter_unreads">"غیر مقروءہ"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"مبارک ہو!
+آپ کے پاس کوئی غیر مقروءہ پیغامات نہیں!"</string>
+  <string name="screen_roomlist_main_space_title">"گفتگوئیں"</string>
+  <string name="screen_roomlist_mark_as_read">"بطور مقروءہ نشانزد کریں"</string>
+  <string name="screen_roomlist_mark_as_unread">"بطور غیر مقروءہ نشانزد کریں"</string>
+  <string name="session_verification_banner_message">"ایسا لگتا ہے کہ آپ ایک نیا آلہ استعمال کر رہے ہیں۔ اپنے مرموزکردہ پیغامات تک رسائی کیلئے کسی دوسرے آلے سے توثیق کریں۔"</string>
+  <string name="session_verification_banner_title">"تصدیق کریں کہ آپ ہی ہیں"</string>
+</resources>

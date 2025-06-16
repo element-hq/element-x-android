@@ -34,10 +34,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -54,7 +56,6 @@ import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrgani
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.list.SwitchListItem
-import io.element.android.libraries.designsystem.modifiers.autofill
 import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -276,14 +277,9 @@ private fun Content(
                     .fillMaxWidth()
                     .onTabOrEnterKeyFocusNext(focusManager)
                     .testTag(TestTags.loginPassword)
-                    .autofill(
-                        autofillTypes = listOf(AutofillType.Password),
-                        onFill = {
-                            val sanitized = it.sanitize()
-                            passwordFieldState = sanitized
-                            eventSink(AccountDeactivationEvents.SetPassword(sanitized))
-                        }
-                    ),
+                    .semantics {
+                        contentType = ContentType.Password
+                    },
                 onValueChange = {
                     val sanitized = it.sanitize()
                     passwordFieldState = sanitized

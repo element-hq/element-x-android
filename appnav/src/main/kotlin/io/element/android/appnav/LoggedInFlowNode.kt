@@ -65,11 +65,13 @@ import io.element.android.libraries.architecture.waitForNavTargetAttached
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -103,7 +105,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
     private val userProfileEntryPoint: UserProfileEntryPoint,
     private val ftueEntryPoint: FtueEntryPoint,
-    private val coroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val ftueService: FtueService,
     private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
     private val shareEntryPoint: ShareEntryPoint,
@@ -174,7 +177,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 appNavigationStateService.onNavigateToSession(id, matrixClient.sessionId)
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
-                loggedInFlowProcessor.observeEvents(coroutineScope)
+                loggedInFlowProcessor.observeEvents(sessionCoroutineScope)
                 matrixClient.sessionVerificationService().setListener(verificationListener)
 
                 ftueService.state
@@ -312,7 +315,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        coroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias(), clearBackstack = false) }
+                        sessionCoroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias(), clearBackstack = false) }
                     }
 
                     override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
@@ -377,6 +380,14 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onOpenRoomNotificationSettings(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.NotificationSettings))
+                    }
+
+                    override fun navigateTo(sessionId: SessionId, roomId: RoomId, eventId: EventId) {
+                        // We do not check the sessionId, but it will have to be done at some point (multi account)
+                        if (sessionId != matrixClient.sessionId) {
+                            Timber.e("SessionId mismatch, expected ${matrixClient.sessionId} but got $sessionId")
+                        }
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Messages(eventId)))
                     }
                 }
                 val inputs = PreferencesEntryPoint.Params(navTarget.initialElement)
