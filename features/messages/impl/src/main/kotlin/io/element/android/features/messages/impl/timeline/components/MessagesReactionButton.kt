@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.R
+import io.element.android.features.messages.impl.timeline.a11y.a11yReactionAction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
@@ -105,11 +106,10 @@ fun MessagesReactionButton(
     }
 
     val a11yClickLabel = if (content is MessagesReactionsButtonContent.Reaction) {
-        if (content.isHighlighted) {
-            stringResource(id = CommonStrings.a11y_remove_reaction_with, content.reaction.key)
-        } else {
-            stringResource(id = CommonStrings.a11y_react_with, content.reaction.key)
-        }
+        a11yReactionAction(
+            emoji = content.reaction.key,
+            userAlreadyReacted = content.isHighlighted
+        )
     } else {
         ""
     }
