@@ -51,7 +51,7 @@ class BatteryOptimizationPresenter @Inject constructor(
                 BatteryOptimizationEvents.Dismiss -> coroutineScope.launch {
                     mutableBatteryOptimizationStore.onOptimizationBannerDismissed()
                 }
-                BatteryOptimizationEvents.DoAction -> {
+                BatteryOptimizationEvents.RequestDisableOptimizations -> {
                     isRequestSent = true
                     if (batteryOptimization.requestDisablingBatteryOptimization().not()) {
                         // If not able to perform the request, ensure that we do not display the banner again

@@ -30,7 +30,7 @@ internal fun BatteryOptimizationBanner(
         description = stringResource(R.string.banner_battery_optimization_content_android),
         type = AnnouncementType.Actionable(
             actionText = stringResource(R.string.banner_battery_optimization_submit_android),
-            onActionClick = { state.eventSink(BatteryOptimizationEvents.DoAction) },
+            onActionClick = { state.eventSink(BatteryOptimizationEvents.RequestDisableOptimizations) },
             onDismissClick = { state.eventSink(BatteryOptimizationEvents.Dismiss) },
         ),
     )

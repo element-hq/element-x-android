@@ -123,7 +123,7 @@ class BatteryOptimizationPresenterTest {
             assertThat(initialState.shouldDisplayBanner).isFalse()
             val displayedItem = awaitItem()
             assertThat(displayedItem.shouldDisplayBanner).isTrue()
-            displayedItem.eventSink(BatteryOptimizationEvents.DoAction)
+            displayedItem.eventSink(BatteryOptimizationEvents.RequestDisableOptimizations)
             requestDisablingBatteryOptimizationResult.assertions().isCalledOnce()
             onOptimizationBannerDismissedResult.assertions().isCalledOnce()
         }
@@ -149,7 +149,7 @@ class BatteryOptimizationPresenterTest {
             assertThat(initialState.shouldDisplayBanner).isFalse()
             val displayedItem = awaitItem()
             assertThat(displayedItem.shouldDisplayBanner).isTrue()
-            displayedItem.eventSink(BatteryOptimizationEvents.DoAction)
+            displayedItem.eventSink(BatteryOptimizationEvents.RequestDisableOptimizations)
             requestDisablingBatteryOptimizationResult.assertions().isCalledOnce()
             batteryOptimization.isIgnoringBatteryOptimizationsResult = true
             lifeCycleOwner.givenState(Lifecycle.State.RESUMED)
