@@ -39,7 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
@@ -438,7 +438,7 @@ private fun EmojiButton(
     } else {
         Color.Transparent
     }
-    val description = if (isHighlighted) {
+    val a11yClickLabel = if (isHighlighted) {
         stringResource(id = CommonStrings.a11y_remove_reaction_with, emoji)
     } else {
         stringResource(id = CommonStrings.a11y_react_with, emoji)
@@ -454,7 +454,12 @@ private fun EmojiButton(
                 interactionSource = remember { MutableInteractionSource() }
             )
             .semantics {
-                contentDescription = description
+                onClick(
+                    label = a11yClickLabel,
+                ) {
+                    onClick(emoji)
+                    true
+                }
             },
         contentAlignment = Alignment.Center
     ) {
