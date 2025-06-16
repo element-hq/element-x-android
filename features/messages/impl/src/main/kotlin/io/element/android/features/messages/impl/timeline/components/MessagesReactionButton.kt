@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -40,6 +39,7 @@ import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.a11y.a11yReactionAction
+import io.element.android.features.messages.impl.timeline.a11y.a11yReactionDetails
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
@@ -52,7 +52,6 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 @Suppress("ModifierClickableOrder") // This is needed to display the right ripple shape
@@ -78,30 +77,11 @@ fun MessagesReactionButton(
         is MessagesReactionsButtonContent.Icon -> stringResource(id = R.string.screen_room_timeline_add_reaction)
         is MessagesReactionsButtonContent.Text -> content.text
         is MessagesReactionsButtonContent.Reaction -> {
-            val reaction = if (content.reaction.key.startsWith("mxc://")) {
-                stringResource(CommonStrings.common_an_image)
-            } else {
-                content.reaction.key
-            }
-            if (content.isHighlighted) {
-                if (content.reaction.count == 1) {
-                    stringResource(R.string.screen_room_timeline_reaction_you_a11y, reaction)
-                } else {
-                    pluralStringResource(
-                        R.plurals.screen_room_timeline_reaction_including_you_a11y,
-                        content.reaction.count - 1,
-                        content.reaction.count - 1,
-                        reaction,
-                    )
-                }
-            } else {
-                pluralStringResource(
-                    R.plurals.screen_room_timeline_reaction_a11y,
-                    content.reaction.count,
-                    content.reaction.count,
-                    reaction,
-                )
-            }
+            a11yReactionDetails(
+                emoji = content.reaction.key,
+                userAlreadyReacted = content.isHighlighted,
+                reactionCount = content.reaction.count,
+            )
         }
     }
 
