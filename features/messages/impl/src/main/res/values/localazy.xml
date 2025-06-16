@@ -51,6 +51,10 @@
     <item quantity="one">"%1$d room change"</item>
     <item quantity="other">"%1$d room changes"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Jump to new room"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"This room has been replaced and is no longer active"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"See old messages"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"This room is a continuation of another room"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s and %3$d other"</item>
     <item quantity="other">"%1$s, %2$s and %3$d others"</item>

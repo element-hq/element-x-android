@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Avslå chat"</string>
   <string name="screen_invites_empty_list">"Ingen invitasjoner"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s) inviterte deg"</string>
-  <string name="screen_join_room_knock_sent_title">"Forespørsel om å bli med sendt"</string>
   <string name="screen_migration_message">"Dette er en engangsprosess, takk for at du venter."</string>
   <string name="screen_migration_title">"Setter opp kontoen din."</string>
   <string name="screen_roomlist_a11y_create_message">"Opprett en ny samtale eller et nytt rom"</string>
@@ -37,6 +36,7 @@ Inntil videre kan du velge bort filtre for å se de andre chattene dine"</string
   <string name="screen_roomlist_filter_unreads">"Uleste"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulerer!
 Du har ingen uleste meldinger!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Forespørsel om å bli med sendt"</string>
   <string name="screen_roomlist_main_space_title">"Chatter"</string>
   <string name="screen_roomlist_mark_as_read">"Marker som lest"</string>
   <string name="screen_roomlist_mark_as_unread">"Merk som ulest"</string>

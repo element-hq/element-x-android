@@ -16,6 +16,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import io.element.android.libraries.ui.strings.CommonStrings
 import org.junit.rules.TestRule
@@ -53,4 +54,9 @@ fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.pressBackKey() {
 
 fun SemanticsNodeInteractionsProvider.pressTag(tag: String) {
     onNode(hasTestTag(tag)).performClick()
+}
+
+fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.assertNoNodeWithText(@StringRes res: Int) {
+    val text = activity.getString(res)
+    onNodeWithText(text).assertDoesNotExist()
 }

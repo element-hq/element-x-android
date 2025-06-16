@@ -381,6 +381,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_event_pill">"Message in %1$s"</string>
+  <string name="screen_room_permalink_same_room_android">"Already viewing this room!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s of %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>
   <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>

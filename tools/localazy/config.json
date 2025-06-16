@@ -165,14 +165,14 @@
       "name" : ":features:roomlist:impl",
       "includeRegex" : [
         "screen_roomlist_.*",
+        "screen\\.roomlist\\..*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
         "banner\\.set_up_recovery\\..*",
         "banner\\.battery_optimization\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
-        "screen_invites_.*",
-        "screen\\.join_room\\.knock_sent_title"
+        "screen_invites_.*"
       ]
     },
     {
@@ -211,6 +211,7 @@
         "screen_room_message.*",
         "screen_room_retry.*",
         "screen_room_timeline.*",
+        "screen\\.room_timeline.*",
         "screen_room_typing.*"
       ]
     },

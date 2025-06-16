@@ -82,6 +82,7 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -90,6 +91,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -101,8 +103,10 @@ import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -211,8 +215,8 @@ fun MessagesView(
                 onMessageLongClick = ::onMessageLongClick,
                 onUserDataClick = {
                     hidingKeyboard {
-                   state.eventSink(MessagesEvents.OnUserClicked(it))
-                }
+                        state.eventSink(MessagesEvents.OnUserClicked(it))
+                    }
                 },
                 onLinkClick = { link, customTab ->
                     if (customTab) {
@@ -410,6 +414,9 @@ private fun MessagesViewContent(
                 MessagesViewComposerBottomSheetContents(
                     subcomposing = subcomposing,
                     state = state,
+                    onRoomSuccessorClick = { roomId ->
+                        state.timelineState.eventSink(TimelineEvents.NavigateToRoom(roomId = roomId))
+                    },
                     onLinkClick = { url, customTab -> onLinkClick(Link(url), customTab) },
                 )
             },
@@ -424,52 +431,59 @@ private fun MessagesViewContent(
 private fun MessagesViewComposerBottomSheetContents(
     subcomposing: Boolean,
     state: MessagesState,
+    onRoomSuccessorClick: (RoomId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
 ) {
-    if (state.userEventPermissions.canSendMessage) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            SuggestionsPickerView(
-                modifier = Modifier
-                    .heightIn(max = 230.dp)
-                    // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
-                    .nestedScroll(object : NestedScrollConnection {
-                        override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                            return available
-                        }
-                    }),
-                roomId = state.roomId,
-                roomName = state.roomName.dataOrNull(),
-                roomAvatarData = state.roomAvatar.dataOrNull(),
-                suggestions = state.composerState.suggestions,
-                onSelectSuggestion = {
-                    state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
+    when {
+        state.successorRoom != null -> {
+            SuccessorRoomBanner(roomSuccessor = state.successorRoom, onRoomSuccessorClick = onRoomSuccessorClick)
+        }
+        state.userEventPermissions.canSendMessage -> {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                SuggestionsPickerView(
+                    modifier = Modifier
+                        .heightIn(max = 230.dp)
+                        // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
+                        .nestedScroll(object : NestedScrollConnection {
+                            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                                return available
+                            }
+                        }),
+                    roomId = state.roomId,
+                    roomName = state.roomName.dataOrNull(),
+                    roomAvatarData = state.roomAvatar.dataOrNull(),
+                    suggestions = state.composerState.suggestions,
+                    onSelectSuggestion = {
+                        state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
+                    }
+                )
+                // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
+                if (state.composerState.suggestions.isEmpty() &&
+                    state.composerState.textEditorState is TextEditorState.Markdown) {
+                    IdentityChangeStateView(
+                        state = state.identityChangeState,
+                        onLinkClick = onLinkClick,
+                    )
                 }
-            )
-            // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
-            if (state.composerState.suggestions.isEmpty() &&
-                state.composerState.textEditorState is TextEditorState.Markdown) {
-                IdentityChangeStateView(
-                    state = state.identityChangeState,
-                    onLinkClick = onLinkClick,
-                )
-            }
-            val verificationViolation = state.identityChangeState.roomMemberIdentityStateChanges.firstOrNull {
-                it.identityState == IdentityState.VerificationViolation
-            }
-            if (verificationViolation != null) {
-                DisabledComposerView(modifier = Modifier.fillMaxWidth())
-            } else {
-                MessageComposerView(
-                    state = state.composerState,
-                    voiceMessageState = state.voiceMessageComposerState,
-                    subcomposing = subcomposing,
-                    enableVoiceMessages = state.enableVoiceMessages,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                val verificationViolation = state.identityChangeState.roomMemberIdentityStateChanges.firstOrNull {
+                    it.identityState == IdentityState.VerificationViolation
+                }
+                if (verificationViolation != null) {
+                    DisabledComposerView(modifier = Modifier.fillMaxWidth())
+                } else {
+                    MessageComposerView(
+                        state = state.composerState,
+                        voiceMessageState = state.voiceMessageComposerState,
+                        subcomposing = subcomposing,
+                        enableVoiceMessages = state.enableVoiceMessages,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
         }
-    } else {
-        CantSendMessageBanner()
+        else -> {
+            CantSendMessageBanner()
+        }
     }
 }
 
@@ -572,9 +586,9 @@ private fun RoomAvatarAndNameRow(
 private fun CantSendMessageBanner() {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(ElementTheme.colors.bgSubtleSecondary)
-            .padding(16.dp),
+                .fillMaxWidth()
+                .background(ElementTheme.colors.bgSubtleSecondary)
+                .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -586,6 +600,22 @@ private fun CantSendMessageBanner() {
             fontStyle = FontStyle.Italic,
         )
     }
+}
+
+@Composable
+private fun SuccessorRoomBanner(
+    roomSuccessor: SuccessorRoom,
+    onRoomSuccessorClick: (RoomId) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ComposerAlertMolecule(
+        avatar = null,
+        content = stringResource(R.string.screen_room_timeline_tombstoned_room_message).toAnnotatedString(),
+        onSubmitClick = { onRoomSuccessorClick(roomSuccessor.roomId) },
+        modifier = modifier,
+        isCritical = false,
+        submitText = stringResource(R.string.screen_room_timeline_tombstoned_room_action)
+    )
 }
 
 @PreviewsDayNight

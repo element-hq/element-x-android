@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Rifiuta l\'invito alla conversazione"</string>
   <string name="screen_invites_empty_list">"Nessun invito"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) ti ha invitato"</string>
-  <string name="screen_join_room_knock_sent_title">"Richiesta di accesso inviata"</string>
   <string name="screen_migration_message">"Si tratta di una procedura che si effettua una sola volta, grazie per l\'attesa."</string>
   <string name="screen_migration_title">"Configurazione del tuo account."</string>
   <string name="screen_roomlist_a11y_create_message">"Crea una nuova conversazione o stanza"</string>
@@ -37,6 +36,7 @@ Per il momento, puoi deselezionare i filtri per vedere le altre conversazioni."<
   <string name="screen_roomlist_filter_unreads">"Non letti"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Congratulazioni!
 Non hai messaggi non letti!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Richiesta di accesso inviata"</string>
   <string name="screen_roomlist_main_space_title">"Tutte le conversazioni"</string>
   <string name="screen_roomlist_mark_as_read">"Segna come letto"</string>
   <string name="screen_roomlist_mark_as_unread">"Segna come non letto"</string>
