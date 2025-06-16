@@ -243,7 +243,6 @@ Ok: %1$s."</string>
   <string name="common_reason">"Ok"</string>
   <string name="common_recovery_key">"Helyreállítási kulcs"</string>
   <string name="common_refreshing">"Frissítés…"</string>
-  <string name="common_replies">"%1$d válasz"</string>
   <string name="common_replying_to">"Válasz %1$s számára"</string>
   <string name="common_report_a_bug">"Hiba jelentése"</string>
   <string name="common_report_a_problem">"Probléma jelentése"</string>

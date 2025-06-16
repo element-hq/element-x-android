@@ -244,7 +244,6 @@
   <string name="common_reason">"Årsak"</string>
   <string name="common_recovery_key">"Gjenopprettingsnøkkel"</string>
   <string name="common_refreshing">"Oppdaterer…"</string>
-  <string name="common_replies">"%1$d svar"</string>
   <string name="common_replying_to">"Svar til %1$s"</string>
   <string name="common_report_a_bug">"Rapporter en feil"</string>
   <string name="common_report_a_problem">"Rapporter et problem"</string>

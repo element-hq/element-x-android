@@ -248,7 +248,6 @@ Důvod: %1$s."</string>
   <string name="common_reason">"Důvod"</string>
   <string name="common_recovery_key">"Klíč pro obnovení"</string>
   <string name="common_refreshing">"Obnovování…"</string>
-  <string name="common_replies">"%1$d odpovědí"</string>
   <string name="common_replying_to">"Odpověď na %1$s"</string>
   <string name="common_report_a_bug">"Nahlásit chybu"</string>
   <string name="common_report_a_problem">"Nahlásit problém"</string>
