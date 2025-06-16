@@ -194,7 +194,7 @@ zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.19.0"
-sentry = "io.sentry:sentry-android:8.13.2"
+sentry = "io.sentry:sentry-android:8.13.3"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
