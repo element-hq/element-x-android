@@ -55,7 +55,7 @@ jobs:
 
   maestro-cloud:
     name: Maestro test suite
-    runs-on: ubuntu-latest
+    runs-on: perf-only
     needs: [ build-apk ]
     # Allow one per PR.
     concurrency:
