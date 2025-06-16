@@ -72,7 +72,9 @@ class ExpandableBottomSheetState {
     val draggingPercentage = internalDraggingPercentage
 
     enum class Position {
-        COLLAPSED, DRAGGING, EXPANDED
+        COLLAPSED,
+        DRAGGING,
+        EXPANDED
     }
 }
 
@@ -166,7 +168,8 @@ fun ExpandableBottomSheetLayout(
 
                                         animatable.animateTo(destination)
                                     }
-                                })
+                                }
+                            )
                         }
                     } else {
                         this
@@ -228,13 +231,13 @@ internal fun GrowingBottomContentScaffoldPreview() {
     LocalView.current.isNestedScrollingEnabled = true
     ExpandableBottomSheetLayout(
         sheetDragHandle = {
-            Box(modifier =
+            Box(
+                modifier =
                 Modifier
                     .clip(RoundedCornerShape(6.dp))
                     .align(Alignment.Center)
                     .size(100.dp, 20.dp)
                     .background(Color.Gray)
-
             )
         },
         content = {
@@ -243,7 +246,8 @@ internal fun GrowingBottomContentScaffoldPreview() {
             }
         },
         bottomSheetContent = {
-            Box(modifier = Modifier
+            Box(
+                modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f, fill = true)
                 .clip(RoundedCornerShape(10.dp))
