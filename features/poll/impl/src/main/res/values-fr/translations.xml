@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Masquer les votes"</string>
   <string name="screen_create_poll_answer_hint">"Option %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Vos modifications n’ont pas été enregistrées. Êtes-vous certain de vouloir quitter ?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Supprimer l’option %1$s"</string>
   <string name="screen_create_poll_question_desc">"Question ou sujet"</string>
   <string name="screen_create_poll_question_hint">"Quel est le sujet du sondage ?"</string>
   <string name="screen_create_poll_title">"Créer un sondage"</string>
