@@ -138,6 +138,9 @@
   <string name="action_view_source">"Forrás megtekintése"</string>
   <string name="action_yes">"Igen"</string>
   <string name="action_yes_try_again">"Igen, újrapróbálkozás"</string>
+  <string name="banner_battery_optimization_content_android">"Kapcsolja ki az alkalmazás akkumulátor-optimalizálását, hogy biztosan megkapja az összes értesítést."</string>
+  <string name="banner_battery_optimization_submit_android">"Optimalizálás letiltása"</string>
+  <string name="banner_battery_optimization_title_android">"Nem érkeznek meg az értesítések?"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"A kiszolgálója mostantól egy új, gyorsabb protokollt támogat. A frissítéshez jelentkezzen ki, majd jelentkezzen be újra. Ha ezt most megteszi, elkerülheti a kényszerített kijelentkeztetést a régi protokollt eltávolításakor."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Frissítés érhető el"</string>
   <string name="common_about">"Névjegy"</string>
@@ -240,6 +243,7 @@ Ok: %1$s."</string>
   <string name="common_reason">"Ok"</string>
   <string name="common_recovery_key">"Helyreállítási kulcs"</string>
   <string name="common_refreshing">"Frissítés…"</string>
+  <string name="common_replies">"%1$d válasz"</string>
   <string name="common_replying_to">"Válasz %1$s számára"</string>
   <string name="common_report_a_bug">"Hiba jelentése"</string>
   <string name="common_report_a_problem">"Probléma jelentése"</string>
@@ -333,6 +337,7 @@ Biztos, hogy folytatja?"</string>
   <string name="error_room_address_invalid_symbols">"Egyes karakterek nem engedélyezettek. Csak a betűk, a számjegyek és a következő szimbólumok támogatottak: $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Néhány üzenet nem került elküldésre"</string>
   <string name="error_unknown">"Elnézést, hiba történt"</string>
+  <string name="event_shield_mismatched_sender">"Az esemény feladója nem egyezik az eseményt küldő eszköz tulajdonosával."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni."</string>
   <string name="event_shield_reason_previously_verified">"Egy korábban ellenőrzött felhasználó által titkosítva."</string>
   <string name="event_shield_reason_sent_in_clear">"Nincs titkosítva."</string>

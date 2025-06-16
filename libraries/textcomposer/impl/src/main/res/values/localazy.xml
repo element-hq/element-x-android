@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Unencrypted message…"</string>
   <string name="rich_text_editor_create_link">"Create a link"</string>
   <string name="rich_text_editor_edit_link">"Edit link"</string>
+  <string name="rich_text_editor_format_action">"%1$s, state: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Apply bold format"</string>
   <string name="rich_text_editor_format_italic">"Apply italic format"</string>
+  <string name="rich_text_editor_format_state_disabled">"disabled"</string>
+  <string name="rich_text_editor_format_state_off">"off"</string>
+  <string name="rich_text_editor_format_state_on">"on"</string>
   <string name="rich_text_editor_format_strikethrough">"Apply strikethrough format"</string>
   <string name="rich_text_editor_format_underline">"Apply underline format"</string>
   <string name="rich_text_editor_full_screen_toggle">"Toggle full screen mode"</string>

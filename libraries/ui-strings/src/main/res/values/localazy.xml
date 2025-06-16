@@ -138,12 +138,16 @@
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="action_yes_try_again">"Yes, try again"</string>
+  <string name="banner_battery_optimization_content_android">"Disable battery optimization for this app, to make sure all notifications are received."</string>
+  <string name="banner_battery_optimization_submit_android">"Disable optimization"</string>
+  <string name="banner_battery_optimization_title_android">"Notifications not arriving?"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade available"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_adding_caption">"Adding caption"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>
+  <string name="common_an_image">"an image"</string>
   <string name="common_analytics">"Analytics"</string>
   <string name="common_appearance">"Appearance"</string>
   <string name="common_audio">"Audio"</string>
@@ -240,6 +244,7 @@ Reason: %1$s."</string>
   <string name="common_reason">"Reason"</string>
   <string name="common_recovery_key">"Recovery key"</string>
   <string name="common_refreshing">"Refreshing…"</string>
+  <string name="common_replies">"%1$d replies"</string>
   <string name="common_replying_to">"Replying to %1$s"</string>
   <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_a_problem">"Report a problem"</string>
@@ -334,6 +339,7 @@ Are you sure you want to continue?"</string>
   <string name="error_room_address_invalid_symbols">"Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
+  <string name="event_shield_mismatched_sender">"The sender of the event does not match the owner of the device that sent it."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"The authenticity of this encrypted message can\'t be guaranteed on this device."</string>
   <string name="event_shield_reason_previously_verified">"Encrypted by a previously-verified user."</string>
   <string name="event_shield_reason_sent_in_clear">"Not encrypted."</string>
@@ -344,6 +350,10 @@ Are you sure you want to continue?"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Options"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Settings"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>

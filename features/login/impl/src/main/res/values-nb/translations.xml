@@ -89,5 +89,6 @@ Prøv å logge på manuelt, eller skann QR-koden med en annen enhet."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix er et åpent nettverk for sikker, desentralisert kommunikasjon."</string>
   <string name="screen_server_confirmation_message_register">"Det er her samtalene dine vil ligge - akkurat som du ville brukt en e-postleverandør til å oppbevare e-postene dine."</string>
   <string name="screen_server_confirmation_title_login">"Du er i ferd med å logge inn på %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Velg kontoleverandør"</string>
   <string name="screen_server_confirmation_title_register">"Du er i ferd med å opprette en konto på %1$s"</string>
 </resources>

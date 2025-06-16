@@ -73,7 +73,7 @@
   <string name="action_end_poll">"Avslutt avstemning"</string>
   <string name="action_enter_pin">"Skriv inn PIN-koden"</string>
   <string name="action_forgot_password">"Glemt passordet?"</string>
-  <string name="action_forward">"Fremover"</string>
+  <string name="action_forward">"Videresend"</string>
   <string name="action_go_back">"Gå tilbake"</string>
   <string name="action_ignore">"Ignorer"</string>
   <string name="action_invite">"Inviter"</string>
@@ -138,12 +138,16 @@
   <string name="action_view_source">"Vis kilde"</string>
   <string name="action_yes">"Ja"</string>
   <string name="action_yes_try_again">"Ja, prøv igjen"</string>
+  <string name="banner_battery_optimization_content_android">"Deaktiver batterioptimalisering for denne appen for å sikre at alle varsler mottas."</string>
+  <string name="banner_battery_optimization_submit_android">"Deaktiver optimalisering"</string>
+  <string name="banner_battery_optimization_title_android">"Kommer ikke varslene frem?"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Serveren din støtter nå en ny, raskere protokoll. Logg ut og logg inn igjen for å oppgradere nå. Ved å gjøre dette nå, unngår du å bli tvunget til å logge ut når den gamle protokollen fjernes senere."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Oppgradering tilgjengelig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Retningslinjer for akseptabel bruk"</string>
   <string name="common_adding_caption">"Legger til bildetekst"</string>
   <string name="common_advanced_settings">"Avanserte innstillinger"</string>
+  <string name="common_an_image">"et bilde"</string>
   <string name="common_analytics">"Analyse"</string>
   <string name="common_appearance">"Utseende"</string>
   <string name="common_audio">"Lyd"</string>
@@ -240,6 +244,7 @@
   <string name="common_reason">"Årsak"</string>
   <string name="common_recovery_key">"Gjenopprettingsnøkkel"</string>
   <string name="common_refreshing">"Oppdaterer…"</string>
+  <string name="common_replies">"%1$d svar"</string>
   <string name="common_replying_to">"Svar til %1$s"</string>
   <string name="common_report_a_bug">"Rapporter en feil"</string>
   <string name="common_report_a_problem">"Rapporter et problem"</string>
@@ -333,6 +338,7 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="error_room_address_invalid_symbols">"Noen tegn er ikke tillatt. Bare bokstaver, sifre og følgende symboler støttes! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Noen meldinger er ikke sendt"</string>
   <string name="error_unknown">"Beklager, det oppstod en feil"</string>
+  <string name="event_shield_mismatched_sender">"Avsenderen av hendelsen samsvarer ikke med eieren av enheten som sendte den."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Ektheten til denne krypterte meldingen kan ikke garanteres på denne enheten."</string>
   <string name="event_shield_reason_previously_verified">"Kryptert av en tidligere verifisert bruker."</string>
   <string name="event_shield_reason_sent_in_clear">"Ikke kryptert."</string>
@@ -343,6 +349,10 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="invite_friends_text">"Hei, snakk med meg på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake for å rapportere feil"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Alternativer"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Fjern %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Innstillinger"</string>
   <string name="screen_media_picker_error_failed_selection">"Kunne ikke velge medium, prøv igjen."</string>
   <string name="screen_media_upload_preview_caption_warning">"Teksting er kanskje ikke synlig for personer som bruker eldre apper."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Kunne ikke behandle medier for opplasting, vennligst prøv igjen."</string>
@@ -371,8 +381,13 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Festede meldinger"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laster inn melding…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Vis alle"</string>
+  <string name="screen_room_timeline_tombstoned_room_action">"Gå til nytt rom"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Dette rommet har blitt erstattet og er ikke lenger aktivt"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Se gamle meldinger"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Dette rommet er en fortsettelse av et annet rom"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Forespørsel om å bli med sendt"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Dette rommet har blitt oppgradert"</string>
   <string name="screen_share_location_title">"Del lokasjon"</string>
   <string name="screen_share_my_location_action">"Del min lokasjon"</string>
   <string name="screen_share_open_apple_maps">"Åpne i Apple Maps"</string>

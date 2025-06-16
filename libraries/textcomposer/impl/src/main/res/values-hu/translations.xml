@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Titkosítatlan üzenet…"</string>
   <string name="rich_text_editor_create_link">"Hivatkozás létrehozása"</string>
   <string name="rich_text_editor_edit_link">"Hivatkozás szerkesztése"</string>
+  <string name="rich_text_editor_format_action">"%1$s, állapot: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Félkövér formátum alkalmazása"</string>
   <string name="rich_text_editor_format_italic">"Dőlt formátum alkalmazása"</string>
+  <string name="rich_text_editor_format_state_disabled">"letiltva"</string>
+  <string name="rich_text_editor_format_state_off">"ki"</string>
+  <string name="rich_text_editor_format_state_on">"be"</string>
   <string name="rich_text_editor_format_strikethrough">"Áthúzott formátum alkalmazása"</string>
   <string name="rich_text_editor_format_underline">"Aláhúzott formátum alkalmazása"</string>
   <string name="rich_text_editor_full_screen_toggle">"Teljes képernyős mód be/ki"</string>
