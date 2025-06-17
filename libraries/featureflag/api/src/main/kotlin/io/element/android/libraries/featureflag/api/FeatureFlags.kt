@@ -118,8 +118,8 @@ enum class FeatureFlags(
         description = "When inviting a user to an encrypted room that has history visibility set to \"shared\"," +
             " share encrypted history with that user, and accept encrypted history when you are invited to such a room." +
             "\nRequires an app restart to take effect." +
-            "\n\nWARNING: this feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on" +
-            " production accounts.",
+            "\n\nWARNING: this feature is EXPERIMENTAL and not all security precautions are implemented." +
+            " Do not enable on production accounts.",
         defaultValue = { false },
         isFinished = false,
     ),
