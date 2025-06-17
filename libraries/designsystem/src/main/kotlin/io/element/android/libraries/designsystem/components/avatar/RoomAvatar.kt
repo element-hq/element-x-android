@@ -20,7 +20,7 @@ fun RoomAvatar(
     hideAvatarImage: Boolean = false,
     contentDescription: String? = null,
 ) {
-    when  {
+    when {
         isTombstoned -> {
             TombstonedRoomAvatar(
                 size = avatarData.size,
