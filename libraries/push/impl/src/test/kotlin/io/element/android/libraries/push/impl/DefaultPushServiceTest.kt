@@ -7,13 +7,17 @@
 
 package io.element.android.libraries.push.impl
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.api.GetCurrentPushProvider
+import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.push.impl.push.FakeMutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.store.InMemoryPushDataStore
@@ -295,6 +299,41 @@ class DefaultPushServiceTest {
         )
         defaultPushService.resetBatteryOptimizationState()
         resetResult.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `resetPushHistory invokes the store method`() = runTest {
+        val resetResult = lambdaRecorder<Unit> { }
+        val defaultPushService = createDefaultPushService(
+            pushDataStore = InMemoryPushDataStore(
+                resetResult = resetResult
+            ),
+        )
+        defaultPushService.resetPushHistory()
+        resetResult.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `getPushHistoryItemsFlow invokes the store method`() = runTest {
+        val store = InMemoryPushDataStore()
+        val aPushHistoryItem = PushHistoryItem(
+            pushDate = 0L,
+            formattedDate = "formattedDate",
+            providerInfo = "providerInfo",
+            eventId = AN_EVENT_ID,
+            roomId = A_ROOM_ID,
+            sessionId = A_SESSION_ID,
+            hasBeenResolved = false,
+            comment = null,
+        )
+        val defaultPushService = createDefaultPushService(
+            pushDataStore = store,
+        )
+        defaultPushService.getPushHistoryItemsFlow().test {
+            assertThat(awaitItem().isEmpty()).isTrue()
+            store.emitPushHistoryItems(listOf(aPushHistoryItem))
+            assertThat(awaitItem().first()).isEqualTo(aPushHistoryItem)
+        }
     }
 
     private fun createDefaultPushService(
