@@ -12,6 +12,7 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,18 +31,23 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.androidutils.ui.showKeyboard
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.DAY_MODE_NAME
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -83,6 +89,7 @@ import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.launch
 import uniffi.wysiwyg_composer.MenuAction
 import kotlin.time.Duration.Companion.seconds
 
@@ -472,6 +479,7 @@ private fun TextInputBox(
     onResetComposerMode: () -> Unit,
     placeholder: String,
     showPlaceholder: Boolean,
+    modifier: Modifier = Modifier,
     textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
@@ -484,7 +492,8 @@ private fun TextInputBox(
             .border(0.5.dp, borderColor, roundedCorners)
             .background(color = bgColor)
             .requiredHeightIn(min = 42.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .then(modifier),
     ) {
         if (composerMode is MessageComposerMode.Special) {
             ComposerModeView(
@@ -546,7 +555,20 @@ private fun TextInput(
     onTyping: (Boolean) -> Unit,
     onSelectRichContent: ((Uri) -> Unit)?,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val view = LocalView.current
     TextInputBox(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+        ) {
+            coroutineScope.launch {
+                state.requestFocus()
+                view.showKeyboard()
+            }
+        }.semantics {
+            hideFromAccessibility()
+        },
         composerMode = composerMode,
         onResetComposerMode = onResetComposerMode,
         placeholder = placeholder,

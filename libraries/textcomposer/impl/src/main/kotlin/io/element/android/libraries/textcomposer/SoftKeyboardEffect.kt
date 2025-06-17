@@ -7,8 +7,6 @@
 
 package io.element.android.libraries.textcomposer
 
-import android.os.Build
-import android.view.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -44,12 +42,8 @@ internal fun <T> SoftKeyboardEffect(
             view.awaitWindowFocus()
 
             if (!view.isKeyboardVisible()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    view.windowInsetsController?.show(WindowInsets.Type.ime())
-                } else {
-                    // Show the keyboard, temporarily using the root view for focus
-                    view.showKeyboard(andRequestFocus = true)
-                }
+                // Show the keyboard, temporarily using the root view for focus
+                view.showKeyboard(andRequestFocus = true)
 
                 // Refocus to the correct view
                 latestOnRequestFocus()
