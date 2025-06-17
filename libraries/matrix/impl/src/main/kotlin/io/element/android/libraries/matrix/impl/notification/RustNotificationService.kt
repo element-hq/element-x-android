@@ -12,6 +12,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -24,7 +25,7 @@ class RustNotificationService(
     private val sessionId: SessionId,
     private val notificationClient: NotificationClient,
     private val dispatchers: CoroutineDispatchers,
-    clock: SystemClock,
+    private val clock: SystemClock,
 ) : NotificationService {
     private val notificationMapper: NotificationMapper = NotificationMapper(clock)
 
@@ -43,11 +44,32 @@ class RustNotificationService(
                 val eventIds = requests.flatMap { it.eventIds }
                 for (eventId in eventIds) {
                     val item = items[eventId]
+                    val roomId = RoomId(requests.find { it.eventIds.contains(eventId) }?.roomId!!)
                     if (item != null) {
-                        val roomId = RoomId(requests.find { it.eventIds.contains(eventId) }?.roomId!!)
                         put(EventId(eventId), notificationMapper.map(sessionId, EventId(eventId), roomId, item))
                     } else {
                         Timber.e("Could not retrieve event for notification with $eventId")
+                        put(
+                            EventId(eventId),
+                            NotificationData(
+                                sessionId = sessionId,
+                                eventId = EventId(eventId),
+                                threadId = null,
+                                roomId = roomId,
+                                senderAvatarUrl = null,
+                                senderDisplayName = null,
+                                senderIsNameAmbiguous = false,
+                                roomAvatarUrl = null,
+                                roomDisplayName = null,
+                                isDirect = false,
+                                isDm = false,
+                                isEncrypted = false,
+                                isNoisy = false,
+                                timestamp = clock.epochMillis(),
+                                content = NotificationContent.MessageLike.UnableToResolve,
+                                hasMention = false
+                            )
+                        )
                     }
                 }
             }
