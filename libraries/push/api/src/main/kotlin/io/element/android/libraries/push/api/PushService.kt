@@ -67,4 +67,9 @@ interface PushService {
      * Reset the push history, including the push counter.
      */
     suspend fun resetPushHistory()
+
+    /**
+     * Reset the battery optimization state.
+     */
+    suspend fun resetBatteryOptimizationState()
 }

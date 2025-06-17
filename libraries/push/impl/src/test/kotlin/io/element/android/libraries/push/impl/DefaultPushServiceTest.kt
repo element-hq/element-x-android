@@ -14,6 +14,8 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.api.GetCurrentPushProvider
+import io.element.android.libraries.push.impl.push.FakeMutableBatteryOptimizationStore
+import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.store.InMemoryPushDataStore
 import io.element.android.libraries.push.impl.store.PushDataStore
 import io.element.android.libraries.push.impl.test.FakeTestPush
@@ -283,6 +285,18 @@ class DefaultPushServiceTest {
         assertThat(userPushStore.getPushProviderName()).isEqualTo(aPushProvider.name)
     }
 
+    @Test
+    fun `resetBatteryOptimizationState invokes the store method`() = runTest {
+        val resetResult = lambdaRecorder<Unit> { }
+        val defaultPushService = createDefaultPushService(
+            mutableBatteryOptimizationStore = FakeMutableBatteryOptimizationStore(
+                resetResult = resetResult,
+            ),
+        )
+        defaultPushService.resetBatteryOptimizationState()
+        resetResult.assertions().isCalledOnce()
+    }
+
     private fun createDefaultPushService(
         testPush: TestPush = FakeTestPush(),
         userPushStoreFactory: UserPushStoreFactory = FakeUserPushStoreFactory(),
@@ -291,6 +305,7 @@ class DefaultPushServiceTest {
         sessionObserver: SessionObserver = NoOpSessionObserver(),
         pushClientSecretStore: PushClientSecretStore = InMemoryPushClientSecretStore(),
         pushDataStore: PushDataStore = InMemoryPushDataStore(),
+        mutableBatteryOptimizationStore: MutableBatteryOptimizationStore = FakeMutableBatteryOptimizationStore(),
     ): DefaultPushService {
         return DefaultPushService(
             testPush = testPush,
@@ -300,6 +315,7 @@ class DefaultPushServiceTest {
             sessionObserver = sessionObserver,
             pushClientSecretStore = pushClientSecretStore,
             pushDataStore = pushDataStore,
+            mutableBatteryOptimizationStore = mutableBatteryOptimizationStore,
         )
     }
 }

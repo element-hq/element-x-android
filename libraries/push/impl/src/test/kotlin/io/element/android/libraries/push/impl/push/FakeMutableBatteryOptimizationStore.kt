@@ -12,6 +12,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 class FakeMutableBatteryOptimizationStore(
     private val showBatteryOptimizationBannerResult: () -> Unit = { lambdaError() },
     private val onOptimizationBannerDismissedResult: () -> Unit = { lambdaError() },
+    private val resetResult: () -> Unit = { lambdaError() },
 ) : MutableBatteryOptimizationStore {
     override suspend fun showBatteryOptimizationBanner() {
         showBatteryOptimizationBannerResult()
@@ -19,5 +20,9 @@ class FakeMutableBatteryOptimizationStore(
 
     override suspend fun onOptimizationBannerDismissed() {
         onOptimizationBannerDismissedResult()
+    }
+
+    override suspend fun reset() {
+        resetResult()
     }
 }
