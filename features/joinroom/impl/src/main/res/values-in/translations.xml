@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Batalkan permintaan"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Ya, batalkan"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Apakah Anda yakin ingin membatalkan permintaan Anda untuk bergabung dengan ruangan ini?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Batalkan permintaan untuk bergabung"</string>
+  <string name="screen_join_room_join_action">"Gabung dengan ruangan"</string>
+  <string name="screen_join_room_knock_action">"Ketuk untuk bergabung"</string>
+  <string name="screen_join_room_knock_message_description">"Pesan (opsional)"</string>
+  <string name="screen_join_room_knock_sent_description">"Anda akan menerima undangan untuk bergabung dengan ruangan jika permintaan Anda diterima."</string>
+  <string name="screen_join_room_knock_sent_title">"Permintaan untuk bergabung dikirim"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s belum mendukung space. Anda dapat mengakses space di web."</string>
+  <string name="screen_join_room_space_not_supported_title">"Space belum didukung"</string>
+  <string name="screen_join_room_subtitle_knock">"Klik tombol di bawah ini dan administrator kamar akan diberi tahu. Anda akan dapat bergabung dengan percakapan setelah disetujui."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Anda harus menjadi anggota ruangan ini untuk melihat riwayat pesan."</string>
+  <string name="screen_join_room_title_knock">"Ingin bergabung dengan ruangan ini?"</string>
+  <string name="screen_join_room_title_no_preview">"Pratinjau tidak tersedia"</string>
+</resources>

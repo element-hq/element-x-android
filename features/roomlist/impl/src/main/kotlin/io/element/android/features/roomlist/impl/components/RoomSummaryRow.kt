@@ -7,7 +7,6 @@
 
 package io.element.android.features.roomlist.impl.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -149,7 +148,7 @@ internal fun RoomSummaryRow(
                         Spacer(modifier = Modifier.height(4.dp))
                     }
                     Text(
-                        text = stringResource(id = R.string.screen_join_room_knock_sent_title),
+                        text = stringResource(id = R.string.screen_roomlist_knock_event_sent_description),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = ElementTheme.typography.fontBodyMdRegular,
@@ -161,7 +160,6 @@ internal fun RoomSummaryRow(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun RoomSummaryScaffoldRow(
     room: RoomListRoomSummary,

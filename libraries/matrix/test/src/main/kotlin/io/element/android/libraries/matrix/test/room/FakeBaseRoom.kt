@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -66,6 +67,7 @@ class FakeBaseRoom(
     private val getRoomVisibilityResult: () -> Result<RoomVisibility> = { lambdaError() },
     private val forgetResult: () -> Result<Unit> = { lambdaError() },
     private val reportRoomResult: (String?) -> Result<Unit> = { lambdaError() },
+    private val predecessorRoomResult: () -> PredecessorRoom? = { null },
 ) : BaseRoom {
     private val _roomInfoFlow: MutableStateFlow<RoomInfo> = MutableStateFlow(initialRoomInfo)
     override val roomInfoFlow: StateFlow<RoomInfo> = _roomInfoFlow
@@ -215,6 +217,8 @@ class FakeBaseRoom(
     }
 
     override suspend fun reportRoom(reason: String?) = reportRoomResult(reason)
+
+    override fun predecessorRoom(): PredecessorRoom? = predecessorRoomResult()
 }
 
 fun defaultRoomPowerLevels() = RoomPowerLevels(

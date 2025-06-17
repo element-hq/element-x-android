@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Einladung ablehnen"</string>
   <string name="screen_invites_empty_list">"Keine Einladungen"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) hat dich eingeladen"</string>
-  <string name="screen_join_room_knock_sent_title">"Beitrittsanfrage geschickt"</string>
   <string name="screen_migration_message">"Dies ist ein einmaliger Vorgang, danke fürs Warten."</string>
   <string name="screen_migration_title">"Dein Konto wird eingerichtet."</string>
   <string name="screen_roomlist_a11y_create_message">"Eine Unterthaltung oder Raum erstellen"</string>
@@ -37,6 +36,7 @@ Deaktivieren Sie den entsprechenden Filter, um Ihre anderen Chatrooms zu sehen"<
   <string name="screen_roomlist_filter_unreads">"Ungelesen"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Glückwunsch!
 Sie haben keine ungelesenen Nachrichten!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Beitrittsanfrage geschickt"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Als gelesen markieren"</string>
   <string name="screen_roomlist_mark_as_unread">"Als ungelesen markieren"</string>

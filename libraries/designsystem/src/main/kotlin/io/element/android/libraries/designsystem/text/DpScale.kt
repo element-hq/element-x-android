@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +28,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
  * will be smaller.
  */
 @Composable
+@ReadOnlyComposable
 fun Dp.applyScaleDown(): Dp = with(LocalDensity.current) {
     return this@applyScaleDown * fontScale.coerceAtMost(1f)
 }
@@ -37,6 +39,7 @@ fun Dp.applyScaleDown(): Dp = with(LocalDensity.current) {
  * will be bigger.
  */
 @Composable
+@ReadOnlyComposable
 fun Dp.applyScaleUp(): Dp = with(LocalDensity.current) {
     return this@applyScaleUp * fontScale.coerceAtLeast(1f)
 }

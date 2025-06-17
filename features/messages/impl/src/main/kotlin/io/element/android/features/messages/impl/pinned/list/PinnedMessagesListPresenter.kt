@@ -106,7 +106,8 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                     renderTypingNotifications = false,
                     typingMembers = persistentListOf(),
                     reserveSpace = false,
-                )
+                ),
+                predecessorRoom = room.predecessorRoom(),
             )
         }
         val timelineProtectionState = timelineProtectionPresenter.present()

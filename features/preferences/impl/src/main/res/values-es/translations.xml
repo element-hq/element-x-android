@@ -8,14 +8,22 @@
   <string name="screen_advanced_settings_element_call_base_url">"URL base personalizada de Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Define una URL base personalizada para Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL no válida, asegúrate de incluir el protocolo (http/https) y la dirección correcta."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Ocultar avatares en las invitaciones a salas"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Ocultar vistas previas de multimedia en la cronología"</string>
   <string name="screen_advanced_settings_media_compression_description">"Sube fotos y vídeos más rápido y reduce el uso de datos"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimizar la calidad de los medios"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderación y seguridad"</string>
   <string name="screen_advanced_settings_push_provider_android">"Proveedor de notificaciones push"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Desactiva el editor de texto enriquecido para escribir Markdown manualmente."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Confirmaciones de lectura"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Si se desactiva, las confirmaciones de lectura no se enviarán a nadie. Seguirás recibiendo confirmaciones de lectura de otros usuarios."</string>
   <string name="screen_advanced_settings_share_presence">"Compartir presencia"</string>
   <string name="screen_advanced_settings_share_presence_description">"Si se desactiva, no podrás enviar ni recibir confirmaciones de lectura ni notificaciones de escritura."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Ocultar siempre"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Mostrar siempre"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"En las salas privadas"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Siempre se puede mostrar un ítem multimedia oculto pulsando sobre él"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Mostrar multimedia en la cronología"</string>
   <string name="screen_advanced_settings_view_source_description">"Habilita la opción para ver el contenido en bruto del mensaje en la cronología."</string>
   <string name="screen_blocked_users_empty">"No tienes usuarios bloqueados"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Desbloquear"</string>
@@ -45,7 +53,7 @@ Si continúas, es posible que algunos de tus ajustes cambien."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"La configuración no se ha corregido, por favor inténtalo de nuevo."</string>
   <string name="screen_notification_settings_group_chats">"Chats grupales"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitaciones"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Tu servidor principal no admite esta opción en salas cifradas, puede que no recibas notificaciones en algunas salas."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Tu servidor base no admite esta opción en salas cifradas, puede que no recibas notificaciones de algunas salas."</string>
   <string name="screen_notification_settings_mentions_section_title">"Menciones"</string>
   <string name="screen_notification_settings_mode_all">"Todos"</string>
   <string name="screen_notification_settings_mode_mentions">"Menciones"</string>
@@ -55,6 +63,7 @@ Si continúas, es posible que algunos de tus ajustes cambien."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ajustes del sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificaciones del sistema desactivadas"</string>
   <string name="screen_notification_settings_title">"Notificaciones"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Historial de notificaciones push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Solucionar problemas"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Solucionar problemas con las notificaciones"</string>
 </resources>

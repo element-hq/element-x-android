@@ -6,7 +6,7 @@
 android_gradle_plugin = "8.10.1"
 kotlin = "2.1.21"
 kotlinpoet = "2.2.0"
-ksp = "2.1.21-2.0.1"
+ksp = "2.1.21-2.0.2"
 firebaseAppDistribution = "5.1.1"
 
 # AndroidX
@@ -39,7 +39,7 @@ serialization_json = "1.8.1"
 #other
 detekt = "1.23.8"
 coil = "3.2.0"
-showkase = "1.0.3"
+showkase = "1.0.4"
 appyx = "1.7.1"
 sqldelight = "2.1.0"
 wysiwyg = "2.38.3"
@@ -147,7 +147,7 @@ test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.6.2"
 test_mockk = "io.mockk:mockk:1.14.2"
 test_konsist = "com.lemonappdev:konsist:0.17.3"
-test_turbine = "app.cash.turbine:turbine:1.2.0"
+test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
 test_robolectric = "org.robolectric:robolectric:4.14.1"
@@ -186,15 +186,15 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.10.1"
+maplibre = "org.maplibre.gl:android-sdk:11.10.3"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.17.0"
-sentry = "io.sentry:sentry-android:8.13.2"
+posthog = "com.posthog:posthog-android:3.19.0"
+sentry = "io.sentry:sentry-android:8.13.3"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
@@ -237,7 +237,7 @@ anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = "org.jlleitschuh.gradle.ktlint:12.3.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:12.1.2"
+dependencycheck = "org.owasp.dependencycheck:12.1.3"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.5"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

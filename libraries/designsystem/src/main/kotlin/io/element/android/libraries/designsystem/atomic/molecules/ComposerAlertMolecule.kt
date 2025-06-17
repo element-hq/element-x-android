@@ -39,7 +39,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun ComposerAlertMolecule(
-    avatar: AvatarData,
+    avatar: AvatarData?,
     content: AnnotatedString,
     onSubmitClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -71,9 +71,9 @@ fun ComposerAlertMolecule(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Avatar(
-                        avatarData = avatar,
-                    )
+                    if (avatar != null) {
+                        Avatar(avatarData = avatar)
+                    }
                     Text(
                         text = content,
                         modifier = Modifier.weight(1f),

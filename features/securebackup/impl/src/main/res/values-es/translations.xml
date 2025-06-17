@@ -9,7 +9,7 @@
   <string name="screen_chat_backup_key_storage_toggle_title">"Permitir almacenamiento de claves"</string>
   <string name="screen_chat_backup_recovery_action_change">"Cambiar la clave de recuperación"</string>
   <string name="screen_chat_backup_recovery_action_change_description">"Recupera tu identidad criptográfica y tu historial de mensajes con una clave de recuperación si has perdido todos tus dispositivos actuales."</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Introduzca la clave de recuperación"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Introduce la clave de recuperación"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Tu almacén de claves no está sincronizado actualmente."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurar la recuperación"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Accede a tus mensajes cifrados si pierdes todos tus dispositivos o cierras sesión de %1$s en cualquier lugar."</string>

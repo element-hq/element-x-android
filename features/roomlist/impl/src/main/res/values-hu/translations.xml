@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Csevegés elutasítása"</string>
   <string name="screen_invites_empty_list">"Nincsenek meghívások"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) meghívta"</string>
-  <string name="screen_join_room_knock_sent_title">"Csatlakozási kérés elküldve"</string>
   <string name="screen_migration_message">"Ez egy egyszeri folyamat, köszönjük a türelmét."</string>
   <string name="screen_migration_title">"A fiók beállítása."</string>
   <string name="screen_roomlist_a11y_create_message">"Új beszélgetés vagy szoba létrehozása"</string>
@@ -37,6 +36,7 @@ Egyelőre törölheti a szűrőket a többi csevegés megtekintéséhez."</strin
   <string name="screen_roomlist_filter_unreads">"Olvasatlan"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulálunk!
 Nincs olvasatlan üzenete!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Csatlakozási kérés elküldve"</string>
   <string name="screen_roomlist_main_space_title">"Összes csevegés"</string>
   <string name="screen_roomlist_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
