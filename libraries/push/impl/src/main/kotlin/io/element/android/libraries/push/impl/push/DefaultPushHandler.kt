@@ -94,7 +94,7 @@ class DefaultPushHandler @Inject constructor(
                                         eventId = request.eventId,
                                         roomId = request.roomId,
                                         sessionId = request.sessionId,
-                                        reason = "Unable to resolve event, showing fallback notification",
+                                        reason = "Showing fallback notification",
                                     )
                                     mutableBatteryOptimizationStore.showBatteryOptimizationBanner()
                                 } else {
