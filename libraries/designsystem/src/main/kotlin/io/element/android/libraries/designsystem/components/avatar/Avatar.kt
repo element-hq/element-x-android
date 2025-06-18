@@ -9,7 +9,7 @@ package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -73,7 +73,7 @@ private fun ImageAvatar(
         contentDescription = contentDescription,
         contentScale = ContentScale.Crop,
         modifier = modifier
-            .requiredSize(size)
+            .size(size)
             .clip(CircleShape)
     ) {
         val collectedState by painter.state.collectAsState()

@@ -7,13 +7,9 @@
 
 package io.element.android.libraries.designsystem.components.avatar
 
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.AvatarColors
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -32,9 +28,7 @@ fun TombstonedRoomAvatar(
             background = ElementTheme.colors.bgSubtlePrimary,
             foreground = ElementTheme.colors.iconTertiary
         ),
-        modifier = modifier
-            .size(size.dp)
-            .clip(CircleShape),
+        modifier = modifier,
         contentDescription = contentDescription
     )
 }

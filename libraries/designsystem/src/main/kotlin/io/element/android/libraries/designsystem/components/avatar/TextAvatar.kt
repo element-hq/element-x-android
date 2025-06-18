@@ -9,7 +9,7 @@ package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,7 +38,7 @@ internal fun TextAvatar(
 ) {
     Box(
         modifier
-            .requiredSize(size)
+            .size(size)
             .clip(CircleShape)
             .background(color = colors.background)
     ) {
