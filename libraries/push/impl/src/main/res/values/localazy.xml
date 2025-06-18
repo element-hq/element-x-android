@@ -13,7 +13,7 @@
     <item quantity="one">"%d notification"</item>
     <item quantity="other">"%d notifications"</item>
   </plurals>
-  <string name="notification_fallback_content">"You have new message(s)."</string>
+  <string name="notification_fallback_content">"You have new messages."</string>
   <string name="notification_incoming_call">"📹 Incoming call"</string>
   <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>
   <string name="notification_invitation_action_join">"Join"</string>
