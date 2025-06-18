@@ -8,12 +8,22 @@
 package io.element.android.features.messages.impl.draft
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 
 class FakeComposerDraftService : ComposerDraftService {
-    var loadDraftLambda: (RoomId, Boolean) -> ComposerDraft? = { _, _ -> null }
-    override suspend fun loadDraft(roomId: RoomId, isVolatile: Boolean): ComposerDraft? = loadDraftLambda(roomId, isVolatile)
+    var loadDraftLambda: (RoomId, ThreadId?, Boolean) -> ComposerDraft? = { _, _, _ -> null }
+    override suspend fun loadDraft(
+        roomId: RoomId,
+        threadRoot: ThreadId?,
+        isVolatile: Boolean
+    ): ComposerDraft? = loadDraftLambda(roomId, threadRoot, isVolatile)
 
-    var saveDraftLambda: (RoomId, ComposerDraft?, Boolean) -> Unit = { _, _, _ -> }
-    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?, isVolatile: Boolean) = saveDraftLambda(roomId, draft, isVolatile)
+    var saveDraftLambda: (RoomId, ThreadId?, ComposerDraft?, Boolean) -> Unit = { _, _, _, _ -> }
+    override suspend fun updateDraft(
+        roomId: RoomId,
+        threadRoot: ThreadId?,
+        draft: ComposerDraft?,
+        isVolatile: Boolean
+    ) = saveDraftLambda(roomId, threadRoot, draft, isVolatile)
 }
