@@ -608,7 +608,7 @@ class DefaultNotifiableEventResolverTest {
                 roomId = A_ROOM_ID,
                 eventId = AN_EVENT_ID,
                 editedEventId = null,
-                description = "Notification",
+                description = "You have new message(s).",
                 canBeReplaced = true,
                 isRedacted = false,
                 isUpdated = false,
