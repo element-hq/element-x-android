@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -266,24 +267,24 @@ class RustBaseRoom(
         }
     }
 
-    override suspend fun saveComposerDraft(composerDraft: ComposerDraft): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun saveComposerDraft(composerDraft: ComposerDraft, threadRoot: ThreadId?): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            Timber.d("saveComposerDraft: $composerDraft into $roomId")
-            innerRoom.saveComposerDraft(composerDraft.into())
+            Timber.d("saveComposerDraft: $composerDraft into $roomId for thread root: $threadRoot")
+            innerRoom.saveComposerDraft(composerDraft.into(), threadRoot = threadRoot?.value)
         }
     }
 
-    override suspend fun loadComposerDraft(): Result<ComposerDraft?> = withContext(roomDispatcher) {
+    override suspend fun loadComposerDraft(threadRoot: ThreadId?): Result<ComposerDraft?> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            Timber.d("loadComposerDraft for $roomId")
-            innerRoom.loadComposerDraft()?.into()
+            Timber.d("loadComposerDraft for $roomId with thread root: $threadRoot")
+            innerRoom.loadComposerDraft(threadRoot?.value)?.into()
         }
     }
 
-    override suspend fun clearComposerDraft(): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun clearComposerDraft(threadRoot: ThreadId?): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            Timber.d("clearComposerDraft for $roomId")
-            innerRoom.clearComposerDraft()
+            Timber.d("clearComposerDraft for $roomId with thread root: $threadRoot")
+            innerRoom.clearComposerDraft(threadRoot = threadRoot?.value)
         }
     }
 

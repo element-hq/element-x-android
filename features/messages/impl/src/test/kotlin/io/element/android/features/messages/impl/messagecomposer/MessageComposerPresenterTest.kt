@@ -37,6 +37,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -178,10 +179,10 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - change mode to edit`() = runTest {
-        val loadDraftLambda = lambdaRecorder { _: RoomId, _: Boolean ->
+        val loadDraftLambda = lambdaRecorder { _: RoomId, _: ThreadId?, _: Boolean ->
             ComposerDraft(A_MESSAGE, A_MESSAGE, ComposerDraftType.NewMessage)
         }
-        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ComposerDraft?, _: Boolean -> }
+        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ThreadId?, _: ComposerDraft?, _: Boolean -> }
         val draftService = FakeComposerDraftService().apply {
             this.loadDraftLambda = loadDraftLambda
             this.saveDraftLambda = updateDraftLambda
@@ -207,23 +208,23 @@ class MessageComposerPresenterTest {
                 .isCalledExactly(2)
                 .withSequence(
                     // Automatic load of draft
-                    listOf(value(A_ROOM_ID), value(false)),
+                    listOf(value(A_ROOM_ID), value(null), value(false)),
                     // Load of volatile draft when closing edit mode
-                    listOf(value(A_ROOM_ID), value(true))
+                    listOf(value(A_ROOM_ID), value(null), value(true))
                 )
 
             assert(updateDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), any(), value(true))
+                .with(value(A_ROOM_ID), value(null), any(), value(true))
         }
     }
 
     @Test
     fun `present - change mode to edit caption`() = runTest {
-        val loadDraftLambda = lambdaRecorder { _: RoomId, _: Boolean ->
+        val loadDraftLambda = lambdaRecorder { _: RoomId, _: ThreadId?, _: Boolean ->
             ComposerDraft(A_MESSAGE, A_MESSAGE, ComposerDraftType.NewMessage)
         }
-        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ComposerDraft?, _: Boolean -> }
+        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ThreadId?, _: ComposerDraft?, _: Boolean -> }
         val draftService = FakeComposerDraftService().apply {
             this.loadDraftLambda = loadDraftLambda
             this.saveDraftLambda = updateDraftLambda
@@ -249,13 +250,13 @@ class MessageComposerPresenterTest {
                 .isCalledExactly(2)
                 .withSequence(
                     // Automatic load of draft
-                    listOf(value(A_ROOM_ID), value(false)),
+                    listOf(value(A_ROOM_ID), value(null), value(false)),
                     // Load of volatile draft when closing edit mode
-                    listOf(value(A_ROOM_ID), value(true))
+                    listOf(value(A_ROOM_ID), value(null), value(true))
                 )
             assert(updateDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), any(), value(true))
+                .with(value(A_ROOM_ID), value(null), any(), value(true))
         }
     }
 
@@ -303,10 +304,10 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - change mode to reply after edit`() = runTest {
-        val loadDraftLambda = lambdaRecorder { _: RoomId, _: Boolean ->
+        val loadDraftLambda = lambdaRecorder { _: RoomId, _: ThreadId?, _: Boolean ->
             ComposerDraft(A_MESSAGE, A_MESSAGE, ComposerDraftType.NewMessage)
         }
-        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ComposerDraft?, _: Boolean -> }
+        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ThreadId?, _: ComposerDraft?, _: Boolean -> }
         val draftService = FakeComposerDraftService().apply {
             this.loadDraftLambda = loadDraftLambda
             this.saveDraftLambda = updateDraftLambda
@@ -333,11 +334,11 @@ class MessageComposerPresenterTest {
 
             assert(loadDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), value(false))
+                .with(value(A_ROOM_ID), value(null), value(false))
 
             assert(updateDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), any(), value(true))
+                .with(value(A_ROOM_ID), value(null), any(), value(true))
         }
     }
 
@@ -1246,7 +1247,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - when there is no draft, nothing is restored`() = runTest {
-        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ -> null }
+        val loadDraftLambda = lambdaRecorder<RoomId, ThreadId?, Boolean, ComposerDraft?> { _, _, _ -> null }
         val composerDraftService = FakeComposerDraftService().apply {
             this.loadDraftLambda = loadDraftLambda
         }
@@ -1257,7 +1258,7 @@ class MessageComposerPresenterTest {
             awaitFirstItem()
             assert(loadDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), value(false))
+                .with(value(A_ROOM_ID), value(null), value(false))
 
             ensureAllEventsConsumed()
         }
@@ -1265,7 +1266,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - when there is a draft for new message with plain text, it is restored`() = runTest {
-        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ ->
+        val loadDraftLambda = lambdaRecorder<RoomId, ThreadId?, Boolean, ComposerDraft?> { _, _, _ ->
             ComposerDraft(plainText = A_MESSAGE, htmlText = null, draftType = ComposerDraftType.NewMessage)
         }
         val composerDraftService = FakeComposerDraftService().apply {
@@ -1286,7 +1287,7 @@ class MessageComposerPresenterTest {
             }
             assert(loadDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), value(false))
+                .with(value(A_ROOM_ID), value(null), value(false))
 
             ensureAllEventsConsumed()
         }
@@ -1294,7 +1295,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - when there is a draft for new message with rich text, it is restored`() = runTest {
-        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ ->
+        val loadDraftLambda = lambdaRecorder<RoomId, ThreadId?, Boolean, ComposerDraft?> { _, _, _ ->
             ComposerDraft(
                 plainText = A_MESSAGE,
                 htmlText = A_MESSAGE,
@@ -1320,14 +1321,14 @@ class MessageComposerPresenterTest {
             }
             assert(loadDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), value(false))
+                .with(value(A_ROOM_ID), value(null), value(false))
             ensureAllEventsConsumed()
         }
     }
 
     @Test
     fun `present - when there is a draft for edit, it is restored`() = runTest {
-        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ ->
+        val loadDraftLambda = lambdaRecorder<RoomId, ThreadId?, Boolean, ComposerDraft?> { _, _, _ ->
             ComposerDraft(
                 plainText = A_MESSAGE,
                 htmlText = null,
@@ -1354,7 +1355,7 @@ class MessageComposerPresenterTest {
             }
             assert(loadDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), value(false))
+                .with(value(A_ROOM_ID), value(null), value(false))
 
             ensureAllEventsConsumed()
         }
@@ -1362,7 +1363,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - when there is a draft for reply, it is restored`() = runTest {
-        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ ->
+        val loadDraftLambda = lambdaRecorder<RoomId, ThreadId?, Boolean, ComposerDraft?> { _, _, _ ->
             ComposerDraft(
                 plainText = A_MESSAGE,
                 htmlText = null,
@@ -1400,7 +1401,7 @@ class MessageComposerPresenterTest {
             }
             assert(loadDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), value(false))
+                .with(value(A_ROOM_ID), value(null), value(false))
 
             assert(loadReplyDetailsLambda)
                 .isCalledOnce()
@@ -1412,7 +1413,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - when save draft event is invoked and composer is empty then service is called with null draft`() = runTest {
-        val saveDraftLambda = lambdaRecorder<RoomId, ComposerDraft?, Boolean, Unit> { _, _, _ -> }
+        val saveDraftLambda = lambdaRecorder<RoomId, ThreadId?, ComposerDraft?, Boolean, Unit> { _, _, _, _ -> }
         val composerDraftService = FakeComposerDraftService().apply {
             this.saveDraftLambda = saveDraftLambda
         }
@@ -1425,13 +1426,13 @@ class MessageComposerPresenterTest {
             advanceUntilIdle()
             assert(saveDraftLambda)
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), value(null), value(false))
+                .with(value(A_ROOM_ID), value(null), value(null), value(false))
         }
     }
 
     @Test
     fun `present - when save draft event is invoked and composer is not empty then service is called`() = runTest {
-        val saveDraftLambda = lambdaRecorder<RoomId, ComposerDraft?, Boolean, Unit> { _, _, _ -> }
+        val saveDraftLambda = lambdaRecorder<RoomId, ThreadId?, ComposerDraft?, Boolean, Unit> { _, _, _, _ -> }
         val composerDraftService = FakeComposerDraftService().apply {
             this.saveDraftLambda = saveDraftLambda
         }
@@ -1478,27 +1479,32 @@ class MessageComposerPresenterTest {
                 .withSequence(
                     listOf(
                         value(A_ROOM_ID),
+                        value(null),
                         value(ComposerDraft(plainText = A_MESSAGE, htmlText = null, draftType = ComposerDraftType.NewMessage)),
                         value(false)
                     ),
                     listOf(
                         value(A_ROOM_ID),
+                        value(null),
                         value(ComposerDraft(plainText = A_MESSAGE, htmlText = A_MESSAGE, draftType = ComposerDraftType.NewMessage)),
                         value(false)
                     ),
                     listOf(
                         value(A_ROOM_ID),
+                        value(null),
                         value(ComposerDraft(plainText = A_MESSAGE, htmlText = A_MESSAGE, draftType = ComposerDraftType.NewMessage)),
                         // The volatile draft created when switching to edit mode.
                         value(true)
                     ),
                     listOf(
                         value(A_ROOM_ID),
+                        value(null),
                         value(ComposerDraft(plainText = A_MESSAGE, htmlText = A_MESSAGE, draftType = ComposerDraftType.Edit(AN_EVENT_ID))),
                         value(false)
                     ),
                     listOf(
                         value(A_ROOM_ID),
+                        value(null),
                         // When moving from edit mode, text composer is cleared, so the draft is null
                         value(null),
                         value(false)

@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.draft
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import javax.inject.Inject
 
@@ -17,18 +18,20 @@ import javax.inject.Inject
  * Currently it's used to store draft message when moving to edit mode.
  */
 class VolatileComposerDraftStore @Inject constructor() : ComposerDraftStore {
-    private val drafts: MutableMap<RoomId, ComposerDraft> = mutableMapOf()
+    private val drafts: MutableMap<String, ComposerDraft> = mutableMapOf()
 
-    override suspend fun loadDraft(roomId: RoomId): ComposerDraft? {
+    override suspend fun loadDraft(roomId: RoomId, threadRoot: ThreadId?): ComposerDraft? {
+        val key = threadRoot?.value ?: roomId.value
         // Remove the draft from the map when it is loaded
-        return drafts.remove(roomId)
+        return drafts.remove(key)
     }
 
-    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?) {
+    override suspend fun updateDraft(roomId: RoomId, threadRoot: ThreadId?, draft: ComposerDraft?) {
+        val key = threadRoot?.value ?: roomId.value
         if (draft == null) {
-            drafts.remove(roomId)
+            drafts.remove(key)
         } else {
-            drafts[roomId] = draft
+            drafts[key] = draft
         }
     }
 }

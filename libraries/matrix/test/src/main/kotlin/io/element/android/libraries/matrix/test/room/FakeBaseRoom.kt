@@ -11,6 +11,7 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -198,11 +199,14 @@ class FakeBaseRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun saveComposerDraft(composerDraft: ComposerDraft) = saveComposerDraftLambda(composerDraft)
+    override suspend fun saveComposerDraft(
+        composerDraft: ComposerDraft,
+        threadRoot: ThreadId?
+    ) = saveComposerDraftLambda(composerDraft)
 
-    override suspend fun loadComposerDraft() = loadComposerDraftLambda()
+    override suspend fun loadComposerDraft(threadRoot: ThreadId?) = loadComposerDraftLambda()
 
-    override suspend fun clearComposerDraft() = clearComposerDraftLambda()
+    override suspend fun clearComposerDraft(threadRoot: ThreadId?) = clearComposerDraftLambda()
 
     override suspend fun getUpdatedIsEncrypted(): Result<Boolean> = simulateLongTask {
         Result.success(info().isEncrypted.orFalse())

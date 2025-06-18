@@ -26,6 +26,10 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
+import io.element.android.libraries.matrix.api.room.message.replyInThread
+import io.element.android.libraries.matrix.ui.messages.reply.eventId
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -98,6 +102,18 @@ class SendLocationPresenter @Inject constructor(
         event: SendLocationEvents.SendLocation,
         mode: SendLocationState.Mode,
     ) {
+        val replyMode = messageComposerContext.composerMode as? MessageComposerMode.Reply
+        val replyParams = replyMode?.replyToDetails?.let { details ->
+            if (replyMode.inThread) {
+                replyInThread(details.eventId())
+            } else {
+                ReplyParameters(
+                    inReplyToEventId = details.eventId(),
+                    enforceThreadReply = false,
+                    replyWithinThread = false
+                )
+            }
+        }
         when (mode) {
             SendLocationState.Mode.PinLocation -> {
                 val geoUri = event.cameraPosition.toGeoUri()
@@ -106,7 +122,8 @@ class SendLocationPresenter @Inject constructor(
                     geoUri = geoUri,
                     description = null,
                     zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
-                    assetType = AssetType.PIN
+                    assetType = AssetType.PIN,
+                    replyParameters = replyParams,
                 )
                 analyticsService.capture(
                     Composer(
@@ -124,7 +141,8 @@ class SendLocationPresenter @Inject constructor(
                     geoUri = geoUri,
                     description = null,
                     zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
-                    assetType = AssetType.SENDER
+                    assetType = AssetType.SENDER,
+                    replyParameters = replyParams,
                 )
                 analyticsService.capture(
                     Composer(
