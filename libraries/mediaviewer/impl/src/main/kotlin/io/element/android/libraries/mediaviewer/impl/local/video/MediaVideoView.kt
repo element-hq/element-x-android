@@ -11,6 +11,9 @@ import android.annotation.SuppressLint
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,20 +22,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.common.Timeline
+import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
@@ -54,6 +63,7 @@ import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePl
 import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.coroutines.delay
+import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @SuppressLint("UnsafeOptInUsageError")
@@ -102,6 +112,8 @@ private fun ExoPlayerMediaVideoView(
                 durationInMillis = 0,
                 canMute = true,
                 isMuted = false,
+                videoWidth = 0,
+                videoHeight = 0,
             )
         )
     }
@@ -148,6 +160,14 @@ private fun ExoPlayerMediaVideoView(
             override fun onPlaybackStateChanged(playbackState: Int) {
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
                     isReady = playbackState == STATE_READY,
+                )
+            }
+
+            override fun onVideoSizeChanged(videoSize: VideoSize) {
+                super.onVideoSizeChanged(videoSize)
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    videoWidth = videoSize.width,
+                    videoHeight = videoSize.height,
                 )
             }
         }
@@ -207,6 +227,102 @@ private fun ExoPlayerMediaVideoView(
             .background(ElementTheme.colors.bgSubtlePrimary),
     ) {
         val context = LocalContext.current
+        // set up all transformation states
+        var playerSize by remember { mutableStateOf(IntSize.Zero) }
+        var scale by remember { mutableFloatStateOf(1f) }
+        var offset by remember { mutableStateOf(Offset.Zero) }
+        val state = rememberTransformableState { zoomChange, offsetChange, _ ->
+            scale = (scale * zoomChange).coerceIn(1f, 6f)
+            if (mediaPlayerControllerState.videoHeight == 0 || mediaPlayerControllerState.videoWidth == 0) {
+                Timber.e("Video size is not set yet, cannot apply offset limits")
+            } else {
+                val newOffset = offset + offsetChange * scale
+                val screenRatio = playerSize.width.toFloat() / playerSize.height.toFloat()
+                val videoRatio = mediaPlayerControllerState.videoWidth.toFloat() / mediaPlayerControllerState.videoHeight.toFloat()
+                if (screenRatio <= videoRatio) {
+                    // For instance, phone in portrait mode and video as a regular movie
+                    // Size of the video with scale == 1
+                    val actualVideoSize = IntSize(
+                        width = playerSize.width,
+                        height = (playerSize.width / videoRatio).toInt(),
+                    )
+                    val translationX = if (actualVideoSize.width * scale > playerSize.width) {
+                        val xLimit = playerSize.width / 2 * (scale - 1)
+                        newOffset.x.coerceIn(-xLimit, xLimit)
+                    } else {
+                        // Video width is smaller than the screen width, do not allow X translation
+                        0f
+                    }
+                    val translationY = if (actualVideoSize.height * scale > playerSize.height) {
+                        // Video height is larger than the screen height, allow Y translation
+                        Timber.e("Video size: $actualVideoSize, Player size: $playerSize, Scale: $scale")
+                        val yLimit = (actualVideoSize.height * scale - playerSize.height) / 2
+                        newOffset.y.coerceIn(-yLimit, yLimit).also {
+                            Timber.e("Video size: $actualVideoSize, Player size: $playerSize, Scale: $scale, Y Limit: $yLimit, New Offset Y: ${newOffset.y}, Translation Y: $it")
+                        }
+                    } else {
+                        // Video height is smaller than the screen height, do not allow Y translation
+                        0f
+                    }
+                    Timber.e("Translation X: $translationX, Translation Y: $translationY, Scale: $scale")
+                    offset = Offset(translationX, translationY)
+                } else {
+                    // For instance, phone in landscape mode and video as a vertical video
+                    // Size of the video with scale == 1
+                    val actualVideoSize = IntSize(
+                        width = (playerSize.height * videoRatio).toInt(),
+                        height = playerSize.height,
+                    )
+                    val translationX = if (actualVideoSize.width * scale > playerSize.width) {
+                        val xLimit = (actualVideoSize.width * scale - playerSize.width) / 2
+                        newOffset.x.coerceIn(-xLimit, xLimit)
+                    } else {
+                        // Video width is smaller than the screen width, do not allow X translation
+                        0f
+                    }
+                    val translationY = if (actualVideoSize.height * scale > playerSize.height) {
+                        // Video height is larger than the screen height, allow Y translation
+                        Timber.e("Video size: $actualVideoSize, Player size: $playerSize, Scale: $scale")
+                        val yLimit = playerSize.height / 2 * (scale - 1)
+                        newOffset.y.coerceIn(-yLimit, yLimit).also {
+                            Timber.e("Video size: $actualVideoSize, Player size: $playerSize, Scale: $scale, Y Limit: $yLimit, New Offset Y: ${newOffset.y}, Translation Y: $it")
+                        }
+                    } else {
+                        // Video height is smaller than the screen height, do not allow Y translation
+                        0f
+                    }
+                    Timber.e("Translation X: $translationX, Translation Y: $translationY, Scale: $scale")
+                    offset = Offset(translationX, translationY)
+                }
+            }
+        }
+        val playerModifier = Modifier
+            // apply transformations zoom and offset
+            .graphicsLayer(
+                scaleX = scale,
+                scaleY = scale,
+                translationX = offset.x,
+                translationY = offset.y
+            )
+            // add transformable to listen to multitouch transformation events
+            .transformable(
+                state = state,
+                lockRotationOnZoomPan = true,
+            )
+            .onSizeChanged {
+                playerSize = it
+                Timber.e("Video size changed: ${it.width}x${it.height}")
+            }
+            .fillMaxSize()
+            .clickable(
+                indication = null,
+                interactionSource = null,
+            ) {
+                autoHideController++
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isVisible = !mediaPlayerControllerState.isVisible,
+                )
+            }
         if (LocalInspectionMode.current) {
             Text(
                 modifier = Modifier
@@ -216,24 +332,16 @@ private fun ExoPlayerMediaVideoView(
             )
         } else {
             AndroidView(
-                modifier = Modifier.fillMaxSize(),
+                modifier = playerModifier,
                 factory = {
                     PlayerView(context).apply {
                         player = exoPlayer
                         resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                         layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                        setOnClickListener {
-                            autoHideController++
-                            mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                                isVisible = !mediaPlayerControllerState.isVisible,
-                            )
-                        }
                         useController = false
                     }
                 },
                 onRelease = { playerView ->
-                    playerView.setOnClickListener(null)
-                    playerView.setControllerVisibilityListener(null as PlayerView.ControllerVisibilityListener?)
                     playerView.player = null
                 },
             )
