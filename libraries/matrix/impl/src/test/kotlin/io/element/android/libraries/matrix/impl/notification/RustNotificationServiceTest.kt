@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -59,6 +60,19 @@ class RustNotificationServiceTest {
         assertThat(result.content).isEqualTo(
             NotificationContent.MessageLike.UnableToResolve
         )
+    }
+
+    @Test
+    fun `close should invoke the close method of the service`() = runTest {
+        val closeResult = lambdaRecorder<Unit> { }
+        val notificationClient = FakeFfiNotificationClient(
+            closeResult = closeResult,
+        )
+        val sut = createRustNotificationService(
+            notificationClient = notificationClient,
+        )
+        sut.close()
+        closeResult.assertions().isCalledOnce()
     }
 
     private fun TestScope.createRustNotificationService(

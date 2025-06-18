@@ -14,8 +14,11 @@ import org.matrix.rustcomponents.sdk.NotificationItemsRequest
 
 class FakeFfiNotificationClient(
     var notificationItemResult: Map<String, NotificationItem> = emptyMap(),
+    val closeResult: () -> Unit = { }
 ) : NotificationClient(NoPointer) {
     override suspend fun getNotifications(requests: List<NotificationItemsRequest>): Map<String, NotificationItem> {
         return notificationItemResult
     }
+
+    override fun close() = closeResult()
 }
