@@ -169,7 +169,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
             if (timelineItem.isRemote && timelineItem.content.canBeForwarded()) {
                 add(TimelineItemAction.Forward)
             }
-            if (timelineItem.isEditable) {
+            if (timelineItem.isEditable && usersEventPermissions.canSendMessage) {
                 if (timelineItem.content is TimelineItemEventContentWithAttachment) {
                     // Caption
                     if (timelineItem.content.caption == null) {
