@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.draft
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import javax.inject.Inject
 
@@ -18,12 +19,12 @@ class DefaultComposerDraftService @Inject constructor(
     private val volatileComposerDraftStore: VolatileComposerDraftStore,
     private val matrixComposerDraftStore: MatrixComposerDraftStore,
 ) : ComposerDraftService {
-    override suspend fun loadDraft(roomId: RoomId, isVolatile: Boolean): ComposerDraft? {
-        return getStore(isVolatile).loadDraft(roomId)
+    override suspend fun loadDraft(roomId: RoomId, threadRoot: ThreadId?, isVolatile: Boolean): ComposerDraft? {
+        return getStore(isVolatile).loadDraft(roomId, threadRoot)
     }
 
-    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?, isVolatile: Boolean) {
-        getStore(isVolatile).updateDraft(roomId, draft)
+    override suspend fun updateDraft(roomId: RoomId, threadRoot: ThreadId?, draft: ComposerDraft?, isVolatile: Boolean) {
+        getStore(isVolatile).updateDraft(roomId, threadRoot, draft)
     }
 
     private fun getStore(isVolatile: Boolean): ComposerDraftStore {
