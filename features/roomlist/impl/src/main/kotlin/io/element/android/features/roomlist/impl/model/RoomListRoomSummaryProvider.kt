@@ -110,6 +110,11 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     name = "A knocked room with alias",
                     canonicalAlias = RoomAlias("#knockable:matrix.org"),
                     displayType = RoomSummaryDisplayType.KNOCKED,
+                ),
+                aRoomListRoomSummary(
+                    name = "A tombstoned room",
+                    displayType = RoomSummaryDisplayType.ROOM,
+                    isTombstoned = true,
                 )
             ),
         ).flatten()
@@ -145,6 +150,7 @@ internal fun aRoomListRoomSummary(
     displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
     canonicalAlias: RoomAlias? = null,
     heroes: List<AvatarData> = emptyList(),
+    isTombstoned: Boolean = false,
 ) = RoomListRoomSummary(
     id = id,
     roomId = RoomId(id),
@@ -165,4 +171,5 @@ internal fun aRoomListRoomSummary(
     displayType = displayType,
     canonicalAlias = canonicalAlias,
     heroes = heroes.toImmutableList(),
+    isTombstoned = isTombstoned,
 )

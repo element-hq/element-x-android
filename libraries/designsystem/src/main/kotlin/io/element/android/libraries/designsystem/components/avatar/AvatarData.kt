@@ -18,7 +18,7 @@ data class AvatarData(
     val url: String? = null,
     val size: AvatarSize,
 ) {
-    val initial by lazy {
+    val initialLetter by lazy {
         // For roomIds, use "#" as initial
         (name?.takeIf { it.isNotBlank() } ?: id.takeIf { !it.startsWith("!") } ?: "#")
             .let { dn ->

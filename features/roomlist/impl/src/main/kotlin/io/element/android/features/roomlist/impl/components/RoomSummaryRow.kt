@@ -44,7 +44,7 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvid
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
-import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
+import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -121,7 +121,7 @@ internal fun RoomSummaryRow(
                         timestamp = room.timestamp,
                         isHighlighted = room.isHighlighted
                     )
-                    LastMessageAndIndicatorRow(room = room)
+                    MessagePreviewAndIndicatorRow(room = room)
                 }
             }
             RoomSummaryDisplayType.KNOCKED -> {
@@ -184,10 +184,11 @@ private fun RoomSummaryScaffoldRow(
             .padding(horizontal = 16.dp, vertical = 11.dp)
             .height(IntrinsicSize.Min),
     ) {
-        CompositeAvatar(
+        RoomAvatar(
             avatarData = room.avatarData,
             heroes = room.heroes,
-            hideAvatarImages = hideAvatarImage,
+            isTombstoned = room.isTombstoned,
+            hideAvatarImage = hideAvatarImage,
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(
@@ -255,7 +256,7 @@ private fun InviteSubtitle(
 }
 
 @Composable
-private fun LastMessageAndIndicatorRow(
+private fun MessagePreviewAndIndicatorRow(
     room: RoomListRoomSummary,
     modifier: Modifier = Modifier,
 ) {
@@ -263,12 +264,15 @@ private fun LastMessageAndIndicatorRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = spacedBy(28.dp)
     ) {
-        // Last Message
-        val attributedLastMessage = room.lastMessage as? AnnotatedString
-            ?: AnnotatedString(room.lastMessage.orEmpty().toString())
+        val messagePreview = if (room.isTombstoned) {
+            stringResource(R.string.screen_roomlist_tombstoned_room_description)
+        } else {
+            room.lastMessage.orEmpty()
+        }
+        val annotatedMessagePreview = messagePreview as? AnnotatedString ?: AnnotatedString(text = messagePreview.toString())
         Text(
             modifier = Modifier.weight(1f),
-            text = attributedLastMessage,
+            text = annotatedMessagePreview,
             color = ElementTheme.roomListRoomMessage(),
             style = ElementTheme.typography.fontBodyMdRegular,
             minLines = 2,

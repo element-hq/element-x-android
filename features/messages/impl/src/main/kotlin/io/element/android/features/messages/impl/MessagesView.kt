@@ -83,10 +83,8 @@ import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorVi
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
+import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -194,8 +192,9 @@ fun MessagesView(
             Column {
                 ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
                 MessagesViewTopBar(
-                    roomName = state.roomName.dataOrNull(),
-                    roomAvatar = state.roomAvatar.dataOrNull(),
+                    roomName = state.roomName,
+                    roomAvatar = state.roomAvatar,
+                    isTombstoned = state.isTombstoned,
                     heroes = state.heroes,
                     roomCallState = state.roomCallState,
                     dmUserIdentityState = state.dmUserVerificationState,
@@ -450,8 +449,8 @@ private fun MessagesViewComposerBottomSheetContents(
                             }
                         }),
                     roomId = state.roomId,
-                    roomName = state.roomName.dataOrNull(),
-                    roomAvatarData = state.roomAvatar.dataOrNull(),
+                    roomName = state.roomName,
+                    roomAvatarData = state.roomAvatar,
                     suggestions = state.composerState.suggestions,
                     onSelectSuggestion = {
                         state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
@@ -491,7 +490,8 @@ private fun MessagesViewComposerBottomSheetContents(
 @Composable
 private fun MessagesViewTopBar(
     roomName: String?,
-    roomAvatar: AvatarData?,
+    roomAvatar: AvatarData,
+    isTombstoned: Boolean,
     heroes: ImmutableList<AvatarData>,
     roomCallState: RoomCallState,
     dmUserIdentityState: IdentityState?,
@@ -513,19 +513,13 @@ private fun MessagesViewTopBar(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 val titleModifier = Modifier.weight(1f, fill = false)
-                if (roomName != null && roomAvatar != null) {
-                    RoomAvatarAndNameRow(
-                        roomName = roomName,
-                        roomAvatar = roomAvatar,
-                        heroes = heroes,
-                        modifier = titleModifier
-                    )
-                } else {
-                    IconTitlePlaceholdersRowMolecule(
-                        iconSize = AvatarSize.TimelineRoom.dp,
-                        modifier = titleModifier
-                    )
-                }
+                RoomAvatarAndNameRow(
+                    roomName = roomName,
+                    roomAvatar = roomAvatar,
+                    isTombstoned = isTombstoned,
+                    heroes = heroes,
+                    modifier = titleModifier
+                )
 
                 when (dmUserIdentityState) {
                     IdentityState.Verified -> {
@@ -559,23 +553,26 @@ private fun MessagesViewTopBar(
 
 @Composable
 private fun RoomAvatarAndNameRow(
-    roomName: String,
+    roomName: String?,
     roomAvatar: AvatarData,
     heroes: ImmutableList<AvatarData>,
+    isTombstoned: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CompositeAvatar(
+        RoomAvatar(
             avatarData = roomAvatar,
             heroes = heroes,
+            isTombstoned = isTombstoned,
         )
         Text(
             modifier = Modifier.padding(horizontal = 8.dp),
-            text = roomName,
+            text = roomName ?: stringResource(CommonStrings.common_no_room_name),
             style = ElementTheme.typography.fontBodyLgMedium,
+            fontStyle = FontStyle.Italic.takeIf { roomName == null },
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -586,9 +583,9 @@ private fun RoomAvatarAndNameRow(
 private fun CantSendMessageBanner() {
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .background(ElementTheme.colors.bgSubtleSecondary)
-                .padding(16.dp),
+            .fillMaxWidth()
+            .background(ElementTheme.colors.bgSubtleSecondary)
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
