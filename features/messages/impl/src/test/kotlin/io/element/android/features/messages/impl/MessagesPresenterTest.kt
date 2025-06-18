@@ -119,9 +119,9 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
-            assertThat(initialState.roomName).isEqualTo(AsyncData.Success(""))
+            assertThat(initialState.roomName).isEqualTo("")
             assertThat(initialState.roomAvatar)
-                .isEqualTo(AsyncData.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
+                .isEqualTo(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom))
             assertThat(initialState.userEventPermissions.canSendMessage).isTrue()
             assertThat(initialState.userEventPermissions.canRedactOwn).isTrue()
             assertThat(initialState.hasNetworkConnection).isTrue()
