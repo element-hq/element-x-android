@@ -47,6 +47,20 @@ class RustNotificationServiceTest {
         )
     }
 
+    @Test
+    fun `test unable to resolve event`() = runTest {
+        val notificationClient = FakeFfiNotificationClient(
+            notificationItemResult = emptyMap(),
+        )
+        val sut = createRustNotificationService(
+            notificationClient = notificationClient,
+        )
+        val result = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!
+        assertThat(result.content).isEqualTo(
+            NotificationContent.MessageLike.UnableToResolve
+        )
+    }
+
     private fun TestScope.createRustNotificationService(
         notificationClient: NotificationClient = FakeFfiNotificationClient(),
         clock: SystemClock = FakeSystemClock(),
