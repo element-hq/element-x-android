@@ -120,8 +120,7 @@ private fun ExoPlayerMediaAudioView(
                 durationInMillis = 0,
                 canMute = false,
                 isMuted = false,
-                videoWidth = 0,
-                videoHeight = 0,
+                videoSize = null,
             )
         )
     }

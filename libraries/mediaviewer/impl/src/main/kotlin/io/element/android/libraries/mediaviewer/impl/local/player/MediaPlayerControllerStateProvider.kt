@@ -8,6 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.local.player
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.IntSize
 
 open class MediaPlayerControllerStateProvider : PreviewParameterProvider<MediaPlayerControllerState> {
     override val values: Sequence<MediaPlayerControllerState> = sequenceOf(
@@ -33,8 +34,7 @@ private fun aMediaPlayerControllerState(
     durationInMillis: Long = 83_000,
     canMute: Boolean = true,
     isMuted: Boolean = false,
-    videoWidth: Int = 1920,
-    videoHeight: Int = 1080,
+    videoSize: IntSize? = null,
 ) = MediaPlayerControllerState(
     isVisible = isVisible,
     isPlaying = isPlaying,
@@ -43,6 +43,5 @@ private fun aMediaPlayerControllerState(
     durationInMillis = durationInMillis,
     canMute = canMute,
     isMuted = isMuted,
-    videoWidth = videoWidth,
-    videoHeight = videoHeight,
+    videoSize = videoSize,
 )

@@ -63,7 +63,6 @@ import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePl
 import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.coroutines.delay
-import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @SuppressLint("UnsafeOptInUsageError")
@@ -112,8 +111,7 @@ private fun ExoPlayerMediaVideoView(
                 durationInMillis = 0,
                 canMute = true,
                 isMuted = false,
-                videoWidth = 0,
-                videoHeight = 0,
+                videoSize = null,
             )
         )
     }
@@ -166,8 +164,10 @@ private fun ExoPlayerMediaVideoView(
             override fun onVideoSizeChanged(videoSize: VideoSize) {
                 super.onVideoSizeChanged(videoSize)
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                    videoWidth = videoSize.width,
-                    videoHeight = videoSize.height,
+                    videoSize = IntSize(
+                        width = videoSize.width,
+                        height = videoSize.height,
+                    ),
                 )
             }
         }
@@ -227,74 +227,22 @@ private fun ExoPlayerMediaVideoView(
             .background(ElementTheme.colors.bgSubtlePrimary),
     ) {
         val context = LocalContext.current
-        // set up all transformation states
-        var playerSize by remember { mutableStateOf(IntSize.Zero) }
+        var offsetHelper by remember { mutableStateOf(OffsetHelper(null, null)) }
+        LaunchedEffect(mediaPlayerControllerState.videoSize) {
+            offsetHelper = offsetHelper.copy(
+                videoSize = mediaPlayerControllerState.videoSize,
+            )
+        }
         var scale by remember { mutableFloatStateOf(1f) }
         var offset by remember { mutableStateOf(Offset.Zero) }
         val state = rememberTransformableState { zoomChange, offsetChange, _ ->
             scale = (scale * zoomChange).coerceIn(1f, 6f)
-            if (mediaPlayerControllerState.videoHeight == 0 || mediaPlayerControllerState.videoWidth == 0) {
-                Timber.e("Video size is not set yet, cannot apply offset limits")
-            } else {
-                val newOffset = offset + offsetChange * scale
-                val screenRatio = playerSize.width.toFloat() / playerSize.height.toFloat()
-                val videoRatio = mediaPlayerControllerState.videoWidth.toFloat() / mediaPlayerControllerState.videoHeight.toFloat()
-                if (screenRatio <= videoRatio) {
-                    // For instance, phone in portrait mode and video as a regular movie
-                    // Size of the video with scale == 1
-                    val actualVideoSize = IntSize(
-                        width = playerSize.width,
-                        height = (playerSize.width / videoRatio).toInt(),
-                    )
-                    val translationX = if (actualVideoSize.width * scale > playerSize.width) {
-                        val xLimit = playerSize.width / 2 * (scale - 1)
-                        newOffset.x.coerceIn(-xLimit, xLimit)
-                    } else {
-                        // Video width is smaller than the screen width, do not allow X translation
-                        0f
-                    }
-                    val translationY = if (actualVideoSize.height * scale > playerSize.height) {
-                        // Video height is larger than the screen height, allow Y translation
-                        Timber.e("Video size: $actualVideoSize, Player size: $playerSize, Scale: $scale")
-                        val yLimit = (actualVideoSize.height * scale - playerSize.height) / 2
-                        newOffset.y.coerceIn(-yLimit, yLimit).also {
-                            Timber.e("Video size: $actualVideoSize, Player size: $playerSize, Scale: $scale, Y Limit: $yLimit, New Offset Y: ${newOffset.y}, Translation Y: $it")
-                        }
-                    } else {
-                        // Video height is smaller than the screen height, do not allow Y translation
-                        0f
-                    }
-                    Timber.e("Translation X: $translationX, Translation Y: $translationY, Scale: $scale")
-                    offset = Offset(translationX, translationY)
-                } else {
-                    // For instance, phone in landscape mode and video as a vertical video
-                    // Size of the video with scale == 1
-                    val actualVideoSize = IntSize(
-                        width = (playerSize.height * videoRatio).toInt(),
-                        height = playerSize.height,
-                    )
-                    val translationX = if (actualVideoSize.width * scale > playerSize.width) {
-                        val xLimit = (actualVideoSize.width * scale - playerSize.width) / 2
-                        newOffset.x.coerceIn(-xLimit, xLimit)
-                    } else {
-                        // Video width is smaller than the screen width, do not allow X translation
-                        0f
-                    }
-                    val translationY = if (actualVideoSize.height * scale > playerSize.height) {
-                        // Video height is larger than the screen height, allow Y translation
-                        Timber.e("Video size: $actualVideoSize, Player size: $playerSize, Scale: $scale")
-                        val yLimit = playerSize.height / 2 * (scale - 1)
-                        newOffset.y.coerceIn(-yLimit, yLimit).also {
-                            Timber.e("Video size: $actualVideoSize, Player size: $playerSize, Scale: $scale, Y Limit: $yLimit, New Offset Y: ${newOffset.y}, Translation Y: $it")
-                        }
-                    } else {
-                        // Video height is smaller than the screen height, do not allow Y translation
-                        0f
-                    }
-                    Timber.e("Translation X: $translationX, Translation Y: $translationY, Scale: $scale")
-                    offset = Offset(translationX, translationY)
-                }
-            }
+            val newOffset = offset + offsetChange * scale
+            offset = offsetHelper.computeOffset(
+                scale = scale,
+                newOffset = newOffset,
+            )
+
         }
         val playerModifier = Modifier
             // apply transformations zoom and offset
@@ -310,8 +258,9 @@ private fun ExoPlayerMediaVideoView(
                 lockRotationOnZoomPan = true,
             )
             .onSizeChanged {
-                playerSize = it
-                Timber.e("Video size changed: ${it.width}x${it.height}")
+                offsetHelper = offsetHelper.copy(
+                    playerSize = it,
+                )
             }
             .fillMaxSize()
             .clickable(

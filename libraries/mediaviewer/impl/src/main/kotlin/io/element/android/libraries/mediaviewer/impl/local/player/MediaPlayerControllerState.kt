@@ -8,6 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.local.player
 
 import androidx.annotation.FloatRange
+import androidx.compose.ui.unit.IntSize
 
 data class MediaPlayerControllerState(
     val isVisible: Boolean,
@@ -17,8 +18,7 @@ data class MediaPlayerControllerState(
     val durationInMillis: Long,
     val canMute: Boolean,
     val isMuted: Boolean,
-    val videoWidth: Int,
-    val videoHeight: Int,
+    val videoSize: IntSize?,
 ) {
     @FloatRange(from = 0.0, to = 1.0)
     val progressAsFloat = (progressInMillis.toFloat() / durationInMillis.toFloat()).coerceIn(0f, 1f)
