@@ -25,6 +25,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.allBooleans
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
@@ -33,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 fun TimelineItemRoomBeginningView(
     roomName: String?,
     predecessorRoom: PredecessorRoom?,
+    isDm: Boolean,
     onPredecessorRoomClick: (RoomId) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -48,24 +50,26 @@ fun TimelineItemRoomBeginningView(
                 submitText = stringResource(R.string.screen_room_timeline_upgraded_room_action)
             )
         }
-
-        Box(
-            modifier = Modifier
+        // Only display for non-DM room
+        if (!isDm) {
+            Box(
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            val text = if (roomName == null) {
-                stringResource(id = R.string.screen_room_timeline_beginning_of_room_no_name)
-            } else {
-                stringResource(id = R.string.screen_room_timeline_beginning_of_room, roomName)
+                contentAlignment = Alignment.Center,
+            ) {
+                val text = if (roomName == null) {
+                    stringResource(id = R.string.screen_room_timeline_beginning_of_room_no_name)
+                } else {
+                    stringResource(id = R.string.screen_room_timeline_beginning_of_room, roomName)
+                }
+                Text(
+                    color = ElementTheme.colors.textSecondary,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    text = text,
+                    textAlign = TextAlign.Center,
+                )
             }
-            Text(
-                color = ElementTheme.colors.textSecondary,
-                style = ElementTheme.typography.fontBodyMdRegular,
-                text = text,
-                textAlign = TextAlign.Center,
-            )
         }
     }
 }
@@ -74,20 +78,25 @@ fun TimelineItemRoomBeginningView(
 @Composable
 internal fun TimelineItemRoomBeginningViewPreview() = ElementPreview {
     Column(verticalArrangement = spacedBy(16.dp)) {
-        TimelineItemRoomBeginningView(
-            predecessorRoom = null,
-            roomName = null,
-            onPredecessorRoomClick = {},
-        )
-        TimelineItemRoomBeginningView(
-            predecessorRoom = null,
-            roomName = "Room Name",
-            onPredecessorRoomClick = {},
-        )
-        TimelineItemRoomBeginningView(
-            predecessorRoom = PredecessorRoom(RoomId("!roomId:matrix.org"), EventId("\$eventId:matrix.org")),
-            roomName = "Room Name",
-            onPredecessorRoomClick = {},
-        )
+        allBooleans.forEach { isDm ->
+            TimelineItemRoomBeginningView(
+                predecessorRoom = null,
+                roomName = null,
+                isDm = isDm,
+                onPredecessorRoomClick = {},
+            )
+            TimelineItemRoomBeginningView(
+                predecessorRoom = null,
+                roomName = "Room Name",
+                isDm = isDm,
+                onPredecessorRoomClick = {},
+            )
+            TimelineItemRoomBeginningView(
+                predecessorRoom = PredecessorRoom(RoomId("!roomId:matrix.org"), EventId("\$eventId:matrix.org")),
+                roomName = "Room Name",
+                isDm = isDm,
+                onPredecessorRoomClick = {},
+            )
+        }
     }
 }
