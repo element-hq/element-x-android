@@ -78,10 +78,10 @@ fun AvatarCluster(
             }
             Box(
                 modifier = modifier
-                    .size(size.dp)
-                    .semantics {
-                        this.contentDescription = contentDescription.orEmpty()
-                    },
+                        .size(size.dp)
+                        .semantics {
+                            this.contentDescription = contentDescription.orEmpty()
+                        },
                 contentAlignment = Alignment.Center,
             ) {
                 limitedAvatars.forEachIndexed { index, heroAvatar ->
@@ -89,11 +89,11 @@ fun AvatarCluster(
                     val yOffset = (offsetRadius * sin(angle * index.toDouble() + angleOffset)).dp
                     Box(
                         modifier = Modifier
-                            .size(heroAvatarSize)
-                            .offset(
-                                x = xOffset,
-                                y = yOffset,
-                            )
+                                .size(heroAvatarSize)
+                                .offset(
+                                        x = xOffset,
+                                        y = yOffset,
+                                )
                     ) {
                         Avatar(
                             avatarData = heroAvatar,
@@ -113,7 +113,7 @@ internal fun AvatarClusterPreview() = ElementThemedPreview {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        repeat(6) { ngOfAvatars ->
+        for (ngOfAvatars in 1..5) {
             AvatarCluster(
                 avatars = List(ngOfAvatars) { anAvatarData(it) }.toPersistentList(),
             )
