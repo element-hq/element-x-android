@@ -79,7 +79,7 @@ class JoinRoomFlowNode @AssistedInject constructor(
             JoinRoomView(
                 state = state,
                 onBackClick = ::navigateUp,
-                onJoinSuccess = ::navigateUp,
+                onJoinSuccess = {},
                 onForgetSuccess = ::navigateUp,
                 onCancelKnockSuccess = {},
                 onKnockSuccess = {},
