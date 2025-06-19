@@ -31,6 +31,10 @@ class InMemoryPushDataStore(
         return mutablePushHistoryItemsFlow.asStateFlow()
     }
 
+    suspend fun emitPushHistoryItems(items: List<PushHistoryItem>) {
+        mutablePushHistoryItemsFlow.emit(items)
+    }
+
     override suspend fun reset() {
         resetResult()
     }

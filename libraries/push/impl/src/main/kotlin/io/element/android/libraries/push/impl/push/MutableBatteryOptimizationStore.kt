@@ -15,6 +15,7 @@ import javax.inject.Inject
 interface MutableBatteryOptimizationStore {
     suspend fun showBatteryOptimizationBanner()
     suspend fun onOptimizationBannerDismissed()
+    suspend fun reset()
 }
 
 @ContributesBinding(AppScope::class)
@@ -27,5 +28,9 @@ class DefaultMutableBatteryOptimizationStore @Inject constructor(
 
     override suspend fun onOptimizationBannerDismissed() {
         defaultPushDataStore.setBatteryOptimizationBannerState(DefaultPushDataStore.BATTERY_OPTIMIZATION_BANNER_STATE_DISMISSED)
+    }
+
+    override suspend fun reset() {
+        defaultPushDataStore.setBatteryOptimizationBannerState(DefaultPushDataStore.BATTERY_OPTIMIZATION_BANNER_STATE_INIT)
     }
 }

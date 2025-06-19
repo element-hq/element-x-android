@@ -46,8 +46,10 @@ class DefaultClearCacheUseCaseTest {
             resetLambda = resetFtueLambda,
         )
         val setIgnoreRegistrationErrorLambda = lambdaRecorder<SessionId, Boolean, Unit> { _, _ -> }
+        val resetBatteryOptimizationStateResult = lambdaRecorder<Unit> { }
         val pushService = FakePushService(
-            setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda
+            setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda,
+            resetBatteryOptimizationStateResult = resetBatteryOptimizationStateResult,
         )
         val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID))
         assertThat(seenInvitesStore.seenRoomIds().first()).isNotEmpty()
@@ -68,6 +70,7 @@ class DefaultClearCacheUseCaseTest {
             resetFtueLambda.assertions().isCalledOnce()
             setIgnoreRegistrationErrorLambda.assertions().isCalledOnce()
                 .with(value(matrixClient.sessionId), value(false))
+            resetBatteryOptimizationStateResult.assertions().isCalledOnce()
             assertThat(awaitItem()).isEqualTo(matrixClient.sessionId)
             assertThat(seenInvitesStore.seenRoomIds().first()).isEmpty()
             assertThat(activeRoomsHolder.getActiveRoom(A_SESSION_ID)).isNull()

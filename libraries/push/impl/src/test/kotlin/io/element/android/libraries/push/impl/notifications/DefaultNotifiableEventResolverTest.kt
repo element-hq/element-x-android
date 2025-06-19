@@ -608,7 +608,32 @@ class DefaultNotifiableEventResolverTest {
                 roomId = A_ROOM_ID,
                 eventId = AN_EVENT_ID,
                 editedEventId = null,
-                description = "Notification",
+                description = "You have new messages.",
+                canBeReplaced = true,
+                isRedacted = false,
+                isUpdated = false,
+                timestamp = A_FAKE_TIMESTAMP,
+            )
+        )
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
+    }
+
+    @Test
+    fun `resolve UnableToResolve`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                mapOf(AN_EVENT_ID to aNotificationData(content = NotificationContent.MessageLike.UnableToResolve))
+            )
+        )
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        val expectedResult = ResolvedPushEvent.Event(
+            FallbackNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+                editedEventId = null,
+                description = "You have new messages.",
                 canBeReplaced = true,
                 isRedacted = false,
                 isUpdated = false,

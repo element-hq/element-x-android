@@ -225,6 +225,11 @@ class DefaultNotifiableEventResolver @Inject constructor(
                 val fallbackNotifiableEvent = fallbackNotifiableEvent(userId, roomId, eventId)
                 ResolvedPushEvent.Event(fallbackNotifiableEvent)
             }
+            NotificationContent.MessageLike.UnableToResolve -> {
+                Timber.tag(loggerTag.value).w("Unable to resolve notification -> fallback")
+                val fallbackNotifiableEvent = fallbackNotifiableEvent(userId, roomId, eventId)
+                ResolvedPushEvent.Event(fallbackNotifiableEvent)
+            }
             is NotificationContent.MessageLike.RoomRedaction -> {
                 // Note: this case will be handled below
                 val redactedEventId = content.redactedEventId
