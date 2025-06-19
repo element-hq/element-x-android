@@ -52,7 +52,9 @@ import io.element.android.features.messages.impl.timeline.components.receipt.aRe
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -65,6 +67,7 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParamsAndResult
 import io.element.android.tests.testutils.EventsRecorder
+import io.element.android.tests.testutils.assertNoNodeWithText
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
@@ -107,7 +110,7 @@ class MessagesViewTest {
                 state = state,
                 onRoomDetailsClick = callback,
             )
-            rule.onNodeWithText(state.roomName.dataOrNull().orEmpty(), useUnmergedTree = true).performClick()
+            rule.onNodeWithText(state.roomName.orEmpty(), useUnmergedTree = true).performClick()
         }
     }
 
@@ -391,7 +394,10 @@ class MessagesViewTest {
         rule.setMessagesView(
             state = state,
         )
-        rule.onAllNodesWithText("👍️").onFirst().performClick()
+        rule.onAllNodesWithText(
+            text = "👍️",
+            useUnmergedTree = true,
+        ).onFirst().performClick()
         eventsRecorder.assertSingle(MessagesEvents.ToggleReaction("👍️", timelineItem.eventOrTransactionId))
     }
 
@@ -411,7 +417,10 @@ class MessagesViewTest {
         rule.setMessagesView(
             state = state,
         )
-        rule.onAllNodesWithText("👍️").onFirst().performTouchInput { longClick() }
+        rule.onAllNodesWithText(
+            text = "👍️",
+            useUnmergedTree = true,
+        ).onFirst().performTouchInput { longClick() }
         eventsRecorder.assertSingle(ReactionSummaryEvents.ShowReactionSummary(timelineItem.eventId!!, timelineItem.reactionsState.reactions, "👍️"))
     }
 
@@ -553,6 +562,36 @@ class MessagesViewTest {
         rule.setMessagesView(state = state)
         rule.onNodeWithText("This is a pinned message").performClick()
         eventsRecorder.assertSingle(TimelineEvents.FocusOnEvent(AN_EVENT_ID, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds))
+    }
+
+    @Test
+    fun `clicking on successor room button emits expected event`() {
+        val eventsRecorder = EventsRecorder<TimelineEvents>()
+        val successorRoomId = RoomId("!successor:server.org")
+        val state = aMessagesState(
+            successorRoom = SuccessorRoom(
+                roomId = successorRoomId,
+                reason = "This room has been upgraded"
+            ),
+            timelineState = aTimelineState(eventSink = eventsRecorder)
+        )
+        rule.setMessagesView(state = state)
+        val text = rule.activity.getString(R.string.screen_room_timeline_tombstoned_room_action)
+        // The bottomsheet subcompose seems to make the node to appear twice
+        rule.onAllNodesWithText(text).onFirst().performClick()
+        eventsRecorder.assertSingle(TimelineEvents.NavigateToRoom(successorRoomId))
+    }
+
+    @Test
+    fun `no banner shown when there is no successor room`() {
+        val eventsRecorder = EventsRecorder<MessagesEvents>(expectEvents = false)
+        val state = aMessagesState(
+            successorRoom = null,
+            eventSink = eventsRecorder
+        )
+        rule.setMessagesView(state = state)
+        rule.assertNoNodeWithText(R.string.screen_room_timeline_tombstoned_room_message)
+        rule.assertNoNodeWithText(R.string.screen_room_timeline_tombstoned_room_action)
     }
 }
 

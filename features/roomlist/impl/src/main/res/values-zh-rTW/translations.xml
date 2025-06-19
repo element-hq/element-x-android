@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"拒絕聊天"</string>
   <string name="screen_invites_empty_list">"沒有邀請"</string>
   <string name="screen_invites_invited_you">"%1$s（%2$s）邀請您"</string>
-  <string name="screen_join_room_knock_sent_title">"已傳送加入請求"</string>
   <string name="screen_migration_message">"這是一次性的程序，感謝您耐心等候。"</string>
   <string name="screen_migration_title">"正在設定您的帳號。"</string>
   <string name="screen_roomlist_a11y_create_message">"建立新的對話或聊天室"</string>
@@ -37,6 +36,7 @@
   <string name="screen_roomlist_filter_unreads">"未讀"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"恭喜！
 您沒有任何未讀的訊息！"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"已傳送加入請求"</string>
   <string name="screen_roomlist_main_space_title">"所有聊天室"</string>
   <string name="screen_roomlist_mark_as_read">"標為已讀"</string>
   <string name="screen_roomlist_mark_as_unread">"標為未讀"</string>

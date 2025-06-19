@@ -152,11 +152,8 @@ class MessagesPresenter @AssistedInject constructor(
 
         val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
 
-        val roomName: AsyncData<String> by remember {
-            derivedStateOf { roomInfo.name?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
-        }
-        val roomAvatar: AsyncData<AvatarData> by remember {
-            derivedStateOf { AsyncData.Success(roomInfo.avatarData()) }
+        val roomAvatar by remember {
+            derivedStateOf { roomInfo.avatarData() }
         }
         val heroes by remember {
             derivedStateOf { roomInfo.heroes().toPersistentList() }
@@ -245,7 +242,7 @@ class MessagesPresenter @AssistedInject constructor(
 
         return MessagesState(
             roomId = room.roomId,
-            roomName = roomName,
+            roomName = roomInfo.name,
             roomAvatar = roomAvatar,
             heroes = heroes,
             composerState = composerState,
@@ -270,6 +267,7 @@ class MessagesPresenter @AssistedInject constructor(
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             dmUserVerificationState = dmUserVerificationState,
             roomMemberModerationState = roomMemberModerationState,
+            successorRoom = roomInfo.successorRoom,
             eventSink = { handleEvents(it) }
         )
     }
@@ -291,7 +289,7 @@ class MessagesPresenter @AssistedInject constructor(
         return AvatarData(
             id = id.value,
             name = name,
-            url = avatarUrl ?: room.info().avatarUrl,
+            url = avatarUrl,
             size = AvatarSize.TimelineRoom
         )
     }

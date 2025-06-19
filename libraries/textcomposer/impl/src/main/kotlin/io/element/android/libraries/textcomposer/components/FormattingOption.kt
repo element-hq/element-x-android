@@ -13,6 +13,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -21,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -32,9 +35,10 @@ import io.element.android.libraries.designsystem.theme.iconSuccessPrimaryBackgro
 @Composable
 internal fun FormattingOption(
     state: FormattingOptionState,
+    toggleable: Boolean,
     onClick: () -> Unit,
     imageVector: ImageVector,
-    contentDescription: String?,
+    contentDescription: String,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor = when (state) {
@@ -52,6 +56,7 @@ internal fun FormattingOption(
         modifier = modifier
             .clickable(
                 onClick = onClick,
+                enabled = state != FormattingOptionState.Disabled,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(
                     bounded = false,
@@ -59,6 +64,20 @@ internal fun FormattingOption(
                 ),
             )
             .size(48.dp)
+            .then(
+                if (toggleable) {
+                    Modifier.toggleable(
+                        value = state == FormattingOptionState.Selected,
+                        enabled = state != FormattingOptionState.Disabled,
+                        onValueChange = { onClick() },
+                    )
+                } else {
+                    Modifier
+                }
+            )
+            .clearAndSetSemantics {
+                this.contentDescription = contentDescription
+            }
     ) {
         Box(
             modifier = Modifier
@@ -84,21 +103,24 @@ internal fun FormattingOptionPreview() = ElementPreview {
     Row {
         FormattingOption(
             state = FormattingOptionState.Default,
+            toggleable = false,
             onClick = { },
             imageVector = CompoundIcons.Bold(),
-            contentDescription = null,
+            contentDescription = "",
         )
         FormattingOption(
             state = FormattingOptionState.Selected,
+            toggleable = true,
             onClick = { },
             imageVector = CompoundIcons.Italic(),
-            contentDescription = null,
+            contentDescription = "",
         )
         FormattingOption(
             state = FormattingOptionState.Disabled,
+            toggleable = false,
             onClick = { },
             imageVector = CompoundIcons.Underline(),
-            contentDescription = null,
+            contentDescription = "",
         )
     }
 }

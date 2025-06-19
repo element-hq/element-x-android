@@ -15,6 +15,7 @@ import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
@@ -77,4 +78,5 @@ data class TimelineRoomInfo(
     val roomCallState: RoomCallState,
     val pinnedEventIds: List<EventId>,
     val typingNotificationState: TypingNotificationState,
+    val predecessorRoom: PredecessorRoom?,
 )

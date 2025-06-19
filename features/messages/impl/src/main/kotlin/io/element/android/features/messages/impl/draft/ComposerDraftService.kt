@@ -8,9 +8,10 @@
 package io.element.android.features.messages.impl.draft
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 
 interface ComposerDraftService {
-    suspend fun loadDraft(roomId: RoomId, isVolatile: Boolean): ComposerDraft?
-    suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?, isVolatile: Boolean)
+    suspend fun loadDraft(roomId: RoomId, threadRoot: ThreadId?, isVolatile: Boolean): ComposerDraft?
+    suspend fun updateDraft(roomId: RoomId, threadRoot: ThreadId?, draft: ComposerDraft?, isVolatile: Boolean)
 }

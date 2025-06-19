@@ -1,3 +1,20 @@
+Changes in Element X v25.06.2
+=============================
+
+## What's Changed
+### 🐛 Bugfixes
+* Fix crash when using Element Call on API <= 30 by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4847
+* Element Call: add delay before selecting the default audio device by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4854
+* Fix for message composer losing focus in Compose 1.8.0 by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4853
+### Dependency upgrades
+* chore(deps): update plugin dependencycheck to v12.1.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4840
+* deps (matrix rust sdk) : bump version to 25.06.10 by @ganfra in https://github.com/element-hq/element-x-android/pull/4855
+### Others
+* feat: Support matrix: links by @ShadowRZ in https://github.com/element-hq/element-x-android/pull/4839
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.06.1...v25.06.2
+
 ## What's Changed
 ### ✨ Features
 * Enable support for Android Auto. by @bmarty in https://github.com/element-hq/element-x-android/pull/4818

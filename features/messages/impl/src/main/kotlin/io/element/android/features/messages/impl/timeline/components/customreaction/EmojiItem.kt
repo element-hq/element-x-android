@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.TextUnit
@@ -30,11 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.emojibasebindings.Emoji
+import io.element.android.features.messages.impl.timeline.a11y.a11yReactionAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun EmojiItem(
@@ -49,11 +48,10 @@ fun EmojiItem(
     } else {
         Color.Transparent
     }
-    val description = if (isSelected) {
-        stringResource(id = CommonStrings.a11y_remove_reaction_with, item.unicode)
-    } else {
-        stringResource(id = CommonStrings.a11y_react_with, item.unicode)
-    }
+    val description = a11yReactionAction(
+        emoji = item.unicode,
+        userAlreadyReacted = isSelected,
+    )
     Box(
         modifier = modifier
             .sizeIn(minWidth = 40.dp, minHeight = 40.dp)

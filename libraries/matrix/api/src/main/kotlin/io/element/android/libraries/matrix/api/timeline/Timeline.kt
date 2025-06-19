@@ -131,6 +131,7 @@ interface Timeline : AutoCloseable {
      * @param zoomLevel Optional zoom level to display the map at.
      * @param assetType Optional type of the location asset.
      *  Set to SENDER if sharing own location. Set to PIN if sharing any location.
+     * @param replyParameters Optional reply parameters to use when sending the location.
      */
     suspend fun sendLocation(
         body: String,
@@ -138,6 +139,7 @@ interface Timeline : AutoCloseable {
         description: String? = null,
         zoomLevel: Int? = null,
         assetType: AssetType? = null,
+        replyParameters: ReplyParameters?,
     ): Result<Unit>
 
     suspend fun sendVoiceMessage(

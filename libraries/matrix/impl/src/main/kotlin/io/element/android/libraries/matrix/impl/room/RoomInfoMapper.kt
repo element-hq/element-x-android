@@ -14,11 +14,11 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.api.room.SuccessorRoom
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
+import io.element.android.libraries.matrix.impl.room.tombstone.map
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
@@ -28,7 +28,6 @@ import uniffi.matrix_sdk_base.EncryptionState
 import org.matrix.rustcomponents.sdk.Membership as RustMembership
 import org.matrix.rustcomponents.sdk.RoomInfo as RustRoomInfo
 import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
-import org.matrix.rustcomponents.sdk.SuccessorRoom as RustSuccessorRoom
 
 class RoomInfoMapper {
     fun map(rustRoomInfo: RustRoomInfo): RoomInfo = rustRoomInfo.let {
@@ -87,11 +86,6 @@ fun RustRoomNotificationMode.map(): RoomNotificationMode = when (this) {
     RustRoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
     RustRoomNotificationMode.MUTE -> RoomNotificationMode.MUTE
 }
-
-fun RustSuccessorRoom.map(): SuccessorRoom = SuccessorRoom(
-    roomId = RoomId(roomId),
-    reason = reason,
-)
 
 /**
  * Map a RoomHero to a MatrixUser. There is not need to create a RoomHero type on the application side.

@@ -371,8 +371,13 @@ Anledning:%1$s."</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Fästa meddelanden"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laddar meddelande …"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Visa alla"</string>
+  <string name="screen_room_timeline_tombstoned_room_action">"Hoppa till nytt rum"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Det här rummet har ersatts och är inte längre aktivt"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Se gamla meddelanden"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Det här rummet är en fortsättning på ett annat rum"</string>
   <string name="screen_room_title">"Chatt"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Begäran om att gå med skickad"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Det här rummet har uppgraderats"</string>
   <string name="screen_share_location_title">"Dela plats"</string>
   <string name="screen_share_my_location_action">"Dela min plats"</string>
   <string name="screen_share_open_apple_maps">"Öppna i Apple Maps"</string>

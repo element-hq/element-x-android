@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
@@ -39,7 +38,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 private const val STICKER_SIZE_IN_DP = 128
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TimelineItemStickerView(
     content: TimelineItemStickerContent,

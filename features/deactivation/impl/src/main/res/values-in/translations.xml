@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Harap konfirmasi bahwa Anda ingin menonaktifkan akun Anda. Tindakan ini tidak dapat diurungkan."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Hapus semua pesan saya"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Peringatan: Pengguna masa depan mungkin melihat percakapan yang tidak lengkap."</string>
+  <string name="screen_deactivate_account_description">"Penonaktifan akun Anda %1$s, ini akan:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"tidak dapat diurungkan"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s akun Anda (Anda tidak dapat masuk kembali, dan ID Anda tidak dapat digunakan kembali)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Nonaktifkan secara permanen"</string>
+  <string name="screen_deactivate_account_list_item_2">"Mengeluarkan Anda dari semua ruangan obrolan."</string>
+  <string name="screen_deactivate_account_list_item_3">"Hapus informasi akun Anda dari server identitas kami."</string>
+  <string name="screen_deactivate_account_list_item_4">"Pesan Anda akan tetap terlihat oleh pengguna terdaftar tetapi tidak akan tersedia bagi pengguna baru atau tidak terdaftar jika Anda memilih untuk menghapusnya."</string>
+  <string name="screen_deactivate_account_title">"Nonaktifkan akun"</string>
+</resources>

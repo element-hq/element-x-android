@@ -138,12 +138,16 @@
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
   <string name="action_yes_try_again">"Oui, réessayez"</string>
+  <string name="banner_battery_optimization_content_android">"Désactivez l’optimisation de la batterie pour cette application afin de vous assurer que toutes les notifications sont reçues."</string>
+  <string name="banner_battery_optimization_submit_android">"Désactiver l’optimisation"</string>
+  <string name="banner_battery_optimization_title_android">"Ils vous manque des notifications?"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l’ancien protocole sera supprimé."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Mise à niveau disponible"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d’utilisation acceptable"</string>
   <string name="common_adding_caption">"Ajout d’une légende"</string>
   <string name="common_advanced_settings">"Paramètres avancés"</string>
+  <string name="common_an_image">"une image"</string>
   <string name="common_analytics">"Statistiques d’utilisation"</string>
   <string name="common_appearance">"Apparence"</string>
   <string name="common_audio">"Audio"</string>
@@ -259,6 +263,7 @@ Raison : %1$s."</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_sending_failed">"Échec de l’envoi"</string>
   <string name="common_sent">"Envoyé"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Serveur non pris en charge"</string>
   <string name="common_server_url">"URL du serveur"</string>
   <string name="common_settings">"Paramètres"</string>
@@ -333,6 +338,7 @@ Raison : %1$s."</string>
   <string name="error_room_address_invalid_symbols">"Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Certains messages n’ont pas été envoyés"</string>
   <string name="error_unknown">"Désolé, une erreur s’est produite"</string>
+  <string name="event_shield_mismatched_sender">"L’expéditeur de ce message ne correspond pas au propriétaire de l’appareil qui l’a envoyé."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"L’authenticité de ce message chiffré ne peut être garantie sur cet appareil."</string>
   <string name="event_shield_reason_previously_verified">"Chiffré par un utilisateur précédemment vérifié."</string>
   <string name="event_shield_reason_sent_in_clear">"Non chiffré."</string>
@@ -371,8 +377,13 @@ Raison : %1$s."</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messages épinglés"</string>
   <string name="screen_room_pinned_banner_loading_description">"Chargement du message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Voir tout"</string>
+  <string name="screen_room_timeline_tombstoned_room_action">"Aller dans le nouveau salon"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Ce salon a été remplacé et n’est plus actif"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Voir les anciens messages"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Ce salon est la continuation du salon précédent"</string>
   <string name="screen_room_title">"Discussion"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Demande de rejoindre le salon envoyée"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Ce salon a été mis à niveau."</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>

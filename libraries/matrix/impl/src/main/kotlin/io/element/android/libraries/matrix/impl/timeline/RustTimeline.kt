@@ -485,6 +485,7 @@ class RustTimeline(
         description: String?,
         zoomLevel: Int?,
         assetType: AssetType?,
+        replyParameters: ReplyParameters?,
     ): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {
             inner.sendLocation(
@@ -493,6 +494,7 @@ class RustTimeline(
                 description = description,
                 zoomLevel = zoomLevel?.toUByte(),
                 assetType = assetType?.toInner(),
+                replyParams = replyParameters?.map(),
             )
         }
     }

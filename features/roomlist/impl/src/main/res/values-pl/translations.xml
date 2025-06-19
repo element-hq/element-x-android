@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Odrzuć czat"</string>
   <string name="screen_invites_empty_list">"Brak zaproszeń"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) zaprosił Cię"</string>
-  <string name="screen_join_room_knock_sent_title">"Wysłano prośbę o dołączenie"</string>
   <string name="screen_migration_message">"Jest to jednorazowy proces, dziękujemy za czekanie."</string>
   <string name="screen_migration_title">"Konfigurowanie Twojego konta."</string>
   <string name="screen_roomlist_a11y_create_message">"Utwórz nową rozmowę lub pokój"</string>
@@ -37,6 +36,7 @@ Na razie możesz wyczyścić filtry, aby zobaczyć pozostałe czaty"</string>
   <string name="screen_roomlist_filter_unreads">"Nieprzeczytane"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulacje!
 Nie masz żadnych nieprzeczytanych wiadomości!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Wysłano prośbę o dołączenie"</string>
   <string name="screen_roomlist_main_space_title">"Wszystkie czaty"</string>
   <string name="screen_roomlist_mark_as_read">"Oznacz jako przeczytane"</string>
   <string name="screen_roomlist_mark_as_unread">"Oznacz jako nieprzeczytane"</string>

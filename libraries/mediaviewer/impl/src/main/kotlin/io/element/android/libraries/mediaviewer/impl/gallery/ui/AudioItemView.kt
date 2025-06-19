@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
@@ -65,7 +64,6 @@ fun AudioItemView(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FilenameRow(
     audio: MediaItem.Audio,

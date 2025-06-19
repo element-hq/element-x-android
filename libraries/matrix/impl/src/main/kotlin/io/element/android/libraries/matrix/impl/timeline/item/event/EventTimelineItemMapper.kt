@@ -176,6 +176,7 @@ private fun ShieldState?.map(): MessageShield? {
         ShieldStateCode.UNVERIFIED_IDENTITY -> MessageShield.UnverifiedIdentity(isCritical)
         ShieldStateCode.SENT_IN_CLEAR -> MessageShield.SentInClear(isCritical)
         ShieldStateCode.VERIFICATION_VIOLATION -> MessageShield.VerificationViolation(isCritical)
+        ShieldStateCode.MISMATCHED_SENDER -> MessageShield.MismatchedSender(isCritical)
     }
 }
 

@@ -304,7 +304,8 @@ class FakeTimeline(
         description: String?,
         zoomLevel: Int?,
         assetType: AssetType?,
-    ) -> Result<Unit> = { _, _, _, _, _ ->
+        replyParameters: ReplyParameters?,
+    ) -> Result<Unit> = { _, _, _, _, _, _ ->
         lambdaError()
     }
 
@@ -314,6 +315,7 @@ class FakeTimeline(
         description: String?,
         zoomLevel: Int?,
         assetType: AssetType?,
+        replyParameters: ReplyParameters?,
     ): Result<Unit> = simulateLongTask {
         sendLocationLambda(
             body,
@@ -321,6 +323,7 @@ class FakeTimeline(
             description,
             zoomLevel,
             assetType,
+            replyParameters,
         )
     }
 
