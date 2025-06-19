@@ -81,7 +81,6 @@ import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import io.element.android.libraries.textcomposer.model.showCaptionCompatibilityWarning
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
-import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -174,18 +173,29 @@ fun TextComposer(
             is TextEditorState.Rich -> {
                 remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
                     @Composable {
-                        TextInput(
-                            state = state.richTextEditorState,
-                            subcomposing = subcomposing,
-                            placeholder = placeholder,
+                        TextInputBox(
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
-                            resolveMentionDisplay = resolveMentionDisplay,
-                            resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
-                            onError = onError,
-                            onTyping = onTyping,
-                            onSelectRichContent = onSelectRichContent,
-                        )
+                            placeholder = placeholder,
+                            showPlaceholder = state.richTextEditorState.messageHtml.isEmpty(),
+                            subcomposing = subcomposing,
+                        ) {
+                            RichTextEditor(
+                                state = state.richTextEditorState,
+                                // Disable most of the editor functionality if it's just being measured for a subcomposition.
+                                // This prevents it gaining focus and mutating the state.
+                                registerStateUpdates = !subcomposing,
+                                modifier = Modifier
+                                    .padding(top = 6.dp, bottom = 6.dp)
+                                    .fillMaxWidth(),
+                                style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.richTextEditorState.hasFocus),
+                                resolveMentionDisplay = resolveMentionDisplay,
+                                resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
+                                onError = onError,
+                                onRichContentSelected = onSelectRichContent,
+                                onTyping = onTyping,
+                            )
+                        }
                     }
                 }
             }
@@ -437,7 +447,9 @@ private fun TextFormattingLayout(
 ) {
     val bottomPadding = with(LocalDensity.current) { WindowInsets.systemBars.getBottom(this).toDp() + 8.dp }
     Column(
-        modifier = modifier.padding(vertical = 4.dp).padding(bottom = bottomPadding),
+        modifier = modifier
+            .padding(vertical = 4.dp)
+            .padding(bottom = bottomPadding),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         if (isRoomEncrypted == false) {
@@ -543,44 +555,6 @@ private fun TextInputBox(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun TextInput(
-    state: RichTextEditorState,
-    subcomposing: Boolean,
-    placeholder: String,
-    composerMode: MessageComposerMode,
-    onResetComposerMode: () -> Unit,
-    resolveRoomMentionDisplay: () -> TextDisplay,
-    resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
-    onError: (Throwable) -> Unit,
-    onTyping: (Boolean) -> Unit,
-    onSelectRichContent: ((Uri) -> Unit)?,
-) {
-    TextInputBox(
-        composerMode = composerMode,
-        onResetComposerMode = onResetComposerMode,
-        placeholder = placeholder,
-        showPlaceholder = state.messageHtml.isEmpty(),
-        subcomposing = subcomposing,
-    ) {
-        RichTextEditor(
-            state = state,
-            // Disable most of the editor functionality if it's just being measured for a subcomposition.
-            // This prevents it gaining focus and mutating the state.
-            registerStateUpdates = !subcomposing,
-            modifier = Modifier
-                .padding(top = 6.dp, bottom = 6.dp)
-                .fillMaxWidth(),
-            style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
-            resolveMentionDisplay = resolveMentionDisplay,
-            resolveRoomMentionDisplay = resolveRoomMentionDisplay,
-            onError = onError,
-            onRichContentSelected = onSelectRichContent,
-            onTyping = onTyping,
-        )
     }
 }
 
