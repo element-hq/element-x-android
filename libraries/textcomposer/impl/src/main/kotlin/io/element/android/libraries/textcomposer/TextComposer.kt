@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -176,12 +175,12 @@ fun TextComposer(
                         TextInputBox(
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
-                            placeholder = placeholder,
-                            showPlaceholder = state.richTextEditorState.messageHtml.isEmpty(),
+                            isTextEmpty = state.richTextEditorState.messageHtml.isEmpty(),
                             subcomposing = subcomposing,
                         ) {
                             RichTextEditor(
                                 state = state.richTextEditorState,
+                                placeholder = placeholder,
                                 // Disable most of the editor functionality if it's just being measured for a subcomposition.
                                 // This prevents it gaining focus and mutating the state.
                                 registerStateUpdates = !subcomposing,
@@ -205,12 +204,13 @@ fun TextComposer(
                     TextInputBox(
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
-                        placeholder = placeholder,
-                        showPlaceholder = state.state.text.value().isEmpty(),
+                        isTextEmpty = state.state.text.value().isEmpty(),
                         subcomposing = subcomposing,
                     ) {
                         MarkdownTextInput(
                             state = state.state,
+                            placeholder = placeholder,
+                            placeholderColor = ElementTheme.colors.textSecondary,
                             subcomposing = subcomposing,
                             onTyping = onTyping,
                             onReceiveSuggestion = onReceiveSuggestion,
@@ -492,8 +492,7 @@ private fun TextFormattingLayout(
 private fun TextInputBox(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
-    placeholder: String,
-    showPlaceholder: Boolean,
+    isTextEmpty: Boolean,
     subcomposing: Boolean,
     textInput: @Composable () -> Unit,
 ) {
@@ -515,7 +514,6 @@ private fun TextInputBox(
                 onResetComposerMode = onResetComposerMode,
             )
         }
-        val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
             modifier = Modifier
                 .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
@@ -523,21 +521,8 @@ private fun TextInputBox(
                 .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
             contentAlignment = Alignment.CenterStart,
         ) {
-            // Placeholder
-            if (showPlaceholder) {
-                Text(
-                    text = placeholder,
-                    style = defaultTypography.copy(
-                        color = ElementTheme.colors.textSecondary,
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-
             textInput()
-
-            if (showPlaceholder && composerMode.showCaptionCompatibilityWarning()) {
+            if (isTextEmpty && composerMode.showCaptionCompatibilityWarning()) {
                 var showBottomSheet by remember { mutableStateOf(false) }
                 Icon(
                     modifier = Modifier
