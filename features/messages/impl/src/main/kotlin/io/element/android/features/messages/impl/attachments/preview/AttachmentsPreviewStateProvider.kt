@@ -24,7 +24,12 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
     override val values: Sequence<AttachmentsPreviewState>
         get() = sequenceOf(
             anAttachmentsPreviewState(),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Processing(displayProgress = false)),
+            anAttachmentsPreviewState(
+                sendActionState = SendActionState.Sending.Processing(displayProgress = false),
+                textEditorState = aTextEditorStateMarkdown(
+                    initialText = "This is a caption!"
+                )
+            ),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Processing(displayProgress = true)),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(aMediaUploadInfo())),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(0.5f, aMediaUploadInfo())),
@@ -55,15 +60,15 @@ fun aMediaUploadInfo(
     filePath: String = "file://path",
     thumbnailFilePath: String? = null,
 ) = MediaUploadInfo.Image(
-        file = File(filePath),
-        imageInfo = ImageInfo(
-            height = 100,
-            width = 100,
-            mimetype = MimeTypes.Jpeg,
-            size = 1000,
-            thumbnailInfo = null,
-            thumbnailSource = null,
-            blurhash = null,
-        ),
-        thumbnailFile = thumbnailFilePath?.let { File(it) },
-    )
+    file = File(filePath),
+    imageInfo = ImageInfo(
+        height = 100,
+        width = 100,
+        mimetype = MimeTypes.Jpeg,
+        size = 1000,
+        thumbnailInfo = null,
+        thumbnailSource = null,
+        blurhash = null,
+    ),
+    thumbnailFile = thumbnailFilePath?.let { File(it) },
+)
