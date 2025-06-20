@@ -33,7 +33,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
     override val values: Sequence<RoomDetailsState>
         get() = sequenceOf(
             aRoomDetailsState(displayAdminSettings = true),
-            aRoomDetailsState(roomTopic = RoomTopicState.Hidden),
+            aRoomDetailsState(roomTopic = RoomTopicState.Hidden, showDebugInfo = true),
             aRoomDetailsState(roomTopic = RoomTopicState.CanAddTopic),
             aRoomDetailsState(isEncrypted = false),
             aRoomDetailsState(roomAlias = null),
@@ -120,6 +120,7 @@ fun aRoomDetailsState(
     hasMemberVerificationViolations: Boolean = false,
     canReportRoom: Boolean = true,
     isTombstoned: Boolean = false,
+    showDebugInfo: Boolean = false,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -151,6 +152,7 @@ fun aRoomDetailsState(
     hasMemberVerificationViolations = hasMemberVerificationViolations,
     canReportRoom = canReportRoom,
     isTombstoned = isTombstoned,
+    showDebugInfo = showDebugInfo,
     eventSink = eventSink,
 )
 

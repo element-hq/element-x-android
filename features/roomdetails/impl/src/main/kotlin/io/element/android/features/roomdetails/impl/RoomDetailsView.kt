@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -42,6 +43,7 @@ import io.element.android.features.roomcall.api.hasPermissionToJoin
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
+import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.atomic.atoms.MatrixBadgeAtom
 import io.element.android.libraries.designsystem.atomic.molecules.MatrixBadgeRowMolecule
@@ -261,6 +263,12 @@ fun RoomDetailsView(
                 onReportRoomClick = onReportRoomClick,
                 onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
             )
+
+            if (state.showDebugInfo) {
+                DebugInfoSection(
+                    roomId = state.roomId,
+                )
+            }
         }
     }
 }
@@ -697,6 +705,33 @@ private fun OtherActionsSection(
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),
             style = ListItemStyle.Destructive,
             onClick = onLeaveRoomClick,
+        )
+    }
+}
+
+@Composable
+private fun DebugInfoSection(roomId: RoomId) {
+    val context = LocalContext.current
+    PreferenceCategory(showTopDivider = true) {
+        ListItem(
+            headlineContent = {
+                Text("Internal room ID")
+            },
+            supportingContent = {
+                Text(
+                    text = roomId.value,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Code())),
+            trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Copy())),
+            onClick = {
+                context.copyToClipboard(
+                    roomId.value,
+                    context.getString(CommonStrings.common_copied_to_clipboard)
+                )
+            },
         )
     }
 }

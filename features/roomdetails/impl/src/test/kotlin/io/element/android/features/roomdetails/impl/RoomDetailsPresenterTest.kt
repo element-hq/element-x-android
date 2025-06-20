@@ -41,6 +41,8 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
@@ -84,6 +86,7 @@ class RoomDetailsPresenterTest {
         isPinnedMessagesFeatureEnabled: Boolean = true,
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore()
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -111,6 +114,7 @@ class RoomDetailsPresenterTest {
             isPinnedMessagesFeatureEnabled = { isPinnedMessagesFeatureEnabled },
             analyticsService = analyticsService,
             clipboardHelper = clipboardHelper,
+            appPreferencesStore = appPreferencesStore,
         )
     }
 
@@ -132,6 +136,7 @@ class RoomDetailsPresenterTest {
             assertThat(initialState.canShowPinnedMessages).isTrue()
             assertThat(initialState.pinnedMessagesCount).isEqualTo(0)
             assertThat(initialState.canShowSecurityAndPrivacy).isFalse()
+            assertThat(initialState.showDebugInfo).isFalse()
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -724,6 +729,25 @@ class RoomDetailsPresenterTest {
             featureFlagService.setFeatureEnabled(FeatureFlags.Knock, true)
             with(awaitItem()) {
                 assertThat(canShowSecurityAndPrivacy).isTrue()
+            }
+        }
+    }
+
+    @Test
+    fun `present - show debug info`() = runTest {
+        val room = aJoinedRoom(
+            canInviteResult = { Result.success(true) },
+            canUserJoinCallResult = { Result.success(true) },
+            canSendStateResult = { _, _ -> Result.success(true) },
+        )
+        val inMemoryAppPreferencesStore = InMemoryAppPreferencesStore(
+            isDeveloperModeEnabled = true,
+        )
+        val presenter = createRoomDetailsPresenter(room = room, appPreferencesStore = inMemoryAppPreferencesStore)
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            skipItems(1)
+            with(awaitItem()) {
+                assertThat(showDebugInfo).isTrue()
             }
         }
     }
