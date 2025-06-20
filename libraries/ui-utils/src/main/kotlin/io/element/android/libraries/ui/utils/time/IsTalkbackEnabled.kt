@@ -9,12 +9,26 @@ package io.element.android.libraries.ui.utils.time
 
 import android.view.accessibility.AccessibilityManager
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun isTalkbackActive(): Boolean {
     val context = LocalContext.current
     val accessibilityManager = remember { context.getSystemService(AccessibilityManager::class.java) }
-    return accessibilityManager.isTouchExplorationEnabled
+    var isTouchExplorationEnabled by remember { mutableStateOf(accessibilityManager.isTouchExplorationEnabled) }
+    DisposableEffect(Unit) {
+        val listener = AccessibilityManager.TouchExplorationStateChangeListener { enabled ->
+            isTouchExplorationEnabled = enabled
+        }
+        accessibilityManager.addTouchExplorationStateChangeListener(listener)
+        onDispose {
+            accessibilityManager.removeTouchExplorationStateChangeListener(listener)
+        }
+    }
+    return isTouchExplorationEnabled
 }
