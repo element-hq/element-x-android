@@ -333,6 +333,7 @@ Are you sure you want to continue?"</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
   <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
   <string name="error_failed_uploading_voice_message">"Failed to upload your voice message."</string>
+  <string name="error_invalid_invite">"The room no longer exists or the invite is no longer valid."</string>
   <string name="error_message_not_found">"Message not found"</string>
   <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
   <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>

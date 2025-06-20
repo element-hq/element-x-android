@@ -9,9 +9,12 @@ package io.element.android.libraries.matrix.impl.room.join
 
 import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.exception.ClientException
+import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.impl.analytics.toAnalyticsJoinedRoom
 import io.element.android.services.analytics.api.AnalyticsService
@@ -41,6 +44,15 @@ class DefaultJoinRoom @Inject constructor(
         }.onSuccess { roomInfo ->
             if (roomInfo != null) {
                 analyticsService.capture(roomInfo.toAnalyticsJoinedRoom(trigger))
+            }
+        }.mapFailure {
+            if (it is ClientException.MatrixApi) {
+                when (it.kind) {
+                    ErrorKind.Forbidden -> JoinRoom.Failures.UnauthorizedJoin
+                    else -> it
+                }
+            } else {
+                it
             }
         }.map { }
     }

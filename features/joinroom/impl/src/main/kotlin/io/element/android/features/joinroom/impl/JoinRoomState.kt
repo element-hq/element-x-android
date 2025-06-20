@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.ui.model.InviteSender
 
 internal const val MAX_KNOCK_MESSAGE_LENGTH = 500
@@ -36,7 +37,7 @@ data class JoinRoomState(
     val canReportRoom: Boolean,
     val eventSink: (JoinRoomEvents) -> Unit
 ) {
-    val isJoinActionUnauthorized = joinAction is AsyncAction.Failure && joinAction.error is JoinRoomFailures.UnauthorizedJoin
+    val isJoinActionUnauthorized = joinAction is AsyncAction.Failure && joinAction.error is JoinRoom.Failures.UnauthorizedJoin
     val joinAuthorisationStatus = when (contentState) {
         is ContentState.Loaded -> {
             when {
@@ -106,8 +107,4 @@ sealed interface JoinAuthorisationStatus {
     data object Restricted : JoinAuthorisationStatus
     data object Unknown : JoinAuthorisationStatus
     data object Unauthorized : JoinAuthorisationStatus
-}
-
-sealed class JoinRoomFailures : Exception() {
-    data object UnauthorizedJoin : JoinRoomFailures()
 }

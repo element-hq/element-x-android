@@ -16,4 +16,8 @@ interface JoinRoom {
         serverNames: List<String>,
         trigger: JoinedRoom.Trigger,
     ): Result<Unit>
+
+    sealed class Failures : Exception() {
+        data object UnauthorizedJoin : Failures()
+    }
 }
