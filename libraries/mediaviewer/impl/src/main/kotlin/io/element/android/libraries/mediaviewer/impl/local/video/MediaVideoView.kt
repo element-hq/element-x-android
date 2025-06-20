@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
@@ -33,6 +34,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.common.Timeline
+import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
@@ -54,6 +56,8 @@ import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePl
 import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.coroutines.delay
+import me.saket.telephoto.zoomable.ZoomableContentLocation
+import me.saket.telephoto.zoomable.zoomable
 import kotlin.time.Duration.Companion.seconds
 
 @SuppressLint("UnsafeOptInUsageError")
@@ -150,6 +154,18 @@ private fun ExoPlayerMediaVideoView(
                     isReady = playbackState == STATE_READY,
                 )
             }
+
+            override fun onVideoSizeChanged(videoSize: VideoSize) {
+                // Ensure that the user cannot zoom/move outside of the video bounds
+                localMediaViewState.zoomableState.setContentLocation(
+                    ZoomableContentLocation.scaledInsideAndCenterAligned(
+                        Size(
+                            videoSize.width.toFloat(),
+                            videoSize.height.toFloat(),
+                        )
+                    )
+                )
+            }
         }
     }
 
@@ -216,24 +232,26 @@ private fun ExoPlayerMediaVideoView(
             )
         } else {
             AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = {
-                    PlayerView(context).apply {
-                        player = exoPlayer
-                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                        layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                        setOnClickListener {
+                modifier = Modifier
+                    .fillMaxSize()
+                    .zoomable(
+                        state = localMediaViewState.zoomableState,
+                        onClick = {
                             autoHideController++
                             mediaPlayerControllerState = mediaPlayerControllerState.copy(
                                 isVisible = !mediaPlayerControllerState.isVisible,
                             )
                         }
+                    ),
+                factory = {
+                    PlayerView(context).apply {
+                        player = exoPlayer
+                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                        layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                         useController = false
                     }
                 },
                 onRelease = { playerView ->
-                    playerView.setOnClickListener(null)
-                    playerView.setControllerVisibilityListener(null as PlayerView.ControllerVisibilityListener?)
                     playerView.player = null
                 },
             )
