@@ -9,8 +9,8 @@ package io.element.android.features.joinroom.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invite.api.InviteData
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
-import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.ui.model.InviteSender
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
@@ -44,7 +45,7 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin),
-                joinAction = AsyncAction.Failure(JoinRoomFailures.UnauthorizedJoin)
+                joinAction = AsyncAction.Failure(JoinRoom.Failures.UnauthorizedJoin)
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin),
@@ -196,6 +197,16 @@ fun aJoinRoomState(
     hideInviteAvatars = hideInviteAvatars,
     canReportRoom = canReportRoom,
     eventSink = eventSink
+)
+
+internal fun anAcceptDeclineInviteState(
+    acceptAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    declineAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    eventSink: (AcceptDeclineInviteEvents) -> Unit = {}
+) = AcceptDeclineInviteState(
+    acceptAction = acceptAction,
+    declineAction = declineAction,
+    eventSink = eventSink,
 )
 
 internal fun anInviteSender(

@@ -8,8 +8,8 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
-import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.logout.api.direct.DirectLogoutState
@@ -22,9 +22,11 @@ import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.anInviteSender
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.features.roomlist.impl.search.aRoomListSearchState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
@@ -83,6 +85,16 @@ internal fun aRoomListState(
     directLogoutState = directLogoutState,
     hideInvitesAvatars = hideInvitesAvatars,
     canReportRoom = canReportRoom,
+    eventSink = eventSink,
+)
+
+internal fun anAcceptDeclineInviteState(
+    acceptAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    declineAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    eventSink: (AcceptDeclineInviteEvents) -> Unit = {}
+) = AcceptDeclineInviteState(
+    acceptAction = acceptAction,
+    declineAction = declineAction,
     eventSink = eventSink,
 )
 
