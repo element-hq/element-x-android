@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -81,7 +80,6 @@ import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import io.element.android.libraries.textcomposer.model.showCaptionCompatibilityWarning
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
-import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -174,18 +172,29 @@ fun TextComposer(
             is TextEditorState.Rich -> {
                 remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
                     @Composable {
-                        TextInput(
-                            state = state.richTextEditorState,
-                            subcomposing = subcomposing,
-                            placeholder = placeholder,
+                        TextInputBox(
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
-                            resolveMentionDisplay = resolveMentionDisplay,
-                            resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
-                            onError = onError,
-                            onTyping = onTyping,
-                            onSelectRichContent = onSelectRichContent,
-                        )
+                            isTextEmpty = state.richTextEditorState.messageHtml.isEmpty(),
+                            subcomposing = subcomposing,
+                        ) {
+                            RichTextEditor(
+                                state = state.richTextEditorState,
+                                placeholder = placeholder,
+                                // Disable most of the editor functionality if it's just being measured for a subcomposition.
+                                // This prevents it gaining focus and mutating the state.
+                                registerStateUpdates = !subcomposing,
+                                modifier = Modifier
+                                    .padding(top = 6.dp, bottom = 6.dp)
+                                    .fillMaxWidth(),
+                                style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.richTextEditorState.hasFocus),
+                                resolveMentionDisplay = resolveMentionDisplay,
+                                resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
+                                onError = onError,
+                                onRichContentSelected = onSelectRichContent,
+                                onTyping = onTyping,
+                            )
+                        }
                     }
                 }
             }
@@ -195,12 +204,13 @@ fun TextComposer(
                     TextInputBox(
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
-                        placeholder = placeholder,
-                        showPlaceholder = state.state.text.value().isEmpty(),
+                        isTextEmpty = state.state.text.value().isEmpty(),
                         subcomposing = subcomposing,
                     ) {
                         MarkdownTextInput(
                             state = state.state,
+                            placeholder = placeholder,
+                            placeholderColor = ElementTheme.colors.textSecondary,
                             subcomposing = subcomposing,
                             onTyping = onTyping,
                             onReceiveSuggestion = onReceiveSuggestion,
@@ -437,7 +447,9 @@ private fun TextFormattingLayout(
 ) {
     val bottomPadding = with(LocalDensity.current) { WindowInsets.systemBars.getBottom(this).toDp() + 8.dp }
     Column(
-        modifier = modifier.padding(vertical = 4.dp).padding(bottom = bottomPadding),
+        modifier = modifier
+            .padding(vertical = 4.dp)
+            .padding(bottom = bottomPadding),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         if (isRoomEncrypted == false) {
@@ -480,8 +492,7 @@ private fun TextFormattingLayout(
 private fun TextInputBox(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
-    placeholder: String,
-    showPlaceholder: Boolean,
+    isTextEmpty: Boolean,
     subcomposing: Boolean,
     textInput: @Composable () -> Unit,
 ) {
@@ -503,7 +514,6 @@ private fun TextInputBox(
                 onResetComposerMode = onResetComposerMode,
             )
         }
-        val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
             modifier = Modifier
                 .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
@@ -511,21 +521,8 @@ private fun TextInputBox(
                 .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
             contentAlignment = Alignment.CenterStart,
         ) {
-            // Placeholder
-            if (showPlaceholder) {
-                Text(
-                    text = placeholder,
-                    style = defaultTypography.copy(
-                        color = ElementTheme.colors.textSecondary,
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-
             textInput()
-
-            if (showPlaceholder && composerMode.showCaptionCompatibilityWarning()) {
+            if (isTextEmpty && composerMode.showCaptionCompatibilityWarning()) {
                 var showBottomSheet by remember { mutableStateOf(false) }
                 Icon(
                     modifier = Modifier
@@ -543,44 +540,6 @@ private fun TextInputBox(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun TextInput(
-    state: RichTextEditorState,
-    subcomposing: Boolean,
-    placeholder: String,
-    composerMode: MessageComposerMode,
-    onResetComposerMode: () -> Unit,
-    resolveRoomMentionDisplay: () -> TextDisplay,
-    resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
-    onError: (Throwable) -> Unit,
-    onTyping: (Boolean) -> Unit,
-    onSelectRichContent: ((Uri) -> Unit)?,
-) {
-    TextInputBox(
-        composerMode = composerMode,
-        onResetComposerMode = onResetComposerMode,
-        placeholder = placeholder,
-        showPlaceholder = state.messageHtml.isEmpty(),
-        subcomposing = subcomposing,
-    ) {
-        RichTextEditor(
-            state = state,
-            // Disable most of the editor functionality if it's just being measured for a subcomposition.
-            // This prevents it gaining focus and mutating the state.
-            registerStateUpdates = !subcomposing,
-            modifier = Modifier
-                .padding(top = 6.dp, bottom = 6.dp)
-                .fillMaxWidth(),
-            style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
-            resolveMentionDisplay = resolveMentionDisplay,
-            resolveRoomMentionDisplay = resolveRoomMentionDisplay,
-            onError = onError,
-            onRichContentSelected = onSelectRichContent,
-            onTyping = onTyping,
-        )
     }
 }
 

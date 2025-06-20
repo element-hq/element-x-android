@@ -8,6 +8,7 @@
 package io.element.android.libraries.textcomposer.components.markdown
 
 import android.content.ClipData
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.getSpans
@@ -26,6 +28,7 @@ import androidx.core.view.OnReceiveContentListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.setPadding
 import androidx.core.widget.addTextChangedListener
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.testtags.TestTags
@@ -43,6 +46,8 @@ import io.element.android.wysiwyg.compose.internal.applyStyleInCompose
 @Composable
 fun MarkdownTextInput(
     state: MarkdownTextEditorState,
+    placeholder: String,
+    placeholderColor: androidx.compose.ui.graphics.Color,
     subcomposing: Boolean,
     onTyping: (Boolean) -> Unit,
     onReceiveSuggestion: (Suggestion?) -> Unit,
@@ -87,6 +92,8 @@ fun MarkdownTextInput(
                 setBackgroundColor(Color.TRANSPARENT)
                 val text = state.text.value()
                 setText(text)
+                setHint(placeholder)
+                setHintTextColor(ColorStateList.valueOf(placeholderColor.toArgb()))
                 inputType = InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE or
@@ -189,6 +196,8 @@ internal fun MarkdownTextInputPreview() {
         val style = ElementRichTextEditorStyle.composerStyle(hasFocus = true)
         MarkdownTextInput(
             state = aMarkdownTextEditorState(initialText = "Hello, World!"),
+            placeholder = "Placeholder",
+            placeholderColor = ElementTheme.colors.textSecondary,
             subcomposing = false,
             onTyping = {},
             onReceiveSuggestion = {},
