@@ -192,8 +192,8 @@ fun MessagesView(
                     Column {
                         ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
                         MessagesViewTopBar(
-                            roomName = state.roomName.dataOrNull(),
-                            roomAvatar = state.roomAvatar.dataOrNull(),
+                            roomName = state.roomName,
+                            roomAvatar = state.roomAvatar,
                             isTombstoned = state.isTombstoned,
                             heroes = state.heroes,
                             roomCallState = state.roomCallState,
@@ -251,8 +251,8 @@ fun MessagesView(
                                 .align(Alignment.BottomStart)
                                 .heightIn(max = 230.dp),
                             roomId = state.roomId,
-                            roomName = state.roomName.dataOrNull(),
-                            roomAvatarData = state.roomAvatar.dataOrNull(),
+                            roomName = state.roomName,
+                            roomAvatarData = state.roomAvatar,
                             suggestions = state.composerState.suggestions,
                             onSelectSuggestion = {
                                 state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
