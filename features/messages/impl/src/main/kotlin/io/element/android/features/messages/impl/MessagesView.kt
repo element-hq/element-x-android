@@ -83,7 +83,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.components.rememberExpandableBottomSheetState
+import io.element.android.libraries.designsystem.components.rememberExpandableBottomSheetLayoutState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
@@ -181,12 +181,11 @@ fun MessagesView(
         state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
     }
 
-    val expandableState = rememberExpandableBottomSheetState()
+    val expandableState = rememberExpandableBottomSheetLayoutState()
     ExpandableBottomSheetLayout(
-        modifier = Modifier.fillMaxSize().imePadding().systemBarsPadding(),
+        modifier = modifier.fillMaxSize().imePadding().systemBarsPadding(),
         content = {
             Scaffold(
-                modifier = modifier,
                 contentWindowInsets = WindowInsets.statusBars,
                 topBar = {
                     Column {

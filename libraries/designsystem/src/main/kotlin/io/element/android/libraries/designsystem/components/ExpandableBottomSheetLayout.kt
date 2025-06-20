@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.designsystem.components
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -31,11 +32,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -48,7 +46,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
@@ -61,39 +58,17 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-@Stable
-class ExpandableBottomSheetState {
-    internal var internalPosition: Position by mutableStateOf(Position.COLLAPSED)
-    internal var internalDraggingPercentage: Float by mutableFloatStateOf(
-        if (internalPosition == Position.EXPANDED) 1f else 0f
-    )
-
-    val position = internalPosition
-    val draggingPercentage = internalDraggingPercentage
-
-    enum class Position {
-        COLLAPSED,
-        DRAGGING,
-        EXPANDED
-    }
-}
-
-@Composable
-fun rememberExpandableBottomSheetState(): ExpandableBottomSheetState {
-    return remember { ExpandableBottomSheetState() }
-}
-
 @Composable
 fun ExpandableBottomSheetLayout(
-    content: @Composable () -> Unit,
     sheetDragHandle: @Composable BoxScope.() -> Unit,
     bottomSheetContent: @Composable ColumnScope.() -> Unit,
-    state: ExpandableBottomSheetState,
-    sheetShape: Shape = RectangleShape,
+    state: ExpandableBottomSheetLayoutState,
     maxBottomSheetContentHeight: Dp,
     isSwipeGestureEnabled: Boolean,
     modifier: Modifier = Modifier,
+    sheetShape: Shape = RectangleShape,
     backgroundColor: Color = Color.Transparent,
+    content: @Composable () -> Unit,
 ) {
     var minBottomContentHeightPx by remember { mutableIntStateOf(0) }
     var currentBottomContentHeightPx by remember { mutableIntStateOf(minBottomContentHeightPx) }
@@ -142,9 +117,9 @@ fun ExpandableBottomSheetLayout(
                                     val calculatedHeight = max(minBottomContentHeightPx, currentBottomContentHeightPx - dragAmount.roundToInt())
                                     val newHeight = min(calculatedMaxBottomContentHeightPx, calculatedHeight)
                                     state.internalPosition = when (newHeight) {
-                                        calculatedMaxBottomContentHeightPx -> ExpandableBottomSheetState.Position.EXPANDED
-                                        minBottomContentHeightPx -> ExpandableBottomSheetState.Position.COLLAPSED
-                                        else -> ExpandableBottomSheetState.Position.DRAGGING
+                                        calculatedMaxBottomContentHeightPx -> ExpandableBottomSheetLayoutState.Position.EXPANDED
+                                        minBottomContentHeightPx -> ExpandableBottomSheetLayoutState.Position.COLLAPSED
+                                        else -> ExpandableBottomSheetLayoutState.Position.DRAGGING
                                     }
                                     state.internalDraggingPercentage = calculatePercentage(
                                         currentPos = newHeight,
@@ -159,10 +134,10 @@ fun ExpandableBottomSheetLayout(
                                         animatable.snapTo(currentBottomContentHeightPx.toFloat())
 
                                         val destination = if (currentBottomContentHeightPx > middle) {
-                                            state.internalPosition = ExpandableBottomSheetState.Position.EXPANDED
+                                            state.internalPosition = ExpandableBottomSheetLayoutState.Position.EXPANDED
                                             calculatedMaxBottomContentHeightPx
                                         } else {
-                                            state.internalPosition = ExpandableBottomSheetState.Position.COLLAPSED
+                                            state.internalPosition = ExpandableBottomSheetLayoutState.Position.COLLAPSED
                                             minBottomContentHeightPx
                                         }.toFloat()
 
@@ -195,7 +170,7 @@ fun ExpandableBottomSheetLayout(
             val lastMinBottomContentHeightPx = minBottomContentHeightPx
             minBottomContentHeightPx = min(minIntrinsicHeight, calculatedMaxBottomContentHeightPx)
 
-            val isExpanded = state.position == ExpandableBottomSheetState.Position.EXPANDED
+            val isExpanded = state.position == ExpandableBottomSheetLayoutState.Position.EXPANDED
             if (lastMinBottomContentHeightPx != minBottomContentHeightPx && !isExpanded) {
                 currentBottomContentHeightPx = minBottomContentHeightPx
             }
@@ -227,16 +202,17 @@ fun ExpandableBottomSheetLayout(
 
 @Preview(showBackground = true)
 @Composable
-internal fun GrowingBottomContentScaffoldPreview() {
-    LocalView.current.isNestedScrollingEnabled = true
+@Suppress("UnusedPrivateMember")
+internal fun ExpandableBottomSheetLayoutPreview() {
     ExpandableBottomSheetLayout(
         sheetDragHandle = {
             Box(
                 modifier =
                 Modifier
+                    .padding(vertical = 6.dp)
                     .clip(RoundedCornerShape(6.dp))
                     .align(Alignment.Center)
-                    .size(100.dp, 20.dp)
+                    .size(100.dp, 8.dp)
                     .background(Color.Gray)
             )
         },
@@ -250,15 +226,16 @@ internal fun GrowingBottomContentScaffoldPreview() {
                 modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f, fill = true)
+                .padding(horizontal = 10.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color.Blue)
             ) {
                 AndroidView(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.Green),
+                        .background(Color.LightGray),
                     factory = { context ->
-                        CustomEditText(context).apply {
+                        PreviewEditText(context).apply {
                             val initialText = "1111\n2222\n3333\n4444\n5555\n6666"
                             setText(initialText)
                             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
@@ -266,22 +243,24 @@ internal fun GrowingBottomContentScaffoldPreview() {
                     }
                 )
             }
-            Text("Heya", modifier = Modifier.padding(vertical = 6.dp))
+            Text("A footer", modifier = Modifier.padding(vertical = 6.dp, horizontal = 16.dp))
         },
         maxBottomSheetContentHeight = 1800.dp,
         isSwipeGestureEnabled = true,
         backgroundColor = Color.White,
-        state = rememberExpandableBottomSheetState(),
+        state = rememberExpandableBottomSheetLayoutState(),
         sheetShape = RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp),
         modifier = Modifier
             .windowInsetsPadding(WindowInsets.statusBars)
             .windowInsetsPadding(WindowInsets.ime)
             .fillMaxSize()
-            .background(Color.Red),
+            .background(Color.Red.copy(alpha = 0.2f)),
     )
 }
 
-class CustomEditText(context: Context) : EditText(context) {
+// This is just for preview purposes
+@SuppressLint("AppCompatCustomView")
+private class PreviewEditText(context: Context) : EditText(context) {
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
