@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 
 @Composable
@@ -152,7 +153,13 @@ private fun TimelineItemGroupedEventsRowContent(
         )
         if (isExpanded) {
             Column {
-                timelineItem.events.forEach { subGroupEvent ->
+                timelineItem.events.let {
+                    if (isTalkbackActive()) {
+                        it.reversed()
+                    } else {
+                        it
+                    }
+                }.forEach { subGroupEvent ->
                     TimelineItemRow(
                         timelineItem = subGroupEvent,
                         timelineRoomInfo = timelineRoomInfo,
