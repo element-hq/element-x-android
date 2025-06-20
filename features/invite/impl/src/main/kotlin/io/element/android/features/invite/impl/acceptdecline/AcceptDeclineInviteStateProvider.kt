@@ -1,14 +1,18 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.invite.api.acceptdecline
+package io.element.android.features.invite.impl.acceptdecline
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invite.api.InviteData
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
+import io.element.android.features.invite.impl.AcceptInvite
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 
@@ -18,13 +22,21 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
             anAcceptDeclineInviteState(),
             anAcceptDeclineInviteState(
                 declineAction = ConfirmingDeclineInvite(
-                    InviteData(roomId = RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
+                    InviteData(
+                        roomId = RoomId("!room:matrix.org"),
+                        isDm = true,
+                        roomName = "Alice"
+                    ),
                     blockUser = false,
                 ),
             ),
             anAcceptDeclineInviteState(
                 declineAction = ConfirmingDeclineInvite(
-                    InviteData(roomId = RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
+                    InviteData(
+                        roomId = RoomId("!room:matrix.org"),
+                        isDm = true,
+                        roomName = "Alice"
+                    ),
                     blockUser = true,
                 ),
             ),
@@ -32,12 +44,15 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
                 acceptAction = AsyncAction.Failure(RuntimeException("Error while accepting invite")),
             ),
             anAcceptDeclineInviteState(
+                acceptAction = AsyncAction.Failure(AcceptInvite.Failures.InvalidInvite),
+            ),
+            anAcceptDeclineInviteState(
                 declineAction = AsyncAction.Failure(RuntimeException("Error while declining invite")),
             ),
         )
 }
 
-fun anAcceptDeclineInviteState(
+private fun anAcceptDeclineInviteState(
     acceptAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     declineAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     eventSink: (AcceptDeclineInviteEvents) -> Unit = {}
