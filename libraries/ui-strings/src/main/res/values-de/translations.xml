@@ -372,7 +372,6 @@ Möchten Sie wirklich fortfahren?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Nachricht wird geladen…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Alle anzeigen"</string>
   <string name="screen_room_title">"Chat"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Beitrittsanfrage geschickt"</string>
   <string name="screen_share_location_title">"Standort teilen"</string>
   <string name="screen_share_my_location_action">"Meinen Standort teilen"</string>
   <string name="screen_share_open_apple_maps">"In Apple Maps öffnen"</string>

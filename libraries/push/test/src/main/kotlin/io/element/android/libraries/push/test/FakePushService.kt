@@ -28,6 +28,7 @@ class FakePushService(
     private val selectPushProviderLambda: suspend (SessionId, PushProvider) -> Unit = { _, _ -> lambdaError() },
     private val setIgnoreRegistrationErrorLambda: (SessionId, Boolean) -> Unit = { _, _ -> lambdaError() },
     private val resetPushHistoryResult: () -> Unit = { lambdaError() },
+    private val resetBatteryOptimizationStateResult: () -> Unit = { lambdaError() },
 ) : PushService {
     override suspend fun getCurrentPushProvider(): PushProvider? {
         return registeredPushProvider ?: currentPushProvider()
@@ -91,5 +92,9 @@ class FakePushService(
 
     override suspend fun resetPushHistory() = simulateLongTask {
         resetPushHistoryResult()
+    }
+
+    override suspend fun resetBatteryOptimizationState() {
+        resetBatteryOptimizationStateResult()
     }
 }

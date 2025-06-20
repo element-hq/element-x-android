@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Sohbeti reddet"</string>
   <string name="screen_invites_empty_list">"Davet Yok"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) sizi davet etti"</string>
-  <string name="screen_join_room_knock_sent_title">"Katılma isteği gönderildi"</string>
   <string name="screen_migration_message">"Bu tek seferlik bir işlemdir, beklediğiniz için teşekkürler."</string>
   <string name="screen_migration_title">"Hesabınızı ayarlanıyor."</string>
   <string name="screen_roomlist_a11y_create_message">"Yeni bir sohbet veya oda oluşturun"</string>
@@ -37,6 +36,7 @@
   <string name="screen_roomlist_filter_unreads">"Okunmamış"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Tebrikler!
 Okunmamış mesajınız yok!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Katılma isteği gönderildi"</string>
   <string name="screen_roomlist_main_space_title">"Sohbetler"</string>
   <string name="screen_roomlist_mark_as_read">"Okundu olarak işaretle"</string>
   <string name="screen_roomlist_mark_as_unread">"Okunmamış olarak işaretle"</string>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Disable battery optimization for this app, to make sure all notifications are received."</string>
+  <string name="banner_battery_optimization_submit_android">"Disable optimization"</string>
+  <string name="banner_battery_optimization_title_android">"Notifications not arriving?"</string>
   <string name="banner_set_up_recovery_content">"Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices."</string>
   <string name="banner_set_up_recovery_submit">"Set up recovery"</string>
   <string name="banner_set_up_recovery_title">"Set up recovery to protect your account"</string>
@@ -15,7 +18,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Decline chat"</string>
   <string name="screen_invites_empty_list">"No Invites"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) invited you"</string>
-  <string name="screen_join_room_knock_sent_title">"Request to join sent"</string>
   <string name="screen_migration_message">"This is a one time process, thanks for waiting."</string>
   <string name="screen_migration_title">"Setting up your account."</string>
   <string name="screen_roomlist_a11y_create_message">"Create a new conversation or room"</string>
@@ -37,9 +39,11 @@ For now, you can deselect filters in order to see your other chats"</string>
   <string name="screen_roomlist_filter_unreads">"Unreads"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Congrats!
 You don’t have any unread messages!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Request to join sent"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Mark as read"</string>
   <string name="screen_roomlist_mark_as_unread">"Mark as unread"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"This room has been upgraded"</string>
   <string name="session_verification_banner_message">"Looks like you’re using a new device. Verify with another device to access your encrypted messages."</string>
   <string name="session_verification_banner_title">"Verify it’s you"</string>
 </resources>

@@ -15,7 +15,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Odmietnuť konverzáciu"</string>
   <string name="screen_invites_empty_list">"Žiadne pozvánky"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) vás pozval/a"</string>
-  <string name="screen_join_room_knock_sent_title">"Žiadosť o pripojenie bola odoslaná"</string>
   <string name="screen_migration_message">"Ide o jednorazový proces, ďakujeme za trpezlivosť."</string>
   <string name="screen_migration_title">"Nastavenie vášho účtu."</string>
   <string name="screen_roomlist_a11y_create_message">"Vytvorte novú konverzáciu alebo miestnosť"</string>
@@ -37,6 +36,7 @@ Zatiaľ môžete zrušiť výber filtrov, aby ste videli ostatné konverzácie"<
   <string name="screen_roomlist_filter_unreads">"Neprečítané"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulujeme!
 Nemáte žiadne neprečítané správy!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Žiadosť o pripojenie bola odoslaná"</string>
   <string name="screen_roomlist_main_space_title">"Všetky konverzácie"</string>
   <string name="screen_roomlist_mark_as_read">"Označiť ako prečítané"</string>
   <string name="screen_roomlist_mark_as_unread">"Označiť ako neprečítané"</string>

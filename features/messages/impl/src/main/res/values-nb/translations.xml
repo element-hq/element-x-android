@@ -35,6 +35,15 @@
   <string name="screen_room_timeline_less_reactions">"Vis mindre"</string>
   <string name="screen_room_timeline_message_copied">"Melding kopiert"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Du har ikke tillatelse til å legge ut innlegg i dette rommet"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"%1$d medlem reagerte med %2$s"</item>
+    <item quantity="other">"%1$d medlemmer reagerte med %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"Du og %1$d medlem reagerte med%2$s"</item>
+    <item quantity="other">"Du og %1$d medlemmer reagerte med%2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"Du reagerte med %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Vis mindre"</string>
   <string name="screen_room_timeline_reactions_show_more">"Vis mer"</string>
   <string name="screen_room_timeline_read_marker_title">"Ny"</string>

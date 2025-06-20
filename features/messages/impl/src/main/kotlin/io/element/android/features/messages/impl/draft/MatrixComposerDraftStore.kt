@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl.draft
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,26 +21,26 @@ import javax.inject.Inject
 class MatrixComposerDraftStore @Inject constructor(
     private val client: MatrixClient,
 ) : ComposerDraftStore {
-    override suspend fun loadDraft(roomId: RoomId): ComposerDraft? {
+    override suspend fun loadDraft(roomId: RoomId, threadRoot: ThreadId?): ComposerDraft? {
         return client.getRoom(roomId)?.use { room ->
-            room.loadComposerDraft()
+            room.loadComposerDraft(threadRoot)
                 .onFailure {
                     Timber.e(it, "Failed to load composer draft for room $roomId")
                 }
                 .onSuccess { draft ->
-                    room.clearComposerDraft()
+                    room.clearComposerDraft(threadRoot)
                     Timber.d("Loaded composer draft for room $roomId : $draft")
                 }
                 .getOrNull()
         }
     }
 
-    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?) {
+    override suspend fun updateDraft(roomId: RoomId, threadRoot: ThreadId?, draft: ComposerDraft?) {
         client.getRoom(roomId)?.use { room ->
             val updateDraftResult = if (draft == null) {
-                room.clearComposerDraft()
+                room.clearComposerDraft(threadRoot)
             } else {
-                room.saveComposerDraft(draft)
+                room.saveComposerDraft(draft, threadRoot)
             }
             updateDraftResult
                 .onFailure {

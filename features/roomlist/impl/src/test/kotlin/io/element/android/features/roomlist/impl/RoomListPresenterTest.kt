@@ -75,6 +75,7 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
@@ -712,6 +713,7 @@ class RoomListPresenterTest {
         analyticsService = analyticsService,
         acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
         fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
+        batteryOptimizationPresenter = { aBatteryOptimizationState() },
         notificationCleaner = notificationCleaner,
         logoutPresenter = { aDirectLogoutState() },
         appPreferencesStore = appPreferencesStore,

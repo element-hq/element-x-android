@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Message non chiffré…"</string>
   <string name="rich_text_editor_create_link">"Créer un lien"</string>
   <string name="rich_text_editor_edit_link">"Modifier le lien"</string>
+  <string name="rich_text_editor_format_action">"%1$s, état : %2$s"</string>
   <string name="rich_text_editor_format_bold">"Appliquer le format gras"</string>
   <string name="rich_text_editor_format_italic">"Appliquer le format italique"</string>
+  <string name="rich_text_editor_format_state_disabled">"désactivé"</string>
+  <string name="rich_text_editor_format_state_off">"désactivé"</string>
+  <string name="rich_text_editor_format_state_on">"activé"</string>
   <string name="rich_text_editor_format_strikethrough">"Appliquer le format barré"</string>
   <string name="rich_text_editor_format_underline">"Appliquer le format souligné"</string>
   <string name="rich_text_editor_full_screen_toggle">"Activer/désactiver le mode plein écran"</string>

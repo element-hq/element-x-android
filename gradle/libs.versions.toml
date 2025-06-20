@@ -39,10 +39,10 @@ serialization_json = "1.8.1"
 #other
 detekt = "1.23.8"
 coil = "3.2.0"
-showkase = "1.0.3"
+showkase = "1.0.4"
 appyx = "1.7.1"
 sqldelight = "2.1.0"
-wysiwyg = "2.38.3"
+wysiwyg = "2.38.4"
 telephoto = "0.16.0"
 
 # Dependency analysis
@@ -77,7 +77,7 @@ google_firebase_bom = "com.google.firebase:firebase-bom:33.15.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-google_tink = "com.google.crypto.tink:tink-android:1.17.0"
+google_tink = "com.google.crypto.tink:tink-android:1.18.0"
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -147,10 +147,10 @@ test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.6.2"
 test_mockk = "io.mockk:mockk:1.14.2"
 test_konsist = "com.lemonappdev:konsist:0.17.3"
-test_turbine = "app.cash.turbine:turbine:1.2.0"
+test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
-test_robolectric = "org.robolectric:robolectric:4.14.1"
+test_robolectric = "org.robolectric:robolectric:4.15"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.6.1"
 test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
@@ -172,29 +172,29 @@ jsoup = "org.jsoup:jsoup:1.20.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.1.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.6.10"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.6.18"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:sqlcipher-android:4.9.0"
-sqlite = "androidx.sqlite:sqlite-ktx:2.5.1"
-unifiedpush = "org.unifiedpush.android:connector:3.0.9"
+sqlite = "androidx.sqlite:sqlite-ktx:2.5.2"
+unifiedpush = "org.unifiedpush.android:connector:3.0.10"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.11.2"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.10.2"
+maplibre = "org.maplibre.gl:android-sdk:11.10.3"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.17.0"
-sentry = "io.sentry:sentry-android:8.13.2"
+posthog = "com.posthog:posthog-android:3.19.0"
+sentry = "io.sentry:sentry-android:8.14.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 

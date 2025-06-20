@@ -81,8 +81,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -124,8 +122,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -167,8 +163,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -262,8 +256,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -405,8 +397,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -500,8 +490,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -515,6 +503,49 @@ class ActionListPresenterTest {
                         TimelineItemAction.Edit,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
+                        TimelineItemAction.CopyText,
+                        TimelineItemAction.ViewSource,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute for my message no permission`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = A_MESSAGE)
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = false,
+                        canRedactOther = false,
+                        canSendMessage = false,
+                        canSendReaction = false,
+                        canPinUnpin = false,
+                    )
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    sentTimeFull = "0 Full true",
+                    displayEmojiReactions = false,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                     )
@@ -747,8 +778,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -789,8 +818,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
         }
     }
@@ -818,8 +845,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -866,8 +891,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -921,8 +944,6 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(

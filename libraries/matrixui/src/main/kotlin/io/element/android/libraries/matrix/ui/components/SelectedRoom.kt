@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
+import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -53,9 +53,10 @@ fun SelectedRoom(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CompositeAvatar(
+            RoomAvatar(
                 avatarData = roomInfo.getAvatarData(AvatarSize.SelectedRoom),
                 heroes = roomInfo.heroes.map { it.getAvatarData(AvatarSize.SelectedRoom) }.toImmutableList(),
+                isTombstoned = roomInfo.isTombstoned,
             )
             Text(
                 // If name is null, we do not have space to render "No room name", so just use `#` here.

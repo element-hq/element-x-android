@@ -13,7 +13,6 @@
   <string name="screen_invites_decline_direct_chat_title">"Chat weigeren"</string>
   <string name="screen_invites_empty_list">"Geen uitnodigingen"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) heeft je uitgenodigd"</string>
-  <string name="screen_join_room_knock_sent_title">"Verzoek om toe te treden verzonden"</string>
   <string name="screen_migration_message">"Dit is een eenmalig proces, bedankt voor het wachten."</string>
   <string name="screen_migration_title">"Je account instellen."</string>
   <string name="screen_roomlist_a11y_create_message">"Begin een nieuw gesprek of maak een nieuwe kamer"</string>
@@ -35,6 +34,7 @@ Voor nu kun je filters deselecteren om je andere chats te zien"</string>
   <string name="screen_roomlist_filter_unreads">"Ongelezen"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Gefeliciteerd!
 Je hebt geen ongelezen berichten!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Verzoek om toe te treden verzonden"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Markeren als gelezen"</string>
   <string name="screen_roomlist_mark_as_unread">"Markeren als ongelezen"</string>

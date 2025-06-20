@@ -1,3 +1,45 @@
+Changes in Element X v25.06.3
+=============================
+
+## What's Changed
+### ✨ Features
+* Feature : room version upgrade by @ganfra in https://github.com/element-hq/element-x-android/pull/4862
+* Add a developer option for history sharing on invite by @richvdh in https://github.com/element-hq/element-x-android/pull/4821
+### 🙌 Improvements
+* Change : add tombstoned room decoration  by @ganfra in https://github.com/element-hq/element-x-android/pull/4891
+* Show generic notification when Event cannot be resolved by @bmarty in https://github.com/element-hq/element-x-android/pull/4889
+### 🐛 Bugfixes
+* [a11y] Improve screen reader on polls by @bmarty in https://github.com/element-hq/element-x-android/pull/4875
+* fix (event action): allow to edit only if permission to send message by @ganfra in https://github.com/element-hq/element-x-android/pull/4895
+* fix (room upgrade) : room predecessor banner on DM room by @ganfra in https://github.com/element-hq/element-x-android/pull/4896
+* fix (join room) : do not navigate up when join is successful by @ganfra in https://github.com/element-hq/element-x-android/pull/4899
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4842
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4881
+### Dependency upgrades
+* chore(deps): update plugin dependencycheck to v12.1.3 by @renovate in https://github.com/element-hq/element-x-android/pull/4856
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v11.10.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4858
+* fix(deps): update kotlin to v2.1.21-2.0.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4850
+* fix(deps): update dependency app.cash.turbine:turbine to v1.2.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4865
+* Update dependency com.posthog:posthog-android to v3.18.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4873
+* Update dependency org.maplibre.gl:android-sdk to v11.10.3 by @renovate in https://github.com/element-hq/element-x-android/pull/4879
+* fix(deps): update dependency com.posthog:posthog-android to v3.19.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4882
+* fix(deps): update dependency io.sentry:sentry-android to v8.13.3 by @renovate in https://github.com/element-hq/element-x-android/pull/4870
+* fix(deps): update showkase to v1.0.4 by @renovate in https://github.com/element-hq/element-x-android/pull/4878
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.6.18 by @renovate in https://github.com/element-hq/element-x-android/pull/4894
+### Others
+* Annotate Composable functions with `@ReadOnlyComposable` where it's possible by @bmarty in https://github.com/element-hq/element-x-android/pull/4859
+* Add documentation on WebViewPipController by @bmarty in https://github.com/element-hq/element-x-android/pull/4861
+* Small cleanup around log tag. by @bmarty in https://github.com/element-hq/element-x-android/pull/4860
+* Another cleanup by @bmarty in https://github.com/element-hq/element-x-android/pull/4869
+* Disable BT audio devices for Element Call on Android < 12 by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4876
+* Add a banner to ask the user to disable battery optimization when Event cannot be resolved from Push by @bmarty in https://github.com/element-hq/element-x-android/pull/4845
+* a11y: improve accessibility on rich text editor options. by @bmarty in https://github.com/element-hq/element-x-android/pull/4886
+* A11Y: improve accessibility on event reactions. by @bmarty in https://github.com/element-hq/element-x-android/pull/4877
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.06.2...v25.06.3
+
 Changes in Element X v25.06.2
 =============================
 

@@ -84,6 +84,7 @@ internal fun createRoomListRoomSummary(
     displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
     heroes: List<AvatarData> = emptyList(),
     timestamp: String? = null,
+    isTombstoned: Boolean = false,
 ) = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
@@ -104,4 +105,5 @@ internal fun createRoomListRoomSummary(
     inviteSender = null,
     isDm = false,
     heroes = heroes.toPersistentList(),
+    isTombstoned = isTombstoned,
 )

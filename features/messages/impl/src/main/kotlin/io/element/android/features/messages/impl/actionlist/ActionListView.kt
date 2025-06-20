@@ -39,7 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
@@ -53,6 +53,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure.ChangedIdentity
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure.None
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure.UnsignedDevice
+import io.element.android.features.messages.impl.timeline.a11y.a11yReactionAction
 import io.element.android.features.messages.impl.timeline.components.MessageShieldView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -438,11 +439,10 @@ private fun EmojiButton(
     } else {
         Color.Transparent
     }
-    val description = if (isHighlighted) {
-        stringResource(id = CommonStrings.a11y_remove_reaction_with, emoji)
-    } else {
-        stringResource(id = CommonStrings.a11y_react_with, emoji)
-    }
+    val a11yClickLabel = a11yReactionAction(
+        emoji = emoji,
+        userAlreadyReacted = isHighlighted,
+    )
     Box(
         modifier = modifier
             .size(48.dp)
@@ -454,7 +454,12 @@ private fun EmojiButton(
                 interactionSource = remember { MutableInteractionSource() }
             )
             .semantics {
-                contentDescription = description
+                onClick(
+                    label = a11yClickLabel,
+                ) {
+                    onClick(emoji)
+                    true
+                }
             },
         contentAlignment = Alignment.Center
     ) {

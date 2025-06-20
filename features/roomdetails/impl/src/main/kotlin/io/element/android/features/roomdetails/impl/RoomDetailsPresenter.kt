@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isDmAsState
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -70,6 +71,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val clipboardHelper: ClipboardHelper,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -136,6 +138,9 @@ class RoomDetailsPresenter @Inject constructor(
         val canShowKnockRequests by remember {
             derivedStateOf { isKnockRequestsEnabled && canHandleKnockRequests && joinRule == JoinRule.Knock }
         }
+        val isDeveloperModeEnabled by remember {
+            appPreferencesStore.isDeveloperModeEnabledFlow()
+        }.collectAsState(initial = false)
 
         val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
 
@@ -210,6 +215,8 @@ class RoomDetailsPresenter @Inject constructor(
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             hasMemberVerificationViolations = hasMemberVerificationViolations,
             canReportRoom = canReportRoom,
+            isTombstoned = roomInfo.successorRoom != null,
+            showDebugInfo = isDeveloperModeEnabled,
             eventSink = ::handleEvents,
         )
     }

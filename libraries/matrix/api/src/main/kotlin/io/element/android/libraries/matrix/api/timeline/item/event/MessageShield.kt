@@ -28,6 +28,9 @@ sealed interface MessageShield {
 
     /** The sender was previously verified but is not anymore. */
     data class VerificationViolation(val isCritical: Boolean) : MessageShield
+
+    /** The sender of the event does not match the owner of the device that created the Megolm session. */
+    data class MismatchedSender(val isCritical: Boolean) : MessageShield
 }
 
 val MessageShield.isCritical: Boolean
@@ -38,4 +41,5 @@ val MessageShield.isCritical: Boolean
         is MessageShield.UnverifiedIdentity -> isCritical
         is MessageShield.SentInClear -> isCritical
         is MessageShield.VerificationViolation -> isCritical
+        is MessageShield.MismatchedSender -> isCritical
     }

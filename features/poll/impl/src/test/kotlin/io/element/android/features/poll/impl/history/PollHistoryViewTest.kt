@@ -131,7 +131,10 @@ class PollHistoryViewTest {
         rule.setPollHistoryViewView(
             state = state,
         )
-        rule.onNodeWithText(answer.text).performClick()
+        rule.onNodeWithText(
+            text = answer.text,
+            useUnmergedTree = true,
+        ).performClick()
         eventsRecorder.assertSingle(
             PollHistoryEvents.SelectPollAnswer(eventId, answer.id)
         )

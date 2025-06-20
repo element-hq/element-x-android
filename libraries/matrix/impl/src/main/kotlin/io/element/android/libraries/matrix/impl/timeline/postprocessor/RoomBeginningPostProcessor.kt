@@ -14,11 +14,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MembershipCha
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
-import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 
 /**
  * This timeline post-processor removes the room creation event and the self-join event from the timeline for DMs
- * or add the RoomBeginning item for non DM room.
+ * or add the RoomBeginning item.
  */
 class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
     fun process(
@@ -30,7 +29,7 @@ class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
         return when {
             items.isEmpty() -> items
             mode == Timeline.Mode.PINNED_EVENTS -> items
-            isDm -> processForDM(items, roomCreator, hasMoreToLoadBackwards)
+            isDm -> processForDM(items, roomCreator)
             hasMoreToLoadBackwards -> items
             else -> processForRoom(items)
         }
@@ -41,13 +40,7 @@ class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
         return items
     }
 
-    private fun processForDM(items: List<MatrixTimelineItem>, roomCreator: UserId?, hasMoreToLoadBackwards: Boolean): List<MatrixTimelineItem> {
-        val roomBeginningItemIndex = if (!hasMoreToLoadBackwards) {
-            items.indexOfFirst { it is MatrixTimelineItem.Virtual && it.virtual is VirtualTimelineItem.RoomBeginning }.takeIf { it >= 0 }
-        } else {
-            null
-        }
-
+    private fun processForDM(items: List<MatrixTimelineItem>, roomCreator: UserId?): List<MatrixTimelineItem> {
         // Find room creation event.
         // This is usually the first MatrixTimelineItem.Event (so index 1, index 0 is a date)
         val roomCreationEventIndex = items.indexOfFirst {
@@ -69,7 +62,6 @@ class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
         }
 
         val indicesToRemove = listOfNotNull(
-            roomBeginningItemIndex,
             roomCreationEventIndex,
             selfUserJoinedEventIndex,
         )

@@ -219,7 +219,12 @@ class MessageComposerPresenter @AssistedInject constructor(
         )
 
         LaunchedEffect(Unit) {
-            val draft = draftService.loadDraft(room.roomId, isVolatile = false)
+            val draft = draftService.loadDraft(
+                roomId = room.roomId,
+                // TODO support threads in composer
+                threadRoot = null,
+                isVolatile = false
+            )
             if (draft != null) {
                 applyDraft(draft, markdownTextEditorState, richTextEditorState)
             }
@@ -539,7 +544,9 @@ class MessageComposerPresenter @AssistedInject constructor(
         draftService.updateDraft(
             roomId = room.roomId,
             draft = draft,
-            isVolatile = isVolatile
+            isVolatile = isVolatile,
+            // TODO support threads in composer
+            threadRoot = null,
         )
     }
 
@@ -700,7 +707,12 @@ class MessageComposerPresenter @AssistedInject constructor(
         fromEdit: Boolean,
     ) {
         // Use the volatile draft only when coming from edit mode otherwise.
-        val draft = draftService.loadDraft(room.roomId, isVolatile = true).takeIf { fromEdit }
+        val draft = draftService.loadDraft(
+            roomId = room.roomId,
+            // TODO support threads in composer
+            threadRoot = null,
+            isVolatile = true
+        ).takeIf { fromEdit }
         if (draft != null) {
             applyDraft(draft, markdownTextEditorState, richTextEditorState)
         } else {

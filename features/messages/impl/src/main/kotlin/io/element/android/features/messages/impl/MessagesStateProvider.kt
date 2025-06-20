@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import kotlinx.collections.immutable.persistentListOf
@@ -57,10 +58,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(composerState = aMessageComposerState(showAttachmentSourcePicker = true)),
             aMessagesState(userEventPermissions = aUserEventPermissions(canSendMessage = false)),
             aMessagesState(showReinvitePrompt = true),
-            aMessagesState(
-                roomName = AsyncData.Uninitialized,
-                roomAvatar = AsyncData.Uninitialized,
-            ),
+            aMessagesState(roomName = null),
             aMessagesState(composerState = aMessageComposerState(showTextFormatting = true)),
             aMessagesState(
                 enableVoiceMessages = true,
@@ -85,14 +83,15 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                     currentPinnedMessageIndex = 0,
                 ),
             ),
-            aMessagesState(roomName = AsyncData.Success("A DM with a very looong name"), dmUserVerificationState = IdentityState.Verified),
-            aMessagesState(roomName = AsyncData.Success("A DM with a very looong name"), dmUserVerificationState = IdentityState.VerificationViolation),
+            aMessagesState(roomName = "A DM with a very looong name", dmUserVerificationState = IdentityState.Verified),
+            aMessagesState(roomName = "A DM with a very looong name", dmUserVerificationState = IdentityState.VerificationViolation),
+            aMessagesState(successorRoom = SuccessorRoom(RoomId("!id:domain"), null)),
         )
 }
 
 fun aMessagesState(
-    roomName: AsyncData<String> = AsyncData.Success("Room name"),
-    roomAvatar: AsyncData<AvatarData> = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
+    roomName: String? = "Room name",
+    roomAvatar: AvatarData = AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom),
     userEventPermissions: UserEventPermissions = aUserEventPermissions(),
     composerState: MessageComposerState = aMessageComposerState(
         textEditorState = aTextEditorStateRich(initialText = "Hello", initialFocus = true),
@@ -119,6 +118,7 @@ fun aMessagesState(
     pinnedMessagesBannerState: PinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(),
     dmUserVerificationState: IdentityState? = null,
     roomMemberModerationState: RoomMemberModerationState = aRoomMemberModerationState(),
+    successorRoom: SuccessorRoom? = null,
     eventSink: (MessagesEvents) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -147,6 +147,7 @@ fun aMessagesState(
     pinnedMessagesBannerState = pinnedMessagesBannerState,
     dmUserVerificationState = dmUserVerificationState,
     roomMemberModerationState = roomMemberModerationState,
+    successorRoom = successorRoom,
     eventSink = eventSink,
 )
 

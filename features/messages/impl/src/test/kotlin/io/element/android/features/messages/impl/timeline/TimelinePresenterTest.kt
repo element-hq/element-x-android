@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.RoomMembersState
+import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -64,6 +65,7 @@ import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -80,7 +82,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 @Suppress("LargeClass")
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class TimelinePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -702,6 +704,73 @@ class TimelinePresenterTest {
 
             val updatedEvent = awaitItem().timelineItems.first() as TimelineItem.Event
             assertThat(updatedEvent.readReceiptState.receipts.first().avatarData.url).isEqualTo(avatarUrl)
+        }
+    }
+
+    @Test
+    fun `present - timeline room info includes predecessor room when room has predecessor`() = runTest {
+        val predecessorRoomId = RoomId("!predecessor:server.org")
+        val predecessorEventId = EventId("\$predecessorEvent:server.org")
+        val predecessorRoom = PredecessorRoom(
+            roomId = predecessorRoomId,
+            lastEventId = predecessorEventId
+        )
+
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                predecessorRoomResult = { predecessorRoom }
+            ),
+        )
+
+        val presenter = createTimelinePresenter(room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.timelineRoomInfo.predecessorRoom).isNotNull()
+            assertThat(initialState.timelineRoomInfo.predecessorRoom?.roomId).isEqualTo(predecessorRoomId)
+            assertThat(initialState.timelineRoomInfo.predecessorRoom?.lastEventId).isEqualTo(predecessorEventId)
+        }
+    }
+
+    @Test
+    fun `present - timeline room info no predecessor`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                predecessorRoomResult = { null }
+            ),
+        )
+        val presenter = createTimelinePresenter(room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.timelineRoomInfo.predecessorRoom).isNull()
+        }
+    }
+
+    @Test
+    fun `present - timeline event navigate to room`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+            ),
+        )
+        val onNavigateToRoomLambda = lambdaRecorder<RoomId, Unit> {}
+        val navigator = FakeMessagesNavigator(
+            onNavigateToRoomLambda = onNavigateToRoomLambda
+        )
+        val presenter = createTimelinePresenter(room = room, messagesNavigator = navigator)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvents.NavigateToRoom(A_ROOM_ID))
+            assert(onNavigateToRoomLambda)
+                .isCalledOnce()
+                .with(
+                    value(A_ROOM_ID)
+                )
         }
     }
 

@@ -396,7 +396,6 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Wrthi\'n llwytho neges…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Dangos y Cyfan"</string>
   <string name="screen_room_title">"Sgwrs"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Anfonwyd y cais i ymuno"</string>
   <string name="screen_share_location_title">"Rhannu lleoliad"</string>
   <string name="screen_share_my_location_action">"Rhannu fy lleoliad"</string>
   <string name="screen_share_open_apple_maps">"Agor yn Apple Maps"</string>

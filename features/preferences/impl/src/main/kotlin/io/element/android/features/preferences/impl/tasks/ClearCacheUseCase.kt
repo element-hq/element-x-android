@@ -59,6 +59,7 @@ class DefaultClearCacheUseCase @Inject constructor(
         seenInvitesStore.clear()
         // Ensure any error will be displayed again
         pushService.setIgnoreRegistrationError(matrixClient.sessionId, false)
+        pushService.resetBatteryOptimizationState()
         // Ensure the app is restarted
         defaultCacheService.onClearedCache(matrixClient.sessionId)
     }
