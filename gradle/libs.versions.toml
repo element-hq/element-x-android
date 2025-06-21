@@ -178,7 +178,7 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
+sqlcipher = "net.zetetic:sqlcipher-android:4.9.0"
 sqlite = "androidx.sqlite:sqlite-ktx:2.5.2"
 unifiedpush = "org.unifiedpush.android:connector:3.0.10"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.11.2"
