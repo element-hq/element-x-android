@@ -9,6 +9,7 @@ package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 
 @Composable
@@ -16,21 +17,21 @@ internal fun InitialOrImageAvatar(
     avatarData: AvatarData,
     hideAvatarImage: Boolean,
     forcedAvatarSize: Dp?,
-    avatarType: AvatarType,
+    avatarShape: Shape,
     modifier: Modifier,
     contentDescription: String?
 ) {
     when {
         avatarData.url.isNullOrBlank() || hideAvatarImage -> InitialLetterAvatar(
             avatarData = avatarData,
-            avatarType = avatarType,
+            avatarShape = avatarShape,
             forcedAvatarSize = forcedAvatarSize,
             modifier = modifier,
             contentDescription = contentDescription,
         )
         else -> ImageAvatar(
             avatarData = avatarData,
-            avatarType = avatarType,
+            avatarShape = avatarShape,
             forcedAvatarSize = forcedAvatarSize,
             modifier = modifier,
             contentDescription = contentDescription,

@@ -23,7 +23,7 @@ internal fun RoomAvatar(
             TombstonedRoomAvatar(
                 size = avatarData.size,
                 modifier = modifier,
-                avatarType = avatarType,
+                avatarShape = avatarType.avatarShape(),
                 contentDescription = contentDescription
             )
         }
@@ -31,7 +31,7 @@ internal fun RoomAvatar(
             InitialOrImageAvatar(
                 avatarData = avatarData,
                 hideAvatarImage = hideAvatarImage,
-                avatarType = avatarType,
+                avatarShape = avatarType.avatarShape(),
                 forcedAvatarSize = null,
                 modifier = modifier,
                 contentDescription = contentDescription,

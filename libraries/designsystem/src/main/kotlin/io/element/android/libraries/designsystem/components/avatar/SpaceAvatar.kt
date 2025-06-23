@@ -29,14 +29,14 @@ internal fun SpaceAvatar(
     when {
         avatarType.isTombstoned -> TombstonedRoomAvatar(
             size = avatarData.size,
-            avatarType = avatarType,
+            avatarShape = avatarType.avatarShape(),
             modifier = modifier,
             contentDescription = contentDescription,
         )
         else -> InitialOrImageAvatar(
             avatarData = avatarData,
             hideAvatarImage = hideAvatarImage,
-            avatarType = avatarType,
+            avatarShape = avatarType.avatarShape(),
             forcedAvatarSize = null,
             modifier = modifier,
             contentDescription = contentDescription,

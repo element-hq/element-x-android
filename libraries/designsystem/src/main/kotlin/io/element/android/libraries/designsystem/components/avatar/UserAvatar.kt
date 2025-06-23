@@ -22,7 +22,7 @@ internal fun UserAvatar(
     InitialOrImageAvatar(
         avatarData = avatarData,
         hideAvatarImage = hideImage,
-        avatarType = AvatarType.User,
+        avatarShape = AvatarType.User.avatarShape(),
         modifier = modifier,
         contentDescription = contentDescription,
         forcedAvatarSize = forcedAvatarSize,

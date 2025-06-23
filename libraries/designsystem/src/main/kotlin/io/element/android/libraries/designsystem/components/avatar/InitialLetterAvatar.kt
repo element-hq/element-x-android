@@ -9,13 +9,14 @@ package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 
 @Composable
 internal fun InitialLetterAvatar(
     avatarData: AvatarData,
-    avatarType: AvatarType,
+    avatarShape: Shape,
     forcedAvatarSize: Dp?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
@@ -24,7 +25,7 @@ internal fun InitialLetterAvatar(
     TextAvatar(
         text = avatarData.initialLetter,
         size = forcedAvatarSize ?: avatarData.size.dp,
-        avatarType = avatarType,
+        avatarShape = avatarShape,
         colors = avatarColors,
         contentDescription = contentDescription,
         modifier = modifier

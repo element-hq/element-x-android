@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,13 +38,13 @@ internal fun TextAvatar(
     size: Dp,
     colors: AvatarColors,
     contentDescription: String?,
-    avatarType: AvatarType,
+    avatarShape: Shape,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier
             .size(size)
-            .clip(avatarType.avatarShape())
+            .clip(avatarShape)
             .background(color = colors.background)
     ) {
         val fontSize = size.toSp() / 2
@@ -83,7 +85,7 @@ internal fun TextAvatarPreview() = ElementPreview {
                     background = ElementTheme.colors.bgSubtlePrimary,
                     foreground = ElementTheme.colors.iconPrimary,
                 ),
-                avatarType = avatarType,
+                avatarShape = CircleShape,
                 contentDescription = null,
             )
         }

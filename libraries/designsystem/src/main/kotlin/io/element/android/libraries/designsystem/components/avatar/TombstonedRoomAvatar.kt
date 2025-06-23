@@ -7,8 +7,10 @@
 
 package io.element.android.libraries.designsystem.components.avatar
 
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.compound.theme.AvatarColors
 import io.element.android.compound.theme.ElementTheme
@@ -18,7 +20,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 @Composable
 internal fun TombstonedRoomAvatar(
     size: AvatarSize,
-    avatarType: AvatarType,
+    avatarShape: Shape,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
 ) {
@@ -30,7 +32,7 @@ internal fun TombstonedRoomAvatar(
             foreground = ElementTheme.colors.iconTertiary
         ),
         modifier = modifier,
-        avatarType = avatarType,
+        avatarShape = avatarShape,
         contentDescription = contentDescription,
     )
 }
@@ -40,7 +42,7 @@ internal fun TombstonedRoomAvatar(
 internal fun TombstonedRoomAvatarPreview() = ElementPreview {
     TombstonedRoomAvatar(
         size = AvatarSize.RoomListItem,
-        avatarType = AvatarType.Room(),
+        avatarShape = CircleShape,
         contentDescription = null,
     )
 }
