@@ -7,10 +7,12 @@
 
 package io.element.android.libraries.designsystem.components.avatar
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+@Immutable
 sealed interface AvatarType {
     data object User : AvatarType
 
