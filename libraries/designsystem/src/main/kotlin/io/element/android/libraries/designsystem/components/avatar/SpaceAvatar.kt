@@ -19,7 +19,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
-fun SpaceAvatar(
+internal fun SpaceAvatar(
     avatarData: AvatarData,
     avatarType: AvatarType.Space,
     modifier: Modifier = Modifier,
