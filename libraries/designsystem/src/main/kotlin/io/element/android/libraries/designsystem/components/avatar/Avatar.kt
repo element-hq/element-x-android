@@ -57,33 +57,6 @@ fun Avatar(
     }
 }
 
-@Composable
-private fun UserAvatar(
-    avatarData: AvatarData,
-    modifier: Modifier = Modifier,
-    contentDescription: String? = null,
-    forcedAvatarSize: Dp? = null,
-    hideImage: Boolean = false,
-) {
-    if (avatarData.url.isNullOrBlank() || hideImage) {
-        InitialLetterAvatar(
-            avatarData = avatarData,
-            avatarType = AvatarType.User,
-            forcedAvatarSize = forcedAvatarSize,
-            modifier = modifier,
-            contentDescription = contentDescription,
-        )
-    } else {
-        ImageAvatar(
-            avatarData = avatarData,
-            avatarType = AvatarType.User,
-            forcedAvatarSize = forcedAvatarSize,
-            modifier = modifier,
-            contentDescription = contentDescription,
-        )
-    }
-}
-
 @Preview(group = PreviewGroup.Avatars)
 @Composable
 internal fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
