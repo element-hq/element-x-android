@@ -23,5 +23,6 @@ sealed interface AvatarType {
 
     data class Space(
         val cornerSize: Dp,
+        val isTombstoned: Boolean = false,
     ) : AvatarType
 }

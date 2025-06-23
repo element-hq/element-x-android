@@ -23,12 +23,11 @@ fun SpaceAvatar(
     avatarData: AvatarData,
     avatarType: AvatarType.Space,
     modifier: Modifier = Modifier,
-    isTombstoned: Boolean = false,
     hideAvatarImage: Boolean = false,
     contentDescription: String? = null,
 ) {
     when {
-        isTombstoned -> TombstonedRoomAvatar(
+        avatarType.isTombstoned -> TombstonedRoomAvatar(
             size = avatarData.size,
             avatarType = avatarType,
             modifier = modifier,
@@ -67,8 +66,10 @@ internal fun SpaceAvatarPreview() =
             )
             SpaceAvatar(
                 avatarData = anAvatarData(),
-                avatarType = AvatarType.Space(cornerSize = 16.dp),
-                isTombstoned = true,
+                avatarType = AvatarType.Space(
+                    cornerSize = 16.dp,
+                    isTombstoned = true,
+                ),
             )
         }
     }
