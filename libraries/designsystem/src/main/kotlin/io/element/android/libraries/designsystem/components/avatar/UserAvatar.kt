@@ -19,21 +19,12 @@ internal fun UserAvatar(
     forcedAvatarSize: Dp? = null,
     hideImage: Boolean = false,
 ) {
-    if (avatarData.url.isNullOrBlank() || hideImage) {
-        InitialLetterAvatar(
-            avatarData = avatarData,
-            avatarType = AvatarType.User,
-            forcedAvatarSize = forcedAvatarSize,
-            modifier = modifier,
-            contentDescription = contentDescription,
-        )
-    } else {
-        ImageAvatar(
-            avatarData = avatarData,
-            avatarType = AvatarType.User,
-            forcedAvatarSize = forcedAvatarSize,
-            modifier = modifier,
-            contentDescription = contentDescription,
-        )
-    }
+    InitialOrImageAvatar(
+        avatarData = avatarData,
+        hideAvatarImage = hideImage,
+        avatarType = AvatarType.User,
+        modifier = modifier,
+        contentDescription = contentDescription,
+        forcedAvatarSize = forcedAvatarSize,
+    )
 }

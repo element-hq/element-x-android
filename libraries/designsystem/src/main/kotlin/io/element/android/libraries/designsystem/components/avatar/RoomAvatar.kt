@@ -28,23 +28,14 @@ internal fun RoomAvatar(
             )
         }
         avatarData.url != null || avatarType.heroes.isEmpty() -> {
-            if (avatarData.url.isNullOrBlank() || hideAvatarImage) {
-                InitialLetterAvatar(
-                    avatarData = avatarData,
-                    avatarType = avatarType,
-                    modifier = modifier,
-                    contentDescription = contentDescription,
-                    forcedAvatarSize = null,
-                )
-            } else {
-                ImageAvatar(
-                    avatarData = avatarData,
-                    avatarType = avatarType,
-                    forcedAvatarSize = null,
-                    modifier = modifier,
-                    contentDescription = contentDescription,
-                )
-            }
+            InitialOrImageAvatar(
+                avatarData = avatarData,
+                hideAvatarImage = hideAvatarImage,
+                avatarType = avatarType,
+                forcedAvatarSize = null,
+                modifier = modifier,
+                contentDescription = contentDescription,
+            )
         }
         else -> {
             AvatarCluster(

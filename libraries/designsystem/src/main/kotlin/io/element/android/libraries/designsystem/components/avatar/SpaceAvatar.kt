@@ -33,15 +33,9 @@ internal fun SpaceAvatar(
             modifier = modifier,
             contentDescription = contentDescription,
         )
-        avatarData.url.isNullOrBlank() || hideAvatarImage -> InitialLetterAvatar(
+        else -> InitialOrImageAvatar(
             avatarData = avatarData,
-            avatarType = avatarType,
-            modifier = modifier,
-            contentDescription = contentDescription,
-            forcedAvatarSize = null,
-        )
-        else -> ImageAvatar(
-            avatarData = avatarData,
+            hideAvatarImage = hideAvatarImage,
             avatarType = avatarType,
             forcedAvatarSize = null,
             modifier = modifier,
