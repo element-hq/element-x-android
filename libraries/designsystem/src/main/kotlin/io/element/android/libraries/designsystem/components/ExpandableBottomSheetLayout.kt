@@ -267,6 +267,7 @@ private class PreviewEditText(context: Context) : EditText(context) {
         parent?.requestDisallowInterceptTouchEvent(true)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         super.onTouchEvent(event)
         parent?.requestDisallowInterceptTouchEvent(true)

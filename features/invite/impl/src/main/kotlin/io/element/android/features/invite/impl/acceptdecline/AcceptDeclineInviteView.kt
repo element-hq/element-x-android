@@ -15,8 +15,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteStateProvider
 import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
+import io.element.android.features.invite.impl.AcceptInvite
 import io.element.android.features.invite.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -39,12 +39,28 @@ fun AcceptDeclineInviteView(
             onErrorDismiss = {
                 state.eventSink(InternalAcceptDeclineInviteEvents.DismissAcceptError)
             },
+            errorTitle = {
+                stringResource(CommonStrings.common_something_went_wrong)
+            },
+            errorMessage = { error ->
+                if (error is AcceptInvite.Failures.InvalidInvite) {
+                    stringResource(CommonStrings.error_invalid_invite)
+                } else {
+                    stringResource(CommonStrings.error_network_or_server_issue)
+                }
+            }
         )
         AsyncActionView(
             async = state.declineAction,
             onSuccess = onDeclineInviteSuccess,
             onErrorDismiss = {
                 state.eventSink(InternalAcceptDeclineInviteEvents.DismissDeclineError)
+            },
+            errorTitle = {
+                stringResource(CommonStrings.common_something_went_wrong)
+            },
+            errorMessage = {
+                stringResource(CommonStrings.error_network_or_server_issue)
             },
             confirmationDialog = { confirming ->
                 // Note: confirming will always be of type ConfirmingDeclineInvite.

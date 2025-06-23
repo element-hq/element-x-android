@@ -15,6 +15,7 @@ import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.test.anInviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -199,9 +200,9 @@ class JoinRoomViewTest {
             canReportRoom = false,
             eventSink = eventsRecorder,
         )
-            rule.setJoinRoomView(state = joinRoomState,)
-            rule.clickOn(R.string.screen_join_room_decline_and_block_button_title)
-            eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(inviteData, true))
+        rule.setJoinRoomView(state = joinRoomState)
+        rule.clickOn(R.string.screen_join_room_decline_and_block_button_title)
+        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(inviteData, true))
     }
 
     @Test
@@ -239,7 +240,7 @@ class JoinRoomViewTest {
             rule.setJoinRoomView(
                 aJoinRoomState(
                     contentState = aLoadedContentState(),
-                    joinAction = AsyncAction.Failure(JoinRoomFailures.UnauthorizedJoin),
+                    joinAction = AsyncAction.Failure(JoinRoom.Failures.UnauthorizedJoin),
                     eventSink = eventsRecorder,
                 ),
                 onBackClick = it

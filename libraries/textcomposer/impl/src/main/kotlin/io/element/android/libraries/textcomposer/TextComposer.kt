@@ -41,7 +41,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -84,7 +83,6 @@ import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import io.element.android.libraries.textcomposer.model.showCaptionCompatibilityWarning
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
-import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -175,19 +173,41 @@ fun TextComposer(
     } else {
         when (state) {
             is TextEditorState.Rich -> {
+                val coroutineScope = rememberCoroutineScope()
+                val view = LocalView.current
                 remember(state.richTextEditorState, composerMode, onResetComposerMode, onError) {
                     @Composable {
-                        TextInput(
-                            state = state.richTextEditorState,
-                            placeholder = placeholder,
+                        TextInputBox(
+                            modifier = Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) {
+                                coroutineScope.launch {
+                                    state.requestFocus()
+                                    view.showKeyboard()
+                                }
+                            }.semantics {
+                                hideFromAccessibility()
+                            },
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
-                            resolveMentionDisplay = resolveMentionDisplay,
-                            resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
-                            onError = onError,
-                            onTyping = onTyping,
-                            onSelectRichContent = onSelectRichContent,
-                        )
+                            isTextEmpty = state.richTextEditorState.messageHtml.isEmpty(),
+                        ) {
+                            RichTextEditor(
+                                state = state.richTextEditorState,
+                                placeholder = placeholder,
+                                registerStateUpdates = true,
+                                modifier = Modifier
+                                    .padding(top = 6.dp, bottom = 6.dp)
+                                    .fillMaxWidth(),
+                                style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.richTextEditorState.hasFocus),
+                                resolveMentionDisplay = resolveMentionDisplay,
+                                resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
+                                onError = onError,
+                                onRichContentSelected = onSelectRichContent,
+                                onTyping = onTyping,
+                            )
+                        }
                     }
                 }
             }
@@ -197,11 +217,12 @@ fun TextComposer(
                     TextInputBox(
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
-                        placeholder = placeholder,
-                        showPlaceholder = state.state.text.value().isEmpty(),
+                        isTextEmpty = state.state.text.value().isEmpty(),
                     ) {
                         MarkdownTextInput(
                             state = state.state,
+                            placeholder = placeholder,
+                            placeholderColor = ElementTheme.colors.textSecondary,
                             onTyping = onTyping,
                             onReceiveSuggestion = onReceiveSuggestion,
                             richTextEditorStyle = style,
@@ -477,8 +498,7 @@ private fun TextFormattingLayout(
 private fun TextInputBox(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
-    placeholder: String,
-    showPlaceholder: Boolean,
+    isTextEmpty: Boolean,
     modifier: Modifier = Modifier,
     textInput: @Composable () -> Unit,
 ) {
@@ -487,7 +507,7 @@ private fun TextInputBox(
     val roundedCorners = textInputRoundedCornerShape(composerMode = composerMode)
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .clip(roundedCorners)
             .border(0.5.dp, borderColor, roundedCorners)
             .background(color = bgColor)
@@ -501,28 +521,14 @@ private fun TextInputBox(
                 onResetComposerMode = onResetComposerMode,
             )
         }
-        val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
             modifier = Modifier
                 .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
                 .then(Modifier.testTag(TestTags.textEditor)),
             contentAlignment = Alignment.CenterStart,
         ) {
-            // Placeholder
-            if (showPlaceholder) {
-                Text(
-                    text = placeholder,
-                    style = defaultTypography.copy(
-                        color = ElementTheme.colors.textSecondary,
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-
             textInput()
-
-            if (showPlaceholder && composerMode.showCaptionCompatibilityWarning()) {
+            if (isTextEmpty && composerMode.showCaptionCompatibilityWarning()) {
                 var showBottomSheet by remember { mutableStateOf(false) }
                 Icon(
                     modifier = Modifier
@@ -540,55 +546,6 @@ private fun TextInputBox(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun TextInput(
-    state: RichTextEditorState,
-    placeholder: String,
-    composerMode: MessageComposerMode,
-    onResetComposerMode: () -> Unit,
-    resolveRoomMentionDisplay: () -> TextDisplay,
-    resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
-    onError: (Throwable) -> Unit,
-    onTyping: (Boolean) -> Unit,
-    onSelectRichContent: ((Uri) -> Unit)?,
-) {
-    val coroutineScope = rememberCoroutineScope()
-    val view = LocalView.current
-    TextInputBox(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-        ) {
-            coroutineScope.launch {
-                state.requestFocus()
-                view.showKeyboard()
-            }
-        }.semantics {
-            hideFromAccessibility()
-        },
-        composerMode = composerMode,
-        onResetComposerMode = onResetComposerMode,
-        placeholder = placeholder,
-        showPlaceholder = state.messageHtml.isEmpty(),
-    ) {
-        RichTextEditor(
-            state = state,
-            // Disable most of the editor functionality if it's just being measured for a subcomposition.
-            // This prevents it gaining focus and mutating the state.
-            registerStateUpdates = true,
-            modifier = Modifier
-                .padding(top = 6.dp, bottom = 6.dp)
-                .fillMaxWidth(),
-            style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
-            resolveMentionDisplay = resolveMentionDisplay,
-            resolveRoomMentionDisplay = resolveRoomMentionDisplay,
-            onError = onError,
-            onRichContentSelected = onSelectRichContent,
-            onTyping = onTyping,
-        )
     }
 }
 

@@ -10,16 +10,23 @@ package io.element.android.features.invite.impl
 import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.SeenInvitesStore
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.exception.ClientException
+import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import javax.inject.Inject
 
 interface AcceptInvite {
     suspend operator fun invoke(roomId: RoomId): Result<RoomId>
+
+    sealed class Failures : Exception() {
+        data object InvalidInvite : Failures()
+    }
 }
 
 @ContributesBinding(SessionScope::class)
@@ -37,6 +44,15 @@ class DefaultAcceptInvite @Inject constructor(
         ).onSuccess {
             notificationCleaner.clearMembershipNotificationForRoom(client.sessionId, roomId)
             seenInvitesStore.markAsUnSeen(roomId)
+        }.mapFailure {
+            if (it is ClientException.MatrixApi) {
+                when (it.kind) {
+                    ErrorKind.Unknown -> AcceptInvite.Failures.InvalidInvite
+                    else -> it
+                }
+            } else {
+                it
+            }
         }.map { roomId }
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.text.getSpans
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -174,6 +175,8 @@ class MarkdownTextInputTest {
             val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus)
             MarkdownTextInput(
                 state = state,
+                placeholder = "Placeholder",
+                placeholderColor = ElementTheme.colors.textSecondary,
                 onTyping = onTyping,
                 onReceiveSuggestion = onSuggestionReceived,
                 richTextEditorStyle = style,

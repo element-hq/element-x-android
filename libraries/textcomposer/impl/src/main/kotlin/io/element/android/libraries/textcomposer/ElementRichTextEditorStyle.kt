@@ -31,6 +31,7 @@ object ElementRichTextEditorStyle {
                 } else {
                     ElementTheme.colors.textSecondary
                 },
+                placeholderColor = ElementTheme.colors.textSecondary,
                 lineHeight = TextUnit.Unspecified,
                 includeFontPadding = true,
             )

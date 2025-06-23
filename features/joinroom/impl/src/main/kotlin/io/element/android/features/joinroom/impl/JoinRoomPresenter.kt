@@ -34,7 +34,6 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
-import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -222,13 +221,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                 roomIdOrAlias = roomIdOrAlias,
                 serverNames = serverNames,
                 trigger = trigger
-            ).mapFailure {
-                if (it is ClientException.MatrixApi && it.kind == ErrorKind.Forbidden) {
-                    JoinRoomFailures.UnauthorizedJoin
-                } else {
-                    it
-                }
-            }
+            )
         }
     }
 

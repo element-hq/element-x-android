@@ -42,7 +42,7 @@ coil = "3.2.0"
 showkase = "1.0.4"
 appyx = "1.7.1"
 sqldelight = "2.1.0"
-wysiwyg = "2.38.3"
+wysiwyg = "2.38.4"
 telephoto = "0.16.0"
 
 # Dependency analysis
@@ -145,12 +145,12 @@ test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.6.2"
-test_mockk = "io.mockk:mockk:1.14.2"
+test_mockk = "io.mockk:mockk:1.14.4"
 test_konsist = "com.lemonappdev:konsist:0.17.3"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
-test_robolectric = "org.robolectric:robolectric:4.14.1"
+test_robolectric = "org.robolectric:robolectric:4.15"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.6.1"
 test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
@@ -178,8 +178,8 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
-sqlite = "androidx.sqlite:sqlite-ktx:2.5.1"
+sqlcipher = "net.zetetic:sqlcipher-android:4.9.0"
+sqlite = "androidx.sqlite:sqlite-ktx:2.5.2"
 unifiedpush = "org.unifiedpush.android:connector:3.0.10"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.11.2"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
