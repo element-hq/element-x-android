@@ -27,7 +27,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationSettingsStat
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
-import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
@@ -364,25 +363,25 @@ class JoinedRustRoom(
         }
     }
 
-    override suspend fun updatePowerLevels(roomPowerLevels: RoomPowerLevels): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun updatePowerLevels(roomPowerLevelsValues: RoomPowerLevelsValues): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
             val changes = RoomPowerLevelChanges(
-                ban = roomPowerLevels.ban,
-                invite = roomPowerLevels.invite,
-                kick = roomPowerLevels.kick,
-                redact = roomPowerLevels.redactEvents,
-                eventsDefault = roomPowerLevels.sendEvents,
-                roomName = roomPowerLevels.roomName,
-                roomAvatar = roomPowerLevels.roomAvatar,
-                roomTopic = roomPowerLevels.roomTopic,
+                ban = roomPowerLevelsValues.ban,
+                invite = roomPowerLevelsValues.invite,
+                kick = roomPowerLevelsValues.kick,
+                redact = roomPowerLevelsValues.redactEvents,
+                eventsDefault = roomPowerLevelsValues.sendEvents,
+                roomName = roomPowerLevelsValues.roomName,
+                roomAvatar = roomPowerLevelsValues.roomAvatar,
+                roomTopic = roomPowerLevelsValues.roomTopic,
             )
             innerRoom.applyPowerLevelChanges(changes)
         }
     }
 
-    override suspend fun resetPowerLevels(): Result<RoomPowerLevels> = withContext(roomDispatcher) {
+    override suspend fun resetPowerLevels(): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            RoomPowerLevelsMapper.map(innerRoom.resetPowerLevels())
+            innerRoom.resetPowerLevels().let {}
         }
     }
 

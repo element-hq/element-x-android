@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -89,7 +89,7 @@ interface BaseRoom : Closeable {
     /**
      * Gets the power levels of the room.
      */
-    suspend fun powerLevels(): Result<RoomPowerLevels>
+    suspend fun powerLevels(): Result<RoomPowerLevelsValues>
 
     /**
      * Gets the role of the user with the provided [userId] in the room.

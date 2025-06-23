@@ -12,7 +12,7 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 
-data class RoomPowerLevels(
+data class RoomPowerLevelsValues(
     val ban: Long,
     val invite: Long,
     val kick: Long,

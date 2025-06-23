@@ -22,7 +22,7 @@ import io.element.android.features.roomdetails.impl.analytics.trackPermissionCha
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -59,8 +59,8 @@ class ChangeRoomPermissionsPresenter @AssistedInject constructor(
 
     private val items: ImmutableList<RoomPermissionType> = itemsForSection(section)
 
-    private var initialPermissions by mutableStateOf<RoomPowerLevels?>(null)
-    private var currentPermissions by mutableStateOf<RoomPowerLevels?>(null)
+    private var initialPermissions by mutableStateOf<RoomPowerLevelsValues?>(null)
+    private var currentPermissions by mutableStateOf<RoomPowerLevelsValues?>(null)
     private var saveAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
     private var confirmExitAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
 

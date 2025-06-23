@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -57,7 +57,7 @@ class FakeBaseRoom(
     private val canUserPinUnpinResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
     private val markAsReadResult: (ReceiptType) -> Result<Unit> = { Result.success(Unit) },
-    private val powerLevelsResult: () -> Result<RoomPowerLevels> = { lambdaError() },
+    private val powerLevelsResult: () -> Result<RoomPowerLevelsValues> = { lambdaError() },
     private val leaveRoomLambda: () -> Result<Unit> = { lambdaError() },
     private val updateMembersResult: () -> Unit = { lambdaError() },
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
@@ -93,7 +93,7 @@ class FakeBaseRoom(
         subscribeToSyncLambda()
     }
 
-    override suspend fun powerLevels(): Result<RoomPowerLevels> {
+    override suspend fun powerLevels(): Result<RoomPowerLevelsValues> {
         return powerLevelsResult()
     }
 
@@ -225,7 +225,7 @@ class FakeBaseRoom(
     override fun predecessorRoom(): PredecessorRoom? = predecessorRoomResult()
 }
 
-fun defaultRoomPowerLevels() = RoomPowerLevels(
+fun defaultRoomPowerLevels() = RoomPowerLevelsValues(
     ban = 50,
     invite = 0,
     kick = 50,
