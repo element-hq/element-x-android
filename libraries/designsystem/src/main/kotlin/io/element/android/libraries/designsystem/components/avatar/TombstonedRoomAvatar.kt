@@ -16,9 +16,10 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
-fun TombstonedRoomAvatar(
+internal fun TombstonedRoomAvatar(
     size: AvatarSize,
     modifier: Modifier = Modifier,
+    avatarType: AvatarType,
     contentDescription: String? = null,
 ) {
     TextAvatar(
@@ -29,7 +30,8 @@ fun TombstonedRoomAvatar(
             foreground = ElementTheme.colors.iconTertiary
         ),
         modifier = modifier,
-        contentDescription = contentDescription
+        avatarType = avatarType,
+        contentDescription = contentDescription,
     )
 }
 
@@ -38,6 +40,7 @@ fun TombstonedRoomAvatar(
 internal fun TombstonedRoomAvatarPreview() = ElementPreview {
     TombstonedRoomAvatar(
         size = AvatarSize.RoomListItem,
+        avatarType = AvatarType.Room(),
         contentDescription = null,
     )
 }

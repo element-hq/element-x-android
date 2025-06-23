@@ -40,6 +40,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -248,7 +249,8 @@ private fun RoomDirectoryRoomRow(
     ) {
         Avatar(
             avatarData = roomDescription.avatarData(AvatarSize.RoomDirectoryItem),
-            modifier = Modifier.align(Alignment.CenterVertically)
+            avatarType = AvatarType.Room(),
+            modifier = Modifier.align(Alignment.CenterVertically),
         )
         Column(
             modifier = Modifier

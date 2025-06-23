@@ -10,7 +10,6 @@ package io.element.android.libraries.designsystem.components.avatar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -37,15 +36,50 @@ import timber.log.Timber
 fun Avatar(
     avatarData: AvatarData,
     modifier: Modifier = Modifier,
+    avatarType: AvatarType = AvatarType.User,
     contentDescription: String? = null,
     // If not null, will be used instead of the size from avatarData
     forcedAvatarSize: Dp? = null,
     // If true, will show initials even if avatarData.url is not null
     hideImage: Boolean = false,
 ) {
+    when (avatarType) {
+        is AvatarType.Room -> RoomAvatar(
+            avatarData = avatarData,
+            avatarType = avatarType,
+            modifier = modifier,
+            hideAvatarImage = hideImage,
+            contentDescription = contentDescription,
+        )
+        AvatarType.User -> UserAvatar(
+            avatarData = avatarData,
+            modifier = modifier,
+            contentDescription = contentDescription,
+            forcedAvatarSize = forcedAvatarSize,
+            hideImage = hideImage,
+        )
+        is AvatarType.Space -> SpaceAvatar(
+            avatarData = avatarData,
+            avatarType = avatarType,
+            modifier = modifier,
+            hideAvatarImage = hideImage,
+            contentDescription = contentDescription,
+        )
+    }
+}
+
+@Composable
+private fun UserAvatar(
+    avatarData: AvatarData,
+    modifier: Modifier = Modifier,
+    contentDescription: String? = null,
+    forcedAvatarSize: Dp? = null,
+    hideImage: Boolean = false,
+) {
     if (avatarData.url.isNullOrBlank() || hideImage) {
         InitialLetterAvatar(
             avatarData = avatarData,
+            avatarType = AvatarType.User,
             forcedAvatarSize = forcedAvatarSize,
             modifier = modifier,
             contentDescription = contentDescription,
@@ -53,6 +87,7 @@ fun Avatar(
     } else {
         ImageAvatar(
             avatarData = avatarData,
+            avatarType = AvatarType.User,
             forcedAvatarSize = forcedAvatarSize,
             modifier = modifier,
             contentDescription = contentDescription,
@@ -61,8 +96,9 @@ fun Avatar(
 }
 
 @Composable
-private fun ImageAvatar(
+internal fun ImageAvatar(
     avatarData: AvatarData,
+    avatarType: AvatarType,
     forcedAvatarSize: Dp?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
@@ -74,7 +110,7 @@ private fun ImageAvatar(
         contentScale = ContentScale.Crop,
         modifier = modifier
             .size(size)
-            .clip(CircleShape)
+            .clip(avatarShape(avatarType))
     ) {
         val collectedState by painter.state.collectAsState()
         when (val state = collectedState) {
@@ -85,12 +121,14 @@ private fun ImageAvatar(
                 }
                 InitialLetterAvatar(
                     avatarData = avatarData,
+                    avatarType = avatarType,
                     forcedAvatarSize = forcedAvatarSize,
                     contentDescription = contentDescription,
                 )
             }
             else -> InitialLetterAvatar(
                 avatarData = avatarData,
+                avatarType = avatarType,
                 forcedAvatarSize = forcedAvatarSize,
                 contentDescription = contentDescription,
             )
@@ -99,8 +137,9 @@ private fun ImageAvatar(
 }
 
 @Composable
-private fun InitialLetterAvatar(
+internal fun InitialLetterAvatar(
     avatarData: AvatarData,
+    avatarType: AvatarType,
     forcedAvatarSize: Dp?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
@@ -109,6 +148,7 @@ private fun InitialLetterAvatar(
     TextAvatar(
         text = avatarData.initialLetter,
         size = forcedAvatarSize ?: avatarData.size.dp,
+        avatarType = avatarType,
         colors = avatarColors,
         contentDescription = contentDescription,
         modifier = modifier

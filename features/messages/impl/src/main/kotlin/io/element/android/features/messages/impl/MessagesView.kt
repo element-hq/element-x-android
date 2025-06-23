@@ -83,8 +83,9 @@ import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorVi
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
+import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -563,10 +564,12 @@ private fun RoomAvatarAndNameRow(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RoomAvatar(
+        Avatar(
             avatarData = roomAvatar,
-            heroes = heroes,
-            isTombstoned = isTombstoned,
+            avatarType = AvatarType.Room(
+                heroes = heroes,
+                isTombstoned = isTombstoned,
+            ),
         )
         Text(
             modifier = Modifier.padding(horizontal = 8.dp),
