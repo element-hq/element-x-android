@@ -9,6 +9,7 @@ package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -98,11 +99,20 @@ internal fun AvatarCluster(
                                 y = yOffset,
                             )
                     ) {
-                        Avatar(
+                        InitialOrImageAvatar(
                             avatarData = heroAvatar,
+                            hideAvatarImage = hideAvatarImages,
+                            avatarShape = avatarType.let { avatarType ->
+                                if (avatarType is AvatarType.Space) {
+                                    // Reduce corner size for small Space avatars
+                                    avatarType.copy(cornerSize = avatarType.cornerSize / 2f)
+                                } else {
+                                    avatarType
+                                }
+                            }.avatarShape(),
                             forcedAvatarSize = heroAvatarSize,
-                            avatarType = avatarType,
-                            hideImage = hideAvatarImages,
+                            modifier = Modifier,
+                            contentDescription = contentDescription,
                         )
                     }
                 }
@@ -114,14 +124,24 @@ internal fun AvatarCluster(
 @Preview(group = PreviewGroup.Avatars)
 @Composable
 internal fun AvatarClusterPreview() = ElementThemedPreview {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        for (ngOfAvatars in 1..5) {
-            AvatarCluster(
-                avatars = List(ngOfAvatars) { anAvatarData(it) }.toPersistentList(),
-                avatarType = AvatarType.User,
-            )
+        listOf(
+            AvatarType.User,
+            AvatarType.Room(),
+            AvatarType.Space(8.dp),
+        ).forEach { avatarType ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                for (ngOfAvatars in 1..5) {
+                    AvatarCluster(
+                        avatars = List(ngOfAvatars) { anAvatarData(it) }.toPersistentList(),
+                        avatarType = avatarType,
+                    )
+                }
+            }
         }
     }
 }

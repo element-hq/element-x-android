@@ -38,6 +38,7 @@ fun Avatar(
             avatarType = avatarType,
             modifier = modifier,
             hideAvatarImage = hideImage,
+            forcedAvatarSize = forcedAvatarSize,
             contentDescription = contentDescription,
         )
         AvatarType.User -> UserAvatar(
@@ -52,6 +53,7 @@ fun Avatar(
             avatarType = avatarType,
             modifier = modifier,
             hideAvatarImage = hideImage,
+            forcedAvatarSize = forcedAvatarSize,
             contentDescription = contentDescription,
         )
     }

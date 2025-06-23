@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -23,12 +24,13 @@ internal fun SpaceAvatar(
     avatarData: AvatarData,
     avatarType: AvatarType.Space,
     modifier: Modifier = Modifier,
+    forcedAvatarSize: Dp? = null,
     hideAvatarImage: Boolean = false,
     contentDescription: String? = null,
 ) {
     when {
         avatarType.isTombstoned -> TombstonedRoomAvatar(
-            size = avatarData.size,
+            size = forcedAvatarSize ?: avatarData.size.dp,
             avatarShape = avatarType.avatarShape(),
             modifier = modifier,
             contentDescription = contentDescription,
@@ -37,7 +39,7 @@ internal fun SpaceAvatar(
             avatarData = avatarData,
             hideAvatarImage = hideAvatarImage,
             avatarShape = avatarType.avatarShape(),
-            forcedAvatarSize = null,
+            forcedAvatarSize = forcedAvatarSize,
             modifier = modifier,
             contentDescription = contentDescription,
         )

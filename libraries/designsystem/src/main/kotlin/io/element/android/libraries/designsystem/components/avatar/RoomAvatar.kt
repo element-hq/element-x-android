@@ -9,6 +9,7 @@ package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 
 @Composable
 internal fun RoomAvatar(
@@ -16,12 +17,13 @@ internal fun RoomAvatar(
     avatarType: AvatarType.Room,
     modifier: Modifier = Modifier,
     hideAvatarImage: Boolean = false,
+    forcedAvatarSize: Dp? = null,
     contentDescription: String? = null,
 ) {
     when {
         avatarType.isTombstoned -> {
             TombstonedRoomAvatar(
-                size = avatarData.size,
+                size = forcedAvatarSize ?: avatarData.size.dp,
                 modifier = modifier,
                 avatarShape = avatarType.avatarShape(),
                 contentDescription = contentDescription
@@ -32,7 +34,7 @@ internal fun RoomAvatar(
                 avatarData = avatarData,
                 hideAvatarImage = hideAvatarImage,
                 avatarShape = avatarType.avatarShape(),
-                forcedAvatarSize = null,
+                forcedAvatarSize = forcedAvatarSize,
                 modifier = modifier,
                 contentDescription = contentDescription,
             )
