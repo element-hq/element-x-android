@@ -52,6 +52,7 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -80,6 +81,7 @@ fun MediaAudioView(
     bottomPaddingInPixels: Int,
     localMedia: LocalMedia?,
     info: MediaInfo?,
+    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
     isDisplayed: Boolean = true,
 ) {
@@ -91,6 +93,7 @@ fun MediaAudioView(
         exoPlayer = exoPlayer,
         localMedia = localMedia,
         info = info,
+        audioFocus = audioFocus,
         modifier = modifier,
     )
 }
@@ -104,6 +107,7 @@ private fun ExoPlayerMediaAudioView(
     exoPlayer: ExoPlayer,
     localMedia: LocalMedia?,
     info: MediaInfo?,
+    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
     var mediaPlayerControllerState: MediaPlayerControllerState by remember {
@@ -111,6 +115,7 @@ private fun ExoPlayerMediaAudioView(
             MediaPlayerControllerState(
                 isVisible = true,
                 isPlaying = false,
+                isReady = false,
                 progressInMillis = 0,
                 durationInMillis = 0,
                 canMute = false,
@@ -293,6 +298,7 @@ private fun ExoPlayerMediaAudioView(
             onToggleMute = {
                 // Cannot happen for audio files
             },
+            audioFocus = audioFocus,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -368,6 +374,7 @@ internal fun MediaAudioViewPreview(
         bottomPaddingInPixels = 0,
         localMediaViewState = rememberLocalMediaViewState(),
         info = info,
+        audioFocus = null,
         localMedia = null,
     )
 }

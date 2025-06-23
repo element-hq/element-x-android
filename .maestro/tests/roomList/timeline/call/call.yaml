@@ -1,0 +1,13 @@
+appId: ${MAESTRO_APP_ID}
+---
+- tapOn: "Start a call"
+- takeScreenshot: build/maestro/700-Call
+- extendedWaitUntil:
+    visible: "maestroelement"
+    timeout: 10000
+- takeScreenshot: build/maestro/710-Call
+# Hangup
+- tapOn: "End call"
+- extendedWaitUntil:
+    visible: "MyRoom"
+    timeout: 10000

@@ -9,8 +9,8 @@ package io.element.android.libraries.matrix.impl
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustClient
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustSyncService
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventTypeFilterFactory
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -28,9 +28,10 @@ import java.io.File
 class RustMatrixClientTest {
     @Test
     fun `ensure that sessionId and deviceId can be retrieved from the client`() = runTest {
-        createRustMatrixClient().use { sut ->
-            assertThat(sut.sessionId).isEqualTo(A_USER_ID)
-            assertThat(sut.deviceId).isEqualTo(A_DEVICE_ID)
+        createRustMatrixClient().run {
+            assertThat(sessionId).isEqualTo(A_USER_ID)
+            assertThat(deviceId).isEqualTo(A_DEVICE_ID)
+            destroy()
         }
     }
 
@@ -38,20 +39,20 @@ class RustMatrixClientTest {
     fun `clear cache invokes the method clearCaches from the client and close it`() = runTest {
         val clearCachesResult = lambdaRecorder<Unit> { }
         val closeResult = lambdaRecorder<Unit> { }
-        createRustMatrixClient(
-            client = FakeRustClient(
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
                 clearCachesResult = clearCachesResult,
                 closeResult = closeResult,
             )
-        ).use { sut ->
-            sut.clearCache()
-            clearCachesResult.assertions().isCalledOnce()
-            closeResult.assertions().isCalledOnce()
-        }
+        )
+        client.clearCache()
+        clearCachesResult.assertions().isCalledOnce()
+        closeResult.assertions().isCalledOnce()
+        client.destroy()
     }
 
     private fun TestScope.createRustMatrixClient(
-        client: Client = FakeRustClient(),
+        client: Client = FakeFfiClient(),
         sessionStore: SessionStore = InMemorySessionStore(),
     ) = RustMatrixClient(
         innerClient = client,
@@ -61,7 +62,7 @@ class RustMatrixClientTest {
         sessionDelegate = aRustClientSessionDelegate(
             sessionStore = sessionStore,
         ),
-        innerSyncService = FakeRustSyncService(),
+        innerSyncService = FakeFfiSyncService(),
         dispatchers = testCoroutineDispatchers(),
         baseCacheDirectory = File(""),
         clock = FakeSystemClock(),

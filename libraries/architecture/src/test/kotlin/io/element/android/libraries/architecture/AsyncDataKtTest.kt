@@ -38,15 +38,15 @@ class AsyncDataKtTest {
 
         val result = runUpdatingState(state) {
             delay(1)
-            Result.failure(MyThrowable("hello"))
+            Result.failure(MyException("hello"))
         }
 
         assertThat(result.isFailure).isTrue()
-        assertThat(result.exceptionOrNull()).isEqualTo(MyThrowable("hello"))
+        assertThat(result.exceptionOrNull()).isEqualTo(MyException("hello"))
 
         assertThat(state.popFirst()).isEqualTo(AsyncData.Uninitialized)
         assertThat(state.popFirst()).isEqualTo(AsyncData.Loading(null))
-        assertThat(state.popFirst()).isEqualTo(AsyncData.Failure<Int>(MyThrowable("hello")))
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Failure<Int>(MyException("hello")))
         state.assertNoMoreValues()
     }
 
@@ -54,17 +54,17 @@ class AsyncDataKtTest {
     fun `updates state when block returns failure transforming the error`() = runTest {
         val state = TestableMutableState<AsyncData<Int>>(AsyncData.Uninitialized)
 
-        val result = runUpdatingState(state, { MyThrowable(it.message + " world") }) {
+        val result = runUpdatingState(state, { MyException(it.message + " world") }) {
             delay(1)
-            Result.failure(MyThrowable("hello"))
+            Result.failure(MyException("hello"))
         }
 
         assertThat(result.isFailure).isTrue()
-        assertThat(result.exceptionOrNull()).isEqualTo(MyThrowable("hello world"))
+        assertThat(result.exceptionOrNull()).isEqualTo(MyException("hello world"))
 
         assertThat(state.popFirst()).isEqualTo(AsyncData.Uninitialized)
         assertThat(state.popFirst()).isEqualTo(AsyncData.Loading(null))
-        assertThat(state.popFirst()).isEqualTo(AsyncData.Failure<Int>(MyThrowable("hello world")))
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Failure<Int>(MyException("hello world")))
         state.assertNoMoreValues()
     }
 }
@@ -101,4 +101,4 @@ private class TestableMutableState<T>(
 /**
  * An exception that is also a data class so we can compare it using equals.
  */
-private data class MyThrowable(val myMessage: String) : Throwable(myMessage)
+private data class MyException(val myMessage: String) : Exception(myMessage)

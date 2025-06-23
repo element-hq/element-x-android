@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Ta bort och banna medlem"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Banna"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Denne kommer inte att kunna gå med i det här rummet igen om denne bjuds in."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Är du säker på att du vill banna den här medlemmen?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Bannar %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Ta bort"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Denne kommer kunna gå med i rummet igen om denne bjuds in"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Är du säker på att du vill ta bort den här medlemmen?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Visa profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Ta bort från rummet"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Ta bort medlem och banna från att gå med i framtiden?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Tar bort %1$s …"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Avbanna från rummet"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Avbanna"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"De skulle kunna gå med i rummet igen om de blev inbjudna"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Är du säker på att du vill avbanna den här medlemmen?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Avbannar %1$s"</string>
+</resources>

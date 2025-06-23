@@ -31,6 +31,7 @@ import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -47,6 +48,7 @@ class DefaultBiometricAuthenticatorManager @Inject constructor(
     private val lockScreenConfig: LockScreenConfig,
     private val encryptionDecryptionService: EncryptionDecryptionService,
     private val secretKeyRepository: SecretKeyRepository,
+    @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
 ) : BiometricAuthenticatorManager {
     private val callbacks = CopyOnWriteArrayList<BiometricAuthenticator.Callback>()
@@ -87,7 +89,9 @@ class DefaultBiometricAuthenticatorManager @Inject constructor(
 
     @Composable
     override fun rememberUnlockBiometricAuthenticator(): BiometricAuthenticator {
-        val isBiometricAllowed by lockScreenStore.isBiometricUnlockAllowed().collectAsState(initial = false)
+        val isBiometricAllowed by remember {
+            lockScreenStore.isBiometricUnlockAllowed()
+        }.collectAsState(initial = false)
         val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
         val isAvailable by remember(lifecycleState) {
             derivedStateOf { isBiometricAllowed && hasAvailableAuthenticator }

@@ -7,10 +7,8 @@
 
 package io.element.android.features.location.api.internal
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import io.element.android.compound.theme.ElementTheme
 
 /**
@@ -24,7 +22,7 @@ interface TileServerStyleUriBuilder {
     ): String
 }
 
-fun TileServerStyleUriBuilder(context: Context): TileServerStyleUriBuilder = MapTilerTileServerStyleUriBuilder(context = context)
+fun TileServerStyleUriBuilder(): TileServerStyleUriBuilder = MapTilerTileServerStyleUriBuilder()
 
 /**
  * Provides and remembers a style URI for a MapLibre compatible tile server.
@@ -33,9 +31,8 @@ fun TileServerStyleUriBuilder(context: Context): TileServerStyleUriBuilder = Map
  */
 @Composable
 fun rememberTileStyleUrl(): String {
-    val context = LocalContext.current
     val darkMode = !ElementTheme.isLightTheme
     return remember(darkMode) {
-        TileServerStyleUriBuilder(context).build(darkMode)
+        TileServerStyleUriBuilder().build(darkMode)
     }
 }

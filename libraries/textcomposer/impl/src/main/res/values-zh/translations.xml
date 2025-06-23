@@ -5,7 +5,9 @@
   <string name="rich_text_editor_close_formatting_options">"关闭格式化选项"</string>
   <string name="rich_text_editor_code_block">"切换代码块"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"可选的标题……"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"加密信息…"</string>
   <string name="rich_text_editor_composer_placeholder">"消息…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"未加密的消息…"</string>
   <string name="rich_text_editor_create_link">"创建链接"</string>
   <string name="rich_text_editor_edit_link">"编辑链接"</string>
   <string name="rich_text_editor_format_bold">"应用粗体格式"</string>

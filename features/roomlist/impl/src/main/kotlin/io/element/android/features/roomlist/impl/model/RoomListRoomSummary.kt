@@ -8,6 +8,7 @@
 package io.element.android.features.roomlist.impl.model
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -39,12 +40,16 @@ data class RoomListRoomSummary(
 ) {
     val isHighlighted = userDefinedNotificationMode != RoomNotificationMode.MUTE &&
         (numberOfUnreadNotifications > 0 || numberOfUnreadMentions > 0) ||
-        isMarkedUnread ||
-        displayType == RoomSummaryDisplayType.INVITE
+        isMarkedUnread
 
     val hasNewContent = numberOfUnreadMessages > 0 ||
         numberOfUnreadMentions > 0 ||
         numberOfUnreadNotifications > 0 ||
-        isMarkedUnread ||
-        displayType == RoomSummaryDisplayType.INVITE
+        isMarkedUnread
+
+    fun toInviteData() = InviteData(
+        roomId = roomId,
+        roomName = name ?: roomId.value,
+        isDm = isDm,
+    )
 }

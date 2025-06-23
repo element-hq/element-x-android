@@ -1,5 +1,4 @@
 import extension.setupAnvil
-import org.gradle.kotlin.dsl.test
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -58,7 +57,6 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.analytics.noop)
-    testImplementation(projects.libraries.permissions.impl)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.features.lockscreen.test)

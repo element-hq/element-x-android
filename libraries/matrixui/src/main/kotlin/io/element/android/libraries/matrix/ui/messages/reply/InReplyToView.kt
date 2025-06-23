@@ -24,13 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.core.extensions.toSafeLength
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -57,7 +60,7 @@ fun InReplyToView(
                 senderId = inReplyTo.senderId,
                 senderProfile = inReplyTo.senderProfile,
                 metadata = inReplyTo.metadata(hideImage),
-                modifier = modifier
+                modifier = modifier,
             )
         }
         is InReplyToDetails.Error ->
@@ -95,13 +98,18 @@ private fun ReplyToReadyContent(
             Spacer(modifier = Modifier.width(8.dp))
         }
         val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderProfile.getDisambiguatedDisplayName(senderId))
-        Column(verticalArrangement = Arrangement.SpaceBetween) {
+        Column(
+            modifier = Modifier.semantics(mergeDescendants = false) { isTraversalGroup = true },
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             SenderName(
                 senderId = senderId,
                 senderProfile = senderProfile,
                 senderNameMode = SenderNameMode.Reply,
                 modifier = Modifier.semantics {
                     contentDescription = a11InReplyToText
+                    isTraversalGroup = true
+                    traversalIndex = 1f
                 },
             )
             ReplyToContentText(metadata)
@@ -152,8 +160,10 @@ private fun ReplyToContentText(metadata: InReplyToMetadata?) {
     val text = when (metadata) {
         InReplyToMetadata.Redacted -> stringResource(id = CommonStrings.common_message_removed)
         InReplyToMetadata.UnableToDecrypt -> stringResource(id = CommonStrings.common_waiting_for_decryption_key)
-        is InReplyToMetadata.Text -> metadata.text
-        is InReplyToMetadata.Thumbnail -> metadata.text
+        // Add a limit to the text length to avoid a crash in Compose
+        is InReplyToMetadata.Text -> metadata.text.toSafeLength()
+        // Add a limit to the text length to avoid a crash in Compose
+        is InReplyToMetadata.Thumbnail -> metadata.text.toSafeLength()
         null -> ""
     }
     val iconResourceId = when (metadata) {
@@ -166,6 +176,10 @@ private fun ReplyToContentText(metadata: InReplyToMetadata?) {
         else -> FontStyle.Normal
     }
     Row(
+        modifier = Modifier.semantics(mergeDescendants = false) {
+            isTraversalGroup = true
+            traversalIndex = -1f
+        },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (iconResourceId != null) {

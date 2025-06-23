@@ -50,7 +50,7 @@ internal class MatrixUserListDataSourceTest {
         val matrixClient = FakeMatrixClient()
         matrixClient.givenSearchUsersResult(
             searchTerm = "test",
-            result = Result.failure(Throwable("Ruhroh"))
+            result = Result.failure(RuntimeException("Ruhroh"))
         )
         val dataSource = MatrixUserListDataSource(matrixClient)
 
@@ -76,7 +76,7 @@ internal class MatrixUserListDataSourceTest {
         val matrixClient = FakeMatrixClient()
         matrixClient.givenGetProfileResult(
             userId = A_USER_ID,
-            result = Result.failure(Throwable("Ruhroh"))
+            result = Result.failure(RuntimeException("Ruhroh"))
         )
         val dataSource = MatrixUserListDataSource(matrixClient)
 

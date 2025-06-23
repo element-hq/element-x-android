@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -28,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.poll.api.actions.EndPollAction
@@ -36,9 +38,10 @@ import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.roomMembers
@@ -62,9 +65,10 @@ const val FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS = 200L
 
 class TimelinePresenter @AssistedInject constructor(
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
-    private val appScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     @Assisted private val navigator: MessagesNavigator,
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
     private val sendPollResponseAction: SendPollResponseAction,
@@ -75,6 +79,7 @@ class TimelinePresenter @AssistedInject constructor(
     private val resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState>,
     private val typingNotificationPresenter: Presenter<TypingNotificationState>,
     private val roomCallStatePresenter: Presenter<RoomCallState>,
+    private val markAsFullyRead: MarkAsFullyRead,
 ) : Presenter<TimelineState> {
     @AssistedFactory
     interface Factory {
@@ -109,9 +114,15 @@ class TimelinePresenter @AssistedInject constructor(
         val messageShield: MutableState<MessageShield?> = remember { mutableStateOf(null) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
-        val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
-        val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
-        val isLive by timelineController.isLive().collectAsState(initial = true)
+        val isSendPublicReadReceiptsEnabled by remember {
+            sessionPreferencesStore.isSendPublicReadReceiptsEnabled()
+        }.collectAsState(initial = true)
+        val renderReadReceipts by remember {
+            sessionPreferencesStore.isRenderReadReceiptsEnabled()
+        }.collectAsState(initial = true)
+        val isLive by remember {
+            timelineController.isLive()
+        }.collectAsState(initial = true)
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
@@ -125,8 +136,8 @@ class TimelinePresenter @AssistedInject constructor(
                         if (event.firstIndex == 0) {
                             newEventState.value = NewEventState.None
                         }
-                        println("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
-                        appScope.sendReadReceiptIfNeeded(
+                        Timber.d("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
+                        sessionCoroutineScope.sendReadReceiptIfNeeded(
                             firstVisibleIndex = event.firstIndex,
                             timelineItems = timelineItems,
                             lastReadReceiptId = lastReadReceiptId,
@@ -136,13 +147,13 @@ class TimelinePresenter @AssistedInject constructor(
                         newEventState.value = NewEventState.None
                     }
                 }
-                is TimelineEvents.SelectPollAnswer -> appScope.launch {
+                is TimelineEvents.SelectPollAnswer -> sessionCoroutineScope.launch {
                     sendPollResponseAction.execute(
                         pollStartId = event.pollStartId,
                         answerId = event.answerId
                     )
                 }
-                is TimelineEvents.EndPoll -> appScope.launch {
+                is TimelineEvents.EndPoll -> sessionCoroutineScope.launch {
                     endPollAction.execute(
                         pollStartId = event.pollStartId,
                     )
@@ -167,6 +178,12 @@ class TimelinePresenter @AssistedInject constructor(
                 is TimelineEvents.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvents.ComputeForMessage(event.event))
                 }
+            }
+        }
+
+        DisposableEffect(Unit) {
+            onDispose {
+                markAsFullyRead(room.roomId)
             }
         }
 
@@ -272,7 +289,10 @@ class TimelinePresenter @AssistedInject constructor(
         if (newEventState.value == NewEventState.FromMe) {
             return@withContext
         }
-        val newMostRecentItem = timelineItems.firstOrNull()
+        val newMostRecentItem = timelineItems.firstOrNull {
+            // Ignore typing item
+            (it as? TimelineItem.Virtual)?.model !is TimelineItemTypingNotificationModel
+        }
         val prevMostRecentItemIdValue = prevMostRecentItemId.value
         val newMostRecentItemId = newMostRecentItem?.identifier()
         val hasNewEvent = prevMostRecentItemIdValue != null &&

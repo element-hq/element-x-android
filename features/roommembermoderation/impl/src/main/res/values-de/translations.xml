@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Mitglied entfernen und sperren"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Sperren"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Sie können dem Raum nicht mehr beitreten, selbst wenn sie eingeladen werden."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Möchten Sie diesen Nutzer wirklich sperren?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s wird gesperrt."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Entfernen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Sie können diesen Raum wieder betreten, wenn sie eingeladen werden."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Möchten Sie dieses Mitglied wirklich entfernen?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Nutzerprofil anzeigen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Mitglied entfernen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Mitglied entfernen und für die Zukunft sperren?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s wird entfernt."</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Sperre für diesen Chatroom aufheben"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Sperre aufheben"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Sie könnten den Chatroom wieder betreten, wenn sie wieder eingeladen würden."</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Möchten Sie die Sperre dieses Mitglieds wirklich aufheben?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Sperre für %1$s aufheben"</string>
+</resources>

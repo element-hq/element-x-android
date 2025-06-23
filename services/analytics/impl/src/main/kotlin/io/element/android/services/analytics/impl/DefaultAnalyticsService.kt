@@ -14,6 +14,7 @@ import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.services.analytics.api.AnalyticsService
@@ -34,6 +35,7 @@ class DefaultAnalyticsService @Inject constructor(
     private val analyticsProviders: Set<@JvmSuppressWildcards AnalyticsProvider>,
     private val analyticsStore: AnalyticsStore,
 //    private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
+    @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
     private val sessionObserver: SessionObserver,
 ) : AnalyticsService, SessionListener {
@@ -42,6 +44,10 @@ class DefaultAnalyticsService @Inject constructor(
 
     // Cache for the properties to send
     private var pendingUserProperties: UserProperties? = null
+
+    override val userConsentFlow: Flow<Boolean> = analyticsStore.userConsentFlow
+    override val didAskUserConsentFlow: Flow<Boolean> = analyticsStore.didAskUserConsentFlow
+    override val analyticsIdFlow: Flow<String> = analyticsStore.analyticsIdFlow
 
     init {
         observeUserConsent()
@@ -52,17 +58,9 @@ class DefaultAnalyticsService @Inject constructor(
         return analyticsProviders
     }
 
-    override fun getUserConsent(): Flow<Boolean> {
-        return analyticsStore.userConsentFlow
-    }
-
     override suspend fun setUserConsent(userConsent: Boolean) {
         Timber.tag(analyticsTag.value).d("setUserConsent($userConsent)")
         analyticsStore.setUserConsent(userConsent)
-    }
-
-    override fun didAskUserConsent(): Flow<Boolean> {
-        return analyticsStore.didAskUserConsentFlow
     }
 
     override suspend fun setDidAskUserConsent() {
@@ -72,10 +70,6 @@ class DefaultAnalyticsService @Inject constructor(
 
     override suspend fun reset() {
         analyticsStore.setDidAskUserConsent(false)
-    }
-
-    override fun getAnalyticsId(): Flow<String> {
-        return analyticsStore.analyticsIdFlow
     }
 
     override suspend fun setAnalyticsId(analyticsId: String) {
@@ -93,7 +87,7 @@ class DefaultAnalyticsService @Inject constructor(
     }
 
     private fun observeUserConsent() {
-        getUserConsent()
+        userConsentFlow
             .onEach { consent ->
                 Timber.tag(analyticsTag.value).d("User consent updated to $consent")
                 userConsent.set(consent)

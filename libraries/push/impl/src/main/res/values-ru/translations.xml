@@ -71,6 +71,7 @@
     <item quantity="few">"Найдено %1$d push-провайдеров: %2$s"</item>
     <item quantity="many">"Найдено %1$d push-провайдеров: %2$s"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Приложение было создано с поддержкой: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Обнаружение поставщиков push-уведомлений"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Убедитесь, что приложение может отображать уведомление."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Уведомление не было нажато."</string>

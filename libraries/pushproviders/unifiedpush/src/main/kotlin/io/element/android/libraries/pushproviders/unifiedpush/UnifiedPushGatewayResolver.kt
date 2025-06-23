@@ -36,7 +36,7 @@ class DefaultUnifiedPushGatewayResolver @Inject constructor(
 ) : UnifiedPushGatewayResolver {
     override suspend fun getGateway(endpoint: String): UnifiedPushGatewayResolverResult {
         val url = tryOrNull(
-            onError = { Timber.tag("DefaultUnifiedPushGatewayResolver").d(it, "Cannot parse endpoint as an URL") }
+            onException = { Timber.tag("DefaultUnifiedPushGatewayResolver").d(it, "Cannot parse endpoint as an URL") }
         ) {
             URL(endpoint)
         }

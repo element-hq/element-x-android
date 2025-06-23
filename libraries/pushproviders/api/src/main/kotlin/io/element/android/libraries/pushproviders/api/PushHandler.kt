@@ -8,5 +8,13 @@
 package io.element.android.libraries.pushproviders.api
 
 interface PushHandler {
-    suspend fun handle(pushData: PushData)
+    suspend fun handle(
+        pushData: PushData,
+        providerInfo: String,
+    )
+
+    suspend fun handleInvalid(
+        providerInfo: String,
+        data: String,
+    )
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Fjern og utesteng medlem"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Utesteng"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"De vil ikke kunne bli med i dette rommet igjen hvis de blir invitert."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Er du sikker på at du vil utestenge dette medlemmet?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Utestenger %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Fjern"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"De vil kunne bli med i dette rommet igjen hvis de blir invitert."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Er du sikker på at du vil fjerne dette medlemmet?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Vis profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Fjern fra rommet"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Fjerne medlem og utestenge fra å bli med i fremtiden?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Fjerner %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Fjern utestengelsen fra rommet"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Opphev utestengelsen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"De vil kunne bli med i rommet igjen hvis de blir invitert"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Er du sikker på at du vil oppheve utestengelsen av dette medlemmet?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Oppheve utestengelsen av %1$s"</string>
+</resources>

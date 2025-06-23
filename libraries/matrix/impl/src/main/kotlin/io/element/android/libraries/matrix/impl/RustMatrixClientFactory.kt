@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
@@ -40,6 +41,7 @@ import javax.inject.Inject
 class RustMatrixClientFactory @Inject constructor(
     private val baseDirectory: File,
     @CacheDirectory private val cacheDirectory: File,
+    @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
@@ -72,8 +74,9 @@ class RustMatrixClientFactory @Inject constructor(
     suspend fun create(client: Client): RustMatrixClient {
         val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
 
+        client.setUtdDelegate(UtdTracker(analyticsService))
+
         val syncService = client.syncService()
-            .withUtdHook(UtdTracker(analyticsService))
             .withOfflineMode()
             .finish()
 
@@ -105,12 +108,11 @@ class RustMatrixClientFactory @Inject constructor(
                 cachePath = sessionPaths.cacheDirectory.absolutePath,
             )
             .setSessionDelegate(sessionDelegate)
-            .passphrase(passphrase)
+            .sessionPassphrase(passphrase)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
-            .useEventCachePersistentStorage(featureFlagService.isFeatureEnabled(FeatureFlags.EventCache))
             .roomKeyRecipientStrategy(
                 strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.OnlySignedDeviceIsolationMode)) {
                     CollectStrategy.IDENTITY_BASED_STRATEGY

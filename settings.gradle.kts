@@ -39,7 +39,6 @@ dependencyResolutionManagement {
         maven {
             url = URI("https://www.jitpack.io")
             content {
-                includeModule("com.github.UnifiedPush", "android-connector")
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
             }
         }
@@ -58,6 +57,7 @@ include(":appconfig")
 include(":appicon:tchap")
 include(":appicon:element")
 include(":appicon:enterprise")
+include(":tests:detekt-rules")
 include(":tests:konsist")
 include(":tests:uitests")
 include(":tests:testutils")

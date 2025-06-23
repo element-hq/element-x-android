@@ -12,6 +12,7 @@ import androidx.annotation.FloatRange
 data class MediaPlayerControllerState(
     val isVisible: Boolean,
     val isPlaying: Boolean,
+    val isReady: Boolean,
     val progressInMillis: Long,
     val durationInMillis: Long,
     val canMute: Boolean,

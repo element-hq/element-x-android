@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.room.knock
 
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
@@ -23,19 +24,19 @@ class RustKnockRequest(
     override val timestamp: Long? = inner.timestamp?.toLong()
     override val isSeen: Boolean = inner.isSeen
 
-    override suspend fun accept(): Result<Unit> = runCatching {
+    override suspend fun accept(): Result<Unit> = runCatchingExceptions {
         inner.actions.accept()
     }
 
-    override suspend fun decline(reason: String?): Result<Unit> = runCatching {
+    override suspend fun decline(reason: String?): Result<Unit> = runCatchingExceptions {
         inner.actions.decline(reason)
     }
 
-    override suspend fun declineAndBan(reason: String?): Result<Unit> = runCatching {
+    override suspend fun declineAndBan(reason: String?): Result<Unit> = runCatchingExceptions {
         inner.actions.declineAndBan(reason)
     }
 
-    override suspend fun markAsSeen(): Result<Unit> = runCatching {
+    override suspend fun markAsSeen(): Result<Unit> = runCatchingExceptions {
         inner.actions.markAsSeen()
     }
 }

@@ -14,10 +14,14 @@ open class AnalyticsOptInStateProvider @Inject constructor() : PreviewParameterP
     override val values: Sequence<AnalyticsOptInState>
         get() = sequenceOf(
             aAnalyticsOptInState(),
+            aAnalyticsOptInState(hasPolicyLink = false),
         )
 }
 
-fun aAnalyticsOptInState() = AnalyticsOptInState(
+fun aAnalyticsOptInState(
+    hasPolicyLink: Boolean = true,
+) = AnalyticsOptInState(
     applicationName = "Tchap X",
+    hasPolicyLink = hasPolicyLink,
     eventSink = {}
 )

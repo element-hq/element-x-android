@@ -13,11 +13,10 @@ import android.text.util.Linkify
 import androidx.core.text.getSpans
 import androidx.core.text.toSpannable
 import androidx.core.text.util.LinkifyCompat
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import timber.log.Timber
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.isNotEmpty
-import kotlin.collections.iterator
 
 /**
  * Helper class to linkify text while preserving existing URL spans.
@@ -50,7 +49,7 @@ object LinkifyHelper {
 
                 // Try to avoid including trailing punctuation in the link.
                 // Since this might fail in some edge cases, we catch the exception and just use the original end index.
-                val newEnd = runCatching {
+                val newEnd = runCatchingExceptions {
                     adjustLinkifiedUrlSpanEndIndex(spannable, start, end)
                 }.onFailure {
                     Timber.e(it, "Failed to adjust end index for link span")

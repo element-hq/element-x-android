@@ -8,6 +8,7 @@
 package io.element.android.features.enterprise.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -20,9 +21,15 @@ class DefaultEnterpriseServiceTest {
     }
 
     @Test
-    fun `defaultHomeserver should return null`() {
+    fun `defaultHomeserverList should return empty list`() {
         val defaultEnterpriseService = DefaultEnterpriseService()
-        assertThat<String?>(defaultEnterpriseService.defaultHomeserver()).isNull()
+        assertThat(defaultEnterpriseService.defaultHomeserverList()).isEmpty()
+    }
+
+    @Test
+    fun `isAllowedToConnectToHomeserver is true for all homeserver urls`() = runTest {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        assertThat(defaultEnterpriseService.isAllowedToConnectToHomeserver(A_HOMESERVER_URL)).isTrue()
     }
 
     @Test

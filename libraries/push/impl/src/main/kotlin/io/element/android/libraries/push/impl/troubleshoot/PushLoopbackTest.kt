@@ -76,6 +76,7 @@ class PushLoopbackTest @Inject constructor(
             job.cancel()
             return
         }
+        @Suppress("RunCatchingNotAllowed")
         runCatching {
             withTimeout(10.seconds) {
                 completable.await()

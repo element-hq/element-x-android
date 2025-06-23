@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Adferwch eich hunaniaeth cryptograffig a hanes negeseuon gydag allwedd adfer os ydych wedi colli eich holl ddyfeisiau presennol."</string>
+  <string name="banner_set_up_recovery_submit">"Gosod adfer"</string>
+  <string name="banner_set_up_recovery_title">"Gosodwch adferiad i ddiogelu eich cyfrif"</string>
+  <string name="confirm_recovery_key_banner_message">"Cadarnhewch eich allwedd adfer i gynnal mynediad i\'ch storfa allweddi a\'ch hanes negeseuon."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Rhowch eich allwedd adfer"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Wedi anghofio\'ch allwedd adfer?"</string>
+  <string name="confirm_recovery_key_banner_title">"Dyw eich allwedd storfa heb ei gydweddu"</string>
+  <string name="full_screen_intent_banner_message">"Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi\'i gloi."</string>
+  <string name="full_screen_intent_banner_title">"Gwella profiad eich galwadau"</string>
+  <string name="screen_invites_decline_chat_message">"Ydych chi\'n siŵr eich bod am wrthod y gwahoddiad i ymuno â %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Gwrthod y gwahoddiad"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Ydych chi\'n siŵr eich bod am wrthod y sgwrs breifat hon gyda %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Gwrthod sgwrs"</string>
+  <string name="screen_invites_empty_list">"Dim Gwahoddiadau"</string>
+  <string name="screen_invites_invited_you">"Mae %1$s (%2$s) wedi eich gwahodd"</string>
+  <string name="screen_join_room_knock_sent_title">"Anfonwyd y cais i ymuno"</string>
+  <string name="screen_migration_message">"Mae hon yn broses un tro, diolch am aros."</string>
+  <string name="screen_migration_title">"Creu eich cyfrif."</string>
+  <string name="screen_roomlist_a11y_create_message">"Crëwch sgwrs neu ystafell newydd"</string>
+  <string name="screen_roomlist_empty_message">"Cychwynnwch arni trwy anfon neges at rywun."</string>
+  <string name="screen_roomlist_empty_title">"Dim sgyrsiau eto."</string>
+  <string name="screen_roomlist_filter_favourites">"Ffefrynnau"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Gallwch ychwanegu sgwrs at eich ffefrynnau yn y gosodiadau sgwrsio.
+Am y tro, gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Does gennych chi ddim hoff sgyrsiau eto"</string>
+  <string name="screen_roomlist_filter_invites">"Gwahoddiadau"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Does gennych chi ddim gwahoddiadau yn aros."</string>
+  <string name="screen_roomlist_filter_low_priority">"Blaenoriaeth Isel"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Does gennych chi ddim sgyrsiau ar gyfer y dewis hwn"</string>
+  <string name="screen_roomlist_filter_people">"Pobl"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Does gennych chi ddim unrhyw DMs eto"</string>
+  <string name="screen_roomlist_filter_rooms">"Ystafelloedd"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Dydych chi ddim mewn unrhyw ystafell eto"</string>
+  <string name="screen_roomlist_filter_unreads">"Heb ei ddarllen"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Llongyfarchiadau!
+Does gennych chi ddim negeseuon heb eu darllen!"</string>
+  <string name="screen_roomlist_main_space_title">"Sgyrsiau"</string>
+  <string name="screen_roomlist_mark_as_read">"Marcio fel wedi\'i ddarllen"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marcio fel heb ei ddarllen"</string>
+  <string name="session_verification_banner_message">"Mae\'n debyg eich bod chi\'n defnyddio dyfais newydd. Dilyswch gyda dyfais arall i gael mynediad at eich negeseuon wedi\'u hamgryptio."</string>
+  <string name="session_verification_banner_title">"Gwiriwch mai chi sydd yna"</string>
+</resources>

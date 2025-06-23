@@ -24,8 +24,9 @@ import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.ui.media.AvatarAction
@@ -43,7 +44,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class RoomDetailsEditPresenter @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
     private val temporaryUriDeleter: TemporaryUriDeleter,
@@ -216,7 +217,7 @@ class RoomDetailsEditPresenter @Inject constructor(
     }
 
     private suspend fun updateAvatar(avatarUri: Uri?): Result<Unit> {
-        return runCatching {
+        return runCatchingExceptions {
             if (avatarUri != null) {
                 val preprocessed = mediaPreProcessor.process(
                     uri = avatarUri,

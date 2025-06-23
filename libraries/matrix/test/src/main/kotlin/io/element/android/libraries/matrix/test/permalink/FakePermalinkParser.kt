@@ -12,13 +12,13 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePermalinkParser(
-    private var result: () -> PermalinkData = { lambdaError() }
+    private var result: (String) -> PermalinkData = { lambdaError() }
 ) : PermalinkParser {
     fun givenResult(result: PermalinkData) {
         this.result = { result }
     }
 
     override fun parse(uriString: String): PermalinkData {
-        return result()
+        return result(uriString)
     }
 }

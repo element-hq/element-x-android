@@ -17,6 +17,7 @@ import org.matrix.rustcomponents.sdk.RoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomNotificationMode
+import org.matrix.rustcomponents.sdk.SuccessorRoom
 import uniffi.matrix_sdk_base.EncryptionState
 
 fun aRustRoomInfo(
@@ -29,7 +30,6 @@ fun aRustRoomInfo(
     isDirect: Boolean = false,
     isPublic: Boolean = false,
     isSpace: Boolean = false,
-    isTombstoned: Boolean = false,
     isFavourite: Boolean = false,
     canonicalAlias: String? = null,
     alternativeAliases: List<String> = listOf(),
@@ -53,6 +53,7 @@ fun aRustRoomInfo(
     roomCreator: UserId? = null,
     joinRule: JoinRule? = null,
     historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
+    successorRoom: SuccessorRoom? = null,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -63,7 +64,6 @@ fun aRustRoomInfo(
     isDirect = isDirect,
     isPublic = isPublic,
     isSpace = isSpace,
-    isTombstoned = isTombstoned,
     isFavourite = isFavourite,
     canonicalAlias = canonicalAlias,
     alternativeAliases = alternativeAliases,
@@ -86,5 +86,6 @@ fun aRustRoomInfo(
     pinnedEventIds = pinnedEventIds,
     creator = roomCreator?.value,
     joinRule = joinRule,
-    historyVisibility = historyVisibility
+    historyVisibility = historyVisibility,
+    successorRoom = successorRoom,
 )

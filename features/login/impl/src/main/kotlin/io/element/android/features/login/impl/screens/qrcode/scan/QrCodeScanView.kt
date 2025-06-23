@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -144,6 +145,12 @@ private fun ColumnScope.Buttons(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = when (error) {
+                                is UnauthorizedAccountProviderException -> {
+                                    stringResource(
+                                        id = R.string.screen_change_server_error_unauthorized_homeserver_title,
+                                        error.unauthorisedAccountProviderTitle,
+                                    )
+                                }
                                 is QrLoginException.OtherDeviceNotSignedIn -> {
                                     stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_subtitle)
                                 }
@@ -156,6 +163,12 @@ private fun ColumnScope.Buttons(
                     }
                     Text(
                         text = when (error) {
+                            is UnauthorizedAccountProviderException -> {
+                                stringResource(
+                                    id = R.string.screen_change_server_error_unauthorized_homeserver_content,
+                                    error.authorisedAccountProviderTitles.joinToString(),
+                                )
+                            }
                             is QrLoginException.OtherDeviceNotSignedIn -> {
                                 stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_description)
                             }

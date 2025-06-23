@@ -55,28 +55,19 @@
   <string name="screen_room_details_title">"ოთახის ინფორმაცია"</string>
   <string name="screen_room_details_topic_title">"თემა"</string>
   <string name="screen_room_details_updating_room">"ოთახის განახლება…"</string>
-  <string name="screen_room_member_list_ban_member_confirmation_action">"დაბლოკვა"</string>
-  <string name="screen_room_member_list_ban_member_confirmation_description">"მოწვევის შემთხვევაში ამ ოთახში კვლავ გაწევრიანებას ვერ შეძლებენ."</string>
-  <string name="screen_room_member_list_ban_member_confirmation_title">"დარწმუნებული ხართ, რომ ამ წევრის დაბლოკვა გსურთ?"</string>
   <string name="screen_room_member_list_banned_empty">"ამ ოთახში არაა დაბლოკილი მომხმარებლები."</string>
-  <string name="screen_room_member_list_banning_user">"%1$s-ს დაბლოკვა"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d ადამიანი"</item>
     <item quantity="other">"%1$d ადამიანი"</item>
   </plurals>
-  <string name="screen_room_member_list_manage_member_ban">"წევრის წაშლა და დაბლოკვა"</string>
-  <string name="screen_room_member_list_manage_member_remove">"ოთახიდან გაგდება"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"წევრის წაშლა და დაბლოკვა"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"მხოლოდ წევრის წაშლა"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_title">"გსურთ წევრის გაგდება და მომავალში გაწევრიანების აკრძალვა?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"განბლოკვა"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"მოწვევის შემთხვევაში განბლოკილი მომხმარებელი ისევ შეძლებს ოთახს შეუერთდეს."</string>
   <string name="screen_room_member_list_manage_member_unban_title">"მომხმარებლის განბლოკვა"</string>
-  <string name="screen_room_member_list_manage_member_user_info">"პროფილის ნახვა"</string>
   <string name="screen_room_member_list_mode_banned">"დაბლოკილები"</string>
   <string name="screen_room_member_list_mode_members">"წევრები"</string>
   <string name="screen_room_member_list_pending_header_title">"მომლოდინე"</string>
-  <string name="screen_room_member_list_removing_user">"%1$s-ს გაგდება…"</string>
   <string name="screen_room_member_list_role_administrator">"ადმინისტრატორი"</string>
   <string name="screen_room_member_list_role_moderator">"მოდერატორი"</string>
   <string name="screen_room_member_list_room_members_header_title">"ოთახის წევრები"</string>
@@ -84,7 +75,7 @@
   <string name="screen_room_notification_settings_allow_custom">"მორგებული პარამეტრის დაშვება"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"ამის ჩართვა უგულებელყოფს თქვენს ნაგულისხმევ პარამეტრს"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"ამ ჩატში ჩემი შეტყობინება:"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote">"თქვენ შეგიძლიათ შეცვალოთ იგი თქვენს %1$s ."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"თქვენ შეგიძლიათ შეცვალოთ იგი თქვენს %1$s."</string>
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"გლობალური პარამეტრები"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Სტანდარტული პარამეტრები"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"მორგებული პარამეტრის წაშლა"</string>

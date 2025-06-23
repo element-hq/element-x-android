@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.timeline
 
 import android.view.HapticFeedbackConstants
-import android.view.accessibility.AccessibilityManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -70,11 +69,12 @@ import io.element.android.libraries.designsystem.theme.components.FloatingAction
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -92,7 +92,7 @@ import kotlin.time.Duration.Companion.milliseconds
 fun TimelineView(
     state: TimelineState,
     timelineProtectionState: TimelineProtectionState,
-    onUserDataClick: (UserId) -> Unit,
+    onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onContentClick: (TimelineItem.Event) -> Unit,
     onMessageLongClick: (TimelineItem.Event) -> Unit,
@@ -126,10 +126,7 @@ fun TimelineView(
     val context = LocalContext.current
     val view = LocalView.current
     // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
-    val useReverseLayout = remember {
-        val accessibilityManager = context.getSystemService(AccessibilityManager::class.java)
-        accessibilityManager.isTouchExplorationEnabled.not()
-    }
+    val useReverseLayout = !isTalkbackActive()
 
     fun inReplyToClick(eventId: EventId) {
         state.eventSink(TimelineEvents.FocusOnEvent(eventId))
@@ -159,7 +156,7 @@ fun TimelineView(
                     .testTag(TestTags.timeline),
                 state = lazyListState,
                 reverseLayout = useReverseLayout,
-                contentPadding = PaddingValues(vertical = 8.dp),
+                contentPadding = PaddingValues(top = 64.dp, bottom = 8.dp),
             ) {
                 items(
                     items = state.timelineItems,
@@ -289,11 +286,16 @@ private fun BoxScope.TimelineScrollHelper(
     }
     var jumpToLiveHandled by remember { mutableStateOf(true) }
 
-    fun scrollToBottom() {
+    /**
+     * @param force If true, scroll to the bottom even if the user is already seeing the most recent item.
+     * This fixes the issue where the user is seeing typing notification and so the read receipt is not sent
+     * when a new message comes in.
+     */
+    fun scrollToBottom(force: Boolean) {
         coroutineScope.launch {
             if (lazyListState.firstVisibleItemIndex > 10) {
                 lazyListState.scrollToItem(0)
-            } else if (lazyListState.firstVisibleItemIndex != 0) {
+            } else if (force || lazyListState.firstVisibleItemIndex != 0) {
                 lazyListState.animateScrollToItem(0)
             }
         }
@@ -301,7 +303,7 @@ private fun BoxScope.TimelineScrollHelper(
 
     fun jumpToBottom() {
         if (isLive) {
-            scrollToBottom()
+            scrollToBottom(force = false)
         } else {
             jumpToLiveHandled = false
             onJumpToLive()
@@ -324,9 +326,10 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     LaunchedEffect(canAutoScroll, newEventState) {
-        val shouldScrollToBottom = isScrollFinished && (canAutoScroll || newEventState == NewEventState.FromMe)
+        val shouldScrollToBottom = isScrollFinished &&
+            (canAutoScroll && newEventState == NewEventState.FromOther || newEventState == NewEventState.FromMe)
         if (shouldScrollToBottom) {
-            scrollToBottom()
+            scrollToBottom(force = true)
         }
     }
 

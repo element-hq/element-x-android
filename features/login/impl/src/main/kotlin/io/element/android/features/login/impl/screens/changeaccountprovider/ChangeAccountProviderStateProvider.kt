@@ -8,20 +8,28 @@
 package io.element.android.features.login.impl.screens.changeaccountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.features.login.impl.changeserver.aChangeServerState
 
 open class ChangeAccountProviderStateProvider : PreviewParameterProvider<ChangeAccountProviderState> {
     override val values: Sequence<ChangeAccountProviderState>
         get() = sequenceOf(
             aChangeAccountProviderState(),
+            aChangeAccountProviderState(canSearchForAccountProviders = false),
             // Add other state here
         )
 }
 
-fun aChangeAccountProviderState() = ChangeAccountProviderState(
-    accountProviders = listOf(
+fun aChangeAccountProviderState(
+    accountProviders: List<AccountProvider> = listOf(
         anAccountProvider()
     ),
-    changeServerState = aChangeServerState(),
+    canSearchForAccountProviders: Boolean = true,
+    changeServerState: ChangeServerState = aChangeServerState(),
+) = ChangeAccountProviderState(
+    accountProviders = accountProviders,
+    canSearchForAccountProviders = canSearchForAccountProviders,
+    changeServerState = changeServerState,
 )

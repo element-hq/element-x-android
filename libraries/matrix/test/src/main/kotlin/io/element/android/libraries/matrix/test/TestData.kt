@@ -19,7 +19,6 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 const val A_USER_NAME = "alice"
 const val A_USER_NAME_2 = "Bob"
@@ -63,21 +62,26 @@ const val A_MESSAGE = "Hello world!"
 const val A_REPLY = "OK, I'll be there!"
 const val ANOTHER_MESSAGE = "Hello universe!"
 const val A_CAPTION = "A media caption"
+const val A_REASON = "A reason"
 
 const val A_REDACTION_REASON = "A redaction reason"
 
 const val A_HOMESERVER_URL = "matrix.org"
 const val A_HOMESERVER_URL_2 = "matrix-client.org"
 
+const val AN_ACCOUNT_PROVIDER = "matrix.org"
+const val AN_ACCOUNT_PROVIDER_2 = "element.io"
+const val AN_ACCOUNT_PROVIDER_3 = "other.io"
+
 val A_HOMESERVER = MatrixHomeServerDetails(A_HOMESERVER_URL, supportsPasswordLogin = true, supportsOidcLogin = false)
 val A_HOMESERVER_OIDC = MatrixHomeServerDetails(A_HOMESERVER_URL, supportsPasswordLogin = false, supportsOidcLogin = true)
 val A_ROOM_NOTIFICATION_MODE = RoomNotificationMode.MUTE
-val A_ROOM_NOTIFICATION_SETTINGS = RoomNotificationSettings(mode = A_ROOM_NOTIFICATION_MODE, isDefault = false)
 
 const val AN_AVATAR_URL = "mxc://data"
 
 const val A_FAILURE_REASON = "There has been a failure"
 
+@Suppress("unused")
 val A_THROWABLE = Throwable(A_FAILURE_REASON)
 val AN_EXCEPTION = Exception(A_FAILURE_REASON)
 
@@ -86,3 +90,6 @@ const val A_RECOVERY_KEY = "1234 5678"
 val A_SERVER_LIST = listOf("server1", "server2")
 
 const val A_TIMESTAMP = 567L
+const val A_FORMATTED_DATE = "April 6, 1980 at 6:35 PM"
+
+const val A_LOGIN_HINT = "mxid:@alice:example.org"

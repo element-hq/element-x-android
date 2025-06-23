@@ -27,6 +27,11 @@ fun View.showKeyboard(andRequestFocus: Boolean = false) {
     imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
 }
 
+fun View.isKeyboardVisible(): Boolean {
+    val imm = context?.getSystemService<InputMethodManager>()
+    return imm?.isAcceptingText == true
+}
+
 suspend fun View.awaitWindowFocus() = suspendCancellableCoroutine { continuation ->
     if (hasWindowFocus()) {
         continuation.resume(Unit)

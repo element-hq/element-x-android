@@ -22,6 +22,7 @@
     <item quantity="other">"%d gonbidapen"</item>
   </plurals>
   <string name="notification_invite_body">"Txatetzera gonbidatu zaitu"</string>
+  <string name="notification_invite_body_with_sender">"%1$s(e)k txatera gonbidatu zaitu"</string>
   <string name="notification_mentioned_you_body">"Aipatu zaitu: %1$s"</string>
   <string name="notification_new_messages">"Mezu berriak"</string>
   <plurals name="notification_new_messages_for_room">
@@ -42,6 +43,7 @@
     <item quantity="one">"Irakurri gabeko mezu %den jakinarazpena"</item>
     <item quantity="other">"Irakurri gabeko %d mezuren jakinarazpena"</item>
   </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s eta %2$s"</string>
   <string name="notification_unread_notified_messages_in_room">"%1$s %2$s gelan"</string>
   <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s %2$s gelan eta %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">

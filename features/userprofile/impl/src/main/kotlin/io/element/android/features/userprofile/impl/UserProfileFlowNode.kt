@@ -25,7 +25,7 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.userprofile.impl.root.UserProfileNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
-import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.features.verifysession.api.OutgoingVerificationEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -46,7 +46,7 @@ class UserProfileFlowNode @AssistedInject constructor(
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val sessionIdHolder: CurrentSessionIdHolder,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
-    private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val outgoingVerificationEntryPoint: OutgoingVerificationEntryPoint,
 ) : BaseFlowNode<UserProfileFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -110,11 +110,11 @@ class UserProfileFlowNode @AssistedInject constructor(
                     .build()
             }
             is NavTarget.VerifyUser -> {
-                val params = VerifySessionEntryPoint.Params(
+                val params = OutgoingVerificationEntryPoint.Params(
                     showDeviceVerifiedScreen = false,
                     verificationRequest = VerificationRequest.Outgoing.User(userId = navTarget.userId)
                 )
-                verifySessionEntryPoint.nodeBuilder(this, buildContext)
+                outgoingVerificationEntryPoint.nodeBuilder(this, buildContext)
                     .params(params)
                     .build()
             }

@@ -8,14 +8,18 @@
 package io.element.android.features.login.impl.changeserver
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -38,6 +42,9 @@ class ChangeServerPresenterTest {
         val authenticationService = FakeMatrixAuthenticationService()
         createPresenter(
             authenticationService = authenticationService,
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { true },
+            ),
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
@@ -52,7 +59,11 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server error`() = runTest {
-        createPresenter().test {
+        createPresenter(
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { true },
+            ),
+        ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
             initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
@@ -67,11 +78,41 @@ class ChangeServerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - change server not allowed error`() = runTest {
+        val isAllowedToConnectToHomeserverResult = lambdaRecorder<String, Boolean> { false }
+        createPresenter(
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = isAllowedToConnectToHomeserverResult,
+                defaultHomeserverListResult = { listOf("element.io") },
+            ),
+        ).test {
+            val initialState = awaitItem()
+            assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
+            val anAccountProvider = AccountProvider(url = A_HOMESERVER_URL)
+            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(anAccountProvider))
+            val loadingState = awaitItem()
+            assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
+            val failureState = awaitItem()
+            assertThat(
+                (failureState.changeServerAction.errorOrNull() as ChangeServerError.UnauthorizedAccountProvider).unauthorisedAccountProviderTitle
+            ).isEqualTo(anAccountProvider.title)
+            assertThat(
+                (failureState.changeServerAction.errorOrNull() as ChangeServerError.UnauthorizedAccountProvider).authorisedAccountProviderTitles
+            ).containsExactly("element.io")
+            isAllowedToConnectToHomeserverResult.assertions()
+                .isCalledOnce()
+                .with(value(A_HOMESERVER_URL))
+        }
+    }
+
     private fun createPresenter(
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+        enterpriseService: EnterpriseService = FakeEnterpriseService(),
     ) = ChangeServerPresenter(
         authenticationService = authenticationService,
-        accountProviderDataSource = accountProviderDataSource
+        accountProviderDataSource = accountProviderDataSource,
+        enterpriseService = enterpriseService,
     )
 }

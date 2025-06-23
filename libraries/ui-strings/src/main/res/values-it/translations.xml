@@ -59,6 +59,7 @@
   <string name="action_delete_poll">"Elimina sondaggio"</string>
   <string name="action_disable">"Disabilita"</string>
   <string name="action_discard">"Annulla"</string>
+  <string name="action_dismiss">"Chiudi"</string>
   <string name="action_done">"Fine"</string>
   <string name="action_edit">"Modifica"</string>
   <string name="action_edit_caption">"Modifica didascalia"</string>
@@ -145,7 +146,9 @@
   <string name="common_copied_to_clipboard">"Copiato negli appunti"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creazione stanza…"</string>
+  <string name="common_current_user_canceled_knock">"Richiesta annullata"</string>
   <string name="common_current_user_left_room">"Hai lasciato la stanza"</string>
+  <string name="common_current_user_rejected_invite">"Invito rifiutato"</string>
   <string name="common_dark">"Scuro"</string>
   <string name="common_decryption_error">"Errore di decrittazione"</string>
   <string name="common_developer_options">"Opzioni sviluppatore"</string>
@@ -158,6 +161,7 @@
   <string name="common_editing">"Modifica in corso"</string>
   <string name="common_editing_caption">"Modifica didascalia"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"File vuoto"</string>
   <string name="common_encryption">"Crittografia"</string>
   <string name="common_encryption_enabled">"Crittografia abilitata"</string>
   <string name="common_enter_your_pin">"Inserisci il PIN"</string>
@@ -182,9 +186,14 @@ Motivo:. %1$s"</string>
   <string name="common_invite_unknown_profile">"Questo ID Matrix non può essere trovato, quindi l\'invito potrebbe non essere ricevuto."</string>
   <string name="common_leaving_room">"Lascio la stanza"</string>
   <string name="common_light">"Chiaro"</string>
+  <string name="common_line_copied_to_clipboard">"Riga copiata negli appunti"</string>
   <string name="common_link_copied_to_clipboard">"Collegamento copiato negli appunti"</string>
   <string name="common_loading">"Caricamento…"</string>
   <string name="common_loading_more">"Caricamento in corso…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d altro"</item>
+    <item quantity="other">"altri %d"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membro"</item>
     <item quantity="other">"%1$d membri"</item>
@@ -198,6 +207,7 @@ Motivo:. %1$s"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nessun risultato"</string>
   <string name="common_no_room_name">"Nessun nome della stanza"</string>
+  <string name="common_not_encrypted">"Non cifrata"</string>
   <string name="common_offline">"Non in linea"</string>
   <string name="common_open_source_licenses">"Licenze open source"</string>
   <string name="common_or">"o"</string>
@@ -259,7 +269,7 @@ Motivo:. %1$s"</string>
   <string name="common_unable_to_decrypt">"Impossibile decrittografare"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Inviato da un dispositivo non sicuro"</string>
   <string name="common_unable_to_decrypt_no_access">"Non hai accesso a questo messaggio"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"L\'identità verificata del mittente è cambiata"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"L\'identità verificata del mittente è stata reimpostata"</string>
   <string name="common_unable_to_invite_message">"Non è stato possibile spedire inviti a uno o più utenti."</string>
   <string name="common_unable_to_invite_title">"Impossibile inviare inviti"</string>
   <string name="common_unlock">"Sblocca"</string>
@@ -279,12 +289,16 @@ Motivo:. %1$s"</string>
   <string name="common_waiting">"In attesa…"</string>
   <string name="common_waiting_for_decryption_key">"In attesa del messaggio"</string>
   <string name="common_you">"Tu"</string>
-  <string name="crypto_identity_change_pin_violation">"L\'identità di %1$s sembra essere cambiata. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"L\'identità di %1$s %2$s sembra essere cambiata. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"L\'identità di %1$s è stata reimpostata. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"L\'identità %2$s di %1$s sembra essere cambiata. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"L\'identità verificata di %1$s è cambiata."</string>
-  <string name="crypto_identity_change_verification_violation_new">"L\'identità %2$s verificata di %1$s è cambiata. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"L\'identità di %1$s è stata reimpostata."</string>
+  <string name="crypto_identity_change_verification_violation_new">"L\'identità %2$s di %1$s è stata reimpostata. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Ritira verifica"</string>
+  <string name="dialog_confirm_link_message">"Il link %1$s ti porta ad un altro sito %2$s
+
+Sei sicuro di voler continuare?"</string>
+  <string name="dialog_confirm_link_title">"Ricontrolla questo link"</string>
   <string name="dialog_title_confirmation">"Conferma"</string>
   <string name="dialog_title_error">"Errore"</string>
   <string name="dialog_title_success">"Operazione riuscita"</string>
@@ -331,7 +345,7 @@ Motivo:. %1$s"</string>
   <string name="screen_reset_identity_confirmation_title">"Non riesci a confermare? Vai al tuo account per ripristinare la tua identità."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ritira la verifica e invia"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Puoi ritirare la tua verifica e inviare comunque questo messaggio, oppure annullarlo per ora e riprovare più tardi dopo aver riverificato %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Il tuo messaggio non è stato inviato perché l\'identità verificata di %1$s è cambiata."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Il tuo messaggio non è stato inviato perché l\'identità verificata di %1$s è stata reimpostata."</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Invia comunque il messaggio"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s sta usando uno o più dispositivi non verificati. Puoi inviare il messaggio in ogni caso, oppure annullarlo e riprovare più tardi quando %2$s avrà verificato tutti i suoi dispositivi."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Il tuo messaggio non è stato inviato perché %1$s non ha verificato tutti i dispositivi."</string>
@@ -352,7 +366,7 @@ Motivo:. %1$s"</string>
   <string name="screen_share_open_google_maps">"Apri in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Apri in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Condividi questa posizione"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Messaggio non inviato perché l\'identità verificata di %1$s è cambiata."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Messaggio non inviato perché l\'identità verificata di %1$s è stata reimpostata."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Messaggio non inviato perché %1$s non ha verificato tutti i dispositivi."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Messaggio non inviato perché non hai verificato uno o più dispositivi."</string>
   <string name="screen_view_location_title">"Posizione"</string>

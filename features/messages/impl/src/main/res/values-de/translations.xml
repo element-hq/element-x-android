@@ -8,9 +8,9 @@
   <string name="emoji_picker_category_people">"Smileys &amp; Menschen"</string>
   <string name="emoji_picker_category_places">"Reisen &amp; Orte"</string>
   <string name="emoji_picker_category_symbols">"Symbole"</string>
-  <string name="screen_report_content_block_user">"Benutzer blockieren"</string>
-  <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
-  <string name="screen_report_content_explanation">"Diese Meldung wird an den Administrator deines Homeservers weitergeleitet. Dieser kann keine verschlüsselten Nachrichten lesen."</string>
+  <string name="screen_report_content_block_user">"Nutzer blockieren"</string>
+  <string name="screen_report_content_block_user_hint">"Prüfen Sie, ob Sie alle aktuellen und zukünftigen Nachrichten dieses Nutzers ausblenden wollen"</string>
+  <string name="screen_report_content_explanation">"Diese Nachricht wird dem Administrator ihres Homeservers gemeldet. Dieser kann allerdings keine verschlüsselten Nachrichten lesen."</string>
   <string name="screen_report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Foto aufnehmen"</string>
@@ -22,8 +22,8 @@
   <string name="screen_room_attachment_text_formatting">"Textformatierung"</string>
   <string name="screen_room_encrypted_history_banner">"Der Nachrichtenverlauf ist derzeit nicht verfügbar"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Der Nachrichtenverlauf ist nicht verfügbar. Verifiziere dieses Gerät, um deinen Nachrichtenverlauf zu sehen."</string>
-  <string name="screen_room_invite_again_alert_message">"Möchtest du sie wieder einladen?"</string>
-  <string name="screen_room_invite_again_alert_title">"Du bist allein in diesem Chat"</string>
+  <string name="screen_room_invite_again_alert_message">"Möchten Sie sie erneut einladen?"</string>
+  <string name="screen_room_invite_again_alert_title">"Sie sind in diesem Chat allein"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Alle Mitglieder benachrichtigen"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Erneut senden"</string>

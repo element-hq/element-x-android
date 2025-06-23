@@ -14,7 +14,7 @@
     <item quantity="other">"%d ειδοποιήσεις"</item>
   </plurals>
   <string name="notification_fallback_content">"Γνωστοποίηση"</string>
-  <string name="notification_incoming_call">"Εισερχόμενη κλήση"</string>
+  <string name="notification_incoming_call">"📹 Εισερχόμενη κλήση"</string>
   <string name="notification_inline_reply_failed">"** Αποτυχία αποστολής - παρακαλώ άνοιξε το δωμάτιο"</string>
   <string name="notification_invitation_action_join">"Συμμετοχή"</string>
   <string name="notification_invitation_action_reject">"Απόρριψη"</string>
@@ -64,6 +64,7 @@
     <item quantity="one">"Βρέθηκε %1$d πάροχος push: %2$s"</item>
     <item quantity="other">"Βρέθηκαν %1$d πάροχοι push: %2$s"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Η εφαρμογή δημιουργήθηκε με υποστήριξη για: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Εντοπισμός παρόχων push"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Έλεγξε ότι η εφαρμογή μπορεί να εμφανίσει ειδοποίηση."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Δεν έχει γίνει κλικ στην ειδοποίηση."</string>

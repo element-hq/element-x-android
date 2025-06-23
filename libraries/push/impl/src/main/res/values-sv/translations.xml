@@ -64,6 +64,7 @@
     <item quantity="one">"Hittade %1$d push-leverantör: %2$s"</item>
     <item quantity="other">"Hittade %1$d push-leverantörer: %2$s"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Applikationen byggdes med stöd för: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Upptäck push-leverantörer"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Kontrollera att applikationen kan visa avisering."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Aviseringen har inte klickats på."</string>

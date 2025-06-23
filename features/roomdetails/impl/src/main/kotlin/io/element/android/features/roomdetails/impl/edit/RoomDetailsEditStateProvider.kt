@@ -9,6 +9,7 @@ package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.net.toUri
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.media.AvatarAction
@@ -22,11 +23,11 @@ open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEd
             aRoomDetailsEditState(),
             aRoomDetailsEditState(roomTopic = ""),
             aRoomDetailsEditState(roomRawName = ""),
-            aRoomDetailsEditState(roomAvatarUrl = Uri.parse("example://uri")),
+            aRoomDetailsEditState(roomAvatarUrl = "example://uri".toUri()),
             aRoomDetailsEditState(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
             aRoomDetailsEditState(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
             aRoomDetailsEditState(saveAction = AsyncAction.Loading),
-            aRoomDetailsEditState(saveAction = AsyncAction.Failure(Throwable("Whelp"))),
+            aRoomDetailsEditState(saveAction = AsyncAction.Failure(RuntimeException("Whelp"))),
         )
 }
 

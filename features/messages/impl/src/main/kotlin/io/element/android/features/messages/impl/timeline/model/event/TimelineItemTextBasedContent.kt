@@ -20,14 +20,12 @@ sealed interface TimelineItemTextBasedContent :
     /** The raw body of the event, in Markdown format. */
     val body: String
 
-    /** The body of the event, with mentions replaced by their pillified version. */
-    val pillifiedBody: CharSequence
-
     /** The parsed HTML DOM of the formatted event body. */
     val htmlDocument: Document?
 
-    /** The formatted body of the event, already parsed and with the DOM translated to Android spans. */
-    val formattedBody: CharSequence?
+    /** The formatted body of the event, already parsed and with the DOM translated to Android spans.
+     * This can also includes mention spans from permalink parsing */
+    val formattedBody: CharSequence
 
     /** The plain text version of the event body. This is the Markdown version without actual Markdown formatting. */
     val plainText: String

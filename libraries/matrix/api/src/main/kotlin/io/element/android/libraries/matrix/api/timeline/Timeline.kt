@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
@@ -49,7 +50,10 @@ interface Timeline : AutoCloseable {
     val membershipChangeEventReceived: Flow<Unit>
     suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
     suspend fun paginate(direction: PaginationDirection): Result<Boolean>
-    fun paginationStatus(direction: PaginationDirection): StateFlow<PaginationStatus>
+
+    val backwardPaginationStatus: StateFlow<PaginationStatus>
+    val forwardPaginationStatus: StateFlow<PaginationStatus>
+
     val timelineItems: Flow<List<MatrixTimelineItem>>
 
     suspend fun sendMessage(
@@ -72,7 +76,7 @@ interface Timeline : AutoCloseable {
     ): Result<Unit>
 
     suspend fun replyMessage(
-        eventId: EventId,
+        replyParameters: ReplyParameters,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
@@ -85,7 +89,8 @@ interface Timeline : AutoCloseable {
         imageInfo: ImageInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler>
 
     suspend fun sendVideo(
@@ -94,10 +99,9 @@ interface Timeline : AutoCloseable {
         videoInfo: VideoInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler>
-
-    suspend fun redactEvent(eventOrTransactionId: EventOrTransactionId, reason: String?): Result<Unit>
 
     suspend fun sendAudio(
         file: File,
@@ -105,7 +109,8 @@ interface Timeline : AutoCloseable {
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        ): Result<MediaUploadHandler>
+        replyParameters: ReplyParameters?,
+    ): Result<MediaUploadHandler>
 
     suspend fun sendFile(
         file: File,
@@ -113,14 +118,8 @@ interface Timeline : AutoCloseable {
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler>
-
-    suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit>
-
-    suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
-
-    suspend fun cancelSend(transactionId: TransactionId): Result<Unit> =
-        redactEvent(transactionId.toEventOrTransactionId(), reason = null)
 
     /**
      * Share a location message in the room.
@@ -140,6 +139,23 @@ interface Timeline : AutoCloseable {
         zoomLevel: Int? = null,
         assetType: AssetType? = null,
     ): Result<Unit>
+
+    suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
+    ): Result<MediaUploadHandler>
+
+    suspend fun redactEvent(eventOrTransactionId: EventOrTransactionId, reason: String?): Result<Unit>
+
+    suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit>
+
+    suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
+
+    suspend fun cancelSend(transactionId: TransactionId): Result<Unit> =
+        redactEvent(transactionId.toEventOrTransactionId(), reason = null)
 
     /**
      * Create a poll in the room.
@@ -188,13 +204,6 @@ interface Timeline : AutoCloseable {
      * @param text Fallback text of the poll end event.
      */
     suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
-
-    suspend fun sendVoiceMessage(
-        file: File,
-        audioInfo: AudioInfo,
-        waveform: List<Float>,
-        progressCallback: ProgressCallback?
-    ): Result<MediaUploadHandler>
 
     suspend fun loadReplyDetails(eventId: EventId): InReplyTo
 

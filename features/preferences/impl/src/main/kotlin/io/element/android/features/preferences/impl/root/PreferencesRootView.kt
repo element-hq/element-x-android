@@ -203,11 +203,13 @@ private fun ColumnScope.GeneralSection(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
         onClick = onOpenAbout,
     )
-    ListItem(
-        headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
-        onClick = onOpenRageShake
-    )
+    if (state.canReportBug) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
+            onClick = onOpenRageShake
+        )
+    }
     if (state.showAnalyticsSettings) {
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_analytics)) },

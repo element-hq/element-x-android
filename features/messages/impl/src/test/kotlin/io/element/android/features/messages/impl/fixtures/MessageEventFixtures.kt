@@ -38,7 +38,7 @@ internal fun aMessageEvent(
     isMine: Boolean = true,
     isEditable: Boolean = true,
     canBeRepliedTo: Boolean = true,
-    content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, formattedBody = null, isEdited = false),
+    content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, formattedBody = A_MESSAGE, isEdited = false),
     inReplyTo: InReplyToDetails? = null,
     isThreaded: Boolean = false,
     sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),

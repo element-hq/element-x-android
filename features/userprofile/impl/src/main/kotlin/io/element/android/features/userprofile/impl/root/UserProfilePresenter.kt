@@ -21,6 +21,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.createroom.api.StartDMAction
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileState.ConfirmationDialog
@@ -46,6 +47,7 @@ class UserProfilePresenter @AssistedInject constructor(
     private val buildMeta: BuildMeta,
     private val client: MatrixClient,
     private val startDMAction: StartDMAction,
+    private val enterpriseService: EnterpriseService,
 ) : Presenter<UserProfileState> {
     @AssistedFactory
     interface Factory {
@@ -55,17 +57,27 @@ class UserProfilePresenter @AssistedInject constructor(
     @Composable
     private fun getDmRoomId(): State<RoomId?> {
         return produceState<RoomId?>(initialValue = null) {
-            value = client.findDM(userId)
+            value = client.findDM(userId).getOrNull()
         }
     }
 
     @Composable
     private fun getCanCall(roomId: RoomId?): State<Boolean> {
-        return produceState(initialValue = false, roomId) {
-            value = if (client.isMe(userId)) {
-                false
-            } else {
-                roomId?.let { client.getRoom(it)?.canUserJoinCall(client.sessionId)?.getOrNull() == true }.orFalse()
+        val isElementCallAvailable by produceState(initialValue = false, roomId) {
+            value = enterpriseService.isElementCallAvailable()
+        }
+
+        return produceState(initialValue = false, isElementCallAvailable, roomId) {
+            value = when {
+                isElementCallAvailable.not() -> false
+                client.isMe(userId) -> false
+                else ->
+                    roomId
+                        ?.let { client.getRoom(it) }
+                        ?.use { room ->
+                            room.canUserJoinCall(client.sessionId).getOrNull()
+                        }
+                        .orFalse()
             }
         }
     }
@@ -122,8 +134,9 @@ class UserProfilePresenter @AssistedInject constructor(
                 UserProfileEvents.ClearStartDMState -> {
                     startDmActionState.value = AsyncAction.Uninitialized
                 }
-                // Do nothing for withdrawing verification as it's handled by the RoomMemberDetailsPresenter if needed
-                UserProfileEvents.WithdrawVerification -> Unit
+                // Do nothing for other event as they are handled by the RoomMemberDetailsPresenter if needed
+                UserProfileEvents.WithdrawVerification,
+                is UserProfileEvents.CopyToClipboard -> Unit
             }
         }
 
@@ -139,6 +152,7 @@ class UserProfilePresenter @AssistedInject constructor(
             isCurrentUser = isCurrentUser,
             dmRoomId = dmRoomId,
             canCall = canCall,
+            snackbarMessage = null,
             eventSink = ::handleEvents
         )
     }

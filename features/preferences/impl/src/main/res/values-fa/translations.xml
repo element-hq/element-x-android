@@ -5,10 +5,17 @@
   <string name="screen_advanced_settings_developer_mode">"حالت توسعه‌دهنده"</string>
   <string name="screen_advanced_settings_element_call_base_url">"نشانی پایهٔ تماس المنتی سفارشی"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"تنظمی نشانی پایه‌‌ای سفارشی برای تماس المنتی."</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"نهفتن رسانه در خط زمانی"</string>
+  <string name="screen_advanced_settings_media_compression_title">"بهینه سازی کیفیت رسانه"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"نظارت و امنیت"</string>
   <string name="screen_advanced_settings_push_provider_android">"فراهم کنندهٔ آگاهی‌های ارسالی"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"از کار انداختن ویرایشگر متن غنی یا نوشتن دستی مارک‌دون."</string>
   <string name="screen_advanced_settings_send_read_receipts">"رسید‌های خواندن"</string>
   <string name="screen_advanced_settings_share_presence">"هم‌رسانی حضور"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"نهفتن همیشگی"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"نمایش همیشگی"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"در اتاق‌های خصوصی"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"نمایش رسانه در خط زمانی"</string>
   <string name="screen_blocked_users_empty">"هیچ کاربر مسدودی ندارید"</string>
   <string name="screen_blocked_users_unblock_alert_action">"رفع انسداد"</string>
   <string name="screen_blocked_users_unblock_alert_description">"قادر خواهید بود دوباره همهٔ پیام‌هایش را ببینید."</string>

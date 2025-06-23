@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Rhwystro"</string>
+  <string name="screen_dm_details_block_alert_description">"Fydd defnyddwyr sydd wedi\'u rhwystro ddim yn gallu anfon negeseuon atoch a bydd eu holl negeseuon yn cael eu cuddio. Gallwch eu dadrwystro unrhyw bryd."</string>
+  <string name="screen_dm_details_block_user">"Rhwystro defnyddiwr"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Dad-rwystro"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Byddwch yn gallu gweld pob neges oddi wrthyn nhw eto."</string>
+  <string name="screen_dm_details_unblock_user">"Dadrwystro defnyddiwr"</string>
+  <string name="screen_room_member_details_block_alert_action">"Rhwystro"</string>
+  <string name="screen_room_member_details_block_alert_description">"Fydd defnyddwyr sydd wedi\'u rhwystro ddim yn gallu anfon negeseuon atoch a bydd eu holl negeseuon yn cael eu cuddio. Gallwch eu dadrwystro unrhyw bryd."</string>
+  <string name="screen_room_member_details_block_user">"Rhwystro defnyddiwr"</string>
+  <string name="screen_room_member_details_title">"Proffil"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Dad-rwystro"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Byddwch yn gallu gweld pob neges oddi wrthyn nhw eto."</string>
+  <string name="screen_room_member_details_unblock_user">"Dadrwystro defnyddiwr"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"Defnyddiwch yr ap gwe i ddilysu\'r defnyddiwr hwn."</string>
+  <string name="screen_room_member_details_verify_button_title">"Dilysu %1$s"</string>
+  <string name="screen_start_chat_error_starting_chat">"Digwyddodd gwall wrth geisio cychwyn sgwrs"</string>
+</resources>

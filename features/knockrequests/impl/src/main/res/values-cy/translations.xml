@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Iawn, derbyn y cyfan"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Ydych chi\'n siŵr eich bod am dderbyn pob cais i ymuno?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Derbyn pob cais"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Derbyn y cyfan"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Doedd dim modd derbyn pob cais. Hoffech chi roi cynnig arall arni?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Wedi methu derbyn pob cais"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Yn derbyn pob cais i ymuno"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Doedd dim modd derbyn y cais hwn. Hoffech chi roi cynnig arall arni?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Wedi methu â derbyn y cais"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Yn derbyn cais i ymuno"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Iawn, gwrthod a gwahardd"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Ydych chi\'n siŵr eich bod am wrthod a gwahardd %1$s? Bydd y defnyddiwr hwn ddim yn gallu gofyn am fynediad i ymuno â\'r ystafell hon eto."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Gwrthod a gwahardd mynediad"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Yn gwrthod a gwahardd mynediad"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Iawn, gwrthod"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Ydych chi\'n siŵr eich bod am wrthod %1$s cais i ymuno â\'r ystafell hon?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Gwrthod mynediad"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Gwrthod a gwahardd"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Doedd dim modd i ni wrthod y cais hwn. Hoffech chi roi cynnig arall arni?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Wedi methu â gwrthod y cais"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Yn gwrthod cais i ymuno"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Pan fydd rhywun yn gofyn am gael ymuno â\'r ystafell, byddwch yn gallu gweld eu cais yma."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Dim cais i ymuno yn disgwyl"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Yn llwytho ceisiadau i ymuno…"</string>
+  <string name="screen_knock_requests_list_title">"Ceisiadau i ymuno"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="zero">"Dyw %1$s na +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
+    <item quantity="one">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
+    <item quantity="two">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
+    <item quantity="few">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
+    <item quantity="many">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
+    <item quantity="other">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Gweld y cyfan"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Derbyn"</string>
+  <string name="screen_room_single_knock_request_title">"Mae %1$s eisiau ymuno â\'r ystafell hon"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Golwg"</string>
+</resources>

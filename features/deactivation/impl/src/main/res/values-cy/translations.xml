@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Cadarnhewch eich bod am gau\'r cyfrif. Does dom modd dadwneud y weithred hon."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Dileu fy holl negeseuon"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Rhybudd: Mae\'n bosibl y bydd defnyddwyr y dyfodol yn gweld sgyrsiau anghyflawn."</string>
+  <string name="screen_deactivate_account_description">"Bydd cau eich cyfrif yn %1$s yn:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"dim modd ei adfer"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s eich cyfrif (does dim modd i chi fewngofnodi eto, ac nid oes modd ailddefnyddio\'ch dull adnabod)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Analluogi\'n barhaol"</string>
+  <string name="screen_deactivate_account_list_item_2">"Eich tynnu o bob ystafell sgwrsio."</string>
+  <string name="screen_deactivate_account_list_item_3">"Dileu manylion eich cyfrif o\'n gweinydd hunaniaeth."</string>
+  <string name="screen_deactivate_account_list_item_4">"Bydd eich negeseuon yn dal i fod yn weladwy i ddefnyddwyr cofrestredig ond fyddan nhw ddim ar gael i ddefnyddwyr newydd neu anghofrestredig os byddwch yn dewis eu dileu."</string>
+  <string name="screen_deactivate_account_title">"Cau cyfrif"</string>
+</resources>

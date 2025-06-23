@@ -8,6 +8,7 @@
 package io.element.android.libraries.pushproviders.firebase
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
@@ -24,7 +25,7 @@ class DefaultFirebaseTokenRotator @Inject constructor(
     private val firebaseTokenGetter: FirebaseTokenGetter,
 ) : FirebaseTokenRotator {
     override suspend fun rotate(): Result<Unit> {
-        return runCatching {
+        return runCatchingExceptions {
             firebaseTokenDeleter.delete()
             firebaseTokenGetter.get()
         }

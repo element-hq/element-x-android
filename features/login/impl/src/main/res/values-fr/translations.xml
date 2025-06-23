@@ -14,11 +14,14 @@
   <string name="screen_change_account_provider_subtitle">"Utilisez un autre fournisseur de compte, tel que votre propre serveur privé ou un serveur professionnel."</string>
   <string name="screen_change_account_provider_title">"Changer de fournisseur de compte"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nous n’avons pas pu atteindre ce serveur d’accueil. Vérifiez que vous avez correctement saisi l’URL du serveur d’accueil. Si l’URL est correcte, contactez l’administrateur de votre serveur d’accueil pour obtenir de l’aide."</string>
-  <string name="screen_change_server_error_invalid_well_known">"Sliding sync n’est pas disponible en raison d’un problème dans le well-known file :
+  <string name="screen_change_server_error_invalid_well_known">"Ce fournisseur de compte n’est pas disponible en raison d’un problème dans le fichier .well-known:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Ce serveur ne prend actuellement pas en charge la synchronisation glissante."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Le fournisseur de compte sélectionné ne prend pas en charge le sliding sync. Une mise à jour du serveur est nécessaire pour pouvoir utiliser %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s n’est pas autorisé à se connecter à %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Cette application a été configurée pour autoriser: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Le fournisseur de compte %1$s n’est pas autorisé."</string>
   <string name="screen_change_server_form_header">"URL du serveur d’accueil"</string>
-  <string name="screen_change_server_form_notice">"Vous ne pouvez vous connecter qu’à un serveur existant qui prend en charge le sliding sync. L’administrateur de votre serveur d’accueil devra le configurer. %1$s"</string>
+  <string name="screen_change_server_form_notice">"Saisissez une adresse de domaine."</string>
   <string name="screen_change_server_subtitle">"Quelle est l’adresse de votre serveur ?"</string>
   <string name="screen_change_server_title">"Choisissez votre serveur"</string>
   <string name="screen_create_account_title">"Créer un compte"</string>
@@ -31,6 +34,13 @@
   <string name="screen_login_subtitle">"Matrix est un réseau ouvert pour une communication sécurisée et décentralisée."</string>
   <string name="screen_login_title">"Content de vous revoir !"</string>
   <string name="screen_login_title_with_homeserver">"Connectez-vous à %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Se connecter manuellement"</string>
+  <string name="screen_onboarding_sign_in_to">"Se connecter à %1$s"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Se connecter avec un QR code"</string>
+  <string name="screen_onboarding_sign_up">"Créer un compte"</string>
+  <string name="screen_onboarding_welcome_message">"Bienvenue dans l’application %1$s la plus rapide de tous les temps. Boosté pour plus de rapidité et de simplicité."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Bienvenue sur %1$s. Boosté, pour plus de rapidité et de simplicité."</string>
+  <string name="screen_onboarding_welcome_title">"Soyez dans votre Element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Établissement d’une connexion sécurisée"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Aucune connexion sécurisée n’a pu être établie avec la nouvelle session. Vos sessions existantes sont toujours en sécurité et vous n’avez pas à vous en soucier."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Et maintenant ?"</string>
@@ -77,5 +87,6 @@
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix est un réseau ouvert pour une communication sécurisée et décentralisée."</string>
   <string name="screen_server_confirmation_message_register">"C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails."</string>
   <string name="screen_server_confirmation_title_login">"Vous êtes sur le point de vous connecter à %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Choisissez un fournisseur de compte"</string>
   <string name="screen_server_confirmation_title_register">"Vous êtes sur le point de créer un compte sur %1$s"</string>
 </resources>

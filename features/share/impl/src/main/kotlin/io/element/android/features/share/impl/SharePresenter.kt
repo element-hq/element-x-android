@@ -18,21 +18,27 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class SharePresenter @AssistedInject constructor(
     @Assisted private val intent: Intent,
-    private val appCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
     private val shareIntentHandler: ShareIntentHandler,
     private val matrixClient: MatrixClient,
     private val mediaPreProcessor: MediaPreProcessor,
     private val sessionPreferencesStore: SessionPreferencesStore,
+    private val activeRoomsHolder: ActiveRoomsHolder,
 ) : Presenter<ShareState> {
     @AssistedFactory
     interface Factory {
@@ -42,7 +48,7 @@ class SharePresenter @AssistedInject constructor(
     private val shareActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
 
     fun onRoomSelected(roomIds: List<RoomId>) {
-        appCoroutineScope.share(intent, roomIds)
+        sessionCoroutineScope.share(intent, roomIds)
     }
 
     @Composable
@@ -59,6 +65,12 @@ class SharePresenter @AssistedInject constructor(
         )
     }
 
+    private suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom? {
+        return activeRoomsHolder.getActiveRoom(matrixClient.sessionId)
+            ?.takeIf { it.roomId == roomId }
+            ?: matrixClient.getJoinedRoom(roomId)
+    }
+
     private fun CoroutineScope.share(
         intent: Intent,
         roomIds: List<RoomId>,
@@ -72,7 +84,7 @@ class SharePresenter @AssistedInject constructor(
                     } else {
                         roomIds
                             .map { roomId ->
-                                val room = matrixClient.getRoom(roomId) ?: return@map false
+                                val room = getJoinedRoom(roomId) ?: return@map false
                                 val mediaSender = MediaSender(
                                     preProcessor = mediaPreProcessor,
                                     room = room,
@@ -80,12 +92,26 @@ class SharePresenter @AssistedInject constructor(
                                 )
                                 filesToShare
                                     .map { fileToShare ->
-                                        mediaSender.sendMedia(
+                                        val result = mediaSender.sendMedia(
                                             uri = fileToShare.uri,
                                             mimeType = fileToShare.mimeType,
-                                        ).isSuccess
+                                        )
+                                        // If the coroutine was cancelled, destroy the room and rethrow the exception
+                                        val cancellationException = result.exceptionOrNull() as? CancellationException
+                                        if (cancellationException != null) {
+                                            if (activeRoomsHolder.getActiveRoomMatching(matrixClient.sessionId, roomId) == null) {
+                                                room.destroy()
+                                            }
+                                            throw cancellationException
+                                        }
+                                        result.isSuccess
                                     }
-                                    .all { it }
+                                    .all { isSuccess -> isSuccess }
+                                    .also {
+                                        if (activeRoomsHolder.getActiveRoomMatching(matrixClient.sessionId, roomId) == null) {
+                                            room.destroy()
+                                        }
+                                    }
                             }
                             .all { it }
                     }
@@ -93,7 +119,7 @@ class SharePresenter @AssistedInject constructor(
                 onPlainText = { text ->
                     roomIds
                         .map { roomId ->
-                            matrixClient.getRoom(roomId)?.sendMessage(
+                            getJoinedRoom(roomId)?.liveTimeline?.sendMessage(
                                 body = text,
                                 htmlBody = null,
                                 intentionalMentions = emptyList(),

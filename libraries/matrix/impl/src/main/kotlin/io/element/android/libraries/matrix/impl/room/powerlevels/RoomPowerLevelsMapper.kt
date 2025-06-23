@@ -7,12 +7,12 @@
 
 package io.element.android.libraries.matrix.impl.room.powerlevels
 
-import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import org.matrix.rustcomponents.sdk.RoomPowerLevels as RustRoomPowerLevels
 
 object RoomPowerLevelsMapper {
-    fun map(roomPowerLevels: RustRoomPowerLevels): MatrixRoomPowerLevels {
-        return MatrixRoomPowerLevels(
+    fun map(roomPowerLevels: RustRoomPowerLevels): RoomPowerLevels {
+        return RoomPowerLevels(
                 ban = roomPowerLevels.ban,
                 invite = roomPowerLevels.invite,
                 kick = roomPowerLevels.kick,

@@ -7,28 +7,23 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.OidcConfig
+import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import org.matrix.rustcomponents.sdk.OidcConfiguration
-import java.io.File
 import javax.inject.Inject
 
 class OidcConfigurationProvider @Inject constructor(
-    private val baseDirectory: File,
+    private val buildMeta: BuildMeta,
+    private val oidcRedirectUrlProvider: OidcRedirectUrlProvider,
 ) {
     fun get(): OidcConfiguration = OidcConfiguration(
-        clientName = "Element",
-        redirectUri = OidcConfig.REDIRECT_URI,
-        clientUri = "https://element.io",
-        logoUri = "https://element.io/mobile-icon.png",
-        tosUri = "https://element.io/acceptable-use-policy-terms",
-        policyUri = "https://element.io/privacy",
-        contacts = listOf(
-            "support@element.io",
-        ),
-        // Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
-        staticRegistrations = mapOf(
-            "https://id.thirdroom.io/realms/thirdroom" to "elementx",
-        ),
-        dynamicRegistrationsFile = File(baseDirectory, "oidc/registrations.json").absolutePath,
+        clientName = buildMeta.applicationName,
+        redirectUri = oidcRedirectUrlProvider.provide(),
+        clientUri = OidcConfig.CLIENT_URI,
+        logoUri = OidcConfig.LOGO_URI,
+        tosUri = OidcConfig.TOS_URI,
+        policyUri = OidcConfig.POLICY_URI,
+        staticRegistrations = OidcConfig.STATIC_REGISTRATIONS,
     )
 }

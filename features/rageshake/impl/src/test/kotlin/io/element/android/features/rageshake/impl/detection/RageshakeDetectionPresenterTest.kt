@@ -15,9 +15,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.api.screenshot.ImageResult
 import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
-import io.element.android.features.rageshake.test.rageshake.FakeRageShake
-import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
-import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
+import io.element.android.features.rageshake.impl.rageshake.FakeRageShake
+import io.element.android.features.rageshake.impl.rageshake.FakeRageshakeDataStore
+import io.element.android.features.rageshake.impl.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
@@ -52,6 +52,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -76,6 +77,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -101,6 +103,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -135,6 +138,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -169,6 +173,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {

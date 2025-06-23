@@ -8,14 +8,22 @@
   <string name="screen_advanced_settings_element_call_base_url">"Element Calli kohandatud teenuseaadress"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Seadista kohandatud teenuseaadress Element Calli jaoks."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Peida jututubade kutsetest tunnuspildid"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Peida meedia eelvaated ajajoonel"</string>
   <string name="screen_advanced_settings_media_compression_description">"Sellega laadid fotosid ja videoid kiiremini üles ning vähendad andmemahtu"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimeeri meedia kvaliteeti"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Modereerimine ja ohutus"</string>
   <string name="screen_advanced_settings_push_provider_android">"Tõuketeavituste pakkuja"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Kui soovid Markdown-vormingut käsitsi lisada, siis lülita vormindatud teksti toimeti välja."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Lugemisteatised"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Kui lülitad selle valiku välja, siis mitte keegi enam ei saa sinult lugemisteatisi. Küll aga saad sina teiste kasutajate lugemisteatisi."</string>
   <string name="screen_advanced_settings_share_presence">"Jaga oma olekut"</string>
   <string name="screen_advanced_settings_share_presence_description">"Kui see eelistus on välja lülitatud, siis sa ei saa ega saada ei lugemisteatisi ega kirjutamise teavitusi."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Peida alati"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Näita alati"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Privaatsetes jututubades"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Peidetud meediumi saad alati näha temal klõpsides"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Näita ajajoonel meediat"</string>
   <string name="screen_advanced_settings_view_source_description">"Selle eelistuse sisselülitamisel on võimalik ajajoonel vaadata sõnumite lähtekoodi."</string>
   <string name="screen_blocked_users_empty">"Sa pole ühtegi kasutajat blokeerinud"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Eemalda blokeering"</string>
@@ -55,6 +63,7 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"süsteemi seadistusi"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>
   <string name="screen_notification_settings_title">"Teavitused"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Tõuketeadete ajalugu"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Veaotsing"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Teavituste veaotsing"</string>
 </resources>

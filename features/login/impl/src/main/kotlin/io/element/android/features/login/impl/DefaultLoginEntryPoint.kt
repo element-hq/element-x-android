@@ -23,7 +23,15 @@ class DefaultLoginEntryPoint @Inject constructor() : LoginEntryPoint {
 
         return object : LoginEntryPoint.NodeBuilder {
             override fun params(params: LoginEntryPoint.Params): LoginEntryPoint.NodeBuilder {
-                plugins += LoginFlowNode.Inputs(flowType = params.flowType)
+                plugins += LoginFlowNode.Params(
+                    accountProvider = params.accountProvider,
+                    loginHint = params.loginHint,
+                )
+                return this
+            }
+
+            override fun callback(callback: LoginEntryPoint.Callback): LoginEntryPoint.NodeBuilder {
+                plugins += callback
                 return this
             }
 

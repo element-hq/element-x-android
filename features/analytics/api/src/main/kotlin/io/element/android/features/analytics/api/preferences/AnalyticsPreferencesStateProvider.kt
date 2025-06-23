@@ -13,12 +13,17 @@ open class AnalyticsPreferencesStateProvider : PreviewParameterProvider<Analytic
     override val values: Sequence<AnalyticsPreferencesState>
         get() = sequenceOf(
             aAnalyticsPreferencesState().copy(isEnabled = true),
+            aAnalyticsPreferencesState().copy(isEnabled = true, policyUrl = ""),
         )
 }
 
-fun aAnalyticsPreferencesState() = AnalyticsPreferencesState(
-    applicationName = "Tchap X",
-    isEnabled = false,
-    policyUrl = "https://www.tchap.gouv.fr",
+fun aAnalyticsPreferencesState(
+    applicationName: String = "Tchap X",
+    isEnabled: Boolean = false,
+    policyUrl: String = "https://www.tchap.gouv.fr",
+) = AnalyticsPreferencesState(
+    applicationName = applicationName,
+    isEnabled = isEnabled,
+    policyUrl = policyUrl,
     eventSink = {}
 )

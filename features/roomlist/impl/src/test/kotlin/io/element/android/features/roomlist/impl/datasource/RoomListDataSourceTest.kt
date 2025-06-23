@@ -100,7 +100,7 @@ class RoomListDataSourceTest {
         roomListRoomSummaryFactory = roomListRoomSummaryFactory,
         coroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService = notificationSettingsService,
-        appScope = backgroundScope,
+        sessionCoroutineScope = backgroundScope,
         dateTimeObserver = dateTimeObserver,
     )
 }

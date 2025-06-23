@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_delete">"Выдаліць"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Уведзеная лічба %1$d"</item>
@@ -7,6 +8,7 @@
     <item quantity="many">"Уведзена %1$d лічб"</item>
   </plurals>
   <string name="a11y_hide_password">"Схаваць пароль"</string>
+  <string name="a11y_join_call">"Далучыцца да выкліку"</string>
   <string name="a11y_jump_to_bottom">"Перайсці ўніз"</string>
   <string name="a11y_notifications_mentions_only">"Толькі згадкі"</string>
   <string name="a11y_notifications_muted">"Гук адключаны"</string>
@@ -31,6 +33,7 @@
   <string name="a11y_show_password">"Паказаць пароль"</string>
   <string name="a11y_start_call">"Пазваніць"</string>
   <string name="a11y_user_menu">"Меню карыстальніка"</string>
+  <string name="a11y_view_details">"Паглядзець падрабязнасці"</string>
   <string name="a11y_voice_message_record">"Запісаць галасавое паведамленне."</string>
   <string name="a11y_voice_message_stop_recording">"Спыніць запіс"</string>
   <string name="action_accept">"Прыняць"</string>
@@ -57,6 +60,7 @@
   <string name="action_delete_poll">"Выдаліць апытанне"</string>
   <string name="action_disable">"Адключыць"</string>
   <string name="action_discard">"Адмяніць"</string>
+  <string name="action_dismiss">"Aдхіліць"</string>
   <string name="action_done">"Гатова"</string>
   <string name="action_edit">"Рэдагаваць"</string>
   <string name="action_edit_poll">"Рэдагаваць апытанне"</string>
@@ -168,6 +172,11 @@
   <string name="common_light">"Светлая"</string>
   <string name="common_link_copied_to_clipboard">"Спасылка скапіравана ў буфер абмену"</string>
   <string name="common_loading">"Загрузка…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d іншы"</item>
+    <item quantity="few">"%d іншыя"</item>
+    <item quantity="many">"%d іншых"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d удзельнік"</item>
     <item quantity="few">"%1$d удзельнікі"</item>
@@ -298,6 +307,8 @@
   <string name="screen_pinned_timeline_screen_title_empty">"Замацаваныя паведамленні"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Адклікаць праверку і адправіць"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Усё роўна адправіць паведамленне"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$sвыкарыстоўвае адну або некалькі неправераных прылад. Вы можаце адправіць паведамленне ў любым выпадку, або вы можаце адмяніць зараз і паўтарыць спробу пазней, калі %2$s праверыць усе свае прылады."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Ваша паведамленне не было адпраўлена, таму што%1$s не праверыў усе прылады"</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s з %2$s"</string>
@@ -311,6 +322,7 @@
   <string name="screen_share_open_google_maps">"Адкрыць у Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Адкрыць у OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Падзяліцеся гэтым месцазнаходжаннем"</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Паведамленне не адпраўлена таму што%1$s не праверыў усе прылады."</string>
   <string name="screen_view_location_title">"Месцазнаходжанне"</string>
   <string name="settings_version_number">"Версія: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"be"</string>

@@ -14,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.setSafeContent
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -54,7 +55,7 @@ class ResolveVerifiedUserSendFailureViewTest {
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setResolveVerifiedUserSendFailureView(
         state: ResolveVerifiedUserSendFailureState,
     ) {
-        setContent {
+        setSafeContent {
             ResolveVerifiedUserSendFailureView(state = state)
         }
     }

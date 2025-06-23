@@ -7,6 +7,7 @@
 
 package io.element.android.features.preferences.impl.developer
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
@@ -32,6 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toPersistentList
 
@@ -48,7 +51,6 @@ fun DeveloperSettingsView(
         title = stringResource(id = CommonStrings.common_developer_options)
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
-        SettingsCategory(state)
         PreferenceCategory(
             title = "Feature flags",
             showTopDivider = true,
@@ -56,6 +58,7 @@ fun DeveloperSettingsView(
             FeatureListContent(state)
         }
         ElementCallCategory(state = state)
+
         PreferenceCategory(title = "Rust SDK") {
             PreferenceDropdown(
                 title = "Tracing log level",
@@ -67,6 +70,22 @@ fun DeveloperSettingsView(
                 }
             )
         }
+        PreferenceCategory(title = "Enable trace logs per SDK feature") {
+            Text(
+                text = "Requires app reboot",
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textSecondary,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+            )
+            for (logPack in TraceLogPack.entries) {
+                PreferenceSwitch(
+                    title = logPack.title,
+                    isChecked = state.tracingLogPacks.contains(logPack),
+                    onCheckedChange = { isChecked -> state.eventSink(DeveloperSettingsEvents.ToggleTracingLogPack(logPack, isChecked)) }
+                )
+            }
+        }
+
         PreferenceCategory(title = "Showkase") {
             ListItem(
                 headlineContent = {
@@ -111,22 +130,6 @@ fun DeveloperSettingsView(
                 }
             )
         }
-    }
-}
-
-@Composable
-private fun SettingsCategory(
-    state: DeveloperSettingsState,
-) {
-    PreferenceCategory(title = "Preferences", showTopDivider = false) {
-        PreferenceSwitch(
-            title = "Hide image & video previews",
-            subtitle = "When toggled image & video will not render in the timeline by default.",
-            isChecked = state.hideImagesAndVideos,
-            onCheckedChange = {
-                state.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(it))
-            }
-        )
     }
 }
 

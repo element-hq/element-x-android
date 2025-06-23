@@ -17,6 +17,7 @@ import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
@@ -42,6 +43,7 @@ class DefaultLockScreenService @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val lockScreenStore: LockScreenStore,
     private val pinCodeManager: PinCodeManager,
+    @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
     private val sessionObserver: SessionObserver,
     private val appForegroundStateService: AppForegroundStateService,

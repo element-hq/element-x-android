@@ -11,6 +11,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultSessionObserver @Inject constructor(
     private val sessionStore: SessionStore,
+    @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
 ) : SessionObserver {

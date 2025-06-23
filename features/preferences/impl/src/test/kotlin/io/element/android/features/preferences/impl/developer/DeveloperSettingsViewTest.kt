@@ -68,7 +68,7 @@ class DeveloperSettingsViewTest {
         eventsRecorder.assertSingle(DeveloperSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.dev"))
     }
 
-    @Config(qualifiers = "h1024dp")
+    @Config(qualifiers = "h1200dp")
     @Test
     fun `clicking on open showkase invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
@@ -97,7 +97,7 @@ class DeveloperSettingsViewTest {
         eventsRecorder.assertSingle(DeveloperSettingsEvents.SetTracingLogLevel(LogLevelItem.DEBUG))
     }
 
-    @Config(qualifiers = "h1500dp")
+    @Config(qualifiers = "h1700dp")
     @Test
     fun `clicking on clear cache emits the expected event`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
@@ -108,18 +108,6 @@ class DeveloperSettingsViewTest {
         )
         rule.onNodeWithText("Clear cache").performClick()
         eventsRecorder.assertSingle(DeveloperSettingsEvents.ClearCache)
-    }
-
-    @Test
-    fun `clicking on the hide images and videos switch emits the expected event`() {
-        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
-        rule.setDeveloperSettingsView(
-            state = aDeveloperSettingsState(
-                eventSink = eventsRecorder
-            ),
-        )
-        rule.onNodeWithText("Hide image & video previews").performClick()
-        eventsRecorder.assertSingle(DeveloperSettingsEvents.SetHideImagesAndVideos(true))
     }
 }
 

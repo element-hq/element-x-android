@@ -47,8 +47,10 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.messageFromMeBackground
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
+import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 
 private val BUBBLE_RADIUS = 12.dp
 private val avatarRadius = AvatarSize.TimelineSender.dp / 2
@@ -95,12 +97,25 @@ fun MessageEventBubble(
         }
     }
 
+    val clickableModifier = if (isTalkbackActive()) {
+        Modifier
+    } else {
+        Modifier.combinedClickable(
+            onClick = onClick,
+            onLongClick = onLongClick,
+            indication = ripple(),
+            interactionSource = interactionSource
+        )
+    }
+
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor = when {
         state.isMine -> ElementTheme.colors.messageFromMeBackground
         else -> ElementTheme.colors.messageFromOtherBackground
     }
-    val bubbleShape = bubbleShape()
+    // If we're running in UI test mode, we want to use a different shape to avoid
+    // this issue: https://issuetracker.google.com/issues/366255137
+    val bubbleShape = if (LocalUiTestMode.current) RoundedCornerShape(12.dp) else bubbleShape()
     val radiusPx = (avatarRadius + SENDER_AVATAR_BORDER_WIDTH).toPx()
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -137,12 +152,7 @@ fun MessageEventBubble(
                         .toDp()
                 )
                 .clip(bubbleShape)
-                .combinedClickable(
-                    onClick = onClick,
-                    onLongClick = onLongClick,
-                    indication = ripple(),
-                    interactionSource = interactionSource
-                ),
+                .then(clickableModifier),
             color = backgroundBubbleColor,
             shape = bubbleShape,
             content = content

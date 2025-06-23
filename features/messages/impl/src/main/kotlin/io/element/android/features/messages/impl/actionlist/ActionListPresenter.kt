@@ -43,7 +43,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -63,7 +63,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
     private val postProcessor: TimelineItemActionPostProcessor,
     private val appPreferencesStore: AppPreferencesStore,
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val userSendFailureFactory: VerifiedUserSendFailureFactory,
     private val featureFlagService: FeatureFlagService,
     private val dateFormatter: DateFormatter,
@@ -84,7 +84,9 @@ class DefaultActionListPresenter @AssistedInject constructor(
             mutableStateOf(ActionListState.Target.None)
         }
 
-        val isDeveloperModeEnabled by appPreferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
+        val isDeveloperModeEnabled by remember {
+            appPreferencesStore.isDeveloperModeEnabledFlow()
+        }.collectAsState(initial = false)
         val isPinnedEventsEnabled = isPinnedMessagesFeatureEnabled()
         val pinnedEventIds by remember {
             room.roomInfoFlow.map { it.pinnedEventIds }

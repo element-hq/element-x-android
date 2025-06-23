@@ -27,8 +27,7 @@ class AnalyticsPreferencesPresenter @Inject constructor(
     @Composable
     override fun present(): AnalyticsPreferencesState {
         val localCoroutineScope = rememberCoroutineScope()
-        val isEnabled = analyticsService.getUserConsent()
-            .collectAsState(initial = false)
+        val isEnabled = analyticsService.userConsentFlow.collectAsState(initial = false)
 
         fun handleEvents(event: AnalyticsOptInEvents) {
             when (event) {

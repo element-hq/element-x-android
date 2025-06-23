@@ -27,8 +27,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.iterator
-import kotlin.collections.orEmpty
 
 @ContributesMultibinding(AppScope::class)
 class SentryAnalyticsProvider @Inject constructor(
@@ -41,9 +39,7 @@ class SentryAnalyticsProvider @Inject constructor(
         Timber.tag(analyticsTag.value).d("Initializing Sentry")
         if (Sentry.isEnabled()) return
 
-        val dsn = if (SentryConfig.DSN.isNotBlank()) {
-            SentryConfig.DSN
-        } else {
+        val dsn = SentryConfig.DSN.ifBlank {
             Timber.w("No Sentry DSN provided, Sentry will not be initialized")
             return
         }

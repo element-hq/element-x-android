@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_title">"ناتوان از ترک اتاق"</string>
+  <string name="screen_report_room_reason_placeholder">"شرح دلیل گزارش…"</string>
+  <string name="screen_report_room_title">"گزارش اتاق"</string>
+</resources>

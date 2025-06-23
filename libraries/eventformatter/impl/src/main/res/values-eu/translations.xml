@@ -49,6 +49,8 @@
   <string name="state_event_room_pinned_events_changed_by_you">"Finkatutako mezuak aldatu dituzu"</string>
   <string name="state_event_room_pinned_events_pinned">"%1$s(e)k mezu bat finkatu du"</string>
   <string name="state_event_room_pinned_events_pinned_by_you">"Mezu bat finkatu duzu"</string>
+  <string name="state_event_room_pinned_events_unpinned">"%1$s(e)k mezu bat finkatzeari utzi dio"</string>
+  <string name="state_event_room_pinned_events_unpinned_by_you">"Mezu bat finkatzeari utzi diozu"</string>
   <string name="state_event_room_reject">"%1$s(e)k gonbidapena baztertu du"</string>
   <string name="state_event_room_reject_by_you">"Gonbidapena baztertu duzu"</string>
   <string name="state_event_room_remove">"%1$s(e)k %2$s kendu du"</string>

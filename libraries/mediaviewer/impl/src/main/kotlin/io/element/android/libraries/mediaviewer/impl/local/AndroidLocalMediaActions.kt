@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.local
 
+import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentValues
@@ -26,10 +27,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
+import androidx.core.content.PermissionChecker
 import androidx.core.net.toFile
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.system.startInstallFromSourceIntent
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
@@ -81,7 +84,7 @@ class AndroidLocalMediaActions @Inject constructor(
 
     override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
-        runCatching {
+        runCatchingExceptions {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveOnDiskUsingMediaStore(localMedia)
             } else {
@@ -96,7 +99,7 @@ class AndroidLocalMediaActions @Inject constructor(
 
     override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
-        runCatching {
+        runCatchingExceptions {
             val shareableUri = localMedia.toShareableUri()
             val shareMediaIntent = Intent(Intent.ACTION_SEND)
                 .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -115,11 +118,18 @@ class AndroidLocalMediaActions @Inject constructor(
 
     override suspend fun open(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
-        runCatching {
+        runCatchingExceptions {
             when (localMedia.info.mimeType) {
                 MimeTypes.Apk -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (activityContext?.packageManager?.canRequestPackageInstalls() == false) {
+                        if (PermissionChecker.checkPermission(
+                                context,
+                                Manifest.permission.REQUEST_INSTALL_PACKAGES,
+                                -1,
+                                -1,
+                                context.packageName
+                            ) == PermissionChecker.PERMISSION_GRANTED &&
+                            activityContext?.packageManager?.canRequestPackageInstalls() == false) {
                             pendingMedia = localMedia
                             activityContext?.startInstallFromSourceIntent(apkInstallLauncher!!).let { }
                         } else {

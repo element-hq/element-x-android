@@ -24,7 +24,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -41,22 +40,24 @@ import io.element.android.features.messages.impl.messagecomposer.suggestions.Sug
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.IntentionalMention
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
-import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -65,7 +66,6 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
@@ -99,8 +99,9 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 class MessageComposerPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
-    private val appCoroutineScope: CoroutineScope,
-    private val room: MatrixRoom,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
+    private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
     private val sessionPreferencesStore: SessionPreferencesStore,
@@ -119,7 +120,6 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val draftService: ComposerDraftService,
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
-    private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val suggestionsProcessor: SuggestionsProcessor,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
@@ -168,20 +168,22 @@ class MessageComposerPresenter @AssistedInject constructor(
             handlePickedMedia(uri, mimeType)
         }
         val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri ->
-            handlePickedMedia(uri)
+            handlePickedMedia(uri, MimeTypes.OctetStream)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
-            handlePickedMedia(uri, MimeTypes.IMAGE_JPEG)
+            handlePickedMedia(uri, MimeTypes.Jpeg)
         }
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
-            handlePickedMedia(uri, MimeTypes.VIDEO_MP4)
+            handlePickedMedia(uri, MimeTypes.Mp4)
         }
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
-        val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
+        val sendTypingNotifications by remember {
+            sessionPreferencesStore.isSendTypingNotificationsEnabled()
+        }.collectAsState(initial = true)
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
@@ -200,7 +202,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         DisposableEffect(Unit) {
             // Declare that the user is not typing anymore when the composer is disposed
             onDispose {
-                appCoroutineScope.launch {
+                sessionCoroutineScope.launch {
                     if (sendTypingNotifications) {
                         room.typingNotice(false)
                     }
@@ -236,12 +238,12 @@ class MessageComposerPresenter @AssistedInject constructor(
                     }
                 }
                 is MessageComposerEvents.SendMessage -> {
-                    appCoroutineScope.sendMessage(
+                    sessionCoroutineScope.sendMessage(
                         markdownTextEditorState = markdownTextEditorState,
                         richTextEditorState = richTextEditorState,
                     )
                 }
-                is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
+                is MessageComposerEvents.SendUri -> sessionCoroutineScope.sendAttachment(
                     attachment = Attachment.Media(
                         localMedia = localMediaFactory.createFromUri(
                             uri = event.uri,
@@ -331,7 +333,6 @@ class MessageComposerPresenter @AssistedInject constructor(
                             markdownTextEditorState.insertSuggestion(
                                 resolvedSuggestion = event.resolvedSuggestion,
                                 mentionSpanProvider = mentionSpanProvider,
-                                permalinkBuilder = permalinkBuilder,
                             )
                             suggestionSearchTrigger.value = null
                         }
@@ -339,25 +340,26 @@ class MessageComposerPresenter @AssistedInject constructor(
                 }
                 MessageComposerEvents.SaveDraft -> {
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
-                    appCoroutineScope.updateDraft(draft, isVolatile = false)
+                    sessionCoroutineScope.updateDraft(draft, isVolatile = false)
                 }
             }
         }
 
-        val mentionSpanTheme = LocalMentionSpanTheme.current
-        val resolveMentionDisplay = remember(mentionSpanTheme) {
+        val resolveMentionDisplay = remember {
             { text: String, url: String ->
-                val permalinkData = permalinkParser.parse(url)
-                if (permalinkData is PermalinkData.UserLink) {
-                    val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, url)
-                    mentionSpan.update(mentionSpanTheme)
+                val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
+                if (mentionSpan != null) {
                     TextDisplay.Custom(mentionSpan)
                 } else {
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
-                    mentionSpan.update(mentionSpanTheme)
-                    TextDisplay.Custom(mentionSpan)
+                    TextDisplay.Plain
                 }
+            }
+        }
+
+        val resolveAtRoomMentionDisplay = remember {
+            {
+                val mentionSpan = mentionSpanProvider.createEveryoneMentionSpan()
+                TextDisplay.Custom(mentionSpan)
             }
         }
 
@@ -371,6 +373,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             canCreatePoll = canCreatePoll.value,
             suggestions = suggestions.toPersistentList(),
             resolveMentionDisplay = resolveMentionDisplay,
+            resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,
             eventSink = { handleEvents(it) },
         )
     }
@@ -400,16 +403,16 @@ class MessageComposerPresenter @AssistedInject constructor(
                 .stateIn(this, SharingStarted.Lazily, emptyList())
 
             combine(mentionTriggerFlow, room.membersStateFlow, roomAliasSuggestionsFlow) { suggestion, roomMembersState, roomAliasSuggestions ->
-                    val result = suggestionsProcessor.process(
-                        suggestion = suggestion,
-                        roomMembersState = roomMembersState,
-                        roomAliasSuggestions = roomAliasSuggestions,
-                        currentUserId = currentUserId,
-                        canSendRoomMention = ::canSendRoomMention,
-                    )
-                    suggestions.clear()
-                    suggestions.addAll(result)
-                }
+                val result = suggestionsProcessor.process(
+                    suggestion = suggestion,
+                    roomMembersState = roomMembersState,
+                    roomAliasSuggestions = roomAliasSuggestions,
+                    currentUserId = currentUserId,
+                    canSendRoomMention = ::canSendRoomMention,
+                )
+                suggestions.clear()
+                suggestions.addAll(result)
+            }
                 .collect()
         }
     }
@@ -424,7 +427,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
             is MessageComposerMode.Attachment,
-            is MessageComposerMode.Normal -> room.sendMessage(
+            is MessageComposerMode.Normal -> room.liveTimeline.sendMessage(
                 body = message.markdown,
                 htmlBody = message.html,
                 intentionalMentions = message.intentionalMentions
@@ -453,7 +456,19 @@ class MessageComposerPresenter @AssistedInject constructor(
             }
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
-                    replyMessage(capturedMode.eventId, message.markdown, message.html, message.intentionalMentions)
+                    with(capturedMode) {
+                        replyMessage(
+                            body = message.markdown,
+                            htmlBody = message.html,
+                            intentionalMentions = message.intentionalMentions,
+                            replyParameters = ReplyParameters(
+                                inReplyToEventId = eventId,
+                                enforceThreadReply = inThread,
+                                // This should be false until we add a way to make a reply in a thread an explicit reply to the provided eventId
+                                replyWithinThread = false,
+                            ),
+                        )
+                    }
                 }
             }
         }
@@ -500,7 +515,7 @@ class MessageComposerPresenter @AssistedInject constructor(
     private suspend fun sendMedia(
         uri: Uri,
         mimeType: String,
-    ) = runCatching {
+    ) = runCatchingExceptions {
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
@@ -640,8 +655,8 @@ class MessageComposerPresenter @AssistedInject constructor(
             analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
         } else {
             val markdown = richTextEditorState.messageMarkdown
-            val pilliefiedMarkdown = pillificationHelper.pillify(markdown)
-            markdownTextEditorState.text.update(pilliefiedMarkdown, true)
+            val markdownWithMentions = pillificationHelper.pillify(markdown, false)
+            markdownTextEditorState.text.update(markdownWithMentions, true)
             // Give some time for the focus of the previous editor to be cleared
             delay(100)
             markdownTextEditorState.requestFocusAction()
@@ -709,7 +724,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             if (content.isEmpty()) {
                 markdownTextEditorState.selection = IntRange.EMPTY
             }
-            val pillifiedContent = pillificationHelper.pillify(content)
+            val pillifiedContent = pillificationHelper.pillify(content, false)
             markdownTextEditorState.text.update(pillifiedContent, true)
             if (requestFocus) {
                 markdownTextEditorState.requestFocusAction()

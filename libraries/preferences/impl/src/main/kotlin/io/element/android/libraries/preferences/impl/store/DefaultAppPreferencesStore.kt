@@ -19,7 +19,9 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -30,8 +32,10 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
-private val hideImagesAndVideosKey = booleanPreferencesKey("hideImagesAndVideos")
+private val hideInviteAvatarsKey = booleanPreferencesKey("hideInviteAvatars")
+private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPreviewValue")
 private val logLevelKey = stringPreferencesKey("logLevel")
+private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore @Inject constructor(
@@ -81,15 +85,27 @@ class DefaultAppPreferencesStore @Inject constructor(
         }
     }
 
-    override suspend fun setHideImagesAndVideos(value: Boolean) {
+    override suspend fun setHideInviteAvatars(value: Boolean) {
         store.edit { prefs ->
-            prefs[hideImagesAndVideosKey] = value
+            prefs[hideInviteAvatarsKey] = value
         }
     }
 
-    override fun doesHideImagesAndVideosFlow(): Flow<Boolean> {
+    override fun getHideInviteAvatarsFlow(): Flow<Boolean> {
         return store.data.map { prefs ->
-            prefs[hideImagesAndVideosKey] ?: false
+            prefs[hideInviteAvatarsKey] == true
+        }
+    }
+
+    override suspend fun setTimelineMediaPreviewValue(value: MediaPreviewValue) {
+        store.edit { prefs ->
+            prefs[timelineMediaPreviewValueKey] = value.name
+        }
+    }
+
+    override fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue> {
+        return store.data.map { prefs ->
+            prefs[timelineMediaPreviewValueKey]?.let { MediaPreviewValue.valueOf(it) } ?: MediaPreviewValue.On
         }
     }
 
@@ -102,6 +118,23 @@ class DefaultAppPreferencesStore @Inject constructor(
     override fun getTracingLogLevelFlow(): Flow<LogLevel> {
         return store.data.map { prefs ->
             prefs[logLevelKey]?.let { LogLevel.valueOf(it) } ?: buildMeta.defaultLogLevel()
+        }
+    }
+
+    override suspend fun setTracingLogPacks(targets: Set<TraceLogPack>) {
+        val value = targets.joinToString(",") { it.key }
+        store.edit { prefs ->
+            prefs[traceLogPacksKey] = value
+        }
+    }
+
+    override fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>> {
+        return store.data.map { prefs ->
+            prefs[traceLogPacksKey]
+                ?.split(",")
+                ?.mapNotNull { value -> TraceLogPack.entries.find { it.key == value } }
+                ?.toSet()
+                ?: emptySet()
         }
     }
 

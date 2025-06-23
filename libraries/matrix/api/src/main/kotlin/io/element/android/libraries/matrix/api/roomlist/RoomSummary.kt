@@ -7,11 +7,11 @@
 
 package io.element.android.libraries.matrix.api.roomlist
 
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 
 data class RoomSummary(
-    val info: MatrixRoomInfo,
+    val info: RoomInfo,
     val lastMessage: RoomMessage?,
 ) {
     val roomId = info.id

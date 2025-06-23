@@ -19,18 +19,18 @@ jobs:
     steps:
       - name: Remove Record-Screenshots label
         if: github.event.label.name == 'Record-Screenshots'
-        uses: actions-ecosystem/action-remove-labels@v1
+        uses: actions-ecosystem/action-remove-labels@2ce5d41b4b6aa8503e285553f75ed56e0a40bae0 # v1.3.0
         with:
           labels: Record-Screenshots
       - name: ⏬ Checkout with LFS (PR)
         if: github.event.label.name == 'Record-Screenshots'
-        uses: nschloe/action-cached-lfs-checkout@v1.2.3
+        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 # v1.2.3
         with:
           persist-credentials: false
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
       - name: ⏬ Checkout with LFS (Branch)
         if: github.event_name == 'workflow_dispatch'
-        uses: nschloe/action-cached-lfs-checkout@v1.2.3
+        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 # v1.2.3
         with:
           persist-credentials: false
       - name: ☕️ Use JDK 21

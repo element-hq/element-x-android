@@ -14,6 +14,7 @@ import io.element.android.features.login.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -29,7 +30,10 @@ internal fun SlidingSyncNotSupportedDialog(
         onSubmitClick = onLearnMoreClick,
         onCancelClick = onDismiss,
         title = stringResource(CommonStrings.dialog_title_error),
-        content = stringResource(R.string.screen_change_server_error_no_sliding_sync_message),
+        content = stringResource(
+            id = R.string.screen_change_server_error_no_sliding_sync_message,
+            LocalBuildMeta.current.applicationName,
+        ),
     )
 }
 

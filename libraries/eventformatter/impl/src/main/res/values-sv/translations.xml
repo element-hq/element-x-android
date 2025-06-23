@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"Du tog bort rummets avatar"</string>
   <string name="state_event_room_ban">"%1$s bannade %2$s"</string>
   <string name="state_event_room_ban_by_you">"Du bannade %1$s"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"Du bannade %1$s: %2$s"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s bannade %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s skapade rummet"</string>
   <string name="state_event_room_created_by_you">"Du skapade rummet"</string>
   <string name="state_event_room_invite">"%1$s bjöd in %2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"Du avvisade inbjudan"</string>
   <string name="state_event_room_remove">"%1$s tog bort %2$s"</string>
   <string name="state_event_room_remove_by_you">"Du tog bort %1$s"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"Du tog bort %1$s: %2$s"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s tog bort %2$s: %3$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s skickade en inbjudan till %2$s att gå med i rummet"</string>
   <string name="state_event_room_third_party_invite_by_you">"Du skickade en inbjudan till %1$s att gå med i rummet"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s återkallade inbjudan för %2$s att gå med i rummet"</string>

@@ -26,6 +26,7 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.setSafeContent
 import io.mockk.mockk
 import org.junit.Rule
 import org.junit.Test
@@ -249,9 +250,10 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
     state: MediaViewerState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
-    setContent {
+    setSafeContent {
         MediaViewerView(
             state = state,
+            audioFocus = null,
             textFileViewer = { _, _ -> },
             onBackClick = onBackClick,
         )

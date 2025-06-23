@@ -11,12 +11,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.VisibleForTesting
+import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.location.api.Location
 import io.element.android.libraries.androidutils.system.openAppSettingsPage
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import timber.log.Timber
+import java.util.Locale
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -24,8 +27,8 @@ class AndroidLocationActions @Inject constructor(
     @ApplicationContext private val context: Context
 ) : LocationActions {
     override fun share(location: Location, label: String?) {
-        runCatching {
-            val uri = Uri.parse(buildUrl(location, label))
+        runCatchingExceptions {
+            val uri = buildUrl(location, label).toUri()
             val showMapsIntent = Intent(Intent.ACTION_VIEW).setData(uri)
             val chooserIntent = Intent.createChooser(showMapsIntent, null)
             chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -42,17 +45,14 @@ class AndroidLocationActions @Inject constructor(
     }
 }
 
+// Ref: https://developer.android.com/guide/components/intents-common#ViewMap
 @VisibleForTesting
 internal fun buildUrl(
     location: Location,
     label: String?,
     urlEncoder: (String) -> String = Uri::encode
 ): String {
-    // Ref: https://developer.android.com/guide/components/intents-common#ViewMap
-    val base = "geo:0,0?q=%.6f,%.6f".format(location.lat, location.lon)
-    return if (label == null) {
-        base
-    } else {
-        "%s (%s)".format(base, urlEncoder(label))
-    }
+    // This is needed so the coordinates are formatted with a dot as decimal separator
+    val locale = Locale.ENGLISH
+    return "geo:0,0?q=%.6f,%.6f (%s)".format(locale, location.lat, location.lon, urlEncoder(label.orEmpty()))
 }

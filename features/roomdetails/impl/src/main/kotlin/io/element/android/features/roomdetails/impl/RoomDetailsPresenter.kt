@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
@@ -24,17 +23,21 @@ import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEn
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.securityAndPrivacyPermissionsAsState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
@@ -46,6 +49,7 @@ import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isDmAsState
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toPersistentList
@@ -58,7 +62,7 @@ import javax.inject.Inject
 class RoomDetailsPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
     private val client: MatrixClient,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val featureFlagService: FeatureFlagService,
     private val notificationSettingsService: NotificationSettingsService,
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
@@ -67,6 +71,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
+    private val clipboardHelper: ClipboardHelper,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -84,11 +89,11 @@ class RoomDetailsPresenter @Inject constructor(
         val joinRule by remember { derivedStateOf { roomInfo.joinRule } }
 
         val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
-        var canShowMediaGallery by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            canShowMediaGallery = featureFlagService.isFeatureEnabled(FeatureFlags.MediaGallery)
-        }
         val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
+
+        val canShowMediaGallery by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaGallery)
+        }.collectAsState(false)
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -124,7 +129,9 @@ class RoomDetailsPresenter @Inject constructor(
         }
 
         val canHandleKnockRequests by room.canHandleKnockRequestsAsState(syncUpdateFlow.value)
-        val isKnockRequestsEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(false)
+        val isKnockRequestsEnabled by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
+        }.collectAsState(false)
         val knockRequestsCount by produceState<Int?>(null) {
             room.knockRequestsFlow.collect { value = it.size }
         }
@@ -133,6 +140,9 @@ class RoomDetailsPresenter @Inject constructor(
         }
 
         val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
+
+        val snackbarDispatcher = LocalSnackbarDispatcher.current
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
@@ -149,6 +159,10 @@ class RoomDetailsPresenter @Inject constructor(
                     }
                 }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
+                is RoomDetailsEvent.CopyToClipboard -> {
+                    clipboardHelper.copyPlainText(event.text)
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
+                }
             }
         }
 
@@ -162,10 +176,12 @@ class RoomDetailsPresenter @Inject constructor(
         }
 
         val hasMemberVerificationViolations by produceState(false) {
-            room.roomMemberIdentityStateChange()
+            room.roomMemberIdentityStateChange(waitForEncryption = true)
                 .onEach { identities -> value = identities.any { it.identityState == IdentityState.VerificationViolation } }
                 .launchIn(this)
         }
+
+        val canReportRoom by produceState(false) { value = client.canReportRoom() }
 
         return RoomDetailsState(
             isDebugBuild = buildMeta.isDebuggable,
@@ -191,10 +207,12 @@ class RoomDetailsPresenter @Inject constructor(
             canShowPinnedMessages = canShowPinnedMessages,
             canShowMediaGallery = canShowMediaGallery,
             pinnedMessagesCount = pinnedMessagesCount,
+            snackbarMessage = snackbarMessage,
             canShowKnockRequests = canShowKnockRequests,
             knockRequestsCount = knockRequestsCount,
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             hasMemberVerificationViolations = hasMemberVerificationViolations,
+            canReportRoom = canReportRoom,
             eventSink = ::handleEvents,
         )
     }
@@ -222,12 +240,12 @@ class RoomDetailsPresenter @Inject constructor(
     }
 
     @Composable
-    private fun getCanInvite(membersState: MatrixRoomMembersState) = produceState(false, membersState) {
+    private fun getCanInvite(membersState: RoomMembersState) = produceState(false, membersState) {
         value = room.canInvite().getOrElse { false }
     }
 
     @Composable
-    private fun getCanSendState(membersState: MatrixRoomMembersState, type: StateEventType) = produceState(false, membersState) {
+    private fun getCanSendState(membersState: RoomMembersState, type: StateEventType) = produceState(false, membersState) {
         value = room.canSendState(type).getOrElse { false }
     }
 

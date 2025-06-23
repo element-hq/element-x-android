@@ -141,7 +141,7 @@ class DefaultVoiceRecorderTest {
             fileConfig = fileConfig,
             fileManager = FakeVoiceFileManager(fakeFileSystem, fileConfig, FILE_ID),
             audioLevelCalculator = FakeAudioLevelCalculator(),
-            appCoroutineScope = backgroundScope,
+            sessionCoroutineScope = backgroundScope,
         )
     }
 

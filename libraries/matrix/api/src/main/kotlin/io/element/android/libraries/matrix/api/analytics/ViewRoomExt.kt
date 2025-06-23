@@ -8,11 +8,11 @@
 package io.element.android.libraries.matrix.api.analytics
 
 import im.vector.app.features.analytics.plan.ViewRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 
-fun MatrixRoom.toAnalyticsViewRoom(
+fun BaseRoom.toAnalyticsViewRoom(
     trigger: ViewRoom.Trigger? = null,
-    selectedSpace: MatrixRoom? = null,
+    selectedSpace: BaseRoom? = null,
     viaKeyboard: Boolean? = null,
 ): ViewRoom {
     val activeSpace = selectedSpace?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
@@ -26,6 +26,6 @@ fun MatrixRoom.toAnalyticsViewRoom(
     )
 }
 
-private fun MatrixRoom.toActiveSpace(): ViewRoom.ActiveSpace {
+private fun BaseRoom.toActiveSpace(): ViewRoom.ActiveSpace {
     return if (info().isPublic) ViewRoom.ActiveSpace.Public else ViewRoom.ActiveSpace.Private
 }

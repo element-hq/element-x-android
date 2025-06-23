@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"您的回報已成功遞交，但我們嘗試離開聊天室時遇到了問題。請再試一次。"</string>
+  <string name="screen_report_room_leave_failed_alert_title">"無法離開聊天室"</string>
+  <string name="screen_report_room_reason_footer">"將此聊天室回報給您的管理員。若訊息已加密，您的管理員將無法讀取它們。"</string>
+  <string name="screen_report_room_reason_placeholder">"說明回報的原因……"</string>
+  <string name="screen_report_room_title">"回報聊天室"</string>
+</resources>

@@ -34,14 +34,17 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomListContextMenu(
     contextMenu: RoomListState.ContextMenu.Shown,
+    canReportRoom: Boolean,
     eventSink: (RoomListEvents.ContextMenuEvents) -> Unit,
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
+    onReportRoomClick: (roomId: RoomId) -> Unit
 ) {
     ModalBottomSheet(
         onDismissRequest = { eventSink(RoomListEvents.HideContextMenu) },
     ) {
         RoomListModalBottomSheetContent(
             contextMenu = contextMenu,
+            canReportRoom = canReportRoom,
             onRoomMarkReadClick = {
                 eventSink(RoomListEvents.HideContextMenu)
                 eventSink(RoomListEvents.MarkAsRead(contextMenu.roomId))
@@ -65,6 +68,10 @@ fun RoomListContextMenu(
                 eventSink(RoomListEvents.HideContextMenu)
                 eventSink(RoomListEvents.ClearCacheOfRoom(contextMenu.roomId))
             },
+            onReportRoomClick = {
+                eventSink(RoomListEvents.HideContextMenu)
+                onReportRoomClick(contextMenu.roomId)
+            },
         )
     }
 }
@@ -72,12 +79,14 @@ fun RoomListContextMenu(
 @Composable
 private fun RoomListModalBottomSheetContent(
     contextMenu: RoomListState.ContextMenu.Shown,
+    canReportRoom: Boolean,
     onRoomSettingsClick: () -> Unit,
     onLeaveRoomClick: () -> Unit,
     onFavoriteChange: (isFavorite: Boolean) -> Unit,
     onRoomMarkReadClick: () -> Unit,
     onRoomMarkUnreadClick: () -> Unit,
     onClearCacheRoomClick: () -> Unit,
+    onReportRoomClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -132,14 +141,10 @@ private fun RoomListModalBottomSheetContent(
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
                     CompoundIcons.Favourite(),
-                    contentDescription = stringResource(id = CommonStrings.common_favourite),
                 )
             ),
             trailingContent = ListItemContent.Switch(
                 checked = contextMenu.isFavorite,
-                onChange = { isFavorite ->
-                    onFavoriteChange(isFavorite)
-                },
             ),
             onClick = {
                 onFavoriteChange(!contextMenu.isFavorite)
@@ -157,32 +162,38 @@ private fun RoomListModalBottomSheetContent(
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
                     CompoundIcons.Settings(),
-                    contentDescription = stringResource(id = CommonStrings.common_settings)
                 )
             ),
             style = ListItemStyle.Primary,
         )
+        if (canReportRoom) {
+            ListItem(
+                headlineContent = {
+                    Text(text = stringResource(CommonStrings.action_report_room))
+                },
+                modifier = Modifier.clickable { onReportRoomClick() },
+                leadingContent = ListItemContent.Icon(
+                    iconSource = IconSource.Vector(
+                        CompoundIcons.ChatProblem(),
+                        contentDescription = stringResource(CommonStrings.action_report_room),
+                    )
+                ),
+                style = ListItemStyle.Destructive,
+            )
+        }
         ListItem(
             headlineContent = {
-                val leaveText = stringResource(
-                    id = if (contextMenu.isDm) {
-                        CommonStrings.action_leave_conversation
-                    } else {
-                        CommonStrings.action_leave_room
-                    }
-                )
-                Text(text = leaveText)
+                Text(text = stringResource(CommonStrings.action_leave_room))
             },
             modifier = Modifier.clickable { onLeaveRoomClick() },
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
                     CompoundIcons.Leave(),
-                    contentDescription = stringResource(id = CommonStrings.action_leave_room)
                 )
             ),
             style = ListItemStyle.Destructive,
         )
-        if (contextMenu.eventCacheFeatureFlagEnabled) {
+        if (contextMenu.displayClearRoomCacheAction) {
             ListItem(
                 headlineContent = {
                     Text(text = "Clear cache for this room")
@@ -207,11 +218,13 @@ internal fun RoomListModalBottomSheetContentPreview(
 ) = ElementPreview {
     RoomListModalBottomSheetContent(
         contextMenu = contextMenu,
+        canReportRoom = true,
         onRoomMarkReadClick = {},
         onRoomMarkUnreadClick = {},
         onRoomSettingsClick = {},
         onLeaveRoomClick = {},
         onFavoriteChange = {},
         onClearCacheRoomClick = {},
+        onReportRoomClick = {},
     )
 }

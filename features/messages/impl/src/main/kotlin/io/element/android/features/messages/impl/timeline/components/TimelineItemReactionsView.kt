@@ -16,6 +16,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
@@ -40,7 +42,9 @@ fun TimelineItemReactionsView(
 ) {
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
     TimelineItemReactionsView(
-        modifier = modifier,
+        modifier = modifier.semantics {
+            hideFromAccessibility()
+        },
         reactions = reactionsState.reactions,
         userCanSendReaction = userCanSendReaction,
         expanded = expanded,

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"کیا آپ واقعی اس گفتگو کو چھوڑنا چاہتے ہیں؟ یہ گفتگو عوامی نہیں ہے اور آپ دعوت نامے کے بغیر دوبارہ شامل نہیں ہو سکیں گے۔"</string>
+  <string name="leave_room_alert_empty_subtitle">"کیا آپ واقعی یہ کمرہ چھوڑنا چاہتے ہیں؟ آپ یہاں واحد شخص ہیں۔ اگر آپ چھوڑتے ہیں، تو مستقبل میں کوئی بھی شامل نہیں ہو سکے گا، آپ سمیت۔"</string>
+  <string name="leave_room_alert_private_subtitle">"کیا آپ واقعی یہ کمرہ چھوڑنا چاہتے ہیں؟ یہ کمرہ عوامی نہیں اور آپ دعوت نامے کے بغیر پھر شامل نہیں ہو پائیں گے۔"</string>
+  <string name="leave_room_alert_subtitle">"کیا آپ واقعی کمرہ چھوڑنا چاہتے ہیں؟"</string>
+</resources>

@@ -33,8 +33,9 @@ class DefaultRegisterUnifiedPushUseCase @Inject constructor(
         UnifiedPush.saveDistributor(context, distributor.value)
         // This will trigger the callback
         // VectorUnifiedPushMessagingReceiver.onNewEndpoint
-        UnifiedPush.registerApp(context = context, instance = clientSecret)
+        UnifiedPush.register(context = context, instance = clientSecret)
         // Wait for VectorUnifiedPushMessagingReceiver.onNewEndpoint to proceed
+        @Suppress("RunCatchingNotAllowed")
         return runCatching {
             withTimeout(30.seconds) {
                 val result = endpointRegistrationHandler.state

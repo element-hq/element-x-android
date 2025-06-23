@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Er mwyn gadael i\'r rhaglen ddefnyddio\'r camera, rhowch ganiatâd iddo yn y gosodiadau system."</string>
+  <string name="dialog_permission_generic">"Rhowch ganiatâd yn y gosodiadau system."</string>
+  <string name="dialog_permission_microphone">"Er mwyn gadael i\'r cais ddefnyddio\'r meicroffon, rhowch ganiatâd yng ngosodiadau\'r system."</string>
+  <string name="dialog_permission_notification">"Er mwyn gadael i\'r ap ddangos hysbysiadau, rhowch ganiatâd yn y gosodiadau system."</string>
+</resources>

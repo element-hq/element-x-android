@@ -17,6 +17,7 @@ import io.element.android.features.licenses.impl.LicensesProvider
 import io.element.android.features.licenses.impl.model.DependencyLicenseItem
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class DependencyLicensesListPresenter @Inject constructor(
         }
         var filter by remember { mutableStateOf("") }
         LaunchedEffect(Unit) {
-            runCatching {
+            runCatchingExceptions {
                 licenses = AsyncData.Success(licensesProvider.provides().toPersistentList())
             }.onFailure {
                 licenses = AsyncData.Failure(it)

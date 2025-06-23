@@ -11,12 +11,12 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.aMatrixRoom
+import io.element.android.features.roomdetails.impl.aJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
@@ -71,7 +71,7 @@ class RoomNotificationSettingsPresenterTest {
     @Test
     fun `present - notification settings set custom failed`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        notificationSettingsService.givenSetNotificationModeError(A_THROWABLE)
+        notificationSettingsService.givenSetNotificationModeError(AN_EXCEPTION)
         val presenter = createRoomNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -131,7 +131,7 @@ class RoomNotificationSettingsPresenterTest {
     @Test
     fun `present - notification settings restore default failed`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        notificationSettingsService.givenRestoreDefaultNotificationModeError(A_THROWABLE)
+        notificationSettingsService.givenRestoreDefaultNotificationModeError(AN_EXCEPTION)
         val presenter = createRoomNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -158,7 +158,7 @@ class RoomNotificationSettingsPresenterTest {
         val notificationService = FakeNotificationSettingsService().apply {
             givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
         }
-        val room = aMatrixRoom(notificationSettingsService = notificationService, isEncrypted = true)
+        val room = aJoinedRoom(notificationSettingsService = notificationService, isEncrypted = true)
         val presenter = createRoomNotificationSettingsPresenter(notificationService, room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -172,7 +172,7 @@ class RoomNotificationSettingsPresenterTest {
         val notificationService = FakeNotificationSettingsService().apply {
             givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
         }
-        val room = aMatrixRoom(notificationSettingsService = notificationService, isEncrypted = false)
+        val room = aJoinedRoom(notificationSettingsService = notificationService, isEncrypted = false)
         val presenter = createRoomNotificationSettingsPresenter(notificationService, room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -183,7 +183,7 @@ class RoomNotificationSettingsPresenterTest {
 
     private fun createRoomNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
-        room: FakeMatrixRoom = aMatrixRoom(notificationSettingsService = notificationSettingsService),
+        room: FakeJoinedRoom = aJoinedRoom(notificationSettingsService = notificationSettingsService),
     ): RoomNotificationSettingsPresenter {
         return RoomNotificationSettingsPresenter(
             room = room,

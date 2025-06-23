@@ -1,3 +1,6 @@
+import config.BuildTimeConfig
+import extension.buildConfigFieldStr
+
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
@@ -10,6 +13,37 @@ plugins {
 
 android {
     namespace = "io.element.android.appconfig"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigFieldStr(
+            name = "URL_POLICY",
+            value = if (isEnterpriseBuild) {
+                BuildTimeConfig.URL_POLICY ?: ""
+            } else {
+                "https://element.io/cookie-policy"
+            },
+        )
+        buildConfigFieldStr(
+            name = "BUG_REPORT_URL",
+            value = if (isEnterpriseBuild) {
+                BuildTimeConfig.BUG_REPORT_URL ?: ""
+            } else {
+                "https://riot.im/bugreports/submit"
+            },
+        )
+        buildConfigFieldStr(
+            name = "BUG_REPORT_APP_NAME",
+            value = if (isEnterpriseBuild) {
+                BuildTimeConfig.BUG_REPORT_APP_NAME ?: ""
+            } else {
+                "element-x-android"
+            },
+        )
+    }
 }
 
 dependencies {

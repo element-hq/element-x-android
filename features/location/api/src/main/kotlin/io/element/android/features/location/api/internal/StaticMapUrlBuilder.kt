@@ -7,8 +7,6 @@
 
 package io.element.android.features.location.api.internal
 
-import android.content.Context
-
 /**
  * Builds an URL for a 3rd party service provider static maps API.
  */
@@ -26,4 +24,4 @@ interface StaticMapUrlBuilder {
     fun isServiceAvailable(): Boolean
 }
 
-fun StaticMapUrlBuilder(context: Context): StaticMapUrlBuilder = MapTilerStaticMapUrlBuilder(context = context)
+fun StaticMapUrlBuilder(): StaticMapUrlBuilder = MapTilerStaticMapUrlBuilder()

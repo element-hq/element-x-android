@@ -10,8 +10,8 @@
   <string name="screen_change_account_provider_other">"Beste bat"</string>
   <string name="screen_change_account_provider_subtitle">"Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat."</string>
   <string name="screen_change_account_provider_title">"Aldatu kontu-hornitzailea"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Zerbitzari hau ez da gaur-gaurkoz sliding sync-ekin bateragarria."</string>
   <string name="screen_change_server_form_header">"Zerbitzariaren URLa"</string>
+  <string name="screen_change_server_form_notice">"Sartu domeinu-helbide bat."</string>
   <string name="screen_change_server_subtitle">"Zein da zure zerbitzariaren helbidea?"</string>
   <string name="screen_change_server_title">"Hautatu zure zerbitzaria"</string>
   <string name="screen_create_account_title">"Sortu kontua"</string>
@@ -21,9 +21,16 @@
   <string name="screen_login_subtitle">"Matrix komunikazio seguru eta deszentralizaturako sare irekia da."</string>
   <string name="screen_login_title">"Ongi etorri!"</string>
   <string name="screen_login_title_with_homeserver">"Hasi saioa %1$s(e)n"</string>
+  <string name="screen_onboarding_sign_in_manually">"Hasi saioa eskuz"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Hasi saioa QR kodearekin"</string>
+  <string name="screen_onboarding_sign_up">"Sortu kontua"</string>
+  <string name="screen_onboarding_welcome_message">"Ongi etorri inoizko %1$s azkarrenera. Abiaduraz eta sinpletasunaz gainkargatua."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Ongi etorri %1$s-ra. Abiaduraz eta sinpletasunez gainezka."</string>
+  <string name="screen_onboarding_welcome_title">"Egon zure saltsan"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Konexio segurua ezartzen"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Ezin izan da konexio segururik ezarri gailu berriarekin. Lehendik dauden gailuak seguru daude oraindik ere eta ez duzu haietaz kezkatu beharrik."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Orain zer?"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Saiatu berriro QR kodearekin saioa hasten sare-arazo bat izan bada"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Horrek ez badu funtzionatzen, hasi saioa eskuz"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Konexioa ez da segurua"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Gailu honetan agertzen diren bi digituak sartzeko eskatuko zaizu."</string>
@@ -31,6 +38,7 @@
   <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Hasi saioa beste gailu batean eta saiatu berriro, edo erabili saioa hasita duen beste gailuren bat."</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Saioa hasteko eskaera bertan behera utzi da beste gailuan"</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Saioa hasteko eskaera bertan behera utzi da"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Saioa hasteari uko egin zaio beste dispositiboan."</string>
   <string name="screen_qr_code_login_error_declined_title">"Saio-hasiera ukatu da"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Saio-hasiera iraungi da. Saiatu berriro."</string>
   <string name="screen_qr_code_login_error_expired_title">"Saio-hasiera ez da garaiz gauzatu."</string>

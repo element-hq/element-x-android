@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_add_topic_title">"Pridėti temą"</string>
+  <string name="screen_room_details_already_a_member">"Jau narys"</string>
+  <string name="screen_room_details_already_invited">"Jau pakviestas"</string>
+  <string name="screen_room_details_edit_room_title">"Redaguoti kambarį"</string>
+  <string name="screen_room_details_edition_error">"Įvyko nežinoma klaida ir informacijos pakeisti nepavyko."</string>
+  <string name="screen_room_details_edition_error_title">"Nepavyko atnaujinti kambario"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Žinutės yra užrakintos. Tik Jūs ir gavėjai turite unikalius raktus joms atrakinti."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Įjungtas žinučių šifravimas"</string>
+  <string name="screen_room_details_invite_people_title">"Pakviesti žmonių"</string>
+  <string name="screen_room_details_leave_room_title">"Palikti kambarį"</string>
+  <string name="screen_room_details_room_name_label">"Kambario pavadinimas"</string>
+  <string name="screen_room_details_security_title">"Saugumas"</string>
+  <string name="screen_room_details_share_room_title">"Bendrinti kambarį"</string>
+  <string name="screen_room_details_topic_title">"Tema"</string>
+  <string name="screen_room_details_updating_room">"Atnaujinamas kambarys…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d asmuo"</item>
+    <item quantity="few">"%1$d asmenys"</item>
+    <item quantity="other">"%1$d asmenų"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_header_title">"Laukiama"</string>
+  <string name="screen_room_member_list_room_members_header_title">"Kambario nariai"</string>
+</resources>

@@ -22,18 +22,16 @@ import io.element.android.features.poll.impl.model.DefaultPollContentStateFactor
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
@@ -57,7 +55,7 @@ class PollHistoryPresenterTest {
         ),
         backwardPaginationStatus = backwardPaginationStatus
     )
-    private val room = FakeMatrixRoom(
+    private val room = FakeJoinedRoom(
         liveTimeline = timeline
     )
 
@@ -155,8 +153,7 @@ class PollHistoryPresenterTest {
     }
 
     private fun TestScope.createPollHistoryPresenter(
-        room: MatrixRoom = FakeMatrixRoom(),
-        appCoroutineScope: CoroutineScope = this,
+        room: FakeJoinedRoom = FakeJoinedRoom(),
         endPollAction: EndPollAction = FakeEndPollAction(),
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
         pollHistoryItemFactory: PollHistoryItemsFactory = PollHistoryItemsFactory(
@@ -166,7 +163,7 @@ class PollHistoryPresenterTest {
         ),
     ): PollHistoryPresenter {
         return PollHistoryPresenter(
-            appCoroutineScope = appCoroutineScope,
+            sessionCoroutineScope = this,
             sendPollResponseAction = sendPollResponseAction,
             endPollAction = endPollAction,
             pollHistoryItemFactory = pollHistoryItemFactory,

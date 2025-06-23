@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -28,6 +30,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.MatrixBadgeRow
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
@@ -47,6 +50,7 @@ fun UserProfileHeaderSection(
     userName: String?,
     verificationState: UserProfileVerificationState,
     openAvatarPreview: (url: String) -> Unit,
+    onUserIdClick: () -> Unit,
     withdrawVerificationClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -59,6 +63,7 @@ fun UserProfileHeaderSection(
         Avatar(
             avatarData = AvatarData(userId.value, userName, avatarUrl, AvatarSize.UserHeader),
             modifier = Modifier
+                .clip(CircleShape)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.memberDetailAvatar)
         )
@@ -74,6 +79,7 @@ fun UserProfileHeaderSection(
         }
         if (isDebugBuild) { // TCHAP hide the Matrix Id in release mode
             Text(
+                modifier = Modifier.niceClickable { onUserIdClick() },
                 text = userId.value,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textSecondary,
@@ -126,6 +132,7 @@ internal fun UserProfileHeaderSectionPreview() = ElementPreview {
         userName = "Alice",
         verificationState = UserProfileVerificationState.VERIFIED,
         openAvatarPreview = {},
+        onUserIdClick = {},
         withdrawVerificationClick = {},
     )
 }
@@ -140,6 +147,7 @@ internal fun UserProfileHeaderSectionWithVerificationViolationPreview() = Elemen
         userName = "Alice",
         verificationState = UserProfileVerificationState.VERIFICATION_VIOLATION,
         openAvatarPreview = {},
+        onUserIdClick = {},
         withdrawVerificationClick = {},
     )
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"A jelentése sikeresen el lett küldve, de hibát találtunk a szoba elhagyása során. Próbálja újra."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Nem tudja elhagyni a szobát"</string>
+  <string name="screen_report_room_reason_footer">"A szoba jelentése a rendszergazdának. Ha az üzenetek titkosítva vannak, akkor a rendszergazda nem fogja tudni elolvasni őket."</string>
+  <string name="screen_report_room_reason_placeholder">"Írja le az okot…"</string>
+  <string name="screen_report_room_title">"Szoba jelentése"</string>
+</resources>

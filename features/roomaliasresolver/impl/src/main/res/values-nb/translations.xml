@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_loading_alert_title">"Vi kunne ikke vise forhåndsvisning av dette rommet"</string>
+  <string name="screen_room_alias_resolver_resolve_alias_failure">"Kunne ikke løse romalias."</string>
+</resources>

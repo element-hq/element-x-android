@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"您將不會看到來自此使用者的任何訊息或聊天室邀請"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"封鎖使用者"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"向您的帳號提供者回報此聊天室。"</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"說明回報的原因……"</string>
+  <string name="screen_decline_and_block_title">"拒絕並封鎖"</string>
   <string name="screen_invites_decline_chat_message">"您確定您想要拒絕加入 %1$s 的邀請嗎？"</string>
   <string name="screen_invites_decline_chat_title">"拒絕邀請"</string>
   <string name="screen_invites_decline_direct_chat_message">"您確定您要拒絕此與 %1$s 的私人聊天嗎？"</string>

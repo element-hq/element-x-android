@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Supprimer"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d chiffre saisi"</item>
     <item quantity="other">"%1$d chiffres saisis"</item>
   </plurals>
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
+  <string name="a11y_join_call">"Rejoindre l’appel"</string>
   <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
   <string name="a11y_notifications_mentions_only">"Mentions uniquement"</string>
   <string name="a11y_notifications_muted">"En sourdine"</string>
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
+  <string name="a11y_paused_voice_message">"Message vocal, durée: %1$s, position actuelle: %2$s"</string>
   <string name="a11y_pin_field">"Code PIN"</string>
   <string name="a11y_play">"Lecture"</string>
   <string name="a11y_poll">"Sondage"</string>
@@ -30,6 +33,7 @@
   <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
   <string name="a11y_view_details">"Afficher les détails"</string>
+  <string name="a11y_voice_message">"Message vocal, durée: %1$s"</string>
   <string name="a11y_voice_message_record">"Enregistrer un message vocal."</string>
   <string name="a11y_voice_message_stop_recording">"Arrêter l’enregistrement"</string>
   <string name="action_accept">"Accepter"</string>
@@ -56,6 +60,7 @@
   <string name="action_deactivate">"Désactiver"</string>
   <string name="action_deactivate_account">"Désactiver le compte"</string>
   <string name="action_decline">"Refuser"</string>
+  <string name="action_decline_and_block">"Refuser et bloquer"</string>
   <string name="action_delete_poll">"Supprimer le sondage"</string>
   <string name="action_disable">"Désactiver"</string>
   <string name="action_discard">"Annuler"</string>
@@ -101,8 +106,11 @@
   <string name="action_remove_message">"Supprimer le message"</string>
   <string name="action_reply">"Répondre"</string>
   <string name="action_reply_in_thread">"Répondre dans le fil de discussion"</string>
+  <string name="action_report">"Signaler"</string>
   <string name="action_report_bug">"Signaler un problème"</string>
   <string name="action_report_content">"Signaler le contenu"</string>
+  <string name="action_report_dm">"Signaler la discussion"</string>
+  <string name="action_report_room">"Signaler le salon"</string>
   <string name="action_reset">"Réinitialiser"</string>
   <string name="action_reset_identity">"Réinitialiser l’identité"</string>
   <string name="action_retry">"Réessayer"</string>
@@ -190,6 +198,10 @@ Raison : %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Lien copié dans le presse-papiers"</string>
   <string name="common_loading">"Chargement…"</string>
   <string name="common_loading_more">"Chargement…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d autre"</item>
+    <item quantity="other">"%d autres"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membre"</item>
     <item quantity="other">"%1$d membres"</item>
@@ -212,6 +224,7 @@ Raison : %1$s."</string>
   <string name="common_permalink">"Permalien"</string>
   <string name="common_permission">"Autorisation"</string>
   <string name="common_pinned">"Épinglé"</string>
+  <string name="common_please_check_internet_connection">"Veuillez vérifier votre connexion internet"</string>
   <string name="common_please_wait">"Veuillez patienter…"</string>
   <string name="common_poll_end_confirmation">"Êtes-vous sûr de vouloir mettre fin à ce sondage ?"</string>
   <string name="common_poll_summary">"Sondage : %1$s"</string>
@@ -224,6 +237,7 @@ Raison : %1$s."</string>
   <string name="common_privacy_policy">"Politique de confidentialité"</string>
   <string name="common_reaction">"Réaction"</string>
   <string name="common_reactions">"Réactions"</string>
+  <string name="common_reason">"Raison"</string>
   <string name="common_recovery_key">"Clé de récupération"</string>
   <string name="common_refreshing">"Actualisation…"</string>
   <string name="common_replying_to">"En réponse à %1$s"</string>
@@ -251,6 +265,7 @@ Raison : %1$s."</string>
   <string name="common_shared_location">"Position partagée"</string>
   <string name="common_signing_out">"Déconnexion"</string>
   <string name="common_something_went_wrong">"Une erreur s’est produite"</string>
+  <string name="common_something_went_wrong_message">"Nous avons rencontré un problème. Veuillez réessayer."</string>
   <string name="common_starting_chat">"Création de la discussion…"</string>
   <string name="common_sticker">"Autocollant"</string>
   <string name="common_success">"Succès"</string>
@@ -295,6 +310,8 @@ Raison : %1$s."</string>
 
 Êtes-vous sûr de vouloir continuer ?"</string>
   <string name="dialog_confirm_link_title">"Veuillez vérifier ce lien"</string>
+  <string name="dialog_room_reported">"Salon signalé"</string>
+  <string name="dialog_room_reported_and_left">"Salon quitté et signalé"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_error">"Erreur"</string>
   <string name="dialog_title_success">"Succès"</string>

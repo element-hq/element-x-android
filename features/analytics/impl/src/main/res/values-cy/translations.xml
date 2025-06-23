@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Fyddwn ni ddim yn cofnodi nac yn proffilio unrhyw ddata personol"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Rhannu data defnydd dienw i\'n helpu i nodi problemau."</string>
+  <string name="screen_analytics_prompt_read_terms">"Gallwch ddarllen ein holl amodau %1$s."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"yma"</string>
+  <string name="screen_analytics_prompt_settings">"Gallwch ddiffodd hwn unrhyw bryd"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Fyddwn ni ddim yn rhannu eich data gyda thrydydd parti"</string>
+  <string name="screen_analytics_prompt_title">"Helpwch i wella %1$s"</string>
+</resources>

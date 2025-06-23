@@ -43,5 +43,6 @@ fun aMessageComposerState(
     canCreatePoll = canCreatePoll,
     suggestions = suggestions,
     resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
+    resolveAtRoomMentionDisplay = { TextDisplay.Plain },
     eventSink = eventSink,
 )

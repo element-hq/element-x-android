@@ -14,6 +14,8 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.api.GetCurrentPushProvider
+import io.element.android.libraries.push.impl.store.InMemoryPushDataStore
+import io.element.android.libraries.push.impl.store.PushDataStore
 import io.element.android.libraries.push.impl.test.FakeTestPush
 import io.element.android.libraries.push.impl.test.TestPush
 import io.element.android.libraries.push.test.FakeGetCurrentPushProvider
@@ -288,6 +290,7 @@ class DefaultPushServiceTest {
         getCurrentPushProvider: GetCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = null),
         sessionObserver: SessionObserver = NoOpSessionObserver(),
         pushClientSecretStore: PushClientSecretStore = InMemoryPushClientSecretStore(),
+        pushDataStore: PushDataStore = InMemoryPushDataStore(),
     ): DefaultPushService {
         return DefaultPushService(
             testPush = testPush,
@@ -296,6 +299,7 @@ class DefaultPushServiceTest {
             getCurrentPushProvider = getCurrentPushProvider,
             sessionObserver = sessionObserver,
             pushClientSecretStore = pushClientSecretStore,
+            pushDataStore = pushDataStore,
         )
     }
 }

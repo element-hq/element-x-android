@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"برداشت و تحریم عضو"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"تحریم"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"در صورت دعوت نمی‌تواند دوباره به اتاق بپیوندد."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"مطمئنید می‌خواهید این عضو را تحریم کنید؟"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"تحریم کردن %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"برداشتن"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"در صورت دعوت می‌تواند دوباره به اتاق بپیوندد."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"مطمئنید می‌خواهید این عضو را بردارید؟"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"دیدن نمایه"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"برداشتن از اتاق"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"برداشتن عضو و تحریم پیوستن در آینده؟"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"برداشتن %1$s…"</string>
+</resources>

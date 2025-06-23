@@ -33,6 +33,8 @@ import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
+import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.login.api.LoginParams
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
@@ -40,6 +42,7 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
+import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.AppScope
@@ -61,6 +64,7 @@ class RootFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val authenticationService: MatrixAuthenticationService,
+    private val enterpriseService: EnterpriseService,
     private val navStateFlowFactory: RootNavStateFlowFactory,
     private val matrixSessionCache: MatrixSessionCache,
     private val presenter: RootPresenter,
@@ -99,14 +103,14 @@ class RootFlowNode @AssistedInject constructor(
                         if (navState.loggedInState.isTokenValid) {
                             tryToRestoreLatestSession(
                                 onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
-                                onFailure = { switchToNotLoggedInFlow() }
+                                onFailure = { switchToNotLoggedInFlow(null) }
                             )
                         } else {
                             switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
                         }
                     }
                     LoggedInState.NotLoggedIn -> {
-                        switchToNotLoggedInFlow()
+                        switchToNotLoggedInFlow(null)
                     }
                 }
             }
@@ -117,9 +121,9 @@ class RootFlowNode @AssistedInject constructor(
         backstack.safeRoot(NavTarget.LoggedInFlow(sessionId, navId))
     }
 
-    private fun switchToNotLoggedInFlow() {
+    private fun switchToNotLoggedInFlow(params: LoginParams?) {
         matrixSessionCache.removeAll()
-        backstack.safeRoot(NavTarget.NotLoggedInFlow)
+        backstack.safeRoot(NavTarget.NotLoggedInFlow(params))
     }
 
     private fun switchToSignedOutFlow(sessionId: SessionId) {
@@ -175,7 +179,9 @@ class RootFlowNode @AssistedInject constructor(
         data object SplashScreen : NavTarget
 
         @Parcelize
-        data object NotLoggedInFlow : NavTarget
+        data class NotLoggedInFlow(
+            val params: LoginParams?
+        ) : NavTarget
 
         @Parcelize
         data class LoggedInFlow(
@@ -211,13 +217,16 @@ class RootFlowNode @AssistedInject constructor(
                 }
                 createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
-            NavTarget.NotLoggedInFlow -> {
+            is NavTarget.NotLoggedInFlow -> {
                 val callback = object : NotLoggedInFlowNode.Callback {
                     override fun onOpenBugReport() {
                         backstack.push(NavTarget.BugReport)
                     }
                 }
-                createNode<NotLoggedInFlowNode>(buildContext, plugins = listOf(callback))
+                val params = NotLoggedInFlowNode.Params(
+                    loginParams = navTarget.params,
+                )
+                createNode<NotLoggedInFlowNode>(buildContext, plugins = listOf(params, callback))
             }
             is NavTarget.SignedOutFlow -> {
                 signedOutEntryPoint.nodeBuilder(this, buildContext)
@@ -272,9 +281,27 @@ class RootFlowNode @AssistedInject constructor(
         val resolvedIntent = intentResolver.resolve(intent) ?: return
         when (resolvedIntent) {
             is ResolvedIntent.Navigation -> navigateTo(resolvedIntent.deeplinkData)
+            is ResolvedIntent.Login -> onLoginLink(resolvedIntent.params)
             is ResolvedIntent.Oidc -> onOidcAction(resolvedIntent.oidcAction)
             is ResolvedIntent.Permalink -> navigateTo(resolvedIntent.permalinkData)
             is ResolvedIntent.IncomingShare -> onIncomingShare(resolvedIntent.intent)
+        }
+    }
+
+    private suspend fun onLoginLink(params: LoginParams) {
+        // Is there a session already?
+        val latestSessionId = authenticationService.getLatestSessionId()
+        if (latestSessionId == null) {
+            // No session, open login
+            if (enterpriseService.isAllowedToConnectToHomeserver(params.accountProvider.ensureProtocol())) {
+                switchToNotLoggedInFlow(params)
+            } else {
+                Timber.w("Login link ignored, we are not allowed to connect to the homeserver")
+                switchToNotLoggedInFlow(null)
+            }
+        } else {
+            // Just ignore the login link if we already have a session
+            Timber.w("Login link ignored, we already have a session")
         }
     }
 
@@ -283,7 +310,7 @@ class RootFlowNode @AssistedInject constructor(
         val latestSessionId = authenticationService.getLatestSessionId()
         if (latestSessionId == null) {
             // No session, open login
-            switchToNotLoggedInFlow()
+            switchToNotLoggedInFlow(null)
         } else {
             attachSession(latestSessionId)
                 .attachIncomingShare(intent)

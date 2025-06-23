@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Ychwanegu atodiad"</string>
+  <string name="rich_text_editor_bullet_list">"Toglo\'r rhestr fwledi"</string>
+  <string name="rich_text_editor_close_formatting_options">"Cau\'r dewisiadau fformatio"</string>
+  <string name="rich_text_editor_code_block">"Toglo\'r bloc cod"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Ychwanegu capsiwn"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Neges wedi\'i hamgryptio…"</string>
+  <string name="rich_text_editor_composer_placeholder">"Neges…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Neges heb ei hamgryptio…"</string>
+  <string name="rich_text_editor_create_link">"Creu dolen"</string>
+  <string name="rich_text_editor_edit_link">"Golygu dolen"</string>
+  <string name="rich_text_editor_format_bold">"Gosod fformat trwm"</string>
+  <string name="rich_text_editor_format_italic">"Gosod fformat italig"</string>
+  <string name="rich_text_editor_format_strikethrough">"Gosod fformat llinell trwodd"</string>
+  <string name="rich_text_editor_format_underline">"Gosod fformat tanlinellu"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Toglo\'r modd sgrin lawn"</string>
+  <string name="rich_text_editor_indent">"Mewnoliad"</string>
+  <string name="rich_text_editor_inline_code">"Gosod fformat cod mewnlin"</string>
+  <string name="rich_text_editor_link">"Gosod dolen"</string>
+  <string name="rich_text_editor_numbered_list">"Toglo\'r rhestr wedi\'i rhifo"</string>
+  <string name="rich_text_editor_open_compose_options">"Agor y dewisiadau cyfansoddi"</string>
+  <string name="rich_text_editor_quote">"Toglo\'r dyfyniad"</string>
+  <string name="rich_text_editor_remove_link">"Dileu dolen"</string>
+  <string name="rich_text_editor_unindent">"Dadmewnoli"</string>
+  <string name="rich_text_editor_url_placeholder">"Dolen"</string>
+  <string name="screen_room_voice_message_tooltip">"Daliwch i recordio"</string>
+</resources>

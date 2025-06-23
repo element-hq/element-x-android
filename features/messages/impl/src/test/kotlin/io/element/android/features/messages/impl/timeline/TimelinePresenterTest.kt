@@ -29,8 +29,9 @@ import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -40,10 +41,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
@@ -57,6 +60,7 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -75,7 +79,9 @@ import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalCoroutinesApi::class) class TimelinePresenterTest {
+@Suppress("LargeClass")
+@OptIn(ExperimentalCoroutinesApi::class)
+class TimelinePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -118,9 +124,26 @@ import kotlin.time.Duration.Companion.seconds
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `present - on scroll finished mark a room as read if the first visible index is 0`() = runTest(StandardTestDispatcher()) {
+    fun `present - on scroll finished mark a room as read if the first visible index is 0 - read private`() {
+        `present - on scroll finished mark a room as read if the first visible index is 0`(
+            isSendPublicReadReceiptsEnabled = false,
+            expectedReceiptType = ReceiptType.READ_PRIVATE,
+        )
+    }
+
+    @Test
+    fun `present - on scroll finished mark a room as read if the first visible index is 0 - read`() {
+        `present - on scroll finished mark a room as read if the first visible index is 0`(
+            isSendPublicReadReceiptsEnabled = true,
+            expectedReceiptType = ReceiptType.READ,
+        )
+    }
+
+    private fun `present - on scroll finished mark a room as read if the first visible index is 0`(
+        isSendPublicReadReceiptsEnabled: Boolean,
+        expectedReceiptType: ReceiptType,
+    ) = runTest(StandardTestDispatcher()) {
         val timeline = FakeTimeline(
             timelineItems = flowOf(
                 listOf(
@@ -128,11 +151,15 @@ import kotlin.time.Duration.Companion.seconds
                 )
             )
         )
-        val room = FakeMatrixRoom(
+        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
+        val room = FakeJoinedRoom(
             liveTimeline = timeline,
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
+            baseRoom = FakeBaseRoom(
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                markAsReadResult = markAsReadResult,
+            )
         )
-        val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
+        val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = isSendPublicReadReceiptsEnabled)
         val presenter = createTimelinePresenter(
             timeline = timeline,
             room = room,
@@ -144,9 +171,30 @@ import kotlin.time.Duration.Companion.seconds
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
             runCurrent()
-            assertThat(room.markAsReadCalls).isNotEmpty()
+            assert(markAsReadResult)
+                .isCalledOnce()
+                .with(value(expectedReceiptType))
             cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    fun `present - once presenter is disposed, room is marked as fully read`() = runTest {
+        val invokeResult = lambdaRecorder<RoomId, Unit> { }
+        val presenter = createTimelinePresenter(
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    canUserSendMessageResult = { _, _ -> Result.success(true) },
+                )
+            ),
+            markAsFullyRead = FakeMarkAsFullyRead(
+                invokeResult = invokeResult,
+            )
+        )
+        presenter.test {
+            awaitFirstItem()
+        }
+        invokeResult.assertions().isCalledOnce().with(value(A_ROOM_ID))
     }
 
     @Test
@@ -481,10 +529,10 @@ import kotlin.time.Duration.Companion.seconds
         val liveTimeline = FakeTimeline(
             timelineItems = flowOf(emptyList())
         )
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) },
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
+            baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
         )
         val presenter = createTimelinePresenter(
             room = room,
@@ -523,7 +571,7 @@ import kotlin.time.Duration.Companion.seconds
             process(listOf(aMessageEvent(eventId = AN_EVENT_ID)))
         }
         val presenter = createTimelinePresenter(
-            room = FakeMatrixRoom(
+            room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline(
                     timelineItems = flowOf(
                         listOf(
@@ -534,7 +582,7 @@ import kotlin.time.Duration.Companion.seconds
                         )
                     )
                 ),
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
             ),
             timelineItemIndexer = timelineItemIndexer,
         )
@@ -557,12 +605,12 @@ import kotlin.time.Duration.Companion.seconds
     @Test
     fun `present - focus on event error case`() = runTest {
         val presenter = createTimelinePresenter(
-            room = FakeMatrixRoom(
+            room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline(
                     timelineItems = flowOf(emptyList()),
                 ),
-                createTimelineResult = { Result.failure(Throwable("An error")) },
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                createTimelineResult = { Result.failure(RuntimeException("An error")) },
+                baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -628,11 +676,11 @@ import kotlin.time.Duration.Companion.seconds
                 )
             )
         )
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
             liveTimeline = timeline,
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
+            baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
         ).apply {
-            givenRoomMembersState(MatrixRoomMembersState.Unknown)
+            givenRoomMembersState(RoomMembersState.Unknown)
         }
 
         val avatarUrl = "https://domain.com/avatar.jpg"
@@ -647,7 +695,7 @@ import kotlin.time.Duration.Companion.seconds
             assertThat(event.readReceiptState.receipts.first().avatarData.url).isNull()
 
             room.givenRoomMembersState(
-                MatrixRoomMembersState.Ready(
+                RoomMembersState.Ready(
                     persistentListOf(aRoomMember(userId = A_USER_ID, avatarUrl = avatarUrl))
                 )
             )
@@ -663,9 +711,9 @@ import kotlin.time.Duration.Companion.seconds
 
     private fun TestScope.createTimelinePresenter(
         timeline: Timeline = FakeTimeline(),
-        room: FakeMatrixRoom = FakeMatrixRoom(
+        room: FakeJoinedRoom = FakeJoinedRoom(
             liveTimeline = timeline,
-            canUserSendMessageResult = { _, _ -> Result.success(true) }
+            baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
         ),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
@@ -673,12 +721,13 @@ import kotlin.time.Duration.Companion.seconds
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
+        markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead(),
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
             room = room,
             dispatchers = testCoroutineDispatchers(),
-            appScope = this,
+            sessionCoroutineScope = this,
             navigator = messagesNavigator,
             redactedVoiceMessageManager = redactedVoiceMessageManager,
             endPollAction = endPollAction,
@@ -689,6 +738,7 @@ import kotlin.time.Duration.Companion.seconds
             resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
             typingNotificationPresenter = { aTypingNotificationState() },
             roomCallStatePresenter = { aStandByCallState() },
+            markAsFullyRead = markAsFullyRead,
         )
     }
 }

@@ -16,11 +16,9 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
+import io.element.android.features.roommembermoderation.api.ModerationAction
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -29,11 +27,12 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.ui.room.canInviteAsState
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import kotlinx.collections.immutable.ImmutableMap
@@ -44,21 +43,16 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RoomMemberListPresenter @AssistedInject constructor(
+class RoomMemberListPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val roomMembersModerationPresenter: Presenter<RoomMembersModerationState>,
+    private val roomMembersModerationPresenter: Presenter<RoomMemberModerationState>,
     private val encryptionService: EncryptionService,
-    @Assisted private val navigator: RoomMemberListNavigator,
 ) : Presenter<RoomMemberListState> {
-    @AssistedFactory
-    interface Factory {
-        fun create(navigator: RoomMemberListNavigator): RoomMemberListPresenter
-    }
-
     @Composable
     override fun present(): RoomMemberListState {
         var roomMembers: AsyncData<RoomMembers> by remember { mutableStateOf(AsyncData.Loading()) }
@@ -71,11 +65,10 @@ class RoomMemberListPresenter @AssistedInject constructor(
         val membersState by room.membersStateFlow.collectAsState()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val canInvite by room.canInviteAsState(syncUpdateFlow.value)
-
         val roomModerationState = roomMembersModerationPresenter.present()
 
         val roomMemberIdentityStates by produceState(persistentMapOf<UserId, IdentityState>()) {
-            room.roomMemberIdentityStateChange()
+            room.roomMemberIdentityStateChange(waitForEncryption = true)
                 .onEach { identities ->
                     value = identities.associateBy({ it.identityRoomMember.userId }, { it.identityState }).toPersistentMap()
                 }
@@ -88,11 +81,11 @@ class RoomMemberListPresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(membersState, roomMemberIdentityStates) {
-            if (membersState is MatrixRoomMembersState.Unknown) {
+            if (membersState is RoomMembersState.Unknown) {
                 return@LaunchedEffect
             }
             val finalMembersState = membersState
-            if (finalMembersState is MatrixRoomMembersState.Error && finalMembersState.roomMembers().orEmpty().isEmpty()) {
+            if (finalMembersState is RoomMembersState.Error && finalMembersState.roomMembers().orEmpty().isEmpty()) {
                 // Cannot fetch members and no cached members, display the error
                 roomMembers = AsyncData.Failure(finalMembersState.failure)
                 return@LaunchedEffect
@@ -118,7 +111,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
                         .map { it.withIdentityState(roomMemberIdentityStates) }
                         .toImmutableList(),
                 )
-                roomMembers = if (membersState is MatrixRoomMembersState.Pending) {
+                roomMembers = if (membersState is RoomMembersState.Pending) {
                     AsyncData.Loading(result)
                 } else {
                     AsyncData.Success(result)
@@ -149,7 +142,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
                                 .toImmutableList(),
                         )
                         SearchBarResultState.Results(
-                            if (membersState is MatrixRoomMembersState.Pending) {
+                            if (membersState is RoomMembersState.Pending) {
                                 AsyncData.Loading(result)
                             } else {
                                 AsyncData.Success(result)
@@ -165,10 +158,10 @@ class RoomMemberListPresenter @AssistedInject constructor(
                 is RoomMemberListEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is RoomMemberListEvents.UpdateSearchQuery -> searchQuery = event.query
                 is RoomMemberListEvents.RoomMemberSelected ->
-                    if (roomModerationState.canDisplayModerationActions) {
-                        roomModerationState.eventSink(RoomMembersModerationEvents.SelectRoomMember(event.roomMember))
+                    if (event.roomMember.membership == RoomMembershipState.BAN) {
+                        roomModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(ModerationAction.UnbanUser, event.roomMember.toMatrixUser()))
                     } else {
-                        navigator.openRoomMemberDetails(event.roomMember.userId)
+                        roomModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.roomMember.toMatrixUser()))
                     }
             }
         }

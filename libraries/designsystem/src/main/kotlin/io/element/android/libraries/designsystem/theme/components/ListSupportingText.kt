@@ -164,7 +164,7 @@ internal fun ListSupportingTextSmallPaddingPreview() {
 internal fun ListSupportingTextLargePaddingPreview() {
     ElementThemedPreview {
         Column {
-            ListItem(headlineContent = { Text("A title") }, leadingContent = ListItemContent.Switch(checked = true, onChange = {}))
+            ListItem(headlineContent = { Text("A title") }, leadingContent = ListItemContent.Switch(checked = true))
             ListSupportingText(
                 text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",
                 contentPadding = ListSupportingTextDefaults.Padding.LargeLeadingContent,

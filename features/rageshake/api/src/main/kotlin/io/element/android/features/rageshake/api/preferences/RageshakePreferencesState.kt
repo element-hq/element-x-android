@@ -8,6 +8,7 @@
 package io.element.android.features.rageshake.api.preferences
 
 data class RageshakePreferencesState(
+    val isFeatureEnabled: Boolean,
     val isEnabled: Boolean,
     val isSupported: Boolean,
     val sensitivity: Float,

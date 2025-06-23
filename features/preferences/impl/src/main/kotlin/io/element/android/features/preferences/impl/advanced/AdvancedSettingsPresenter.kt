@@ -9,14 +9,14 @@ package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.launch
@@ -29,20 +29,35 @@ class AdvancedSettingsPresenter @Inject constructor(
     @Composable
     override fun present(): AdvancedSettingsState {
         val localCoroutineScope = rememberCoroutineScope()
-        val isDeveloperModeEnabled by appPreferencesStore
-            .isDeveloperModeEnabledFlow()
-            .collectAsState(initial = false)
-        val isSharePresenceEnabled by sessionPreferencesStore
-            .isSharePresenceEnabled()
-            .collectAsState(initial = true)
-        val doesCompressMedia by sessionPreferencesStore
-            .doesCompressMedia()
-            .collectAsState(initial = true)
-        val theme by remember {
+        val isDeveloperModeEnabled by remember {
+            appPreferencesStore.isDeveloperModeEnabledFlow()
+        }.collectAsState(initial = false)
+        val isSharePresenceEnabled by remember {
+            sessionPreferencesStore.isSharePresenceEnabled()
+        }.collectAsState(initial = true)
+        val doesCompressMedia by remember {
+            sessionPreferencesStore.doesCompressMedia()
+        }.collectAsState(initial = true)
+        val theme = remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
+        }.collectAsState(initial = Theme.System)
+        val hideInviteAvatars by remember {
+            appPreferencesStore.getHideInviteAvatarsFlow()
+        }.collectAsState(false)
+
+        val timelineMediaPreviewValue by remember {
+            appPreferencesStore.getTimelineMediaPreviewValueFlow()
+        }.collectAsState(initial = MediaPreviewValue.On)
+
+        val themeOption by remember {
+            derivedStateOf {
+                when (theme.value) {
+                    Theme.System -> ThemeOption.System
+                    Theme.Dark -> ThemeOption.Dark
+                    Theme.Light -> ThemeOption.Light
+                }
+            }
         }
-            .collectAsState(initial = Theme.System)
-        var showChangeThemeDialog by remember { mutableStateOf(false) }
 
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
@@ -55,11 +70,18 @@ class AdvancedSettingsPresenter @Inject constructor(
                 is AdvancedSettingsEvents.SetCompressMedia -> localCoroutineScope.launch {
                     sessionPreferencesStore.setCompressMedia(event.compress)
                 }
-                AdvancedSettingsEvents.CancelChangeTheme -> showChangeThemeDialog = false
-                AdvancedSettingsEvents.ChangeTheme -> showChangeThemeDialog = true
                 is AdvancedSettingsEvents.SetTheme -> localCoroutineScope.launch {
-                    appPreferencesStore.setTheme(event.theme.name)
-                    showChangeThemeDialog = false
+                    when (event.theme) {
+                        ThemeOption.System -> appPreferencesStore.setTheme(Theme.System.name)
+                        ThemeOption.Dark -> appPreferencesStore.setTheme(Theme.Dark.name)
+                        ThemeOption.Light -> appPreferencesStore.setTheme(Theme.Light.name)
+                    }
+                }
+                is AdvancedSettingsEvents.SetHideInviteAvatars -> localCoroutineScope.launch {
+                    appPreferencesStore.setHideInviteAvatars(event.value)
+                }
+                is AdvancedSettingsEvents.SetTimelineMediaPreviewValue -> localCoroutineScope.launch {
+                    appPreferencesStore.setTimelineMediaPreviewValue(event.value)
                 }
             }
         }
@@ -68,8 +90,9 @@ class AdvancedSettingsPresenter @Inject constructor(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
             doesCompressMedia = doesCompressMedia,
-            theme = theme,
-            showChangeThemeDialog = showChangeThemeDialog,
+            theme = themeOption,
+            hideInviteAvatars = hideInviteAvatars,
+            timelineMediaPreviewValue = timelineMediaPreviewValue,
             eventSink = { handleEvents(it) }
         )
     }

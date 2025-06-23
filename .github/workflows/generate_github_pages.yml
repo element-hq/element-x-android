@@ -12,7 +12,7 @@ jobs:
     if: ${{ github.repository == 'element-hq/element-x-android' && ('pull_request' != github.event_name || github.event.pull_request.head.repo.full_name == github.repository) }}
     steps:
       - name: ⏬ Checkout with LFS
-        uses: nschloe/action-cached-lfs-checkout@v1.2.3
+        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 # v1.2.3
       - name: Use JDK 21
         uses: actions/setup-java@v4
         with:
@@ -32,7 +32,7 @@ jobs:
           mkdir -p screenshots/en
           cp tests/uitests/src/test/snapshots/images/* screenshots/en
       - name: Deploy GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./screenshots

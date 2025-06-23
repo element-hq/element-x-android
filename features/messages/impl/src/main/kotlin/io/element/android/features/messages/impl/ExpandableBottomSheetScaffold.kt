@@ -10,9 +10,14 @@
 package io.element.android.features.messages.impl
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -29,10 +34,8 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
-import io.element.android.libraries.designsystem.theme.components.bottomsheet.CustomSheetState
-import io.element.android.libraries.designsystem.theme.components.bottomsheet.rememberBottomSheetScaffoldState
-import io.element.android.libraries.designsystem.theme.components.bottomsheet.rememberStandardBottomSheetState
 import kotlin.math.roundToInt
 
 /**
@@ -112,7 +115,7 @@ internal fun ExpandableBottomSheetScaffold(
     }
 
     SubcomposeLayout(
-        modifier = modifier,
+        modifier = modifier.windowInsetsPadding(WindowInsets.ime),
         measurePolicy = { constraints: Constraints ->
             val sheetContentSub = subcompose(Slot.SheetContent(sheetContentKey)) { sheetContent(true) }.map {
                 it.measure(Constraints(maxWidth = constraints.maxWidth))
@@ -123,7 +126,7 @@ internal fun ExpandableBottomSheetScaffold(
             val dragHandleHeight = dragHandleSub?.height?.toDp() ?: 0.dp
 
             val maxHeight = constraints.maxHeight.toDp()
-            val contentHeight = sheetContentSub.height.toDp() + dragHandleHeight
+            val contentHeight = sheetContentSub.measuredHeight.toDp() + dragHandleHeight
 
             contentOverflows = contentHeight > maxHeight
 
@@ -139,8 +142,8 @@ internal fun ExpandableBottomSheetScaffold(
                         modifier = Modifier.fillMaxHeight(),
                         measurePolicy = { measurables, constraints ->
                             val constraintHeight = constraints.maxHeight
-                            val offset = scaffoldState.bottomSheetState.getIntOffset() ?: 0
-                            val height = Integer.max(0, constraintHeight - offset)
+                            val offset = tryOrNull { scaffoldState.bottomSheetState.requireOffset() } ?: 0f
+                            val height = Integer.max(peekHeight.roundToPx(), constraintHeight - offset.roundToInt())
                             val top = measurables[0].measure(
                                 constraints.copy(
                                     minHeight = height,
@@ -163,12 +166,6 @@ internal fun ExpandableBottomSheetScaffold(
             }
         }
     )
-}
-
-private fun CustomSheetState.getIntOffset(): Int? = try {
-    requireOffset().roundToInt()
-} catch (e: IllegalStateException) {
-    null
 }
 
 private sealed interface Slot {

@@ -37,26 +37,22 @@ sealed interface ListItemContent {
     /**
      * Default Switch content for [ListItem].
      * @param checked The current state of the switch.
-     * @param onChange Callback when the switch is toggled: it should only be set to override the default click behaviour in the [ListItem].
      * @param enabled Whether the switch is enabled or not.
      */
     data class Switch(
         val checked: Boolean,
-        val onChange: ((Boolean) -> Unit)? = null,
         val enabled: Boolean = true
     ) : ListItemContent
 
     /**
      * Default Checkbox content for [ListItem].
      * @param checked The current state of the checkbox.
-     * @param onChange Callback when the checkbox is toggled: it should only be set to override the default click behaviour in the [ListItem].
      * @param enabled Whether the checkbox is enabled or not.
      * @param compact Reduces the size of the component to make the wrapping [ListItem] smaller.
      * This is especially useful when the [ListItem] is used inside a Dialog. `false` by default.
      */
     data class Checkbox(
         val checked: Boolean,
-        val onChange: ((Boolean) -> Unit)? = null,
         val enabled: Boolean = true,
         val compact: Boolean = false
     ) : ListItemContent
@@ -64,14 +60,12 @@ sealed interface ListItemContent {
     /**
      * Default RadioButton content for [ListItem].
      * @param selected The current state of the radio button.
-     * @param onClick Callback when the radio button is toggled: it should only be set to override the default click behaviour in the [ListItem].
      * @param enabled Whether the radio button is enabled or not.
      * @param compact Reduces the size of the component to make the wrapping [ListItem] smaller.
      * This is especially useful when the [ListItem] is used inside a Dialog. `false` by default.
      */
     data class RadioButton(
         val selected: Boolean,
-        val onClick: (() -> Unit)? = null,
         val enabled: Boolean = true,
         val compact: Boolean = false
     ) : ListItemContent
@@ -99,24 +93,24 @@ sealed interface ListItemContent {
     data class Counter(val count: Int) : ListItemContent
 
     @Composable
-    fun View() {
+    fun View(isItemEnabled: Boolean) {
         when (this) {
             is Switch -> SwitchComponent(
                 checked = checked,
-                onCheckedChange = onChange,
-                enabled = enabled
+                onCheckedChange = null,
+                enabled = enabled && isItemEnabled,
             )
             is Checkbox -> CheckboxComponent(
                 modifier = if (compact) Modifier.size(maxCompactSize) else Modifier,
                 checked = checked,
-                onCheckedChange = onChange,
-                enabled = enabled
+                onCheckedChange = null,
+                enabled = enabled && isItemEnabled,
             )
             is RadioButton -> RadioButtonComponent(
                 modifier = if (compact) Modifier.size(maxCompactSize) else Modifier,
                 selected = selected,
-                onClick = onClick,
-                enabled = enabled
+                onClick = null,
+                enabled = enabled && isItemEnabled,
             )
             is Icon -> {
                 IconComponent(

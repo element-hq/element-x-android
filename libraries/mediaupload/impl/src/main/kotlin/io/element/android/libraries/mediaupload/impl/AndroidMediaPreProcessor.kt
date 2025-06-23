@@ -21,6 +21,7 @@ import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
@@ -62,7 +63,7 @@ class AndroidMediaPreProcessor @Inject constructor(
          */
         private const val IMAGE_SCALE_REF_SIZE = 640
 
-        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP)
+        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP, MimeTypes.Svg)
     }
 
     private val contentResolver = context.contentResolver
@@ -73,8 +74,12 @@ class AndroidMediaPreProcessor @Inject constructor(
         deleteOriginal: Boolean,
         compressIfPossible: Boolean,
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
-        runCatching {
+        runCatchingExceptions {
             val result = when {
+                // Special case for SVG, since Android can't read its metadata or create a thumbnail, it must be sent as a file
+                mimeType == MimeTypes.Svg -> {
+                    processFile(uri, mimeType)
+                }
                 mimeType.isMimeTypeImage() -> {
                     val shouldBeCompressed = compressIfPossible && mimeType !in notCompressibleImageTypes
                     processImage(uri, mimeType, shouldBeCompressed)
@@ -184,20 +189,29 @@ class AndroidMediaPreProcessor @Inject constructor(
     }
 
     private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean): MediaUploadInfo {
-        val resultFile = videoCompressor.compress(uri, shouldBeCompressed)
-            .onEach {
-                // TODO handle progress
-            }
-            .filterIsInstance<VideoTranscodingEvent.Completed>()
-            .first()
-            .file
-        val thumbnailInfo = thumbnailFactory.createVideoThumbnail(resultFile)
-        val videoInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo)
-        return MediaUploadInfo.Video(
-            file = resultFile,
-            videoInfo = videoInfo,
-            thumbnailFile = thumbnailInfo?.file
-        )
+        val resultFile = runCatchingExceptions {
+            videoCompressor.compress(uri, shouldBeCompressed)
+                .onEach {
+                    // TODO handle progress
+                }
+                .filterIsInstance<VideoTranscodingEvent.Completed>()
+                .first()
+                .file
+        }
+            .getOrNull()
+
+        if (resultFile != null) {
+            val thumbnailInfo = thumbnailFactory.createVideoThumbnail(resultFile)
+            val videoInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo)
+            return MediaUploadInfo.Video(
+                file = resultFile,
+                videoInfo = videoInfo,
+                thumbnailFile = thumbnailInfo?.file
+            )
+        } else {
+            // If the video could not be compressed, just use the original one, but send it as a file
+            return processFile(uri, MimeTypes.OctetStream)
+        }
     }
 
     private suspend fun processAudio(uri: Uri, mimeType: String?): MediaUploadInfo {

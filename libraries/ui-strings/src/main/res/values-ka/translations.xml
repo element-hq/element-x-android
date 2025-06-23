@@ -147,6 +147,10 @@
   <string name="common_light">"ღია"</string>
   <string name="common_link_copied_to_clipboard">"ბმული კოპირებულია გაცვლის ბუფერში"</string>
   <string name="common_loading">"იტვირთება…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d სხვა"</item>
+    <item quantity="other">"%d სხვა"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d წევრი"</item>
     <item quantity="other">"%1$d წევრები"</item>

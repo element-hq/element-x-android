@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"წევრის წაშლა და დაბლოკვა"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"დაბლოკვა"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"მოწვევის შემთხვევაში ამ ოთახში კვლავ გაწევრიანებას ვერ შეძლებენ."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"დარწმუნებული ხართ, რომ ამ წევრის დაბლოკვა გსურთ?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s-ს დაბლოკვა"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"პროფილის ნახვა"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"ოთახიდან გაგდება"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"გსურთ წევრის გაგდება და მომავალში გაწევრიანების აკრძალვა?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s-ს გაგდება…"</string>
+</resources>

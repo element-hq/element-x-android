@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Ви не бачитимете повідомлень або запрошень у кімнату від цього користувача"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Заблокувати користувача"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Поскаржитися на цю кімнату постачальнику облікового запису."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Опишіть причину скарги…"</string>
+  <string name="screen_decline_and_block_title">"Відхилити та заблокувати"</string>
   <string name="screen_invites_decline_chat_message">"Ви впевнені, що хочете відхилити запрошення приєднатися до %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Відхилити запрошення"</string>
   <string name="screen_invites_decline_direct_chat_message">"Ви дійсно хочете відмовитися від приватної бесіди з %1$s?"</string>
