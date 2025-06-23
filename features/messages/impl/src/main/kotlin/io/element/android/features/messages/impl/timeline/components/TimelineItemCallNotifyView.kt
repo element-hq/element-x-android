@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.RoomCallStateProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
@@ -55,7 +56,10 @@ internal fun TimelineItemCallNotifyView(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Avatar(avatarData = event.senderAvatar)
+        Avatar(
+            avatarData = event.senderAvatar,
+            avatarType = AvatarType.User,
+        )
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = event.safeSenderName,

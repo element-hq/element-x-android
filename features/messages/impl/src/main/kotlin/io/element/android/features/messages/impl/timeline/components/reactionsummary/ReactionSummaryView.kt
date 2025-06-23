@@ -62,6 +62,7 @@ import io.element.android.features.messages.impl.timeline.model.AggregatedReacti
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
@@ -249,7 +250,10 @@ private fun SenderRow(
             .semantics(mergeDescendants = true) {},
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Avatar(avatarData)
+        Avatar(
+            avatarData = avatarData,
+            avatarType = AvatarType.User,
+        )
         Column(
             modifier = Modifier.padding(start = 12.dp),
         ) {

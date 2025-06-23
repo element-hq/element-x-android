@@ -33,7 +33,10 @@ internal fun UserAvatarColorsPreview() = ElementPreview {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // Note: it's OK, since the hash of "0" is 0, the hash of "1" is 1, etc.
-                Avatar(anAvatarData(id = "$it"))
+                Avatar(
+                    avatarData = anAvatarData(id = "$it"),
+                    avatarType = AvatarType.User,
+                )
                 Text(text = "Color index $it")
             }
         }

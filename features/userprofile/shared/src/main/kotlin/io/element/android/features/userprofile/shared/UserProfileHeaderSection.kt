@@ -30,6 +30,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.MatrixBadgeRow
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -61,6 +62,7 @@ fun UserProfileHeaderSection(
     ) {
         Avatar(
             avatarData = AvatarData(userId.value, userName, avatarUrl, AvatarSize.UserHeader),
+            avatarType = AvatarType.User,
             modifier = Modifier
                 .clip(CircleShape)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }

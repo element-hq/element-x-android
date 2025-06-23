@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatarBloom
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -297,6 +298,7 @@ private fun NavigationIcon(
         Box {
             Avatar(
                 avatarData = avatarData,
+                avatarType = AvatarType.User,
                 contentDescription = stringResource(CommonStrings.common_settings),
             )
             if (showAvatarIndicator) {

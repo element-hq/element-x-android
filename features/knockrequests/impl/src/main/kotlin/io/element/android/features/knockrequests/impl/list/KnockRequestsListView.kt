@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -318,7 +319,10 @@ private fun KnockRequestItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        Avatar(knockRequest.getAvatarData(AvatarSize.KnockRequestItem))
+        Avatar(
+            avatarData = knockRequest.getAvatarData(AvatarSize.KnockRequestItem),
+            avatarType = AvatarType.User,
+        )
         Spacer(modifier = Modifier.width(16.dp))
         Column {
             // Name and date

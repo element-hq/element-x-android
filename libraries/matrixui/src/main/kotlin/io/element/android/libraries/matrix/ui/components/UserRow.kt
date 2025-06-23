@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -38,7 +39,10 @@ internal fun UserRow(
             .padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Avatar(avatarData)
+        Avatar(
+            avatarData = avatarData,
+            avatarType = AvatarType.User,
+        )
         Column(
             modifier = Modifier
                 .padding(start = 12.dp)

@@ -24,8 +24,8 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 @Composable
 fun Avatar(
     avatarData: AvatarData,
+    avatarType: AvatarType,
     modifier: Modifier = Modifier,
-    avatarType: AvatarType = AvatarType.User,
     contentDescription: String? = null,
     // If not null, will be used instead of the size from avatarData
     forcedAvatarSize: Dp? = null,
@@ -67,7 +67,10 @@ internal fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarDa
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Avatar(avatarData)
+            Avatar(
+                avatarData = avatarData,
+                avatarType = AvatarType.User,
+            )
             Text(text = avatarData.size.name + " " + avatarData.size.dp)
         }
     }
