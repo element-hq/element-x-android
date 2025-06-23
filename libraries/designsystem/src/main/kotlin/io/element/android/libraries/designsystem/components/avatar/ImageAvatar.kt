@@ -26,7 +26,7 @@ internal fun ImageAvatar(
     avatarData: AvatarData,
     avatarType: AvatarType,
     forcedAvatarSize: Dp?,
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     contentDescription: String? = null,
 ) {
     val size = forcedAvatarSize ?: avatarData.size.dp
