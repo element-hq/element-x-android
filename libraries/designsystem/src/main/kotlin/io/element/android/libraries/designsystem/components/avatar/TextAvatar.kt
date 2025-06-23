@@ -8,9 +8,11 @@
 package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,12 +36,13 @@ internal fun TextAvatar(
     size: Dp,
     colors: AvatarColors,
     contentDescription: String?,
+    avatarType: AvatarType,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier
             .size(size)
-            .clip(CircleShape)
+            .clip(avatarType.avatarShape())
             .background(color = colors.background)
     ) {
         val fontSize = size.toSp() / 2
@@ -64,13 +67,25 @@ internal fun TextAvatar(
 @Preview(group = PreviewGroup.Avatars)
 @Composable
 internal fun TextAvatarPreview() = ElementPreview {
-        TextAvatar(
-            text = "AB",
-            size = 40.dp,
-            colors = AvatarColors(
-                background = ElementTheme.colors.bgSubtlePrimary,
-                foreground = ElementTheme.colors.iconPrimary,
-            ),
-            contentDescription = null,
-        )
+    Row(
+        modifier = Modifier.padding(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        listOf(
+            AvatarType.User,
+            AvatarType.Room(),
+            AvatarType.Space(8.dp),
+        ).forEach { avatarType ->
+            TextAvatar(
+                text = "AB",
+                size = 40.dp,
+                colors = AvatarColors(
+                    background = ElementTheme.colors.bgSubtlePrimary,
+                    foreground = ElementTheme.colors.iconPrimary,
+                ),
+                avatarType = avatarType,
+                contentDescription = null,
+            )
+        }
     }
+}

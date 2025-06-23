@@ -32,8 +32,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -214,12 +215,14 @@ private fun RoomSummaryView(
             .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RoomAvatar(
+        Avatar(
             avatarData = roomInfo.getAvatarData(size = AvatarSize.RoomSelectRoomListItem),
-            heroes = roomInfo.heroes.map { user ->
-                user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
-            }.toPersistentList(),
-            isTombstoned = roomInfo.isTombstoned,
+            avatarType = AvatarType.Room(
+                heroes = roomInfo.heroes.map { user ->
+                    user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
+                }.toPersistentList(),
+                isTombstoned = roomInfo.isTombstoned,
+            ),
         )
         Column(
             modifier = Modifier

@@ -9,36 +9,46 @@ package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun RoomAvatar(
+internal fun RoomAvatar(
     avatarData: AvatarData,
-    heroes: ImmutableList<AvatarData>,
+    avatarType: AvatarType.Room,
     modifier: Modifier = Modifier,
-    isTombstoned: Boolean = false,
     hideAvatarImage: Boolean = false,
     contentDescription: String? = null,
 ) {
     when {
-        isTombstoned -> {
+        avatarType.isTombstoned -> {
             TombstonedRoomAvatar(
                 size = avatarData.size,
                 modifier = modifier,
+                avatarType = avatarType,
                 contentDescription = contentDescription
             )
         }
-        avatarData.url != null || heroes.isEmpty() -> {
-            Avatar(
-                avatarData = avatarData,
-                modifier = modifier,
-                contentDescription = contentDescription,
-                hideImage = hideAvatarImage
-            )
+        avatarData.url != null || avatarType.heroes.isEmpty() -> {
+            if (avatarData.url.isNullOrBlank() || hideAvatarImage) {
+                InitialLetterAvatar(
+                    avatarData = avatarData,
+                    avatarType = avatarType,
+                    modifier = modifier,
+                    contentDescription = contentDescription,
+                    forcedAvatarSize = null,
+                )
+            } else {
+                ImageAvatar(
+                    avatarData = avatarData,
+                    avatarType = avatarType,
+                    forcedAvatarSize = null,
+                    modifier = modifier,
+                    contentDescription = contentDescription,
+                )
+            }
         }
         else -> {
             AvatarCluster(
-                avatars = heroes,
+                avatars = avatarType.heroes,
                 modifier = modifier,
                 hideAvatarImages = hideAvatarImage,
                 contentDescription = contentDescription

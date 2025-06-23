@@ -31,9 +31,10 @@ import kotlin.math.sin
 private const val MAX_AVATAR_COUNT = 4
 
 @Composable
-fun AvatarCluster(
+internal fun AvatarCluster(
     avatars: ImmutableList<AvatarData>,
     modifier: Modifier = Modifier,
+    avatarType: AvatarType = AvatarType.User,
     hideAvatarImages: Boolean = false,
     contentDescription: String? = null,
 ) {
@@ -50,6 +51,7 @@ fun AvatarCluster(
         1 -> {
             Avatar(
                 avatarData = limitedAvatars[0],
+                avatarType = avatarType,
                 modifier = modifier,
                 contentDescription = contentDescription,
                 hideImage = hideAvatarImages
@@ -78,10 +80,10 @@ fun AvatarCluster(
             }
             Box(
                 modifier = modifier
-                        .size(size.dp)
-                        .semantics {
-                            this.contentDescription = contentDescription.orEmpty()
-                        },
+                    .size(size.dp)
+                    .semantics {
+                        this.contentDescription = contentDescription.orEmpty()
+                    },
                 contentAlignment = Alignment.Center,
             ) {
                 limitedAvatars.forEachIndexed { index, heroAvatar ->
@@ -89,15 +91,16 @@ fun AvatarCluster(
                     val yOffset = (offsetRadius * sin(angle * index.toDouble() + angleOffset)).dp
                     Box(
                         modifier = Modifier
-                                .size(heroAvatarSize)
-                                .offset(
-                                        x = xOffset,
-                                        y = yOffset,
-                                )
+                            .size(heroAvatarSize)
+                            .offset(
+                                x = xOffset,
+                                y = yOffset,
+                            )
                     ) {
                         Avatar(
                             avatarData = heroAvatar,
                             forcedAvatarSize = heroAvatarSize,
+                            avatarType = avatarType,
                             hideImage = hideAvatarImages,
                         )
                     }
