@@ -33,8 +33,8 @@ private const val MAX_AVATAR_COUNT = 4
 @Composable
 internal fun AvatarCluster(
     avatars: ImmutableList<AvatarData>,
+    avatarType: AvatarType,
     modifier: Modifier = Modifier,
-    avatarType: AvatarType = AvatarType.User,
     hideAvatarImages: Boolean = false,
     contentDescription: String? = null,
 ) {
@@ -119,6 +119,7 @@ internal fun AvatarClusterPreview() = ElementThemedPreview {
         for (ngOfAvatars in 1..5) {
             AvatarCluster(
                 avatars = List(ngOfAvatars) { anAvatarData(it) }.toPersistentList(),
+                avatarType = AvatarType.User,
             )
         }
     }

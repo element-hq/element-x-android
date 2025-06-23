@@ -49,6 +49,8 @@ internal fun RoomAvatar(
         else -> {
             AvatarCluster(
                 avatars = avatarType.heroes,
+                // Note: even for a room avatar, we use UserAvatarType here to display the avatar of heroes
+                avatarType = AvatarType.User,
                 modifier = modifier,
                 hideAvatarImages = hideAvatarImage,
                 contentDescription = contentDescription
