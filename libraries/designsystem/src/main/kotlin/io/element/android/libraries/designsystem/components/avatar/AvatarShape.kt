@@ -13,11 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Shape
 
 @Composable
-fun avatarShape(
-    avatarType: AvatarType,
-): Shape {
-    return when (avatarType) {
-        is AvatarType.Space -> RoundedCornerShape(avatarType.cornerSize)
+fun AvatarType.avatarShape(): Shape {
+    return when (this) {
+        is AvatarType.Space -> RoundedCornerShape(cornerSize)
         is AvatarType.Room,
         AvatarType.User -> CircleShape
     }

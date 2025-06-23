@@ -36,7 +36,7 @@ internal fun ImageAvatar(
         contentScale = ContentScale.Companion.Crop,
         modifier = modifier
                 .size(size)
-                .clip(avatarShape(avatarType))
+                .clip(avatarType.avatarShape())
     ) {
         val collectedState by painter.state.collectAsState()
         when (val state = collectedState) {

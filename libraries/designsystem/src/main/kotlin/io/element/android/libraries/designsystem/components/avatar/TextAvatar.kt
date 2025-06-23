@@ -42,7 +42,7 @@ internal fun TextAvatar(
     Box(
         modifier
             .size(size)
-            .clip(avatarShape(avatarType))
+            .clip(avatarType.avatarShape())
             .background(color = colors.background)
     ) {
         val fontSize = size.toSp() / 2

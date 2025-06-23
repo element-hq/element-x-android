@@ -48,7 +48,7 @@ fun UnsavedAvatar(
 ) {
     val commonModifier = modifier
         .size(70.dp)
-        .clip(avatarShape(avatarType))
+        .clip(avatarType.avatarShape())
 
     if (avatarUri != null) {
         val context = LocalContext.current
