@@ -225,7 +225,7 @@ import kotlin.time.Duration.Companion.seconds
     }
 
     @Test
-    fun `present - a received room member message makes the call to be active`() = runTest {
+    fun `present - a received 'joined' action makes the call to be active`() = runTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
@@ -248,13 +248,10 @@ import kotlin.time.Duration.Companion.seconds
             messageInterceptor.givenInterceptedMessage(
                 """
                     {
-                        "action":"send_event",
+                        "action":"io.element.join",
                         "api":"fromWidget",
                         "widgetId":"1",
-                        "requestId":"1",
-                        "data":{
-                            "type":"org.matrix.msc3401.call.member"
-                        }
+                        "requestId":"1"
                     }
                 """.trimIndent()
             )

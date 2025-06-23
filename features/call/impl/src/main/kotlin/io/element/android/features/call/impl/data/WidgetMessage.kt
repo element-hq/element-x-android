@@ -30,6 +30,9 @@ data class WidgetMessage(
 
     @Serializable
     enum class Action {
+        @SerialName("io.element.join")
+        Join,
+
         @SerialName("im.vector.hangup")
         HangUp,
 
