@@ -18,8 +18,8 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 @Composable
 internal fun TombstonedRoomAvatar(
     size: AvatarSize,
-    modifier: Modifier = Modifier,
     avatarType: AvatarType,
+    modifier: Modifier = Modifier,
     contentDescription: String? = null,
 ) {
     TextAvatar(

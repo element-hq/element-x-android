@@ -114,14 +114,11 @@ private fun SuggestionItemView(
             is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
             is ResolvedSuggestion.Alias -> suggestion.roomAlias.value
         }
-
         Avatar(
             avatarData = avatarData,
             avatarType = avatarType,
             modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp),
         )
-
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
