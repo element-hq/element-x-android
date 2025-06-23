@@ -49,12 +49,13 @@ internal fun AvatarCluster(
             error("Unsupported number of avatars: 0")
         }
         1 -> {
-            Avatar(
+            InitialOrImageAvatar(
                 avatarData = limitedAvatars[0],
-                avatarType = avatarType,
+                hideAvatarImage = hideAvatarImages,
+                avatarShape = avatarType.avatarShape(),
+                forcedAvatarSize = null,
                 modifier = modifier,
                 contentDescription = contentDescription,
-                hideImage = hideAvatarImages
             )
         }
         else -> {
