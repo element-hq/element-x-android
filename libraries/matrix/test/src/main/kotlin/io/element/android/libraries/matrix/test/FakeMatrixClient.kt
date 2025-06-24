@@ -89,6 +89,7 @@ class FakeMatrixClient(
     private val ignoreUserResult: (UserId) -> Result<Unit> = { lambdaError() },
     private var unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
     private val canReportRoomLambda: () -> Boolean = { false },
+    private val isLivekitRtcSupportedLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
@@ -333,5 +334,9 @@ class FakeMatrixClient(
 
     override suspend fun canReportRoom(): Boolean {
         return canReportRoomLambda()
+    }
+
+    override suspend fun isLivekitRtcSupported(): Boolean {
+        return isLivekitRtcSupportedLambda()
     }
 }

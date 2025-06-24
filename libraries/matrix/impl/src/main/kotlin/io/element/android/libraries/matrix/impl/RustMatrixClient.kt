@@ -678,6 +678,10 @@ class RustMatrixClient(
         }.getOrDefault(false)
     }
 
+    override suspend fun isLivekitRtcSupported(): Boolean = withContext(sessionDispatcher) {
+        innerClient.isLivekitRtcSupported()
+    }
+
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {

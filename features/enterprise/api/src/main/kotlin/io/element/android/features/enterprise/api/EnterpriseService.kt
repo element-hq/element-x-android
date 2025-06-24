@@ -16,8 +16,6 @@ interface EnterpriseService {
     fun defaultHomeserverList(): List<String>
     suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
 
-    suspend fun isElementCallAvailable(): Boolean
-
     fun semanticColorsLight(): SemanticColors
     fun semanticColorsDark(): SemanticColors
 

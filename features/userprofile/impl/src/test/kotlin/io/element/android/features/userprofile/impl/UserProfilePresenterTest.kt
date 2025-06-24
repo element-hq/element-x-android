@@ -16,7 +16,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.createroom.test.FakeStartDMAction
-import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
@@ -410,7 +410,7 @@ class UserProfilePresenterTest {
             userId = userId,
             client = client,
             startDMAction = startDMAction,
-            enterpriseService = FakeEnterpriseService(
+            sessionEnterpriseService = FakeSessionEnterpriseService(
                 isElementCallAvailableResult = { isElementCallAvailable },
             ),
         )
