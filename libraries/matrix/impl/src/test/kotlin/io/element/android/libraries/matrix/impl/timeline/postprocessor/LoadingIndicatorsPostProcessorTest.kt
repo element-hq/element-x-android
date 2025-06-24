@@ -17,24 +17,11 @@ import org.junit.Test
 
 class LoadingIndicatorsPostProcessorTest {
     @Test
-    fun `LoadingIndicatorsPostProcessor does not alter the items is the timeline is not initialized`() {
-        val sut = LoadingIndicatorsPostProcessor(FakeSystemClock())
-        val result = sut.process(
-            items = listOf(messageEvent, messageEvent2),
-            isTimelineInitialized = false,
-            hasMoreToLoadBackward = true,
-            hasMoreToLoadForward = true,
-        )
-        assertThat(result).containsExactly(messageEvent, messageEvent2)
-    }
-
-    @Test
     fun `LoadingIndicatorsPostProcessor adds Loading indicator at the top of the list if hasMoreToLoadBackward is true`() {
         val clock = FakeSystemClock()
         val sut = LoadingIndicatorsPostProcessor(clock)
         val result = sut.process(
             items = listOf(messageEvent, messageEvent2),
-            isTimelineInitialized = true,
             hasMoreToLoadBackward = true,
             hasMoreToLoadForward = false,
         )
@@ -57,7 +44,6 @@ class LoadingIndicatorsPostProcessorTest {
         val sut = LoadingIndicatorsPostProcessor(clock)
         val result = sut.process(
             items = listOf(messageEvent, messageEvent2),
-            isTimelineInitialized = true,
             hasMoreToLoadBackward = false,
             hasMoreToLoadForward = true,
         )
@@ -80,7 +66,6 @@ class LoadingIndicatorsPostProcessorTest {
         val sut = LoadingIndicatorsPostProcessor(clock)
         val result = sut.process(
             items = listOf(messageEvent, messageEvent2),
-            isTimelineInitialized = true,
             hasMoreToLoadBackward = true,
             hasMoreToLoadForward = true,
         )
@@ -110,7 +95,6 @@ class LoadingIndicatorsPostProcessorTest {
         val sut = LoadingIndicatorsPostProcessor(clock)
         val result = sut.process(
             items = listOf(),
-            isTimelineInitialized = true,
             hasMoreToLoadBackward = true,
             hasMoreToLoadForward = true,
         )

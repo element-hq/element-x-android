@@ -58,11 +58,6 @@ class RustTimelineTest {
                 )
             )
             with(awaitItem()) {
-                assertThat(size).isEqualTo(1)
-                // Typing notification
-                assertThat((get(0) as MatrixTimelineItem.Virtual).virtual).isEqualTo(VirtualTimelineItem.TypingNotification)
-            }
-            with(awaitItem()) {
                 assertThat(size).isEqualTo(2)
                 // The loading
                 assertThat((get(0) as MatrixTimelineItem.Virtual).virtual).isEqualTo(
