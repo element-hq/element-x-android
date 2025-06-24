@@ -44,7 +44,6 @@ import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -89,7 +88,6 @@ class CallScreenPresenter @AssistedInject constructor(
         var webViewError by remember { mutableStateOf<String?>(null) }
         val languageTag = languageTagProvider.provideLanguageTag()
         val theme = if (ElementTheme.isLightTheme) "light" else "dark"
-        var loadCallTimeoutJob by remember { mutableStateOf<Job?>(null) }
 
         DisposableEffect(Unit) {
             coroutineScope.launch {
@@ -121,15 +119,6 @@ class CallScreenPresenter @AssistedInject constructor(
 
         callWidgetDriver.value?.let { driver ->
             LaunchedEffect(Unit) {
-                loadCallTimeoutJob = launch {
-                    // Wait for the call to be loaded, if it takes too long, we display an error
-                    delay(10.seconds)
-
-                    Timber.w("The call took too long to be joined. Displaying an error before exiting.")
-
-                    // This will display a simple 'Sorry, an error occurred' dialog
-                    webViewError = ""
-                }
                 driver.incomingMessages
                     .onEach {
                         // Relay message to the WebView
@@ -155,13 +144,23 @@ class CallScreenPresenter @AssistedInject constructor(
                             if (parsedMessage.action == WidgetMessage.Action.Close) {
                                 close(callWidgetDriver.value, navigator)
                             } else if (parsedMessage.action == WidgetMessage.Action.Join) {
-                                // This action is received when the call is joined, we can stop the timeout job
                                 isJoinedCall = true
-                                loadCallTimeoutJob?.cancel()
                             }
                         }
                     }
                     .launchIn(this)
+            }
+
+            LaunchedEffect(Unit) {
+                // Wait for the call to be joined, if it takes too long, we display an error
+                delay(10.seconds)
+
+                if (!isJoinedCall) {
+                    Timber.w("The call took too long to be joined. Displaying an error before exiting.")
+
+                    // This will display a simple 'Sorry, an error occurred' dialog and force the user to exit the call
+                    webViewError = ""
+                }
             }
         }
 
