@@ -60,7 +60,6 @@ interface CallScreenNavigator {
     fun close()
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CallScreenView(
     state: CallScreenState,
@@ -78,19 +77,6 @@ internal fun CallScreenView(
 
     Scaffold(
         modifier = modifier,
-        topBar = {
-            if (!pipState.isInPictureInPicture) {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.element_call)) },
-                    navigationIcon = {
-                        BackButton(
-                            imageVector = if (pipState.supportPip) CompoundIcons.ArrowLeft() else CompoundIcons.Close(),
-                            onClick = ::handleBack,
-                        )
-                    }
-                )
-            }
-        }
     ) { padding ->
         BackHandler {
             handleBack()
