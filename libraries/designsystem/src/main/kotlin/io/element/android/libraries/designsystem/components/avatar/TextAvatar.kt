@@ -85,7 +85,7 @@ internal fun TextAvatarPreview() = ElementPreview {
                     background = ElementTheme.colors.bgSubtlePrimary,
                     foreground = ElementTheme.colors.iconPrimary,
                 ),
-                avatarShape = CircleShape,
+                avatarShape = avatarType.avatarShape(),
                 contentDescription = null,
             )
         }
