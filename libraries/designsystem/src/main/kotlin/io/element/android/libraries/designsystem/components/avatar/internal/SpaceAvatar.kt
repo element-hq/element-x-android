@@ -32,17 +32,18 @@ internal fun SpaceAvatar(
     hideAvatarImage: Boolean = false,
     contentDescription: String? = null,
 ) {
+    val size = forcedAvatarSize ?: avatarData.size.dp
     when {
         avatarType.isTombstoned -> TombstonedRoomAvatar(
-            size = forcedAvatarSize ?: avatarData.size.dp,
-            avatarShape = avatarType.avatarShape(),
+            size = size,
+            avatarShape = avatarType.avatarShape(size),
             modifier = modifier,
             contentDescription = contentDescription,
         )
         else -> InitialOrImageAvatar(
             avatarData = avatarData,
             hideAvatarImage = hideAvatarImage,
-            avatarShape = avatarType.avatarShape(),
+            avatarShape = avatarType.avatarShape(size),
             forcedAvatarSize = forcedAvatarSize,
             modifier = modifier,
             contentDescription = contentDescription,
@@ -62,12 +63,11 @@ internal fun SpaceAvatarPreview() =
         ) {
             SpaceAvatar(
                 avatarData = anAvatarData(),
-                avatarType = AvatarType.Space(cornerSize = 16.dp),
+                avatarType = AvatarType.Space(),
             )
             SpaceAvatar(
                 avatarData = anAvatarData(),
                 avatarType = AvatarType.Space(
-                    cornerSize = 16.dp,
                     isTombstoned = true,
                 ),
             )

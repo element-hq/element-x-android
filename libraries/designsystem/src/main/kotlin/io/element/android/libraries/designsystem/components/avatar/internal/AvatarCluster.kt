@@ -57,7 +57,7 @@ internal fun AvatarCluster(
             InitialOrImageAvatar(
                 avatarData = limitedAvatars[0],
                 hideAvatarImage = hideAvatarImages,
-                avatarShape = avatarType.avatarShape(),
+                avatarShape = avatarType.avatarShape(limitedAvatars[0].size.dp),
                 forcedAvatarSize = null,
                 modifier = modifier,
                 contentDescription = contentDescription,
@@ -106,14 +106,7 @@ internal fun AvatarCluster(
                         InitialOrImageAvatar(
                             avatarData = heroAvatar,
                             hideAvatarImage = hideAvatarImages,
-                            avatarShape = avatarType.let { avatarType ->
-                                if (avatarType is AvatarType.Space) {
-                                    // Reduce corner size for small Space avatars
-                                    avatarType.copy(cornerSize = avatarType.cornerSize / 2f)
-                                } else {
-                                    avatarType
-                                }
-                            }.avatarShape(),
+                            avatarShape = avatarType.avatarShape(heroAvatarSize),
                             forcedAvatarSize = heroAvatarSize,
                             modifier = Modifier,
                             contentDescription = contentDescription,
@@ -134,7 +127,7 @@ internal fun AvatarClusterPreview() = ElementThemedPreview {
         listOf(
             AvatarType.User,
             AvatarType.Room(),
-            AvatarType.Space(8.dp),
+            AvatarType.Space(),
         ).forEach { avatarType ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)

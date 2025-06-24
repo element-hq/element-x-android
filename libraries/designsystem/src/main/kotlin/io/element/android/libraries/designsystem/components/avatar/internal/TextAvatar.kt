@@ -77,7 +77,7 @@ internal fun TextAvatarPreview() = ElementPreview {
         listOf(
             AvatarType.User,
             AvatarType.Room(),
-            AvatarType.Space(8.dp),
+            AvatarType.Space(),
         ).forEach { avatarType ->
             TextAvatar(
                 text = "AB",
@@ -86,7 +86,7 @@ internal fun TextAvatarPreview() = ElementPreview {
                     background = ElementTheme.colors.bgSubtlePrimary,
                     foreground = ElementTheme.colors.iconPrimary,
                 ),
-                avatarShape = avatarType.avatarShape(),
+                avatarShape = avatarType.avatarShape(40.dp),
                 contentDescription = null,
             )
         }

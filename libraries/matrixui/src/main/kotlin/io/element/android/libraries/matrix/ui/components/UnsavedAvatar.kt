@@ -50,7 +50,7 @@ fun UnsavedAvatar(
 ) {
     val commonModifier = modifier
         .size(avatarSize.dp)
-        .clip(avatarType.avatarShape())
+        .clip(avatarType.avatarShape(avatarSize.dp))
 
     if (avatarUri != null) {
         val context = LocalContext.current
@@ -87,7 +87,7 @@ internal fun UnsavedAvatarPreview() = ElementPreview {
     ) {
         UnsavedAvatar(null, AvatarSize.EditRoomDetails, AvatarType.User)
         UnsavedAvatar(Uri.EMPTY, AvatarSize.EditRoomDetails, AvatarType.User)
-        UnsavedAvatar(null, AvatarSize.EditRoomDetails, AvatarType.Space(8.dp))
-        UnsavedAvatar(Uri.EMPTY, AvatarSize.EditRoomDetails, AvatarType.Space(8.dp))
+        UnsavedAvatar(null, AvatarSize.EditRoomDetails, AvatarType.Space())
+        UnsavedAvatar(Uri.EMPTY, AvatarSize.EditRoomDetails, AvatarType.Space())
     }
 }
