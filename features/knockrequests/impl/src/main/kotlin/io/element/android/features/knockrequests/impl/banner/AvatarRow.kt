@@ -37,6 +37,7 @@ import kotlinx.collections.immutable.toImmutableList
  * Draw a row of avatars (they must all have the same size), from start to end.
  * @param avatarDataList the avatars to render. Note: they will all be rendered, the caller may
  * want to limit the list size
+ * @param avatarType the type of avatars to render
  * @param modifier Jetpack Compose modifier
  * @param overlapRatio the overlap ration. When 0f, avatars will render without overlap, when 1f
  * only the first avatar will be visible

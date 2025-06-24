@@ -18,8 +18,8 @@ internal fun InitialOrImageAvatar(
     hideAvatarImage: Boolean,
     forcedAvatarSize: Dp?,
     avatarShape: Shape,
-    modifier: Modifier,
-    contentDescription: String?
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
 ) {
     when {
         avatarData.url.isNullOrBlank() || hideAvatarImage -> InitialLetterAvatar(
