@@ -12,38 +12,41 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.androidutils.ui.showKeyboard
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.DAY_MODE_NAME
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -84,6 +87,7 @@ import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.launch
 import uniffi.wysiwyg_composer.MenuAction
 import kotlin.time.Duration.Companion.seconds
 
@@ -110,7 +114,6 @@ fun TextComposer(
     resolveAtRoomMentionDisplay: () -> TextDisplay,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
-    subcomposing: Boolean = false,
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -170,20 +173,30 @@ fun TextComposer(
     } else {
         when (state) {
             is TextEditorState.Rich -> {
-                remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
+                val coroutineScope = rememberCoroutineScope()
+                val view = LocalView.current
+                remember(state.richTextEditorState, composerMode, onResetComposerMode, onError) {
                     @Composable {
                         TextInputBox(
+                            modifier = Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) {
+                                coroutineScope.launch {
+                                    state.requestFocus()
+                                    view.showKeyboard()
+                                }
+                            }.semantics {
+                                hideFromAccessibility()
+                            },
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
                             isTextEmpty = state.richTextEditorState.messageHtml.isEmpty(),
-                            subcomposing = subcomposing,
                         ) {
                             RichTextEditor(
                                 state = state.richTextEditorState,
                                 placeholder = placeholder,
-                                // Disable most of the editor functionality if it's just being measured for a subcomposition.
-                                // This prevents it gaining focus and mutating the state.
-                                registerStateUpdates = !subcomposing,
+                                registerStateUpdates = true,
                                 modifier = Modifier
                                     .padding(top = 6.dp, bottom = 6.dp)
                                     .fillMaxWidth(),
@@ -205,13 +218,11 @@ fun TextComposer(
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
                         isTextEmpty = state.state.text.value().isEmpty(),
-                        subcomposing = subcomposing,
                     ) {
                         MarkdownTextInput(
                             state = state.state,
                             placeholder = placeholder,
                             placeholderColor = ElementTheme.colors.textSecondary,
-                            subcomposing = subcomposing,
                             onTyping = onTyping,
                             onReceiveSuggestion = onReceiveSuggestion,
                             richTextEditorStyle = style,
@@ -326,13 +337,11 @@ fun TextComposer(
         )
     }
 
-    if (!subcomposing) {
-        SoftKeyboardEffect(composerMode, onRequestFocus) {
-            it is MessageComposerMode.Special
-        }
-
-        SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
+    SoftKeyboardEffect(composerMode, onRequestFocus) {
+        it is MessageComposerMode.Special
     }
+
+    SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
 
     val latestOnReceiveSuggestion by rememberUpdatedState(onReceiveSuggestion)
     if (state is TextEditorState.Rich) {
@@ -445,11 +454,8 @@ private fun TextFormattingLayout(
     sendButton: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val bottomPadding = with(LocalDensity.current) { WindowInsets.systemBars.getBottom(this).toDp() + 8.dp }
     Column(
-        modifier = modifier
-            .padding(vertical = 4.dp)
-            .padding(bottom = bottomPadding),
+        modifier = modifier.padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         if (isRoomEncrypted == false) {
@@ -493,7 +499,7 @@ private fun TextInputBox(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
     isTextEmpty: Boolean,
-    subcomposing: Boolean,
+    modifier: Modifier = Modifier,
     textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
@@ -501,12 +507,13 @@ private fun TextInputBox(
     val roundedCorners = textInputRoundedCornerShape(composerMode = composerMode)
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .clip(roundedCorners)
             .border(0.5.dp, borderColor, roundedCorners)
             .background(color = bgColor)
             .requiredHeightIn(min = 42.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .then(modifier),
     ) {
         if (composerMode is MessageComposerMode.Special) {
             ComposerModeView(
@@ -517,8 +524,7 @@ private fun TextInputBox(
         Box(
             modifier = Modifier
                 .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
-                .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
+                .then(Modifier.testTag(TestTags.textEditor)),
             contentAlignment = Alignment.CenterStart,
         ) {
             textInput()

@@ -168,7 +168,6 @@ class MarkdownTextInputTest {
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMarkdownTextInput(
         state: MarkdownTextEditorState = aMarkdownTextEditorState(),
-        subcomposing: Boolean = false,
         onTyping: (Boolean) -> Unit = {},
         onSuggestionReceived: (Suggestion?) -> Unit = {},
     ) {
@@ -178,7 +177,6 @@ class MarkdownTextInputTest {
                 state = state,
                 placeholder = "Placeholder",
                 placeholderColor = ElementTheme.colors.textSecondary,
-                subcomposing = subcomposing,
                 onTyping = onTyping,
                 onReceiveSuggestion = onSuggestionReceived,
                 richTextEditorStyle = style,
