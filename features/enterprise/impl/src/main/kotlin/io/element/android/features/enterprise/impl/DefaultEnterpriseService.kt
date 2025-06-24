@@ -22,7 +22,7 @@ class DefaultEnterpriseService @Inject constructor() : EnterpriseService {
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
 
-    override fun defaultHomeserverList(): List<String> = emptyList()
+    override fun defaultHomeserverList(): List<String> = listOf("matrix.agent.dinum.tchap.gouv.fr")
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String) = true
 
     override suspend fun isElementCallAvailable(): Boolean = true
