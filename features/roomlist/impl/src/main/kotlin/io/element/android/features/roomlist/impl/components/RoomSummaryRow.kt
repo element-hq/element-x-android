@@ -44,7 +44,8 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvid
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
-import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -184,11 +185,13 @@ private fun RoomSummaryScaffoldRow(
             .padding(horizontal = 16.dp, vertical = 11.dp)
             .height(IntrinsicSize.Min),
     ) {
-        RoomAvatar(
+        Avatar(
             avatarData = room.avatarData,
-            heroes = room.heroes,
-            isTombstoned = room.isTombstoned,
-            hideAvatarImage = hideAvatarImage,
+            avatarType = AvatarType.Room(
+                heroes = room.heroes,
+                isTombstoned = room.isTombstoned,
+            ),
+            hideImage = hideAvatarImage,
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(

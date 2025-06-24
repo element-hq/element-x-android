@@ -34,6 +34,7 @@ import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -103,6 +104,7 @@ fun RoomDetailsEditView(
                 displayName = state.roomRawName,
                 avatarUrl = state.roomAvatarUrl,
                 avatarSize = AvatarSize.EditRoomDetails,
+                avatarType = AvatarType.Room(),
                 onAvatarClick = ::onAvatarClick,
                 modifier = Modifier.fillMaxWidth(),
             )

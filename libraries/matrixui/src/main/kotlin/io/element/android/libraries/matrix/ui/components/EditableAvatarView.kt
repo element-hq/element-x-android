@@ -35,6 +35,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -49,6 +50,7 @@ fun EditableAvatarView(
     displayName: String?,
     avatarUrl: Uri?,
     avatarSize: AvatarSize,
+    avatarType: AvatarType,
     onAvatarClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -74,12 +76,14 @@ fun EditableAvatarView(
                 null, "mxc" -> {
                     Avatar(
                         avatarData = AvatarData(matrixId, displayName, avatarUrl?.toString(), size = avatarSize),
+                        avatarType = avatarType,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
                 else -> {
                     UnsavedAvatar(
                         avatarUri = avatarUrl,
+                        avatarType = avatarType,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -116,6 +120,7 @@ internal fun EditableAvatarViewPreview(
         displayName = "A room",
         avatarUrl = uri,
         avatarSize = AvatarSize.EditRoomDetails,
+        avatarType = AvatarType.User,
         onAvatarClick = {},
     )
 }
