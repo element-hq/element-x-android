@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.avatarShape
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -43,11 +44,12 @@ import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 @Composable
 fun UnsavedAvatar(
     avatarUri: Uri?,
+    avatarSize: AvatarSize,
     avatarType: AvatarType,
     modifier: Modifier = Modifier,
 ) {
     val commonModifier = modifier
-        .size(70.dp)
+        .size(avatarSize.dp)
         .clip(avatarType.avatarShape())
 
     if (avatarUri != null) {
@@ -69,7 +71,7 @@ fun UnsavedAvatar(
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .size(40.dp),
+                    .size(avatarSize.dp * 4 / 7),
                 tint = ElementTheme.colors.iconSecondary,
             )
         }
@@ -83,9 +85,9 @@ internal fun UnsavedAvatarPreview() = ElementPreview {
         modifier = Modifier.padding(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        UnsavedAvatar(null, AvatarType.User)
-        UnsavedAvatar(Uri.EMPTY, AvatarType.User)
-        UnsavedAvatar(null, AvatarType.Space(8.dp))
-        UnsavedAvatar(Uri.EMPTY, AvatarType.Space(8.dp))
+        UnsavedAvatar(null, AvatarSize.EditRoomDetails, AvatarType.User)
+        UnsavedAvatar(Uri.EMPTY, AvatarSize.EditRoomDetails, AvatarType.User)
+        UnsavedAvatar(null, AvatarSize.EditRoomDetails, AvatarType.Space(8.dp))
+        UnsavedAvatar(Uri.EMPTY, AvatarSize.EditRoomDetails, AvatarType.Space(8.dp))
     }
 }

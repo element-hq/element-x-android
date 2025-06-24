@@ -13,7 +13,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -61,7 +60,6 @@ fun EditableAvatarView(
         val a11yAvatar = stringResource(CommonStrings.a11y_avatar)
         Box(
             modifier = Modifier
-                .size(avatarSize.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = onAvatarClick,
@@ -75,16 +73,20 @@ fun EditableAvatarView(
             when (avatarUrl?.scheme) {
                 null, "mxc" -> {
                     Avatar(
-                        avatarData = AvatarData(matrixId, displayName, avatarUrl?.toString(), size = avatarSize),
+                        avatarData = AvatarData(
+                            id = matrixId,
+                            name = displayName,
+                            url = avatarUrl?.toString(),
+                            size = avatarSize,
+                        ),
                         avatarType = avatarType,
-                        modifier = Modifier.fillMaxSize(),
                     )
                 }
                 else -> {
                     UnsavedAvatar(
                         avatarUri = avatarUrl,
+                        avatarSize = avatarSize,
                         avatarType = avatarType,
-                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
