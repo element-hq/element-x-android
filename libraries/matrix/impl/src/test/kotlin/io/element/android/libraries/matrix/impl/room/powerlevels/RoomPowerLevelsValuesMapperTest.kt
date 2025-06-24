@@ -8,16 +8,16 @@
 package io.element.android.libraries.matrix.impl.room.powerlevels
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
-import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomPowerLevelsValues
 import org.junit.Test
 
-class RoomPowerLevelsMapperTest {
+class RoomPowerLevelsValuesMapperTest {
     @Test
-    fun `test that mapping of RoomPowerLevels is correct`() {
+    fun `test that mapping of RoomPowerLevelsValues is correct`() {
         assertThat(
-            RoomPowerLevelsMapper.map(
-                aRustRoomPowerLevels(
+            RoomPowerLevelsValuesMapper.map(
+                aRustRoomPowerLevelsValues(
                     ban = 1,
                     invite = 2,
                     kick = 3,
@@ -31,7 +31,7 @@ class RoomPowerLevelsMapperTest {
                 )
             )
         ).isEqualTo(
-            RoomPowerLevels(
+            RoomPowerLevelsValues(
                 ban = 1,
                 invite = 2,
                 kick = 3,

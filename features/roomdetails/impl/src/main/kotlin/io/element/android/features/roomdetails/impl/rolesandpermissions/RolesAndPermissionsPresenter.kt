@@ -105,7 +105,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
     ) = launch(dispatchers.io) {
         runUpdatingState(resetPermissionsAction) {
             analyticsService.capture(RoomModeration(RoomModeration.Action.ResetPermissions))
-            room.resetPowerLevels().map {}
+            room.resetPowerLevels()
         }
     }
 

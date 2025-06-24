@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationSettingsStat
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -66,8 +66,8 @@ class FakeJoinedRoom(
     private val updateAvatarResult: (String, ByteArray) -> Result<Unit> = { _, _ -> lambdaError() },
     private val removeAvatarResult: () -> Result<Unit> = { lambdaError() },
     private val updateUserRoleResult: (List<UserRoleChange>) -> Result<Unit> = { lambdaError() },
-    private val updatePowerLevelsResult: (RoomPowerLevels) -> Result<Unit> = { lambdaError() },
-    private val resetPowerLevelsResult: () -> Result<RoomPowerLevels> = { lambdaError() },
+    private val updatePowerLevelsResult: (RoomPowerLevelsValues) -> Result<Unit> = { lambdaError() },
+    private val resetPowerLevelsResult: () -> Result<Unit> = { lambdaError() },
     private val reportContentResult: (EventId, String, UserId?) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val kickUserResult: (UserId, String?) -> Result<Unit> = { _, _ -> lambdaError() },
     private val banUserResult: (UserId, String?) -> Result<Unit> = { _, _ -> lambdaError() },
@@ -162,11 +162,11 @@ class FakeJoinedRoom(
         updateUserRoleResult(changes)
     }
 
-    override suspend fun updatePowerLevels(roomPowerLevels: RoomPowerLevels): Result<Unit> = simulateLongTask {
-        updatePowerLevelsResult(roomPowerLevels)
+    override suspend fun updatePowerLevels(roomPowerLevelsValues: RoomPowerLevelsValues): Result<Unit> = simulateLongTask {
+        updatePowerLevelsResult(roomPowerLevelsValues)
     }
 
-    override suspend fun resetPowerLevels(): Result<RoomPowerLevels> = simulateLongTask {
+    override suspend fun resetPowerLevels(): Result<Unit> = simulateLongTask {
         resetPowerLevelsResult()
     }
 
