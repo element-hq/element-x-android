@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.designsystem.components.avatar
+package io.element.android.libraries.designsystem.components.avatar.internal
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -14,19 +14,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import timber.log.Timber
 
 @Composable
 internal fun ImageAvatar(
     avatarData: AvatarData,
-    avatarType: AvatarType,
+    avatarShape: Shape,
     forcedAvatarSize: Dp?,
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     contentDescription: String? = null,
 ) {
     val size = forcedAvatarSize ?: avatarData.size.dp
@@ -35,8 +37,8 @@ internal fun ImageAvatar(
         contentDescription = contentDescription,
         contentScale = ContentScale.Companion.Crop,
         modifier = modifier
-                .size(size)
-                .clip(avatarType.avatarShape())
+            .size(size)
+            .clip(avatarShape)
     ) {
         val collectedState by painter.state.collectAsState()
         when (val state = collectedState) {
@@ -50,14 +52,14 @@ internal fun ImageAvatar(
                 }
                 InitialLetterAvatar(
                     avatarData = avatarData,
-                    avatarType = avatarType,
+                    avatarShape = avatarShape,
                     forcedAvatarSize = forcedAvatarSize,
                     contentDescription = contentDescription,
                 )
             }
             else -> InitialLetterAvatar(
                 avatarData = avatarData,
-                avatarType = avatarType,
+                avatarShape = avatarShape,
                 forcedAvatarSize = forcedAvatarSize,
                 contentDescription = contentDescription,
             )

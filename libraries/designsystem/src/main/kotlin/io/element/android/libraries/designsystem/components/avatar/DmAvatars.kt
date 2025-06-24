@@ -55,6 +55,7 @@ fun DmAvatars(
         // Draw user avatar and cut top end corner
         Avatar(
             avatarData = userAvatarData,
+            avatarType = AvatarType.User,
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .graphicsLayer {
@@ -85,6 +86,7 @@ fun DmAvatars(
         // Draw other user avatar
         Avatar(
             avatarData = otherUserAvatarData,
+            avatarType = AvatarType.User,
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .clip(CircleShape)

@@ -40,6 +40,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -220,6 +221,7 @@ private fun RoomNameWithAvatar(
     ) {
         UnsavedAvatar(
             avatarUri = avatarUri,
+            avatarSize = AvatarSize.EditRoomDetails,
             avatarType = AvatarType.Room(),
             modifier = Modifier.clickable(onClick = onAvatarClick),
         )

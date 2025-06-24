@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 open class AvatarDataProvider : PreviewParameterProvider<AvatarData> {
     override val values: Sequence<AvatarData>
-        get() = AvatarSize.values()
+        get() = AvatarSize.entries
             .asSequence()
             .map {
                 sequenceOf(

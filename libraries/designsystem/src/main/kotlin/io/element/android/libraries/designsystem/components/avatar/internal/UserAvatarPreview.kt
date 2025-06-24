@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.designsystem.components.avatar
+package io.element.android.libraries.designsystem.components.avatar.internal
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.avatarColors
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -33,7 +36,10 @@ internal fun UserAvatarColorsPreview() = ElementPreview {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // Note: it's OK, since the hash of "0" is 0, the hash of "1" is 1, etc.
-                Avatar(anAvatarData(id = "$it"))
+                Avatar(
+                    avatarData = anAvatarData(id = "$it"),
+                    avatarType = AvatarType.User,
+                )
                 Text(text = "Color index $it")
             }
         }

@@ -74,6 +74,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.utils.messagesummary.DefaultMessageSummaryFormatter
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -256,7 +257,12 @@ private fun MessageSummary(
     modifier: Modifier = Modifier,
 ) {
     val content: @Composable () -> Unit
-    val icon: @Composable () -> Unit = { Avatar(avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender)) }
+    val icon: @Composable () -> Unit = {
+        Avatar(
+            avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender),
+            avatarType = AvatarType.User,
+        )
+    }
     val contentStyle = ElementTheme.typography.fontBodyMdRegular.copy(color = ElementTheme.colors.textSecondary)
 
     @Composable

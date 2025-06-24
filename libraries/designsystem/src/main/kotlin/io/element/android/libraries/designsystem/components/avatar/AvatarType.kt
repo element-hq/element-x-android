@@ -8,7 +8,6 @@
 package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.unit.Dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -22,7 +21,6 @@ sealed interface AvatarType {
     ) : AvatarType
 
     data class Space(
-        val cornerSize: Dp,
         val isTombstoned: Boolean = false,
     ) : AvatarType
 }

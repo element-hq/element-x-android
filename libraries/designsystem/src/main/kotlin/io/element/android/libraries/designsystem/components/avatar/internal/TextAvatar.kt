@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.designsystem.components.avatar
+package io.element.android.libraries.designsystem.components.avatar.internal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.AvatarColors
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.components.avatar.avatarShape
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.text.toSp
@@ -36,13 +39,13 @@ internal fun TextAvatar(
     size: Dp,
     colors: AvatarColors,
     contentDescription: String?,
-    avatarType: AvatarType,
+    avatarShape: Shape,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier
             .size(size)
-            .clip(avatarType.avatarShape())
+            .clip(avatarShape)
             .background(color = colors.background)
     ) {
         val fontSize = size.toSp() / 2
@@ -74,7 +77,7 @@ internal fun TextAvatarPreview() = ElementPreview {
         listOf(
             AvatarType.User,
             AvatarType.Room(),
-            AvatarType.Space(8.dp),
+            AvatarType.Space(),
         ).forEach { avatarType ->
             TextAvatar(
                 text = "AB",
@@ -83,7 +86,7 @@ internal fun TextAvatarPreview() = ElementPreview {
                     background = ElementTheme.colors.bgSubtlePrimary,
                     foreground = ElementTheme.colors.iconPrimary,
                 ),
-                avatarType = avatarType,
+                avatarShape = avatarType.avatarShape(40.dp),
                 contentDescription = null,
             )
         }

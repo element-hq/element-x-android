@@ -5,10 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.designsystem.components.avatar
+package io.element.android.libraries.designsystem.components.avatar.internal
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -19,6 +20,10 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.components.avatar.anAvatarData
+import io.element.android.libraries.designsystem.components.avatar.avatarShape
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import kotlinx.collections.immutable.ImmutableList
@@ -33,8 +38,8 @@ private const val MAX_AVATAR_COUNT = 4
 @Composable
 internal fun AvatarCluster(
     avatars: ImmutableList<AvatarData>,
+    avatarType: AvatarType,
     modifier: Modifier = Modifier,
-    avatarType: AvatarType = AvatarType.User,
     hideAvatarImages: Boolean = false,
     contentDescription: String? = null,
 ) {
@@ -49,12 +54,13 @@ internal fun AvatarCluster(
             error("Unsupported number of avatars: 0")
         }
         1 -> {
-            Avatar(
+            InitialOrImageAvatar(
                 avatarData = limitedAvatars[0],
-                avatarType = avatarType,
+                hideAvatarImage = hideAvatarImages,
+                avatarShape = avatarType.avatarShape(limitedAvatars[0].size.dp),
+                forcedAvatarSize = null,
                 modifier = modifier,
                 contentDescription = contentDescription,
-                hideImage = hideAvatarImages
             )
         }
         else -> {
@@ -97,11 +103,13 @@ internal fun AvatarCluster(
                                 y = yOffset,
                             )
                     ) {
-                        Avatar(
+                        InitialOrImageAvatar(
                             avatarData = heroAvatar,
+                            hideAvatarImage = hideAvatarImages,
+                            avatarShape = avatarType.avatarShape(heroAvatarSize),
                             forcedAvatarSize = heroAvatarSize,
-                            avatarType = avatarType,
-                            hideImage = hideAvatarImages,
+                            modifier = Modifier,
+                            contentDescription = contentDescription,
                         )
                     }
                 }
@@ -113,13 +121,24 @@ internal fun AvatarCluster(
 @Preview(group = PreviewGroup.Avatars)
 @Composable
 internal fun AvatarClusterPreview() = ElementThemedPreview {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        for (ngOfAvatars in 1..5) {
-            AvatarCluster(
-                avatars = List(ngOfAvatars) { anAvatarData(it) }.toPersistentList(),
-            )
+        listOf(
+            AvatarType.User,
+            AvatarType.Room(),
+            AvatarType.Space(),
+        ).forEach { avatarType ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                for (ngOfAvatars in 1..5) {
+                    AvatarCluster(
+                        avatars = List(ngOfAvatars) { anAvatarData(it) }.toPersistentList(),
+                        avatarType = avatarType,
+                    )
+                }
+            }
         }
     }
 }

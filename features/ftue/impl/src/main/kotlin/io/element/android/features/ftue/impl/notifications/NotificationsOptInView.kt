@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -149,6 +150,7 @@ private fun NotificationRow(
         ) {
             Avatar(
                 avatarData = AvatarData(id = avatarColorsId, name = avatarLetter, size = AvatarSize.NotificationsOptIn),
+                avatarType = AvatarType.User,
             )
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(

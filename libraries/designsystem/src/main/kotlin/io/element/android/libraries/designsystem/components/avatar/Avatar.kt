@@ -16,6 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.avatar.internal.RoomAvatar
+import io.element.android.libraries.designsystem.components.avatar.internal.SpaceAvatar
+import io.element.android.libraries.designsystem.components.avatar.internal.UserAvatar
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -24,8 +27,8 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 @Composable
 fun Avatar(
     avatarData: AvatarData,
+    avatarType: AvatarType,
     modifier: Modifier = Modifier,
-    avatarType: AvatarType = AvatarType.User,
     contentDescription: String? = null,
     // If not null, will be used instead of the size from avatarData
     forcedAvatarSize: Dp? = null,
@@ -38,6 +41,7 @@ fun Avatar(
             avatarType = avatarType,
             modifier = modifier,
             hideAvatarImage = hideImage,
+            forcedAvatarSize = forcedAvatarSize,
             contentDescription = contentDescription,
         )
         AvatarType.User -> UserAvatar(
@@ -52,33 +56,7 @@ fun Avatar(
             avatarType = avatarType,
             modifier = modifier,
             hideAvatarImage = hideImage,
-            contentDescription = contentDescription,
-        )
-    }
-}
-
-@Composable
-private fun UserAvatar(
-    avatarData: AvatarData,
-    modifier: Modifier = Modifier,
-    contentDescription: String? = null,
-    forcedAvatarSize: Dp? = null,
-    hideImage: Boolean = false,
-) {
-    if (avatarData.url.isNullOrBlank() || hideImage) {
-        InitialLetterAvatar(
-            avatarData = avatarData,
-            avatarType = AvatarType.User,
             forcedAvatarSize = forcedAvatarSize,
-            modifier = modifier,
-            contentDescription = contentDescription,
-        )
-    } else {
-        ImageAvatar(
-            avatarData = avatarData,
-            avatarType = AvatarType.User,
-            forcedAvatarSize = forcedAvatarSize,
-            modifier = modifier,
             contentDescription = contentDescription,
         )
     }
@@ -94,7 +72,10 @@ internal fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarDa
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Avatar(avatarData)
+            Avatar(
+                avatarData = avatarData,
+                avatarType = AvatarType.User,
+            )
             Text(text = avatarData.size.name + " " + avatarData.size.dp)
         }
     }

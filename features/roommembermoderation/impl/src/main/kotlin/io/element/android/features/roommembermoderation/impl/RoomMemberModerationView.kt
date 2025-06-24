@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.TextFieldDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -223,6 +224,7 @@ private fun RoomMemberActionsBottomSheet(
         ) {
             Avatar(
                 avatarData = user.getAvatarData(size = AvatarSize.RoomListManageUser),
+                avatarType = AvatarType.User,
                 modifier = Modifier
                         .padding(bottom = 28.dp)
                         .align(Alignment.CenterHorizontally)
