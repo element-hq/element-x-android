@@ -507,7 +507,7 @@ private fun TextInputBox(
     val roundedCorners = textInputRoundedCornerShape(composerMode = composerMode)
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .clip(roundedCorners)
             .border(0.5.dp, borderColor, roundedCorners)
             .background(color = bgColor)
