@@ -117,7 +117,7 @@ class RustMatrixClientFactory @Inject constructor(
                 strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.OnlySignedDeviceIsolationMode)) {
                     CollectStrategy.IDENTITY_BASED_STRATEGY
                 } else {
-                    CollectStrategy.ERROR_ON_VERIFIED_USER_PROBLEM
+                    CollectStrategy.ALL_DEVICES // TCHAP accepts all devices for room key sharing
                 }
             )
             .roomDecryptionTrustRequirement(
