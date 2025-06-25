@@ -16,11 +16,12 @@ import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.first
-import org.matrix.rustcomponents.sdk.EncryptionSystem
-import org.matrix.rustcomponents.sdk.VirtualElementCallWidgetOptions
 import org.matrix.rustcomponents.sdk.newVirtualElementCallWidget
+import uniffi.matrix_sdk.EncryptionSystem
+import uniffi.matrix_sdk.HeaderStyle
+import uniffi.matrix_sdk.VirtualElementCallWidgetOptions
+import uniffi.matrix_sdk.Intent as CallIntent
 import javax.inject.Inject
-import org.matrix.rustcomponents.sdk.Intent as CallIntent
 
 @ContributesBinding(AppScope::class)
 class DefaultCallWidgetSettingsProvider @Inject constructor(
@@ -50,6 +51,7 @@ class DefaultCallWidgetSettingsProvider @Inject constructor(
             parentUrl = null,
             hideHeader = true,
             controlledMediaDevices = true,
+            header = null,
         )
         val rustWidgetSettings = newVirtualElementCallWidget(options)
         return MatrixWidgetSettings.fromRustWidgetSettings(rustWidgetSettings)

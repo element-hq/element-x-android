@@ -86,7 +86,7 @@ fun aRoomInfo(
     notificationCount = notificationCount,
     userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = hasRoomCall,
-    userPowerLevels = userPowerLevels,
+    roomPowerLevels = userPowerLevels,
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
     heroes = heroes.toImmutableList(),
     pinnedEventIds = pinnedEventIds.toImmutableList(),

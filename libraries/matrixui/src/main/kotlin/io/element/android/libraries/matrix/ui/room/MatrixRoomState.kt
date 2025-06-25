@@ -106,7 +106,7 @@ fun BaseRoom.userPowerLevelAsState(updateKey: Long): State<Long> {
 @Composable
 fun BaseRoom.isOwnUserAdmin(): Boolean {
     val roomInfo by roomInfoFlow.collectAsState()
-    val powerLevel = roomInfo.userPowerLevels[sessionId] ?: 0L
+    val powerLevel = roomInfo.roomPowerLevels?.users?.get(sessionId) ?: 0L
     return RoomMember.Role.forPowerLevel(powerLevel) == RoomMember.Role.ADMIN
 }
 

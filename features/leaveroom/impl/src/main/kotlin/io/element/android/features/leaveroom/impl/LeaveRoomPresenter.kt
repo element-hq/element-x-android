@@ -19,6 +19,8 @@ import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.Gen
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.LastUserInRoom
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.PrivateRoom
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -78,7 +80,8 @@ private suspend fun showLeaveRoomAlert(
         val roomInfo = room.roomInfoFlow.first()
         confirmation.value = when {
             roomInfo.isDm -> Dm(roomId)
-            !roomInfo.isPublic -> PrivateRoom(roomId)
+            // If unknown, assume the room is private
+            roomInfo.isPublic.orFalse() -> PrivateRoom(roomId)
             roomInfo.joinedMembersCount == 1L -> LastUserInRoom(roomId)
             else -> Generic(roomId)
         }

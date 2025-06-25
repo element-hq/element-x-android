@@ -97,7 +97,7 @@ fun aRoomSummary(
         activeMembersCount = activeMembersCount,
         invitedMembersCount = invitedMembersCount,
         joinedMembersCount = joinedMembersCount,
-        userPowerLevels = userPowerLevels,
+        roomPowerLevels = userPowerLevels,
         highlightCount = highlightCount,
         notificationCount = notificationCount,
         userDefinedNotificationMode = userDefinedNotificationMode,

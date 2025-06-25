@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
@@ -28,7 +29,7 @@ data class RoomInfo(
     val rawName: String?,
     val topic: String?,
     val avatarUrl: String?,
-    val isPublic: Boolean,
+    val isPublic: Boolean?,
     val isDirect: Boolean,
     val isEncrypted: Boolean?,
     val joinRule: JoinRule?,
@@ -48,7 +49,7 @@ data class RoomInfo(
     val activeMembersCount: Long,
     val invitedMembersCount: Long,
     val joinedMembersCount: Long,
-    val userPowerLevels: ImmutableMap<UserId, Long>,
+    val roomPowerLevels: RoomPowerLevels?,
     val highlightCount: Long,
     val notificationCount: Long,
     val userDefinedNotificationMode: RoomNotificationMode?,
