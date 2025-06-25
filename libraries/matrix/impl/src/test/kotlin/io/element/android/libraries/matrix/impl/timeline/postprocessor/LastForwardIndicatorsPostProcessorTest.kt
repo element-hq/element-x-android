@@ -18,21 +18,14 @@ class LastForwardIndicatorsPostProcessorTest {
     @Test
     fun `LastForwardIndicatorsPostProcessor does not alter the items with mode not FOCUSED_ON_EVENT`() {
         val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.LIVE)
-        val result = sut.process(listOf(messageEvent), true)
-        assertThat(result).containsExactly(messageEvent)
-    }
-
-    @Test
-    fun `LastForwardIndicatorsPostProcessor does not alter the items with mode FOCUSED_ON_EVENT but timeline not initialized`() {
-        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FOCUSED_ON_EVENT)
-        val result = sut.process(listOf(messageEvent), false)
+        val result = sut.process(listOf(messageEvent))
         assertThat(result).containsExactly(messageEvent)
     }
 
     @Test
     fun `LastForwardIndicatorsPostProcessor add virtual items`() {
         val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FOCUSED_ON_EVENT)
-        val result = sut.process(listOf(messageEvent), true)
+        val result = sut.process(listOf(messageEvent))
         assertThat(result).containsExactly(
             messageEvent,
             MatrixTimelineItem.Virtual(
@@ -45,7 +38,7 @@ class LastForwardIndicatorsPostProcessorTest {
     @Test
     fun `LastForwardIndicatorsPostProcessor add virtual items on empty list`() {
         val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FOCUSED_ON_EVENT)
-        val result = sut.process(listOf(), true)
+        val result = sut.process(listOf())
         assertThat(result).containsExactly(
             MatrixTimelineItem.Virtual(
                 uniqueId = UniqueId("last_forward_indicator_fake_id"),
@@ -58,9 +51,9 @@ class LastForwardIndicatorsPostProcessorTest {
     fun `LastForwardIndicatorsPostProcessor add virtual items but does not alter the list if called a second time`() {
         val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FOCUSED_ON_EVENT)
         // Process a first time
-        sut.process(listOf(messageEvent), true)
+        sut.process(listOf(messageEvent))
         // Process a second time with the same Event
-        val result = sut.process(listOf(messageEvent), true)
+        val result = sut.process(listOf(messageEvent))
         assertThat(result).containsExactly(
             messageEvent,
             MatrixTimelineItem.Virtual(
@@ -74,9 +67,9 @@ class LastForwardIndicatorsPostProcessorTest {
     fun `LastForwardIndicatorsPostProcessor add virtual items each time it is called with new Events`() {
         val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FOCUSED_ON_EVENT)
         // Process a first time
-        sut.process(listOf(dayEvent, messageEvent), true)
+        sut.process(listOf(dayEvent, messageEvent))
         // Process a second time with the same Event
-        val result = sut.process(listOf(dayEvent, messageEvent, messageEvent2), true)
+        val result = sut.process(listOf(dayEvent, messageEvent, messageEvent2))
         assertThat(result).containsExactly(
             dayEvent,
             messageEvent,
