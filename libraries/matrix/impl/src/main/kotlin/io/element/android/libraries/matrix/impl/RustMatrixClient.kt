@@ -26,6 +26,9 @@ import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
+import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
+import io.element.android.libraries.matrix.api.media.MediaPreviewService
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
@@ -52,6 +55,7 @@ import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.encryption.RustEncryptionService
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
+import io.element.android.libraries.matrix.impl.media.RustMediaPreviewService
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
@@ -107,6 +111,7 @@ import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
+import org.matrix.rustcomponents.sdk.InviteAvatars
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.RoomInfoListener
@@ -212,6 +217,11 @@ class RustMatrixClient(
         baseCacheDirectory = baseCacheDirectory,
         dispatchers = dispatchers,
         innerClient = innerClient,
+    )
+
+    private val mediaPreviewService = RustMediaPreviewService(
+        innerClient = innerClient,
+        sessionDispatcher = sessionDispatcher,
     )
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
@@ -507,6 +517,8 @@ class RustMatrixClient(
 
     override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService
 
+    override fun mediaPreviewService(): MediaPreviewService = mediaPreviewService
+
     internal suspend fun destroy() {
         innerNotificationClient.close()
 
@@ -681,6 +693,8 @@ class RustMatrixClient(
     override suspend fun isLivekitRtcSupported(): Boolean = withContext(sessionDispatcher) {
         innerClient.isLivekitRtcSupported()
     }
+
+
 
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,

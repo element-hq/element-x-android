@@ -17,7 +17,10 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
+import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
@@ -36,6 +39,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
+import io.element.android.libraries.matrix.test.media.FakeMediaPreviewService
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
@@ -72,6 +76,7 @@ class FakeMatrixClient(
     private val syncService: FakeSyncService = FakeSyncService(),
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
+    private val mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
     private val accountManagementUrlResult: (AccountManagementAction?) -> Result<String?> = { lambdaError() },
     private val resolveRoomAliasResult: (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
         Result.success(
@@ -91,6 +96,7 @@ class FakeMatrixClient(
     private val canReportRoomLambda: () -> Boolean = { false },
     private val isLivekitRtcSupportedLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
+
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -234,10 +240,12 @@ class FakeMatrixClient(
     override fun notificationService(): NotificationService = notificationService
     override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
     override fun encryptionService(): EncryptionService = encryptionService
+    override fun mediaPreviewService(): MediaPreviewService = mediaPreviewService
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
         return RoomMembershipObserver()
     }
+
 
     // Mocks
 
