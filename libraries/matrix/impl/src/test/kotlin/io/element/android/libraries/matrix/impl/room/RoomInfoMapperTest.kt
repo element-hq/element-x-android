@@ -16,10 +16,12 @@ import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomHero
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomInfo
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomMember
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomPowerLevels
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
@@ -28,8 +30,9 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_6
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.collections.immutable.toPersistentList
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Membership
@@ -64,7 +67,7 @@ class RoomInfoMapperTest {
                     activeMembersCount = 2uL,
                     invitedMembersCount = 3uL,
                     joinedMembersCount = 4uL,
-                    userPowerLevels = mapOf(A_USER_ID_6.value to 50L),
+                    roomPowerLevels = FakeFfiRoomPowerLevels(users = mapOf(A_USER_ID_6.value to 50L)),
                     highlightCount = 10uL,
                     notificationCount = 11uL,
                     userDefinedNotificationMode = RustRoomNotificationMode.MUTE,
@@ -99,7 +102,10 @@ class RoomInfoMapperTest {
                 activeMembersCount = 2L,
                 invitedMembersCount = 3L,
                 joinedMembersCount = 4L,
-                roomPowerLevels = mapOf(A_USER_ID_6 to 50L).toImmutableMap(),
+                roomPowerLevels = RoomPowerLevels(
+                    values = defaultRoomPowerLevelValues(),
+                    users = persistentMapOf(A_USER_ID_6 to 50L)
+                ),
                 highlightCount = 10L,
                 notificationCount = 11L,
                 userDefinedNotificationMode = RoomNotificationMode.MUTE,
@@ -149,7 +155,7 @@ class RoomInfoMapperTest {
                     activeMembersCount = 2uL,
                     invitedMembersCount = 3uL,
                     joinedMembersCount = 4uL,
-                    userPowerLevels = emptyMap(),
+                    roomPowerLevels = FakeFfiRoomPowerLevels(),
                     highlightCount = 10uL,
                     notificationCount = 11uL,
                     userDefinedNotificationMode = null,
@@ -184,7 +190,10 @@ class RoomInfoMapperTest {
                 activeMembersCount = 2L,
                 invitedMembersCount = 3L,
                 joinedMembersCount = 4L,
-                roomPowerLevels = emptyMap<UserId, Long>().toImmutableMap(),
+                roomPowerLevels = RoomPowerLevels(
+                    values = defaultRoomPowerLevelValues(),
+                    users = persistentMapOf(),
+                ),
                 highlightCount = 10L,
                 notificationCount = 11L,
                 userDefinedNotificationMode = null,

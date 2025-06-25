@@ -122,7 +122,8 @@ class RustMatrixClientFactory @Inject constructor(
                 }
             )
             .decryptionSettings(
-                DecryptionSettings(senderDeviceTrustRequirement = if (featureFlagService.isFeatureEnabled(FeatureFlags.OnlySignedDeviceIsolationMode)) {
+                DecryptionSettings(
+                    senderDeviceTrustRequirement = if (featureFlagService.isFeatureEnabled(FeatureFlags.OnlySignedDeviceIsolationMode)) {
                         TrustRequirement.CROSS_SIGNED_OR_LEGACY
                     } else {
                         TrustRequirement.UNTRUSTED

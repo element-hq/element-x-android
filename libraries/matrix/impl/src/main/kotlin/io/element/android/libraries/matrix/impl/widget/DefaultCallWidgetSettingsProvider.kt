@@ -18,10 +18,9 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.newVirtualElementCallWidget
 import uniffi.matrix_sdk.EncryptionSystem
-import uniffi.matrix_sdk.HeaderStyle
 import uniffi.matrix_sdk.VirtualElementCallWidgetOptions
-import uniffi.matrix_sdk.Intent as CallIntent
 import javax.inject.Inject
+import uniffi.matrix_sdk.Intent as CallIntent
 
 @ContributesBinding(AppScope::class)
 class DefaultCallWidgetSettingsProvider @Inject constructor(

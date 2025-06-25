@@ -18,7 +18,6 @@ import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
 
 @Immutable
 data class RoomInfo(
