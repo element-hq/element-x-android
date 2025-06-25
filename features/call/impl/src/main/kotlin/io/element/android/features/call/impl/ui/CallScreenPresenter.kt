@@ -48,9 +48,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import timber.log.Timber
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
@@ -91,6 +88,7 @@ class CallScreenPresenter @AssistedInject constructor(
         var webViewError by remember { mutableStateOf<String?>(null) }
         val languageTag = languageTagProvider.provideLanguageTag()
         val theme = if (ElementTheme.isLightTheme) "light" else "dark"
+
         DisposableEffect(Unit) {
             coroutineScope.launch {
                 // Sets the call as joined
@@ -145,16 +143,24 @@ class CallScreenPresenter @AssistedInject constructor(
                         if (parsedMessage?.direction == WidgetMessage.Direction.FromWidget) {
                             if (parsedMessage.action == WidgetMessage.Action.Close) {
                                 close(callWidgetDriver.value, navigator)
-                            } else if (parsedMessage.action == WidgetMessage.Action.SendEvent) {
-                                // This event is received when a member joins the call, the first one will be the current one
-                                val type = parsedMessage.data?.jsonObject?.get("type")?.jsonPrimitive?.contentOrNull
-                                if (type == "org.matrix.msc3401.call.member") {
-                                    isJoinedCall = true
-                                }
+                            } else if (parsedMessage.action == WidgetMessage.Action.Join) {
+                                isJoinedCall = true
                             }
                         }
                     }
                     .launchIn(this)
+            }
+
+            LaunchedEffect(Unit) {
+                // Wait for the call to be joined, if it takes too long, we display an error
+                delay(10.seconds)
+
+                if (!isJoinedCall) {
+                    Timber.w("The call took too long to be joined. Displaying an error before exiting.")
+
+                    // This will display a simple 'Sorry, an error occurred' dialog and force the user to exit the call
+                    webViewError = ""
+                }
             }
         }
 
