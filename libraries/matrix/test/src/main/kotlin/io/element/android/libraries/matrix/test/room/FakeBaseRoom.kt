@@ -225,7 +225,7 @@ class FakeBaseRoom(
     override fun predecessorRoom(): PredecessorRoom? = predecessorRoomResult()
 }
 
-fun defaultRoomPowerLevels() = RoomPowerLevelsValues(
+fun defaultRoomPowerLevelValues() = RoomPowerLevelsValues(
     ban = 50,
     invite = 0,
     kick = 50,

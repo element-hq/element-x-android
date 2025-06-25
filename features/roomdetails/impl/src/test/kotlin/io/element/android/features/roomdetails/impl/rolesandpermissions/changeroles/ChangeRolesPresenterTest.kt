@@ -16,14 +16,17 @@ import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentMapOf
@@ -142,7 +145,7 @@ class ChangeRolesPresenterTest {
     fun `present - UserSelectionToggle adds and removes users from the selected user list`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -164,7 +167,7 @@ class ChangeRolesPresenterTest {
     fun `present - hasPendingChanges is true when the initial selected users don't match the new ones`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -193,7 +196,7 @@ class ChangeRolesPresenterTest {
     fun `present - Exit will display success if no pending changes`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -213,7 +216,7 @@ class ChangeRolesPresenterTest {
     fun `present - CancelExit will remove exit confirmation`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -239,7 +242,7 @@ class ChangeRolesPresenterTest {
     fun `present - Exit will display a confirmation dialog if there are pending changes, calling it again will actually exit`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -270,7 +273,7 @@ class ChangeRolesPresenterTest {
             baseRoom = FakeBaseRoom(updateMembersResult = { Result.success(Unit) }),
         ).apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
         }
         val presenter = createChangeRolesPresenter(role = RoomMember.Role.ADMIN, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -299,7 +302,7 @@ class ChangeRolesPresenterTest {
     fun `present - CancelSave will remove the confirmation dialog`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
         }
         val presenter = createChangeRolesPresenter(role = RoomMember.Role.ADMIN, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -328,7 +331,7 @@ class ChangeRolesPresenterTest {
             baseRoom = FakeBaseRoom(updateMembersResult = { Result.success(Unit) }),
         ).apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 50)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.MODERATOR)))
         }
         val presenter = createChangeRolesPresenter(
             role = RoomMember.Role.MODERATOR,
@@ -361,7 +364,7 @@ class ChangeRolesPresenterTest {
             updateUserRoleResult = { Result.failure(IllegalStateException("Failed")) }
         ).apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 50)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.MODERATOR)))
         }
         val presenter = createChangeRolesPresenter(role = RoomMember.Role.MODERATOR, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -383,6 +386,16 @@ class ChangeRolesPresenterTest {
             failedState.eventSink(ChangeRolesEvent.ClearError)
             assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Uninitialized)
         }
+    }
+
+    private fun roomPowerLevelsWithRole(
+        role: RoomMember.Role,
+        userId: UserId = A_USER_ID,
+    ): RoomPowerLevels {
+        return RoomPowerLevels(
+            values = defaultRoomPowerLevelValues(),
+            users = persistentMapOf(userId to role.powerLevel)
+        )
     }
 
     private fun TestScope.createChangeRolesPresenter(
