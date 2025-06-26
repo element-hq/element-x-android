@@ -18,11 +18,13 @@ data class HomeState(
     val matrixUser: MatrixUser,
     val showAvatarIndicator: Boolean,
     val hasNetworkConnection: Boolean,
+    val currentHomeNavigationBarItem: HomeNavigationBarItem,
     val roomListState: RoomListState,
     val snackbarMessage: SnackbarMessage?,
     val canReportBug: Boolean,
     val directLogoutState: DirectLogoutState,
+    val isSpaceFeatureEnabled: Boolean,
     val eventSink: (HomeEvents) -> Unit,
 ) {
-    val displayActions = true
+    val displayActions = currentHomeNavigationBarItem == HomeNavigationBarItem.Chats
 }

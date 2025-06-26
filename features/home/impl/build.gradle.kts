@@ -51,6 +51,8 @@ dependencies {
     implementation(projects.features.rageshake.api)
     implementation(projects.services.analytics.api)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.haze)
+    implementation(libs.haze.materials)
     implementation(projects.features.reportroom.api)
     api(projects.features.home.api)
 
