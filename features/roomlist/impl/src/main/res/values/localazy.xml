@@ -21,6 +21,7 @@
   <string name="screen_migration_message">"This is a one time process, thanks for waiting."</string>
   <string name="screen_migration_title">"Setting up your account."</string>
   <string name="screen_roomlist_a11y_create_message">"Create a new conversation or room"</string>
+  <string name="screen_roomlist_clear_filters">"Clear filters"</string>
   <string name="screen_roomlist_empty_message">"Get started by messaging someone."</string>
   <string name="screen_roomlist_empty_title">"No chats yet."</string>
   <string name="screen_roomlist_filter_favourites">"Favourites"</string>

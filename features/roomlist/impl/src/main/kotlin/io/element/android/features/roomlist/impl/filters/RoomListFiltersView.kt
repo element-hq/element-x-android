@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -147,7 +148,7 @@ private fun RoomListClearFiltersButton(
             modifier = Modifier.align(Alignment.Center),
             imageVector = CompoundIcons.Close(),
             tint = ElementTheme.colors.iconOnSolidPrimary,
-            contentDescription = stringResource(id = io.element.android.libraries.ui.strings.R.string.action_clear),
+            contentDescription = stringResource(id = R.string.screen_roomlist_clear_filters),
         )
     }
 }
