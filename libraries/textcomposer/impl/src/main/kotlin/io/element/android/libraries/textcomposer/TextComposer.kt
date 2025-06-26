@@ -178,17 +178,19 @@ fun TextComposer(
                 remember(state.richTextEditorState, composerMode, onResetComposerMode, onError) {
                     @Composable {
                         TextInputBox(
-                            modifier = Modifier.clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                            ) {
-                                coroutineScope.launch {
-                                    state.requestFocus()
-                                    view.showKeyboard()
+                            modifier = Modifier
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                ) {
+                                    coroutineScope.launch {
+                                        state.requestFocus()
+                                        view.showKeyboard()
+                                    }
                                 }
-                            }.semantics {
-                                hideFromAccessibility()
-                            },
+                                .semantics {
+                                    hideFromAccessibility()
+                                },
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
                             isTextEmpty = state.richTextEditorState.messageHtml.isEmpty(),
@@ -317,7 +319,7 @@ fun TextComposer(
                 IconColorButton(
                     onClick = onDismissTextFormatting,
                     imageVector = CompoundIcons.Close(),
-                    contentDescription = stringResource(CommonStrings.action_close),
+                    contentDescription = stringResource(R.string.rich_text_editor_close_formatting_options),
                 )
             },
             textFormatting = textFormattingOptions,
