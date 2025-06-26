@@ -11,10 +11,14 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -144,7 +148,12 @@ class AdvancedSettingsPresenterTest {
 
     @Test
     fun `present - timeline media preview value`() = runTest {
-        val presenter = createAdvancedSettingsPresenter()
+        val mediaPreviewConfigFlow = MutableStateFlow<MediaPreviewConfig?>(null)
+        val presenter = createAdvancedSettingsPresenter(
+            matrixClient = FakeMatrixClient(
+                mediaPreviewConfigFlow = mediaPreviewConfigFlow
+            )
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -165,8 +174,10 @@ class AdvancedSettingsPresenterTest {
     private fun createAdvancedSettingsPresenter(
         appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
+        matrixClient: MatrixClient = FakeMatrixClient(),
     ) = AdvancedSettingsPresenter(
         appPreferencesStore = appPreferencesStore,
         sessionPreferencesStore = sessionPreferencesStore,
+        matrixClient = matrixClient,
     )
 }

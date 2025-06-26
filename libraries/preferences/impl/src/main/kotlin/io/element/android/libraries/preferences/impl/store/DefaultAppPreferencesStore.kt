@@ -85,21 +85,9 @@ class DefaultAppPreferencesStore @Inject constructor(
         }
     }
 
-    override suspend fun setHideInviteAvatars(value: Boolean) {
-        store.edit { prefs ->
-            prefs[hideInviteAvatarsKey] = value
-        }
-    }
-
     override fun getHideInviteAvatarsFlow(): Flow<Boolean> {
         return store.data.map { prefs ->
             prefs[hideInviteAvatarsKey] == true
-        }
-    }
-
-    override suspend fun setTimelineMediaPreviewValue(value: MediaPreviewValue) {
-        store.edit { prefs ->
-            prefs[timelineMediaPreviewValueKey] = value.name
         }
     }
 

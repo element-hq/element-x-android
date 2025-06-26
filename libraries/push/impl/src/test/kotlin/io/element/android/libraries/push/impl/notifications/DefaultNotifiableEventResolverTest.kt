@@ -826,7 +826,6 @@ class DefaultNotifiableEventResolverTest {
     private fun createDefaultNotifiableEventResolver(
         notificationService: FakeNotificationService? = FakeNotificationService(),
         notificationResult: Result<Map<EventId, NotificationData>> = Result.success(emptyMap()),
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         callNotificationEventResolver: FakeCallNotificationEventResolver = FakeCallNotificationEventResolver(),
     ): DefaultNotifiableEventResolver {
         val context = RuntimeEnvironment.getApplication() as Context
@@ -849,7 +848,6 @@ class DefaultNotifiableEventResolverTest {
             context = context,
             permalinkParser = FakePermalinkParser(),
             callNotificationEventResolver = callNotificationEventResolver,
-            appPreferencesStore = appPreferencesStore,
         )
     }
 }

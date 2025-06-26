@@ -22,10 +22,8 @@ interface AppPreferencesStore {
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 
-    suspend fun setHideInviteAvatars(value: Boolean)
     fun getHideInviteAvatarsFlow(): Flow<Boolean>
 
-    suspend fun setTimelineMediaPreviewValue(value: MediaPreviewValue)
     fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue>
 
     suspend fun setTracingLogLevel(logLevel: LogLevel)

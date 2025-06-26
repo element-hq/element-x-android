@@ -55,16 +55,8 @@ class InMemoryAppPreferencesStore(
         return theme
     }
 
-    override suspend fun setHideInviteAvatars(value: Boolean) {
-        hideInviteAvatars.value = value
-    }
-
     override fun getHideInviteAvatarsFlow(): Flow<Boolean> {
         return hideInviteAvatars
-    }
-
-    override suspend fun setTimelineMediaPreviewValue(value: MediaPreviewValue) {
-        timelineMediaPreviewValue.value = value
     }
 
     override fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue> {
