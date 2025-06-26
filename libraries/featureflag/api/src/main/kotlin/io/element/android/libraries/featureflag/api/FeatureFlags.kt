@@ -130,6 +130,13 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    Space(
+        key = "feature.space",
+        title = "Spaces",
+        description = "Spaces are under active development, only developers should enable this flog for now.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     MediaUploadOnSendQueue(
         key = "feature.media_upload_through_send_queue",
         title = "Media upload through send queue",
