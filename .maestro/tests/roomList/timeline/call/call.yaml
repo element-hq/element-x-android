@@ -1,6 +1,15 @@
 appId: ${MAESTRO_APP_ID}
 ---
-- tapOn: "Start a call"
+- runFlow:
+    when:
+      visible: 'Start a call'
+    commands:
+      - tapOn: "Start a call"
+- runFlow:
+    when:
+      visible: 'Join'
+    commands:
+      - tapOn: "Join"
 - takeScreenshot: build/maestro/700-Call
 - extendedWaitUntil:
     visible: "maestroelement"
