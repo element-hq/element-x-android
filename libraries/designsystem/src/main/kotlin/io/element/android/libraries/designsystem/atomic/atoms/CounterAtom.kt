@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -41,13 +41,14 @@ private const val MAX_COUNT_STRING = "+$MAX_COUNT"
 fun CounterAtom(
     count: Int,
     modifier: Modifier = Modifier,
+    textStyle: TextStyle = CounterAtomDefaults.textStyle,
+    isCritical: Boolean = false,
 ) {
     if (count < 1) return
     val countAsText = when (count) {
         in 0..MAX_COUNT -> count.toString()
         else -> MAX_COUNT_STRING
     }
-    val textStyle = ElementTheme.typography.fontBodyMdMedium
     val textMeasurer = rememberTextMeasurer()
     // Measure the maximum count string size
     val textLayoutResult = textMeasurer.measure(
@@ -58,17 +59,28 @@ fun CounterAtom(
     val squareSize = maxOf(textSize.width, textSize.height)
     Box(
         modifier = modifier
-                .size(squareSize.toDp() + 1.dp)
-                .clip(CircleShape)
-                .background(ElementTheme.colors.iconSuccessPrimary)
+            .size(squareSize.toDp() + 1.dp)
+            .clip(CircleShape)
+            .background(
+                if (isCritical) {
+                    ElementTheme.colors.iconCriticalPrimary
+                } else {
+                    ElementTheme.colors.iconAccentPrimary
+                }
+            )
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = countAsText,
             style = textStyle,
-            color = Color.White,
+            color = ElementTheme.colors.textOnSolidPrimary,
         )
     }
+}
+
+object CounterAtomDefaults {
+    val textStyle: TextStyle
+        @Composable get() = ElementTheme.typography.fontBodyMdMedium
 }
 
 @PreviewsDayNight
@@ -79,5 +91,6 @@ internal fun CounterAtomPreview() = ElementPreview {
         CounterAtom(count = 4)
         CounterAtom(count = 99)
         CounterAtom(count = 100)
+        CounterAtom(count = 4, isCritical = true)
     }
 }
