@@ -108,6 +108,9 @@ class RoomListPresenter @Inject constructor(
         val searchState = searchPresenter.present()
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
         val canReportBug = remember { rageshakeFeatureAvailability.isAvailable() }
+        val isSpaceFeatureEnabled by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.Space)
+        }.collectAsState(initial = false)
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
@@ -184,6 +187,7 @@ class RoomListPresenter @Inject constructor(
             directLogoutState = directLogoutState,
             hideInvitesAvatars = hideInvitesAvatar,
             canReportRoom = canReportRoom,
+            isSpaceFeatureEnabled = isSpaceFeatureEnabled,
             eventSink = ::handleEvents,
         )
     }

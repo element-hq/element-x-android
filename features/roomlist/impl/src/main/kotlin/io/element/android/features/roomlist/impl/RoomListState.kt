@@ -39,6 +39,7 @@ data class RoomListState(
     val directLogoutState: DirectLogoutState,
     val hideInvitesAvatars: Boolean,
     val canReportRoom: Boolean,
+    val isSpaceFeatureEnabled: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     val displayFilters = contentState is RoomListContentState.Rooms

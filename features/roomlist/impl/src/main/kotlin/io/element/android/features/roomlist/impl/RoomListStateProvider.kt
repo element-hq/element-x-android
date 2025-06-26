@@ -33,6 +33,7 @@ import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
@@ -49,6 +50,13 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
             aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SetUpRecovery)),
             aRoomListState(contentState = aRoomsContentState(batteryOptimizationState = aBatteryOptimizationState(shouldDisplayBanner = true))),
+            aRoomListState(
+                isSpaceFeatureEnabled = true,
+                // Add more rooms to see the blur effect under the NavigationBar
+                contentState = aRoomsContentState(
+                    summaries = generateRoomListRoomSummaryList(),
+                )
+            ),
         )
 }
 
@@ -68,6 +76,7 @@ internal fun aRoomListState(
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
     hideInvitesAvatars: Boolean = false,
     canReportRoom: Boolean = true,
+    isSpaceFeatureEnabled: Boolean = false,
     eventSink: (RoomListEvents) -> Unit = {}
 ) = RoomListState(
     matrixUser = matrixUser,
@@ -85,6 +94,7 @@ internal fun aRoomListState(
     directLogoutState = directLogoutState,
     hideInvitesAvatars = hideInvitesAvatars,
     canReportRoom = canReportRoom,
+    isSpaceFeatureEnabled = isSpaceFeatureEnabled,
     eventSink = eventSink,
 )
 
@@ -132,4 +142,19 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             displayType = RoomSummaryDisplayType.PLACEHOLDER,
         ),
     )
+}
+
+internal fun generateRoomListRoomSummaryList(
+    numberOfRooms: Int = 10,
+): ImmutableList<RoomListRoomSummary> {
+    return List(numberOfRooms) { index ->
+        aRoomListRoomSummary(
+            name = "Room#$index",
+            numberOfUnreadMessages = 0,
+            timestamp = "14:16",
+            lastMessage = "A message",
+            avatarData = AvatarData("!id$index", "${(65 + index % 26).toChar()}", size = AvatarSize.RoomListItem),
+            id = "!roomId$index:domain",
+        )
+    }.toPersistentList()
 }

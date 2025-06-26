@@ -122,6 +122,7 @@ class RoomListPresenterTest {
             assertThat(withUserState.matrixUser.displayName).isEqualTo(A_USER_NAME)
             assertThat(withUserState.matrixUser.avatarUrl).isEqualTo(AN_AVATAR_URL)
             assertThat(withUserState.showAvatarIndicator).isFalse()
+            assertThat(withUserState.isSpaceFeatureEnabled).isFalse()
         }
     }
 

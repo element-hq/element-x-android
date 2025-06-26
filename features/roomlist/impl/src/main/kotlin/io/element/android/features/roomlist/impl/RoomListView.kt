@@ -5,10 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalHazeMaterialsApi::class)
+
 package io.element.android.features.roomlist.impl
 
+import androidx.activity.compose.BackHandler
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,12 +23,26 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
+import dev.chrisbanes.haze.materials.HazeMaterials
+import dev.chrisbanes.haze.rememberHazeState
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
@@ -37,7 +57,10 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.NavigationBar
+import io.element.android.libraries.designsystem.theme.components.NavigationBarItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -112,6 +135,32 @@ fun RoomListView(
     }
 }
 
+private enum class HomeNavigationBarItem(
+    @StringRes
+    val labelRes: Int,
+) {
+    Chats(
+        labelRes = R.string.screen_roomlist_main_space_title
+    ),
+    Spaces(
+        // TODO Create a new entry in Localazy
+        labelRes = R.string.screen_roomlist_main_space_title
+    );
+
+    @Composable
+    fun icon() = when (this) {
+        Chats -> CompoundIcons.ChatSolid()
+        // TODO Spaces -> CompoundIcons.Workspace()
+        Spaces -> CompoundIcons.Code()
+    }
+
+    companion object {
+        fun from(index: Int): HomeNavigationBarItem {
+            return entries.getOrElse(index) { Chats }
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomListScaffold(
@@ -132,10 +181,26 @@ private fun RoomListScaffold(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
+    var currentHomeNavigationBarItemOrdinal by rememberSaveable { mutableIntStateOf(HomeNavigationBarItem.Chats.ordinal) }
+    val currentHomeNavigationBarItem by remember {
+        derivedStateOf {
+            HomeNavigationBarItem.from(currentHomeNavigationBarItemOrdinal)
+        }
+    }
+
+    BackHandler(
+        enabled = currentHomeNavigationBarItem != HomeNavigationBarItem.Chats,
+    ) {
+        currentHomeNavigationBarItemOrdinal = HomeNavigationBarItem.Chats.ordinal
+    }
+
+    val hazeState = rememberHazeState()
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             RoomListTopBar(
+                title = stringResource(currentHomeNavigationBarItem.labelRes),
                 matrixUser = state.matrixUser,
                 showAvatarIndicator = state.showAvatarIndicator,
                 areSearchResultsDisplayed = state.searchState.isSearchActive,
@@ -144,28 +209,86 @@ private fun RoomListScaffold(
                 onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior,
                 displayMenuItems = state.displayActions,
-                displayFilters = state.displayFilters,
+                displayFilters = state.displayFilters && currentHomeNavigationBarItem == HomeNavigationBarItem.Chats,
                 filtersState = state.filtersState,
                 canReportBug = state.canReportBug,
             )
         },
+        bottomBar = {
+            if (state.isSpaceFeatureEnabled) {
+                NavigationBar(
+                    containerColor = Color.Transparent,
+                    modifier = Modifier
+                        .hazeEffect(
+                            state = hazeState,
+                            style = HazeMaterials.regular(),
+                        )
+                ) {
+                    HomeNavigationBarItem.entries.forEach { item ->
+                        NavigationBarItem(
+                            selected = currentHomeNavigationBarItem == item,
+                            onClick = {
+                                currentHomeNavigationBarItemOrdinal = item.ordinal
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = item.icon(),
+                                    contentDescription = null
+                                )
+                            },
+                            label = {
+                                Text(stringResource(item.labelRes))
+                            }
+                        )
+                    }
+                }
+            }
+        },
         content = { padding ->
-            RoomListContentView(
-                contentState = state.contentState,
-                filtersState = state.filtersState,
-                hideInvitesAvatars = state.hideInvitesAvatars,
-                eventSink = state.eventSink,
-                onSetUpRecoveryClick = onSetUpRecoveryClick,
-                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                onRoomClick = ::onRoomClick,
-                onCreateRoomClick = onCreateRoomClick,
-                modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-            )
+            when (currentHomeNavigationBarItem) {
+                HomeNavigationBarItem.Chats -> {
+                    RoomListContentView(
+                        contentState = state.contentState,
+                        filtersState = state.filtersState,
+                        hideInvitesAvatars = state.hideInvitesAvatars,
+                        eventSink = state.eventSink,
+                        onSetUpRecoveryClick = onSetUpRecoveryClick,
+                        onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                        onRoomClick = ::onRoomClick,
+                        onCreateRoomClick = onCreateRoomClick,
+                        // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80,
+                        // and include provided bottom padding
+                        contentBottomPadding = 80.dp + padding.calculateBottomPadding(),
+                        modifier = Modifier
+                            .padding(
+                                top = padding.calculateTopPadding(),
+                                bottom = 0.dp,
+                                start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                                end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                            )
+                            .consumeWindowInsets(padding)
+                            .hazeSource(state = hazeState)
+                    )
+                }
+                HomeNavigationBarItem.Spaces -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                            .consumeWindowInsets(padding)
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = "Spaces are coming soon!",
+                            style = ElementTheme.typography.fontBodyLgRegular,
+                            color = ElementTheme.colors.textPrimary,
+                        )
+                    }
+                }
+            }
         },
         floatingActionButton = {
-            if (state.displayActions) {
+            if (state.displayActions && currentHomeNavigationBarItem == HomeNavigationBarItem.Chats) {
                 FloatingActionButton(
                     containerColor = ElementTheme.colors.iconPrimary,
                     onClick = onCreateRoomClick
