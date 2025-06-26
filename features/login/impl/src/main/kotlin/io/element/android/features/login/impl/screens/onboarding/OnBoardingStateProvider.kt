@@ -30,6 +30,7 @@ fun anOnBoardingState(
     canLoginWithQrCode: Boolean = false,
     canCreateAccount: Boolean = false,
     canReportBug: Boolean = false,
+    version: String = "1.0.0",
     loginMode: AsyncData<LoginMode> = AsyncData.Uninitialized,
     eventSink: (OnBoardingEvents) -> Unit = {},
 ) = OnBoardingState(
@@ -39,6 +40,7 @@ fun anOnBoardingState(
     canLoginWithQrCode = canLoginWithQrCode,
     canCreateAccount = canCreateAccount,
     canReportBug = canReportBug,
+    version = version,
     loginMode = loginMode,
     eventSink = eventSink,
 )

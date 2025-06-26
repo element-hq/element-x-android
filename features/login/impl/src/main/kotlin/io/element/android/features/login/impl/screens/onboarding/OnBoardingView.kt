@@ -202,9 +202,20 @@ private fun OnBoardingButtons(
             // Add a report problem text button. Use a Text since we need a special theme here.
             Text(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .clickable(onClick = onReportProblem),
+                    .clickable(onClick = onReportProblem)
+                    .padding(16.dp),
                 text = stringResource(id = CommonStrings.common_report_a_problem),
+                style = ElementTheme.typography.fontBodySmRegular,
+                color = ElementTheme.colors.textSecondary,
+            )
+        } else {
+            Text(
+                modifier = Modifier
+                    .clickable {
+                        state.eventSink(OnBoardingEvents.OnVersionClick)
+                    }
+                    .padding(16.dp),
+                text = stringResource(id = R.string.screen_onboarding_app_version, state.version),
                 style = ElementTheme.typography.fontBodySmRegular,
                 color = ElementTheme.colors.textSecondary,
             )
