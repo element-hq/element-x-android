@@ -19,16 +19,17 @@ import io.element.android.libraries.designsystem.atomic.atoms.CounterAtom
 @Composable
 fun NavigationBarIcon(
     imageVector: ImageVector,
-    count: Int,
-    isCritical: Boolean,
+    modifier: Modifier = Modifier,
+    count: Int = 0,
+    isCritical: Boolean = false,
 ) {
-    Box {
+    Box(modifier) {
         Icon(
             imageVector = imageVector,
             contentDescription = null,
         )
         CounterAtom(
-            modifier = Modifier.Companion.offset(11.dp, (-11).dp),
+            modifier = Modifier.offset(11.dp, (-11).dp),
             textStyle = ElementTheme.typography.fontBodyXsMedium,
             count = count,
             isCritical = isCritical,

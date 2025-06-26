@@ -8,13 +8,16 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import io.element.android.compound.theme.ElementTheme
 
 @Composable
 fun NavigationBarText(
     text: String,
+    modifier: Modifier = Modifier,
 ) {
     Text(
+        modifier = modifier,
         text = text,
         style = ElementTheme.typography.fontBodySmMedium,
     )

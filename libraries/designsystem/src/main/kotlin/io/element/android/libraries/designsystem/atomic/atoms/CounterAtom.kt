@@ -36,6 +36,8 @@ private const val MAX_COUNT_STRING = "+$MAX_COUNT"
  * @param count The number to display. If the number is greater than [MAX_COUNT], the counter will display [MAX_COUNT_STRING].
  * If the number is less than 1, the counter will not be displayed.
  * @param modifier The modifier to apply to this layout.
+ * @param textStyle The style to apply to the text inside the counter.
+ * @param isCritical If true, the counter will use a critical color scheme, otherwise it will use an accent color scheme.
  */
 @Composable
 fun CounterAtom(
