@@ -22,9 +22,10 @@ interface AppPreferencesStore {
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 
-    fun getHideInviteAvatarsFlow(): Flow<Boolean>
-
-    fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue>
+    suspend fun setHideInviteAvatars(hide: Boolean?)
+    fun getHideInviteAvatarsFlow(): Flow<Boolean?>
+    suspend fun setTimelineMediaPreviewValue(mediaPreviewValue: MediaPreviewValue?)
+    fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue?>
 
     suspend fun setTracingLogLevel(logLevel: LogLevel)
     fun getTracingLogLevelFlow(): Flow<LogLevel>

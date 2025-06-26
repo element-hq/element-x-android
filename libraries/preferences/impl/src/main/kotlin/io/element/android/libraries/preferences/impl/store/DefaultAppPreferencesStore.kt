@@ -85,15 +85,35 @@ class DefaultAppPreferencesStore @Inject constructor(
         }
     }
 
-    override fun getHideInviteAvatarsFlow(): Flow<Boolean> {
+    override fun getHideInviteAvatarsFlow(): Flow<Boolean?> {
         return store.data.map { prefs ->
-            prefs[hideInviteAvatarsKey] == true
+            prefs[hideInviteAvatarsKey]
         }
     }
 
-    override fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue> {
+    override suspend fun setHideInviteAvatars(hide: Boolean?) {
+        store.edit { prefs ->
+            if (hide != null) {
+                prefs[hideInviteAvatarsKey] = hide
+            } else {
+                prefs.remove(hideInviteAvatarsKey)
+            }
+        }
+    }
+
+    override suspend fun setTimelineMediaPreviewValue(mediaPreviewValue: MediaPreviewValue?) {
+        store.edit { prefs ->
+            if (mediaPreviewValue != null) {
+                prefs[timelineMediaPreviewValueKey] = mediaPreviewValue.name
+            } else {
+                prefs.remove(timelineMediaPreviewValueKey)
+            }
+        }
+    }
+
+    override fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue?> {
         return store.data.map { prefs ->
-            prefs[timelineMediaPreviewValueKey]?.let { MediaPreviewValue.valueOf(it) } ?: MediaPreviewValue.On
+            prefs[timelineMediaPreviewValueKey]?.let { MediaPreviewValue.valueOf(it) }
         }
     }
 

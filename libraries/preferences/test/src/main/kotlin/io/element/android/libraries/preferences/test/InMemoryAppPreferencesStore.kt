@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class InMemoryAppPreferencesStore(
     isDeveloperModeEnabled: Boolean = false,
     customElementCallBaseUrl: String? = null,
-    hideInviteAvatars: Boolean = false,
-    timelineMediaPreviewValue: MediaPreviewValue = MediaPreviewValue.On,
+    hideInviteAvatars: Boolean? = null,
+    timelineMediaPreviewValue: MediaPreviewValue? = null,
     theme: String? = null,
     logLevel: LogLevel = LogLevel.INFO,
     traceLockPacks: Set<TraceLogPack> = emptySet(),
@@ -55,12 +55,20 @@ class InMemoryAppPreferencesStore(
         return theme
     }
 
-    override fun getHideInviteAvatarsFlow(): Flow<Boolean> {
+    override fun getHideInviteAvatarsFlow(): Flow<Boolean?> {
         return hideInviteAvatars
     }
 
-    override fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue> {
+    override fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue?> {
         return timelineMediaPreviewValue
+    }
+
+    override suspend fun setHideInviteAvatars(hide: Boolean?) {
+        hideInviteAvatars.value = hide
+    }
+
+    override suspend fun setTimelineMediaPreviewValue(mediaPreviewValue: MediaPreviewValue?) {
+        timelineMediaPreviewValue.value = mediaPreviewValue
     }
 
     override suspend fun setTracingLogLevel(logLevel: LogLevel) {
