@@ -26,7 +26,7 @@ fun RowScope.NavigationBarItem(
     enabled: Boolean = true,
     label: @Composable (() -> Unit)? = null,
     alwaysShowLabel: Boolean = true,
-    colors: NavigationBarItemColors = ElementNavigationBarItemDefaultsDefaults.colors(),
+    colors: NavigationBarItemColors = ElementNavigationBarItemDefaults.colors(),
     interactionSource: MutableInteractionSource? = null
 ) {
     NavigationBarItem(
@@ -42,7 +42,7 @@ fun RowScope.NavigationBarItem(
     )
 }
 
-object ElementNavigationBarItemDefaultsDefaults {
+object ElementNavigationBarItemDefaults {
     @Composable
     fun colors() = NavigationBarItemDefaults.colors().copy(
         selectedIconColor = ElementTheme.colors.iconPrimary,
