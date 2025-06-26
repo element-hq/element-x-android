@@ -34,8 +34,6 @@ class KonsistComposableTest {
                 // Add some exceptions...
                 "InvisibleButton",
                 "OutlinedButton",
-                "NavigationBarIcon",
-                "NavigationBarText",
                 "SimpleAlertDialogContent",
                 "TextButton",
             )
