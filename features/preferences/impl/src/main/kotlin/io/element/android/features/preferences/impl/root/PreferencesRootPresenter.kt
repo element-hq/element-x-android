@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
@@ -49,6 +50,7 @@ class PreferencesRootPresenter @Inject constructor(
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
+        val coroutineScope = rememberCoroutineScope()
         val matrixUser = matrixClient.userProfile.collectAsState()
         LaunchedEffect(Unit) {
             // Force a refresh of the profile
@@ -103,7 +105,7 @@ class PreferencesRootPresenter @Inject constructor(
         fun handleEvent(event: PreferencesRootEvents) {
             when (event) {
                 is PreferencesRootEvents.OnVersionInfoClick -> {
-                    showDeveloperSettingsProvider.unlockDeveloperSettings()
+                    showDeveloperSettingsProvider.unlockDeveloperSettings(coroutineScope)
                 }
             }
         }

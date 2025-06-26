@@ -66,6 +66,7 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.push.api)
     implementation(projects.libraries.pushproviders.api)
+    implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.fullscreenintent.api)
     implementation(projects.features.rageshake.api)
     implementation(projects.features.lockscreen.api)
