@@ -7,7 +7,10 @@
 
 package io.element.android.features.preferences.impl.advanced
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -27,6 +30,10 @@ import io.element.android.libraries.designsystem.theme.components.ListSectionHea
 import io.element.android.libraries.designsystem.theme.components.ListSupportingText
 import io.element.android.libraries.designsystem.theme.components.ListSupportingTextDefaults
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
@@ -40,10 +47,21 @@ fun AdvancedSettingsView(
     modifier: Modifier = Modifier,
 ) {
     val analyticsService = LocalAnalyticsService.current
+
+    val snackbarDispatcher = LocalSnackbarDispatcher.current
+    val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
+    val snackbarHostState = rememberSnackbarHostState(snackbarMessage = snackbarMessage)
+
     PreferencePage(
         modifier = modifier,
         onBackClick = onBackClick,
-        title = stringResource(id = CommonStrings.common_advanced_settings)
+        title = stringResource(id = CommonStrings.common_advanced_settings),
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState,
+                modifier = Modifier.navigationBarsPadding()
+            )
+        }
     ) {
         PreferenceDropdown(
             title = stringResource(id = CommonStrings.common_appearance),
@@ -119,15 +137,18 @@ private fun ModerationAndSafety(
             onCheckedChange = {
                 state.eventSink(AdvancedSettingsEvents.SetHideInviteAvatars(it))
             },
+            enabled = !state.setHideInviteAvatarsAction.isLoading()
         )
         ListSectionHeader(
             title = stringResource(R.string.screen_advanced_settings_show_media_timeline_title),
             hasDivider = false,
             description = {
-                ListSupportingText(
-                    text = stringResource(R.string.screen_advanced_settings_show_media_timeline_subtitle),
-                    contentPadding = ListSupportingTextDefaults.Padding.None,
-                )
+                Row {
+                    ListSupportingText(
+                        text = stringResource(R.string.screen_advanced_settings_show_media_timeline_subtitle),
+                        contentPadding = ListSupportingTextDefaults.Padding.None,
+                    )
+                }
             }
         )
         ListItem(
@@ -136,6 +157,7 @@ private fun ModerationAndSafety(
             onClick = {
                 state.eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
             },
+            enabled = !state.setTimelineMediaPreviewAction.isLoading()
         )
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_private_rooms)) },
@@ -143,6 +165,7 @@ private fun ModerationAndSafety(
             onClick = {
                 state.eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Private))
             },
+            enabled = !state.setTimelineMediaPreviewAction.isLoading()
         )
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_always_show)) },
@@ -150,6 +173,7 @@ private fun ModerationAndSafety(
             onClick = {
                 state.eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.On))
             },
+            enabled = !state.setTimelineMediaPreviewAction.isLoading()
         )
     }
 }
