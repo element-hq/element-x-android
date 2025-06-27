@@ -96,7 +96,7 @@ jobs:
           arch: ${{ env.ARCH }}
           profile: ${{ env.DEVICE }}
           target: ${{ env.TARGET }}
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -no-boot-anim -camera-back none
           disable-animations: true
           disk-size: 3G
           script: |
