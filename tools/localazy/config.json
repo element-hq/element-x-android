@@ -162,7 +162,7 @@
       ]
     },
     {
-      "name" : ":features:roomlist:impl",
+      "name" : ":features:home:impl",
       "includeRegex" : [
         "screen_roomlist_.*",
         "screen\\.roomlist\\..*",
