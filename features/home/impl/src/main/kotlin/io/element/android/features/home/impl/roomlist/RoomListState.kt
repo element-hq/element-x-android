@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.home.impl
+package io.element.android.features.home.impl.roomlist
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.home.impl.filters.RoomListFiltersState
@@ -13,36 +13,26 @@ import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.search.RoomListSearchState
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 
 @Immutable
 data class RoomListState(
-    val matrixUser: MatrixUser,
-    val showAvatarIndicator: Boolean,
-    val hasNetworkConnection: Boolean,
-    val snackbarMessage: SnackbarMessage?,
     val contextMenu: ContextMenu,
     val declineInviteMenu: DeclineInviteMenu,
     val leaveRoomState: LeaveRoomState,
     val filtersState: RoomListFiltersState,
-    val canReportBug: Boolean,
     val searchState: RoomListSearchState,
     val contentState: RoomListContentState,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
-    val directLogoutState: DirectLogoutState,
     val hideInvitesAvatars: Boolean,
     val canReportRoom: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     val displayFilters = contentState is RoomListContentState.Rooms
-    val displayActions = true
 
     sealed interface ContextMenu {
         data object Hidden : ContextMenu

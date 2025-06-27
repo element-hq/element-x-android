@@ -44,7 +44,7 @@ import kotlinx.parcelize.Parcelize
 class HomeFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomListPresenter,
+    private val presenter: HomePresenter,
     private val inviteFriendsUseCase: InviteFriendsUseCase,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInviteView: AcceptDeclineInviteView,
@@ -126,8 +126,8 @@ class HomeFlowNode @AssistedInject constructor(
             val state = presenter.present()
             val activity = requireNotNull(LocalActivity.current)
 
-            RoomListView(
-                state = state,
+            HomeView(
+                homeState = state,
                 onRoomClick = this::onRoomClick,
                 onSettingsClick = this::onOpenSettings,
                 onCreateRoomClick = this::onCreateRoomClick,
@@ -140,7 +140,7 @@ class HomeFlowNode @AssistedInject constructor(
                 modifier = modifier,
             ) {
                 acceptDeclineInviteView.Render(
-                    state = state.acceptDeclineInviteState,
+                    state = state.roomListState.acceptDeclineInviteState,
                     onAcceptInviteSuccess = this::onRoomClick,
                     onDeclineInviteSuccess = { },
                     modifier = Modifier

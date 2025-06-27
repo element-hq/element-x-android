@@ -35,10 +35,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
-import io.element.android.features.home.impl.RoomListContentState
-import io.element.android.features.home.impl.RoomListContentStateProvider
-import io.element.android.features.home.impl.RoomListEvents
-import io.element.android.features.home.impl.SecurityBannerState
 import io.element.android.features.home.impl.contentType
 import io.element.android.features.home.impl.filters.RoomListFilter
 import io.element.android.features.home.impl.filters.RoomListFiltersEmptyStateResources
@@ -47,6 +43,10 @@ import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.features.home.impl.filters.selection.FilterSelectionState
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
+import io.element.android.features.home.impl.roomlist.RoomListContentState
+import io.element.android.features.home.impl.roomlist.RoomListContentStateProvider
+import io.element.android.features.home.impl.roomlist.RoomListEvents
+import io.element.android.features.home.impl.roomlist.SecurityBannerState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -311,7 +311,12 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
     RoomListContentView(
         contentState = state,
         filtersState = aRoomListFiltersState(
-            filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) }
+            filterSelectionStates = RoomListFilter.entries.map {
+                FilterSelectionState(
+                    filter = it,
+                    isSelected = true
+                )
+            }
         ),
         hideInvitesAvatars = false,
         eventSink = {},

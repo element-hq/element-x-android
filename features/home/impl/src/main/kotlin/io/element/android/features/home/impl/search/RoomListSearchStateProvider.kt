@@ -8,8 +8,8 @@
 package io.element.android.features.home.impl.search
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.home.impl.aRoomListRoomSummaryList
 import io.element.android.features.home.impl.model.RoomListRoomSummary
+import io.element.android.features.home.impl.roomlist.aRoomListRoomSummaryList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

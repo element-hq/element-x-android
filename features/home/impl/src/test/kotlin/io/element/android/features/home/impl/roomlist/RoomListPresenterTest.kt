@@ -5,13 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.home.impl
+package io.element.android.features.home.impl.roomlist
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.home.impl.FakeDateTimeObserver
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.datasource.aRoomListRoomSummaryFactory
 import io.element.android.features.home.impl.filters.RoomListFiltersState
@@ -27,20 +28,14 @@ import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
-import io.element.android.features.logout.api.direct.aDirectLogoutState
-import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
-import io.element.android.libraries.androidutils.system.DateTimeObserver
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
-import io.element.android.libraries.indicator.api.IndicatorService
-import io.element.android.libraries.indicator.test.FakeIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -48,18 +43,12 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomList
-import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
-import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.test.AN_AVATAR_URL
-import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
@@ -88,7 +77,6 @@ import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -99,65 +87,6 @@ import kotlin.time.Duration.Companion.seconds
 class RoomListPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
-
-    @Test
-    fun `present - should start with no user and then load user with success`() = runTest {
-        val matrixClient = FakeMatrixClient(
-            userDisplayName = null,
-            userAvatarUrl = null,
-        )
-        matrixClient.givenGetProfileResult(matrixClient.sessionId, Result.success(MatrixUser(matrixClient.sessionId, A_USER_NAME, AN_AVATAR_URL)))
-        val presenter = createRoomListPresenter(
-            client = matrixClient,
-            rageshakeFeatureAvailability = { false },
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.matrixUser).isEqualTo(MatrixUser(A_USER_ID))
-            assertThat(initialState.canReportBug).isFalse()
-            val withUserState = awaitItem()
-            assertThat(withUserState.matrixUser.userId).isEqualTo(A_USER_ID)
-            assertThat(withUserState.matrixUser.displayName).isEqualTo(A_USER_NAME)
-            assertThat(withUserState.matrixUser.avatarUrl).isEqualTo(AN_AVATAR_URL)
-            assertThat(withUserState.showAvatarIndicator).isFalse()
-        }
-    }
-
-    @Test
-    fun `present - show avatar indicator`() = runTest {
-        val indicatorService = FakeIndicatorService()
-        val presenter = createRoomListPresenter(
-            indicatorService = indicatorService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.showAvatarIndicator).isFalse()
-            indicatorService.setShowRoomListTopBarIndicator(true)
-            val finalState = awaitItem()
-            assertThat(finalState.showAvatarIndicator).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - should start with no user and then load user with error`() = runTest {
-        val matrixClient = FakeMatrixClient(
-            userDisplayName = null,
-            userAvatarUrl = null,
-        )
-        matrixClient.givenGetProfileResult(matrixClient.sessionId, Result.failure(AN_EXCEPTION))
-        val presenter = createRoomListPresenter(client = matrixClient)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.matrixUser).isEqualTo(MatrixUser(matrixClient.sessionId))
-            // No new state is coming
-        }
-    }
 
     @Test
     fun `present - load 1 room with success`() = runTest {
@@ -672,8 +601,6 @@ class RoomListPresenterTest {
 
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
-        syncService: SyncService = FakeSyncService(),
-        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         dateFormatter: DateFormatter = FakeDateFormatter(),
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
@@ -685,13 +612,9 @@ class RoomListPresenterTest {
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
-        rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { true },
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
-        indicatorService: IndicatorService = FakeIndicatorService(),
     ) = RoomListPresenter(
         client = client,
-        syncService = syncService,
-        snackbarDispatcher = snackbarDispatcher,
         leaveRoomPresenter = { leaveRoomState },
         roomListDataSource = RoomListDataSource(
             roomListService = client.roomListService,
@@ -705,7 +628,6 @@ class RoomListPresenterTest {
             dateTimeObserver = FakeDateTimeObserver(),
         ),
         featureFlagService = featureFlagService,
-        indicatorService = indicatorService,
         searchPresenter = searchPresenter,
         sessionPreferencesStore = sessionPreferencesStore,
         filtersPresenter = filtersPresenter,
@@ -714,17 +636,7 @@ class RoomListPresenterTest {
         fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         batteryOptimizationPresenter = { aBatteryOptimizationState() },
         notificationCleaner = notificationCleaner,
-        logoutPresenter = { aDirectLogoutState() },
         appPreferencesStore = appPreferencesStore,
-        rageshakeFeatureAvailability = rageshakeFeatureAvailability,
         seenInvitesStore = seenInvitesStore,
     )
-}
-
-class FakeDateTimeObserver : DateTimeObserver {
-    override val changes = MutableSharedFlow<DateTimeObserver.Event>(extraBufferCapacity = 1)
-
-    fun given(event: DateTimeObserver.Event) {
-        changes.tryEmit(event)
-    }
 }
