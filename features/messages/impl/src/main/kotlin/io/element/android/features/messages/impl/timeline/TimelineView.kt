@@ -13,6 +13,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -45,6 +47,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.focused
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -104,6 +108,7 @@ fun TimelineView(
     lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,
     nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
+    focusedTimelineIndex: Int = -1,
 ) {
     fun clearFocusRequestState() {
         state.eventSink(TimelineEvents.ClearFocusRequestState)
@@ -156,11 +161,11 @@ fun TimelineView(
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(top = 64.dp, bottom = 8.dp),
             ) {
-                items(
+                itemsIndexed(
                     items = state.timelineItems,
-                    contentType = { timelineItem -> timelineItem.contentType() },
-                    key = { timelineItem -> timelineItem.identifier() },
-                ) { timelineItem ->
+                    contentType = { _, timelineItem -> timelineItem.contentType() },
+                    key = { _, timelineItem -> timelineItem.identifier() },
+                ) { index, timelineItem ->
                     TimelineItemRow(
                         timelineItem = timelineItem,
                         timelineRoomInfo = state.timelineRoomInfo,
@@ -181,6 +186,7 @@ fun TimelineView(
                         onSwipeToReply = onSwipeToReply,
                         onJoinCallClick = onJoinCallClick,
                         eventSink = state.eventSink,
+                        isFocused = focusedTimelineIndex == index,
                     )
                 }
             }

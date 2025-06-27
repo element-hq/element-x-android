@@ -32,11 +32,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -108,6 +116,8 @@ import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -182,6 +192,10 @@ fun MessagesView(
         state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
     }
 
+    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
+    var focusedTimelineIndex by remember { mutableIntStateOf(-1) }
+
     val expandableState = rememberExpandableBottomSheetLayoutState()
     ExpandableBottomSheetLayout(
         modifier = modifier.fillMaxSize().imePadding().systemBarsPadding(),
@@ -240,8 +254,16 @@ fun MessagesView(
                             },
                             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                             onJoinCallClick = onJoinCallClick,
-                            onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
+                            onViewAllPinnedMessagesClick = {
+                                coroutineScope.launch {
+                                    focusManager.clearFocus()
+                                    delay(100)
+//                                    focusRequester.requestFocus()
+                                    focusedTimelineIndex += 1
+                                }
+                                                           },
                             knockRequestsBannerView = knockRequestsBannerView,
+                            focusedTimelineIndex = focusedTimelineIndex,
                         )
 
                         SuggestionsPickerView(
@@ -358,6 +380,7 @@ private fun MessagesViewContent(
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
     knockRequestsBannerView: @Composable () -> Unit,
+    focusedTimelineIndex: Int = -1,
 ) {
     Box(
         modifier = modifier
@@ -408,6 +431,7 @@ private fun MessagesViewContent(
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 onJoinCallClick = onJoinCallClick,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
+                focusedTimelineIndex = focusedTimelineIndex,
             )
             AnimatedVisibility(
                 visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
@@ -503,7 +527,7 @@ private fun MessagesViewTopBar(
                     roomAvatar = roomAvatar,
                     isTombstoned = isTombstoned,
                     heroes = heroes,
-                    modifier = titleModifier
+                    modifier = titleModifier,
                 )
 
                 when (dmUserIdentityState) {
@@ -542,7 +566,7 @@ private fun RoomAvatarAndNameRow(
     roomAvatar: AvatarData,
     heroes: ImmutableList<AvatarData>,
     isTombstoned: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
@@ -554,6 +578,7 @@ private fun RoomAvatarAndNameRow(
                 heroes = heroes,
                 isTombstoned = isTombstoned,
             ),
+            contentDescription = "An avatar",
         )
         Text(
             modifier = Modifier.padding(horizontal = 8.dp),

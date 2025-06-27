@@ -20,6 +20,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.focused
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
@@ -71,6 +72,7 @@ internal fun TimelineItemRow(
     onJoinCallClick: () -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
+    isFocused: Boolean = false,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -141,6 +143,8 @@ internal fun TimelineItemRow(
                                     }
                                     // For Polls, allow the answers to be traversed by Talkback
                                     isTraversalGroup = timelineItem.content is TimelineItemPollContent
+
+                                    focused = isFocused
                                 }
                                 // Custom clickable that applies over the whole item for accessibility
                                 .then(
