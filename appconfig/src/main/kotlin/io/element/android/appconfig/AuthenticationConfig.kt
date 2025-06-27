@@ -9,11 +9,12 @@ package io.element.android.appconfig
 
 object AuthenticationConfig {
     const val MATRIX_ORG_URL = "https://matrix.org"
+    const val VOYZME_URL = "https://synapse.voicedropdev.com"
 
     /**
      * Default homeserver url to sign in with, unless the user selects a different one.
      */
-    const val DEFAULT_HOMESERVER_URL = MATRIX_ORG_URL
+    const val DEFAULT_HOMESERVER_URL = VOYZME_URL
 
     /**
      * URL with some docs that explain what's sliding sync and how to add it to your home server.
