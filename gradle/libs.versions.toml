@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.10.1"
+android_gradle_plugin = "8.11.0"
 kotlin = "2.1.21"
 kotlinpoet = "2.2.0"
 ksp = "2.1.21-2.0.2"
