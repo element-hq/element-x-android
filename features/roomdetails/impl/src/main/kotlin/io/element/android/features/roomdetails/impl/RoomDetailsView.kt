@@ -408,6 +408,7 @@ private fun RoomHeaderSection(
                 }.toPersistentList(),
                 isTombstoned = isTombstoned,
             ),
+            contentDescription = avatarUrl?.let { stringResource(CommonStrings.a11y_view_avatar) },
             modifier = Modifier
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.roomDetailAvatar)

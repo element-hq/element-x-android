@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
@@ -30,6 +31,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.CommonStrings
 
 /** Ratio between the box size (120 on Figma) and the avatar size (75 on Figma). */
 private const val SIZE_RATIO = 1.6f
@@ -56,6 +58,7 @@ fun DmAvatars(
         Avatar(
             avatarData = userAvatarData,
             avatarType = AvatarType.User,
+            contentDescription = userAvatarData.url?.let { stringResource(CommonStrings.a11y_view_avatar) },
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .graphicsLayer {
@@ -87,6 +90,7 @@ fun DmAvatars(
         Avatar(
             avatarData = otherUserAvatarData,
             avatarType = AvatarType.User,
+            contentDescription = otherUserAvatarData.url?.let { stringResource(CommonStrings.a11y_view_avatar) },
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .clip(CircleShape)
