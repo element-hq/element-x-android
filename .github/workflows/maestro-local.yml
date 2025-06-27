@@ -100,6 +100,7 @@ jobs:
           disable-animations: true
           disk-size: 3G
           script: |
+            adb shell settings put system show_touches 1
             .github/workflows/scripts/maestro/maestro-local-with-screen-recording.sh app-gplay-x86_64-debug.apk
       - name: Upload test results
         uses: actions/upload-artifact@v4
