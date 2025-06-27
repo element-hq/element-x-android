@@ -17,6 +17,7 @@ data class OnBoardingState(
     val canLoginWithQrCode: Boolean,
     val canCreateAccount: Boolean,
     val canReportBug: Boolean,
+    val version: String,
     val loginMode: AsyncData<LoginMode>,
     val eventSink: (OnBoardingEvents) -> Unit,
 ) {
