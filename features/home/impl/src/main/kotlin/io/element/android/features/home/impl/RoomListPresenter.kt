@@ -75,6 +75,7 @@ import javax.inject.Inject
 private const val EXTENDED_RANGE_SIZE = 40
 private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 300L
 
+// TODO Create HomePresenter to split the state.
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val syncService: SyncService,
