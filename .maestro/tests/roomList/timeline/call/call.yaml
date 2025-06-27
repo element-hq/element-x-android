@@ -17,6 +17,12 @@ appId: ${MAESTRO_APP_ID}
 - takeScreenshot: build/maestro/710-Call
 # Hangup
 - tapOn: "End call"
+# Repeat hang up in case it helps
+- runFlow:
+    when:
+      visible: 'End call'
+    commands:
+      - tapOn: "End call"
 - extendedWaitUntil:
     visible: "MyRoom"
     timeout: 10000
