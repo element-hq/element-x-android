@@ -18,6 +18,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.newVirtualElementCallWidget
 import uniffi.matrix_sdk.EncryptionSystem
+import uniffi.matrix_sdk.HeaderStyle
 import uniffi.matrix_sdk.VirtualElementCallWidgetOptions
 import javax.inject.Inject
 import uniffi.matrix_sdk.Intent as CallIntent
@@ -48,9 +49,10 @@ class DefaultCallWidgetSettingsProvider @Inject constructor(
             sentryDsn = callAnalyticsCredentialsProvider.sentryDsn.takeIf { isAnalyticsEnabled },
             sentryEnvironment = if (buildMeta.buildType == BuildType.RELEASE) "RELEASE" else "DEBUG",
             parentUrl = null,
+            // For backwards compatibility, it'll be ignored in recent versions of Element Call
             hideHeader = true,
             controlledMediaDevices = true,
-            header = null,
+            header = HeaderStyle.APP_BAR,
         )
         val rustWidgetSettings = newVirtualElementCallWidget(options)
         return MatrixWidgetSettings.fromRustWidgetSettings(rustWidgetSettings)

@@ -11,6 +11,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.ConsoleMessage
+import android.webkit.JavascriptInterface
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -19,7 +20,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,11 +32,9 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.call.impl.R
 import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.PictureInPictureState
-import io.element.android.features.call.impl.pip.PictureInPictureStateProvider
 import io.element.android.features.call.impl.pip.aPictureInPictureState
 import io.element.android.features.call.impl.utils.InvalidAudioDeviceReason
 import io.element.android.features.call.impl.utils.WebViewAudioManager
@@ -44,13 +42,11 @@ import io.element.android.features.call.impl.utils.WebViewPipController
 import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
-import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
 
@@ -60,7 +56,6 @@ interface CallScreenNavigator {
     fun close()
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CallScreenView(
     state: CallScreenState,
@@ -78,19 +73,6 @@ internal fun CallScreenView(
 
     Scaffold(
         modifier = modifier,
-        topBar = {
-            if (!pipState.isInPictureInPicture) {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.element_call)) },
-                    navigationIcon = {
-                        BackButton(
-                            imageVector = if (pipState.supportPip) CompoundIcons.ArrowLeft() else CompoundIcons.Close(),
-                            onClick = ::handleBack,
-                        )
-                    }
-                )
-            }
-        }
     ) { padding ->
         BackHandler {
             handleBack()
@@ -127,9 +109,11 @@ internal fun CallScreenView(
                     requestPermissions(androidPermissions.toTypedArray(), callback)
                 },
                 onCreateWebView = { webView ->
+                    webView.addBackHandler(onBackPressed = ::handleBack)
                     val interceptor = WebViewWidgetMessageInterceptor(
                         webView = webView,
                         onUrlLoaded = { url ->
+                            webView.evaluateJavascript("controls.onBackButtonPressed = () => { backHandler.onBackPressed() }", null)
                             if (webViewAudioManager?.isInCallMode?.get() == false) {
                                 Timber.d("URL $url is loaded, starting in-call audio mode")
                                 webViewAudioManager?.onCallStarted()
@@ -282,6 +266,17 @@ private fun WebView.setup(
     }
 }
 
+private fun WebView.addBackHandler(onBackPressed: () -> Unit) {
+    addJavascriptInterface(
+        object {
+            @Suppress("unused")
+            @JavascriptInterface
+            fun onBackPressed() = onBackPressed()
+        },
+        "backHandler"
+    )
+}
+
 @PreviewsDayNight
 @Composable
 internal fun CallScreenViewPreview(
@@ -290,18 +285,6 @@ internal fun CallScreenViewPreview(
     CallScreenView(
         state = state,
         pipState = aPictureInPictureState(),
-        requestPermissions = { _, _ -> },
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun CallScreenPipViewPreview(
-    @PreviewParameter(PictureInPictureStateProvider::class) state: PictureInPictureState,
-) = ElementPreview {
-    CallScreenView(
-        state = aCallScreenState(),
-        pipState = state,
         requestPermissions = { _, _ -> },
     )
 }
