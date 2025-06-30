@@ -12,6 +12,7 @@
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
+  <string name="a11y_other_user_avatar">"Other user avatar"</string>
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
   <string name="a11y_paused_voice_message">"Voice message, duration: %1$s, current position: %2$s"</string>
@@ -30,15 +31,18 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Tap to show all"</string>
   <string name="a11y_remove_reaction">"Remove reaction: %1$s"</string>
   <string name="a11y_remove_reaction_with">"Remove reaction with %1$s"</string>
+  <string name="a11y_room_avatar">"Room avatar"</string>
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
+  <string name="a11y_user_avatar">"User avatar"</string>
   <string name="a11y_user_menu">"User menu"</string>
   <string name="a11y_view_avatar">"View avatar"</string>
   <string name="a11y_view_details">"View details"</string>
   <string name="a11y_voice_message">"Voice message, duration: %1$s"</string>
   <string name="a11y_voice_message_record">"Record voice message."</string>
   <string name="a11y_voice_message_stop_recording">"Stop recording"</string>
+  <string name="a11y_your_avatar">"Your avatar"</string>
   <string name="action_accept">"Accept"</string>
   <string name="action_add_caption">"Add caption"</string>
   <string name="action_add_to_timeline">"Add to timeline"</string>
@@ -137,6 +141,7 @@
   <string name="action_tap_for_options">"Tap for options"</string>
   <string name="action_try_again">"Try again"</string>
   <string name="action_unpin">"Unpin"</string>
+  <string name="action_view">"View"</string>
   <string name="action_view_in_timeline">"View in timeline"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
