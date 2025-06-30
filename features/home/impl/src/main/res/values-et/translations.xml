@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Kui tahad olla kindel, et näed õigel ajal kõiki teavitusi, siis palun lülita akukasutuse optimeerimine välja."</string>
+  <string name="banner_battery_optimization_submit_android">"Lülita akukasutuse optimeerimine välja"</string>
+  <string name="banner_battery_optimization_title_android">"Sa ei näe kõiki teavitusi?"</string>
   <string name="banner_set_up_recovery_content">"Loo uus taastevõti, mida saad kasutada oma krüptitud sõnumite ajaloo taastamisel olukorras, kus kaotad ligipääsu oma seadmetele."</string>
   <string name="banner_set_up_recovery_submit">"Seadista andmete taastamine"</string>
   <string name="banner_set_up_recovery_title">"Seadista taastamine"</string>
@@ -18,6 +21,7 @@
   <string name="screen_migration_message">"Tänud, et ootad - seda toimingut on vaja teha vaid üks kord."</string>
   <string name="screen_migration_title">"Seadistame sinu kasutajakontot."</string>
   <string name="screen_roomlist_a11y_create_message">"Loo uus vestlus või jututuba"</string>
+  <string name="screen_roomlist_clear_filters">"Tühjenda filtrid"</string>
   <string name="screen_roomlist_empty_message">"Alustamiseks saada kellelegi sõnum."</string>
   <string name="screen_roomlist_empty_title">"Veel pole vestlusi."</string>
   <string name="screen_roomlist_filter_favourites">"Lemmikud"</string>
@@ -40,6 +44,7 @@ Sul pole ühtegi lugemata sõnumit!"</string>
   <string name="screen_roomlist_main_space_title">"Vestlused"</string>
   <string name="screen_roomlist_mark_as_read">"Märgi loetuks"</string>
   <string name="screen_roomlist_mark_as_unread">"Märgi mitteloetuks"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"See jututuba on uuendatud"</string>
   <string name="session_verification_banner_message">"Tundub, et kasutad uut seadet. Oma krüptitud sõnumite lugemiseks verifitseeri ta mõne muu oma seadmega."</string>
   <string name="session_verification_banner_title">"Verifitseeri, et see oled sina"</string>
 </resources>

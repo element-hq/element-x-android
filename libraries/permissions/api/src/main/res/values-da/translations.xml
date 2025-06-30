@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"For at lade applikationen bruge kameraet, skal du give tilladelsen i systemindstillingerne."</string>
+  <string name="dialog_permission_generic">"Giv venligst tilladelsen i systemindstillingerne."</string>
+  <string name="dialog_permission_microphone">"For at lade applikationen bruge mikrofonen, skal du give tilladelsen i systemindstillingerne."</string>
+  <string name="dialog_permission_notification">"For at lade applikationen vise notifikationer, skal du give tilladelsen i systemindstillingerne."</string>
+</resources>

@@ -22,9 +22,9 @@
   <string name="state_event_room_invite_you">"%1$s ви покани"</string>
   <string name="state_event_room_join">"%1$s се присъедини към стаята"</string>
   <string name="state_event_room_join_by_you">"Вие се присъединихте към стаята"</string>
-  <string name="state_event_room_knock">"%1$s поиска да се присъедини"</string>
-  <string name="state_event_room_knock_accepted">"%1$s позволи на %2$s да се присъедини"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s ви позволи да се присъедините"</string>
+  <string name="state_event_room_knock">"%1$s иска да се присъедини"</string>
+  <string name="state_event_room_knock_accepted">"%1$s получи достъп до %2$s"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Вие позволихте на %1$s да се присъедини"</string>
   <string name="state_event_room_knock_by_you">"Вие поискахте да се присъедините"</string>
   <string name="state_event_room_knock_retracted">"%1$s вече не се интересува от присъединяване"</string>
   <string name="state_event_room_leave">"%1$s напусна стаята"</string>
@@ -35,6 +35,10 @@
   <string name="state_event_room_name_removed_by_you">"Вие премахнахте името на стаята"</string>
   <string name="state_event_room_none">"%1$s не направи промени"</string>
   <string name="state_event_room_none_by_you">"Не направихте промени"</string>
+  <string name="state_event_room_pinned_events_changed">"%1$s промени закачените съобщения"</string>
+  <string name="state_event_room_pinned_events_changed_by_you">"Вие променихте закачените съобщения"</string>
+  <string name="state_event_room_pinned_events_pinned">"%1$s закачи съобщение"</string>
+  <string name="state_event_room_pinned_events_pinned_by_you">"Вие закачихте съобщение"</string>
   <string name="state_event_room_reject">"%1$s отхвърли поканата"</string>
   <string name="state_event_room_reject_by_you">"Вие отхвърлихте поканата"</string>
   <string name="state_event_room_remove">"%1$s премахна %2$s"</string>

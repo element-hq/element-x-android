@@ -25,7 +25,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 已读"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"点击以显示全部"</string>
-  <string name="a11y_remove_reaction_with">"撤回反应 %1$s"</string>
+  <string name="a11y_remove_reaction">"撤回反应 %1$s"</string>
   <string name="a11y_send_files">"发送文件"</string>
   <string name="a11y_show_password">"显示密码"</string>
   <string name="a11y_start_call">"开始通话"</string>
@@ -58,6 +58,7 @@
   <string name="action_deactivate">"停用"</string>
   <string name="action_deactivate_account">"停用账户"</string>
   <string name="action_decline">"拒绝"</string>
+  <string name="action_decline_and_block">"拒绝并屏蔽"</string>
   <string name="action_delete_poll">"删除投票"</string>
   <string name="action_disable">"禁用"</string>
   <string name="action_discard">"丢弃"</string>
@@ -103,8 +104,11 @@
   <string name="action_remove_message">"删除消息"</string>
   <string name="action_reply">"回复"</string>
   <string name="action_reply_in_thread">"在消息列中回复"</string>
+  <string name="action_report">"举报"</string>
   <string name="action_report_bug">"报告错误"</string>
   <string name="action_report_content">"举报内容"</string>
+  <string name="action_report_dm">"举报对话"</string>
+  <string name="action_report_room">"举报房间"</string>
   <string name="action_reset">"重置"</string>
   <string name="action_reset_identity">"重置身份"</string>
   <string name="action_retry">"重试"</string>
@@ -216,6 +220,7 @@
   <string name="common_permalink">"固定链接"</string>
   <string name="common_permission">"权限"</string>
   <string name="common_pinned">"已置顶"</string>
+  <string name="common_please_check_internet_connection">"请检查 Internet 连接"</string>
   <string name="common_please_wait">"请稍候……"</string>
   <string name="common_poll_end_confirmation">"确定要结束这个投票吗？"</string>
   <string name="common_poll_summary">"投票：%1$s"</string>
@@ -230,6 +235,9 @@
   <string name="common_reason">"理由"</string>
   <string name="common_recovery_key">"恢复密钥"</string>
   <string name="common_refreshing">"正在刷新…"</string>
+  <plurals name="common_replies">
+    <item quantity="other">"%1$d 个回复"</item>
+  </plurals>
   <string name="common_replying_to">"正在回复 %1$s"</string>
   <string name="common_report_a_bug">"报告错误"</string>
   <string name="common_report_a_problem">"报告问题"</string>
@@ -255,6 +263,7 @@
   <string name="common_shared_location">"共享位置"</string>
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"发生了一些错误"</string>
+  <string name="common_something_went_wrong_message">"我们遇到了一个问题。请重试。"</string>
   <string name="common_starting_chat">"开始聊天…"</string>
   <string name="common_sticker">"贴纸"</string>
   <string name="common_success">"成功"</string>
@@ -299,6 +308,8 @@
 
 确定要继续吗？"</string>
   <string name="dialog_confirm_link_title">"请再次确认链接"</string>
+  <string name="dialog_room_reported">"已举报房间"</string>
+  <string name="dialog_room_reported_and_left">"举报并离开房间"</string>
   <string name="dialog_title_confirmation">"确认"</string>
   <string name="dialog_title_error">"错误"</string>
   <string name="dialog_title_success">"成功"</string>

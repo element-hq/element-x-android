@@ -26,7 +26,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Citit de%1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Atingeți pentru a le afișa pe toate"</string>
-  <string name="a11y_remove_reaction_with">"Îndepărtați reacția cu %1$s"</string>
+  <string name="a11y_remove_reaction">"Îndepărtați reacția cu %1$s"</string>
   <string name="a11y_send_files">"Trimiteți fișiere"</string>
   <string name="a11y_show_password">"Afișați parola"</string>
   <string name="a11y_start_call">"Începeți un apel"</string>

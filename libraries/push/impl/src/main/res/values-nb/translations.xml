@@ -13,7 +13,7 @@
     <item quantity="one">"%d varsel"</item>
     <item quantity="other">"%d varsler"</item>
   </plurals>
-  <string name="notification_fallback_content">"Varsel"</string>
+  <string name="notification_fallback_content">"Du har nye meldinger."</string>
   <string name="notification_incoming_call">"📹 Innkommende anrop"</string>
   <string name="notification_inline_reply_failed">"** Kunne ikke sende - vennligst åpne rommet"</string>
   <string name="notification_invitation_action_join">"Bli med"</string>

@@ -25,7 +25,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 已讀"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"點擊以顯示全部"</string>
-  <string name="a11y_remove_reaction_with">"移除 %1$s 的反應"</string>
+  <string name="a11y_remove_reaction">"移除 %1$s 的反應"</string>
   <string name="a11y_send_files">"傳送檔案"</string>
   <string name="a11y_show_password">"顯示密碼"</string>
   <string name="a11y_start_call">"開始通話"</string>

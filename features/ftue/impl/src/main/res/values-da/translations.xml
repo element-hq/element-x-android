@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Kan ikke bekræfte?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Opret en ny gendannelsesnøgle"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verificér denne enhed for at konfigurere sikre meddelelser."</string>
+  <string name="screen_identity_confirmation_title">"Bekræft din identitet"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Brug en anden enhed"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Brug gendannelsesnøgle"</string>
+  <string name="screen_identity_confirmed_subtitle">"Nu kan du læse eller sende beskeder sikkert, og enhver du samtaler med kan også stole på denne enhed."</string>
+  <string name="screen_identity_confirmed_title">"Enhed verificeret"</string>
+  <string name="screen_identity_use_another_device">"Brug en anden enhed"</string>
+  <string name="screen_identity_waiting_on_other_device">"Venter på en anden enhed…"</string>
+  <string name="screen_notification_optin_subtitle">"Du kan ændre dine indstillinger senere."</string>
+  <string name="screen_notification_optin_title">"Tillad notifikationer, og gå aldrig glip af en besked"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Indtast gendannelsesnøgle"</string>
+  <string name="screen_welcome_bullet_1">"Opkald, afstemninger, søgninger og mere vil blive tilføjet senere på året."</string>
+  <string name="screen_welcome_bullet_2">"Beskedhistorik for krypterede rum er ikke tilgængelig endnu."</string>
+  <string name="screen_welcome_bullet_3">"Vi vil meget gerne høre fra dig. Fortæl os din mening via indstillingssiden."</string>
+  <string name="screen_welcome_button">"Lad os komme i gang!"</string>
+  <string name="screen_welcome_subtitle">"Her er, hvad du har brug for at vide:"</string>
+  <string name="screen_welcome_title">"Velkommen til %1$s!"</string>
+</resources>

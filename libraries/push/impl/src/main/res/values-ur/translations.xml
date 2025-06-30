@@ -13,7 +13,6 @@
     <item quantity="one">"%d اطلاع"</item>
     <item quantity="other">"%d اطلاعات"</item>
   </plurals>
-  <string name="notification_fallback_content">"اطلاع"</string>
   <string name="notification_incoming_call">"📹 آنے والا مکالمہ"</string>
   <string name="notification_inline_reply_failed">"** بھیجنے میں ناکام - براہ کرم کمرہ کھولیں"</string>
   <string name="notification_invitation_action_join">"شامل ہوں"</string>

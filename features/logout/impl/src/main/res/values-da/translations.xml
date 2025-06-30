@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Er du sikker på, at du vil logge ud?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Log ud"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Log ud"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Logger ud…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Du er ved at logge ud af din sidste session. Hvis du logger ud nu, mister du adgangen til dine krypterede meddelelser."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Du har slået sikkerhedskopiering fra"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Dine nøgler blev stadig sikkerhedskopieret, da du gik offline. Opret forbindelse igen, så dine nøgler kan sikkerhedskopieres, før du logger ud."</string>
+  <string name="screen_signout_key_backup_offline_title">"Dine nøgler bliver stadig sikkerhedskopieret"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Vent på, at dette er fuldført, før du logger ud."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Dine nøgler bliver stadig sikkerhedskopieret"</string>
+  <string name="screen_signout_preference_item">"Log ud"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Du er ved at logge ud af din sidste session. Hvis du logger af nu, mister du adgangen til dine krypterede meddelelser."</string>
+  <string name="screen_signout_recovery_disabled_title">"Gendannelse er ikke konfigureret"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Du er ved at logge ud af din sidste session. Hvis du logger af nu, kan du miste adgangen til dine krypterede meddelelser."</string>
+  <string name="screen_signout_save_recovery_key_title">"Har du gemt din gendannelsesnøgle?"</string>
+</resources>

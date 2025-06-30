@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Melléklet hozzáadása"</string>
   <string name="rich_text_editor_bullet_list">"Felsorolás be/ki"</string>
-  <string name="rich_text_editor_close_formatting_options">"Formázási beállítások bezárása"</string>
+  <string name="rich_text_editor_close_formatting_options">"Mégse, és a formázási beállítások bezárása"</string>
   <string name="rich_text_editor_code_block">"Kódblokk be/ki"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Felirat hozzáadása…"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Titkosított üzenet…"</string>

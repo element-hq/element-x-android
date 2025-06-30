@@ -35,7 +35,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Wedi\'i ddarllen gan %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tapio i ddangos y cyfan"</string>
-  <string name="a11y_remove_reaction_with">"Wedi dileu adwaith gyda %1$s"</string>
+  <string name="a11y_remove_reaction">"Wedi dileu adwaith gyda %1$s"</string>
   <string name="a11y_send_files">"Anfon ffeiliau"</string>
   <string name="a11y_show_password">"Dangos y cyfrinair"</string>
   <string name="a11y_start_call">"Cychwyn galwad"</string>

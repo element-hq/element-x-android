@@ -42,6 +42,10 @@
     <item quantity="one">"%1$d rumsändring"</item>
     <item quantity="other">"%1$d rumsändringar"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Hoppa till nytt rum"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Det här rummet har ersatts och är inte längre aktivt"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Se gamla meddelanden"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Det här rummet är en fortsättning på ett annat rum"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s och %3$d annan"</item>
     <item quantity="other">"%1$s, %2$s och %3$d andra"</item>

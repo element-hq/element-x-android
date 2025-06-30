@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Ja, acceptér alle"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Er du sikker på, at du vil acceptere alle anmodninger om at deltage?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Acceptér alle anmodninger"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Acceptér alle"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Vi kunne ikke acceptere alle anmodninger. Vil du prøve igen?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Kunne ikke acceptere alle anmodninger"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Accepterer alle anmodninger om at deltage"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Vi kunne ikke acceptere denne anmodning. Vil du prøve igen?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Kunne ikke acceptere anmodningen"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Accepterer anmodning om at deltage"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ja, afvis og spær"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Er du sikker på, at du vil afvise og spærre %1$s? Denne bruger vil ikke kunne anmode om adgang til at deltage i dette rum igen."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Afvis og spær for deres adgang til rummet"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Afviser og spærrer for adgang"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ja, afvis"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Er du sikker på, at du vil afvise %1$ss anmodning om at deltage i dette rum?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Afvis adgang"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Afvis og spær"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Vi kunne ikke afvise denne anmodning. Vil du prøve igen?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Anmodningen kunne ikke afvises"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Afviser anmodning om at deltage"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Når nogen beder om at deltage i rummet, kan du se deres anmodning her."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Ingen ventende anmodning om at deltage"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Indlæser anmodninger om at deltage…"</string>
+  <string name="screen_knock_requests_list_title">"Anmodninger om at deltage"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s + %2$d anden ønsker at deltage i dette rum"</item>
+    <item quantity="other">"%1$s + %2$d andre ønsker at deltage i dette rum"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Se alle"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Accepter"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s ønsker at deltage i dette rum"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Se"</string>
+</resources>

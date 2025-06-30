@@ -24,7 +24,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Okuyan %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tümünü göstermek için dokunun"</string>
-  <string name="a11y_remove_reaction_with">"Tepkimeyi kaldır %1$s"</string>
+  <string name="a11y_remove_reaction">"Tepkimeyi kaldır %1$s"</string>
   <string name="a11y_send_files">"Dosyaları gönder"</string>
   <string name="a11y_show_password">"Şifreyi göster"</string>
   <string name="a11y_start_call">"Bir arama başlatın"</string>

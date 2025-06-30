@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Ajouter une pièce jointe"</string>
   <string name="rich_text_editor_bullet_list">"Afficher une liste à puces"</string>
-  <string name="rich_text_editor_close_formatting_options">"Fermer les options de formatage"</string>
+  <string name="rich_text_editor_close_formatting_options">"Annuler et fermer les options de formatage"</string>
   <string name="rich_text_editor_code_block">"Afficher le bloc de code"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Légende facultative…"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Message chiffré…"</string>

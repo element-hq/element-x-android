@@ -22,7 +22,7 @@
   <string name="a11y_read_receipts_multiple">"خوانده به دست %1$s و %2$s"</string>
   <string name="a11y_read_receipts_single">"خوانده به دست %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"زدن برای نمایش همه"</string>
-  <string name="a11y_remove_reaction_with">"برداشتن واکنش با %1$s"</string>
+  <string name="a11y_remove_reaction">"برداشتن واکنش با %1$s"</string>
   <string name="a11y_send_files">"ارسال پرونده‌ها"</string>
   <string name="a11y_show_password">"نمایش گذرواژه"</string>
   <string name="a11y_start_call">"آغاز یک تماس"</string>

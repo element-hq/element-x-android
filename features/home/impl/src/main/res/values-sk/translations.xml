@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Vypnite optimalizáciu batérie pre túto aplikáciu, aby ste sa uistili, že sú prijaté všetky upozornenia."</string>
+  <string name="banner_battery_optimization_submit_android">"Zakázať optimalizáciu"</string>
+  <string name="banner_battery_optimization_title_android">"Oznámenia neprichádzajú?"</string>
   <string name="banner_set_up_recovery_content">"Vytvorte nový kľúč na obnovenie, ktorý môžete použiť na obnovenie vašej histórie šifrovaných správ v prípade straty prístupu k vašim zariadeniam."</string>
   <string name="banner_set_up_recovery_submit">"Nastaviť obnovenie"</string>
   <string name="banner_set_up_recovery_title">"Nastaviť obnovenie"</string>
@@ -18,6 +21,7 @@
   <string name="screen_migration_message">"Ide o jednorazový proces, ďakujeme za trpezlivosť."</string>
   <string name="screen_migration_title">"Nastavenie vášho účtu."</string>
   <string name="screen_roomlist_a11y_create_message">"Vytvorte novú konverzáciu alebo miestnosť"</string>
+  <string name="screen_roomlist_clear_filters">"Vyčistiť filtre"</string>
   <string name="screen_roomlist_empty_message">"Začnite tým, že niekomu pošlete správu."</string>
   <string name="screen_roomlist_empty_title">"Zatiaľ žiadne konverzácie."</string>
   <string name="screen_roomlist_filter_favourites">"Obľúbené"</string>
@@ -40,6 +44,7 @@ Nemáte žiadne neprečítané správy!"</string>
   <string name="screen_roomlist_main_space_title">"Všetky konverzácie"</string>
   <string name="screen_roomlist_mark_as_read">"Označiť ako prečítané"</string>
   <string name="screen_roomlist_mark_as_unread">"Označiť ako neprečítané"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Táto miestnosť bola aktualizovaná"</string>
   <string name="session_verification_banner_message">"Vyzerá to tak, že používate nové zariadenie. Overte svoj prístup k zašifrovaným správam pomocou vášho druhého zariadenia."</string>
   <string name="session_verification_banner_title">"Overte, že ste to vy"</string>
 </resources>

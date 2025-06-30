@@ -7,7 +7,7 @@
   <string name="screen_deactivate_account_description_bold_part">"μη αναστρέψιμο"</string>
   <string name="screen_deactivate_account_list_item_1">"%1$s τον λογαριασμό σου (δεν μπορείς να συνδεθείς ξανά και το αναγνωριστικό σου δεν μπορεί να επαναχρησιμοποιηθεί)."</string>
   <string name="screen_deactivate_account_list_item_1_bold_part">"Μόνιμη απενεργοποίηση"</string>
-  <string name="screen_deactivate_account_list_item_2">"Σε αφαιρέσει από όλα τα δωμάτια συνομιλίας."</string>
+  <string name="screen_deactivate_account_list_item_2">"Αποχώρησή σας από όλες τις αίθουσες συνομιλίας."</string>
   <string name="screen_deactivate_account_list_item_3">"Διαγράψει τα στοιχεία του λογαριασμού σου από τον διακομιστή ταυτότητάς μας."</string>
   <string name="screen_deactivate_account_list_item_4">"Τα μηνύματά σου θα εξακολουθούν να είναι ορατά στους εγγεγραμμένους χρήστες, αλλά δεν θα είναι διαθέσιμα σε νέους ή μη εγγεγραμμένους χρήστες εάν επιλέξεις να τα διαγράψεις."</string>
   <string name="screen_deactivate_account_title">"Απενεργοποίηση λογαριασμού"</string>

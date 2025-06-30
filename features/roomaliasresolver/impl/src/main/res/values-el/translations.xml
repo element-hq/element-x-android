@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_loading_alert_title">"Δεν μπορέσαμε να εμφανίσουμε αυτήν την προεπισκόπηση δωματίου"</string>
-  <string name="screen_room_alias_resolver_resolve_alias_failure">"Αποτυχία επίλυσης ψευδωνύμου δωματίου."</string>
+  <string name="screen_join_room_loading_alert_title">"Δεν μπορέσαμε να εμφανίσουμε αυτή την προεπισκόπηση αίθουσας"</string>
+  <string name="screen_room_alias_resolver_resolve_alias_failure">"Αποτυχία επίλυσης του ψευδώνυμου αίθουσας."</string>
 </resources>

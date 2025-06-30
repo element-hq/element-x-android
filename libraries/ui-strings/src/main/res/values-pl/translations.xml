@@ -29,7 +29,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Odczytane przez %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Stuknij, aby pokazać wszystkich"</string>
-  <string name="a11y_remove_reaction_with">"Usuń reakcję %1$s"</string>
+  <string name="a11y_remove_reaction">"Usuń reakcję %1$s"</string>
   <string name="a11y_send_files">"Wyślij pliki"</string>
   <string name="a11y_show_password">"Pokaż hasło"</string>
   <string name="a11y_start_call">"Rozpocznij rozmowę"</string>

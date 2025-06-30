@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Du vil ikke se nogen beskeder eller rum-invitationer fra denne bruger"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Bloker bruger"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Anmeld dette rum til din kontoudbyder."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Beskriv årsagen til anmeldelsen…"</string>
+  <string name="screen_decline_and_block_title">"Afvis og blokér"</string>
+  <string name="screen_invites_decline_chat_message">"Er du sikker på, at du vil afvise invitationen til at deltage i %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Afvis invitation"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Er du sikker på, at du vil afvise denne private samtale med %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Afvis samtale"</string>
+  <string name="screen_invites_empty_list">"Ingen invitationer"</string>
+  <string name="screen_invites_invited_you">"%1$s(%2$s ) inviterede dig"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ja, afvis og blokér"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Er du sikker på, at du vil afvise invitationen til at deltage i dette rum? Dette forhindrer også %1$s i at kontakte dig eller invitere dig til andre rum."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Afvis invitation og blokér"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Afvis og blokér"</string>
+</resources>

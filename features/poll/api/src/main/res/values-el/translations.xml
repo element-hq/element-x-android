@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="a11y_polls_percent_of_total">
+    <item quantity="one">"%1$d τοις εκατό των συνολικών ψήφων"</item>
+    <item quantity="other">"%1$d τοις εκατό του συνόλου των ψήφων"</item>
+  </plurals>
+  <string name="a11y_polls_winning_answer">"Αυτή είναι η νικητήρια απάντηση"</string>
+</resources>

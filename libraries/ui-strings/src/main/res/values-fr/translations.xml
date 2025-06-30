@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Ajouter une réaction: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Supprimer"</string>
   <plurals name="a11y_digits_entered">
@@ -27,11 +28,13 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Lu par %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Taper pour voir toute la liste"</string>
+  <string name="a11y_remove_reaction">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_remove_reaction_with">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
+  <string name="a11y_view_avatar">"Voir l’avatar"</string>
   <string name="a11y_view_details">"Afficher les détails"</string>
   <string name="a11y_voice_message">"Message vocal, durée: %1$s"</string>
   <string name="a11y_voice_message_record">"Enregistrer un message vocal."</string>
@@ -138,9 +141,6 @@
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
   <string name="action_yes_try_again">"Oui, réessayez"</string>
-  <string name="banner_battery_optimization_content_android">"Désactivez l’optimisation de la batterie pour cette application afin de vous assurer que toutes les notifications sont reçues."</string>
-  <string name="banner_battery_optimization_submit_android">"Désactiver l’optimisation"</string>
-  <string name="banner_battery_optimization_title_android">"Ils vous manque des notifications?"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l’ancien protocole sera supprimé."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Mise à niveau disponible"</string>
   <string name="common_about">"À propos"</string>
@@ -244,6 +244,9 @@ Raison : %1$s."</string>
   <string name="common_reason">"Raison"</string>
   <string name="common_recovery_key">"Clé de récupération"</string>
   <string name="common_refreshing">"Actualisation…"</string>
+  <plurals name="common_replies">
+    <item quantity="other">"%1$d réponses"</item>
+  </plurals>
   <string name="common_replying_to">"En réponse à %1$s"</string>
   <string name="common_report_a_bug">"Signaler un problème"</string>
   <string name="common_report_a_problem">"Remonter un problème"</string>
@@ -329,6 +332,7 @@ Raison : %1$s."</string>
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>
   <string name="error_failed_locating_user">"%1$s n’a pas pu accéder à votre position. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_uploading_voice_message">"Échec lors de l’envoi du message vocal."</string>
+  <string name="error_invalid_invite">"Ce salon n’existe plus ou l’invitation n’est plus valable."</string>
   <string name="error_message_not_found">"Message introuvable"</string>
   <string name="error_missing_location_auth_android">"%1$s n’est pas autorisé à accéder à votre position. Vous pouvez activer l’accès dans les Paramètres."</string>
   <string name="error_missing_location_rationale_android">"%1$s n’est pas autorisé à accéder à votre position. Activez l’accès ci-dessous."</string>
@@ -349,6 +353,10 @@ Raison : %1$s."</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Options"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Supprimer %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Paramètres"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_caption_warning">"Les légendes peuvent ne pas être visibles pour les utilisateurs d’anciennes applications."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
@@ -373,17 +381,14 @@ Raison : %1$s."</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
   <string name="screen_room_event_pill">"Message dans %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Développer"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Réduire"</string>
+  <string name="screen_room_permalink_same_room_android">"Vous êtes déjà dans ce salon!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s sur %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messages épinglés"</string>
   <string name="screen_room_pinned_banner_loading_description">"Chargement du message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Voir tout"</string>
-  <string name="screen_room_timeline_tombstoned_room_action">"Aller dans le nouveau salon"</string>
-  <string name="screen_room_timeline_tombstoned_room_message">"Ce salon a été remplacé et n’est plus actif"</string>
-  <string name="screen_room_timeline_upgraded_room_action">"Voir les anciens messages"</string>
-  <string name="screen_room_timeline_upgraded_room_message">"Ce salon est la continuation du salon précédent"</string>
   <string name="screen_room_title">"Discussion"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Demande de rejoindre le salon envoyée"</string>
-  <string name="screen_roomlist_tombstoned_room_description">"Ce salon a été mis à niveau."</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>

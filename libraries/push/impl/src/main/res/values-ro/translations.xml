@@ -13,7 +13,6 @@
     <item quantity="one">"%d notificare"</item>
     <item quantity="other">"%d notificări"</item>
   </plurals>
-  <string name="notification_fallback_content">"Notificare"</string>
   <string name="notification_incoming_call">"Apel primit"</string>
   <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
   <string name="notification_invitation_action_join">"Alăturați-vă"</string>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Du blev spærret fra dette rum af %1$s."</string>
+  <string name="screen_join_room_ban_message">"Du blev spærret fra dette rum"</string>
+  <string name="screen_join_room_ban_reason">"Årsag: %1$s."</string>
+  <string name="screen_join_room_cancel_knock_action">"Annuller anmodning"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Ja, annullér"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Er du sikker på, at du vil annullere din anmodning om at deltage i dette rum?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Annullér anmodning om at deltage"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ja, afvis og blokér"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Er du sikker på, at du vil afvise invitationen til at deltage i dette rum? Dette forhindrer også %1$s i at kontakte dig eller invitere dig til andre rum."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Afvis invitation og blokér"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Afvis og blokér"</string>
+  <string name="screen_join_room_fail_message">"Deltagelse i rummet fejlede."</string>
+  <string name="screen_join_room_fail_reason">"Dette rum er enten kun for gæster, eller der kan være sat begrænsninger for adgangen på klyngeniveau."</string>
+  <string name="screen_join_room_forget_action">"Glem dette rum"</string>
+  <string name="screen_join_room_invite_required_message">"Du har brug for en invitation for at deltage i dette rum"</string>
+  <string name="screen_join_room_join_action">"Deltag i rummet"</string>
+  <string name="screen_join_room_join_restricted_message">"Du skal muligvis være inviteret eller være medlem af en klynge for at deltage."</string>
+  <string name="screen_join_room_knock_action">"Send anmodning om at deltage"</string>
+  <string name="screen_join_room_knock_message_description">"Besked (valgfrit)"</string>
+  <string name="screen_join_room_knock_sent_description">"Du vil modtage en invitation til at deltage i rummet, hvis din anmodning accepteres."</string>
+  <string name="screen_join_room_knock_sent_title">"Anmodning om at deltage sendt"</string>
+  <string name="screen_join_room_loading_alert_message">"Vi kunne ikke forhåndsvise rummet. Dette kan skyldes netværks- eller serverproblemer."</string>
+  <string name="screen_join_room_loading_alert_title">"Vi kunne ikke forhåndsvise rummet"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s understøtter ikke klynger endnu. Du kan få adgang til klynger på nettet."</string>
+  <string name="screen_join_room_space_not_supported_title">"Klynger er ikke understøttet endnu"</string>
+  <string name="screen_join_room_subtitle_knock">"Klik på knappen nedenfor, og en rumadministrator vil blive underrettet. Du kan deltage i samtalen, når din anmodning er godkendt."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Du skal være medlem af dette rum for at kunne se meddelelseshistorikken."</string>
+  <string name="screen_join_room_title_knock">"Vil du deltage i dette rum?"</string>
+  <string name="screen_join_room_title_no_preview">"Forhåndsvisning er ikke tilgængelig"</string>
+</resources>

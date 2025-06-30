@@ -29,7 +29,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Прочитано %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Нажмите, чтобы показать все"</string>
-  <string name="a11y_remove_reaction_with">"Удалить реакцию с %1$s"</string>
+  <string name="a11y_remove_reaction">"Удалить реакцию с %1$s"</string>
   <string name="a11y_send_files">"Отправить файлы"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
@@ -377,13 +377,7 @@
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Закрепленные сообщения"</string>
   <string name="screen_room_pinned_banner_loading_description">"Загрузка сообщения…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Посмотреть все"</string>
-  <string name="screen_room_timeline_tombstoned_room_action">"Перейти в новую комнату"</string>
-  <string name="screen_room_timeline_tombstoned_room_message">"Эта комната была заменена и больше не активна"</string>
-  <string name="screen_room_timeline_upgraded_room_action">"Посмотреть старые сообщения"</string>
-  <string name="screen_room_timeline_upgraded_room_message">"Эта комната является продолжением другой комнаты"</string>
   <string name="screen_room_title">"Чат"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Запрос на присоединение отправлен"</string>
-  <string name="screen_roomlist_tombstoned_room_description">"Эта комната была обновлена"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
   <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>

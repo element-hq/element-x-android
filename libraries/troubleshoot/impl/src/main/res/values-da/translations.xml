@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"Push-historik"</string>
+  <string name="troubleshoot_notifications_screen_action">"Kør test"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Kør test igen"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Nogle tests mislykkedes. Tjek venligst detaljerne."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Kør testene for at registrere de problemer i din konfiguration, der kan medføre, at meddelelser ikke opfører sig som forventet."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Forsøg på at reparere"</string>
+  <string name="troubleshoot_notifications_screen_success">"Alle tests bestået med succes."</string>
+  <string name="troubleshoot_notifications_screen_title">"Fejlfinding af meddelelser"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Nogle tests kræver din opmærksomhed. Tjek venligst detaljerne."</string>
+</resources>

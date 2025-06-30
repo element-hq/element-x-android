@@ -35,14 +35,30 @@
   <string name="screen_room_timeline_less_reactions">"Показувати менше"</string>
   <string name="screen_room_timeline_message_copied">"Повідомлення скопійовано"</string>
   <string name="screen_room_timeline_no_permission_to_post">"У вас немає дозволу на публікацію в цій кімнаті"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"%1$d учасник відреагував з %2$s"</item>
+    <item quantity="few">"%1$d учасники відреагували з %2$s"</item>
+    <item quantity="many">"%1$d учасників відреагували з %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"Ви та ще %1$d учасник відреагували з %2$s"</item>
+    <item quantity="few">"Ви та ще %1$d учасники відреагували з %2$s"</item>
+    <item quantity="many">"Ви та ще %1$d учасників відреагували з %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"Ви відреагували за допомогою %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Показувати менше"</string>
   <string name="screen_room_timeline_reactions_show_more">"Показати більше"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Показати підсумок реакцій"</string>
   <string name="screen_room_timeline_read_marker_title">"Нове"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d зміна в кімнаті"</item>
     <item quantity="few">"%1$d зміни в кімнаті"</item>
     <item quantity="many">"%1$d змін у кімнаті"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Перейти до нової кімнати"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Цю кімнату замінили, і вона більше не активна."</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Перегляд давніших повідомлень"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Ця кімната є продовженням іншої кімнати"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s%2$s та %3$d інший"</item>
     <item quantity="few">"%1$s%2$s та %3$d інші"</item>

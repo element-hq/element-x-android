@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Για να διασφαλίσεις ότι δεν θα χάσεις ποτέ μια σημαντική κλήση, άλλαξε τις ρυθμίσεις σου για να επιτρέψεις τις ειδοποιήσεις πλήρους οθόνης όταν το τηλέφωνό σου είναι κλειδωμένο."</string>
+  <string name="full_screen_intent_banner_message">"Για να διασφαλίσετε ότι δεν θα χάσετε ποτέ μια σημαντική κλήση, αλλάξτε τις ρυθμίσεις σας ώστε να επιτρέπονται οι ειδοποιήσεις πλήρους οθόνης όταν το τηλέφωνό σας είναι κλειδωμένο."</string>
   <string name="full_screen_intent_banner_title">"Βελτίωσε την εμπειρία κλήσεων"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Επέλεξε τον τρόπο λήψης ειδοποιήσεων"</string>
   <string name="screen_advanced_settings_developer_mode">"Λειτουργία προγραμματιστή"</string>
@@ -8,7 +8,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"Προσαρμοσμένο URL βάσης κλήσεων Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Όρισε μια προσαρμοσμένη διεύθυνση βάσης URL για κλήση Element."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Μη έγκυρη διεύθυνση URL, βεβαιώσου ότι έχεις συμπεριλάβει το πρωτόκολλο (http/https) και τη σωστή διεύθυνση."</string>
-  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Απόκρυψη εικόνων προφίλ σε αιτήματα πρόσκλησης δωματίου"</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Απόκρυψη εικόνων προφίλ σε αιτήματα πρόσκλησης αίθουσας"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Απόκρυψη προεπισκοπήσεων πολυμέσων στο timeline"</string>
   <string name="screen_advanced_settings_media_compression_description">"Ανέβασε φωτογραφίες και βίντεο γρηγορότερα και μείωσε τη χρήση δεδομένων"</string>
   <string name="screen_advanced_settings_media_compression_title">"Βελτιστοποίηση ποιότητας των μέσων"</string>
@@ -21,7 +21,7 @@
   <string name="screen_advanced_settings_share_presence_description">"Εάν απενεργοποιηθεί, δεν θα μπορείς να στέλνεις ή να λαμβάνεις αποδεικτικά ανάγνωσης ή ειδοποιήσεις πληκτρολόγησης."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Πάντα απόκρυψη"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Πάντα εμφάνιση"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Σε ιδιωτικά δωμάτια"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Σε ιδιωτικές αίθουσες"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ένα κρυφό πολυμέσο μπορεί πάντα να εμφανιστεί πατώντας το"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Εμφάνιση πολυμέσων στο timeline"</string>
   <string name="screen_advanced_settings_view_source_description">"Ενεργοποίησε την επιλογή για προβολή πηγής μηνυμάτων στη ροή."</string>
@@ -53,7 +53,7 @@
   <string name="screen_notification_settings_failed_fixing_configuration">"Η διαμόρφωση δεν έχει διορθωθεί, δοκίμασε ξανά."</string>
   <string name="screen_notification_settings_group_chats">"Ομαδικές συνομιλίες"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Προσκλήσεις"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Ο οικιακός διακομιστής σου δεν υποστηρίζει αυτήν την επιλογή σε κρυπτογραφημένα δωμάτια, ενδέχεται να μην λάβεις ειδοποίηση σε ορισμένα δωμάτια."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Ο αρχικός διακομιστής σας δεν υποστηρίζει αυτή την επιλογή σε κρυπτογραφημένες αίθουσες, ενδέχεται να μην λαμβάνετε ειδοποιήσεις σε ορισμένες αίθουσες."</string>
   <string name="screen_notification_settings_mentions_section_title">"Αναφορές"</string>
   <string name="screen_notification_settings_mode_all">"Όλα"</string>
   <string name="screen_notification_settings_mode_mentions">"Αναφορές"</string>

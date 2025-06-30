@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="call_foreground_service_channel_title_android">"Igangværende opkald"</string>
+  <string name="call_foreground_service_message_android">"Tryk for at vende tilbage til opkaldet"</string>
+  <string name="call_foreground_service_title_android">"☎️ Opkald i gang"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Call understøtter desværre ikke brug af Bluetooth-lydenheder i denne Android-version. Vælg venligst en anden lydenhed."</string>
+  <string name="screen_incoming_call_subtitle_android">"Indgående Element opkald"</string>
+</resources>

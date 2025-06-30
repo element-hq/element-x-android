@@ -2,7 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Anhang hinzufügen"</string>
   <string name="rich_text_editor_bullet_list">"Aufzählungsliste umschalten"</string>
-  <string name="rich_text_editor_close_formatting_options">"Formatierungsoptionen schließen"</string>
   <string name="rich_text_editor_code_block">"Codeblock umschalten"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Bildunterschrift hinzufügen"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Verschlüsselte Nachricht…"</string>

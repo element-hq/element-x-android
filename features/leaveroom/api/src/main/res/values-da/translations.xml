@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Er du sikker på, at du vil forlade denne samtale? Denne samtale er ikke offentlig, og du kan ikke deltage igen uden en invitation."</string>
+  <string name="leave_room_alert_empty_subtitle">"Er du sikker på, at du vil forlade dette rum? Du er den eneste person her. Hvis du går, vil ingen kunne tilslutte sig det i fremtiden, heller ikke dig."</string>
+  <string name="leave_room_alert_private_subtitle">"Er du sikker på, at du vil forlade dette rum? Rummet er ikke offentligt, så du vil ikke kunne deltage igen uden en invitation."</string>
+  <string name="leave_room_alert_subtitle">"Er du sikker på, at du ønsker at forlade rummet?"</string>
+</resources>

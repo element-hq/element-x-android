@@ -3,5 +3,6 @@
   <string name="call_foreground_service_channel_title_android">"Probíhající hovor"</string>
   <string name="call_foreground_service_message_android">"Klepněte pro návrat k hovoru"</string>
   <string name="call_foreground_service_title_android">"☎️ Probíhá hovor"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Call nepodporuje používání Bluetooth zvukových zařízení v této verzi systému Android. Vyberte jiné zvukové zařízení."</string>
   <string name="screen_incoming_call_subtitle_android">"Příchozí Element Call"</string>
 </resources>

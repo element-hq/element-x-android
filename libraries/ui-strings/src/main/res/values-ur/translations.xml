@@ -24,7 +24,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s نے پڑھا"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"سب دکھانے کے لیے تھپتھپائیں"</string>
-  <string name="a11y_remove_reaction_with">"%1$s کے ساتھ رد عمل ہٹائیں"</string>
+  <string name="a11y_remove_reaction">"%1$s کے ساتھ رد عمل ہٹائیں"</string>
   <string name="a11y_send_files">"مسلیں بھیجیں"</string>
   <string name="a11y_show_password">"لفظ عبور دکھائیں"</string>
   <string name="a11y_start_call">"مکالمہ شروع کریں"</string>

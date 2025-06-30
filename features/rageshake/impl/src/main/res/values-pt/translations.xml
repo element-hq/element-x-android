@@ -10,6 +10,7 @@
   <string name="screen_bug_report_error_description_too_short">"A descrição é demasiado curta. Por favor dá mais detalhes sobre o que aconteceu. Obrigado!"</string>
   <string name="screen_bug_report_include_crash_logs">"Enviar registos de falha"</string>
   <string name="screen_bug_report_include_logs">"Permitir registos"</string>
+  <string name="screen_bug_report_include_logs_error">"Os teus registos são excessivamente grandes e não podem ser incluídos neste relatório, por favor envia-no-los de outra forma."</string>
   <string name="screen_bug_report_include_screenshot">"Enviar captura de ecrã"</string>
   <string name="screen_bug_report_logs_description">"Os registos serão incluídos na tua mensagem para garantir que tudo está a funcionar corretamente. Para enviares a tua mensagem sem registos, desativa esta definição."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"A %1$s teve uma falha da última vez que foi utilizada. Gostarias de partilhar um relatório de acidente connosco?"</string>

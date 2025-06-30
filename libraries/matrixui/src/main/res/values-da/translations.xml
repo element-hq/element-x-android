@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Send invitation"</string>
+  <string name="screen_bottom_sheet_create_dm_message">"Kunne du tænke dig at starte en samtale med %1$s?"</string>
+  <string name="screen_bottom_sheet_create_dm_title">"Send invitation?"</string>
+  <string name="screen_invites_invited_you">"%1$s(%2$s ) inviterede dig"</string>
+</resources>

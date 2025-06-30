@@ -89,5 +89,6 @@
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix — це відкрита мережа для безпечної, децентралізованої комунікації."</string>
   <string name="screen_server_confirmation_message_register">"Тут розміщуватимуться ваші розмови — так само як у поштовій скриньці для зберігання своїх електронних листів."</string>
   <string name="screen_server_confirmation_title_login">"Ви збираєтесь увійти в %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Вибір постачальника облікового запису"</string>
   <string name="screen_server_confirmation_title_register">"Ви збираєтеся створити обліковий запис на %1$s"</string>
 </resources>

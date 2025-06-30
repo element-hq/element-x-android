@@ -27,7 +27,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Leído por %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Pulsa para mostrar todo"</string>
-  <string name="a11y_remove_reaction_with">"Elimina la reacción con %1$s"</string>
+  <string name="a11y_remove_reaction">"Elimina la reacción con %1$s"</string>
   <string name="a11y_send_files">"Enviar archivos"</string>
   <string name="a11y_show_password">"Mostrar contraseña"</string>
   <string name="a11y_start_call">"Iniciar llamada"</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Reageeri: %1$s"</string>
   <string name="a11y_avatar">"Tunnuspilt"</string>
   <string name="a11y_delete">"Kustuta"</string>
   <plurals name="a11y_digits_entered">
@@ -27,11 +28,13 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Seda luges %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Vaata kõiki"</string>
-  <string name="a11y_remove_reaction_with">"Eemalda reageerimine %1$s emotikoniga"</string>
+  <string name="a11y_remove_reaction">"Eemalda reageerimine %1$s emotikoniga"</string>
+  <string name="a11y_remove_reaction_with">"Eemalda reageerimine: %1$s"</string>
   <string name="a11y_send_files">"Saada faile"</string>
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
+  <string name="a11y_view_avatar">"Vaata tunnuspilti"</string>
   <string name="a11y_view_details">"Vaata üksikasju"</string>
   <string name="a11y_voice_message">"Häälsõnum, kestus:%1$s"</string>
   <string name="a11y_voice_message_record">"Salvesta häälsõnum."</string>
@@ -144,6 +147,7 @@
   <string name="common_acceptable_use_policy">"Vastuvõetava kasutamise põhimõtted"</string>
   <string name="common_adding_caption">"Lisame selgitust"</string>
   <string name="common_advanced_settings">"Täiendavad seadistused"</string>
+  <string name="common_an_image">"pilt"</string>
   <string name="common_analytics">"Analüütika"</string>
   <string name="common_appearance">"Välimus"</string>
   <string name="common_audio">"Heli"</string>
@@ -240,6 +244,10 @@ Põhjus: %1$s."</string>
   <string name="common_reason">"Põhjus"</string>
   <string name="common_recovery_key">"Taastevõti"</string>
   <string name="common_refreshing">"Värskendame andmeid…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d vastus"</item>
+    <item quantity="other">"%1$d vastust"</item>
+  </plurals>
   <string name="common_replying_to">"Vastates kasutajale %1$s"</string>
   <string name="common_report_a_bug">"Teata veast"</string>
   <string name="common_report_a_problem">"Teata veast"</string>
@@ -259,6 +267,7 @@ Põhjus: %1$s."</string>
   <string name="common_sending">"Saadame…"</string>
   <string name="common_sending_failed">"Saatmine ei õnnestunud"</string>
   <string name="common_sent">"Saadetud"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Server pole toetatud"</string>
   <string name="common_server_url">"Serveri URL"</string>
   <string name="common_settings">"Seadistused"</string>
@@ -324,6 +333,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="error_failed_loading_messages">"Sõnumite laadimine ei õnnestunud"</string>
   <string name="error_failed_locating_user">"Rakendus %1$s ei suutnud tuvastada sinu asukohta. Palun proovi hiljem uuesti."</string>
   <string name="error_failed_uploading_voice_message">"Sinu häälsõnumi üleslaadimine ei õnnestunud."</string>
+  <string name="error_invalid_invite">"Seda jututuba pole enam olemas või pole see kutse enam kehtiv."</string>
   <string name="error_message_not_found">"Sõnumit ei leidu"</string>
   <string name="error_missing_location_auth_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Sa saad seda lubada süsteemi seadistustest."</string>
   <string name="error_missing_location_rationale_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Järgnevalt anna vastavad õigused."</string>
@@ -333,6 +343,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="error_room_address_invalid_symbols">"Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Mõned sõnumid on saatmata"</string>
   <string name="error_unknown">"Vabandust, ilmnes viga"</string>
+  <string name="event_shield_mismatched_sender">"Sündmuse saatja ja seadme omanik pole vastavuses."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud."</string>
   <string name="event_shield_reason_previously_verified">"Krüptitud varem verifitseeritud kasutaja poolt"</string>
   <string name="event_shield_reason_sent_in_clear">"Pole krüptitud."</string>
@@ -343,6 +354,10 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Veast teatamiseks raputa nutiseadet ägedalt"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Valikud"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Kustuta: %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Seadistused"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
@@ -367,17 +382,14 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_room_error_failed_processing_media">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kasutaja andmete laadimine ei õnnestunud"</string>
   <string name="screen_room_event_pill">"Sõnum jututoas %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Näita rohkem"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Näita vähem"</string>
+  <string name="screen_room_permalink_same_room_android">"Sa juba vaatad seda jututuba!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s esiletõstetud sõnumit"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laadime sõnumit…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Näita kõiki"</string>
-  <string name="screen_room_timeline_tombstoned_room_action">"Hüppa uude jututuppa"</string>
-  <string name="screen_room_timeline_tombstoned_room_message">"See jututuba on asendatud uuega ning pole enam aktiivne"</string>
-  <string name="screen_room_timeline_upgraded_room_action">"Vaata vanu sõnumeid"</string>
-  <string name="screen_room_timeline_upgraded_room_message">"See jututuba on varasema jututoa jätk"</string>
   <string name="screen_room_title">"Vestlus"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Liitumispalve on saadetud"</string>
-  <string name="screen_roomlist_tombstoned_room_description">"See jututuba on uuendatud"</string>
   <string name="screen_share_location_title">"Jaga asukohta"</string>
   <string name="screen_share_my_location_action">"Jaga minu asukohta"</string>
   <string name="screen_share_open_apple_maps">"Ava Apple Mapsis"</string>

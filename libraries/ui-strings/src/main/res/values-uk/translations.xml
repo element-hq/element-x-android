@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Додати реакцію: %1$s"</string>
   <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_delete">"Видалити"</string>
   <plurals name="a11y_digits_entered">
@@ -29,7 +30,8 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Прочитано %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Натисніть, щоб показати все"</string>
-  <string name="a11y_remove_reaction_with">"Видалити реакцію з %1$s"</string>
+  <string name="a11y_remove_reaction">"Видалити реакцію з %1$s"</string>
+  <string name="a11y_remove_reaction_with">"Прибрати реакцію %1$s"</string>
   <string name="a11y_send_files">"Надіслати файли"</string>
   <string name="a11y_show_password">"Показати пароль"</string>
   <string name="a11y_start_call">"Розпочати виклик"</string>
@@ -264,6 +266,7 @@
   <string name="common_sending">"Надсилання…"</string>
   <string name="common_sending_failed">"Не вдалося надіслати"</string>
   <string name="common_sent">"Надіслано"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Сервер не підтримується"</string>
   <string name="common_server_url">"URL-адреса сервера"</string>
   <string name="common_settings">"Налаштування"</string>
@@ -329,6 +332,7 @@
   <string name="error_failed_loading_messages">"Не вдалося завантажити повідомлення"</string>
   <string name="error_failed_locating_user">"%1$s не вдалося отримати доступ до вашого розташування. Повторіть спробу пізніше."</string>
   <string name="error_failed_uploading_voice_message">"Не вдалося завантажити голосове повідомлення."</string>
+  <string name="error_invalid_invite">"Кімната більше не існує або запрошення не чинне."</string>
   <string name="error_message_not_found">"Повідомлення не знайдено"</string>
   <string name="error_missing_location_auth_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкнути доступ можна в Налаштуваннях."</string>
   <string name="error_missing_location_rationale_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкніть доступ нижче."</string>
@@ -338,6 +342,7 @@
   <string name="error_room_address_invalid_symbols">"Деякі символи не допускаються. Підтримуються тільки букви, цифри і наступні символи! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Деякі повідомлення не були надіслані"</string>
   <string name="error_unknown">"Вибачте, сталася помилка"</string>
+  <string name="event_shield_mismatched_sender">"Відправник події не збігається з власником пристрою, який його надіслав."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Автентичність цього зашифрованого повідомлення не може бути гарантована на цьому пристрої."</string>
   <string name="event_shield_reason_previously_verified">"Зашифровано попередньо перевіреним користувачем."</string>
   <string name="event_shield_reason_sent_in_clear">"Не зашифровано."</string>
@@ -348,6 +353,10 @@
   <string name="invite_friends_text">"Вітаю, поспілкуйтеся зі мною в %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Повідомити про ваду за допомогою Rageshake"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Варіанти"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Вилучити %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Налаштування"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_caption_warning">"Користувачі старих застосунків можуть не бачити підписи."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
@@ -373,6 +382,9 @@
   <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
   <string name="screen_room_event_pill">"Повідомлення в %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Розгорнути"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Згорнути"</string>
+  <string name="screen_room_permalink_same_room_android">"Уже переглядаєте цю кімнату!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s із %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s закріплених повідомлень"</string>
   <string name="screen_room_pinned_banner_loading_description">"Завантаження повідомлення…"</string>

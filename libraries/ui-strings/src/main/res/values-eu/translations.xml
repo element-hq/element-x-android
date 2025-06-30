@@ -23,7 +23,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s(e)k irakurri du"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Egin tap guztiak ikusteko"</string>
-  <string name="a11y_remove_reaction_with">"Kendu %1$s erreakzioa"</string>
+  <string name="a11y_remove_reaction">"Kendu %1$s erreakzioa"</string>
   <string name="a11y_send_files">"Bidali fitxategiak"</string>
   <string name="a11y_show_password">"Erakutsi pasahitza"</string>
   <string name="a11y_start_call">"Hasi dei bat"</string>

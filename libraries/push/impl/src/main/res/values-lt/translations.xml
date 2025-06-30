@@ -14,7 +14,6 @@
     <item quantity="few">"%d pranešimai"</item>
     <item quantity="other">"%d pranešimų"</item>
   </plurals>
-  <string name="notification_fallback_content">"Pranešimas"</string>
   <string name="notification_inline_reply_failed">"** Nepavyko išsiųsti - prašome atidaryti kambarį"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d kvietimas"</item>

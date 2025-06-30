@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Kapcsolja ki az alkalmazás akkumulátor-optimalizálását, hogy biztosan megkapja az összes értesítést."</string>
+  <string name="banner_battery_optimization_submit_android">"Optimalizálás letiltása"</string>
+  <string name="banner_battery_optimization_title_android">"Nem érkeznek meg az értesítések?"</string>
   <string name="banner_set_up_recovery_content">"Hozzon létre egy új helyreállítási kulcsot, amellyel visszaállíthatja a titkosított üzenetek előzményeit, ha elveszíti az eszközökhöz való hozzáférést."</string>
   <string name="banner_set_up_recovery_submit">"Helyreállítás beállítása"</string>
   <string name="banner_set_up_recovery_title">"Helyreállítás beállítása a fiókja védelméhez"</string>
@@ -18,6 +21,7 @@
   <string name="screen_migration_message">"Ez egy egyszeri folyamat, köszönjük a türelmét."</string>
   <string name="screen_migration_title">"A fiók beállítása."</string>
   <string name="screen_roomlist_a11y_create_message">"Új beszélgetés vagy szoba létrehozása"</string>
+  <string name="screen_roomlist_clear_filters">"Szűrők törlése"</string>
   <string name="screen_roomlist_empty_message">"Kezdje azzal, hogy üzenetet küld valakinek."</string>
   <string name="screen_roomlist_empty_title">"Még nincsenek csevegések."</string>
   <string name="screen_roomlist_filter_favourites">"Kedvencek"</string>
@@ -40,6 +44,7 @@ Nincs olvasatlan üzenete!"</string>
   <string name="screen_roomlist_main_space_title">"Összes csevegés"</string>
   <string name="screen_roomlist_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"A szoba verzióját frissítették"</string>
   <string name="session_verification_banner_message">"Úgy tűnik, hogy új eszközt használ. Ellenőrizze egy másik eszközzel, hogy a továbbiakban elérje a titkosított üzeneteket."</string>
   <string name="session_verification_banner_title">"Ellenőrizze, hogy Ön az"</string>
 </resources>
