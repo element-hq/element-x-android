@@ -24,7 +24,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"წაიკითხეს: %s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"შეეხეთ ყველაფრის საჩვენებლად"</string>
-  <string name="a11y_remove_reaction_with">"%1$s რეაქციის წაშლა"</string>
+  <string name="a11y_remove_reaction">"%1$s რეაქციის წაშლა"</string>
   <string name="a11y_send_files">"ფაილების გაგზავნა"</string>
   <string name="a11y_show_password">"პაროლის ჩვენება"</string>
   <string name="a11y_start_call">"დარეკვა"</string>

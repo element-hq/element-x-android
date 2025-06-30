@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Pridať reakciu: %1$s"</string>
   <string name="a11y_avatar">"Obrázok"</string>
   <string name="a11y_delete">"Vymazať"</string>
   <plurals name="a11y_digits_entered">
@@ -29,11 +30,13 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Prečítal/a %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Ťuknutím zobrazíte všetko"</string>
+  <string name="a11y_remove_reaction">"Odstrániť reakciu s %1$s"</string>
   <string name="a11y_remove_reaction_with">"Odstrániť reakciu s %1$s"</string>
   <string name="a11y_send_files">"Odoslať súbory"</string>
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_start_call">"Začať hovor"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
+  <string name="a11y_view_avatar">"Zobraziť profilový obrázok"</string>
   <string name="a11y_view_details">"Zobraziť podrobnosti"</string>
   <string name="a11y_voice_message">"Hlasová správa, dĺžka: %1$s"</string>
   <string name="a11y_voice_message_record">"Nahrať hlasovú správu."</string>
@@ -146,6 +149,7 @@
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
   <string name="common_adding_caption">"Pridáva sa titulok"</string>
   <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
+  <string name="common_an_image">"obrázok"</string>
   <string name="common_analytics">"Analytika"</string>
   <string name="common_appearance">"Vzhľad"</string>
   <string name="common_audio">"Zvuk"</string>
@@ -245,6 +249,11 @@ Dôvod: %1$s."</string>
   <string name="common_reason">"Dôvod"</string>
   <string name="common_recovery_key">"Kľúč na obnovenie"</string>
   <string name="common_refreshing">"Obnovuje sa…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d odpoveď"</item>
+    <item quantity="few">"%1$d odpovede"</item>
+    <item quantity="other">"%1$d odpovedí"</item>
+  </plurals>
   <string name="common_replying_to">"Odpoveď na %1$s"</string>
   <string name="common_report_a_bug">"Nahlásiť chybu"</string>
   <string name="common_report_a_problem">"Nahlásiť problém"</string>
@@ -264,6 +273,7 @@ Dôvod: %1$s."</string>
   <string name="common_sending">"Odosiela sa…"</string>
   <string name="common_sending_failed">"Odoslanie zlyhalo"</string>
   <string name="common_sent">"Odoslané"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Server nie je podporovaný"</string>
   <string name="common_server_url">"URL adresa servera"</string>
   <string name="common_settings">"Nastavenia"</string>
@@ -329,6 +339,7 @@ Naozaj chcete pokračovať?"</string>
   <string name="error_failed_loading_messages">"Načítanie správ zlyhalo"</string>
   <string name="error_failed_locating_user">"%1$s nemohol získať prístup k vašej polohe. Skúste to prosím neskôr."</string>
   <string name="error_failed_uploading_voice_message">"Nepodarilo sa nahrať hlasovú správu."</string>
+  <string name="error_invalid_invite">"Miestnosť už neexistuje alebo pozvánka už nie je platná."</string>
   <string name="error_message_not_found">"Správa sa nenašla"</string>
   <string name="error_missing_location_auth_android">"%1$s nemá povolenie na prístup k vašej polohe. Prístup môžete zapnúť v Nastaveniach."</string>
   <string name="error_missing_location_rationale_android">"%1$s nemá povolenie na prístup k vašej polohe. Povoľte prístup nižšie."</string>
@@ -338,6 +349,7 @@ Naozaj chcete pokračovať?"</string>
   <string name="error_room_address_invalid_symbols">"Niektoré znaky nie sú povolené. Podporované sú iba písmená, číslice a nasledujúce symboly ! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
+  <string name="event_shield_mismatched_sender">"Odosielateľ udalosti sa nezhoduje s vlastníkom zariadenia, ktoré ju odoslalo."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Pravosť tejto šifrovanej správy nie je možné zaručiť na tomto zariadení."</string>
   <string name="event_shield_reason_previously_verified">"Šifrované predtým overeným používateľom."</string>
   <string name="event_shield_reason_sent_in_clear">"Nie je šifrované."</string>
@@ -348,6 +360,10 @@ Naozaj chcete pokračovať?"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Možnosti"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Odstrániť %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Nastavenia"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
@@ -373,6 +389,9 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>
   <string name="screen_room_event_pill">"Správa v %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Rozbaliť"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Zmenšiť"</string>
+  <string name="screen_room_permalink_same_room_android">"Už si prezeráte túto miestnosť!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pripnutých správ"</string>
   <string name="screen_room_pinned_banner_loading_description">"Načítava sa správa…"</string>

@@ -18,6 +18,7 @@
   <string name="screen_room_attachment_source_poll">"Анкета"</string>
   <string name="screen_room_attachment_text_formatting">"Форматиране на текст"</string>
   <string name="screen_room_encrypted_history_banner">"Хронологията на съобщенията не е налична в момента."</string>
+  <string name="screen_room_mentions_at_room_title">"Всеки"</string>
   <string name="screen_room_timeline_add_reaction">"Добавяне на емоджи"</string>
   <string name="screen_room_timeline_beginning_of_room">"Това е началото на %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Това е началото на този разговор."</string>

@@ -22,7 +22,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Dibaca oleh %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Ketuk untuk melihat semua"</string>
-  <string name="a11y_remove_reaction_with">"Hapus reaksi dengan %1$s"</string>
+  <string name="a11y_remove_reaction">"Hapus reaksi dengan %1$s"</string>
   <string name="a11y_send_files">"Kirim berkas"</string>
   <string name="a11y_show_password">"Tampilkan kata sandi"</string>
   <string name="a11y_start_call">"Mulai panggilan"</string>

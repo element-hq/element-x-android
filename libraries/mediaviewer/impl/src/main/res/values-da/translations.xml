@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Denne fil vil blive fjernet fra rummet, og medlemmer vil ikke længere have adgang til den."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Vil du slette filen?"</string>
+  <string name="screen_media_browser_download_error_message">"Tjek din internetforbindelse, og prøv igen."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Dokumenter, lydfiler og stemmemeddelelser uploadet til dette rum vises her."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Ingen filer uploadet endnu"</string>
+  <string name="screen_media_browser_list_loading_files">"Indlæser filer…"</string>
+  <string name="screen_media_browser_list_loading_media">"Indlæser medier…"</string>
+  <string name="screen_media_browser_list_mode_files">"Filer"</string>
+  <string name="screen_media_browser_list_mode_media">"Medier"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Billeder og videoer uploadet til dette rum vil blive vist her."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Ingen medier uploadet endnu"</string>
+  <string name="screen_media_browser_title">"Medier og filer"</string>
+  <string name="screen_media_details_file_format">"Filformat"</string>
+  <string name="screen_media_details_filename">"Filnavn"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Ikke flere filer at vise"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Ikke flere medier at vise"</string>
+  <string name="screen_media_details_uploaded_by">"Uploadet af"</string>
+  <string name="screen_media_details_uploaded_on">"Uploadet på"</string>
+</resources>

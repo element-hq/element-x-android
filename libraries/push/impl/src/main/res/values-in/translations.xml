@@ -11,7 +11,6 @@
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d pemberitahuan"</item>
   </plurals>
-  <string name="notification_fallback_content">"Notifikasi"</string>
   <string name="notification_incoming_call">"📹 Panggilan masuk"</string>
   <string name="notification_inline_reply_failed">"** Gagal mengirim — silakan buka ruangan"</string>
   <string name="notification_invitation_action_join">"Gabung"</string>

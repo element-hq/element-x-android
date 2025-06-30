@@ -27,7 +27,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Gelezen door %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tik om alles weer te geven"</string>
-  <string name="a11y_remove_reaction_with">"Verwijder reactie met %1$s"</string>
+  <string name="a11y_remove_reaction">"Verwijder reactie met %1$s"</string>
   <string name="a11y_send_files">"Bestanden verzenden"</string>
   <string name="a11y_show_password">"Wachtwoord weergeven"</string>
   <string name="a11y_start_call">"Begin een oproep"</string>

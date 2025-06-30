@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Legg til reaksjon: %1$s"</string>
   <string name="a11y_avatar">"Profilbilde"</string>
   <string name="a11y_delete">"Slett"</string>
   <plurals name="a11y_digits_entered">
@@ -27,6 +28,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Lest av %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Trykk for å vise alle"</string>
+  <string name="a11y_remove_reaction">"Fjern reaksjonen med %1$s"</string>
   <string name="a11y_remove_reaction_with">"Fjern reaksjonen med %1$s"</string>
   <string name="a11y_send_files">"Sende filer"</string>
   <string name="a11y_show_password">"Vis passord"</string>
@@ -138,9 +140,6 @@
   <string name="action_view_source">"Vis kilde"</string>
   <string name="action_yes">"Ja"</string>
   <string name="action_yes_try_again">"Ja, prøv igjen"</string>
-  <string name="banner_battery_optimization_content_android">"Deaktiver batterioptimalisering for denne appen for å sikre at alle varsler mottas."</string>
-  <string name="banner_battery_optimization_submit_android">"Deaktiver optimalisering"</string>
-  <string name="banner_battery_optimization_title_android">"Kommer ikke varslene frem?"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Serveren din støtter nå en ny, raskere protokoll. Logg ut og logg inn igjen for å oppgradere nå. Ved å gjøre dette nå, unngår du å bli tvunget til å logge ut når den gamle protokollen fjernes senere."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Oppgradering tilgjengelig"</string>
   <string name="common_about">"Om"</string>
@@ -244,6 +243,9 @@
   <string name="common_reason">"Årsak"</string>
   <string name="common_recovery_key">"Gjenopprettingsnøkkel"</string>
   <string name="common_refreshing">"Oppdaterer…"</string>
+  <plurals name="common_replies">
+    <item quantity="other">"%1$d svar"</item>
+  </plurals>
   <string name="common_replying_to">"Svar til %1$s"</string>
   <string name="common_report_a_bug">"Rapporter en feil"</string>
   <string name="common_report_a_problem">"Rapporter et problem"</string>
@@ -328,6 +330,7 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="error_failed_loading_messages">"Kunne ikke laste inn meldinger"</string>
   <string name="error_failed_locating_user">"%1$s fikk ikke tilgang til lokasjonen din. Vennligst prøv igjen senere."</string>
   <string name="error_failed_uploading_voice_message">"Kunne ikke laste opp talemeldingen din."</string>
+  <string name="error_invalid_invite">"Rommet eksisterer ikke lenger, eller invitasjonen er ikke lenger gyldig."</string>
   <string name="error_message_not_found">"Melding ikke funnet"</string>
   <string name="error_missing_location_auth_android">"%1$s har ikke tilgang til lokasjonen din. Du kan aktivere tilgang i Innstillinger."</string>
   <string name="error_missing_location_rationale_android">"%1$s har ikke tilgang til lokasjonen din. Aktiver tilgang nedenfor."</string>
@@ -376,17 +379,14 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_room_error_failed_processing_media">"Kunne ikke behandle medier for opplasting, vennligst prøv igjen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunne ikke hente brukerdetaljer"</string>
   <string name="screen_room_event_pill">"Melding i %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Utvid"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Reduser"</string>
+  <string name="screen_room_permalink_same_room_android">"Du ser allerede på dette rommet!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s av %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Festede meldinger"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laster inn melding…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Vis alle"</string>
-  <string name="screen_room_timeline_tombstoned_room_action">"Gå til nytt rom"</string>
-  <string name="screen_room_timeline_tombstoned_room_message">"Dette rommet har blitt erstattet og er ikke lenger aktivt"</string>
-  <string name="screen_room_timeline_upgraded_room_action">"Se gamle meldinger"</string>
-  <string name="screen_room_timeline_upgraded_room_message">"Dette rommet er en fortsettelse av et annet rom"</string>
   <string name="screen_room_title">"Chat"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Forespørsel om å bli med sendt"</string>
-  <string name="screen_roomlist_tombstoned_room_description">"Dette rommet har blitt oppgradert"</string>
   <string name="screen_share_location_title">"Del lokasjon"</string>
   <string name="screen_share_my_location_action">"Del min lokasjon"</string>
   <string name="screen_share_open_apple_maps">"Åpne i Apple Maps"</string>

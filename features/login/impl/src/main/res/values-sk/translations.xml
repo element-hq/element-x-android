@@ -34,6 +34,7 @@
   <string name="screen_login_subtitle">"Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu."</string>
   <string name="screen_login_title">"Vitajte späť!"</string>
   <string name="screen_login_title_with_homeserver">"Prihlásiť sa do %1$s"</string>
+  <string name="screen_onboarding_app_version">"Verzia %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Prihlásiť sa manuálne"</string>
   <string name="screen_onboarding_sign_in_to">"Prihlásiť sa do %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Prihlásiť sa pomocou QR kódu"</string>

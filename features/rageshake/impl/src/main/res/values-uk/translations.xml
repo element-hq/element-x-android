@@ -10,6 +10,7 @@
   <string name="screen_bug_report_error_description_too_short">"Опис закороткий, будь ласка, надайте докладнішу інформацію про те, що сталося. Дякуємо!"</string>
   <string name="screen_bug_report_include_crash_logs">"Надіслати журнали збоїв"</string>
   <string name="screen_bug_report_include_logs">"Дозволити журнали"</string>
+  <string name="screen_bug_report_include_logs_error">"Ваші журнали надмірно великі, тому їх не можна включити в цей звіт, будь ласка, надішліть їх нам іншим способом."</string>
   <string name="screen_bug_report_include_screenshot">"Надіслати знімок екрана"</string>
   <string name="screen_bug_report_logs_description">"Журнали будуть додані до вашого повідомлення, щоб переконатися, що все працює належним чином. Щоб надіслати повідомлення без журналів, вимкніть це налаштування."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"Стався збій %1$s під час останнього користування. Хочете поділитися з нами звітом про збій?"</string>

@@ -3,13 +3,13 @@
   <string name="screen_media_browser_delete_confirmation_subtitle">"Αυτό το αρχείο θα αφαιρεθεί από την αίθουσα και τα μέλη δεν θα έχουν πρόσβαση σε αυτό."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Διαγραφή αρχείου;"</string>
   <string name="screen_media_browser_download_error_message">"Ελέγξτε τη σύνδεσή σας στο διαδίκτυο και δοκιμάστε ξανά."</string>
-  <string name="screen_media_browser_files_empty_state_subtitle">"Έγγραφα, αρχεία ήχου και φωνητικά μηνύματα που έχουν μεταφορτωθεί σε αυτό το δωμάτιο θα εμφανίζονται εδώ."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Τα έγγραφα, τα αρχεία ήχου και τα φωνητικά μηνύματα που μεταφορτώνονται σε αυτή την αίθουσα θα εμφανίζονται εδώ."</string>
   <string name="screen_media_browser_files_empty_state_title">"Δεν έχουν μεταφορτωθεί ακόμα αρχεία"</string>
   <string name="screen_media_browser_list_loading_files">"Φόρτωση αρχείων…"</string>
   <string name="screen_media_browser_list_loading_media">"Φόρτωση πολυμέσων…"</string>
   <string name="screen_media_browser_list_mode_files">"Αρχεία"</string>
   <string name="screen_media_browser_list_mode_media">"Πολυμέσα"</string>
-  <string name="screen_media_browser_media_empty_state_subtitle">"Εικόνες και βίντεο που μεταφορτώνονται σε αυτό το δωμάτιο θα εμφανίζονται εδώ."</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Οι εικόνες και τα βίντεο που μεταφορτώνονται σε αυτή την αίθουσα θα εμφανίζονται εδώ."</string>
   <string name="screen_media_browser_media_empty_state_title">"Δεν έχουν μεταφορτωθεί ακόμα πολυμέσα"</string>
   <string name="screen_media_browser_title">"Πολυμέσα και αρχεία"</string>
   <string name="screen_media_details_file_format">"Μορφή αρχείου"</string>
