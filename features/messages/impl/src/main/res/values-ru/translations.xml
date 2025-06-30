@@ -43,6 +43,10 @@
     <item quantity="few">"%1$d изменения в комнате"</item>
     <item quantity="many">"%1$d изменений в комнате"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Перейти в новую комнату"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Эта комната была заменена и больше не активна"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Посмотреть старые сообщения"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Эта комната является продолжением другой комнаты"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s и %3$d"</item>
     <item quantity="few">"%1$s, %2$s и другие %3$d"</item>

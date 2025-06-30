@@ -10,6 +10,7 @@
   <string name="screen_bug_report_error_description_too_short">"Beskrivelsen er for kort, vennligst gi flere detaljer om hva som skjedde. Takk skal du ha!"</string>
   <string name="screen_bug_report_include_crash_logs">"Send krasjlogger"</string>
   <string name="screen_bug_report_include_logs">"Tillat logger"</string>
+  <string name="screen_bug_report_include_logs_error">"Loggene dine er for store og kan derfor ikke inkluderes i denne rapporten. Vennligst send dem til oss på en annen måte."</string>
   <string name="screen_bug_report_include_screenshot">"Send skjermbilde"</string>
   <string name="screen_bug_report_logs_description">"Logger vil bli inkludert i meldingen din, for å sikre at alt fungerer som det skal. For å sende meldingen uten logger, slå av denne innstillingen."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s krasjet sist gang den ble brukt. Vil du dele en krasjrapport med oss?"</string>

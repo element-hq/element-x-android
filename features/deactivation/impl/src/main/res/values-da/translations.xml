@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Bekræft venligst, at du vil deaktivere din konto. Denne handling kan ikke fortrydes."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Slet alle mine beskeder"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Advarsel: Fremtidige brugere kan muligvis se ufuldstændige samtaler."</string>
+  <string name="screen_deactivate_account_description">"Deaktivering af din konto er %1$s, det vil:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"irreversibel"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s din konto (du kan ikke logge ind igen, og dit ID kan ikke genbruges)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Deaktiver permanent"</string>
+  <string name="screen_deactivate_account_list_item_2">"Fjern dig fra alle samtalerum"</string>
+  <string name="screen_deactivate_account_list_item_3">"Slette dine kontooplysninger fra vores identitetsserver."</string>
+  <string name="screen_deactivate_account_list_item_4">"Dine beskeder vil stadig være synlige for registrerede brugere, men vil ikke være tilgængelige for nye eller uregistrerede brugere, hvis du vælger at slette dem."</string>
+  <string name="screen_deactivate_account_title">"Deaktiver konto"</string>
+</resources>

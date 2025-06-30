@@ -12,7 +12,6 @@
     <item quantity="one">"jakinarazpen %d"</item>
     <item quantity="other">"%d jakinarazpen"</item>
   </plurals>
-  <string name="notification_fallback_content">"Jakinarazpena"</string>
   <string name="notification_incoming_call">"Deia jasotzen"</string>
   <string name="notification_inline_reply_failed">"** Huts egin du bidalketak - ireki gela"</string>
   <string name="notification_invitation_action_join">"Elkartu"</string>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_settings_help_us_improve">"Del anonyme brugsdata for at hjælpe os med at identificere problemer."</string>
+  <string name="screen_analytics_settings_read_terms">"Du kan læse alle vores vilkår %1$s."</string>
+  <string name="screen_analytics_settings_read_terms_content_link">"her"</string>
+  <string name="screen_analytics_settings_share_data">"Del analysedata"</string>
+</resources>

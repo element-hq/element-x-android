@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_submit_android">"禁用优化"</string>
+  <string name="banner_battery_optimization_title_android">"通知未送达？"</string>
+  <string name="banner_set_up_recovery_content">"生成新的恢复密钥，该密钥可用于在您无法访问设备时恢复加密的消息历史记录。"</string>
+  <string name="banner_set_up_recovery_submit">"设置恢复"</string>
+  <string name="banner_set_up_recovery_title">"设置恢复"</string>
+  <string name="confirm_recovery_key_banner_message">"确认恢复密钥，以保持对密钥存储和消息历史的访问。"</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"输入恢复密钥"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"忘记了恢复密钥？"</string>
+  <string name="confirm_recovery_key_banner_title">"你的密钥存储已不同步"</string>
+  <string name="full_screen_intent_banner_message">"为确保您不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>
+  <string name="full_screen_intent_banner_title">"提升通话体验"</string>
+  <string name="screen_invites_decline_chat_message">"您确定要拒绝加入 %1$s 的邀请吗？"</string>
+  <string name="screen_invites_decline_chat_title">"拒绝邀请"</string>
+  <string name="screen_invites_decline_direct_chat_message">"您确定要拒绝与 %1$s 开始私聊吗？"</string>
+  <string name="screen_invites_decline_direct_chat_title">"拒绝聊天"</string>
+  <string name="screen_invites_empty_list">"没有邀请"</string>
+  <string name="screen_invites_invited_you">"%1$s （%2$s）邀请了你"</string>
+  <string name="screen_migration_message">"这是一个一次性的过程，感谢您的等待。"</string>
+  <string name="screen_migration_title">"设置您的账户。"</string>
+  <string name="screen_roomlist_a11y_create_message">"创建新的对话或聊天室"</string>
+  <string name="screen_roomlist_empty_message">"通过向某人发送消息来开始。"</string>
+  <string name="screen_roomlist_empty_title">"还没有聊天。"</string>
+  <string name="screen_roomlist_filter_favourites">"收藏夹"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"可以在聊天设置里将聊天添加到收藏夹中。
+现在，可以取消选择过滤器以查看其他对话。"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"您未收藏任何聊天"</string>
+  <string name="screen_roomlist_filter_invites">"邀请"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"没有待处理的邀请。"</string>
+  <string name="screen_roomlist_filter_low_priority">"低优先级"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"您可以取消选择过滤器以查看其他对话"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"您没有关于此选项的聊天"</string>
+  <string name="screen_roomlist_filter_people">"用户"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"目前您还没有私信"</string>
+  <string name="screen_roomlist_filter_rooms">"聊天室"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"您尚未进入任何聊天室"</string>
+  <string name="screen_roomlist_filter_unreads">"未读"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"恭喜！
+没有任何未读消息！"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"加入请求已发送"</string>
+  <string name="screen_roomlist_main_space_title">"全部聊天"</string>
+  <string name="screen_roomlist_mark_as_read">"标记为已读"</string>
+  <string name="screen_roomlist_mark_as_unread">"标记为未读"</string>
+  <string name="session_verification_banner_message">"您似乎正在使用新设备。使用另一台设备进行验证以访问您的加密消息。"</string>
+  <string name="session_verification_banner_title">"验证是你本人"</string>
+</resources>

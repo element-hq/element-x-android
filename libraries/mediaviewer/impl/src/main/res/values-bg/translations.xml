@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_list_mode_files">"Файлове"</string>
+  <string name="screen_media_browser_list_mode_media">"Медия"</string>
+  <string name="screen_media_browser_title">"Медия и файлове"</string>
+</resources>

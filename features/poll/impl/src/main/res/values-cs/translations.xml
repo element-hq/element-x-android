@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Anonymní hlasování"</string>
   <string name="screen_create_poll_answer_hint">"Volba %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Vaše změny nebyly uloženy. Opravdu se chcete vrátit?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Smazat možnost %1$s"</string>
   <string name="screen_create_poll_question_desc">"Otázka nebo téma"</string>
   <string name="screen_create_poll_question_hint">"Čeho se hlasování týká?"</string>
   <string name="screen_create_poll_title">"Vytvořit hlasování"</string>

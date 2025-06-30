@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"未加密的消息…"</string>
   <string name="rich_text_editor_create_link">"创建链接"</string>
   <string name="rich_text_editor_edit_link">"编辑链接"</string>
+  <string name="rich_text_editor_format_action">"%1$s，状态：%2$s"</string>
   <string name="rich_text_editor_format_bold">"应用粗体格式"</string>
   <string name="rich_text_editor_format_italic">"应用斜体格式"</string>
+  <string name="rich_text_editor_format_state_disabled">"已禁用"</string>
+  <string name="rich_text_editor_format_state_off">"关"</string>
+  <string name="rich_text_editor_format_state_on">"开"</string>
   <string name="rich_text_editor_format_strikethrough">"应用删除线格式"</string>
   <string name="rich_text_editor_format_underline">"应用下划线格式"</string>
   <string name="rich_text_editor_full_screen_toggle">"切换全屏模式"</string>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Désactivez l’optimisation de la batterie pour cette application afin de vous assurer que toutes les notifications sont reçues."</string>
+  <string name="banner_battery_optimization_submit_android">"Désactiver l’optimisation"</string>
+  <string name="banner_battery_optimization_title_android">"Ils vous manque des notifications?"</string>
+  <string name="banner_set_up_recovery_content">"Générez une nouvelle clé de récupération qui peut être utilisée pour restaurer l’historique de vos messages chiffrés au cas où vous perdriez l’accès à vos appareils."</string>
+  <string name="banner_set_up_recovery_submit">"Configurer la sauvegarde"</string>
+  <string name="banner_set_up_recovery_title">"Configurer la récupération"</string>
+  <string name="confirm_recovery_key_banner_message">"Confirmez votre clé de récupération pour conserver l’accès à votre stockage de clés et à l’historique des messages."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Saisissez votre clé de récupération"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Clé de récupération oubliée ?"</string>
+  <string name="confirm_recovery_key_banner_title">"Le stockage de vos clés n’est pas synchronisé"</string>
+  <string name="full_screen_intent_banner_message">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
+  <string name="full_screen_intent_banner_title">"Améliorez votre expérience d’appel"</string>
+  <string name="screen_invites_decline_chat_message">"Êtes-vous sûr de vouloir décliner l’invitation à rejoindre %1$s ?"</string>
+  <string name="screen_invites_decline_chat_title">"Refuser l’invitation"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Êtes-vous sûr de vouloir refuser cette discussion privée avec %1$s ?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Refuser l’invitation"</string>
+  <string name="screen_invites_empty_list">"Aucune invitation"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) vous a invité(e)"</string>
+  <string name="screen_migration_message">"Il s’agit d’une opération ponctuelle, merci d’attendre quelques instants."</string>
+  <string name="screen_migration_title">"Configuration de votre compte."</string>
+  <string name="screen_roomlist_a11y_create_message">"Créer une nouvelle discussion ou un nouveau salon"</string>
+  <string name="screen_roomlist_clear_filters">"Supprimer les filtres"</string>
+  <string name="screen_roomlist_empty_message">"Commencez par envoyer un message à quelqu’un."</string>
+  <string name="screen_roomlist_empty_title">"Aucune discussion pour le moment."</string>
+  <string name="screen_roomlist_filter_favourites">"Favoris"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Vous pouvez ajouter une discussion aux favoris depuis les paramètres de la discussion.
+En attendant, vous pouvez désélectionner des filtres pour voir vos autres salons."</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Vous n’avez pas encore de discussions favorites"</string>
+  <string name="screen_roomlist_filter_invites">"Invitations"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Vous n’avez aucune invitation en attente."</string>
+  <string name="screen_roomlist_filter_low_priority">"Priorité basse"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Veuillez désélectionner des filtres pour voir vos discussions"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Vous n’avez pas de discussions pour cette sélection"</string>
+  <string name="screen_roomlist_filter_people">"Personnes"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Vous n’avez pas encore de discussions"</string>
+  <string name="screen_roomlist_filter_rooms">"Salons"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Vous n’êtes membre d’aucun salon"</string>
+  <string name="screen_roomlist_filter_unreads">"Non-lus"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Félicitations !
+Vous n’avez plus de messages non-lus !"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Demande de rejoindre le salon envoyée"</string>
+  <string name="screen_roomlist_main_space_title">"Conversations"</string>
+  <string name="screen_roomlist_mark_as_read">"Marquer comme lu"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marquer comme non lu"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Ce salon a été mis à niveau."</string>
+  <string name="session_verification_banner_message">"Il semblerait que vous utilisiez un nouvel appareil. Vérifiez la session avec un autre de vos appareils pour accéder à vos messages chiffrés."</string>
+  <string name="session_verification_banner_title">"Vérifier que c’est bien vous"</string>
+</resources>

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Изберете как да получавате известия"</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Скриване на профилните снимки в заявките за покана за стая"</string>
+  <string name="screen_advanced_settings_media_compression_title">"Оптимизиране на качеството на медията"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерация и безопасност"</string>
   <string name="screen_advanced_settings_send_read_receipts">"Потвърждения за прочитане"</string>
   <string name="screen_advanced_settings_share_presence">"Споделяне на присъствието"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Скриване винаги"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Показване винаги"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"В частни стаи"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Отблокиране"</string>
   <string name="screen_blocked_users_unblock_alert_title">"Отблокиране на потребителя"</string>
   <string name="screen_edit_profile_display_name">"Име"</string>
@@ -20,6 +27,7 @@
   <string name="screen_notification_settings_enable_notifications">"Включване на известията на това устройство"</string>
   <string name="screen_notification_settings_group_chats">"Групови чатове"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Покани"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Вашият сървър не поддържа тази опция в шифровани стаи, може да не получавате известия в някои стаи."</string>
   <string name="screen_notification_settings_mentions_section_title">"Споменавания"</string>
   <string name="screen_notification_settings_mode_mentions">"Споменавания"</string>
   <string name="screen_notification_settings_notification_section_title">"Да бъда известяван за"</string>

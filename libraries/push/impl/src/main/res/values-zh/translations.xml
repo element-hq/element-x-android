@@ -11,7 +11,6 @@
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d 条通知"</item>
   </plurals>
-  <string name="notification_fallback_content">"通知"</string>
   <string name="notification_incoming_call">"📹 来电"</string>
   <string name="notification_inline_reply_failed">"** 无法发送——请打开聊天室"</string>
   <string name="notification_invitation_action_join">"加入"</string>

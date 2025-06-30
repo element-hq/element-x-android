@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, mikäli menetät pääsyn kaikkiin laitteisiisi."</string>
+  <string name="banner_set_up_recovery_submit">"Ota palautus käyttöön"</string>
+  <string name="banner_set_up_recovery_title">"Ota palautus käyttöön tilisi suojaamiseksi"</string>
+  <string name="confirm_recovery_key_banner_message">"Vahvista palautusavaimesi, jotta pääset edelleen käyttämään avainten säilytystä ja viestihistoriaa."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Syötä palautusavaimesi"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Unohditko palautusavaimesi?"</string>
+  <string name="confirm_recovery_key_banner_title">"Avainten säilytys ei ole synkronoitu"</string>
+  <string name="full_screen_intent_banner_message">"Salli koko näytön ilmoitukset, kun laite on lukittu, jos et halua koskaan missata tärkeää puhelua."</string>
+  <string name="full_screen_intent_banner_title">"Paranna puhelukokemustasi"</string>
+  <string name="screen_invites_decline_chat_message">"Haluatko varmasti hylätä kutsun liittyä %1$s -huoneeseen?"</string>
+  <string name="screen_invites_decline_chat_title">"Hylkää kutsu"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Haluatko varmasti hylätä kutsun yksityiseen keskusteluun käyttäjän %1$s kanssa?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Hylkää keskustelu"</string>
+  <string name="screen_invites_empty_list">"Ei kutsuja"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) kutsui sinut"</string>
+  <string name="screen_migration_message">"Tämä on kertaluonteinen prosessi, kiitos odottamisesta."</string>
+  <string name="screen_migration_title">"Tiliä määritetään."</string>
+  <string name="screen_roomlist_a11y_create_message">"Luo uusi keskustelu tai huone"</string>
+  <string name="screen_roomlist_empty_message">"Aloita lähettämällä viesti jollekin."</string>
+  <string name="screen_roomlist_empty_title">"Sinulla ei ole vielä keskusteluja."</string>
+  <string name="screen_roomlist_filter_favourites">"Suosikit"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Voit lisätä keskustelun suosikkeihisi keskustelun asetuksissa.
+Toistaiseksi voit poistaa suodattimien valinnan, jotta näet muut keskustelut."</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Sinulla ei ole vielä suosikkikeskusteluja"</string>
+  <string name="screen_roomlist_filter_invites">"Kutsut"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Sinulla ei ole yhtään odottavaa kutsua."</string>
+  <string name="screen_roomlist_filter_low_priority">"Matala prioriteetti"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Voit poistaa suodattimien valinnan nähdäksesi muut keskustelusi."</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Sinulla ei ole sopivia keskusteluja tähän valintaan"</string>
+  <string name="screen_roomlist_filter_people">"Ihmiset"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Sinulla ei ole vielä yhtään yksityisviestiä"</string>
+  <string name="screen_roomlist_filter_rooms">"Huoneet"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Et ole vielä missään huoneessa"</string>
+  <string name="screen_roomlist_filter_unreads">"Lukemattomat"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Onnittelut!
+Sinulla ei ole lukemattomia viestejä!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Liittymispyyntö lähetetty"</string>
+  <string name="screen_roomlist_main_space_title">"Keskustelut"</string>
+  <string name="screen_roomlist_mark_as_read">"Merkitse luetuksi"</string>
+  <string name="screen_roomlist_mark_as_unread">"Merkitse lukemattomaksi"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Tämä huone on päivitetty"</string>
+  <string name="session_verification_banner_message">"Vaikuttaisi siltä, että käytät uutta laitetta. Vahvista toisella laitteella nähdäksesi salatut viestit."</string>
+  <string name="session_verification_banner_title">"Vahvista, että se olet sinä"</string>
+</resources>

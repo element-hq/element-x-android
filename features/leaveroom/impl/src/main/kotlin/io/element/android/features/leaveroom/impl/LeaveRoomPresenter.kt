@@ -78,7 +78,8 @@ private suspend fun showLeaveRoomAlert(
         val roomInfo = room.roomInfoFlow.first()
         confirmation.value = when {
             roomInfo.isDm -> Dm(roomId)
-            !roomInfo.isPublic -> PrivateRoom(roomId)
+            // If unknown, assume the room is private
+            roomInfo.isPublic == null || roomInfo.isPublic == false -> PrivateRoom(roomId)
             roomInfo.joinedMembersCount == 1L -> LastUserInRoom(roomId)
             else -> Generic(roomId)
         }

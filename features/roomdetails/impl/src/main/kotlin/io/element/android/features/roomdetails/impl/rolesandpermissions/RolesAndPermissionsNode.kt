@@ -59,7 +59,7 @@ class RolesAndPermissionsNode @AssistedInject constructor(
         lifecycleScope.launch {
             room.roomInfoFlow
                 .filter { info ->
-                    info.userPowerLevels[room.sessionId] != RoomMember.Role.ADMIN.powerLevel
+                    info.roomPowerLevels?.users?.get(room.sessionId) != RoomMember.Role.ADMIN.powerLevel
                 }
                 .take(1)
                 .onEach { navigateUp() }

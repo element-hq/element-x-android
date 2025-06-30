@@ -139,7 +139,7 @@ class JoinedRustRoom(
     }
 
     init {
-        val powerLevelChanges = roomInfoFlow.map { it.userPowerLevels }.distinctUntilChanged()
+        val powerLevelChanges = roomInfoFlow.map { it.roomPowerLevels }.distinctUntilChanged()
         val membershipChanges = liveTimeline.membershipChangeEventReceived.onStart { emit(Unit) }
         combine(membershipChanges, powerLevelChanges) { _, _ -> }
             // Skip initial one

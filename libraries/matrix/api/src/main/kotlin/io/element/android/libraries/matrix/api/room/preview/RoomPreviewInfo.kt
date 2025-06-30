@@ -33,5 +33,5 @@ data class RoomPreviewInfo(
     /** the membership of the current user. */
     val membership: CurrentUserMembership?,
     /** The room's join rule. */
-    val joinRule: JoinRule,
+    val joinRule: JoinRule?,
 )

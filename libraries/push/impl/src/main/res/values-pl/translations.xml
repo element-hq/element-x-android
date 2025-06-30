@@ -15,7 +15,6 @@
     <item quantity="few">"%d powiadomienia"</item>
     <item quantity="many">"%d powiadomień"</item>
   </plurals>
-  <string name="notification_fallback_content">"Powiadomienie"</string>
   <string name="notification_incoming_call">"📹 Połączenie przychodzące"</string>
   <string name="notification_inline_reply_failed">"** Nie udało się wysłać - proszę otworzyć pokój"</string>
   <string name="notification_invitation_action_join">"Dołącz"</string>

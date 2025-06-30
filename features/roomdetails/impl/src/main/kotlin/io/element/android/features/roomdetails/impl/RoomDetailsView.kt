@@ -58,6 +58,7 @@ import io.element.android.libraries.designsystem.components.button.MainActionBut
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
+import io.element.android.libraries.designsystem.modifiers.a11yClickLabel
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -400,6 +401,7 @@ private fun RoomHeaderSection(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val actionView = stringResource(CommonStrings.action_view)
         Avatar(
             avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomHeader),
             avatarType = AvatarType.Room(
@@ -408,9 +410,11 @@ private fun RoomHeaderSection(
                 }.toPersistentList(),
                 isTombstoned = isTombstoned,
             ),
+            contentDescription = avatarUrl?.let { stringResource(CommonStrings.a11y_room_avatar) },
             modifier = Modifier
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.roomDetailAvatar)
+                .a11yClickLabel(avatarUrl?.let { actionView })
         )
         TitleAndSubtitle(
             title = roomName,

@@ -15,5 +15,7 @@ android {
     dependencies {
         testImplementation(libs.test.junit)
         testImplementation(libs.test.truth)
+        testImplementation(libs.coroutines.test)
+        testImplementation(libs.test.truth)
     }
 }

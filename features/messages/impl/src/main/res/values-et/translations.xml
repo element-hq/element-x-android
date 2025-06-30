@@ -35,13 +35,27 @@
   <string name="screen_room_timeline_less_reactions">"Näita vähem"</string>
   <string name="screen_room_timeline_message_copied">"Sõnum on kopeeritud"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Sul pole õigusi siia jututuppa kirjutada"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"%1$d liige reageeris: %2$s"</item>
+    <item quantity="other">"%1$d liige reageerisid: %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"Sina ja veel %1$d liige reageeris: %2$s"</item>
+    <item quantity="other">"Sina ja veel %1$d liiget reageerisid: %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"Sina reageerisid: %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Näita vähem"</string>
   <string name="screen_room_timeline_reactions_show_more">"Näita rohkem"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Näita reageerimiste kokkuvõtet"</string>
   <string name="screen_room_timeline_read_marker_title">"Uus"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d jututoa muudatus"</item>
     <item quantity="other">"%1$d jututoa muudatust"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Hüppa uude jututuppa"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"See jututuba on asendatud uuega ning pole enam aktiivne"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Vaata vanu sõnumeid"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"See jututuba on varasema jututoa jätk"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s ja veel %3$d osaleja"</item>
     <item quantity="other">"%1$s, %2$s ja veel %3$d osalejat"</item>

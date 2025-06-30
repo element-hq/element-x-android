@@ -35,14 +35,30 @@
   <string name="screen_room_timeline_less_reactions">"Zobraziť menej"</string>
   <string name="screen_room_timeline_message_copied">"Správa skopírovaná"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Nemáte povolenie uverejňovať príspevky v tejto miestnosti"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"%1$d člen reagoval s %2$s"</item>
+    <item quantity="few">"%1$d členovia reagovali s %2$s"</item>
+    <item quantity="other">"%1$d členov reagovalo s %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"Vy a %1$d člen reagoval s %2$s"</item>
+    <item quantity="few">"Vy a %1$d členovia reagovali s %2$s"</item>
+    <item quantity="other">"Vy a %1$d členov reagovalo s %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"Reagovali ste s %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Zobraziť menej"</string>
   <string name="screen_room_timeline_reactions_show_more">"Zobraziť viac"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Zobraziť súhrn reakcií"</string>
   <string name="screen_room_timeline_read_marker_title">"Nové"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d zmena miestnosti"</item>
     <item quantity="few">"%1$d zmeny miestnosti"</item>
     <item quantity="other">"%1$d zmien miestnosti"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Prejsť do novej miestnosti"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Táto miestnosť bola nahradená a už nie je aktívna"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Zobraziť staré správy"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Táto miestnosť je pokračovaním inej miestnosti"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s a %3$d ďalší"</item>
     <item quantity="few">"%1$s, %2$s a %3$d ďalší"</item>

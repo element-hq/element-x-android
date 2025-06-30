@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Kapcsolja ki az alkalmazás akkumulátor-optimalizálását, hogy biztosan megkapja az összes értesítést."</string>
+  <string name="banner_battery_optimization_submit_android">"Optimalizálás letiltása"</string>
+  <string name="banner_battery_optimization_title_android">"Nem érkeznek meg az értesítések?"</string>
+  <string name="banner_set_up_recovery_content">"Hozzon létre egy új helyreállítási kulcsot, amellyel visszaállíthatja a titkosított üzenetek előzményeit, ha elveszíti az eszközökhöz való hozzáférést."</string>
+  <string name="banner_set_up_recovery_submit">"Helyreállítás beállítása"</string>
+  <string name="banner_set_up_recovery_title">"Helyreállítás beállítása a fiókja védelméhez"</string>
+  <string name="confirm_recovery_key_banner_message">"Erősítse meg a helyreállítási kulcsát, hogy továbbra is hozzáférjen a kulcstárolójához és az üzenetelőzményekhez."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Adja meg a helyreállítási kulcsot"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Elfelejtette a helyreállítási kulcsot?"</string>
+  <string name="confirm_recovery_key_banner_title">"A kulcstároló nincs szinkronizálva"</string>
+  <string name="full_screen_intent_banner_message">"Hogy sose maradjon le egyetlen fontos hívásról sem, a beállításokban engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van."</string>
+  <string name="full_screen_intent_banner_title">"Fokozza a hívásélményét"</string>
+  <string name="screen_invites_decline_chat_message">"Biztos, hogy elutasítja a meghívást, hogy csatlakozzon ehhez: %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Meghívás elutasítása"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Biztos, hogy elutasítja ezt a privát csevegést vele: %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Csevegés elutasítása"</string>
+  <string name="screen_invites_empty_list">"Nincsenek meghívások"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) meghívta"</string>
+  <string name="screen_migration_message">"Ez egy egyszeri folyamat, köszönjük a türelmét."</string>
+  <string name="screen_migration_title">"A fiók beállítása."</string>
+  <string name="screen_roomlist_a11y_create_message">"Új beszélgetés vagy szoba létrehozása"</string>
+  <string name="screen_roomlist_clear_filters">"Szűrők törlése"</string>
+  <string name="screen_roomlist_empty_message">"Kezdje azzal, hogy üzenetet küld valakinek."</string>
+  <string name="screen_roomlist_empty_title">"Még nincsenek csevegések."</string>
+  <string name="screen_roomlist_filter_favourites">"Kedvencek"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"A csevegési beállításokban csevegéseket adhat hozzá a kedvencekhez.
+Egyelőre törölheti a szűrőket a többi csevegés megtekintéséhez."</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Még nincsenek kedvenc csevegései"</string>
+  <string name="screen_roomlist_filter_invites">"Meghívások"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Nincsenek függőben lévő meghívásai."</string>
+  <string name="screen_roomlist_filter_low_priority">"Alacsony prioritás"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Ehhez a kiválasztáshoz nem tartoznak csevegések"</string>
+  <string name="screen_roomlist_filter_people">"Emberek"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Még nincsenek privát üzenetei"</string>
+  <string name="screen_roomlist_filter_rooms">"Szobák"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Még nincs egy szobában sem"</string>
+  <string name="screen_roomlist_filter_unreads">"Olvasatlan"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulálunk!
+Nincs olvasatlan üzenete!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Csatlakozási kérés elküldve"</string>
+  <string name="screen_roomlist_main_space_title">"Összes csevegés"</string>
+  <string name="screen_roomlist_mark_as_read">"Megjelölés olvasottként"</string>
+  <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"A szoba verzióját frissítették"</string>
+  <string name="session_verification_banner_message">"Úgy tűnik, hogy új eszközt használ. Ellenőrizze egy másik eszközzel, hogy a továbbiakban elérje a titkosított üzeneteket."</string>
+  <string name="session_verification_banner_title">"Ellenőrizze, hogy Ön az"</string>
+</resources>

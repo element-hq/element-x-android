@@ -22,9 +22,7 @@ class LastForwardIndicatorsPostProcessor(
 
     fun process(
         items: List<MatrixTimelineItem>,
-        isTimelineInitialized: Boolean,
     ): List<MatrixTimelineItem> {
-        if (!isTimelineInitialized) return items
         // We don't need to add the last forward indicator if we are not in the FOCUSED_ON_EVENT mode
         if (mode != Timeline.Mode.FOCUSED_ON_EVENT) {
             return items

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Disable battery optimization for this app, to make sure all notifications are received."</string>
+  <string name="banner_battery_optimization_submit_android">"Disable optimization"</string>
+  <string name="banner_battery_optimization_title_android">"Notifications not arriving?"</string>
+  <string name="banner_set_up_recovery_content">"Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices."</string>
+  <string name="banner_set_up_recovery_submit">"Set up recovery"</string>
+  <string name="banner_set_up_recovery_title">"Set up recovery to protect your account"</string>
+  <string name="confirm_recovery_key_banner_message">"Confirm your recovery key to maintain access to your key storage and message history."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Enter your recovery key"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Forgot your recovery key?"</string>
+  <string name="confirm_recovery_key_banner_title">"Your key storage is out of sync"</string>
+  <string name="full_screen_intent_banner_message">"To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked."</string>
+  <string name="full_screen_intent_banner_title">"Enhance your call experience"</string>
+  <string name="screen_invites_decline_chat_message">"Are you sure you want to decline the invitation to join %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Decline invite"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Are you sure you want to decline this private chat with %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Decline chat"</string>
+  <string name="screen_invites_empty_list">"No Invites"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) invited you"</string>
+  <string name="screen_migration_message">"This is a one time process, thanks for waiting."</string>
+  <string name="screen_migration_title">"Setting up your account."</string>
+  <string name="screen_roomlist_a11y_create_message">"Create a new conversation or room"</string>
+  <string name="screen_roomlist_clear_filters">"Clear filters"</string>
+  <string name="screen_roomlist_empty_message">"Get started by messaging someone."</string>
+  <string name="screen_roomlist_empty_title">"No chats yet."</string>
+  <string name="screen_roomlist_filter_favourites">"Favourites"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"You can add a chat to your favourites in the chat settings.
+For now, you can deselect filters in order to see your other chats"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"You don’t have favourite chats yet"</string>
+  <string name="screen_roomlist_filter_invites">"Invites"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"You don\'t have any pending invites."</string>
+  <string name="screen_roomlist_filter_low_priority">"Low Priority"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"You can deselect filters in order to see your other chats"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"You don’t have chats for this selection"</string>
+  <string name="screen_roomlist_filter_people">"People"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"You don’t have any DMs yet"</string>
+  <string name="screen_roomlist_filter_rooms">"Rooms"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"You’re not in any room yet"</string>
+  <string name="screen_roomlist_filter_unreads">"Unreads"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Congrats!
+You don’t have any unread messages!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Request to join sent"</string>
+  <string name="screen_roomlist_main_space_title">"Chats"</string>
+  <string name="screen_roomlist_mark_as_read">"Mark as read"</string>
+  <string name="screen_roomlist_mark_as_unread">"Mark as unread"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"This room has been upgraded"</string>
+  <string name="session_verification_banner_message">"Looks like you’re using a new device. Verify with another device to access your encrypted messages."</string>
+  <string name="session_verification_banner_title">"Verify it’s you"</string>
+</resources>

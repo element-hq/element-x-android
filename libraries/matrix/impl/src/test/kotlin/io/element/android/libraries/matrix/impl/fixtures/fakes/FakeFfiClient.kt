@@ -25,6 +25,7 @@ import org.matrix.rustcomponents.sdk.PusherKind
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SessionVerificationController
+import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
@@ -62,7 +63,7 @@ class FakeFfiClient(
     ) = Unit
 
     override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
-    override suspend fun clearCaches() = simulateLongTask { clearCachesResult() }
+    override suspend fun clearCaches(syncService: SyncService?) = simulateLongTask { clearCachesResult() }
     override suspend fun setUtdDelegate(utdDelegate: UnableToDecryptDelegate) = withUtdHook(utdDelegate)
     override suspend fun getSessionVerificationController(): SessionVerificationController = FakeFfiSessionVerificationController()
     override suspend fun ignoredUsers(): List<String> {

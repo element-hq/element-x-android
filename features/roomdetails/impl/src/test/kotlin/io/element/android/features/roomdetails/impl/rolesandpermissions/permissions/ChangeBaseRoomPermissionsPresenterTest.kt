@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember.Role.USER
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
-import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevels
+import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -296,7 +296,7 @@ class ChangeBaseRoomPermissionsPresenterTest {
         analyticsService = analyticsService,
     )
 
-    private fun defaultPermissions() = defaultRoomPowerLevels()
+    private fun defaultPermissions() = defaultRoomPowerLevelValues()
 
     private suspend fun TurbineTestContext<ChangeRoomPermissionsState>.awaitUpdatedItem(): ChangeRoomPermissionsState {
         skipItems(1)

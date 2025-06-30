@@ -131,7 +131,7 @@ class RustMatrixClient(
     private val sessionStore: SessionStore,
     private val appCoroutineScope: CoroutineScope,
     private val sessionDelegate: RustClientSessionDelegate,
-    innerSyncService: ClientSyncService,
+    private val innerSyncService: ClientSyncService,
     dispatchers: CoroutineDispatchers,
     baseCacheDirectory: File,
     clock: SystemClock,
@@ -541,7 +541,7 @@ class RustMatrixClient(
     }
 
     override suspend fun clearCache() {
-        innerClient.clearCaches()
+        innerClient.clearCaches(innerSyncService)
         destroy()
     }
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Vypnite optimalizáciu batérie pre túto aplikáciu, aby ste sa uistili, že sú prijaté všetky upozornenia."</string>
+  <string name="banner_battery_optimization_submit_android">"Zakázať optimalizáciu"</string>
+  <string name="banner_battery_optimization_title_android">"Oznámenia neprichádzajú?"</string>
+  <string name="banner_set_up_recovery_content">"Vytvorte nový kľúč na obnovenie, ktorý môžete použiť na obnovenie vašej histórie šifrovaných správ v prípade straty prístupu k vašim zariadeniam."</string>
+  <string name="banner_set_up_recovery_submit">"Nastaviť obnovenie"</string>
+  <string name="banner_set_up_recovery_title">"Nastaviť obnovenie"</string>
+  <string name="confirm_recovery_key_banner_message">"Potvrďte svoj kľúč na obnovenie, aby ste zachovali prístup k úložisku kľúčov a histórii správ."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Zadajte kľúč na obnovenie"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Zabudli ste svoj kľúč na obnovenie?"</string>
+  <string name="confirm_recovery_key_banner_title">"Vaše úložisko kľúčov nie je synchronizované"</string>
+  <string name="full_screen_intent_banner_message">"Aby ste už nikdy nezmeškali dôležitý hovor, zmeňte svoje nastavenia a povoľte upozornenia na celú obrazovku, keď je váš telefón uzamknutý."</string>
+  <string name="full_screen_intent_banner_title">"Vylepšite svoj zážitok z hovoru"</string>
+  <string name="screen_invites_decline_chat_message">"Naozaj chcete odmietnuť pozvánku na pripojenie do %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Odmietnuť pozvanie"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Naozaj chcete odmietnuť túto súkromnú konverzáciu s %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Odmietnuť konverzáciu"</string>
+  <string name="screen_invites_empty_list">"Žiadne pozvánky"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) vás pozval/a"</string>
+  <string name="screen_migration_message">"Ide o jednorazový proces, ďakujeme za trpezlivosť."</string>
+  <string name="screen_migration_title">"Nastavenie vášho účtu."</string>
+  <string name="screen_roomlist_a11y_create_message">"Vytvorte novú konverzáciu alebo miestnosť"</string>
+  <string name="screen_roomlist_clear_filters">"Vyčistiť filtre"</string>
+  <string name="screen_roomlist_empty_message">"Začnite tým, že niekomu pošlete správu."</string>
+  <string name="screen_roomlist_empty_title">"Zatiaľ žiadne konverzácie."</string>
+  <string name="screen_roomlist_filter_favourites">"Obľúbené"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Môžete pridať konverzáciu medzi obľúbené v nastaveniach konverzácie.
+Zatiaľ môžete zrušiť výber filtrov, aby ste videli ostatné konverzácie"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Zatiaľ nemáte obľúbené konverzácie"</string>
+  <string name="screen_roomlist_filter_invites">"Pozvánky"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Nemáte žiadne čakajúce pozvánky."</string>
+  <string name="screen_roomlist_filter_low_priority">"Nízka priorita"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Nemáte konverzácie pre tento výber"</string>
+  <string name="screen_roomlist_filter_people">"Ľudia"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Zatiaľ nemáte žiadne priame správy"</string>
+  <string name="screen_roomlist_filter_rooms">"Miestnosti"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Zatiaľ ešte nie ste v žiadnej miestnosti"</string>
+  <string name="screen_roomlist_filter_unreads">"Neprečítané"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulujeme!
+Nemáte žiadne neprečítané správy!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Žiadosť o pripojenie bola odoslaná"</string>
+  <string name="screen_roomlist_main_space_title">"Všetky konverzácie"</string>
+  <string name="screen_roomlist_mark_as_read">"Označiť ako prečítané"</string>
+  <string name="screen_roomlist_mark_as_unread">"Označiť ako neprečítané"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Táto miestnosť bola aktualizovaná"</string>
+  <string name="session_verification_banner_message">"Vyzerá to tak, že používate nové zariadenie. Overte svoj prístup k zašifrovaným správam pomocou vášho druhého zariadenia."</string>
+  <string name="session_verification_banner_title">"Overte, že ste to vy"</string>
+</resources>

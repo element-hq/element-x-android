@@ -46,11 +46,16 @@
   <string name="screen_room_timeline_reaction_you_a11y">"Du reagerte med %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Vis mindre"</string>
   <string name="screen_room_timeline_reactions_show_more">"Vis mer"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Vis sammendrag av reaksjoner"</string>
   <string name="screen_room_timeline_read_marker_title">"Ny"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d romendring"</item>
     <item quantity="other">"%1$d romendringer"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Gå til nytt rom"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Dette rommet har blitt erstattet og er ikke lenger aktivt"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Se gamle meldinger"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Dette rommet er en fortsettelse av et annet rom"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s og %3$d annet"</item>
     <item quantity="other">"%1$s, %2$s og %3$d andre"</item>
