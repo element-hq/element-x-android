@@ -43,7 +43,7 @@ object Versions {
 
     // When updating the `minSdk`, make sure to update the value of `minSdkVersion` in the file `tools/release/release.sh`
     private const val MIN_SDK_FOSS = 24
-    private const val MIN_SDK_ENTERPRISE = 26
+    private const val MIN_SDK_ENTERPRISE = 33
     val minSdk = if (isEnterpriseBuild) MIN_SDK_ENTERPRISE else MIN_SDK_FOSS
 
     private const val JAVA_VERSION = 21

@@ -24,6 +24,7 @@ Learn more about why we are building Element X in our blog post: [https://elemen
 * [Translations](#translations)
 * [Rust SDK](#rust-sdk)
 * [Status](#status)
+* [Minimum SDK version](#minimum-sdk-version)
 * [Contributing](#contributing)
 * [Build instructions](#build-instructions)
 * [Support](#support)
@@ -72,6 +73,12 @@ We're doing this as a way to share code between platforms and while we've seen p
 ## Status
 
 This project is in an early rollout and migration phase.
+
+## Minimum SDK version
+
+Element X Android requires a minimum SDK version of 24 (Android 7.0, Nougat). We aim to support devices running Android 7.0 and above, which covers a wide range of devices still in use today.
+
+Element Android Enterprise requires a minimum SDK version of 33 (Android 13, Tiramisu). For Element Enterprise, we support only devices that still receive security updates, which means devices running Android 13 and above. Android does not have a documented support policy, but some information can be found at [https://endoflife.date/android](https://endoflife.date/android).
 
 ## Contributing
 
