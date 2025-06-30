@@ -31,6 +31,7 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.modifiers.a11yClickLabel
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -60,13 +61,16 @@ fun UserProfileHeaderSection(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val actionView = stringResource(CommonStrings.action_view)
         Avatar(
             avatarData = AvatarData(userId.value, userName, avatarUrl, AvatarSize.UserHeader),
             avatarType = AvatarType.User,
+            contentDescription = avatarUrl?.let { stringResource(CommonStrings.a11y_user_avatar) },
             modifier = Modifier
                 .clip(CircleShape)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.memberDetailAvatar)
+                .a11yClickLabel(avatarUrl?.let { actionView })
         )
         Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
