@@ -8,7 +8,6 @@
 package io.element.android.libraries.matrix.api
 
 import io.element.android.libraries.core.data.tryOrNull
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.ProgressCallback
@@ -20,9 +19,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
-import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
@@ -44,7 +41,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.withContext
 import java.util.Optional
 
 interface MatrixClient {
@@ -175,7 +171,6 @@ interface MatrixClient {
      * Return true if Livekit Rtc is supported, i.e. if Element Call is available.
      */
     suspend fun isLivekitRtcSupported(): Boolean
-
 }
 
 /**

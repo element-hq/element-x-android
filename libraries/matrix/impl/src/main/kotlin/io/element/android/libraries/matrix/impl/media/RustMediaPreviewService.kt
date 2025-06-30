@@ -13,7 +13,10 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.InviteAvatars
@@ -22,26 +25,26 @@ import org.matrix.rustcomponents.sdk.MediaPreviews
 import org.matrix.rustcomponents.sdk.MediaPreviewConfig as RustMediaPreviewConfig
 
 class RustMediaPreviewService(
+    sessionCoroutineScope: CoroutineScope,
     private val sessionDispatcher: CoroutineDispatcher,
     private val innerClient: Client,
 ) : MediaPreviewService {
+    override val mediaPreviewConfigFlow: StateFlow<MediaPreviewConfig> =
+        innerClient
+            .getMediaPreviewConfigFlow()
+            .stateIn(sessionCoroutineScope, started = SharingStarted.Lazily, initialValue = MediaPreviewConfig.DEFAULT)
+
     override suspend fun fetchMediaPreviewConfig(): Result<MediaPreviewConfig?> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.fetchMediaPreviewConfig()?.into()
         }
     }
 
-    override fun getMediaPreviewConfigFlow(): Flow<MediaPreviewConfig?> = innerClient.getMediaPreviewConfigFlow()
-
-    override suspend fun getMediaPreviewValue(): MediaPreviewValue? = innerClient.getMediaPreviewDisplayPolicy()?.into()
-
     override suspend fun setMediaPreviewValue(mediaPreviewValue: MediaPreviewValue): Result<Unit> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.setMediaPreviewDisplayPolicy(mediaPreviewValue.into())
         }
     }
-
-    override suspend fun getHideInviteAvatars(): Boolean = innerClient.getInviteAvatarsDisplayPolicy() == InviteAvatars.OFF
 
     override suspend fun setHideInviteAvatars(hide: Boolean): Result<Unit> = withContext(sessionDispatcher) {
         runCatchingExceptions {
@@ -61,7 +64,9 @@ private fun RustMediaPreviewConfig.into(): MediaPreviewConfig {
 private fun Client.getMediaPreviewConfigFlow() = mxCallbackFlow {
     subscribeToMediaPreviewConfig(object : MediaPreviewConfigListener {
         override fun onChange(mediaPreviewConfig: RustMediaPreviewConfig?) {
-            trySend(mediaPreviewConfig?.into())
+            if (mediaPreviewConfig != null) {
+                trySend(mediaPreviewConfig.into())
+            }
         }
     })
 }
@@ -81,4 +86,3 @@ private fun MediaPreviews.into(): MediaPreviewValue {
         MediaPreviews.PRIVATE -> MediaPreviewValue.Private
     }
 }
-

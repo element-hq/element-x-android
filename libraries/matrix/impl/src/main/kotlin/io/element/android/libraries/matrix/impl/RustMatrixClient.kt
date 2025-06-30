@@ -26,9 +26,7 @@ import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
-import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
@@ -111,7 +109,6 @@ import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
-import org.matrix.rustcomponents.sdk.InviteAvatars
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.RoomInfoListener
@@ -220,6 +217,7 @@ class RustMatrixClient(
     )
 
     private val mediaPreviewService = RustMediaPreviewService(
+        sessionCoroutineScope = sessionCoroutineScope,
         innerClient = innerClient,
         sessionDispatcher = sessionDispatcher,
     )
@@ -693,8 +691,6 @@ class RustMatrixClient(
     override suspend fun isLivekitRtcSupported(): Boolean = withContext(sessionDispatcher) {
         innerClient.isLivekitRtcSupported()
     }
-
-
 
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,

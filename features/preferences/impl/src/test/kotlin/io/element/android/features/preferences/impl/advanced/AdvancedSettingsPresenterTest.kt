@@ -11,14 +11,12 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -38,6 +36,10 @@ class AdvancedSettingsPresenterTest {
                 assertThat(isSharePresenceEnabled).isTrue()
                 assertThat(doesCompressMedia).isTrue()
                 assertThat(theme).isEqualTo(ThemeOption.System)
+                assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
+                assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
+                assertThat(mediaPreviewConfigState.setHideInviteAvatarsAction).isEqualTo(AsyncAction.Uninitialized)
+                assertThat(mediaPreviewConfigState.setTimelineMediaPreviewAction).isEqualTo(AsyncAction.Uninitialized)
             }
         }
     }
@@ -128,56 +130,92 @@ class AdvancedSettingsPresenterTest {
 
     @Test
     fun `present - hide invite avatars`() = runTest {
-        val presenter = createAdvancedSettingsPresenter()
+        val mediaPreviewStore = FakeMediaPreviewConfigStateStore()
+        val presenter = createAdvancedSettingsPresenter(mediaPreviewConfigStateStore = mediaPreviewStore)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             with(awaitItem()) {
-                assertThat(hideInviteAvatars).isFalse()
+                assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
                 eventSink(AdvancedSettingsEvents.SetHideInviteAvatars(true))
             }
             with(awaitItem()) {
-                assertThat(hideInviteAvatars).isTrue()
+                assertThat(mediaPreviewConfigState.hideInviteAvatars).isTrue()
                 eventSink(AdvancedSettingsEvents.SetHideInviteAvatars(false))
             }
             with(awaitItem()) {
-                assertThat(hideInviteAvatars).isFalse()
+                assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
+            }
+        }
+        assertThat(mediaPreviewStore.getSetHideInviteAvatarsEvents()).isEqualTo(listOf(true, false))
+    }
+
+    @Test
+    fun `present - timeline media preview value`() = runTest {
+        val mediaPreviewStore = FakeMediaPreviewConfigStateStore()
+        val presenter = createAdvancedSettingsPresenter(mediaPreviewConfigStateStore = mediaPreviewStore)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            with(awaitItem()) {
+                assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
+                eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
+            }
+            with(awaitItem()) {
+                assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.Off)
+                eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Private))
+            }
+            with(awaitItem()) {
+                assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.Private)
+            }
+        }
+        assertThat(mediaPreviewStore.getSetTimelineMediaPreviewValueEvents()).isEqualTo(
+            listOf(MediaPreviewValue.Off, MediaPreviewValue.Private)
+        )
+    }
+
+    @Test
+    fun `present - media preview state with custom initial values`() = runTest {
+        val mediaPreviewStore = FakeMediaPreviewConfigStateStore(
+            hideInviteAvatarsValue = true,
+            timelineMediaPreviewValue = MediaPreviewValue.Private
+        )
+        val presenter = createAdvancedSettingsPresenter(mediaPreviewConfigStateStore = mediaPreviewStore)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            with(awaitItem()) {
+                assertThat(mediaPreviewConfigState.hideInviteAvatars).isTrue()
+                assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.Private)
             }
         }
     }
 
     @Test
-    fun `present - timeline media preview value`() = runTest {
-        val mediaPreviewConfigFlow = MutableStateFlow<MediaPreviewConfig?>(null)
-        val presenter = createAdvancedSettingsPresenter(
-            matrixClient = FakeMatrixClient(
-                mediaPreviewConfigFlow = mediaPreviewConfigFlow
-            )
+    fun `present - async actions state`() = runTest {
+        val mediaPreviewStore = FakeMediaPreviewConfigStateStore(
+            setHideInviteAvatarsActionValue = AsyncAction.Loading,
+            setTimelineMediaPreviewActionValue = AsyncAction.Success(Unit)
         )
+        val presenter = createAdvancedSettingsPresenter(mediaPreviewConfigStateStore = mediaPreviewStore)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             with(awaitItem()) {
-                assertThat(timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
-                eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
-            }
-            with(awaitItem()) {
-                assertThat(timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.Off)
-                eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Private))
-            }
-            with(awaitItem()) {
-                assertThat(timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.Private)
+                assertThat(mediaPreviewConfigState.setHideInviteAvatarsAction).isEqualTo(AsyncAction.Loading)
+                assertThat(mediaPreviewConfigState.setTimelineMediaPreviewAction).isEqualTo(AsyncAction.Success(Unit))
             }
         }
     }
 
-    private fun createAdvancedSettingsPresenter(
+    private fun CoroutineScope.createAdvancedSettingsPresenter(
         appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
-        matrixClient: MatrixClient = FakeMatrixClient(),
+        mediaPreviewConfigStateStore: MediaPreviewConfigStateStore = FakeMediaPreviewConfigStateStore(),
     ) = AdvancedSettingsPresenter(
         appPreferencesStore = appPreferencesStore,
         sessionPreferencesStore = sessionPreferencesStore,
-        matrixClient = matrixClient,
+        mediaPreviewConfigStateStore = mediaPreviewConfigStateStore,
+        sessionCoroutineScope = this,
     )
 }

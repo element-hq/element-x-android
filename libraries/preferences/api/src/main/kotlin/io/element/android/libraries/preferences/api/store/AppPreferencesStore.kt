@@ -22,9 +22,13 @@ interface AppPreferencesStore {
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     suspend fun setHideInviteAvatars(hide: Boolean?)
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     fun getHideInviteAvatarsFlow(): Flow<Boolean?>
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     suspend fun setTimelineMediaPreviewValue(mediaPreviewValue: MediaPreviewValue?)
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue?>
 
     suspend fun setTracingLogLevel(logLevel: LogLevel)

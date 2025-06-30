@@ -7,7 +7,7 @@
 
 package io.element.android.features.preferences.impl.advanced
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.architecture.AsyncAction
@@ -21,27 +21,29 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-interface MediaPreviewConfigStateStore {
-    val hideInviteAvatars: State<Boolean>
-    val timelineMediaPreviewValue: State<MediaPreviewValue>
-    val setHideInviteAvatarsAction: State<AsyncAction<Unit>>
-    val setTimelineMediaPreviewAction: State<AsyncAction<Unit>>
+data class MediaPreviewConfigState(
+    val hideInviteAvatars: Boolean,
+    val timelineMediaPreviewValue: MediaPreviewValue,
+    val setHideInviteAvatarsAction: AsyncAction<Unit>,
+    val setTimelineMediaPreviewAction: AsyncAction<Unit>,
+)
 
+interface MediaPreviewConfigStateStore {
+    @Composable
+    fun state(): MediaPreviewConfigState
     fun setHideInviteAvatars(hide: Boolean)
     fun setTimelineMediaPreviewValue(value: MediaPreviewValue)
 }
 
-@ContributesBinding(SessionScope::class, boundType = MediaPreviewConfigStateStore::class)
+@ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
 class DefaultMediaPreviewConfigStateStore @Inject constructor(
     @SessionCoroutineScope
@@ -49,19 +51,19 @@ class DefaultMediaPreviewConfigStateStore @Inject constructor(
     private val mediaPreviewService: MediaPreviewService,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : MediaPreviewConfigStateStore {
-    override val hideInviteAvatars = mutableStateOf(false)
-    override val timelineMediaPreviewValue = mutableStateOf(MediaPreviewValue.On)
-    override val setHideInviteAvatarsAction = mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
-    override val setTimelineMediaPreviewAction = mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+    private val hideInviteAvatars = mutableStateOf(false)
+    private val timelineMediaPreviewValue = mutableStateOf(MediaPreviewValue.On)
+    private val setHideInviteAvatarsAction = mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+    private val setTimelineMediaPreviewAction = mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
 
     init {
-        val configFlow = mediaPreviewService.getMediaPreviewConfigFlow().shareIn(sessionCoroutineScope, SharingStarted.Eagerly)
-        val hideInviteAvatarsFlow = configFlow.mapNotNull { it?.hideInviteAvatar }.distinctUntilChanged()
-        val timelineMediaPreviewFlow = configFlow.mapNotNull { it?.mediaPreviewValue }.distinctUntilChanged()
+        val configFlow = mediaPreviewService.mediaPreviewConfigFlow
+        val hideInviteAvatarsFlow = configFlow.map { it.hideInviteAvatar }.distinctUntilChanged()
+        val timelineMediaPreviewFlow = configFlow.map { it.mediaPreviewValue }.distinctUntilChanged()
 
         hideInviteAvatarsFlow
             .onEach {
-                Timber.d("Hide invi@te avatars changed to $it")
+                Timber.d("Hide invite avatars changed to $it")
                 hideInviteAvatars.value = it
             }
             .launchIn(sessionCoroutineScope)
@@ -72,6 +74,16 @@ class DefaultMediaPreviewConfigStateStore @Inject constructor(
                 timelineMediaPreviewValue.value = it
             }
             .launchIn(sessionCoroutineScope)
+    }
+
+    @Composable
+    override fun state(): MediaPreviewConfigState {
+        return MediaPreviewConfigState(
+            hideInviteAvatars = hideInviteAvatars.value,
+            timelineMediaPreviewValue = timelineMediaPreviewValue.value,
+            setHideInviteAvatarsAction = setHideInviteAvatarsAction.value,
+            setTimelineMediaPreviewAction = setTimelineMediaPreviewAction.value,
+        )
     }
 
     override fun setHideInviteAvatars(hide: Boolean) {
@@ -106,4 +118,3 @@ class DefaultMediaPreviewConfigStateStore @Inject constructor(
         }
     }
 }
-

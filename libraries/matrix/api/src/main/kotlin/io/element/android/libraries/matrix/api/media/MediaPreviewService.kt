@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.api.media
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface MediaPreviewService {
     /**
@@ -19,24 +19,17 @@ interface MediaPreviewService {
      * Will emit the media preview config known by the client.
      * This will emit a new value when received from sync.
      */
-    fun getMediaPreviewConfigFlow(): Flow<MediaPreviewConfig?>
-
-    /**
-     * Get the media preview display policy from the cache. This value is updated through sync.
-     */
-    suspend fun getMediaPreviewValue(): MediaPreviewValue?
-
-    /**
-     * Get the invite avatars display policy from the cache. This value is updated through sync.
-     */
-    suspend fun getHideInviteAvatars(): Boolean
+    val mediaPreviewConfigFlow: StateFlow<MediaPreviewConfig>
 
     /**
      * Set the media preview display policy. This will update the value on the server and update the local value when successful.
      */
     suspend fun setMediaPreviewValue(mediaPreviewValue: MediaPreviewValue): Result<Unit>
+
     /**
      * Set the invite avatars display policy. This will update the value on the server and update the local value when successful.
      */
     suspend fun setHideInviteAvatars(hide: Boolean): Result<Unit>
 }
+
+fun MediaPreviewService.getMediaPreviewValue() = mediaPreviewConfigFlow.value.mediaPreviewValue

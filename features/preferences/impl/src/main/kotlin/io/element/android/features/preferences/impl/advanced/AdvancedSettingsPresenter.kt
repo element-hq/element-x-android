@@ -8,21 +8,15 @@
 package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CoroutineScope
@@ -50,6 +44,8 @@ class AdvancedSettingsPresenter @Inject constructor(
         val theme = remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
         }.collectAsState(initial = Theme.System)
+
+        val mediaPreviewConfigState = mediaPreviewConfigStateStore.state()
 
         val themeOption by remember {
             derivedStateOf {
@@ -89,10 +85,7 @@ class AdvancedSettingsPresenter @Inject constructor(
             isSharePresenceEnabled = isSharePresenceEnabled,
             doesCompressMedia = doesCompressMedia,
             theme = themeOption,
-            hideInviteAvatars = mediaPreviewConfigStateStore.hideInviteAvatars.value,
-            timelineMediaPreviewValue = mediaPreviewConfigStateStore.timelineMediaPreviewValue.value,
-            setHideInviteAvatarsAction = mediaPreviewConfigStateStore.setHideInviteAvatarsAction.value,
-            setTimelineMediaPreviewAction = mediaPreviewConfigStateStore.setTimelineMediaPreviewAction.value,
+            mediaPreviewConfigState = mediaPreviewConfigState,
             eventSink = ::handleEvents,
         )
     }

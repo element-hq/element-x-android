@@ -13,4 +13,14 @@ package io.element.android.libraries.matrix.api.media
 data class MediaPreviewConfig(
     val mediaPreviewValue: MediaPreviewValue,
     val hideInviteAvatar: Boolean,
-)
+) {
+    companion object {
+        /**
+         * The default config if unknown (no local nor server config).
+         */
+        val DEFAULT = MediaPreviewConfig(
+            mediaPreviewValue = MediaPreviewValue.On,
+            hideInviteAvatar = false
+        )
+    }
+}

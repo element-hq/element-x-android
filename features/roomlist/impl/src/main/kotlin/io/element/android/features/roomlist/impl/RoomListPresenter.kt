@@ -37,6 +37,7 @@ import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -120,8 +121,11 @@ class RoomListPresenter @Inject constructor(
         // Avatar indicator
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
         val hideInvitesAvatar by remember {
-            appPreferencesStore.getHideInviteAvatarsFlow()
-        }.collectAsState(initial = false)
+            client
+                .mediaPreviewService()
+                .mediaPreviewConfigFlow
+                .mapState { config -> config.hideInviteAvatar }
+        }.collectAsState()
 
         val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
         val declineInviteMenu = remember { mutableStateOf<RoomListState.DeclineInviteMenu>(RoomListState.DeclineInviteMenu.Hidden) }

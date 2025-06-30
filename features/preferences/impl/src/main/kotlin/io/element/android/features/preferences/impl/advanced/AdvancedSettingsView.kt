@@ -133,11 +133,11 @@ private fun ModerationAndSafety(
     ) {
         PreferenceSwitch(
             title = stringResource(R.string.screen_advanced_settings_hide_invite_avatars_toggle_title),
-            isChecked = state.hideInviteAvatars,
+            isChecked = state.mediaPreviewConfigState.hideInviteAvatars,
             onCheckedChange = {
                 state.eventSink(AdvancedSettingsEvents.SetHideInviteAvatars(it))
             },
-            enabled = !state.setHideInviteAvatarsAction.isLoading()
+            enabled = !state.mediaPreviewConfigState.setHideInviteAvatarsAction.isLoading()
         )
         ListSectionHeader(
             title = stringResource(R.string.screen_advanced_settings_show_media_timeline_title),
@@ -153,27 +153,36 @@ private fun ModerationAndSafety(
         )
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_always_hide)) },
-            leadingContent = ListItemContent.RadioButton(selected = state.timelineMediaPreviewValue == MediaPreviewValue.Off, compact = true),
+            leadingContent = ListItemContent.RadioButton(
+                selected = state.mediaPreviewConfigState.timelineMediaPreviewValue == MediaPreviewValue.Off,
+                compact = true
+            ),
             onClick = {
                 state.eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
             },
-            enabled = !state.setTimelineMediaPreviewAction.isLoading()
+            enabled = !state.mediaPreviewConfigState.setTimelineMediaPreviewAction.isLoading()
         )
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_private_rooms)) },
-            leadingContent = ListItemContent.RadioButton(selected = state.timelineMediaPreviewValue == MediaPreviewValue.Private, compact = true),
+            leadingContent = ListItemContent.RadioButton(
+                selected = state.mediaPreviewConfigState.timelineMediaPreviewValue == MediaPreviewValue.Private,
+                compact = true
+            ),
             onClick = {
                 state.eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Private))
             },
-            enabled = !state.setTimelineMediaPreviewAction.isLoading()
+            enabled = !state.mediaPreviewConfigState.setTimelineMediaPreviewAction.isLoading()
         )
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_always_show)) },
-            leadingContent = ListItemContent.RadioButton(selected = state.timelineMediaPreviewValue == MediaPreviewValue.On, compact = true),
+            leadingContent = ListItemContent.RadioButton(
+                selected = state.mediaPreviewConfigState.timelineMediaPreviewValue == MediaPreviewValue.On,
+                compact = true
+            ),
             onClick = {
                 state.eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.On))
             },
-            enabled = !state.setTimelineMediaPreviewAction.isLoading()
+            enabled = !state.mediaPreviewConfigState.setTimelineMediaPreviewAction.isLoading()
         )
     }
 }

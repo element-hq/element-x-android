@@ -10,9 +10,7 @@ package io.element.android.features.preferences.impl.advanced
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.preferences.DropdownOption
-import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.ui.strings.CommonStrings
 
 data class AdvancedSettingsState(
@@ -20,10 +18,7 @@ data class AdvancedSettingsState(
     val isSharePresenceEnabled: Boolean,
     val doesCompressMedia: Boolean,
     val theme: ThemeOption,
-    val hideInviteAvatars: Boolean,
-    val timelineMediaPreviewValue: MediaPreviewValue,
-    val setHideInviteAvatarsAction: AsyncAction<Unit>,
-    val setTimelineMediaPreviewAction: AsyncAction<Unit>,
+    val mediaPreviewConfigState: MediaPreviewConfigState,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )
 

@@ -34,6 +34,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -49,7 +50,6 @@ import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.ui.model.toInviteSender
-import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Optional
@@ -67,7 +67,6 @@ class JoinRoomPresenter @AssistedInject constructor(
     private val forgetRoom: ForgetRoom,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val buildMeta: BuildMeta,
-    private val appPreferencesStore: AppPreferencesStore,
     private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<JoinRoomState> {
     interface Factory {
@@ -94,8 +93,11 @@ class JoinRoomPresenter @AssistedInject constructor(
         var knockMessage by rememberSaveable { mutableStateOf("") }
         var isDismissingContent by remember { mutableStateOf(false) }
         val hideInviteAvatars by remember {
-            appPreferencesStore.getHideInviteAvatarsFlow()
-        }.collectAsState(initial = false)
+            matrixClient
+                .mediaPreviewService()
+                .mediaPreviewConfigFlow
+                .mapState { config -> config.hideInviteAvatar }
+        }.collectAsState()
         val canReportRoom by produceState(false) { value = matrixClient.canReportRoom() }
 
         val contentState by produceState<ContentState>(

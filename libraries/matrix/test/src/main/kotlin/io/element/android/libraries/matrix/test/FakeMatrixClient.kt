@@ -17,8 +17,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
-import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
-import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.notification.NotificationService
@@ -96,7 +94,6 @@ class FakeMatrixClient(
     private val canReportRoomLambda: () -> Boolean = { false },
     private val isLivekitRtcSupportedLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
-
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -245,7 +242,6 @@ class FakeMatrixClient(
     override fun roomMembershipObserver(): RoomMembershipObserver {
         return RoomMembershipObserver()
     }
-
 
     // Mocks
 

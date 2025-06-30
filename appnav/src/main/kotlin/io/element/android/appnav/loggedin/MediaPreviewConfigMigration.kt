@@ -26,6 +26,7 @@ class MediaPreviewConfigMigration @Inject constructor(
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
 ) {
+    @Suppress("DEPRECATION")
     operator fun invoke() = sessionCoroutineScope.launch {
         val hideInviteAvatars = appPreferencesStore.getHideInviteAvatarsFlow().first()
         val mediaPreviewValue = appPreferencesStore.getTimelineMediaPreviewValueFlow().first()
@@ -49,7 +50,8 @@ class MediaPreviewConfigMigration @Inject constructor(
                         appPreferencesStore.setTimelineMediaPreviewValue(null)
                     }
                 }
-            }.onFailure {
+            }
+            .onFailure {
                 Timber.d("Couldn't perform migration, failed to fetch media preview config.")
             }
     }

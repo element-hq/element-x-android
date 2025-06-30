@@ -29,8 +29,8 @@ fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSharePresenceEnabled: Boolean = false,
     doesCompressMedia: Boolean = false,
-    hideInviteAvatars: Boolean = false,
     theme: ThemeOption = ThemeOption.System,
+    hideInviteAvatars: Boolean = false,
     timelineMediaPreviewValue: MediaPreviewValue = MediaPreviewValue.On,
     setTimelineMediaPreviewAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     setHideInviteAvatarsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
@@ -40,9 +40,11 @@ fun aAdvancedSettingsState(
     isSharePresenceEnabled = isSharePresenceEnabled,
     doesCompressMedia = doesCompressMedia,
     theme = theme,
-    hideInviteAvatars = hideInviteAvatars,
-    timelineMediaPreviewValue = timelineMediaPreviewValue,
-    setTimelineMediaPreviewAction = setTimelineMediaPreviewAction,
-    setHideInviteAvatarsAction = setHideInviteAvatarsAction,
+    mediaPreviewConfigState = MediaPreviewConfigState(
+        hideInviteAvatars = hideInviteAvatars,
+        timelineMediaPreviewValue = timelineMediaPreviewValue,
+        setTimelineMediaPreviewAction = setTimelineMediaPreviewAction,
+        setHideInviteAvatarsAction = setHideInviteAvatarsAction
+    ),
     eventSink = eventSink
 )
