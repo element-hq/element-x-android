@@ -145,7 +145,7 @@ class AdvancedSettingsViewTest {
     }
 
     @Test
-    @Config(qualifiers = "h640dp")
+    @Config(qualifiers = "h1024dp")
     fun `clicking on timeline media preview emits the expected event`() {
         val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
         rule.setAdvancedSettingsView(
