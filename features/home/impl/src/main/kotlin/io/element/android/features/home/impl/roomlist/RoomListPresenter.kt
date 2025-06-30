@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.home.impl
+package io.element.android.features.home.impl.roomlist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,22 +33,16 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteE
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomEvent.ShowConfirmation
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
-import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
-import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
@@ -75,15 +69,11 @@ import javax.inject.Inject
 private const val EXTENDED_RANGE_SIZE = 40
 private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 300L
 
-// TODO Create HomePresenter to split the state.
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val syncService: SyncService,
-    private val snackbarDispatcher: SnackbarDispatcher,
     private val leaveRoomPresenter: Presenter<LeaveRoomState>,
     private val roomListDataSource: RoomListDataSource,
     private val featureFlagService: FeatureFlagService,
-    private val indicatorService: IndicatorService,
     private val filtersPresenter: Presenter<RoomListFiltersState>,
     private val searchPresenter: Presenter<RoomListSearchState>,
     private val sessionPreferencesStore: SessionPreferencesStore,
@@ -92,9 +82,7 @@ class RoomListPresenter @Inject constructor(
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
     private val batteryOptimizationPresenter: Presenter<BatteryOptimizationState>,
     private val notificationCleaner: NotificationCleaner,
-    private val logoutPresenter: Presenter<DirectLogoutState>,
     private val appPreferencesStore: AppPreferencesStore,
-    private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
@@ -103,31 +91,23 @@ class RoomListPresenter @Inject constructor(
     override fun present(): RoomListState {
         val coroutineScope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
-        val matrixUser = client.userProfile.collectAsState()
-        val isOnline by syncService.isOnline.collectAsState()
         val filtersState = filtersPresenter.present()
         val searchState = searchPresenter.present()
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
-        val canReportBug = remember { rageshakeFeatureAvailability.isAvailable() }
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
-            // Force a refresh of the profile
-            client.getUserProfile()
         }
 
         var securityBannerDismissed by rememberSaveable { mutableStateOf(false) }
 
         // Avatar indicator
-        val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
         val hideInvitesAvatar by remember {
             appPreferencesStore.getHideInviteAvatarsFlow()
         }.collectAsState(initial = false)
 
         val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
         val declineInviteMenu = remember { mutableStateOf<RoomListState.DeclineInviteMenu>(RoomListState.DeclineInviteMenu.Hidden) }
-
-        val directLogoutState = logoutPresenter.present()
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
@@ -163,26 +143,18 @@ class RoomListPresenter @Inject constructor(
             }
         }
 
-        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
-
         val contentState = roomListContentState(securityBannerDismissed)
 
         val canReportRoom by produceState(false) { value = client.canReportRoom() }
 
         return RoomListState(
-            matrixUser = matrixUser.value,
-            showAvatarIndicator = showAvatarIndicator,
-            snackbarMessage = snackbarMessage,
-            hasNetworkConnection = isOnline,
             contextMenu = contextMenu.value,
             declineInviteMenu = declineInviteMenu.value,
             leaveRoomState = leaveRoomState,
             filtersState = filtersState,
-            canReportBug = canReportBug,
             searchState = searchState,
             contentState = contentState,
             acceptDeclineInviteState = acceptDeclineInviteState,
-            directLogoutState = directLogoutState,
             hideInvitesAvatars = hideInvitesAvatar,
             canReportRoom = canReportRoom,
             eventSink = ::handleEvents,

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.home.impl
+package io.element.android.features.home.impl.roomlist
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.home.impl.filters.RoomListFiltersState
@@ -20,17 +20,11 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteE
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
-import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
-import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -38,8 +32,6 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
         get() = sequenceOf(
             aRoomListState(),
-            aRoomListState(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
-            aRoomListState(hasNetworkConnection = false),
             aRoomListState(contextMenu = aContextMenuShown(roomName = null)),
             aRoomListState(contextMenu = aContextMenuShown(roomName = "A nice room name")),
             aRoomListState(contextMenu = aContextMenuShown(isFavorite = true)),
@@ -53,36 +45,24 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
 }
 
 internal fun aRoomListState(
-    matrixUser: MatrixUser = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
-    showAvatarIndicator: Boolean = false,
-    hasNetworkConnection: Boolean = true,
-    snackbarMessage: SnackbarMessage? = null,
     contextMenu: RoomListState.ContextMenu = RoomListState.ContextMenu.Hidden,
     declineInviteMenu: RoomListState.DeclineInviteMenu = RoomListState.DeclineInviteMenu.Hidden,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     searchState: RoomListSearchState = aRoomListSearchState(),
     filtersState: RoomListFiltersState = aRoomListFiltersState(),
-    canReportBug: Boolean = true,
     contentState: RoomListContentState = aRoomsContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
-    directLogoutState: DirectLogoutState = aDirectLogoutState(),
     hideInvitesAvatars: Boolean = false,
     canReportRoom: Boolean = true,
     eventSink: (RoomListEvents) -> Unit = {}
 ) = RoomListState(
-    matrixUser = matrixUser,
-    showAvatarIndicator = showAvatarIndicator,
-    hasNetworkConnection = hasNetworkConnection,
-    snackbarMessage = snackbarMessage,
     contextMenu = contextMenu,
     declineInviteMenu = declineInviteMenu,
     leaveRoomState = leaveRoomState,
     filtersState = filtersState,
-    canReportBug = canReportBug,
     searchState = searchState,
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
-    directLogoutState = directLogoutState,
     hideInvitesAvatars = hideInvitesAvatars,
     canReportRoom = canReportRoom,
     eventSink = eventSink,

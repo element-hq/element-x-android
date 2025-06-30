@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.home.impl
+package io.element.android.features.home.impl.roomlist
 
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.libraries.matrix.api.core.RoomId

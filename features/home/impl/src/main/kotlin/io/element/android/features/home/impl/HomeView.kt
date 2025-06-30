@@ -29,6 +29,10 @@ import io.element.android.features.home.impl.components.RoomListContentView
 import io.element.android.features.home.impl.components.RoomListMenuAction
 import io.element.android.features.home.impl.components.RoomListTopBar
 import io.element.android.features.home.impl.model.RoomListRoomSummary
+import io.element.android.features.home.impl.roomlist.RoomListContextMenu
+import io.element.android.features.home.impl.roomlist.RoomListDeclineInviteMenu
+import io.element.android.features.home.impl.roomlist.RoomListEvents
+import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.search.RoomListSearchView
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
@@ -43,8 +47,8 @@ import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbar
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @Composable
-fun RoomListView(
-    state: RoomListState,
+fun HomeView(
+    homeState: HomeState,
     onRoomClick: (RoomId) -> Unit,
     onSettingsClick: () -> Unit,
     onSetUpRecoveryClick: () -> Unit,
@@ -57,12 +61,13 @@ fun RoomListView(
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
+    val state: RoomListState = homeState.roomListState
     val coroutineScope = rememberCoroutineScope()
     val firstThrottler = remember { FirstThrottler(300, coroutineScope) }
 
     ConnectivityIndicatorContainer(
         modifier = modifier,
-        isOnline = state.hasNetworkConnection,
+        isOnline = homeState.hasNetworkConnection,
     ) { topPadding ->
         Box {
             if (state.contextMenu is RoomListState.ContextMenu.Shown) {
@@ -85,8 +90,8 @@ fun RoomListView(
 
             LeaveRoomView(state = state.leaveRoomState)
 
-            RoomListScaffold(
-                state = state,
+            HomeScaffold(
+                state = homeState,
                 onSetUpRecoveryClick = onSetUpRecoveryClick,
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                 onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
@@ -114,8 +119,8 @@ fun RoomListView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RoomListScaffold(
-    state: RoomListState,
+private fun HomeScaffold(
+    state: HomeState,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomId) -> Unit,
@@ -131,6 +136,7 @@ private fun RoomListScaffold(
     val appBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
+    val roomListState: RoomListState = state.roomListState
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -138,23 +144,23 @@ private fun RoomListScaffold(
             RoomListTopBar(
                 matrixUser = state.matrixUser,
                 showAvatarIndicator = state.showAvatarIndicator,
-                areSearchResultsDisplayed = state.searchState.isSearchActive,
-                onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
+                areSearchResultsDisplayed = roomListState.searchState.isSearchActive,
+                onToggleSearch = { roomListState.eventSink(RoomListEvents.ToggleSearchResults) },
                 onMenuActionClick = onMenuActionClick,
                 onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior,
                 displayMenuItems = state.displayActions,
-                displayFilters = state.displayFilters,
-                filtersState = state.filtersState,
+                displayFilters = roomListState.displayFilters,
+                filtersState = roomListState.filtersState,
                 canReportBug = state.canReportBug,
             )
         },
         content = { padding ->
             RoomListContentView(
-                contentState = state.contentState,
-                filtersState = state.filtersState,
-                hideInvitesAvatars = state.hideInvitesAvatars,
-                eventSink = state.eventSink,
+                contentState = roomListState.contentState,
+                filtersState = roomListState.filtersState,
+                hideInvitesAvatars = roomListState.hideInvitesAvatars,
+                eventSink = roomListState.eventSink,
                 onSetUpRecoveryClick = onSetUpRecoveryClick,
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                 onRoomClick = ::onRoomClick,
@@ -186,9 +192,9 @@ internal fun RoomListRoomSummary.contentType() = displayType.ordinal
 
 @PreviewsDayNight
 @Composable
-internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class) state: RoomListState) = ElementPreview {
-    RoomListView(
-        state = state,
+internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: HomeState) = ElementPreview {
+    HomeView(
+        homeState = state,
         onRoomClick = {},
         onSettingsClick = {},
         onSetUpRecoveryClick = {},
