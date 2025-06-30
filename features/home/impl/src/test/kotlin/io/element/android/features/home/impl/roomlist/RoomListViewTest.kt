@@ -35,12 +35,14 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class RoomListViewTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 
+    @Config(qualifiers = "h1024dp")
     @Test
     fun `displaying the view automatically sends a couple of UpdateVisibleRangeEvents`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
@@ -54,7 +56,7 @@ class RoomListViewTest {
         eventsRecorder.assertList(
             listOf(
                 RoomListEvents.UpdateVisibleRange(IntRange.EMPTY),
-                RoomListEvents.UpdateVisibleRange(0..2),
+                RoomListEvents.UpdateVisibleRange(0..5),
             )
         )
     }
