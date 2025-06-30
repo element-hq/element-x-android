@@ -36,8 +36,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
-import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState

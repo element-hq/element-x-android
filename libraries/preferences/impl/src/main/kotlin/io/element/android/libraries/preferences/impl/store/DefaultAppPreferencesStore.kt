@@ -85,12 +85,14 @@ class DefaultAppPreferencesStore @Inject constructor(
         }
     }
 
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     override fun getHideInviteAvatarsFlow(): Flow<Boolean?> {
         return store.data.map { prefs ->
             prefs[hideInviteAvatarsKey]
         }
     }
 
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     override suspend fun setHideInviteAvatars(hide: Boolean?) {
         store.edit { prefs ->
             if (hide != null) {
@@ -101,6 +103,7 @@ class DefaultAppPreferencesStore @Inject constructor(
         }
     }
 
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     override suspend fun setTimelineMediaPreviewValue(mediaPreviewValue: MediaPreviewValue?) {
         store.edit { prefs ->
             if (mediaPreviewValue != null) {
@@ -111,6 +114,7 @@ class DefaultAppPreferencesStore @Inject constructor(
         }
     }
 
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     override fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue?> {
         return store.data.map { prefs ->
             prefs[timelineMediaPreviewValueKey]?.let { MediaPreviewValue.valueOf(it) }
