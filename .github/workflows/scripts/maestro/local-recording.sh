@@ -12,8 +12,8 @@ mkdir -p /data/local/tmp/recordings;
 FILENAME=/data/local/tmp/recordings/testRecording$COUNT.mp4
 while true
  do
-   ((COUNT++))
+   COUNT=$((COUNT+1))
    FILENAME=/data/local/tmp/recordings/testRecording$COUNT.mp4
-   echo "\nRecording video file #$COUNT"
+   printf "\nRecording video file #%d\n" $COUNT
    screenrecord --bugreport --bit-rate=16m --size 720x1280 $FILENAME
  done
