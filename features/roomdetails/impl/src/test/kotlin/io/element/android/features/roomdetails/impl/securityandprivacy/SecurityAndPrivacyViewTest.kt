@@ -93,7 +93,7 @@ class SecurityAndPrivacyViewTest {
     }
 
     @Test
-    @Config(qualifiers = "h640dp")
+    @Config(qualifiers = "h1024dp")
     fun `click on room visibility item emits the expected event`() {
         val recorder = EventsRecorder<SecurityAndPrivacyEvents>()
         val state = aSecurityAndPrivacyState(
