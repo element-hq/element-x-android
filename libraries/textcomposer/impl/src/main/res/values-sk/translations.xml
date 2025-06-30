@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Pridať prílohu"</string>
   <string name="rich_text_editor_bullet_list">"Prepnúť zoznam odrážok"</string>
-  <string name="rich_text_editor_close_formatting_options">"Zatvoriť možnosti formátovania"</string>
+  <string name="rich_text_editor_close_formatting_options">"Zrušiť a zatvoriť formátovanie textu"</string>
   <string name="rich_text_editor_code_block">"Prepnúť blok kódu"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Voliteľný titulok…"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Šifrovaná správa…"</string>
@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Nešifrovaná správa…"</string>
   <string name="rich_text_editor_create_link">"Vytvoriť odkaz"</string>
   <string name="rich_text_editor_edit_link">"Upraviť odkaz"</string>
+  <string name="rich_text_editor_format_action">"%1$s, stav: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Použiť tučný formát"</string>
   <string name="rich_text_editor_format_italic">"Použiť formát kurzívy"</string>
+  <string name="rich_text_editor_format_state_disabled">"zakázané"</string>
+  <string name="rich_text_editor_format_state_off">"vypnuté"</string>
+  <string name="rich_text_editor_format_state_on">"zapnuté"</string>
   <string name="rich_text_editor_format_strikethrough">"Použiť formát prečiarknutia"</string>
   <string name="rich_text_editor_format_underline">"Použiť formát podčiarknutia"</string>
   <string name="rich_text_editor_full_screen_toggle">"Prepnúť režim celej obrazovky"</string>

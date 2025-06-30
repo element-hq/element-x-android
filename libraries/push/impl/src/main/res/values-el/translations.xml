@@ -13,9 +13,9 @@
     <item quantity="one">"%d ειδοποίηση"</item>
     <item quantity="other">"%d ειδοποιήσεις"</item>
   </plurals>
-  <string name="notification_fallback_content">"Γνωστοποίηση"</string>
+  <string name="notification_fallback_content">"Έχεις νέο(α) μήνυμα(τα)."</string>
   <string name="notification_incoming_call">"📹 Εισερχόμενη κλήση"</string>
-  <string name="notification_inline_reply_failed">"** Αποτυχία αποστολής - παρακαλώ άνοιξε το δωμάτιο"</string>
+  <string name="notification_inline_reply_failed">"** Αποτυχία αποστολής - παρακαλώ ανοίξτε την αίθουσα"</string>
   <string name="notification_invitation_action_join">"Συμμετοχή"</string>
   <string name="notification_invitation_action_reject">"Απόρριψη"</string>
   <plurals name="notification_invitations">
@@ -33,8 +33,8 @@
   <string name="notification_reaction_body">"Αντέδρασε με %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Επισήμανση ως αναγνωσμένου"</string>
   <string name="notification_room_action_quick_reply">"Γρήγορη απάντηση"</string>
-  <string name="notification_room_invite_body">"Σέ προσκάλεσε να συμμετάσχεις στο δωμάτιο"</string>
-  <string name="notification_room_invite_body_with_sender">"Ο χρήστης %1$s σε προσκάλεσε να συμμετάσχεις στο δωμάτιο"</string>
+  <string name="notification_room_invite_body">"Σας προσκάλεσε να ενταχθείτε στην αίθουσα"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s σας προσκάλεσε να συμμετάσχετε στην αίθουσα"</string>
   <string name="notification_sender_me">"Εγώ"</string>
   <string name="notification_sender_mention_reply">"Ο χρήστης %1$s αναφέρθηκε ή απάντησε"</string>
   <string name="notification_test_push_notification_content">"Βλέπεις την ειδοποίηση! Κάνε μου κλικ!"</string>
@@ -48,8 +48,8 @@
   <string name="notification_unread_notified_messages_in_room">"%1$s σε %2$s"</string>
   <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s σε %2$s και %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
-    <item quantity="one">"%d δωμάτιο"</item>
-    <item quantity="other">"%d δωμάτια"</item>
+    <item quantity="one">"%d αίθουσα"</item>
+    <item quantity="other">"%d αίθουσες"</item>
   </plurals>
   <string name="push_distributor_background_sync_android">"Συγχρονισμός στο παρασκήνιο"</string>
   <string name="push_distributor_firebase_android">"Υπηρεσίες Google"</string>

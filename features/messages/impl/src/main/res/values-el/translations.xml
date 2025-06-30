@@ -21,10 +21,10 @@
   <string name="screen_room_attachment_source_poll">"Δημοσκόπηση"</string>
   <string name="screen_room_attachment_text_formatting">"Μορφοποίηση Κειμένου"</string>
   <string name="screen_room_encrypted_history_banner">"Το ιστορικό μηνυμάτων δεν είναι διαθέσιμο προς το παρόν."</string>
-  <string name="screen_room_encrypted_history_banner_unverified">"Το ιστορικό μηνυμάτων δεν είναι διαθέσιμο σε αυτό το δωμάτιο. Επαλήθευσε αυτήν τη συσκευή για να δεις το ιστορικό μηνυμάτων σου."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Το ιστορικό μηνυμάτων δεν είναι διαθέσιμο σε αυτή την αίθουσα. Επαληθεύστε αυτή τη συσκευή για να δείτε το ιστορικό των μηνυμάτων σας."</string>
   <string name="screen_room_invite_again_alert_message">"Θα ήθελες να τους προσκαλέσεις και συ;"</string>
   <string name="screen_room_invite_again_alert_title">"Είσαι μόνος σε αυτή τη συνομιλία"</string>
-  <string name="screen_room_mentions_at_room_subtitle">"Ειδοποίησε όλο το δωμάτιο"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Ειδοποιήστε όλη την αίθουσα"</string>
   <string name="screen_room_mentions_at_room_title">"Όλοι"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Αποστολή ξανά"</string>
   <string name="screen_room_retry_send_menu_title">"Το μήνυμά σου απέτυχε να σταλεί"</string>
@@ -34,14 +34,28 @@
   <string name="screen_room_timeline_legacy_call">"Μη υποστηριζόμενη κλήση. Ρώτα εάν ο καλών μπορεί να χρησιμοποιήσει τη νέα εφαρμογή Element X."</string>
   <string name="screen_room_timeline_less_reactions">"Εμφάνιση λιγότερων"</string>
   <string name="screen_room_timeline_message_copied">"Το μήνυμα αντιγράφηκε"</string>
-  <string name="screen_room_timeline_no_permission_to_post">"Δεν έχεις άδεια να δημοσιεύσεις σε αυτό το δωμάτιο"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Δεν έχετε δικαιώματα για να δημοσιεύσετε σε αυτήν την αίθουσα"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"%1$d μέλος αντέδρασε με %2$s"</item>
+    <item quantity="other">"%1$d μέλη αντέδρασαν με %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"Εσύ και %1$d μέλος αντιδράσατε με %2$s"</item>
+    <item quantity="other">"Εσύ και τα %1$d μέλη αντιδράσατε με %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"Αντέδρασες με %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Εμφάνιση λιγότερων"</string>
   <string name="screen_room_timeline_reactions_show_more">"Εμφάνιση περισσότερων"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Εμφάνιση περίληψης αντιδράσεων"</string>
   <string name="screen_room_timeline_read_marker_title">"Νέο"</string>
   <plurals name="screen_room_timeline_state_changes">
-    <item quantity="one">"%1$d αλλαγή δωματίου"</item>
-    <item quantity="other">"%1$d αλλαγές δωματίου"</item>
+    <item quantity="one">"%1$d αλλαγή αίθουσας"</item>
+    <item quantity="other">"%1$d αλλαγές αίθουσας"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Μετάβαση σε νέα αίθουσα"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Αυτή η αίθουσα έχει αντικατασταθεί και δεν είναι πλέον ενεργή"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Δες παλιά μηνύματα"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Αυτή η αίθουσα αποτελεί συνέχεια μιας άλλης αίθουσας"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s και %3$d ακόμη"</item>
     <item quantity="other">"%1$s, %2$s και %3$d ακόμη"</item>

@@ -13,7 +13,6 @@
     <item quantity="one">"%d avisering"</item>
     <item quantity="other">"%d aviseringar"</item>
   </plurals>
-  <string name="notification_fallback_content">"notis"</string>
   <string name="notification_incoming_call">"📹 Inkommande samtal"</string>
   <string name="notification_inline_reply_failed">"** Misslyckades att skicka - vänligen öppna rummet"</string>
   <string name="notification_invitation_action_join">"Gå med"</string>

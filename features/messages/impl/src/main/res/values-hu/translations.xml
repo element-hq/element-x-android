@@ -35,13 +35,27 @@
   <string name="screen_room_timeline_less_reactions">"Kevesebb megjelenítése"</string>
   <string name="screen_room_timeline_message_copied">"Üzenet másolva"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Nincs jogosultsága arra, hogy bejegyzést tegyen közzé ebben a szobában"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"%1$d tag reagált így: %2$s"</item>
+    <item quantity="other">"%1$d tag reagált így: %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"Ön és %1$d tag reagáltak így: %2$s"</item>
+    <item quantity="other">"Ön és %1$d tag reagáltak így: %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"Ezzel reagált: %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Kevesebb megjelenítése"</string>
   <string name="screen_room_timeline_reactions_show_more">"Több megjelenítése"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Reakció-összefoglaló megjelenítése"</string>
   <string name="screen_room_timeline_read_marker_title">"Új"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d szobaváltozás"</item>
     <item quantity="other">"%1$d szobaváltozás"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Ugrás az új szobába"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Ezt a szobát lecserélték, és már nem aktív."</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Régi üzenetek megtekintése"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Ez a szoba egy másik szoba folytatása"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s és %3$d további felhasználó"</item>
     <item quantity="other">"%1$s, %2$s és %3$d további felhasználó"</item>

@@ -46,11 +46,16 @@
   <string name="screen_room_timeline_reaction_you_a11y">"Vous avez réagi avec %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Afficher moins"</string>
   <string name="screen_room_timeline_reactions_show_more">"Afficher plus"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Afficher le résumé des réactions"</string>
   <string name="screen_room_timeline_read_marker_title">"Nouveau"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d changement dans le salon"</item>
     <item quantity="other">"%1$d changements dans le salon"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Aller dans le nouveau salon"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Ce salon a été remplacé et n’est plus actif"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Voir les anciens messages"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Ce salon est la continuation du salon précédent"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s et %3$d autre"</item>
     <item quantity="other">"%1$s, %2$s et %3$d autres"</item>

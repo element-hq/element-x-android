@@ -13,7 +13,6 @@
     <item quantity="one">"%d melding"</item>
     <item quantity="other">"%d meldingen"</item>
   </plurals>
-  <string name="notification_fallback_content">"Melding"</string>
   <string name="notification_incoming_call">"📹 Inkomende oproep"</string>
   <string name="notification_inline_reply_failed">"** Verzenden is mislukt - open de kamer"</string>
   <string name="notification_invitation_action_join">"Deelnemen"</string>

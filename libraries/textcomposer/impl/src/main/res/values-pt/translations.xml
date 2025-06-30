@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Adicionar anexo"</string>
   <string name="rich_text_editor_bullet_list">"Ativar/desativar lista de pontos"</string>
-  <string name="rich_text_editor_close_formatting_options">"Fechar opções de formatação"</string>
+  <string name="rich_text_editor_close_formatting_options">"Cancelar e fechar opções de formatação"</string>
   <string name="rich_text_editor_code_block">"Ativar/desativar bloco de código"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Legenda opcional…"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Mensagem encriptada…"</string>
@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Mensagem não encriptada…"</string>
   <string name="rich_text_editor_create_link">"Criar uma ligação"</string>
   <string name="rich_text_editor_edit_link">"Editar ligação"</string>
+  <string name="rich_text_editor_format_action">"%1$s, estado: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Aplicar negrito"</string>
   <string name="rich_text_editor_format_italic">"Aplicar itálico"</string>
+  <string name="rich_text_editor_format_state_disabled">"desativado"</string>
+  <string name="rich_text_editor_format_state_off">"desligado"</string>
+  <string name="rich_text_editor_format_state_on">"ligado"</string>
   <string name="rich_text_editor_format_strikethrough">"Aplicar rasura"</string>
   <string name="rich_text_editor_format_underline">"Aplicar sublinhado"</string>
   <string name="rich_text_editor_full_screen_toggle">"Entrar/sair do modo de ecrã inteiro"</string>

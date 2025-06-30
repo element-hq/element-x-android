@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Deaktiver batterioptimalisering for denne appen for å sikre at alle varsler mottas."</string>
+  <string name="banner_battery_optimization_submit_android">"Deaktiver optimalisering"</string>
+  <string name="banner_battery_optimization_title_android">"Kommer ikke varslene frem?"</string>
   <string name="banner_set_up_recovery_content">"Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine brukte enheter."</string>
   <string name="banner_set_up_recovery_submit">"Konfigurer gjenoppretting"</string>
   <string name="banner_set_up_recovery_title">"Konfigurer gjenoppretting for å beskytte kontoen din"</string>
@@ -40,6 +43,7 @@ Du har ingen uleste meldinger!"</string>
   <string name="screen_roomlist_main_space_title">"Chatter"</string>
   <string name="screen_roomlist_mark_as_read">"Marker som lest"</string>
   <string name="screen_roomlist_mark_as_unread">"Merk som ulest"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Dette rommet har blitt oppgradert"</string>
   <string name="session_verification_banner_message">"Det ser ut til at du bruker en ny enhet. Bekreft med en annen enhet for å få tilgang til de krypterte meldingene dine."</string>
   <string name="session_verification_banner_title">"Bekreft at det er deg"</string>
 </resources>
