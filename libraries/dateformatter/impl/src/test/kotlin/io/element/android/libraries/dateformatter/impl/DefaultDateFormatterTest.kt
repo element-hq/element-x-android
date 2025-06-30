@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.dateformatter.impl
 
+import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
@@ -16,7 +17,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(qualifiers = "en")
+@Config(qualifiers = "en", sdk = [Build.VERSION_CODES.TIRAMISU])
 class DefaultDateFormatterTest {
     @Test
     fun `test null`() {
