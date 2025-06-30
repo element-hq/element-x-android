@@ -270,7 +270,6 @@ jobs:
       - name: Run shellcheck
         uses: ludeeus/action-shellcheck@2.0.0
         with:
-          scandir: ./tools
           severity: warning
 
   upload_reports:
