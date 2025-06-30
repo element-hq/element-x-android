@@ -62,7 +62,8 @@ if [ ${envError} == 1 ]; then
   exit 1
 fi
 
-minSdkVersion=24
+# Read minSdkVersion from file plugins/src/main/kotlin/Versions.kt
+minSdkVersion=$(grep "MIN_SDK_FOSS =" ./plugins/src/main/kotlin/Versions.kt |cut -d '=' -f 2 |xargs)
 buildToolsVersion="35.0.0"
 buildToolsPath="${androidHome}/build-tools/${buildToolsVersion}"
 
