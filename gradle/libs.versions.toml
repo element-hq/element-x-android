@@ -213,7 +213,7 @@ anvil_compiler_api = { module = "dev.zacsweers.anvil:compiler-api", version.ref 
 anvil_compiler_utils = { module = "dev.zacsweers.anvil:compiler-utils", version.ref = "anvil" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.12.2"
+element_call_embedded = "io.element.android:element-call-embedded:0.13.0"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
