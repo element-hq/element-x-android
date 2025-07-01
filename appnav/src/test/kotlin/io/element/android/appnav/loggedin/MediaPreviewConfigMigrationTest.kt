@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:Suppress("DEPRECATION")
+
 package io.element.android.appnav.loggedin
 
 import com.google.common.truth.Truth.assertThat
