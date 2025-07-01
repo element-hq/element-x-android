@@ -15,6 +15,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
@@ -131,7 +132,7 @@ class AdvancedSettingsViewTest {
     }
 
     @Test
-    @Config(qualifiers = "h640dp")
+    @Config(qualifiers = "h1080dp")
     fun `clicking on hide invite avatars emits the expected event`() {
         val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
         rule.setAdvancedSettingsView(
@@ -145,8 +146,8 @@ class AdvancedSettingsViewTest {
     }
 
     @Test
-    @Config(qualifiers = "h1024dp")
-    fun `clicking on timeline media preview emits the expected event`() {
+    @Config(qualifiers = "h1080dp")
+    fun `clicking on timeline media preview always hide emits the expected event`() {
         val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
         rule.setAdvancedSettingsView(
             state = aAdvancedSettingsState(
@@ -156,6 +157,65 @@ class AdvancedSettingsViewTest {
         )
         rule.clickOn(R.string.screen_advanced_settings_show_media_timeline_always_hide)
         eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
+    }
+
+    @Test
+    @Config(qualifiers = "h1080dp")
+    fun `clicking on timeline media preview private rooms emits the expected event`() {
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                eventSink = eventsRecorder,
+                timelineMediaPreviewValue = MediaPreviewValue.On
+            ),
+        )
+        rule.clickOn(R.string.screen_advanced_settings_show_media_timeline_private_rooms)
+        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Private))
+    }
+
+    @Test
+    @Config(qualifiers = "h1080dp")
+    fun `clicking on timeline media preview always show emits the expected event`() {
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                eventSink = eventsRecorder,
+                timelineMediaPreviewValue = MediaPreviewValue.Off
+            ),
+        )
+        rule.clickOn(R.string.screen_advanced_settings_show_media_timeline_always_show)
+        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.On))
+    }
+
+    @Test
+    @Config(qualifiers = "h1080dp")
+    fun `hide invite avatars toggle is disabled when action is loading`() {
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>(expectEvents = false)
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                eventSink = eventsRecorder,
+                hideInviteAvatars = false,
+                setHideInviteAvatarsAction = AsyncAction.Loading
+            ),
+        )
+        // The toggle should be disabled, so clicking should not emit any events
+        rule.clickOn(R.string.screen_advanced_settings_hide_invite_avatars_toggle_title)
+    }
+
+    @Test
+    @Config(qualifiers = "h1080dp")
+    fun `timeline media preview options are disabled when action is loading`() {
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>(expectEvents = false)
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                eventSink = eventsRecorder,
+                timelineMediaPreviewValue = MediaPreviewValue.On,
+                setTimelineMediaPreviewAction = AsyncAction.Loading
+            ),
+        )
+        // The options should be disabled, so clicking should not emit any events
+        rule.clickOn(R.string.screen_advanced_settings_show_media_timeline_always_hide)
+        rule.clickOn(R.string.screen_advanced_settings_show_media_timeline_private_rooms)
     }
 }
 

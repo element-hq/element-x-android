@@ -35,6 +35,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent.ShowConfirmation
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
@@ -103,8 +104,11 @@ class RoomListPresenter @Inject constructor(
 
         // Avatar indicator
         val hideInvitesAvatar by remember {
-            appPreferencesStore.getHideInviteAvatarsFlow()
-        }.collectAsState(initial = false)
+            client
+                .mediaPreviewService()
+                .mediaPreviewConfigFlow
+                .mapState { config -> config.hideInviteAvatar }
+        }.collectAsState()
 
         val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
         val declineInviteMenu = remember { mutableStateOf<RoomListState.DeclineInviteMenu>(RoomListState.DeclineInviteMenu.Hidden) }

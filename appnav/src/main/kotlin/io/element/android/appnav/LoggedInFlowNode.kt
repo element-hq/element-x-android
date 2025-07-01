@@ -41,6 +41,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
+import io.element.android.appnav.loggedin.MediaPreviewConfigMigration
 import io.element.android.appnav.loggedin.SendQueues
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomNavigationTarget
@@ -123,6 +124,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val sendingQueue: SendQueues,
     private val logoutEntryPoint: LogoutEntryPoint,
     private val incomingVerificationEntryPoint: IncomingVerificationEntryPoint,
+    private val mediaPreviewConfigMigration: MediaPreviewConfigMigration,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -188,6 +190,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(sessionCoroutineScope)
                 matrixClient.sessionVerificationService().setListener(verificationListener)
+                mediaPreviewConfigMigration()
 
                 ftueService.state
                     .onEach { ftueState ->
