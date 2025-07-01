@@ -66,6 +66,7 @@ class AndroidMediaPreProcessorTest {
     }
 
     @Test
+    @Ignore("Ignore now that min API for enterprise is 33")
     fun `test processing png`() = runTest {
         val mediaUploadInfo = process(
             asset = assetImagePng,
@@ -109,6 +110,7 @@ class AndroidMediaPreProcessorTest {
     }
 
     @Test
+    @Ignore("Ignore now that min API for enterprise is 33")
     fun `test processing png no compression`() = runTest {
         val mediaUploadInfo = process(
             asset = assetImagePng,
@@ -130,6 +132,7 @@ class AndroidMediaPreProcessorTest {
     }
 
     @Test
+    @Ignore("Ignore now that min API for enterprise is 33")
     fun `test processing png and delete`() = runTest {
         val mediaUploadInfo = process(
             asset = assetImagePng,
@@ -154,6 +157,7 @@ class AndroidMediaPreProcessorTest {
     }
 
     @Test
+    @Ignore("Ignore now that min API for enterprise is 33")
     fun `test processing jpeg`() = runTest {
         val mediaUploadInfo = process(
             asset = assetImageJpeg,
@@ -197,6 +201,7 @@ class AndroidMediaPreProcessorTest {
     }
 
     @Test
+    @Ignore("Ignore now that min API for enterprise is 33")
     fun `test processing jpeg no compression`() = runTest {
         val mediaUploadInfo = process(
             asset = assetImageJpeg,
@@ -218,6 +223,7 @@ class AndroidMediaPreProcessorTest {
     }
 
     @Test
+    @Ignore("Ignore now that min API for enterprise is 33")
     fun `test processing jpeg and delete`() = runTest {
         val mediaUploadInfo = process(
             asset = assetImageJpeg,
@@ -242,6 +248,7 @@ class AndroidMediaPreProcessorTest {
     }
 
     @Test
+    @Ignore("Ignore now that min API for enterprise is 33")
     fun `test processing gif`() = runTest {
         val mediaUploadInfo = process(
             asset = assetAnimatedGif,

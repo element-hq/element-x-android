@@ -32,6 +32,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class MediaViewerViewTest {
@@ -108,6 +109,7 @@ class MediaViewerViewTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on save emit expected Event`() {
         val data = aMediaViewerPageData()
         testBottomSheetAction(
@@ -118,6 +120,7 @@ class MediaViewerViewTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on share emit expected Event`() {
         val data = aMediaViewerPageData()
         testBottomSheetAction(
