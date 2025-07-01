@@ -11,6 +11,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.roomlist.RoomListStateProvider
 import io.element.android.features.home.impl.roomlist.aRoomListState
+import io.element.android.features.home.impl.roomlist.aRoomsContentState
+import io.element.android.features.home.impl.roomlist.generateRoomListRoomSummaryList
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -24,6 +26,19 @@ open class HomeStateProvider : PreviewParameterProvider<HomeState> {
             aHomeState(),
             aHomeState(hasNetworkConnection = false),
             aHomeState(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
+            aHomeState(
+                isSpaceFeatureEnabled = true,
+                roomListState = aRoomListState(
+                    // Add more rooms to see the blur effect under the NavigationBar
+                    contentState = aRoomsContentState(
+                        summaries = generateRoomListRoomSummaryList(),
+                    )
+                ),
+            ),
+            aHomeState(
+                isSpaceFeatureEnabled = true,
+                currentHomeNavigationBarItem = HomeNavigationBarItem.Spaces,
+            ),
         ) + RoomListStateProvider().values.map {
             aHomeState(roomListState = it)
         }
@@ -34,8 +49,10 @@ internal fun aHomeState(
     showAvatarIndicator: Boolean = false,
     hasNetworkConnection: Boolean = true,
     snackbarMessage: SnackbarMessage? = null,
+    currentHomeNavigationBarItem: HomeNavigationBarItem = HomeNavigationBarItem.Chats,
     roomListState: RoomListState = aRoomListState(),
     canReportBug: Boolean = true,
+    isSpaceFeatureEnabled: Boolean = false,
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
     eventSink: (HomeEvents) -> Unit = {}
 ) = HomeState(
@@ -45,6 +62,8 @@ internal fun aHomeState(
     snackbarMessage = snackbarMessage,
     canReportBug = canReportBug,
     directLogoutState = directLogoutState,
+    currentHomeNavigationBarItem = currentHomeNavigationBarItem,
     roomListState = roomListState,
+    isSpaceFeatureEnabled = isSpaceFeatureEnabled,
     eventSink = eventSink,
 )

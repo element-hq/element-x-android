@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -66,6 +67,7 @@ fun RoomListContentView(
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     onCreateRoomClick: () -> Unit,
+    contentBottomPadding: Dp,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -93,6 +95,7 @@ fun RoomListContentView(
                     onSetUpRecoveryClick = onSetUpRecoveryClick,
                     onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                     onRoomClick = onRoomClick,
+                    contentBottomPadding = contentBottomPadding,
                 )
             }
         }
@@ -164,6 +167,7 @@ private fun RoomsView(
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
+    contentBottomPadding: Dp,
     modifier: Modifier = Modifier,
 ) {
     if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
@@ -179,6 +183,7 @@ private fun RoomsView(
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
             onRoomClick = onRoomClick,
+            contentBottomPadding = contentBottomPadding,
             modifier = modifier.fillMaxSize(),
         )
     }
@@ -192,6 +197,7 @@ private fun RoomsViewList(
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
+    contentBottomPadding: Dp,
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
@@ -210,8 +216,7 @@ private fun RoomsViewList(
     LazyColumn(
         state = lazyListState,
         modifier = modifier,
-        // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
-        contentPadding = PaddingValues(bottom = 80.dp)
+        contentPadding = PaddingValues(bottom = contentBottomPadding)
     ) {
         when (state.securityBannerState) {
             SecurityBannerState.SetUpRecovery -> {
@@ -324,5 +329,6 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
         onConfirmRecoveryKeyClick = {},
         onRoomClick = {},
         onCreateRoomClick = {},
+        contentBottomPadding = 0.dp,
     )
 }

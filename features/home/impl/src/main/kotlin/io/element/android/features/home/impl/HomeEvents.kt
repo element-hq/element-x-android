@@ -7,4 +7,6 @@
 
 package io.element.android.features.home.impl
 
-sealed interface HomeEvents
+sealed interface HomeEvents {
+    data class SelectHomeNavigationBarItem(val item: HomeNavigationBarItem) : HomeEvents
+}

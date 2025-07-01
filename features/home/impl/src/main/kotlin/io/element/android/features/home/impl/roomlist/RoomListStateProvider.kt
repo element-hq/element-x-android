@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
@@ -112,4 +113,19 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             displayType = RoomSummaryDisplayType.PLACEHOLDER,
         ),
     )
+}
+
+internal fun generateRoomListRoomSummaryList(
+    numberOfRooms: Int = 10,
+): ImmutableList<RoomListRoomSummary> {
+    return List(numberOfRooms) { index ->
+        aRoomListRoomSummary(
+            name = "Room#$index",
+            numberOfUnreadMessages = 0,
+            timestamp = "14:16",
+            lastMessage = "A message",
+            avatarData = AvatarData("!id$index", "${(65 + index % 26).toChar()}", size = AvatarSize.RoomListItem),
+            id = "!roomId$index:domain",
+        )
+    }.toPersistentList()
 }
