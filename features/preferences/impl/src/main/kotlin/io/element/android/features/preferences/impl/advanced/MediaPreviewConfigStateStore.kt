@@ -88,8 +88,9 @@ class DefaultMediaPreviewConfigStateStore @Inject constructor(
 
     override fun setHideInviteAvatars(hide: Boolean) {
         sessionCoroutineScope.launch {
-            Timber.d("Setting hide invite avatars to $hide")
             val prevHideInviteAvatars = hideInviteAvatars.value
+            if (prevHideInviteAvatars == hide) return@launch
+            Timber.d("Setting hide invite avatars to $hide")
             hideInviteAvatars.value = hide
             runUpdatingState(setHideInviteAvatarsAction) {
                 mediaPreviewService
@@ -104,8 +105,9 @@ class DefaultMediaPreviewConfigStateStore @Inject constructor(
 
     override fun setTimelineMediaPreviewValue(value: MediaPreviewValue) {
         sessionCoroutineScope.launch {
-            Timber.d("Setting timeline media preview value to $value")
             val prevTimelineMediaPreviewValue = timelineMediaPreviewValue.value
+            if (prevTimelineMediaPreviewValue == value) return@launch
+            Timber.d("Setting timeline media preview value to $value")
             timelineMediaPreviewValue.value = value
             runUpdatingState(setTimelineMediaPreviewAction) {
                 mediaPreviewService

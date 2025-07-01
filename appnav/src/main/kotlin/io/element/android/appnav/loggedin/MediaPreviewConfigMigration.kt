@@ -52,7 +52,7 @@ class MediaPreviewConfigMigration @Inject constructor(
                 }
             }
             .onFailure {
-                Timber.d("Couldn't perform migration, failed to fetch media preview config.")
+                Timber.e(it, "Couldn't perform migration, failed to fetch media preview config.")
             }
     }
 }

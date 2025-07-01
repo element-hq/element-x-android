@@ -7,7 +7,6 @@
 
 package io.element.android.features.preferences.impl.advanced
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -143,12 +142,10 @@ private fun ModerationAndSafety(
             title = stringResource(R.string.screen_advanced_settings_show_media_timeline_title),
             hasDivider = false,
             description = {
-                Row {
-                    ListSupportingText(
-                        text = stringResource(R.string.screen_advanced_settings_show_media_timeline_subtitle),
-                        contentPadding = ListSupportingTextDefaults.Padding.None,
-                    )
-                }
+                ListSupportingText(
+                    text = stringResource(R.string.screen_advanced_settings_show_media_timeline_subtitle),
+                    contentPadding = ListSupportingTextDefaults.Padding.None,
+                )
             }
         )
         ListItem(

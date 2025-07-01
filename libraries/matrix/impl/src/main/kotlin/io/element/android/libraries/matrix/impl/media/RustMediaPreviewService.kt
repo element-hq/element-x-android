@@ -56,7 +56,7 @@ class RustMediaPreviewService(
 
 private fun RustMediaPreviewConfig.into(): MediaPreviewConfig {
     return MediaPreviewConfig(
-        mediaPreviewValue = this@into.mediaPreviews.into(),
+        mediaPreviewValue = mediaPreviews.into(),
         hideInviteAvatar = inviteAvatars == InviteAvatars.OFF
     )
 }
