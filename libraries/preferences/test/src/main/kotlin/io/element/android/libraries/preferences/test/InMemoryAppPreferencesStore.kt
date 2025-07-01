@@ -55,18 +55,22 @@ class InMemoryAppPreferencesStore(
         return theme
     }
 
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     override fun getHideInviteAvatarsFlow(): Flow<Boolean?> {
         return hideInviteAvatars
     }
 
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     override fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue?> {
         return timelineMediaPreviewValue
     }
 
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     override suspend fun setHideInviteAvatars(hide: Boolean?) {
         hideInviteAvatars.value = hide
     }
 
+    @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     override suspend fun setTimelineMediaPreviewValue(mediaPreviewValue: MediaPreviewValue?) {
         timelineMediaPreviewValue.value = mediaPreviewValue
     }
