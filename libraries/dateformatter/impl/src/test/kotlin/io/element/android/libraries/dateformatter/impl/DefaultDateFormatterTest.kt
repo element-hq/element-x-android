@@ -11,11 +11,13 @@ import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
-import kotlinx.datetime.Instant
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 @RunWith(AndroidJUnit4::class)
 @Config(qualifiers = "en", sdk = [Build.VERSION_CODES.TIRAMISU])
 class DefaultDateFormatterTest {
