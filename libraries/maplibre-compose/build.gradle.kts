@@ -13,8 +13,10 @@ plugins {
 android {
     namespace = "io.element.android.libraries.maplibre.compose"
 
-    kotlinOptions {
-        freeCompilerArgs += "-Xexplicit-api=strict"
+    kotlin {
+        compilerOptions {
+            explicitApi()
+        }
     }
 }
 
