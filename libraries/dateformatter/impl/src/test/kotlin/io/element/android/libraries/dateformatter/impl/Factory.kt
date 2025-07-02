@@ -10,13 +10,11 @@ package io.element.android.libraries.dateformatter.impl
 import io.element.android.tests.testutils.InstrumentationStringProvider
 import kotlinx.datetime.TimeZone
 import java.util.Locale
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 /**
  * Create DefaultDateFormatter and set current time to the provided date.
  */
-@OptIn(ExperimentalTime::class)
 fun createFormatter(currentDate: String): DefaultDateFormatter {
     val clock = FakeClock().apply { givenInstant(Instant.parse(currentDate)) }
     val localDateTimeProvider = LocalDateTimeProvider(clock) { TimeZone.UTC }

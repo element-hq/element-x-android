@@ -11,10 +11,8 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-@OptIn(ExperimentalTime::class)
 class LocalDateTimeProvider @Inject constructor(
     private val clock: Clock,
     private val timezoneProvider: TimezoneProvider,

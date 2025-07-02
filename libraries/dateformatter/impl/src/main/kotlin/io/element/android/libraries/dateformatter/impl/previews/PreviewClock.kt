@@ -8,10 +8,8 @@
 package io.element.android.libraries.dateformatter.impl.previews
 
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-@OptIn(ExperimentalTime::class)
 class PreviewClock : Clock {
     private var instant: Instant = Instant.fromEpochMilliseconds(0)
 

@@ -5,8 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalTime::class)
-
 package io.element.android.libraries.dateformatter.impl.previews
 
 import androidx.compose.foundation.layout.Column
@@ -30,7 +28,6 @@ import io.element.android.libraries.dateformatter.impl.DefaultDateFormatter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.allBooleans
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 @Preview

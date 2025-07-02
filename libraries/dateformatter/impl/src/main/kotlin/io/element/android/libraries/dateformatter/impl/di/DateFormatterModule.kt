@@ -15,9 +15,7 @@ import io.element.android.libraries.di.AppScope
 import kotlinx.datetime.TimeZone
 import java.util.Locale
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 @Module
 @ContributesTo(AppScope::class)
 object DateFormatterModule {
