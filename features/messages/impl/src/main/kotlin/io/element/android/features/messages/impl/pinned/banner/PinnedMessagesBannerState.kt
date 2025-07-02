@@ -16,6 +16,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Immutable
 sealed interface PinnedMessagesBannerState {
     data object Hidden : PinnedMessagesBannerState
+    @Immutable
     sealed interface Visible : PinnedMessagesBannerState {
         fun pinnedMessagesCount() = when (this) {
             is Loading -> expectedPinnedMessagesCount
