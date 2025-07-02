@@ -20,6 +20,7 @@ import java.time.Period
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
+import kotlin.time.ExperimentalTime
 
 @SingleIn(AppScope::class)
 class DateFormatters @Inject constructor(
@@ -67,6 +68,7 @@ class DateFormatters @Inject constructor(
         return dateTimeFormatters.dateWithFullFormatNoYearFormatter.format(localDateTime.toJavaLocalDateTime())
     }
 
+    @OptIn(ExperimentalTime::class)
     internal fun formatDate(
         dateToFormat: LocalDateTime,
         currentDate: LocalDateTime,
