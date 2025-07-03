@@ -33,8 +33,8 @@ class DefaultDateFormatterDay @Inject constructor(
         return if (useRelative) {
             val dayDiff = today.date.toEpochDays() - dateToFormat.date.toEpochDays()
             when (dayDiff) {
-                0 -> dateFormatters.getRelativeDay(timestamp, "Today")
-                1 -> dateFormatters.getRelativeDay(timestamp, "Yesterday")
+                0L -> dateFormatters.getRelativeDay(timestamp, "Today")
+                1L -> dateFormatters.getRelativeDay(timestamp, "Yesterday")
                 else -> if (dayDiff < 7) {
                     dateFormatters.formatDateWithDay(dateToFormat)
                 } else {

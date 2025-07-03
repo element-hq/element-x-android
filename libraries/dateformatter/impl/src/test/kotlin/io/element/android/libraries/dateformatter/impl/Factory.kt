@@ -8,9 +8,9 @@
 package io.element.android.libraries.dateformatter.impl
 
 import io.element.android.tests.testutils.InstrumentationStringProvider
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import java.util.Locale
+import kotlin.time.Instant
 
 /**
  * Create DefaultDateFormatter and set current time to the provided date.

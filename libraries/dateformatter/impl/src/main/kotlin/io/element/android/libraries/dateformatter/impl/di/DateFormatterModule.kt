@@ -12,9 +12,9 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.dateformatter.impl.TimezoneProvider
 import io.element.android.libraries.di.AppScope
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import java.util.Locale
+import kotlin.time.Clock
 
 @Module
 @ContributesTo(AppScope::class)

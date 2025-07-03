@@ -78,7 +78,7 @@ fun PinnedMessagesBannerView(
 
 @Composable
 private fun PinnedMessagesBannerRow(
-    state: PinnedMessagesBannerState,
+    state: PinnedMessagesBannerState.Visible,
     onClick: (EventId) -> Unit,
     onViewAllClick: () -> Unit,
     modifier: Modifier = Modifier,

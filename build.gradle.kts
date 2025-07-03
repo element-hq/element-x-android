@@ -98,6 +98,10 @@ allprojects {
 
             // Uncomment to suppress Compose Kotlin compiler compatibility warning
 //            freeCompilerArgs.addAll(listOf("-P", "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"))
+
+            // Fix compilation warning for annotations
+            // See https://youtrack.jetbrains.com/issue/KT-73255/Change-defaulting-rule-for-annotations for more details
+            freeCompilerArgs.add("-Xannotation-default-target=first-only")
         }
     }
 }

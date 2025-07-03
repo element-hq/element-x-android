@@ -391,7 +391,7 @@ private fun MessagesViewContent(
 
         Box {
             val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
-                pinnedMessagesCount = state.pinnedMessagesBannerState.pinnedMessagesCount(),
+                pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
             )
             TimelineView(
                 state = state.timelineState,

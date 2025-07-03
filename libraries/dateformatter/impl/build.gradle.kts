@@ -22,6 +22,14 @@ android {
         }
     }
 
+    kotlin {
+        compilerOptions {
+            optIn = listOf(
+                "kotlin.time.ExperimentalTime"
+            )
+        }
+    }
+
     dependencies {
         implementation(libs.dagger)
         implementation(projects.libraries.core)
