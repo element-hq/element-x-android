@@ -21,7 +21,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.LinearGradientShader
 import androidx.compose.ui.graphics.ShaderBrush
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -32,7 +31,6 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
-import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
  * Send button for the message composer.
@@ -60,10 +58,6 @@ internal fun SendButton(
             composerMode.isEditing -> 0.dp
             else -> 2.dp
         }
-        val contentDescription = when {
-            composerMode.isEditing -> stringResource(CommonStrings.action_edit)
-            else -> stringResource(CommonStrings.action_send)
-        }
         Box(
             modifier = Modifier
                 .clip(CircleShape)
@@ -81,7 +75,8 @@ internal fun SendButton(
                     .padding(start = iconStartPadding)
                     .align(Alignment.Center),
                 imageVector = iconVector,
-                contentDescription = contentDescription,
+                // Note: accessibility is managed in TextComposer.
+                contentDescription = null,
                 tint = if (canSendMessage) {
                     if (ElementTheme.colors.isLight) {
                         ElementTheme.colors.iconOnSolidPrimary
