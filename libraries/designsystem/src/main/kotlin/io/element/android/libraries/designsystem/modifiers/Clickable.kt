@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.semantics.onClick
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
 fun Modifier.clickableIfNotNull(onClick: (() -> Unit)? = null): Modifier = this.then(
@@ -31,18 +29,3 @@ fun Modifier.niceClickable(
         .clickable { onClick() }
         .padding(horizontal = 4.dp)
 }
-
-fun Modifier.a11yClickLabel(
-    label: String?,
-): Modifier = then(
-    if (label != null) {
-        Modifier.semantics {
-            onClick(
-                label = label,
-                action = null,
-            )
-        }
-    } else {
-        Modifier
-    }
-)

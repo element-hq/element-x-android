@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -85,15 +84,6 @@ fun MessagesReactionButton(
         }
     }
 
-    val a11yClickLabel = if (content is MessagesReactionsButtonContent.Reaction) {
-        a11yReactionAction(
-            emoji = content.reaction.key,
-            userAlreadyReacted = content.isHighlighted
-        )
-    } else {
-        ""
-    }
-
     Surface(
         modifier = modifier
             .background(Color.Transparent)
@@ -107,6 +97,12 @@ fun MessagesReactionButton(
             .clip(RoundedCornerShape(corner = CornerSize(12.dp)))
             .combinedClickable(
                 onClick = onClick,
+                onClickLabel = (content as? MessagesReactionsButtonContent.Reaction)?.let {
+                    a11yReactionAction(
+                        emoji = content.reaction.key,
+                        userAlreadyReacted = content.isHighlighted
+                    )
+                },
                 onLongClick = onLongClick
             )
             // Inner border, to highlight when selected
@@ -115,14 +111,6 @@ fun MessagesReactionButton(
             .padding(vertical = 4.dp, horizontal = 10.dp)
             .clearAndSetSemantics {
                 contentDescription = a11yText
-                if (content is MessagesReactionsButtonContent.Reaction) {
-                    onClick(
-                        label = a11yClickLabel
-                    ) {
-                        onClick()
-                        true
-                    }
-                }
             },
         color = buttonColor
     ) {
