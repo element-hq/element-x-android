@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomPowerLevels
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import org.matrix.rustcomponents.sdk.JoinRule
@@ -17,6 +18,7 @@ import org.matrix.rustcomponents.sdk.RoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomNotificationMode
+import org.matrix.rustcomponents.sdk.RoomPowerLevels
 import org.matrix.rustcomponents.sdk.SuccessorRoom
 import uniffi.matrix_sdk_base.EncryptionState
 
@@ -39,7 +41,7 @@ fun aRustRoomInfo(
     activeMembersCount: ULong = 0uL,
     invitedMembersCount: ULong = 0uL,
     joinedMembersCount: ULong = 0uL,
-    userPowerLevels: Map<String, Long> = mapOf(),
+    roomPowerLevels: RoomPowerLevels = FakeFfiRoomPowerLevels(),
     highlightCount: ULong = 0uL,
     notificationCount: ULong = 0uL,
     userDefinedNotificationMode: RoomNotificationMode? = null,
@@ -73,7 +75,7 @@ fun aRustRoomInfo(
     activeMembersCount = activeMembersCount,
     invitedMembersCount = invitedMembersCount,
     joinedMembersCount = joinedMembersCount,
-    userPowerLevels = userPowerLevels,
+    powerLevels = roomPowerLevels,
     highlightCount = highlightCount,
     notificationCount = notificationCount,
     cachedUserDefinedNotificationMode = userDefinedNotificationMode,

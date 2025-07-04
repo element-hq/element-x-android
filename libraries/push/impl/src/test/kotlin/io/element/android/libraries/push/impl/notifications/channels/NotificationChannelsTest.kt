@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 class NotificationChannelsTest {
     @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
     fun `init - creates notification channels and migrates old ones`() {
         val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
             every { notificationChannels } returns emptyList()

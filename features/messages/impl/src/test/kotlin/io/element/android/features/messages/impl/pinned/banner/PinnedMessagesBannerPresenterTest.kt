@@ -62,7 +62,7 @@ class PinnedMessagesBannerPresenterTest {
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
             skipItems(2)
-            val loadingState = awaitItem()
+            val loadingState = awaitItem() as PinnedMessagesBannerState.Loading
             assertThat(loadingState).isEqualTo(PinnedMessagesBannerState.Loading(1))
             assertThat(loadingState.pinnedMessagesCount()).isEqualTo(1)
             assertThat(loadingState.currentPinnedMessageIndex()).isEqualTo(0)
@@ -167,7 +167,8 @@ class PinnedMessagesBannerPresenterTest {
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
             skipItems(2)
-            awaitItem().also { loadingState ->
+            awaitItem().also { state ->
+                val loadingState = state as PinnedMessagesBannerState.Loading
                 assertThat(loadingState).isEqualTo(PinnedMessagesBannerState.Loading(1))
                 assertThat(loadingState.pinnedMessagesCount()).isEqualTo(1)
                 assertThat(loadingState.currentPinnedMessageIndex()).isEqualTo(0)

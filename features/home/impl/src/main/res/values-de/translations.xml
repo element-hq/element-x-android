@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Deaktiviere die Batterieoptimierung für diese App, um sicherzustellen, dass alle Benachrichtigungen empfangen werden."</string>
+  <string name="banner_battery_optimization_submit_android">"Optimierung deaktivieren"</string>
+  <string name="banner_battery_optimization_title_android">"Kommen die Benachrichtigungen nicht an?"</string>
+  <string name="banner_set_up_recovery_content">"Falls Sie alle vorhandenen Geräte verloren haben, stellen Sie Ihre kryptografische Identität und Ihren Nachrichtenverlauf mit einem Wiederherstellungsschlüssel wieder her."</string>
+  <string name="banner_set_up_recovery_submit">"Wiederherstellung einrichten"</string>
+  <string name="banner_set_up_recovery_title">"Wiederherstellung einrichten"</string>
+  <string name="confirm_recovery_key_banner_message">"Bestätigen Sie die Validität Ihres Wiederherstellungsschlüssels, um weiterhin auf Ihren Schlüsselspeicher und den Nachrichtenverlauf zugreifen zu können."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Geben Sie Ihren Wiederherstellungsschlüssel ein"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Haben Sie Ihren Wiederherstellungsschlüssel vergessen?"</string>
+  <string name="confirm_recovery_key_banner_title">"Ihr Schlüsselspeicher ist nicht synchronisiert"</string>
+  <string name="full_screen_intent_banner_message">"Damit Sie keine wichtigen Anrufe verpassen, ändern Sie bitte Ihre Einstellungen, so dass das gesperrte Telefon auch Benachrichtigungen im Vollbildmodus erhalten darf."</string>
+  <string name="full_screen_intent_banner_title">"Verbessere dein Anruferlebnis"</string>
+  <string name="screen_invites_decline_chat_message">"Möchten Sie die Einladung zum Betreten von %1$s wirklich ablehnen?"</string>
+  <string name="screen_invites_decline_chat_title">"Einladung ablehnen"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Möchten Sie diesen privaten Chat mit %1$s wirklich ablehnen?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Einladung ablehnen"</string>
+  <string name="screen_invites_empty_list">"Keine Einladungen"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) hat dich eingeladen"</string>
+  <string name="screen_migration_message">"Dies ist ein einmaliger Vorgang, danke fürs Warten."</string>
+  <string name="screen_migration_title">"Dein Konto wird eingerichtet."</string>
+  <string name="screen_roomlist_a11y_create_message">"Eine Unterthaltung oder Raum erstellen"</string>
+  <string name="screen_roomlist_clear_filters">"Filter zurücksetzen"</string>
+  <string name="screen_roomlist_empty_message">"Beginnen Sie, indem Sie jemandem eine Nachricht senden."</string>
+  <string name="screen_roomlist_empty_title">"Noch keine Chats."</string>
+  <string name="screen_roomlist_filter_favourites">"Favoriten"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"In den Chatroomeinstellungen können Sie einen Chatroom als Favorit markieren.
+Deaktivieren Sie den entsprechenden Filter, um Ihre anderen Chatrooms zu sehen"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Sie haben noch keine Chatrooms als Favorit markiert"</string>
+  <string name="screen_roomlist_filter_invites">"Einladungen"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Sie haben keine ausstehenden Einladungen."</string>
+  <string name="screen_roomlist_filter_low_priority">"Niedrige Priorität"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Wähle Filter ab, um Deine Chats zu sehen."</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Diese Chats entsprechen diesen Kriterien nicht."</string>
+  <string name="screen_roomlist_filter_people">"Personen"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Sie haben noch keine Direktnachrichten"</string>
+  <string name="screen_roomlist_filter_rooms">"Räume"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Sie sind noch in keinem Raum"</string>
+  <string name="screen_roomlist_filter_unreads">"Ungelesen"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Glückwunsch!
+Sie haben keine ungelesenen Nachrichten!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Beitrittsanfrage geschickt"</string>
+  <string name="screen_roomlist_main_space_title">"Chats"</string>
+  <string name="screen_roomlist_mark_as_read">"Als gelesen markieren"</string>
+  <string name="screen_roomlist_mark_as_unread">"Als ungelesen markieren"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Dieser Raum wurde aktualisiert."</string>
+  <string name="session_verification_banner_message">"Sie verwenden anscheinend ein neues Gerät. Verifizieren Sie es mit einem anderen Gerät, um Zugriff auf ihre verschlüsselten Nachrichten zu erhalten."</string>
+  <string name="session_verification_banner_title">"Bestätigen Sie ihre Identität"</string>
+</resources>

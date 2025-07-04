@@ -48,20 +48,20 @@ fun aRustNotificationRoomInfo(
     displayName: String = A_ROOM_NAME,
     avatarUrl: String? = null,
     canonicalAlias: String? = null,
+    topic: String? = null,
     joinedMembersCount: ULong = 2u,
     isEncrypted: Boolean? = true,
     isDirect: Boolean = false,
     joinRule: JoinRule? = null,
-    isPublic: Boolean = true,
 ) = NotificationRoomInfo(
     displayName = displayName,
     avatarUrl = avatarUrl,
     canonicalAlias = canonicalAlias,
+    topic = topic,
     joinedMembersCount = joinedMembersCount,
     isEncrypted = isEncrypted,
     isDirect = isDirect,
     joinRule = joinRule,
-    isPublic = isPublic,
 )
 
 fun aRustNotificationEventTimeline(

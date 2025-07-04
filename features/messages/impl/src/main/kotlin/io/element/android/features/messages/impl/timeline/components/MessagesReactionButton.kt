@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,6 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 @Suppress("ModifierClickableOrder") // This is needed to display the right ripple shape
@@ -85,15 +85,6 @@ fun MessagesReactionButton(
         }
     }
 
-    val a11yClickLabel = if (content is MessagesReactionsButtonContent.Reaction) {
-        a11yReactionAction(
-            emoji = content.reaction.key,
-            userAlreadyReacted = content.isHighlighted
-        )
-    } else {
-        ""
-    }
-
     Surface(
         modifier = modifier
             .background(Color.Transparent)
@@ -107,6 +98,13 @@ fun MessagesReactionButton(
             .clip(RoundedCornerShape(corner = CornerSize(12.dp)))
             .combinedClickable(
                 onClick = onClick,
+                onClickLabel = (content as? MessagesReactionsButtonContent.Reaction)?.let {
+                    a11yReactionAction(
+                        emoji = content.reaction.key,
+                        userAlreadyReacted = content.isHighlighted
+                    )
+                },
+                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
                 onLongClick = onLongClick
             )
             // Inner border, to highlight when selected
@@ -115,14 +113,6 @@ fun MessagesReactionButton(
             .padding(vertical = 4.dp, horizontal = 10.dp)
             .clearAndSetSemantics {
                 contentDescription = a11yText
-                if (content is MessagesReactionsButtonContent.Reaction) {
-                    onClick(
-                        label = a11yClickLabel
-                    ) {
-                        onClick()
-                        true
-                    }
-                }
             },
         color = buttonColor
     ) {

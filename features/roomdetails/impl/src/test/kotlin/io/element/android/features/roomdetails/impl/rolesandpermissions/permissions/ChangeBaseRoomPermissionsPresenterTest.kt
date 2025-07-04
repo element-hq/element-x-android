@@ -18,10 +18,10 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember.Role.ADMIN
 import io.element.android.libraries.matrix.api.room.RoomMember.Role.MODERATOR
 import io.element.android.libraries.matrix.api.room.RoomMember.Role.USER
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
-import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevels
+import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -133,7 +133,7 @@ class ChangeBaseRoomPermissionsPresenterTest {
 
             (items.last() as? Event.Item<ChangeRoomPermissionsState>)?.value?.run {
                 assertThat(currentPermissions).isEqualTo(
-                    RoomPowerLevels(
+                    RoomPowerLevelsValues(
                         invite = MODERATOR.powerLevel,
                         kick = MODERATOR.powerLevel,
                         ban = MODERATOR.powerLevel,
@@ -296,18 +296,7 @@ class ChangeBaseRoomPermissionsPresenterTest {
         analyticsService = analyticsService,
     )
 
-    private fun defaultPermissions() = defaultRoomPowerLevels().run {
-        RoomPowerLevels(
-            invite = invite,
-            kick = kick,
-            ban = ban,
-            redactEvents = redactEvents,
-            sendEvents = sendEvents,
-            roomName = roomName,
-            roomAvatar = roomAvatar,
-            roomTopic = roomTopic,
-        )
-    }
+    private fun defaultPermissions() = defaultRoomPowerLevelValues()
 
     private suspend fun TurbineTestContext<ChangeRoomPermissionsState>.awaitUpdatedItem(): ChangeRoomPermissionsState {
         skipItems(1)

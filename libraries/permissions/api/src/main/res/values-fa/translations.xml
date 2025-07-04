@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"برای اینکه برنامه از دوربین استفاده کند، لطفا در تنظیمات سیستم مجوز بدهید."</string>
   <string name="dialog_permission_generic">"لطفاً در تنظیمات سامانه اجازه بدهید."</string>
+  <string name="dialog_permission_microphone">"برای اینکه برنامه از میکروفون استفاده کند، لطفا اجازه دهید در تنظیمات سیستم مجوز بدهید."</string>
+  <string name="dialog_permission_notification">"برای اینکه برنامه اعلان ها را نمایش دهد، لطفا مجوز را در تنظیمات سیستم اعطا کنید."</string>
 </resources>

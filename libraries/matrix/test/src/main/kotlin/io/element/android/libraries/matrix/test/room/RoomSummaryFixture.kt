@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -29,7 +30,6 @@ import io.element.android.libraries.matrix.test.A_ROOM_RAW_NAME
 import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
-import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
 
@@ -65,7 +65,10 @@ fun aRoomSummary(
     notificationCount: Long = 0,
     userDefinedNotificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
-    userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
+    roomPowerLevels: RoomPowerLevels = RoomPowerLevels(
+        values = defaultRoomPowerLevelValues(),
+        users = persistentMapOf(),
+    ),
     activeRoomCallParticipants: List<UserId> = emptyList(),
     heroes: List<MatrixUser> = emptyList(),
     pinnedEventIds: List<EventId> = emptyList(),
@@ -97,7 +100,7 @@ fun aRoomSummary(
         activeMembersCount = activeMembersCount,
         invitedMembersCount = invitedMembersCount,
         joinedMembersCount = joinedMembersCount,
-        userPowerLevels = userPowerLevels,
+        roomPowerLevels = roomPowerLevels,
         highlightCount = highlightCount,
         notificationCount = notificationCount,
         userDefinedNotificationMode = userDefinedNotificationMode,

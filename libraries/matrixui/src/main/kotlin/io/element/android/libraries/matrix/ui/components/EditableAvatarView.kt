@@ -13,7 +13,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -35,6 +34,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -49,6 +49,7 @@ fun EditableAvatarView(
     displayName: String?,
     avatarUrl: Uri?,
     avatarSize: AvatarSize,
+    avatarType: AvatarType,
     onAvatarClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -59,7 +60,6 @@ fun EditableAvatarView(
         val a11yAvatar = stringResource(CommonStrings.a11y_avatar)
         Box(
             modifier = Modifier
-                .size(avatarSize.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = onAvatarClick,
@@ -73,14 +73,20 @@ fun EditableAvatarView(
             when (avatarUrl?.scheme) {
                 null, "mxc" -> {
                     Avatar(
-                        avatarData = AvatarData(matrixId, displayName, avatarUrl?.toString(), size = avatarSize),
-                        modifier = Modifier.fillMaxSize(),
+                        avatarData = AvatarData(
+                            id = matrixId,
+                            name = displayName,
+                            url = avatarUrl?.toString(),
+                            size = avatarSize,
+                        ),
+                        avatarType = avatarType,
                     )
                 }
                 else -> {
                     UnsavedAvatar(
                         avatarUri = avatarUrl,
-                        modifier = Modifier.fillMaxSize(),
+                        avatarSize = avatarSize,
+                        avatarType = avatarType,
                     )
                 }
             }
@@ -116,6 +122,7 @@ internal fun EditableAvatarViewPreview(
         displayName = "A room",
         avatarUrl = uri,
         avatarSize = AvatarSize.EditRoomDetails,
+        avatarType = AvatarType.User,
         onAvatarClick = {},
     )
 }

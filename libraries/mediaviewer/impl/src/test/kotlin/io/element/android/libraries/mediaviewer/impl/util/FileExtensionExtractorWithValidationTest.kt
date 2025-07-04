@@ -17,9 +17,7 @@ class FileExtensionExtractorWithValidationTest {
     @Test
     fun `test FileExtensionExtractor with validation OK`() {
         val sut = FileExtensionExtractorWithValidation()
-        // The result should be txt, but with Robolectric,
-        // MimeTypeMap.getSingleton().hasExtension() always returns false
-        assertThat(sut.extractFromName("test.txt")).isEqualTo("bin")
+        assertThat(sut.extractFromName("test.txt")).isEqualTo("txt")
     }
 
     @Test

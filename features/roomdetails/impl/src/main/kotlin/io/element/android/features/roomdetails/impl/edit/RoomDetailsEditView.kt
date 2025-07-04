@@ -29,18 +29,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -68,12 +66,7 @@ fun RoomDetailsEditView(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.screen_room_details_edit_room_title),
-                        style = ElementTheme.typography.aliasScreenTitle,
-                    )
-                },
+                titleStr = stringResource(id = R.string.screen_room_details_edit_room_title),
                 navigationIcon = { BackButton(onClick = onBackClick) },
                 actions = {
                     TextButton(
@@ -103,6 +96,7 @@ fun RoomDetailsEditView(
                 displayName = state.roomRawName,
                 avatarUrl = state.roomAvatarUrl,
                 avatarSize = AvatarSize.EditRoomDetails,
+                avatarType = AvatarType.Room(),
                 onAvatarClick = ::onAvatarClick,
                 modifier = Modifier.fillMaxWidth(),
             )

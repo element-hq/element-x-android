@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"Anda akan memerlukan alamat ruangan untuk membuatnya terlihat dalam direktori."</string>
+  <string name="screen_edit_room_address_title">"Alamat ruangan"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Terjadi kesalahan saat memperbarui pengaturan pemberitahuan."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda mungkin tidak diberi tahu dalam beberapa ruangan."</string>
   <string name="screen_polls_history_title">"Pemungutan suara"</string>
@@ -54,6 +56,7 @@
   <string name="screen_room_details_notification_mode_default">"Bawaan"</string>
   <string name="screen_room_details_notification_title">"Notifikasi"</string>
   <string name="screen_room_details_pinned_events_row_title">"Pesan yang disematkan"</string>
+  <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Permintaan untuk bergabung"</string>
   <string name="screen_room_details_roles_and_permissions">"Peran dan perizinan"</string>
   <string name="screen_room_details_room_name_label">"Nama ruangan"</string>
@@ -126,6 +129,7 @@ Kami tidak menyarankan untuk mengaktifkan enkripsi untuk ruangan yang dapat dite
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Space saat ini tidak didukung"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Anggota space"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Anda memerlukan alamat ruangan agar dapat membuatnya terlihat di direktori ruangan."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Alamat ruangan"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Izinkan ruangan ini ditemukan dengan mencari direktori ruangan %1$s publik"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Terlihat di direktori ruangan publik"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Siapa pun"</string>

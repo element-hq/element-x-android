@@ -31,6 +31,7 @@ class MediaDetailsBottomSheetTest {
     val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on View in timeline invokes expected callback`() {
         val state = aMediaDetailsBottomSheetState()
         ensureCalledOnceWithParam(state.eventId) { callback ->
@@ -43,6 +44,7 @@ class MediaDetailsBottomSheetTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on Share invokes expected callback`() {
         val state = aMediaDetailsBottomSheetState()
         ensureCalledOnceWithParam(state.eventId) { callback ->
@@ -55,6 +57,7 @@ class MediaDetailsBottomSheetTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on Save invokes expected callback`() {
         val state = aMediaDetailsBottomSheetState()
         ensureCalledOnceWithParam(state.eventId) { callback ->

@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.dateformatter.impl
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 class FakeClock : Clock {
     private var instant: Instant = Instant.fromEpochMilliseconds(0)

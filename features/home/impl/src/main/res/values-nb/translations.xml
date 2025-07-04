@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Deaktiver batterioptimalisering for denne appen for å sikre at alle varsler mottas."</string>
+  <string name="banner_battery_optimization_submit_android">"Deaktiver optimalisering"</string>
+  <string name="banner_battery_optimization_title_android">"Kommer ikke varslene frem?"</string>
+  <string name="banner_set_up_recovery_content">"Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine brukte enheter."</string>
+  <string name="banner_set_up_recovery_submit">"Konfigurer gjenoppretting"</string>
+  <string name="banner_set_up_recovery_title">"Konfigurer gjenoppretting for å beskytte kontoen din"</string>
+  <string name="confirm_recovery_key_banner_message">"Verifiser gjenopprettingsnøkkelen for å opprettholde tilgangen til nøkkellageret og meldingshistorikken."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Skriv inn gjenopprettingsnøkkelen din"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Har du glemt din gjenopprettingsnøkkel?"</string>
+  <string name="confirm_recovery_key_banner_title">"Nøkkellagringen din er ikke synkronisert"</string>
+  <string name="full_screen_intent_banner_message">"For å sikre at du aldri går glipp av en viktig samtale, må du endre innstillingene dine for å tillate fullskjermvarsler når telefonen er låst."</string>
+  <string name="full_screen_intent_banner_title">"Forbedre samtaleopplevelsen din"</string>
+  <string name="screen_invites_decline_chat_message">"Er du sikker på at du vil takke nei til invitasjonen til å bli med i %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Avvis invitasjon"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Er du sikker på at du vil avslå denne private chatten med %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Avslå chat"</string>
+  <string name="screen_invites_empty_list">"Ingen invitasjoner"</string>
+  <string name="screen_invites_invited_you">"%1$s(%2$s) inviterte deg"</string>
+  <string name="screen_migration_message">"Dette er en engangsprosess, takk for at du venter."</string>
+  <string name="screen_migration_title">"Setter opp kontoen din."</string>
+  <string name="screen_roomlist_a11y_create_message">"Opprett en ny samtale eller et nytt rom"</string>
+  <string name="screen_roomlist_empty_message">"Kom i gang med å sende meldinger til noen."</string>
+  <string name="screen_roomlist_empty_title">"Ingen chatter ennå."</string>
+  <string name="screen_roomlist_filter_favourites">"Favoritter"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Du kan legge til en chat blant favorittene dine i chat-innstillingene.
+Inntil videre kan du velge bort filtre for å se de andre chattene dine"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Du har ikke favorittchatter ennå"</string>
+  <string name="screen_roomlist_filter_invites">"Invitasjoner"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Du har ingen ventende invitasjoner."</string>
+  <string name="screen_roomlist_filter_low_priority">"Lav prioritet"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Du kan velge bort filtre for å se de andre chattene dine"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Du har ikke chatter for dette utvalget"</string>
+  <string name="screen_roomlist_filter_people">"Personer"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Du har ingen DM-er ennå"</string>
+  <string name="screen_roomlist_filter_rooms">"Rom"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Du er ikke i noe rom ennå"</string>
+  <string name="screen_roomlist_filter_unreads">"Uleste"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulerer!
+Du har ingen uleste meldinger!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Forespørsel om å bli med sendt"</string>
+  <string name="screen_roomlist_main_space_title">"Chatter"</string>
+  <string name="screen_roomlist_mark_as_read">"Marker som lest"</string>
+  <string name="screen_roomlist_mark_as_unread">"Merk som ulest"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Dette rommet har blitt oppgradert"</string>
+  <string name="session_verification_banner_message">"Det ser ut til at du bruker en ny enhet. Bekreft med en annen enhet for å få tilgang til de krypterte meldingene dine."</string>
+  <string name="session_verification_banner_title">"Bekreft at det er deg"</string>
+</resources>

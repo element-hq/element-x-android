@@ -29,6 +29,7 @@ fun MediaPreviewValue.isPreviewEnabled(joinRule: JoinRule?): Boolean {
         On -> true
         Off -> false
         Private -> when (joinRule) {
+            is JoinRule.Private,
             is JoinRule.Knock,
             is JoinRule.Invite,
             is JoinRule.Restricted,

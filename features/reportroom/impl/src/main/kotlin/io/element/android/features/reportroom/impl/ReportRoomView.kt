@@ -25,14 +25,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -75,12 +73,7 @@ fun ReportRoomView(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        stringResource(R.string.screen_report_room_title),
-                        style = ElementTheme.typography.aliasScreenTitle,
-                    )
-                },
+                titleStr = stringResource(R.string.screen_report_room_title),
                 navigationIcon = {
                     BackButton(onClick = onBackClick)
                 }
@@ -90,12 +83,12 @@ fun ReportRoomView(
     ) { padding ->
         Column(
             modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .imePadding()
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(vertical = 16.dp)
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .imePadding()
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 16.dp)
         ) {
             TextField(
                 value = state.reason,
@@ -104,9 +97,9 @@ fun ReportRoomView(
                 minLines = 3,
                 enabled = !isReporting,
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .heightIn(min = 90.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .heightIn(min = 90.dp),
                 supportingText = stringResource(R.string.screen_report_room_reason_footer),
             )
 
@@ -135,8 +128,8 @@ fun ReportRoomView(
                     state.eventSink(ReportRoomEvents.Report)
                 },
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             )
         }
     }

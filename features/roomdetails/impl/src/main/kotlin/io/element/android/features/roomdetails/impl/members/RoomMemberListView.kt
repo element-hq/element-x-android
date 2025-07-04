@@ -49,7 +49,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -352,12 +351,7 @@ private fun RoomMemberListTopBar(
     onInviteClick: () -> Unit,
 ) {
     TopAppBar(
-        title = {
-            Text(
-                text = stringResource(CommonStrings.common_people),
-                style = ElementTheme.typography.aliasScreenTitle,
-            )
-        },
+        titleStr = stringResource(CommonStrings.common_people),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             if (canInvite) {

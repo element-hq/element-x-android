@@ -40,7 +40,6 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -142,12 +141,7 @@ private fun SecurityAndPrivacyToolbar(
 ) {
     TopAppBar(
         modifier = modifier,
-        title = {
-            Text(
-                text = stringResource(R.string.screen_room_details_security_and_privacy_title),
-                style = ElementTheme.typography.aliasScreenTitle,
-            )
-        },
+        titleStr = stringResource(R.string.screen_room_details_security_and_privacy_title),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             TextButton(

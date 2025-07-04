@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Vedhæft skærmbillede"</string>
+  <string name="screen_bug_report_contact_me">"Du kan kontakte mig, hvis du har opfølgende spørgsmål."</string>
+  <string name="screen_bug_report_contact_me_title">"Kontakt mig"</string>
+  <string name="screen_bug_report_edit_screenshot">"Rediger skærmbillede"</string>
+  <string name="screen_bug_report_editor_description">"Beskriv venligst problemet: Hvad gjorde du? Hvad forventede du, at der skulle ske? Hvad skete der faktisk? - Beskriv det med så mange detaljer som du kan."</string>
+  <string name="screen_bug_report_editor_placeholder">"Beskriv problemet…"</string>
+  <string name="screen_bug_report_editor_supporting">"Hvis det er muligt, må du meget gerne lave beskrivelsen på engelsk."</string>
+  <string name="screen_bug_report_error_description_too_short">"Beskrivelsen er for kort, giv venligst flere detaljer om, hvad der skete. Tak!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Send nedbrudslogfiler"</string>
+  <string name="screen_bug_report_include_logs">"Tillad logfiler"</string>
+  <string name="screen_bug_report_include_logs_error">"Dine logfiler er for store, så de kan ikke medtages i denne rapport, send dem venligst til os på en anden måde."</string>
+  <string name="screen_bug_report_include_screenshot">"Send skærmbillede"</string>
+  <string name="screen_bug_report_logs_description">"Logfiler vil blive inkluderet i din besked for at sikre, at alt fungerer korrekt. Hvis du vil sende din besked uden logfiler, skal du deaktivere denne indstilling."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s crashede sidste gang den blev brugt. Vil du dele en ulykkesrapport med os?"</string>
+  <string name="screen_bug_report_view_logs">"Se logfiler"</string>
+</resources>

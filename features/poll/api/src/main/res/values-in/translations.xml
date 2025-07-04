@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="a11y_polls_percent_of_total">
+    <item quantity="other">"%1$d persen dari total suara"</item>
+  </plurals>
+  <string name="a11y_polls_winning_answer">"Ini adalah jawaban yang menang"</string>
+</resources>

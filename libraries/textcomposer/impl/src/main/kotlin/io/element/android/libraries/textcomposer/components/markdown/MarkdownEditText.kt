@@ -8,6 +8,7 @@
 package io.element.android.libraries.textcomposer.components.markdown
 
 import android.content.Context
+import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 
 internal class MarkdownEditText(
@@ -35,5 +36,11 @@ internal class MarkdownEditText(
         if (!isModifyingText) {
             onSelectionChangeListener?.invoke(selStart, selEnd)
         }
+    }
+
+    // When using the EditText within a Compose layout, we need to override focusSearch to prevent the default behavior
+    // Otherwise it can try searching for focusable nodes in the Compose hierarchy while they're being laid out, which will crash
+    override fun focusSearch(direction: Int): View? {
+        return null
     }
 }

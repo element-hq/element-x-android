@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter."</string>
+  <string name="banner_set_up_recovery_submit">"Ställ in återställning"</string>
+  <string name="banner_set_up_recovery_title">"Ställ in återställning"</string>
+  <string name="confirm_recovery_key_banner_message">"Bekräfta din återställningsnyckel för att behålla åtkomsten till din nyckellagring och meddelandehistorik."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Ange din återställningsnyckel"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Glömt din återställningsnyckel?"</string>
+  <string name="confirm_recovery_key_banner_title">"Din nyckellagring är inte synkroniserad"</string>
+  <string name="full_screen_intent_banner_message">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>
+  <string name="full_screen_intent_banner_title">"Förbättra din samtalsupplevelse"</string>
+  <string name="screen_invites_decline_chat_message">"Är du säker på att du vill tacka nej till inbjudan att gå med%1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Avböj inbjudan"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Är du säker på att du vill avböja denna privata chatt med %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Avböj chatt"</string>
+  <string name="screen_invites_empty_list">"Inga inbjudningar"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) bjöd in dig"</string>
+  <string name="screen_migration_message">"Detta är en engångsprocess, tack för att du väntar."</string>
+  <string name="screen_migration_title">"Konfigurerar ditt konto"</string>
+  <string name="screen_roomlist_a11y_create_message">"Skapa en ny konversation eller ett nytt rum"</string>
+  <string name="screen_roomlist_empty_message">"Kom igång genom att skicka meddelanden till någon."</string>
+  <string name="screen_roomlist_empty_title">"Inga chattar än."</string>
+  <string name="screen_roomlist_filter_favourites">"Favoriter"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Du kan lägga till en chatt till dina favoriter i chattinställningarna.
+För tillfället kan du avmarkera filter för att se dina andra chattar"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Du har inga favoritchattar än"</string>
+  <string name="screen_roomlist_filter_invites">"Inbjudningar"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Du har inga väntande inbjudningar."</string>
+  <string name="screen_roomlist_filter_low_priority">"Låg prioritet"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Du kan avmarkera filter för att se dina andra chattar"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Du har inga chattar för det här valet"</string>
+  <string name="screen_roomlist_filter_people">"Personer"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Du har inga DM:er än"</string>
+  <string name="screen_roomlist_filter_rooms">"Rum"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Du är inte i något rum än"</string>
+  <string name="screen_roomlist_filter_unreads">"Olästa"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Grattis!
+Du har inga olästa meddelanden!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Begäran om att gå med skickad"</string>
+  <string name="screen_roomlist_main_space_title">"Alla chattar"</string>
+  <string name="screen_roomlist_mark_as_read">"Markera som läst"</string>
+  <string name="screen_roomlist_mark_as_unread">"Markera som oläst"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Det här rummet har uppgraderats"</string>
+  <string name="session_verification_banner_message">"Det verkar som om du använder en ny enhet. Verifiera med en annan enhet för att komma åt dina krypterade meddelanden."</string>
+  <string name="session_verification_banner_title">"Verifiera att det är du"</string>
+</resources>

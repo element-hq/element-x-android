@@ -28,14 +28,6 @@ internal class MatrixTimelineDiffProcessor(
     private val _membershipChangeEventReceived = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val membershipChangeEventReceived: Flow<Unit> = _membershipChangeEventReceived
 
-    suspend fun postItems(items: List<TimelineItem>) {
-        updateTimelineItems {
-            Timber.v("Update timeline items from postItems (with ${items.size} items) on ${Thread.currentThread()}")
-            val mappedItems = items.map { it.asMatrixTimelineItem() }
-            addAll(0, mappedItems)
-        }
-    }
-
     suspend fun postDiffs(diffs: List<TimelineDiff>) {
         updateTimelineItems {
             Timber.v("Update timeline items from postDiffs (with ${diffs.size} items) on ${Thread.currentThread()}")

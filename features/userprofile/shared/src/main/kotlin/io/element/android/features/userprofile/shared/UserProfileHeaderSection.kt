@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -30,6 +32,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.MatrixBadgeRow
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -61,15 +64,26 @@ fun UserProfileHeaderSection(
     ) {
         Avatar(
             avatarData = AvatarData(userId.value, userName, avatarUrl, AvatarSize.UserHeader),
+            avatarType = AvatarType.User,
+            contentDescription = avatarUrl?.let { stringResource(CommonStrings.a11y_user_avatar) },
             modifier = Modifier
                 .clip(CircleShape)
-                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                .clickable(
+                    enabled = avatarUrl != null,
+                    onClickLabel = stringResource(CommonStrings.action_view),
+                ) {
+                    openAvatarPreview(avatarUrl!!)
+                }
                 .testTag(TestTags.memberDetailAvatar)
         )
         Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
             Text(
-                modifier = Modifier.clipToBounds(),
+                modifier = Modifier
+                    .clipToBounds()
+                    .semantics {
+                        heading()
+                    },
                 text = userName,
                 style = ElementTheme.typography.fontHeadingLgBold,
                 textAlign = TextAlign.Center,

@@ -11,7 +11,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.api.CurrentCallService
 import io.element.android.features.call.test.FakeCurrentCallService
-import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
@@ -230,7 +230,7 @@ class RoomCallStatePresenterTest {
         return RoomCallStatePresenter(
             room = joinedRoom,
             currentCallService = currentCallService,
-            enterpriseService = FakeEnterpriseService(
+            sessionEnterpriseService = FakeSessionEnterpriseService(
                 isElementCallAvailableResult = { isElementCallAvailable },
             ),
         )

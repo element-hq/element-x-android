@@ -105,13 +105,13 @@ class RolesAndPermissionsPresenter @Inject constructor(
     ) = launch(dispatchers.io) {
         runUpdatingState(resetPermissionsAction) {
             analyticsService.capture(RoomModeration(RoomModeration.Action.ResetPermissions))
-            room.resetPowerLevels().map {}
+            room.resetPowerLevels()
         }
     }
 
     private fun RoomInfo.userCountWithRole(userIds: List<UserId>, role: RoomMember.Role): Int {
-        return this.userPowerLevels.count { (userId, level) ->
+        return this.roomPowerLevels?.users?.count { (userId, level) ->
             RoomMember.Role.forPowerLevel(level) == role && userId in userIds
-        }
+        } ?: 0
     }
 }

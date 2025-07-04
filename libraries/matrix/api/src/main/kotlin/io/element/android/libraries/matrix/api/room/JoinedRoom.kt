@@ -16,7 +16,7 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -118,9 +118,9 @@ interface JoinedRoom : BaseRoom {
 
     suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit>
 
-    suspend fun updatePowerLevels(roomPowerLevels: RoomPowerLevels): Result<Unit>
+    suspend fun updatePowerLevels(roomPowerLevelsValues: RoomPowerLevelsValues): Result<Unit>
 
-    suspend fun resetPowerLevels(): Result<RoomPowerLevels>
+    suspend fun resetPowerLevels(): Result<Unit>
 
     suspend fun setName(name: String): Result<Unit>
 

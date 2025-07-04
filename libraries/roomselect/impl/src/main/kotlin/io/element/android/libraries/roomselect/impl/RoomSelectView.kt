@@ -32,12 +32,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -94,14 +94,9 @@ fun RoomSelectView(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = when (state.mode) {
-                            RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_message)
-                            RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
-                        },
-                        style = ElementTheme.typography.aliasScreenTitle
-                    )
+                titleStr = when (state.mode) {
+                    RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_message)
+                    RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                 },
                 navigationIcon = {
                     BackButton(onClick = { onBackButton(state) })
@@ -214,12 +209,14 @@ private fun RoomSummaryView(
             .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RoomAvatar(
+        Avatar(
             avatarData = roomInfo.getAvatarData(size = AvatarSize.RoomSelectRoomListItem),
-            heroes = roomInfo.heroes.map { user ->
-                user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
-            }.toPersistentList(),
-            isTombstoned = roomInfo.isTombstoned,
+            avatarType = AvatarType.Room(
+                heroes = roomInfo.heroes.map { user ->
+                    user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
+                }.toPersistentList(),
+                isTombstoned = roomInfo.isTombstoned,
+            ),
         )
         Column(
             modifier = Modifier

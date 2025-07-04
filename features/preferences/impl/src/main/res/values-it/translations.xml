@@ -19,6 +19,11 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Se disattivato, le tue ricevute di visualizzazione non verranno inviate a nessuno. Riceverai comunque ricevute di visualizzazione da altri utenti."</string>
   <string name="screen_advanced_settings_share_presence">"Condividi presenza online"</string>
   <string name="screen_advanced_settings_share_presence_description">"Se disattivato, non potrai inviare o ricevere ricevute di lettura o notifiche di scrittura."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Nascondi sempre"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Mostra sempre"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Nelle stanze private"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Un file multimediale nascosto può sempre essere visualizzato toccandolo"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Mostra i media nella conversazione"</string>
   <string name="screen_advanced_settings_view_source_description">"Attiva l\'opzione per visualizzare il codice sorgente del messaggio nella conversazione."</string>
   <string name="screen_blocked_users_empty">"Non hai utenti bloccati"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Sblocca"</string>
@@ -58,6 +63,7 @@ Se procedi, alcune delle tue impostazioni potrebbero cambiare."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"impostazioni di sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notifiche di sistema disattivate"</string>
   <string name="screen_notification_settings_title">"Notifiche"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Cronologia push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Risoluzione dei problemi"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Risoluzione di problemi delle notifiche"</string>
 </resources>

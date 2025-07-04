@@ -24,14 +24,14 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.impl.room.draft.into
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
-import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
+import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsValuesMapper
 import io.element.android.libraries.matrix.impl.room.tombstone.map
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
@@ -132,9 +132,11 @@ class RustBaseRoom(
         }
     }
 
-    override suspend fun powerLevels(): Result<RoomPowerLevels> = withContext(roomDispatcher) {
+    override suspend fun powerLevels(): Result<RoomPowerLevelsValues> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            RoomPowerLevelsMapper.map(innerRoom.getPowerLevels())
+            innerRoom.getPowerLevels().use {
+                RoomPowerLevelsValuesMapper.map(it.values())
+            }
         }
     }
 
@@ -167,55 +169,55 @@ class RustBaseRoom(
 
     override suspend fun canUserInvite(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.canUserInvite(userId.value)
+            innerRoom.getPowerLevels().use { it.canUserInvite(userId.value) }
         }
     }
 
     override suspend fun canUserKick(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.canUserKick(userId.value)
+            innerRoom.getPowerLevels().use { it.canUserKick(userId.value) }
         }
     }
 
     override suspend fun canUserBan(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.canUserBan(userId.value)
+            innerRoom.getPowerLevels().use { it.canUserBan(userId.value) }
         }
     }
 
     override suspend fun canUserRedactOwn(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.canUserRedactOwn(userId.value)
+            innerRoom.getPowerLevels().use { it.canUserRedactOwn(userId.value) }
         }
     }
 
     override suspend fun canUserRedactOther(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.canUserRedactOther(userId.value)
+            innerRoom.getPowerLevels().use { it.canUserRedactOther(userId.value) }
         }
     }
 
     override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.canUserSendState(userId.value, type.map())
+            innerRoom.getPowerLevels().use { it.canUserSendState(userId.value, type.map()) }
         }
     }
 
     override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.canUserSendMessage(userId.value, type.map())
+            innerRoom.getPowerLevels().use { it.canUserSendMessage(userId.value, type.map()) }
         }
     }
 
     override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.canUserTriggerRoomNotification(userId.value)
+            innerRoom.getPowerLevels().use { it.canUserTriggerRoomNotification(userId.value) }
         }
     }
 
     override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.canUserPinUnpin(userId.value)
+            innerRoom.getPowerLevels().use { it.canUserPinUnpin(userId.value) }
         }
     }
 

@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -42,14 +43,16 @@ import io.element.android.features.roomcall.api.hasPermissionToJoin
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
+import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.atomic.atoms.MatrixBadgeAtom
 import io.element.android.libraries.designsystem.atomic.molecules.MatrixBadgeRowMolecule
 import io.element.android.libraries.designsystem.components.ClickableLinkText
+import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.DmAvatars
-import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -261,6 +264,12 @@ fun RoomDetailsView(
                 onReportRoomClick = onReportRoomClick,
                 onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
             )
+
+            if (state.showDebugInfo) {
+                DebugInfoSection(
+                    roomId = state.roomId,
+                )
+            }
         }
     }
 }
@@ -391,14 +400,22 @@ private fun RoomHeaderSection(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        RoomAvatar(
+        Avatar(
             avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomHeader),
-            heroes = heroes.map { user ->
-                user.getAvatarData(size = AvatarSize.RoomHeader)
-            }.toPersistentList(),
-            isTombstoned = isTombstoned,
+            avatarType = AvatarType.Room(
+                heroes = heroes.map { user ->
+                    user.getAvatarData(size = AvatarSize.RoomHeader)
+                }.toPersistentList(),
+                isTombstoned = isTombstoned,
+            ),
+            contentDescription = avatarUrl?.let { stringResource(CommonStrings.a11y_room_avatar) },
             modifier = Modifier
-                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                .clickable(
+                    enabled = avatarUrl != null,
+                    onClickLabel = stringResource(CommonStrings.action_view),
+                ) {
+                    openAvatarPreview(avatarUrl!!)
+                }
                 .testTag(TestTags.roomDetailAvatar)
         )
         TitleAndSubtitle(
@@ -697,6 +714,33 @@ private fun OtherActionsSection(
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),
             style = ListItemStyle.Destructive,
             onClick = onLeaveRoomClick,
+        )
+    }
+}
+
+@Composable
+private fun DebugInfoSection(roomId: RoomId) {
+    val context = LocalContext.current
+    PreferenceCategory(showTopDivider = true) {
+        ListItem(
+            headlineContent = {
+                Text("Internal room ID")
+            },
+            supportingContent = {
+                Text(
+                    text = roomId.value,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Code())),
+            trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Copy())),
+            onClick = {
+                context.copyToClipboard(
+                    roomId.value,
+                    context.getString(CommonStrings.common_copied_to_clipboard)
+                )
+            },
         )
     }
 }

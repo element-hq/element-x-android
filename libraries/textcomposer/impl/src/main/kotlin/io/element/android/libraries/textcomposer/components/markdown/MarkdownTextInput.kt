@@ -8,6 +8,7 @@
 package io.element.android.libraries.textcomposer.components.markdown
 
 import android.content.ClipData
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.getSpans
@@ -26,6 +28,7 @@ import androidx.core.view.OnReceiveContentListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.setPadding
 import androidx.core.widget.addTextChangedListener
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.testtags.TestTags
@@ -43,14 +46,13 @@ import io.element.android.wysiwyg.compose.internal.applyStyleInCompose
 @Composable
 fun MarkdownTextInput(
     state: MarkdownTextEditorState,
-    subcomposing: Boolean,
+    placeholder: String,
+    placeholderColor: androidx.compose.ui.graphics.Color,
     onTyping: (Boolean) -> Unit,
     onReceiveSuggestion: (Suggestion?) -> Unit,
     richTextEditorStyle: RichTextEditorStyle,
     onSelectRichContent: ((Uri) -> Unit)?,
 ) {
-    val canUpdateState = !subcomposing
-
     // Copied from io.element.android.wysiwyg.internal.utils.UriContentListener
     class ReceiveUriContentListener(
         private val onContent: (uri: Uri) -> Unit,
@@ -87,43 +89,38 @@ fun MarkdownTextInput(
                 setBackgroundColor(Color.TRANSPARENT)
                 val text = state.text.value()
                 setText(text)
+                setHint(placeholder)
+                setHintTextColor(ColorStateList.valueOf(placeholderColor.toArgb()))
                 inputType = InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE or
                     InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
-                if (canUpdateState) {
-                    val textRange = 0..text.length
-                    setSelection(state.selection.first.coerceIn(textRange), state.selection.last.coerceIn(textRange))
-                    setOnFocusChangeListener { _, hasFocus ->
-                        state.hasFocus = hasFocus
-                    }
-                    addTextChangedListener { editable ->
-                        onTyping(!editable.isNullOrEmpty())
-                        state.text.update(editable, false)
-                        state.lineCount = lineCount
-
-                        state.currentSuggestion = editable?.checkSuggestionNeeded()
-                        onReceiveSuggestion(state.currentSuggestion)
-                    }
-                    onSelectionChangeListener = { selStart, selEnd ->
-                        state.selection = selStart..selEnd
-                        state.currentSuggestion = editableText.checkSuggestionNeeded()
-                        onReceiveSuggestion(state.currentSuggestion)
-                    }
-                    if (onSelectRichContent != null) {
-                        ViewCompat.setOnReceiveContentListener(
-                            this,
-                            arrayOf("image/*"),
-                            ReceiveUriContentListener { onSelectRichContent(it) }
-                        )
-                    }
-                    state.requestFocusAction = { this.requestFocus() }
-                } else {
-                    isEnabled = false
-                    isFocusable = false
-                    isFocusableInTouchMode = false
-                    isClickable = false
+                val textRange = 0..text.length
+                setSelection(state.selection.first.coerceIn(textRange), state.selection.last.coerceIn(textRange))
+                setOnFocusChangeListener { _, hasFocus ->
+                    state.hasFocus = hasFocus
                 }
+                addTextChangedListener { editable ->
+                    onTyping(!editable.isNullOrEmpty())
+                    state.text.update(editable, false)
+                    state.lineCount = lineCount
+
+                    state.currentSuggestion = editable?.checkSuggestionNeeded()
+                    onReceiveSuggestion(state.currentSuggestion)
+                }
+                onSelectionChangeListener = { selStart, selEnd ->
+                    state.selection = selStart..selEnd
+                    state.currentSuggestion = editableText.checkSuggestionNeeded()
+                    onReceiveSuggestion(state.currentSuggestion)
+                }
+                if (onSelectRichContent != null) {
+                    ViewCompat.setOnReceiveContentListener(
+                        this,
+                        arrayOf("image/*"),
+                        ReceiveUriContentListener { onSelectRichContent(it) }
+                    )
+                }
+                state.requestFocusAction = { this.requestFocus() }
             }
         },
         update = { editText ->
@@ -132,19 +129,15 @@ fun MarkdownTextInput(
             mentionSpanUpdater.updateMentionSpans(text)
             if (state.text.needsDisplaying()) {
                 editText.updateEditableText(text)
-                if (canUpdateState) {
-                    state.text.update(editText.editableText, false)
-                }
+                state.text.update(editText.editableText, false)
             }
-            if (canUpdateState) {
-                val newSelectionStart = state.selection.first
-                val newSelectionEnd = state.selection.last
-                val currentTextRange = 0..editText.editableText.length
-                val didSelectionChange = { editText.selectionStart != newSelectionStart || editText.selectionEnd != newSelectionEnd }
-                val isNewSelectionValid = { newSelectionStart in currentTextRange && newSelectionEnd in currentTextRange }
-                if (didSelectionChange() && isNewSelectionValid()) {
-                    editText.setSelection(state.selection.first, state.selection.last)
-                }
+            val newSelectionStart = state.selection.first
+            val newSelectionEnd = state.selection.last
+            val currentTextRange = 0..editText.editableText.length
+            val didSelectionChange = { editText.selectionStart != newSelectionStart || editText.selectionEnd != newSelectionEnd }
+            val isNewSelectionValid = { newSelectionStart in currentTextRange && newSelectionEnd in currentTextRange }
+            if (didSelectionChange() && isNewSelectionValid()) {
+                editText.setSelection(state.selection.first, state.selection.last)
             }
         }
     )
@@ -189,7 +182,8 @@ internal fun MarkdownTextInputPreview() {
         val style = ElementRichTextEditorStyle.composerStyle(hasFocus = true)
         MarkdownTextInput(
             state = aMarkdownTextEditorState(initialText = "Hello, World!"),
-            subcomposing = false,
+            placeholder = "Placeholder",
+            placeholderColor = ElementTheme.colors.textSecondary,
             onTyping = {},
             onReceiveSuggestion = {},
             richTextEditorStyle = style,

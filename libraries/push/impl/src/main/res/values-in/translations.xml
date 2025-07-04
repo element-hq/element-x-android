@@ -11,7 +11,7 @@
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d pemberitahuan"</item>
   </plurals>
-  <string name="notification_fallback_content">"Notifikasi"</string>
+  <string name="notification_fallback_content">"Anda memiliki pesan baru."</string>
   <string name="notification_incoming_call">"📹 Panggilan masuk"</string>
   <string name="notification_inline_reply_failed">"** Gagal mengirim — silakan buka ruangan"</string>
   <string name="notification_invitation_action_join">"Gabung"</string>
@@ -57,6 +57,7 @@
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
     <item quantity="other">"Ditemukan %1$d penyedia notifikasi dorongan: %2$s"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplikasi ini dibangun dengan dukungan untuk: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Deteksi penyedia notifikasi dorongan"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Periksa apakah aplikasi dapat menampilkan notifikasi."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Notifikasi belum diklik."</string>

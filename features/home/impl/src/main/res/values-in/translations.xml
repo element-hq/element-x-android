@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Nonaktifkan pengoptimalan baterai untuk aplikasi ini, untuk memastikan semua notifikasi diterima."</string>
+  <string name="banner_battery_optimization_submit_android">"Nonaktifkan optimasi"</string>
+  <string name="banner_battery_optimization_title_android">"Notifikasi tidak masuk?"</string>
+  <string name="banner_set_up_recovery_content">"Buat kunci pemulihan baru yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi Anda jika Anda kehilangan akses ke perangkat Anda."</string>
+  <string name="banner_set_up_recovery_submit">"Siapkan pemulihan"</string>
+  <string name="banner_set_up_recovery_title">"Siapkan pemulihan"</string>
+  <string name="confirm_recovery_key_banner_message">"Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Masukkan kunci pemulihan Anda"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Lupa kunci pemulihan Anda?"</string>
+  <string name="confirm_recovery_key_banner_title">"Penyimpanan kunci Anda tidak sinkron"</string>
+  <string name="full_screen_intent_banner_message">"Untuk memastikan Anda tidak melewatkan panggilan penting, silakan ubah pengaturan Anda untuk memperbolehkan notifikasi layar penuh ketika ponsel Anda terkunci."</string>
+  <string name="full_screen_intent_banner_title">"Tingkatkan pengalaman panggilan Anda"</string>
+  <string name="screen_invites_decline_chat_message">"Apakah Anda yakin ingin menolak undangan untuk bergabung ke %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Tolak undangan"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Apakah Anda yakin ingin menolak obrolan pribadi dengan %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Tolak obrolan"</string>
+  <string name="screen_invites_empty_list">"Tidak ada undangan"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) mengundang Anda"</string>
+  <string name="screen_migration_message">"Ini adalah proses satu kali, terima kasih telah menunggu."</string>
+  <string name="screen_migration_title">"Menyiapkan akun Anda."</string>
+  <string name="screen_roomlist_a11y_create_message">"Buat percakapan atau ruangan baru"</string>
+  <string name="screen_roomlist_clear_filters">"Hapus filter"</string>
+  <string name="screen_roomlist_empty_message">"Mulailah dengan mengirim pesan kepada seseorang."</string>
+  <string name="screen_roomlist_empty_title">"Belum ada obrolan."</string>
+  <string name="screen_roomlist_filter_favourites">"Favorit"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Anda dapat menambahkan percakapan ke favorit Anda dalam pengaturan percakapan.
+Untuk sementara, Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Anda belum memiliki percakapan favorit"</string>
+  <string name="screen_roomlist_filter_invites">"Undangan"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Anda tidak memiliki undangan yang tertunda."</string>
+  <string name="screen_roomlist_filter_low_priority">"Prioritas Rendah"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Anda tidak memiliki percakapan untuk pemilihan ini"</string>
+  <string name="screen_roomlist_filter_people">"Orang"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Anda belum memiliki percakapan langsung"</string>
+  <string name="screen_roomlist_filter_rooms">"Ruangan"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Anda belum berada dalam ruangan"</string>
+  <string name="screen_roomlist_filter_unreads">"Belum dibaca"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Selamat!
+Anda tidak memiliki pesan yang belum dibaca!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Permintaan untuk bergabung dikirim"</string>
+  <string name="screen_roomlist_main_space_title">"Semua Obrolan"</string>
+  <string name="screen_roomlist_mark_as_read">"Tandai sebagai dibaca"</string>
+  <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Ruangan ini telah ditingkatkan"</string>
+  <string name="session_verification_banner_message">"Sepertinya Anda menggunakan perangkat baru. Verifikasi dengan perangkat lain untuk mengakses pesan terenkripsi Anda selanjutnya."</string>
+  <string name="session_verification_banner_title">"Verifikasi bahwa ini Anda"</string>
+</resources>

@@ -48,7 +48,6 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.TypingNot
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,9 +94,6 @@ class RustTimeline(
     private val featureFlagsService: FeatureFlagService,
     onNewSyncedEvent: () -> Unit,
 ) : Timeline {
-    private val initLatch = CompletableDeferred<Unit>()
-    private val isTimelineInitialized = MutableStateFlow(false)
-
     private val _timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
         MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
 
@@ -119,8 +115,6 @@ class RustTimeline(
         timeline = inner,
         timelineCoroutineScope = coroutineScope,
         timelineDiffProcessor = timelineDiffProcessor,
-        initLatch = initLatch,
-        isTimelineInitialized = isTimelineInitialized,
         dispatcher = dispatcher,
         onNewSyncedEvent = onNewSyncedEvent,
     )
@@ -181,7 +175,6 @@ class RustTimeline(
     // Use NonCancellable to avoid breaking the timeline when the coroutine is cancelled.
     override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = withContext(NonCancellable) {
         withContext(dispatcher) {
-            initLatch.await()
             runCatchingExceptions {
                 if (!canPaginate(direction)) throw TimelineException.CannotPaginate
                 updatePaginationStatus(direction) { it.copy(isPaginating = true) }
@@ -203,7 +196,6 @@ class RustTimeline(
     }
 
     private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
-        if (!isTimelineInitialized.value) return false
         return when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backwardPaginationStatus.value.canPaginate
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.value.canPaginate
@@ -215,12 +207,10 @@ class RustTimeline(
         backwardPaginationStatus,
         forwardPaginationStatus,
         joinedRoom.roomInfoFlow.map { it.creator to it.isDm }.distinctUntilChanged(),
-        isTimelineInitialized,
     ) { timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        (roomCreator, isDm),
-        isTimelineInitialized ->
+        (roomCreator, isDm) ->
         withContext(dispatcher) {
             timelineItems
                 .let { items ->
@@ -234,7 +224,6 @@ class RustTimeline(
                 .let { items ->
                     loadingIndicatorsPostProcessor.process(
                         items = items,
-                        isTimelineInitialized = isTimelineInitialized,
                         hasMoreToLoadBackward = backwardPaginationStatus.hasMoreToLoad,
                         hasMoreToLoadForward = forwardPaginationStatus.hasMoreToLoad,
                     )
@@ -244,10 +233,7 @@ class RustTimeline(
                 }
                 // Keep lastForwardIndicatorsPostProcessor last
                 .let { items ->
-                    lastForwardIndicatorsPostProcessor.process(
-                        items = items,
-                        isTimelineInitialized = isTimelineInitialized,
-                    )
+                    lastForwardIndicatorsPostProcessor.process(items = items)
                 }
         }
     }.onStart {
@@ -262,7 +248,6 @@ class RustTimeline(
     }
 
     private fun CoroutineScope.fetchMembers() = launch(dispatcher) {
-        initLatch.await()
         try {
             inner.fetchMembers()
         } catch (exception: Exception) {

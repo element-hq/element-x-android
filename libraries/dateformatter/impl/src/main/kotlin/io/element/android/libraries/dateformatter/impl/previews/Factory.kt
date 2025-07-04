@@ -16,9 +16,9 @@ import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultDateFormatter
 import io.element.android.libraries.dateformatter.impl.DefaultDateFormatterDay
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import java.util.Locale
+import kotlin.time.Instant
 
 /**
  * Create DefaultDateFormatter and set current time to the provided date.

@@ -83,19 +83,40 @@ class OnBoardingPresenterTest {
             assertThat(initialState.canLoginWithQrCode).isFalse()
             assertThat(initialState.productionApplicationName).isEqualTo("B")
             assertThat(initialState.canCreateAccount).isEqualTo(OnBoardingConfig.CAN_CREATE_ACCOUNT)
-            assertThat(initialState.canReportBug).isTrue()
+            assertThat(initialState.canReportBug).isFalse()
             assertThat(awaitItem().canLoginWithQrCode).isTrue()
         }
     }
 
     @Test
-    fun `present - rageshake not available`() = runTest {
+    fun `present - clicking on version 7 times has no effect if rageshake not available`() = runTest {
         val presenter = createPresenter(
             rageshakeFeatureAvailability = { false },
         )
         presenter.test {
             skipItems(1)
-            assertThat(awaitItem().canReportBug).isFalse()
+            awaitItem().also { state ->
+                assertThat(state.canReportBug).isFalse()
+                repeat(7) {
+                    state.eventSink(OnBoardingEvents.OnVersionClick)
+                }
+            }
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `present - clicking on version 7 times will reveal the report a problem button`() = runTest {
+        val presenter = createPresenter()
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.canReportBug).isFalse()
+                repeat(7) {
+                    state.eventSink(OnBoardingEvents.OnVersionClick)
+                }
+            }
+            assertThat(awaitItem().canReportBug).isTrue()
         }
     }
 

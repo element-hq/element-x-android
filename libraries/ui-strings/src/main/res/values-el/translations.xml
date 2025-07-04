@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Προσθήκη αντίδρασης: %1$s"</string>
   <string name="a11y_avatar">"Εικόνα Προφίλ"</string>
   <string name="a11y_delete">"Διαγραφή"</string>
   <plurals name="a11y_digits_entered">
@@ -27,7 +28,8 @@
   </plurals>
   <string name="a11y_read_receipts_single">"Διαβάστηκε από %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Πάτα για εμφάνιση όλων"</string>
-  <string name="a11y_remove_reaction_with">"Αφαίρεση αντίδρασης με %1$s"</string>
+  <string name="a11y_remove_reaction">"Αφαίρεση αντίδρασης με %1$s"</string>
+  <string name="a11y_remove_reaction_with">"Αφαιρέστε την αντίδραση με %1$s"</string>
   <string name="a11y_send_files">"Αποστολή αρχείων"</string>
   <string name="a11y_show_password">"Εμφάνιση κωδικού πρόσβασης"</string>
   <string name="a11y_start_call">"Ξεκίνησε μια κλήση"</string>
@@ -56,7 +58,7 @@
   <string name="action_copy_link_to_message">"Αντιγραφή συνδέσμου στο μήνυμα"</string>
   <string name="action_copy_text">"Αντιγραφή κειμένου"</string>
   <string name="action_create">"Δημιουργία"</string>
-  <string name="action_create_a_room">"Δημιούργησε ένα δωμάτιο"</string>
+  <string name="action_create_a_room">"Δημιουργία αίθουσας"</string>
   <string name="action_deactivate">"Απενεργοποίηση"</string>
   <string name="action_deactivate_account">"Απενεργοποίηση λογαριασμού"</string>
   <string name="action_decline">"Απόρριψη"</string>
@@ -85,7 +87,7 @@
   <string name="action_learn_more">"Μάθε περισσότερα"</string>
   <string name="action_leave">"Αποχώρηση"</string>
   <string name="action_leave_conversation">"Αποχώρηση από τη συζήτηση"</string>
-  <string name="action_leave_room">"Αποχώρηση από το δωμάτιο"</string>
+  <string name="action_leave_room">"Αποχώρηση από την αίθουσα"</string>
   <string name="action_load_more">"Φόρτωσε περισσότερα"</string>
   <string name="action_manage_account">"Διαχείριση λογαριασμού"</string>
   <string name="action_manage_devices">"Διαχείριση συσκευών"</string>
@@ -110,7 +112,7 @@
   <string name="action_report_bug">"Αναφορά σφάλματος"</string>
   <string name="action_report_content">"Αναφορά περιεχομένου"</string>
   <string name="action_report_dm">"Αναφορά συνομιλίας"</string>
-  <string name="action_report_room">"Αναφορά δωματίου"</string>
+  <string name="action_report_room">"Αναφορά αίθουσας"</string>
   <string name="action_reset">"Επαναφορά"</string>
   <string name="action_reset_identity">"Επαναφορά ταυτότητας"</string>
   <string name="action_retry">"Επανάληψη"</string>
@@ -144,6 +146,7 @@
   <string name="common_acceptable_use_policy">"Πολιτική αποδεκτής χρήσης"</string>
   <string name="common_adding_caption">"Η λεζάντα προστίθεται"</string>
   <string name="common_advanced_settings">"Ρυθμίσεις για προχωρημένους"</string>
+  <string name="common_an_image">"μια εικόνα"</string>
   <string name="common_analytics">"Στατιστικά στοιχεία"</string>
   <string name="common_appearance">"Εμφάνιση"</string>
   <string name="common_audio">"Ήχος"</string>
@@ -153,9 +156,9 @@
   <string name="common_chat_backup">"Αντίγραφο ασφαλείας συνομιλίας"</string>
   <string name="common_copied_to_clipboard">"Αντιγράφηκε στο πρόχειρο"</string>
   <string name="common_copyright">"Πνευματικά δικαιώματα"</string>
-  <string name="common_creating_room">"Δημιουργία δωματίου…"</string>
+  <string name="common_creating_room">"Δημιουργία αίθουσας…"</string>
   <string name="common_current_user_canceled_knock">"Το αίτημα ακυρώθηκε"</string>
-  <string name="common_current_user_left_room">"Αποχώρησε από το δωμάτιο"</string>
+  <string name="common_current_user_left_room">"Αποχώρησε από την αίθουσα"</string>
   <string name="common_current_user_rejected_invite">"Η πρόσκληση απορρίφθηκε"</string>
   <string name="common_dark">"Σκοτεινό"</string>
   <string name="common_decryption_error">"Σφάλμα αποκρυπτογράφησης"</string>
@@ -192,7 +195,7 @@
   <string name="common_in_reply_to">"Σε απάντηση στον χρήστη %1$s"</string>
   <string name="common_install_apk_android">"Εγκατάσταση APK"</string>
   <string name="common_invite_unknown_profile">"Αυτό το Matrix ID δεν μπορεί να βρεθεί, επομένως η πρόσκληση ενδέχεται να μην ληφθεί."</string>
-  <string name="common_leaving_room">"Αποχώρηση από το δωμάτιο"</string>
+  <string name="common_leaving_room">"Αποχώρηση από την αίθουσα"</string>
   <string name="common_light">"Φωτεινό"</string>
   <string name="common_line_copied_to_clipboard">"Η γραμμή αντιγράφηκε στο πρόχειρο"</string>
   <string name="common_link_copied_to_clipboard">"Ο σύνδεσμος αντιγράφηκε στο πρόχειρο"</string>
@@ -214,7 +217,7 @@
   <string name="common_mute">"Σίγαση"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Κανένα αποτέλεσμα"</string>
-  <string name="common_no_room_name">"Χωρίς όνομα δωματίου"</string>
+  <string name="common_no_room_name">"Δεν υπάρχει όνομα αίθουσας"</string>
   <string name="common_not_encrypted">"Χωρίς κρυπτογράφηση"</string>
   <string name="common_offline">"Εκτός σύνδεσης"</string>
   <string name="common_open_source_licenses">"Άδειες ανοιχτού κώδικα"</string>
@@ -240,13 +243,17 @@
   <string name="common_reason">"Αιτιολογία"</string>
   <string name="common_recovery_key">"Κλειδί ανάκτησης"</string>
   <string name="common_refreshing">"Ανανέωση…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d απάντηση"</item>
+    <item quantity="other">"%1$d απαντήσεις"</item>
+  </plurals>
   <string name="common_replying_to">"Απάντηση σε %1$s"</string>
   <string name="common_report_a_bug">"Αναφορά σφάλματος"</string>
   <string name="common_report_a_problem">"Αναφορά προβλήματος"</string>
   <string name="common_report_submitted">"Η αναφορά υποβλήθηκε"</string>
   <string name="common_rich_text_editor">"Επεξεργαστής εμπλουτισμένου κειμένου"</string>
   <string name="common_room">"Αίθουσα"</string>
-  <string name="common_room_name">"Όνομα δωματίου"</string>
+  <string name="common_room_name">"Όνομα αίθουσας"</string>
   <string name="common_room_name_placeholder">"πχ. το όνομα του έργου σου"</string>
   <string name="common_saved_changes">"Αποθηκευμένες αλλαγές"</string>
   <string name="common_saving">"Αποθηκεύεται"</string>
@@ -259,6 +266,7 @@
   <string name="common_sending">"Αποστολή…"</string>
   <string name="common_sending_failed">"Αποτυχία αποστολής"</string>
   <string name="common_sent">"Εστάλη"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Ο διακομιστής δεν υποστηρίζεται"</string>
   <string name="common_server_url">"URL διακομιστή"</string>
   <string name="common_settings">"Ρυθμίσεις"</string>
@@ -276,7 +284,7 @@
   <string name="common_third_party_notices">"Ειδοποιήσεις τρίτων"</string>
   <string name="common_thread">"Νήμα"</string>
   <string name="common_topic">"Θέμα"</string>
-  <string name="common_topic_placeholder">"Τί αφορά το δωμάτιο;"</string>
+  <string name="common_topic_placeholder">"Τι αφορά αυτή η αίθουσα;"</string>
   <string name="common_unable_to_decrypt">"Δεν είναι δυνατή η αποκρυπτογράφηση"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Στάλθηκε από μια μη ασφαλής συσκευή"</string>
   <string name="common_unable_to_decrypt_no_access">"Δεν έχεις πρόσβαση σε αυτό το μήνυμα"</string>
@@ -310,8 +318,8 @@
 
 Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"</string>
   <string name="dialog_confirm_link_title">"Ελέγξτε ξανά αυτόν τον σύνδεσμο"</string>
-  <string name="dialog_room_reported">"Το δωμάτιο αναφέρθηκε"</string>
-  <string name="dialog_room_reported_and_left">"Αναφέρθηκε και αποχωρήσατε από το δωμάτιο"</string>
+  <string name="dialog_room_reported">"Η αίθουσα αναφέρθηκε"</string>
+  <string name="dialog_room_reported_and_left">"Αναφέρθηκε και αποχωρήσατε από την αίθουσα"</string>
   <string name="dialog_title_confirmation">"Επιβεβαίωση"</string>
   <string name="dialog_title_error">"Σφάλμα"</string>
   <string name="dialog_title_success">"Επιτυχία"</string>
@@ -324,15 +332,17 @@
   <string name="error_failed_loading_messages">"Αποτυχία φόρτωσης μηνυμάτων"</string>
   <string name="error_failed_locating_user">"Το %1$s δεν μπόρεσε να αποκτήσει πρόσβαση στην τοποθεσία σου. Προσπάθησε ξανά αργότερα."</string>
   <string name="error_failed_uploading_voice_message">"Αποτυχία μεταφόρτωσης του φωνητικού σου μηνύματος."</string>
+  <string name="error_invalid_invite">"Η αίθουσα δεν υπάρχει πλέον ή η πρόσκληση δεν ισχύει πλέον."</string>
   <string name="error_message_not_found">"Το μήνυμα δεν βρέθηκε"</string>
   <string name="error_missing_location_auth_android">"Το %1$s δεν έχει άδεια πρόσβασης στην τοποθεσία σου. Μπορείς να ενεργοποιήσεις την πρόσβαση στις Ρυθμίσεις."</string>
   <string name="error_missing_location_rationale_android">"Ο χρήστης %1$s δεν έχει άδεια πρόσβασης στην τοποθεσία σου. Ενεργοποίησε την πρόσβαση παρακάτω."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Το %1$s δεν έχει άδεια πρόσβασης στο μικρόφωνό σου. Ενεργοποίησε την πρόσβαση για εγγραφή φωνητικού μηνύματος."</string>
   <string name="error_network_or_server_issue">"Αυτό μπορεί να οφείλεται σε προβλήματα δικτύου ή διακομιστή."</string>
-  <string name="error_room_address_already_exists">"Αυτή η διεύθυνση δωματίου υπάρχει ήδη, δοκίμασε να επεξεργαστείς το πεδίο διεύθυνσης δωματίου ή να αλλάξεις το όνομα δωματίου"</string>
+  <string name="error_room_address_already_exists">"Αυτή η διεύθυνση αίθουσας υπάρχει ήδη. Παρακαλώ δοκιμάστε να επεξεργαστείτε το πεδίο διεύθυνσης αίθουσας ή αλλάξτε το όνομα της αίθουσας"</string>
   <string name="error_room_address_invalid_symbols">"Ορισμένοι χαρακτήρες δεν επιτρέπονται. Υποστηρίζονται μόνο γράμματα, ψηφία και τα ακόλουθα σύμβολα ! $ &amp; \'() * +/; = ? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Ορισμένα μηνύματα δεν έχουν σταλεί"</string>
   <string name="error_unknown">"Λυπούμαστε, παρουσιάστηκε σφάλμα"</string>
+  <string name="event_shield_mismatched_sender">"Ο αποστολέας του συμβάντος δεν ταιριάζει με τον κάτοχο της συσκευής που το έστειλε."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Η αυθεντικότητα αυτού του κρυπτογραφημένου μηνύματος δεν είναι εγγυημένη σε αυτήν τη συσκευή."</string>
   <string name="event_shield_reason_previously_verified">"Κρυπτογραφημένο από έναν προηγουμένως επαληθευμένο χρήστη."</string>
   <string name="event_shield_reason_sent_in_clear">"Μη κρυπτογραφημένο."</string>
@@ -343,6 +353,10 @@
   <string name="invite_friends_text">"Γεια, μίλα μου στην εφαρμογή %1$s :%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Κούνησε δυνατά τη συσκευή σου για να αναφέρεις κάποιο σφάλμα"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Επιλογές"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Αφαίρεση %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Ρυθμίσεις"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_caption_warning">"Οι λεζάντες ενδέχεται να μην είναι ορατές σε άτομα που χρησιμοποιούν παλαιότερες εφαρμογές."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
@@ -367,6 +381,9 @@
   <string name="screen_room_error_failed_processing_media">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Δεν ήταν δυνατή η ανάκτηση στοιχείων χρήστη"</string>
   <string name="screen_room_event_pill">"Μήνυμα στο %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Επέκταση"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Μείωση"</string>
+  <string name="screen_room_permalink_same_room_android">"Βλέπετε ήδη αυτήν την αίθουσα!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s από %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Καρφιτσωμένα μηνύματα"</string>
   <string name="screen_room_pinned_banner_loading_description">"Φόρτωση μηνύματος…"</string>

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Не можете да потвърдите?"</string>
+  <string name="screen_identity_confirmation_subtitle">"Потвърдете това устройство, за да настроите защитени съобщения."</string>
+  <string name="screen_identity_confirmation_title">"Потвърдете самоличността си"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Използване на друго устройство"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Използване на ключ за възстановяване"</string>
+  <string name="screen_identity_confirmed_title">"Устройството е потвърдено"</string>
+  <string name="screen_identity_use_another_device">"Използване на друго устройство"</string>
   <string name="screen_notification_optin_subtitle">"Можете да промените настройките си по-късно."</string>
   <string name="screen_notification_optin_title">"Разрешете известията и никога не пропускайте съобщение"</string>
   <string name="screen_session_verification_enter_recovery_key">"Въвеждане на ключ за възстановяване"</string>

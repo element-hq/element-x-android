@@ -16,10 +16,8 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineDi
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineItem
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
@@ -116,8 +114,6 @@ class TimelineItemsSubscriberTest {
 private fun TestScope.createTimelineItemsSubscriber(
     timeline: Timeline = FakeFfiTimeline(),
     timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> = MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE),
-    initLatch: CompletableDeferred<Unit> = CompletableDeferred(),
-    isTimelineInitialized: MutableStateFlow<Boolean> = MutableStateFlow(false),
     onNewSyncedEvent: () -> Unit = { lambdaError() },
 ): TimelineItemsSubscriber {
     return TimelineItemsSubscriber(
@@ -125,8 +121,6 @@ private fun TestScope.createTimelineItemsSubscriber(
         dispatcher = StandardTestDispatcher(testScheduler),
         timeline = timeline,
         timelineDiffProcessor = createMatrixTimelineDiffProcessor(timelineItems),
-        initLatch = initLatch,
-        isTimelineInitialized = isTimelineInitialized,
         onNewSyncedEvent = onNewSyncedEvent,
     )
 }

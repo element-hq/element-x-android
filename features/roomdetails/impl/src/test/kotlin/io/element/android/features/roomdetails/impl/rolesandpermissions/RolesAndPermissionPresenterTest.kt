@@ -16,7 +16,6 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
-import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevels
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -121,7 +120,7 @@ class RolesAndPermissionPresenterTest {
         val presenter = createRolesAndPermissionsPresenter(
             analyticsService = analyticsService,
             room = FakeJoinedRoom(
-                resetPowerLevelsResult = { Result.success(defaultRoomPowerLevels()) }
+                resetPowerLevelsResult = { Result.success(Unit) }
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {

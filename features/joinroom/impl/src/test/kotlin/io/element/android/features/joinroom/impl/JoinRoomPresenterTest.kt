@@ -13,7 +13,6 @@ import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
-import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.invite.api.toInviteData
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.joinroom.impl.di.CancelKnockRoom
@@ -36,6 +35,7 @@ import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -52,8 +52,6 @@ import io.element.android.libraries.matrix.test.room.aRoomPreviewInfo
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.matrix.ui.model.toInviteSender
-import io.element.android.libraries.preferences.api.store.AppPreferencesStore
-import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
@@ -304,7 +302,7 @@ class JoinRoomPresenterTest {
         val presenter = createJoinRoomPresenter(
             roomDescription = Optional.of(roomDescription),
             joinRoomLambda = { _, _, _ ->
-                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden", null))
+                Result.failure(JoinRoom.Failures.UnauthorizedJoin)
             },
         )
         presenter.test {
@@ -316,7 +314,7 @@ class JoinRoomPresenterTest {
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Loading)
             }
             awaitItem().also { state ->
-                assertThat(state.joinAction).isEqualTo(AsyncAction.Failure(JoinRoomFailures.UnauthorizedJoin))
+                assertThat(state.joinAction).isEqualTo(AsyncAction.Failure(JoinRoom.Failures.UnauthorizedJoin))
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.Unauthorized)
             }
         }
@@ -1057,7 +1055,6 @@ class JoinRoomPresenterTest {
         forgetRoom: ForgetRoom = FakeForgetRoom(),
         buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
     ): JoinRoomPresenter {
         return JoinRoomPresenter(
@@ -1073,7 +1070,6 @@ class JoinRoomPresenterTest {
             forgetRoom = forgetRoom,
             buildMeta = buildMeta,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
-            appPreferencesStore = appPreferencesStore,
             seenInvitesStore = seenInvitesStore,
         )
     }

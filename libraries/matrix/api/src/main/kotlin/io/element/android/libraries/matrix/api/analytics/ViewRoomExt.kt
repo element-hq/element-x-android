@@ -27,5 +27,5 @@ fun BaseRoom.toAnalyticsViewRoom(
 }
 
 private fun BaseRoom.toActiveSpace(): ViewRoom.ActiveSpace {
-    return if (info().isPublic) ViewRoom.ActiveSpace.Public else ViewRoom.ActiveSpace.Private
+    return if (info().isPublic == true) ViewRoom.ActiveSpace.Public else ViewRoom.ActiveSpace.Private
 }

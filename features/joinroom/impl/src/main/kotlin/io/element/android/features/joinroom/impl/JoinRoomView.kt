@@ -31,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -53,6 +55,7 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.SuperButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -92,7 +95,11 @@ fun JoinRoomView(
                 vertical = 32.dp
             ),
             topBar = {
-                JoinRoomTopBar(contentState = state.contentState, onBackClick = onBackClick)
+                JoinRoomTopBar(
+                    contentState = state.contentState,
+                    hideAvatarImage = state.hideAvatarsImages,
+                    onBackClick = onBackClick,
+                )
             },
             content = {
                 JoinRoomContent(
@@ -490,7 +497,11 @@ private fun DefaultLoadedContent(
     RoomPreviewOrganism(
         modifier = modifier,
         avatar = {
-            Avatar(contentState.avatarData(AvatarSize.RoomHeader), hideImage = hideAvatarImage)
+            Avatar(
+                contentState.avatarData(AvatarSize.RoomHeader),
+                hideImage = hideAvatarImage,
+                avatarType = AvatarType.Room(),
+            )
         },
         title = {
             if (contentState.name != null) {
@@ -545,6 +556,7 @@ private fun DefaultLoadedContent(
 @Composable
 private fun JoinRoomTopBar(
     contentState: ContentState,
+    hideAvatarImage: Boolean,
     onBackClick: () -> Unit,
 ) {
     TopAppBar(
@@ -561,9 +573,17 @@ private fun JoinRoomTopBar(
                         modifier = titleModifier,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Avatar(avatarData = contentState.avatarData(AvatarSize.TimelineRoom))
+                        Avatar(
+                            avatarData = contentState.avatarData(AvatarSize.TimelineRoom),
+                            hideImage = hideAvatarImage,
+                            avatarType = AvatarType.Room(),
+                        )
                         Text(
-                            modifier = Modifier.padding(horizontal = 8.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .semantics {
+                                    heading()
+                                },
                             text = contentState.name,
                             style = ElementTheme.typography.fontBodyLgMedium,
                             maxLines = 1,

@@ -32,7 +32,6 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -54,12 +53,7 @@ fun ViewFolderView(
                 navigationIcon = {
                     BackButton(onClick = onBackClick)
                 },
-                title = {
-                    Text(
-                        text = state.path,
-                        style = ElementTheme.typography.aliasScreenTitle,
-                    )
-                }
+                titleStr = state.path,
             )
         },
         content = { padding ->

@@ -43,8 +43,6 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
 import io.element.android.libraries.matrix.test.notification.aNotificationData
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
-import io.element.android.libraries.preferences.api.store.AppPreferencesStore
-import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationMediaRepo
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
@@ -826,7 +824,6 @@ class DefaultNotifiableEventResolverTest {
     private fun createDefaultNotifiableEventResolver(
         notificationService: FakeNotificationService? = FakeNotificationService(),
         notificationResult: Result<Map<EventId, NotificationData>> = Result.success(emptyMap()),
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         callNotificationEventResolver: FakeCallNotificationEventResolver = FakeCallNotificationEventResolver(),
     ): DefaultNotifiableEventResolver {
         val context = RuntimeEnvironment.getApplication() as Context
@@ -849,7 +846,6 @@ class DefaultNotifiableEventResolverTest {
             context = context,
             permalinkParser = FakePermalinkParser(),
             callNotificationEventResolver = callNotificationEventResolver,
-            appPreferencesStore = appPreferencesStore,
         )
     }
 }

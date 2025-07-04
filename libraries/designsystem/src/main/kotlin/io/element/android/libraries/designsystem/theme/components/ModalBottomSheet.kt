@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +33,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.sheetStateForPreview
-import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -54,14 +52,11 @@ fun ModalBottomSheet(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val safeSheetState = if (LocalInspectionMode.current) sheetStateForPreview() else sheetState
-    // If we're running in UI test mode, we want to use a different shape to avoid
-    // this issue: https://issuetracker.google.com/issues/366255137
-    val safeShape = if (LocalUiTestMode.current) RoundedCornerShape(12.dp) else shape
     androidx.compose.material3.ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
         sheetState = safeSheetState,
-        shape = safeShape,
+        shape = shape,
         containerColor = containerColor,
         contentColor = contentColor,
         tonalElevation = tonalElevation,

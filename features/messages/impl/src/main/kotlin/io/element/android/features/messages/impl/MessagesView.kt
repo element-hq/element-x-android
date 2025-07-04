@@ -26,24 +26,21 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -83,10 +80,13 @@ import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorVi
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
+import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayout
+import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.RoomAvatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.rememberExpandableBottomSheetLayoutState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
@@ -111,7 +111,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
-import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -185,69 +184,117 @@ fun MessagesView(
         state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
     }
 
-    Scaffold(
-        modifier = modifier,
-        contentWindowInsets = WindowInsets.statusBars,
-        topBar = {
-            Column {
-                ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                MessagesViewTopBar(
-                    roomName = state.roomName,
-                    roomAvatar = state.roomAvatar,
-                    isTombstoned = state.isTombstoned,
-                    heroes = state.heroes,
-                    roomCallState = state.roomCallState,
-                    dmUserIdentityState = state.dmUserVerificationState,
-                    onBackClick = { hidingKeyboard { onBackClick() } },
-                    onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
-                    onJoinCallClick = onJoinCallClick,
-                )
-            }
+    val expandableState = rememberExpandableBottomSheetLayoutState()
+    ExpandableBottomSheetLayout(
+        modifier = modifier
+            .fillMaxSize()
+            .imePadding()
+            .systemBarsPadding(),
+        content = {
+            Scaffold(
+                contentWindowInsets = WindowInsets.statusBars,
+                topBar = {
+                    Column {
+                        ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+                        MessagesViewTopBar(
+                            roomName = state.roomName,
+                            roomAvatar = state.roomAvatar,
+                            isTombstoned = state.isTombstoned,
+                            heroes = state.heroes,
+                            roomCallState = state.roomCallState,
+                            dmUserIdentityState = state.dmUserVerificationState,
+                            onBackClick = { hidingKeyboard { onBackClick() } },
+                            onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
+                            onJoinCallClick = onJoinCallClick,
+                        )
+                    }
+                },
+                content = { padding ->
+                    Box(
+                        modifier = Modifier
+                            .padding(padding)
+                            .consumeWindowInsets(padding)
+                    ) {
+                        MessagesViewContent(
+                            state = state,
+                            onContentClick = ::onContentClick,
+                            onMessageLongClick = ::onMessageLongClick,
+                            onUserDataClick = {
+                                hidingKeyboard {
+                                    state.eventSink(MessagesEvents.OnUserClicked(it))
+                                }
+                            },
+                            onLinkClick = { link, customTab ->
+                                if (customTab) {
+                                    onLinkClick(link.url, true)
+                                    // Do not check those links, they are internal link only
+                                } else {
+                                    state.linkState.eventSink(LinkEvents.OnLinkClick(link))
+                                }
+                            },
+                            onReactionClick = ::onEmojiReactionClick,
+                            onReactionLongClick = ::onEmojiReactionLongClick,
+                            onMoreReactionsClick = ::onMoreReactionsClick,
+                            onReadReceiptClick = { event ->
+                                state.readReceiptBottomSheetState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(event))
+                            },
+                            onSendLocationClick = onSendLocationClick,
+                            onCreatePollClick = onCreatePollClick,
+                            onSwipeToReply = { targetEvent ->
+                                state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
+                            },
+                            forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                            onJoinCallClick = onJoinCallClick,
+                            onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
+                            knockRequestsBannerView = knockRequestsBannerView,
+                        )
+
+                        SuggestionsPickerView(
+                            modifier = Modifier
+                                .shadow(10.dp)
+                                .background(ElementTheme.colors.bgCanvasDefault)
+                                .align(Alignment.BottomStart)
+                                .heightIn(max = 230.dp),
+                            roomId = state.roomId,
+                            roomName = state.roomName,
+                            roomAvatarData = state.roomAvatar,
+                            suggestions = state.composerState.suggestions,
+                            onSelectSuggestion = {
+                                state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
+                            }
+                        )
+                    }
+                },
+                snackbarHost = {
+                    SnackbarHost(
+                        snackbarHostState,
+                        modifier = Modifier.navigationBarsPadding()
+                    )
+                },
+            )
         },
-        content = { padding ->
-            MessagesViewContent(
+        bottomSheetContent = {
+            MessagesViewComposerBottomSheetContents(
                 state = state,
-                modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding),
-                onContentClick = ::onContentClick,
-                onMessageLongClick = ::onMessageLongClick,
-                onUserDataClick = {
-                    hidingKeyboard {
-                        state.eventSink(MessagesEvents.OnUserClicked(it))
-                    }
+                onLinkClick = { url, customTab -> onLinkClick(url, customTab) },
+                onRoomSuccessorClick = { roomId ->
+                    state.timelineState.eventSink(TimelineEvents.NavigateToRoom(roomId = roomId))
                 },
-                onLinkClick = { link, customTab ->
-                    if (customTab) {
-                        onLinkClick(link.url, true)
-                        // Do not check those links, they are internal link only
-                    } else {
-                        state.linkState.eventSink(LinkEvents.OnLinkClick(link))
-                    }
-                },
-                onReactionClick = ::onEmojiReactionClick,
-                onReactionLongClick = ::onEmojiReactionLongClick,
-                onMoreReactionsClick = ::onMoreReactionsClick,
-                onReadReceiptClick = { event ->
-                    state.readReceiptBottomSheetState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(event))
-                },
-                onSendLocationClick = onSendLocationClick,
-                onCreatePollClick = onCreatePollClick,
-                onSwipeToReply = { targetEvent ->
-                    state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
-                },
-                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                onJoinCallClick = onJoinCallClick,
-                onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
-                knockRequestsBannerView = knockRequestsBannerView,
             )
         },
-        snackbarHost = {
-            SnackbarHost(
-                snackbarHostState,
-                modifier = Modifier.navigationBarsPadding()
-            )
+        sheetDragHandle = if (state.composerState.showTextFormatting) {
+            @Composable { BottomSheetDragHandle() }
+        } else {
+            @Composable {}
         },
+        isSwipeGestureEnabled = state.composerState.showTextFormatting,
+        state = expandableState,
+        sheetShape = if (state.composerState.showTextFormatting || state.composerState.suggestions.isNotEmpty()) {
+            MaterialTheme.shapes.large
+        } else {
+            RectangleShape
+        },
+        maxBottomSheetContentHeight = 360.dp,
     )
 
     ActionListView(
@@ -347,88 +394,49 @@ private fun MessagesViewContent(
             )
         }
 
-        // This key is used to force the sheet to be remeasured when the content changes.
-        // Any state change that should trigger a height size should be added to the list of remembered values here.
-        val sheetResizeContentKey = remember { mutableIntStateOf(0) }
-        LaunchedEffect(
-            state.composerState.textEditorState.lineCount,
-            state.composerState.showTextFormatting,
-        ) {
-            sheetResizeContentKey.intValue = Random.nextInt()
-        }
-
-        ExpandableBottomSheetScaffold(
-            sheetDragHandle = if (state.composerState.showTextFormatting) {
-                @Composable { BottomSheetDragHandle() }
-            } else {
-                @Composable {}
-            },
-            sheetSwipeEnabled = state.composerState.showTextFormatting,
-            sheetShape = if (state.composerState.showTextFormatting || state.composerState.suggestions.isNotEmpty()) {
-                MaterialTheme.shapes.large
-            } else {
-                RectangleShape
-            },
-            content = { paddingValues ->
-                Box(modifier = Modifier.padding(paddingValues)) {
-                    val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
-                        pinnedMessagesCount = state.pinnedMessagesBannerState.pinnedMessagesCount(),
+        Box {
+            val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
+                pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
+            )
+            TimelineView(
+                state = state.timelineState,
+                timelineProtectionState = state.timelineProtectionState,
+                onUserDataClick = onUserDataClick,
+                onLinkClick = { link -> onLinkClick(link, false) },
+                onContentClick = onContentClick,
+                onMessageLongClick = onMessageLongClick,
+                onSwipeToReply = onSwipeToReply,
+                onReactionClick = onReactionClick,
+                onReactionLongClick = onReactionLongClick,
+                onMoreReactionsClick = onMoreReactionsClick,
+                onReadReceiptClick = onReadReceiptClick,
+                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                onJoinCallClick = onJoinCallClick,
+                nestedScrollConnection = scrollBehavior.nestedScrollConnection,
+            )
+            AnimatedVisibility(
+                visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
+                enter = expandVertically(),
+                exit = shrinkVertically(),
+            ) {
+                fun focusOnPinnedEvent(eventId: EventId) {
+                    state.timelineState.eventSink(
+                        TimelineEvents.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
                     )
-                    TimelineView(
-                        state = state.timelineState,
-                        timelineProtectionState = state.timelineProtectionState,
-                        onUserDataClick = onUserDataClick,
-                        onLinkClick = { link -> onLinkClick(link, false) },
-                        onContentClick = onContentClick,
-                        onMessageLongClick = onMessageLongClick,
-                        onSwipeToReply = onSwipeToReply,
-                        onReactionClick = onReactionClick,
-                        onReactionLongClick = onReactionLongClick,
-                        onMoreReactionsClick = onMoreReactionsClick,
-                        onReadReceiptClick = onReadReceiptClick,
-                        forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                        onJoinCallClick = onJoinCallClick,
-                        nestedScrollConnection = scrollBehavior.nestedScrollConnection,
-                    )
-                    AnimatedVisibility(
-                        visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
-                        enter = expandVertically(),
-                        exit = shrinkVertically(),
-                    ) {
-                        fun focusOnPinnedEvent(eventId: EventId) {
-                            state.timelineState.eventSink(
-                                TimelineEvents.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
-                            )
-                        }
-                        PinnedMessagesBannerView(
-                            state = state.pinnedMessagesBannerState,
-                            onClick = ::focusOnPinnedEvent,
-                            onViewAllClick = onViewAllPinnedMessagesClick,
-                        )
-                    }
-                    knockRequestsBannerView()
                 }
-            },
-            sheetContent = { subcomposing: Boolean ->
-                MessagesViewComposerBottomSheetContents(
-                    subcomposing = subcomposing,
-                    state = state,
-                    onRoomSuccessorClick = { roomId ->
-                        state.timelineState.eventSink(TimelineEvents.NavigateToRoom(roomId = roomId))
-                    },
-                    onLinkClick = { url, customTab -> onLinkClick(Link(url), customTab) },
+                PinnedMessagesBannerView(
+                    state = state.pinnedMessagesBannerState,
+                    onClick = ::focusOnPinnedEvent,
+                    onViewAllClick = onViewAllPinnedMessagesClick,
                 )
-            },
-            sheetContentKey = sheetResizeContentKey.intValue,
-            sheetTonalElevation = 0.dp,
-            sheetShadowElevation = if (state.composerState.suggestions.isNotEmpty()) 16.dp else 0.dp,
-        )
+            }
+            knockRequestsBannerView()
+        }
     }
 }
 
 @Composable
 private fun MessagesViewComposerBottomSheetContents(
-    subcomposing: Boolean,
     state: MessagesState,
     onRoomSuccessorClick: (RoomId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
@@ -439,23 +447,6 @@ private fun MessagesViewComposerBottomSheetContents(
         }
         state.userEventPermissions.canSendMessage -> {
             Column(modifier = Modifier.fillMaxWidth()) {
-                SuggestionsPickerView(
-                    modifier = Modifier
-                        .heightIn(max = 230.dp)
-                        // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
-                        .nestedScroll(object : NestedScrollConnection {
-                            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                                return available
-                            }
-                        }),
-                    roomId = state.roomId,
-                    roomName = state.roomName,
-                    roomAvatarData = state.roomAvatar,
-                    suggestions = state.composerState.suggestions,
-                    onSelectSuggestion = {
-                        state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
-                    }
-                )
                 // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
                 if (state.composerState.suggestions.isEmpty() &&
                     state.composerState.textEditorState is TextEditorState.Markdown) {
@@ -473,7 +464,6 @@ private fun MessagesViewComposerBottomSheetContents(
                     MessageComposerView(
                         state = state.composerState,
                         voiceMessageState = state.voiceMessageComposerState,
-                        subcomposing = subcomposing,
                         enableVoiceMessages = state.enableVoiceMessages,
                         modifier = Modifier.fillMaxWidth(),
                     )
@@ -563,13 +553,19 @@ private fun RoomAvatarAndNameRow(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RoomAvatar(
+        Avatar(
             avatarData = roomAvatar,
-            heroes = heroes,
-            isTombstoned = isTombstoned,
+            avatarType = AvatarType.Room(
+                heroes = heroes,
+                isTombstoned = isTombstoned,
+            ),
         )
         Text(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .semantics {
+                    heading()
+                },
             text = roomName ?: stringResource(CommonStrings.common_no_room_name),
             style = ElementTheme.typography.fontBodyLgMedium,
             fontStyle = FontStyle.Italic.takeIf { roomName == null },

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Disabilita l\'ottimizzazione della batteria per questa app, per assicurarti che tutte le notifiche vengano ricevute."</string>
+  <string name="banner_battery_optimization_submit_android">"Disabilita l\'ottimizzazione"</string>
+  <string name="banner_battery_optimization_title_android">"Le notifiche non arrivano?"</string>
+  <string name="banner_set_up_recovery_content">"Genera una nuova chiave di recupero che può essere usata per ripristinare la cronologia dei messaggi crittografati nel caso in cui tu perda l\'accesso ai tuoi dispositivi."</string>
+  <string name="banner_set_up_recovery_submit">"Configura il recupero"</string>
+  <string name="banner_set_up_recovery_title">"Configura il ripristino"</string>
+  <string name="confirm_recovery_key_banner_message">"Conferma la chiave di recupero per mantenere l\'accesso all\'archiviazione delle chiavi e alla cronologia dei messaggi."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Inserisci la tua chiave di recupero"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Hai dimenticato la chiave di recupero?"</string>
+  <string name="confirm_recovery_key_banner_title">"L\'archiviazione delle chiavi non è sincronizzata"</string>
+  <string name="full_screen_intent_banner_message">"Per non perdere mai una chiamata importante, modifica le impostazioni per consentire le notifiche a schermo intero quando il telefono è bloccato."</string>
+  <string name="full_screen_intent_banner_title">"Migliora la tua esperienza di chiamata"</string>
+  <string name="screen_invites_decline_chat_message">"Vuoi davvero rifiutare l\'invito ad entrare in %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Rifiuta l\'invito"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Vuoi davvero rifiutare questa conversazione privata con %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Rifiuta l\'invito alla conversazione"</string>
+  <string name="screen_invites_empty_list">"Nessun invito"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) ti ha invitato"</string>
+  <string name="screen_migration_message">"Si tratta di una procedura che si effettua una sola volta, grazie per l\'attesa."</string>
+  <string name="screen_migration_title">"Configurazione del tuo account."</string>
+  <string name="screen_roomlist_a11y_create_message">"Crea una nuova conversazione o stanza"</string>
+  <string name="screen_roomlist_clear_filters">"Elimina filtri"</string>
+  <string name="screen_roomlist_empty_message">"Inizia inviando un messaggio a qualcuno."</string>
+  <string name="screen_roomlist_empty_title">"Ancora nessuna conversazione."</string>
+  <string name="screen_roomlist_filter_favourites">"Preferiti"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Puoi aggiungere una conversazione ai tuoi preferiti nelle impostazioni della stessa.
+Per il momento, puoi deselezionare i filtri per vedere le altre conversazioni."</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Non hai ancora conversazioni preferite"</string>
+  <string name="screen_roomlist_filter_invites">"Inviti"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Non hai nessun invito in sospeso."</string>
+  <string name="screen_roomlist_filter_low_priority">"Bassa priorità"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puoi deselezionare i filtri per vedere le altre conversazioni."</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Non hai conversazioni per questa selezione"</string>
+  <string name="screen_roomlist_filter_people">"Persone"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Non hai ancora nessuna conversazione diretta"</string>
+  <string name="screen_roomlist_filter_rooms">"Stanze"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Non sei ancora in nessuna stanza"</string>
+  <string name="screen_roomlist_filter_unreads">"Non letti"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Congratulazioni!
+Non hai messaggi non letti!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Richiesta di accesso inviata"</string>
+  <string name="screen_roomlist_main_space_title">"Tutte le conversazioni"</string>
+  <string name="screen_roomlist_mark_as_read">"Segna come letto"</string>
+  <string name="screen_roomlist_mark_as_unread">"Segna come non letto"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Questa stanza è stata aggiornata"</string>
+  <string name="session_verification_banner_message">"Sembra che tu stia usando un nuovo dispositivo. Verificati con un altro dispositivo per accedere ai tuoi messaggi cifrati."</string>
+  <string name="session_verification_banner_title">"Verifica che sei tu"</string>
+</resources>

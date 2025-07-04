@@ -37,4 +37,17 @@ class KonsistImportTest {
                 it.name == "androidx.compose.material3.OutlinedTextField"
             }
     }
+
+    @Test
+    fun `material3 TopAppBar should not be used`() {
+        Konsist
+            .scopeFromProject()
+            .imports
+            .assertFalse(
+                additionalMessage = "Please use 'io.element.android.libraries.designsystem.theme.components.TopAppBar' instead of " +
+                    "'androidx.compose.material3.TopAppBar.",
+            ) {
+                it.name == "androidx.compose.material3.TopAppBar"
+            }
+    }
 }

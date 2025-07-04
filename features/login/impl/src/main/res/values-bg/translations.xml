@@ -26,6 +26,7 @@
   <string name="screen_onboarding_welcome_subtitle">"Добре дошли в %1$s. Супер зареден за скорост и простота."</string>
   <string name="screen_onboarding_welcome_title">"Бъдете в стихията си"</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Повторен опит"</string>
+  <string name="screen_qr_code_login_verify_code_title">"Вашият код за потвърждение"</string>
   <string name="screen_server_confirmation_change_server">"Промяна на доставчика на акаунт"</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix е отворена мрежа за сигурна, децентрализирана комуникация."</string>
   <string name="screen_server_confirmation_message_register">"Това е мястото, където ще живеят вашите разговори — точно както бихте използвали имейл доставчик, за да съхранявате вашите имейли."</string>

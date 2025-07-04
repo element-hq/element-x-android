@@ -27,7 +27,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s on lukenut viestin"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Näytä kaikki napauttamalla"</string>
-  <string name="a11y_remove_reaction_with">"Poista reaktio emojilla %1$s"</string>
+  <string name="a11y_remove_reaction">"Poista reaktio emojilla %1$s"</string>
   <string name="a11y_send_files">"Lähetä tiedostoja"</string>
   <string name="a11y_show_password">"Näytä salasana"</string>
   <string name="a11y_start_call">"Aloita puhelu"</string>
@@ -371,13 +371,7 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_room_pinned_banner_indicator_description">"Kiinnitetty viesti %1$s"</string>
   <string name="screen_room_pinned_banner_loading_description">"Viestiä ladataan…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Näytä kaikki"</string>
-  <string name="screen_room_timeline_tombstoned_room_action">"Siirry uuteen huoneeseen"</string>
-  <string name="screen_room_timeline_tombstoned_room_message">"Tämä huone on korvattu, eikä se ole enää aktiivinen"</string>
-  <string name="screen_room_timeline_upgraded_room_action">"Katso vanhoja viestejä"</string>
-  <string name="screen_room_timeline_upgraded_room_message">"Tämä huone on jatkoa toiselle huoneelle"</string>
   <string name="screen_room_title">"Keskustelu"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Liittymispyyntö lähetetty"</string>
-  <string name="screen_roomlist_tombstoned_room_description">"Tämä huone on päivitetty"</string>
   <string name="screen_share_location_title">"Jaa sijainti"</string>
   <string name="screen_share_my_location_action">"Jaa sijaintini"</string>
   <string name="screen_share_open_apple_maps">"Avaa Apple Mapsissa"</string>

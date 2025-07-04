@@ -13,27 +13,20 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
-import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
-import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
@@ -43,16 +36,11 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.seconds
 
 class SyncOnNotifiableEventTest {
-    private val timelineItems = MutableStateFlow<List<MatrixTimelineItem>>(emptyList())
     private val startSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
     private val stopSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
     private val subscribeToSyncLambda = lambdaRecorder<Unit> { }
 
-    private val liveTimeline = FakeTimeline(
-        timelineItems = timelineItems,
-    )
     private val room = FakeJoinedRoom(
-        liveTimeline = liveTimeline,
         baseRoom = FakeBaseRoom(
             roomId = A_ROOM_ID,
             subscribeToSyncLambda = subscribeToSyncLambda,
@@ -130,10 +118,6 @@ class SyncOnNotifiableEventTest {
         )
         val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService, isSyncOnPushEnabled = true)
 
-        timelineItems.emit(
-            listOf(MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem()))
-        )
-
         appForegroundStateService.isSyncingNotificationEvent.test {
             syncService.emitSyncState(SyncState.Running)
             sut(listOf(notifiableEvent))
@@ -150,7 +134,7 @@ class SyncOnNotifiableEventTest {
     }
 
     @Test
-    fun `when feature flag is enabled and app is in background, running multiple time only call once`() = runTest {
+    fun `when feature flag is enabled and app is in background, running multiple times only call once`() = runTest {
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = false,
         )
@@ -159,12 +143,6 @@ class SyncOnNotifiableEventTest {
         appForegroundStateService.isSyncingNotificationEvent.test {
             launch { sut(listOf(notifiableEvent)) }
             launch { sut(listOf(notifiableEvent)) }
-            launch {
-                delay(1)
-                timelineItems.emit(
-                    listOf(MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem()))
-                )
-            }
 
             // It's initially false
             assertThat(awaitItem()).isFalse()
@@ -183,7 +161,6 @@ class SyncOnNotifiableEventTest {
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = true,
         ),
-        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ): SyncOnNotifiableEvent {
         val featureFlagService = FakeFeatureFlagService(
             initialState = mapOf(
@@ -196,7 +173,6 @@ class SyncOnNotifiableEventTest {
             featureFlagService = featureFlagService,
             appForegroundStateService = appForegroundStateService,
             dispatchers = testCoroutineDispatchers(),
-            activeRoomsHolder = activeRoomsHolder,
         )
     }
 }

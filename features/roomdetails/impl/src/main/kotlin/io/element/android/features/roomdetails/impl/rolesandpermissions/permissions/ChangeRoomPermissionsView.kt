@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.core.bool.orFalse
@@ -26,7 +25,6 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
@@ -36,7 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +56,7 @@ fun ChangeRoomPermissionsView(
                 ChangeRoomPermissionsSection.MembershipModeration -> stringResource(R.string.screen_room_change_permissions_member_moderation)
             }
             TopAppBar(
-                title = { Text(text = title, style = ElementTheme.typography.aliasScreenTitle) },
+                titleStr = title,
                 navigationIcon = {
                     BackButton(onClick = { state.eventSink(ChangeRoomPermissionsEvent.Exit) })
                 },
@@ -133,7 +131,7 @@ fun ChangeRoomPermissionsView(
 private fun SelectRoleItem(
     permissionsItem: RoomPermissionType,
     role: RoomMember.Role,
-    currentPermissions: RoomPowerLevels?,
+    currentPermissions: RoomPowerLevelsValues?,
     onClick: (RoomPermissionType, RoomMember.Role) -> Unit
 ) {
     val title = when (role) {
@@ -153,7 +151,7 @@ private fun SelectRoleItem(
     )
 }
 
-private fun RoomPowerLevels.isSelected(item: RoomPermissionType, role: RoomMember.Role): Boolean {
+private fun RoomPowerLevelsValues.isSelected(item: RoomPermissionType, role: RoomMember.Role): Boolean {
     return when (item) {
         RoomPermissionType.BAN -> RoomMember.Role.forPowerLevel(ban) == role
         RoomPermissionType.INVITE -> RoomMember.Role.forPowerLevel(invite) == role

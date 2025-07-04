@@ -25,6 +25,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -50,10 +51,11 @@ fun VerificationUserProfileContent(
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Avatar(avatarData)
-
+        Avatar(
+            avatarData = avatarData,
+            avatarType = AvatarType.User,
+        )
         Spacer(modifier = Modifier.padding(12.dp))
-
         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(text = displayName ?: userId.value, style = ElementTheme.typography.fontBodyLgMedium, color = ElementTheme.colors.textPrimary)
 

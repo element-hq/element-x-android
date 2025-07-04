@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Anhang hinzufügen"</string>
   <string name="rich_text_editor_bullet_list">"Aufzählungsliste umschalten"</string>
-  <string name="rich_text_editor_close_formatting_options">"Formatierungsoptionen schließen"</string>
+  <string name="rich_text_editor_close_formatting_options">"Textformatierung abbrechen und schließen"</string>
   <string name="rich_text_editor_code_block">"Codeblock umschalten"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Bildunterschrift hinzufügen"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Verschlüsselte Nachricht…"</string>
@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Unverschlüsselte Nachricht"</string>
   <string name="rich_text_editor_create_link">"Einen Link erstellen"</string>
   <string name="rich_text_editor_edit_link">"Link bearbeiten"</string>
+  <string name="rich_text_editor_format_action">"%1$s, Zustand: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Fettes Format anwenden"</string>
   <string name="rich_text_editor_format_italic">"Kursives Format anwenden"</string>
+  <string name="rich_text_editor_format_state_disabled">"deaktiviert"</string>
+  <string name="rich_text_editor_format_state_off">"aus"</string>
+  <string name="rich_text_editor_format_state_on">"ein"</string>
   <string name="rich_text_editor_format_strikethrough">"Text durchstreichen"</string>
   <string name="rich_text_editor_format_underline">"Unterstreichungsformat anwenden"</string>
   <string name="rich_text_editor_full_screen_toggle">"Vollbildmodus umschalten"</string>

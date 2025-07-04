@@ -41,6 +41,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
+import io.element.android.appnav.loggedin.MediaPreviewConfigMigration
 import io.element.android.appnav.loggedin.SendQueues
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomNavigationTarget
@@ -49,11 +50,11 @@ import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
+import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
-import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
@@ -90,6 +91,15 @@ import java.time.Duration
 import java.time.Instant
 import java.util.Optional
 import java.util.UUID
+import kotlin.collections.List
+import kotlin.collections.any
+import kotlin.collections.emptyList
+import kotlin.collections.first
+import kotlin.collections.forEach
+import kotlin.collections.listOf
+import kotlin.collections.mapNotNull
+import kotlin.collections.plus
+import kotlin.collections.setOf
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
@@ -98,7 +108,7 @@ import kotlin.time.toKotlinDuration
 class LoggedInFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val roomListEntryPoint: RoomListEntryPoint,
+    private val homeEntryPoint: HomeEntryPoint,
     private val preferencesEntryPoint: PreferencesEntryPoint,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
@@ -114,6 +124,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val sendingQueue: SendQueues,
     private val logoutEntryPoint: LogoutEntryPoint,
     private val incomingVerificationEntryPoint: IncomingVerificationEntryPoint,
+    private val mediaPreviewConfigMigration: MediaPreviewConfigMigration,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -160,7 +171,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 // Otherwise, the RoomList UI may be incorrectly displayed on top
                 withTimeout(5.seconds) {
                     backstack.elements.first { elements ->
-                        elements.any { it.key.navTarget == NavTarget.RoomList }
+                        elements.any { it.key.navTarget == NavTarget.Home }
                     }
                 }
 
@@ -179,13 +190,14 @@ class LoggedInFlowNode @AssistedInject constructor(
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(sessionCoroutineScope)
                 matrixClient.sessionVerificationService().setListener(verificationListener)
+                mediaPreviewConfigMigration()
 
                 ftueService.state
                     .onEach { ftueState ->
                         when (ftueState) {
                             is FtueState.Unknown -> Unit // Nothing to do
                             is FtueState.Incomplete -> backstack.safeRoot(NavTarget.Ftue)
-                            is FtueState.Complete -> backstack.safeRoot(NavTarget.RoomList)
+                            is FtueState.Complete -> backstack.safeRoot(NavTarget.Home)
                         }
                     }
                     .launchIn(lifecycleScope)
@@ -212,7 +224,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         data object LoggedInPermanent : NavTarget
 
         @Parcelize
-        data object RoomList : NavTarget
+        data object Home : NavTarget
 
         @Parcelize
         data class Room(
@@ -269,8 +281,8 @@ class LoggedInFlowNode @AssistedInject constructor(
                 }
                 createNode<LoggedInNode>(buildContext, listOf(callback))
             }
-            NavTarget.RoomList -> {
-                val callback = object : RoomListEntryPoint.Callback {
+            NavTarget.Home -> {
+                val callback = object : HomeEntryPoint.Callback {
                     override fun onRoomClick(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
@@ -303,7 +315,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.LogoutForNativeSlidingSyncMigrationNeeded)
                     }
                 }
-                roomListEntryPoint
+                homeEntryPoint
                     .nodeBuilder(this, buildContext)
                     .callback(callback)
                     .build()
@@ -487,7 +499,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         clearBackstack: Boolean,
     ) {
         waitForNavTargetAttached { navTarget ->
-            navTarget is NavTarget.RoomList
+            navTarget is NavTarget.Home
         }
         attachChild<RoomFlowNode> {
             val roomNavTarget = NavTarget.Room(
@@ -504,7 +516,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     suspend fun attachUser(userId: UserId) {
         waitForNavTargetAttached { navTarget ->
-            navTarget is NavTarget.RoomList
+            navTarget is NavTarget.Home
         }
         attachChild<Node> {
             backstack.push(
@@ -517,7 +529,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     internal suspend fun attachIncomingShare(intent: Intent) {
         waitForNavTargetAttached { navTarget ->
-            navTarget is NavTarget.RoomList
+            navTarget is NavTarget.Home
         }
         attachChild<Node> {
             backstack.push(
@@ -555,7 +567,7 @@ private class AttachRoomOperation(
         return if (clearBackstack) {
             // Makes sure the room list target is alone in the backstack and stashed
             elements.mapNotNull { element ->
-                if (element.key.navTarget == LoggedInFlowNode.NavTarget.RoomList) {
+                if (element.key.navTarget == LoggedInFlowNode.NavTarget.Home) {
                     element.transitionTo(STASHED, this)
                 } else {
                     null

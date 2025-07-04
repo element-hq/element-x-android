@@ -12,5 +12,6 @@ sealed interface OnBoardingEvents {
         val defaultAccountProvider: String
     ) : OnBoardingEvents
 
+    data object OnVersionClick : OnBoardingEvents
     data object ClearError : OnBoardingEvents
 }

@@ -5,7 +5,7 @@
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Wählen Sie, wie Sie Benachrichtigungen erhalten möchten"</string>
   <string name="screen_advanced_settings_developer_mode">"Entwicklermodus"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktivieren, um Zugriff auf Features und Funktionen für Entwickler zu aktivieren."</string>
-  <string name="screen_advanced_settings_element_call_base_url">"Benutzerdefinierte Element-Aufruf-Basis-URL"</string>
+  <string name="screen_advanced_settings_element_call_base_url">"Benutzerdefinierte Element Call Basis-URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Lege eine eigene Basis-URL für Element Call fest."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ungültige URL, bitte geben Sie das Protokoll (http/https) und die richtige Adresse an."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Avatare in Chateinladungen ausblenden"</string>

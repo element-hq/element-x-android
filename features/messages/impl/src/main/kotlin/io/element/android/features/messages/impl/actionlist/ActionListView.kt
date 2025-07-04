@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
@@ -74,6 +73,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.utils.messagesummary.DefaultMessageSummaryFormatter
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -256,7 +256,12 @@ private fun MessageSummary(
     modifier: Modifier = Modifier,
 ) {
     val content: @Composable () -> Unit
-    val icon: @Composable () -> Unit = { Avatar(avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender)) }
+    val icon: @Composable () -> Unit = {
+        Avatar(
+            avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender),
+            avatarType = AvatarType.User,
+        )
+    }
     val contentStyle = ElementTheme.typography.fontBodyMdRegular.copy(color = ElementTheme.colors.textSecondary)
 
     @Composable
@@ -448,19 +453,11 @@ private fun EmojiButton(
             .size(48.dp)
             .background(backgroundColor, CircleShape)
             .clickable(
-                enabled = true,
+                onClickLabel = a11yClickLabel,
                 onClick = { onClick(emoji) },
                 indication = ripple(bounded = false, radius = emojiRippleRadius),
                 interactionSource = remember { MutableInteractionSource() }
-            )
-            .semantics {
-                onClick(
-                    label = a11yClickLabel,
-                ) {
-                    onClick(emoji)
-                    true
-                }
-            },
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(

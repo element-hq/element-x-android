@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_chat_backup_key_backup_action_disable">"Изключване на резервните копия"</string>
+  <string name="screen_chat_backup_key_backup_action_disable">"Изтриване на хранилището за ключове"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Включване на резервните копия"</string>
-  <string name="screen_chat_backup_key_backup_description">"Резервното копие гарантира, че няма да загубите хронологията на съобщенията си. %1$s."</string>
-  <string name="screen_chat_backup_key_backup_title">"Резервно копие"</string>
+  <string name="screen_chat_backup_key_backup_description">"Съхранявайте сигурно криптографската си самоличност и ключовете за съобщения на сървъра. Това ще ви позволи да преглеждате историята на съобщенията си на всички нови устройства.%1$s ."</string>
+  <string name="screen_chat_backup_key_backup_title">"Съхранение на ключове"</string>
+  <string name="screen_chat_backup_key_storage_disabled_error">"За да настроите възстановяването, трябва да включите съхранението на ключове."</string>
+  <string name="screen_chat_backup_key_storage_toggle_title">"Разрешаване на съхранението на ключове"</string>
   <string name="screen_chat_backup_recovery_action_change">"Промяна на ключа за възстановяване"</string>
+  <string name="screen_chat_backup_recovery_action_change_description">"Възстановете криптографската си самоличност и историята на съобщенията с ключ за възстановяване, ако сте загубили всичките си съществуващи устройства."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Въвеждане на ключ за възстановяване"</string>
-  <string name="screen_chat_backup_recovery_action_confirm_description">"Резервното копие на чатовете ви в момента не е синхронизирано."</string>
+  <string name="screen_chat_backup_recovery_action_confirm_description">"Хранилището ви за ключове в момента не е синхронизирано."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Изключване"</string>
+  <string name="screen_key_backup_disable_description">"Изтриването на хранилището за ключове ще премахне вашата криптографска самоличност и ключове за съобщения от сървъра и ще изключи следните функции за сигурност:"</string>
+  <string name="screen_key_backup_disable_title">"Сигурни ли сте, че искате да изключите хранилището на ключове и да го изтриете?"</string>
+  <string name="screen_recovery_key_change_description">"Вземете нов ключ за възстановяване, ако сте загубили съществуващия си. След като промените ключа си за възстановяване, старият ви вече няма да работи."</string>
   <string name="screen_recovery_key_change_generate_key">"Генериране на нов ключ за възстановяване"</string>
+  <string name="screen_recovery_key_change_generate_key_description">"Не споделяйте това с никого!"</string>
   <string name="screen_recovery_key_change_title">"Промяна на ключа за възстановяване?"</string>
   <string name="screen_recovery_key_confirm_description">"Уверете се, че никой не може да види този екран!"</string>
+  <string name="screen_recovery_key_confirm_error_content">"Моля, опитайте отново, за да потвърдите достъпа до хранилището за ключове."</string>
   <string name="screen_recovery_key_confirm_error_title">"Неправилен ключ за възстановяване"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Въведете 48-символния код."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Ако имате ключ за сигурност или фраза за сигурност, това също ще работи."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Въведете…"</string>
   <string name="screen_recovery_key_confirm_success">"Ключът за възстановяване е потвърден"</string>
+  <string name="screen_recovery_key_confirm_title">"Въведете ключа си за възстановяване"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Копиран ключ за възстановяване"</string>
   <string name="screen_recovery_key_save_action">"Запазване на ключа за възстановяване"</string>
+  <string name="screen_recovery_key_setup_description">"Вашето хранилище за ключове е защитено с ключ за възстановяване. Ако имате нужда от нов ключ за възстановяване след настройката, можете да го създадете отново, като изберете „Промяна на ключа за възстановяване“."</string>
+  <string name="screen_recovery_key_setup_generate_key_description">"Не споделяйте това с никого!"</string>
   <string name="screen_reset_encryption_password_placeholder">"Въведете…"</string>
 </resources>

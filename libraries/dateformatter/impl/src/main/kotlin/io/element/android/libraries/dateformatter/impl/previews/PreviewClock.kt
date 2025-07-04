@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.dateformatter.impl.previews
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 class PreviewClock : Clock {
     private var instant: Instant = Instant.fromEpochMilliseconds(0)

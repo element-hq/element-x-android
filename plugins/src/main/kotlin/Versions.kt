@@ -29,10 +29,10 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
  */
 
 private const val versionYear = 25
-private const val versionMonth = 6
+private const val versionMonth = 7
 
 // Note: must be in [0,99]
-private const val versionReleaseNumber = 3
+private const val versionReleaseNumber = 0
 
 object Versions {
     const val VERSION_CODE = (2000 + versionYear) * 10_000 + versionMonth * 100 + versionReleaseNumber
@@ -42,7 +42,9 @@ object Versions {
     const val TARGET_SDK = 35
 
     // When updating the `minSdk`, make sure to update the value of `minSdkVersion` in the file `tools/release/release.sh`
-    val minSdk = if (isEnterpriseBuild) 26 else 24
+    private const val MIN_SDK_FOSS = 24
+    private const val MIN_SDK_ENTERPRISE = 33
+    val minSdk = if (isEnterpriseBuild) MIN_SDK_ENTERPRISE else MIN_SDK_FOSS
 
     private const val JAVA_VERSION = 21
     val javaVersion: JavaVersion = JavaVersion.toVersion(JAVA_VERSION)

@@ -7,9 +7,9 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
-import org.matrix.rustcomponents.sdk.RoomPowerLevels
+import org.matrix.rustcomponents.sdk.RoomPowerLevelsValues
 
-internal fun aRustRoomPowerLevels(
+internal fun aRustRoomPowerLevelsValues(
     ban: Long,
     invite: Long,
     kick: Long,
@@ -20,7 +20,7 @@ internal fun aRustRoomPowerLevels(
     roomName: Long,
     roomAvatar: Long,
     roomTopic: Long,
-) = RoomPowerLevels(
+) = RoomPowerLevelsValues(
     ban = ban,
     invite = invite,
     kick = kick,

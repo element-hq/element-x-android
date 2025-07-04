@@ -42,6 +42,10 @@
     <item quantity="one">"%1$d muutos huoneeseen"</item>
     <item quantity="other">"%1$d muutosta huoneeseen"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Siirry uuteen huoneeseen"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Tämä huone on korvattu, eikä se ole enää aktiivinen"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Katso vanhoja viestejä"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Tämä huone on jatkoa toiselle huoneelle"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s ja %3$d muu"</item>
     <item quantity="other">"%1$s, %2$s ja %3$d muuta"</item>

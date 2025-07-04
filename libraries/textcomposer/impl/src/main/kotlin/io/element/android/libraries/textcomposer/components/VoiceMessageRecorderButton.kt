@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -26,7 +25,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun VoiceMessageRecorderButton(
@@ -70,7 +68,8 @@ private fun StartButton(
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = CompoundIcons.MicOn(),
-        contentDescription = stringResource(CommonStrings.a11y_voice_message_record),
+        // Note: accessibility is managed in TextComposer.
+        contentDescription = null,
         tint = ElementTheme.colors.iconSecondary,
     )
 }
@@ -95,7 +94,8 @@ private fun StopButton(
     Icon(
         modifier = Modifier.size(24.dp),
         resourceId = CommonDrawables.ic_stop,
-        contentDescription = stringResource(CommonStrings.a11y_voice_message_stop_recording),
+        // Note: accessibility is managed in TextComposer.
+        contentDescription = null,
         tint = ElementTheme.colors.iconOnSolidPrimary,
     )
 }

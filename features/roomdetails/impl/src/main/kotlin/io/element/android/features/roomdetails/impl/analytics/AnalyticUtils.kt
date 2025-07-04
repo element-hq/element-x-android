@@ -9,7 +9,7 @@ package io.element.android.features.roomdetails.impl.analytics
 
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.services.analytics.api.AnalyticsService
 
 internal fun RoomMember.Role.toAnalyticsMemberRole(): RoomModeration.Role = when (this) {
@@ -22,7 +22,7 @@ internal fun analyticsMemberRoleForPowerLevel(powerLevel: Long): RoomModeration.
     return RoomMember.Role.forPowerLevel(powerLevel).toAnalyticsMemberRole()
 }
 
-internal fun AnalyticsService.trackPermissionChangeAnalytics(initial: RoomPowerLevels?, updated: RoomPowerLevels) {
+internal fun AnalyticsService.trackPermissionChangeAnalytics(initial: RoomPowerLevelsValues?, updated: RoomPowerLevelsValues) {
     if (updated.ban != initial?.ban) {
         capture(RoomModeration(RoomModeration.Action.ChangePermissionsBanMembers, analyticsMemberRoleForPowerLevel(updated.ban)))
     }

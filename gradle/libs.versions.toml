@@ -3,10 +3,10 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.10.1"
-kotlin = "2.1.21"
+android_gradle_plugin = "8.11.0"
+kotlin = "2.2.0"
 kotlinpoet = "2.2.0"
-ksp = "2.1.21-2.0.2"
+ksp = "2.2.0-2.0.2"
 firebaseAppDistribution = "5.1.1"
 
 # AndroidX
@@ -20,7 +20,7 @@ media3 = "1.7.1"
 camera = "1.4.2"
 
 # Compose
-compose_bom = "2025.05.01"
+compose_bom = "2025.06.01"
 composecompiler = "1.5.15"
 
 # Coroutines
@@ -33,8 +33,8 @@ accompanist = "0.37.3"
 test_core = "1.6.1"
 
 # Jetbrain
-datetime = "0.6.2"
-serialization_json = "1.8.1"
+datetime = "0.7.0"
+serialization_json = "1.9.0"
 
 #other
 detekt = "1.23.8"
@@ -42,11 +42,12 @@ coil = "3.2.0"
 showkase = "1.0.4"
 appyx = "1.7.1"
 sqldelight = "2.1.0"
-wysiwyg = "2.38.3"
+wysiwyg = "2.38.4"
 telephoto = "0.16.0"
+haze = "1.6.6"
 
 # Dependency analysis
-dependencyAnalysis = "2.18.0"
+dependencyAnalysis = "2.19.0"
 
 # DI
 dagger = "2.56.2"
@@ -71,13 +72,13 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
-gms_google_services = "com.google.gms:google-services:4.4.2"
+gms_google_services = "com.google.gms:google-services:4.4.3"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.15.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.16.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-google_tink = "com.google.crypto.tink:tink-android:1.17.0"
+google_tink = "com.google.crypto.tink:tink-android:1.18.0"
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -145,12 +146,12 @@ test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.6.2"
-test_mockk = "io.mockk:mockk:1.14.2"
+test_mockk = "io.mockk:mockk:1.14.4"
 test_konsist = "com.lemonappdev:konsist:0.17.3"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
-test_robolectric = "org.robolectric:robolectric:4.14.1"
+test_robolectric = "org.robolectric:robolectric:4.15.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.6.1"
 test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
@@ -168,33 +169,35 @@ serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-jso
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
-jsoup = "org.jsoup:jsoup:1.20.1"
+jsoup = "org.jsoup:jsoup:1.21.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.1.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.6.18"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.7.3"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
-sqlite = "androidx.sqlite:sqlite-ktx:2.5.1"
-unifiedpush = "org.unifiedpush.android:connector:3.0.9"
+sqlcipher = "net.zetetic:sqlcipher-android:4.9.0"
+sqlite = "androidx.sqlite:sqlite-ktx:2.5.2"
+unifiedpush = "org.unifiedpush.android:connector:3.0.10"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.11.2"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.10.3"
+maplibre = "org.maplibre.gl:android-sdk:11.11.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
+haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
+haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.19.0"
-sentry = "io.sentry:sentry-android:8.13.3"
+sentry = "io.sentry:sentry-android:8.16.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
@@ -210,7 +213,7 @@ anvil_compiler_api = { module = "dev.zacsweers.anvil:compiler-api", version.ref 
 anvil_compiler_utils = { module = "dev.zacsweers.anvil:compiler-utils", version.ref = "anvil" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.12.2"
+element_call_embedded = "io.element.android:element-call-embedded:0.13.1"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }

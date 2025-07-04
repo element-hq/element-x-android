@@ -225,7 +225,7 @@ import kotlin.time.Duration.Companion.seconds
     }
 
     @Test
-    fun `present - a received room member message makes the call to be active`() = runTest {
+    fun `present - a received 'joined' action makes the call to be active`() = runTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
@@ -248,19 +248,50 @@ import kotlin.time.Duration.Companion.seconds
             messageInterceptor.givenInterceptedMessage(
                 """
                     {
-                        "action":"send_event",
+                        "action":"io.element.join",
                         "api":"fromWidget",
                         "widgetId":"1",
-                        "requestId":"1",
-                        "data":{
-                            "type":"org.matrix.msc3401.call.member"
-                        }
+                        "requestId":"1"
                     }
                 """.trimIndent()
             )
             skipItems(2)
             val finalState = awaitItem()
             assertThat(finalState.isCallActive).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - if in room mode and no join action is received an error is displayed`() = runTest {
+        val navigator = FakeCallScreenNavigator()
+        val widgetDriver = FakeMatrixWidgetDriver()
+        val presenter = createCallScreenPresenter(
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            widgetDriver = widgetDriver,
+            navigator = navigator,
+            dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            screenTracker = FakeScreenTracker {},
+        )
+        val messageInterceptor = FakeWidgetMessageInterceptor()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Give it time to load the URL and WidgetDriver
+            advanceTimeBy(1.seconds)
+            skipItems(2)
+            val initialState = awaitItem()
+            assertThat(initialState.isCallActive).isFalse()
+            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
+            skipItems(2)
+
+            // Wait for the timeout to trigger
+            advanceTimeBy(10.seconds)
+
+            val finalState = awaitItem()
+            assertThat(finalState.isCallActive).isFalse()
+            // The error dialog that will force the user to leave the call is displayed
+            assertThat(finalState.webViewError).isNotNull()
+            assertThat(finalState.webViewError).isEmpty()
         }
     }
 

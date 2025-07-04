@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.features.createroom.impl.userlist.UserListEvents
@@ -23,9 +22,7 @@ import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -74,12 +71,7 @@ private fun AddPeopleViewTopBar(
     onNextClick: () -> Unit,
 ) {
     TopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = R.string.screen_create_room_add_people_title),
-                style = ElementTheme.typography.aliasScreenTitle
-            )
-        },
+        titleStr = stringResource(id = R.string.screen_create_room_add_people_title),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             val textActionResId = if (hasSelectedUsers) CommonStrings.action_next else CommonStrings.action_skip

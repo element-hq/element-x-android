@@ -10,7 +10,6 @@ package io.element.android.libraries.dateformatter.impl
 import android.text.format.DateUtils
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaLocalDate
@@ -20,6 +19,7 @@ import java.time.Period
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
+import kotlin.time.Clock
 
 @SingleIn(AppScope::class)
 class DateFormatters @Inject constructor(

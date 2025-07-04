@@ -7,16 +7,17 @@
 
 package io.element.android.libraries.dateformatter.impl
 
+import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
-import kotlinx.datetime.Instant
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import kotlin.time.Instant
 
 @RunWith(AndroidJUnit4::class)
-@Config(qualifiers = "fr")
+@Config(qualifiers = "fr", sdk = [Build.VERSION_CODES.TIRAMISU])
 class DefaultDateFormatterFrTest {
     @Test
     fun `test null`() {
@@ -34,7 +35,7 @@ class DefaultDateFormatterFrTest {
         assertThat(formatter.format(ts, DateFormatterMode.Full)).isEqualTo("1 janvier 1970 à 00:00")
         assertThat(formatter.format(ts, DateFormatterMode.Month)).isEqualTo("Janvier 1970")
         assertThat(formatter.format(ts, DateFormatterMode.Day)).isEqualTo("1 janvier 1970")
-        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate)).isEqualTo("01.01.1970")
+        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate)).isEqualTo("01/01/1970")
         assertThat(formatter.format(ts, DateFormatterMode.TimeOnly)).isEqualTo("00:00")
     }
 
@@ -46,7 +47,7 @@ class DefaultDateFormatterFrTest {
         assertThat(formatter.format(ts, DateFormatterMode.Full, true)).isEqualTo("1 janvier 1970 à 00:00")
         assertThat(formatter.format(ts, DateFormatterMode.Month, true)).isEqualTo("Janvier 1970")
         assertThat(formatter.format(ts, DateFormatterMode.Day, true)).isEqualTo("1 janvier 1970")
-        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate, true)).isEqualTo("01.01.1970")
+        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate, true)).isEqualTo("01/01/1970")
         assertThat(formatter.format(ts, DateFormatterMode.TimeOnly, true)).isEqualTo("00:00")
     }
 
@@ -241,7 +242,7 @@ class DefaultDateFormatterFrTest {
         assertThat(formatter.format(ts, DateFormatterMode.Full)).isEqualTo("6 avril 1979 à 18:35")
         assertThat(formatter.format(ts, DateFormatterMode.Month)).isEqualTo("Avril 1979")
         assertThat(formatter.format(ts, DateFormatterMode.Day)).isEqualTo("6 avril 1979")
-        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate)).isEqualTo("06.04.1979")
+        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate)).isEqualTo("06/04/1979")
         assertThat(formatter.format(ts, DateFormatterMode.TimeOnly)).isEqualTo("18:35")
     }
 
@@ -254,7 +255,7 @@ class DefaultDateFormatterFrTest {
         assertThat(formatter.format(ts, DateFormatterMode.Full, true)).isEqualTo("6 avril 1979 à 18:35")
         assertThat(formatter.format(ts, DateFormatterMode.Month, true)).isEqualTo("Avril 1979")
         assertThat(formatter.format(ts, DateFormatterMode.Day, true)).isEqualTo("6 avril 1979")
-        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate, true)).isEqualTo("06.04.1979")
+        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate, true)).isEqualTo("06/04/1979")
         assertThat(formatter.format(ts, DateFormatterMode.TimeOnly, true)).isEqualTo("18:35")
     }
 }

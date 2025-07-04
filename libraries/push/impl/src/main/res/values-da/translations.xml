@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Opkald"</string>
+  <string name="notification_channel_listening_for_events">"Lytter efter begivenheder"</string>
+  <string name="notification_channel_noisy">"Lyd på notifikationer"</string>
+  <string name="notification_channel_ringing_calls">"Ringende opkald"</string>
+  <string name="notification_channel_silent">"Lydløse notifikationer"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d besked"</item>
+    <item quantity="other">"%1$s: %2$d beskeder"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d notifikation"</item>
+    <item quantity="other">"%d notifikationer"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Du har nye beskeder."</string>
+  <string name="notification_incoming_call">"📹 Indgående opkald"</string>
+  <string name="notification_inline_reply_failed">"** Kunne ikke sende - åbn venligst rummet"</string>
+  <string name="notification_invitation_action_join">"Deltag"</string>
+  <string name="notification_invitation_action_reject">"Afvis"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d invitation"</item>
+    <item quantity="other">"%d invitationer"</item>
+  </plurals>
+  <string name="notification_invite_body">"Inviterede dig til at samtale"</string>
+  <string name="notification_invite_body_with_sender">"%1$s inviterede dig til at samtale"</string>
+  <string name="notification_mentioned_you_body">"Nævnte dig: %1$s"</string>
+  <string name="notification_new_messages">"Nye beskeder"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d ny besked"</item>
+    <item quantity="other">"%d nye beskeder"</item>
+  </plurals>
+  <string name="notification_reaction_body">"Reagerede med%1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Marker som læst"</string>
+  <string name="notification_room_action_quick_reply">"Hurtigt svar"</string>
+  <string name="notification_room_invite_body">"Inviterede dig til at deltage i rummet"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s inviterede dig til at deltage i rummet"</string>
+  <string name="notification_sender_me">"Mig"</string>
+  <string name="notification_sender_mention_reply">"%1$s nævnt eller besvaret"</string>
+  <string name="notification_test_push_notification_content">"Du ser notifikationen! Klik på mig!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d ulæst besked"</item>
+    <item quantity="other">"%d ulæste beskeder"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s og %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s i %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s i %2$s og %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d rum"</item>
+    <item quantity="other">"%d rum"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Synkronisering i baggrunden"</string>
+  <string name="push_distributor_firebase_android">"Google-tjenester"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Der blev ikke fundet nogen gyldige Google Play-tjenester. Notifikationer fungerer muligvis ikke korrekt."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Få navnet på den aktuelle udbyder."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Ingen push-udbydere valgt."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Nuværende push-udbyder: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Nuværende push-udbyder"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Sørg for, at programmet understøtter mindst én push-udbyder."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Ingen push-udbyder understøttelse fundet."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Fandt %1$d push-udbyder: %2$s"</item>
+    <item quantity="other">"Fandt %1$d push-udbydere: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Applikationen blev bygget med støtte til: %1$s"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Understøttelse af push-udbydere"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Kontrollér, at appen kan vise notifikationer."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Der er ikke blevet klikket på meddelelsen."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Kan ikke vise notifikationen."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Der er blevet klikket på notifikationen!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Vis notifikation"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Klik venligst på notifikationen for at fortsætte testen."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Sørg for, at applikationen modtager push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Fejl: pusher har afvist anmodningen."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Fejl: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Fejl, kan ikke teste push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Fejl, timeout venter på push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Push loop back tog %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Afprøv Push loop back"</string>
+</resources>

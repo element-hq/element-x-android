@@ -50,12 +50,12 @@ import io.element.android.libraries.designsystem.components.async.rememberAsyncI
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
@@ -95,16 +95,10 @@ fun ChangeRolesView(
             topBar = {
                 AnimatedVisibility(visible = !state.isSearchActive) {
                     TopAppBar(
-                        title = {
-                            val title = when (state.role) {
-                                RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_change_role_administrators_title)
-                                RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_change_role_moderators_title)
-                                RoomMember.Role.USER -> error("This should never be reached")
-                            }
-                            Text(
-                                text = title,
-                                style = ElementTheme.typography.aliasScreenTitle,
-                            )
+                        titleStr = when (state.role) {
+                            RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_change_role_administrators_title)
+                            RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_change_role_moderators_title)
+                            RoomMember.Role.USER -> error("This should never be reached")
                         },
                         navigationIcon = {
                             BackButton(onClick = { state.eventSink(ChangeRolesEvent.Exit) })
@@ -341,7 +335,10 @@ private fun MemberRow(
             .padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Avatar(avatarData)
+        Avatar(
+            avatarData = avatarData,
+            avatarType = AvatarType.User,
+        )
         Column(
             modifier = Modifier
                 .padding(start = 12.dp)

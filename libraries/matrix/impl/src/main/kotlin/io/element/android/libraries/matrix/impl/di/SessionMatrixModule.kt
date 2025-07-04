@@ -15,6 +15,7 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
+import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
@@ -70,5 +71,10 @@ object SessionMatrixModule {
     @Provides
     fun providesRoomDirectoryService(matrixClient: MatrixClient): RoomDirectoryService {
         return matrixClient.roomDirectoryService()
+    }
+
+    @Provides
+    fun providesMediaPreviewService(matrixClient: MatrixClient): MediaPreviewService {
+        return matrixClient.mediaPreviewService()
     }
 }

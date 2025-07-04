@@ -10,8 +10,10 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Незашифроване повідомлення…"</string>
   <string name="rich_text_editor_create_link">"Створити посилання"</string>
   <string name="rich_text_editor_edit_link">"Редагувати посилання"</string>
+  <string name="rich_text_editor_format_action">"%1$s, стан: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Жирний формат"</string>
   <string name="rich_text_editor_format_italic">"Курсивний формат"</string>
+  <string name="rich_text_editor_format_state_off">"вимкнено"</string>
   <string name="rich_text_editor_format_strikethrough">"Застосувати формат закреслення"</string>
   <string name="rich_text_editor_format_underline">"Застосувати формат підкреслення"</string>
   <string name="rich_text_editor_full_screen_toggle">"Перемкнути повноекранний режим"</string>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Zakažte optimalizaci baterie pro tuto aplikaci, abyste měli jistotu, že budou přijata všechna oznámení."</string>
+  <string name="banner_battery_optimization_submit_android">"Zakázat optimalizaci"</string>
+  <string name="banner_battery_optimization_title_android">"Nepřicházejí vám oznámení?"</string>
+  <string name="banner_set_up_recovery_content">"Vygenerujte nový klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup ke svým zařízením."</string>
+  <string name="banner_set_up_recovery_submit">"Nastavení obnovy"</string>
+  <string name="banner_set_up_recovery_title">"Nastavení obnovy"</string>
+  <string name="confirm_recovery_key_banner_message">"Potvrďte klíč pro obnovení, abyste zachovali přístup k úložišti klíčů a historii zpráv."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Zadejte klíč pro obnovení"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Zapomněli jste klíč pro obnovení?"</string>
+  <string name="confirm_recovery_key_banner_title">"Vaše úložiště klíčů není synchronizováno"</string>
+  <string name="full_screen_intent_banner_message">"Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen."</string>
+  <string name="full_screen_intent_banner_title">"Vylepšete si zážitek z volání"</string>
+  <string name="screen_invites_decline_chat_message">"Opravdu chcete odmítnout pozvánku do %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Odmítnout pozvání"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Opravdu chcete odmítnout tuto soukromou konverzaci s %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Odmítnout chat"</string>
+  <string name="screen_invites_empty_list">"Žádné pozvánky"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) vás pozval(a)"</string>
+  <string name="screen_migration_message">"Jedná se o jednorázový proces, prosíme o strpení."</string>
+  <string name="screen_migration_title">"Nastavení vašeho účtu"</string>
+  <string name="screen_roomlist_a11y_create_message">"Vytvořte novou konverzaci nebo místnost"</string>
+  <string name="screen_roomlist_empty_message">"Začněte tím, že někomu pošnete zprávu."</string>
+  <string name="screen_roomlist_empty_title">"Zatím žádné konverzace."</string>
+  <string name="screen_roomlist_filter_favourites">"Oblíbené"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"V nastavení chatu můžete přidat chat k oblíbeným.
+Prozatím můžete zrušit výběr filtrů, abyste viděli své další chaty"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Zatím nemáte oblíbené chaty"</string>
+  <string name="screen_roomlist_filter_invites">"Pozvánky"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Nemáte žádné nevyřízené pozvánky."</string>
+  <string name="screen_roomlist_filter_low_priority">"Nízká priorita"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Můžete zrušit výběr filtrů, abyste viděli své další chaty"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Nemáte chaty pro tento výběr"</string>
+  <string name="screen_roomlist_filter_people">"Lidé"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Zatím nemáte žádné přímé zprávy"</string>
+  <string name="screen_roomlist_filter_rooms">"Místnosti"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Ještě nejste v žádné místnosti"</string>
+  <string name="screen_roomlist_filter_unreads">"Nepřečtené"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulujeme!
+Nemáte žádné nepřečtené zprávy!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Žádost o vstup odeslána"</string>
+  <string name="screen_roomlist_main_space_title">"Všechny chaty"</string>
+  <string name="screen_roomlist_mark_as_read">"Označit jako přečtené"</string>
+  <string name="screen_roomlist_mark_as_unread">"Označit jako nepřečtené"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Tato místnost byla aktualizována"</string>
+  <string name="session_verification_banner_message">"Zdá se, že používáte nové zařízení. Ověřte přihlášení, abyste měli přístup k zašifrovaným zprávám."</string>
+  <string name="session_verification_banner_title">"Ověřte, že jste to vy"</string>
+</resources>

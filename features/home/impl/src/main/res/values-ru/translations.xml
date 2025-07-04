@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Создайте новый ключ восстановления, который можно использовать для восстановления зашифрованной истории сообщений в случае потери доступа к своим устройствам."</string>
+  <string name="banner_set_up_recovery_submit">"Настроить восстановление"</string>
+  <string name="banner_set_up_recovery_title">"Для защиты вашего аккаунта рекомендуется настроить восстановление"</string>
+  <string name="confirm_recovery_key_banner_message">"Подтвердите ключ восстановления, чтобы сохранить доступ к хранилищу ключей и истории сообщений."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Введите ключ восстановления"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Забыли ключ восстановления?"</string>
+  <string name="confirm_recovery_key_banner_title">"Хранилище ключей не синхронизировано"</string>
+  <string name="full_screen_intent_banner_message">"Чтобы больше не пропускать важные звонки, разрешите приложению показывать полноэкранные уведомления на заблокированном экране телефона."</string>
+  <string name="full_screen_intent_banner_title">"Улучшите качество звонков"</string>
+  <string name="screen_invites_decline_chat_message">"Вы уверены, что хотите отклонить приглашение в %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Отклонить приглашение"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Вы уверены, что хотите отказаться от личного общения с %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Отклонить чат"</string>
+  <string name="screen_invites_empty_list">"Нет приглашений"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) пригласил вас"</string>
+  <string name="screen_migration_message">"Это одноразовый процесс, спасибо, что подождали."</string>
+  <string name="screen_migration_title">"Настройка учетной записи."</string>
+  <string name="screen_roomlist_a11y_create_message">"Создайте новую беседу или комнату"</string>
+  <string name="screen_roomlist_empty_message">"Начните переписку с отправки сообщения."</string>
+  <string name="screen_roomlist_empty_title">"Пока нет доступных чатов."</string>
+  <string name="screen_roomlist_filter_favourites">"Избранное"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Добавить чат в избранное можно в настройках чата.
+На данный момент вы можете убрать фильтры, чтобы увидеть другие ваши чаты."</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"У вас пока нет избранных чатов"</string>
+  <string name="screen_roomlist_filter_invites">"Приглашения"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"У вас нет отложенных приглашений."</string>
+  <string name="screen_roomlist_filter_low_priority">"Низкий приоритет"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Вы можете убрать фильтры, чтобы увидеть другие ваши чаты."</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"У вас нет чатов для этой подборки"</string>
+  <string name="screen_roomlist_filter_people">"Пользователи"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"У вас пока нет личных сообщений"</string>
+  <string name="screen_roomlist_filter_rooms">"Комнаты"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Вас пока нет ни в одной комнате"</string>
+  <string name="screen_roomlist_filter_unreads">"Непрочитанные"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Поздравляем!
+У вас нет непрочитанных сообщений!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Запрос на присоединение отправлен"</string>
+  <string name="screen_roomlist_main_space_title">"Все чаты"</string>
+  <string name="screen_roomlist_mark_as_read">"Пометить как прочитанное"</string>
+  <string name="screen_roomlist_mark_as_unread">"Отметить как непрочитанное"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Эта комната была обновлена"</string>
+  <string name="session_verification_banner_message">"Похоже, вы используете новое устройство. Чтобы получить доступ к зашифрованным сообщениям пройдите подтверждение с другим устройством."</string>
+  <string name="session_verification_banner_title">"Подтвердите, что это вы"</string>
+</resources>
