@@ -72,7 +72,8 @@ fun TimelineItemStickerView(
                                     .combinedClickable(
                                         onClick = onContentClick,
                                         onLongClick = onLongClick,
-                                        onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),                                    )
+                                        onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+                                    )
                             } else {
                                 Modifier
                             }
