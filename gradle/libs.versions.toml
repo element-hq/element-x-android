@@ -163,7 +163,7 @@ coil_network_okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 coil_compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil_gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil_test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
-compound = { module = "io.element.android:compound-android", version = "25.4.4" }
+compound = { module = "io.element.android:compound-android", version = "25.7.4" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
