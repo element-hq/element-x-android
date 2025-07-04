@@ -44,7 +44,6 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -72,12 +71,7 @@ fun EventDebugInfoView(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = "Debug event info",
-                        style = ElementTheme.typography.aliasScreenTitle,
-                    )
-                },
+                titleStr = "Debug event info",
                 navigationIcon = { BackButton(onClick = onBackClick) }
             )
         },

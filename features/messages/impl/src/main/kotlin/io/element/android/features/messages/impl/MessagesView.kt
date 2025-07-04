@@ -39,6 +39,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -184,7 +186,10 @@ fun MessagesView(
 
     val expandableState = rememberExpandableBottomSheetLayoutState()
     ExpandableBottomSheetLayout(
-        modifier = modifier.fillMaxSize().imePadding().systemBarsPadding(),
+        modifier = modifier
+            .fillMaxSize()
+            .imePadding()
+            .systemBarsPadding(),
         content = {
             Scaffold(
                 contentWindowInsets = WindowInsets.statusBars,
@@ -556,7 +561,11 @@ private fun RoomAvatarAndNameRow(
             ),
         )
         Text(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .semantics {
+                    heading()
+                },
             text = roomName ?: stringResource(CommonStrings.common_no_room_name),
             style = ElementTheme.typography.fontBodyLgMedium,
             fontStyle = FontStyle.Italic.takeIf { roomName == null },

@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -77,7 +79,11 @@ fun UserProfileHeaderSection(
         Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
             Text(
-                modifier = Modifier.clipToBounds(),
+                modifier = Modifier
+                    .clipToBounds()
+                    .semantics {
+                        heading()
+                    },
                 text = userName,
                 style = ElementTheme.typography.fontHeadingLgBold,
                 textAlign = TextAlign.Center,

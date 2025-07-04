@@ -47,7 +47,7 @@ fun DependencyLicensesListView(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(CommonStrings.common_open_source_licenses)) },
+                titleStr = stringResource(CommonStrings.common_open_source_licenses),
                 navigationIcon = { BackButton(onClick = onBackClick) },
             )
         },

@@ -96,11 +96,7 @@ private fun UserDefinedRoomNotificationSettingsTopBar(
     onBackClick: () -> Unit,
 ) {
     TopAppBar(
-        title = {
-            Text(
-                text = roomName,
-            )
-        },
+        titleStr = roomName,
         navigationIcon = { BackButton(onClick = onBackClick) },
     )
 }

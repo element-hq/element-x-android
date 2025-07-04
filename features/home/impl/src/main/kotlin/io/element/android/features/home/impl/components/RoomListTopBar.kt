@@ -34,6 +34,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -197,7 +199,12 @@ private fun DefaultRoomListTopBar(
                         scrolledContainerColor = Color.Transparent,
                     ),
                     title = {
-                        Text(text = title)
+                        Text(
+                            modifier = Modifier.semantics {
+                                heading()
+                            },
+                            text = title,
+                        )
                     },
                     navigationIcon = {
                         NavigationIcon(

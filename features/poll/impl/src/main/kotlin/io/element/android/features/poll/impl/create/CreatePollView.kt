@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.poll.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -39,7 +38,6 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -209,14 +207,9 @@ private fun CreatePollTopAppBar(
     onSaveClick: () -> Unit = {},
 ) {
     TopAppBar(
-        title = {
-            Text(
-                text = when (mode) {
-                    CreatePollState.Mode.New -> stringResource(id = R.string.screen_create_poll_title)
-                    CreatePollState.Mode.Edit -> stringResource(id = R.string.screen_edit_poll_title)
-                },
-                style = ElementTheme.typography.aliasScreenTitle,
-            )
+        titleStr = when (mode) {
+            CreatePollState.Mode.New -> stringResource(id = R.string.screen_create_poll_title)
+            CreatePollState.Mode.Edit -> stringResource(id = R.string.screen_edit_poll_title)
         },
         navigationIcon = {
             BackButton(onClick = onBackClick)
