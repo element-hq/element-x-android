@@ -1,3 +1,79 @@
+Changes in Element X v25.07.0
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v25.07.0 -->
+
+## What's Changed
+### 🙌 Improvements
+* Change : handle invalid invite error  by @ganfra in https://github.com/element-hq/element-x-android/pull/4909
+* Add ability to zoom on video. by @bmarty in https://github.com/element-hq/element-x-android/pull/4916
+* Change : sync moderation and safety preferences with server by @ganfra in https://github.com/element-hq/element-x-android/pull/4962
+### 🐛 Bugfixes
+* Restore `MarkdownEditText.focusSearch` override by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4908
+* Fix duplicate usage of a `modifier` variable in `TextInputBox` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4928
+### 🗣 Translations
+* Sync Strings - new translations to Danish by @ElementBot in https://github.com/element-hq/element-x-android/pull/4913
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4983
+### 🧱 Build
+* a11y: Add scripts to enable and disable the talkback service by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4906
+* Update min api level to 33 for Element enterprise by @bmarty in https://github.com/element-hq/element-x-android/pull/4960
+### 🚧 In development 🚧
+* Rename module roomlist to home by @bmarty in https://github.com/element-hq/element-x-android/pull/4955
+* Home navigation bar by @bmarty in https://github.com/element-hq/element-x-android/pull/4964
+### Dependency upgrades
+* fix(deps): update dependency org.unifiedpush.android:connector to v3.0.10 by @renovate in https://github.com/element-hq/element-x-android/pull/4871
+* fix(deps): update dependency io.sentry:sentry-android to v8.14.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4892
+* fix(deps): update dependency com.google.crypto.tink:tink-android to v1.18.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4897
+* fix(deps): update wysiwyg to v2.38.4 by @renovate in https://github.com/element-hq/element-x-android/pull/4907
+* fix(deps): update dependency org.robolectric:robolectric to v4.15 by @renovate in https://github.com/element-hq/element-x-android/pull/4901
+* fix(deps): update dependency androidx.sqlite:sqlite-ktx to v2.5.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4898
+* fix(deps): update dependency io.mockk:mockk to v1.14.4 by @renovate in https://github.com/element-hq/element-x-android/pull/4912
+* fix(deps): update dependency org.robolectric:robolectric to v4.15.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4911
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.6.23 by @renovate in https://github.com/element-hq/element-x-android/pull/4917
+* fix(deps): update dependencyanalysis to v2.19.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4932
+* fix(deps): update dependency org.jsoup:jsoup to v1.21.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4914
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.6.25 by @renovate in https://github.com/element-hq/element-x-android/pull/4936
+* fix(deps): update dependency io.sentry:sentry-android to v8.15.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4938
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v11.11.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4939
+* fix(deps): update dependency com.google.firebase:firebase-bom to v33.16.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4945
+* fix(deps): update dependency io.sentry:sentry-android to v8.16.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4941
+* Update sdk to version 25.7.1 by @bmarty in https://github.com/element-hq/element-x-android/pull/4966
+* Update haze to v1.6.6 by @renovate in https://github.com/element-hq/element-x-android/pull/4968
+* Update dependency com.google.gms:google-services to v4.4.3 by @renovate in https://github.com/element-hq/element-x-android/pull/4946
+* Update android.gradle.plugin to v8.11.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4931
+* Update dependency io.element.android:element-call-embedded to v0.13.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4969
+* Update dependency org.matrix.rustcomponents:sdk-android to v25.7.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4967
+* Upgrade compose bom to 2025.06.01 by @bmarty in https://github.com/element-hq/element-x-android/pull/4970
+* Update kotlin by @renovate in https://github.com/element-hq/element-x-android/pull/4918
+* Update dependency io.element.android:element-call-embedded to v0.13.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4977
+* Update dependency org.matrix.rustcomponents:sdk-android to v25.7.3 by @ganfra in https://github.com/element-hq/element-x-android/pull/4976
+### Others
+* a11y: Make isTalkbackActive() live. by @bmarty in https://github.com/element-hq/element-x-android/pull/4903
+* a11y: improve accessibility on grouped state events header. by @bmarty in https://github.com/element-hq/element-x-android/pull/4902
+* Room debug info by @bmarty in https://github.com/element-hq/element-x-android/pull/4904
+* [a11y] Improve accessibility of message composer by @bmarty in https://github.com/element-hq/element-x-android/pull/4900
+* refactor: Migrate SQLCipher Android to new API by @ShadowRZ in https://github.com/element-hq/element-x-android/pull/4874
+* Iterate on avatar to be able to render Space avatar. by @bmarty in https://github.com/element-hq/element-x-android/pull/4921
+* Simplify syncing the room list when receiving a push by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4915
+* Add unit test on ChooseAccountProviderState so that the coverage is above 90% by @bmarty in https://github.com/element-hq/element-x-android/pull/4924
+* Iterate on avatar to be able to render Space avatar Part2 by @bmarty in https://github.com/element-hq/element-x-android/pull/4923
+* Introduce SessionEnterpriseService. by @bmarty in https://github.com/element-hq/element-x-android/pull/4925
+* Simplify message composer layout by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4884
+* Display error dialog if Element Call can't be joined by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4919
+* misc : simplify timeline diff logic by @ganfra in https://github.com/element-hq/element-x-android/pull/4930
+* Navigation bar component by @bmarty in https://github.com/element-hq/element-x-android/pull/4940
+* a11y: improve content description of the close buttons by @bmarty in https://github.com/element-hq/element-x-android/pull/4943
+* Element Call: remove top app bar and add it inside the webview instead by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4927
+* Replace the Report a problem button with the app's version on the on boading screen. by @bmarty in https://github.com/element-hq/element-x-android/pull/4944
+* Split RoomListPresenter and introduce HomePresenter by @bmarty in https://github.com/element-hq/element-x-android/pull/4958
+* Add "View avatar" content description to all clickable Avatar that will open the avatar preview. by @bmarty in https://github.com/element-hq/element-x-android/pull/4948
+* [a11y] Ensure that the focus is not lost when the send button state change by @bmarty in https://github.com/element-hq/element-x-android/pull/4975
+* [a11y] add missing heading() qualifier on screen titles and other headers by @bmarty in https://github.com/element-hq/element-x-android/pull/4980
+* misc (tracing) : add new TraceLogPack.Notification by @ganfra in https://github.com/element-hq/element-x-android/pull/4981
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.06.3...v25.07.0
+
 Changes in Element X v25.06.3
 =============================
 
