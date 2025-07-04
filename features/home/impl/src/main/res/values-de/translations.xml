@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Deaktiviere die Batterieoptimierung für diese App, um sicherzustellen, dass alle Benachrichtigungen empfangen werden."</string>
+  <string name="banner_battery_optimization_submit_android">"Optimierung deaktivieren"</string>
+  <string name="banner_battery_optimization_title_android">"Kommen die Benachrichtigungen nicht an?"</string>
   <string name="banner_set_up_recovery_content">"Falls Sie alle vorhandenen Geräte verloren haben, stellen Sie Ihre kryptografische Identität und Ihren Nachrichtenverlauf mit einem Wiederherstellungsschlüssel wieder her."</string>
   <string name="banner_set_up_recovery_submit">"Wiederherstellung einrichten"</string>
   <string name="banner_set_up_recovery_title">"Wiederherstellung einrichten"</string>
@@ -18,6 +21,7 @@
   <string name="screen_migration_message">"Dies ist ein einmaliger Vorgang, danke fürs Warten."</string>
   <string name="screen_migration_title">"Dein Konto wird eingerichtet."</string>
   <string name="screen_roomlist_a11y_create_message">"Eine Unterthaltung oder Raum erstellen"</string>
+  <string name="screen_roomlist_clear_filters">"Filter zurücksetzen"</string>
   <string name="screen_roomlist_empty_message">"Beginnen Sie, indem Sie jemandem eine Nachricht senden."</string>
   <string name="screen_roomlist_empty_title">"Noch keine Chats."</string>
   <string name="screen_roomlist_filter_favourites">"Favoriten"</string>
@@ -40,6 +44,7 @@ Sie haben keine ungelesenen Nachrichten!"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Als gelesen markieren"</string>
   <string name="screen_roomlist_mark_as_unread">"Als ungelesen markieren"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Dieser Raum wurde aktualisiert."</string>
   <string name="session_verification_banner_message">"Sie verwenden anscheinend ein neues Gerät. Verifizieren Sie es mit einem anderen Gerät, um Zugriff auf ihre verschlüsselten Nachrichten zu erhalten."</string>
   <string name="session_verification_banner_title">"Bestätigen Sie ihre Identität"</string>
 </resources>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"ما هیچ گونه اطلاعات شخصی را ضبط یا نمایه‌سازی نمی‌کنیم"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"داده های استفاده ناشناس را به اشتراک بگذارید تا به ما در شناسایی مشکلات کمک کند."</string>
+  <string name="screen_analytics_prompt_read_terms">"شما می‌توانید تمام شرایط ما را بخوانید%1$s ."</string>
   <string name="screen_analytics_prompt_read_terms_content_link">"این‌جا"</string>
   <string name="screen_analytics_prompt_settings">"می‌توانید در هر زمان خاموشش کنید"</string>
   <string name="screen_analytics_prompt_third_party_sharing">"داده‌هایتان را با سوم‌شخص‌ها هم‌نمی‌رسانیم"</string>

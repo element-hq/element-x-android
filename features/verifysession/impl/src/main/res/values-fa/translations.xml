@@ -10,10 +10,13 @@
   <string name="screen_identity_confirmed_title">"افزاره تأیید شده"</string>
   <string name="screen_identity_use_another_device">"استفاده از افزاره‌ای دیگر"</string>
   <string name="screen_identity_waiting_on_other_device">"منتظر افزارهٔ دیگر…"</string>
+  <string name="screen_session_verification_cancelled_subtitle">"يه چيزي درست به نظر نمياد یا زمان درخواست به پایان رسید یا درخواست رد شد."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"تأیید کنید که ایموجی های زیر با ایموجی های نشان داده شده در جلسه دیگر شما مطابقت دارند."</string>
   <string name="screen_session_verification_compare_emojis_title">"مقایسهٔ شکلک‌ها"</string>
   <string name="screen_session_verification_compare_numbers_title">"مقایسهٔ اعداد"</string>
   <string name="screen_session_verification_complete_subtitle">"نشست جدید شما اکنون تأیید شده‌است. این نشست به پیام‌های رمزگذاری شده‌ی شما دسترسی داشته و سایر کاربران نیز این نشست را قابل اعتماد می دانند."</string>
   <string name="screen_session_verification_enter_recovery_key">"ورود کلید بازیابی"</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"برای دسترسی به تاریخچه پیام‌های رمزگذاری‌شده‌تان، ثابت کنید که خودتان هستید."</string>
   <string name="screen_session_verification_open_existing_session_title">"گشودن نشستی موجود"</string>
   <string name="screen_session_verification_positive_button_canceled">"تلاش برای تأیید دوباره"</string>
   <string name="screen_session_verification_positive_button_initial">"آماده‌ام"</string>
@@ -24,6 +27,7 @@
   <string name="screen_session_verification_request_success_title">"افزاره تأیید شده"</string>
   <string name="screen_session_verification_they_dont_match">"مطابق نیستند"</string>
   <string name="screen_session_verification_they_match">"مطابقند"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"برای ادامه، درخواست شروع فرآیند تأیید را در جلسه دیگر خود بپذیرید."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"منظر پذیرش درخواست"</string>
   <string name="screen_signout_in_progress_dialog_content">"خارج شدن…"</string>
 </resources>

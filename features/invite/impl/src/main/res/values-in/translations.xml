@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Anda tidak akan melihat pesan atau undangan ruangan dari pengguna ini"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Blokir pengguna"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Laporkan ruangan ini ke penyedia akun Anda."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Jelaskan alasan untuk melaporkan…"</string>
+  <string name="screen_decline_and_block_title">"Tolak dan blokir"</string>
   <string name="screen_invites_decline_chat_message">"Apakah Anda yakin ingin menolak undangan untuk bergabung ke %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Tolak undangan"</string>
   <string name="screen_invites_decline_direct_chat_message">"Apakah Anda yakin ingin menolak obrolan pribadi dengan %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Tolak obrolan"</string>
   <string name="screen_invites_empty_list">"Tidak ada undangan"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) mengundang Anda"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ya, tolak &amp; blokir"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Apakah Anda yakin ingin menolak undangan untuk bergabung dengan ruangan ini? Ini juga akan mencegah %1$s menghubungi Anda atau mengundang Anda ke ruangan."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Tolak undangan &amp; blokir"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Tolak dan blokir"</string>
 </resources>

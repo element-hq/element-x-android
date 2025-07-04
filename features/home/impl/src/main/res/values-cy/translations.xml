@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Analluogwch optimeiddio batri ar gyfer yr ap hwn, er mwyn sicrhau bod pob hysbysiad yn cael ei dderbyn."</string>
+  <string name="banner_battery_optimization_submit_android">"Analluogi optimeiddio"</string>
+  <string name="banner_battery_optimization_title_android">"Hysbysiadau ddim yn cyrraedd?"</string>
   <string name="banner_set_up_recovery_content">"Adferwch eich hunaniaeth cryptograffig a hanes negeseuon gydag allwedd adfer os ydych wedi colli eich holl ddyfeisiau presennol."</string>
   <string name="banner_set_up_recovery_submit">"Gosod adfer"</string>
   <string name="banner_set_up_recovery_title">"Gosodwch adferiad i ddiogelu eich cyfrif"</string>
@@ -18,6 +21,7 @@
   <string name="screen_migration_message">"Mae hon yn broses un tro, diolch am aros."</string>
   <string name="screen_migration_title">"Creu eich cyfrif."</string>
   <string name="screen_roomlist_a11y_create_message">"Crëwch sgwrs neu ystafell newydd"</string>
+  <string name="screen_roomlist_clear_filters">"Clirio\'r hidlau"</string>
   <string name="screen_roomlist_empty_message">"Cychwynnwch arni trwy anfon neges at rywun."</string>
   <string name="screen_roomlist_empty_title">"Dim sgyrsiau eto."</string>
   <string name="screen_roomlist_filter_favourites">"Ffefrynnau"</string>
@@ -40,6 +44,7 @@ Does gennych chi ddim negeseuon heb eu darllen!"</string>
   <string name="screen_roomlist_main_space_title">"Sgyrsiau"</string>
   <string name="screen_roomlist_mark_as_read">"Marcio fel wedi\'i ddarllen"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcio fel heb ei ddarllen"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Mae\'r ystafell hon wedi\'i huwchraddio"</string>
   <string name="session_verification_banner_message">"Mae\'n debyg eich bod chi\'n defnyddio dyfais newydd. Dilyswch gyda dyfais arall i gael mynediad at eich negeseuon wedi\'u hamgryptio."</string>
   <string name="session_verification_banner_title">"Gwiriwch mai chi sydd yna"</string>
 </resources>

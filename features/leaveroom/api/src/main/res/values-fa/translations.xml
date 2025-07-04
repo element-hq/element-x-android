@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_room_alert_empty_subtitle">"آیا مطمئن هستید که می خواهید این اتاق را ترک کنید؟ شما تنها کسی هستید که اینجا هستید. اگر ترک کنید، هیچ کس نمی تواند در آینده به آن بپیوندد.از جمله خود شما."</string>
+  <string name="leave_room_alert_private_subtitle">"آیا مطمئن هستید که می خواهید از این اتاق خارج شوید؟ این اتاق عمومی نیست و نمی‌توانید بدون دعوت دوباره بپیوندید."</string>
+  <string name="leave_room_alert_subtitle">"آیا مطمئن هستید که می خواهید اتاق را ترک کنید؟"</string>
+</resources>
