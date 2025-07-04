@@ -38,7 +38,7 @@ internal fun TimelineItemDaySeparatorView(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            modifier = modifier
+            modifier = Modifier
                 .semantics {
                     heading()
                 },
