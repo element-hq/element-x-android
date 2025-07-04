@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +40,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.SemanticsPropertyReceiver
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -280,6 +285,13 @@ fun TextComposer(
         else -> sendButton
     }
 
+    val endButtonA11y = endButtonA11y(
+        composerMode = composerMode,
+        voiceMessageState = voiceMessageState,
+        enableVoiceMessages = enableVoiceMessages,
+        canSendMessage = canSendMessage,
+    )
+
     val voiceRecording = @Composable {
         when (voiceMessageState) {
             is VoiceMessageState.Preview ->
@@ -323,6 +335,7 @@ fun TextComposer(
                 )
             },
             textFormatting = textFormattingOptions,
+            endButtonA11y = endButtonA11y,
             sendButton = sendButton,
         )
     } else {
@@ -334,6 +347,7 @@ fun TextComposer(
             composerOptionsButton = composerOptionsButton,
             textInput = textInput,
             endButton = sendOrRecordButton,
+            endButtonA11y = endButtonA11y,
             voiceRecording = voiceRecording,
             voiceDeleteButton = voiceDeleteButton,
         )
@@ -359,6 +373,40 @@ fun TextComposer(
     }
 }
 
+@ReadOnlyComposable
+@Composable
+private fun endButtonA11y(
+    composerMode: MessageComposerMode,
+    voiceMessageState: VoiceMessageState,
+    enableVoiceMessages: Boolean,
+    canSendMessage: Boolean,
+): (SemanticsPropertyReceiver) -> Unit {
+    val a11ySendButtonDescription = stringResource(
+        id = when {
+            enableVoiceMessages && !canSendMessage ->
+                when (voiceMessageState) {
+                    VoiceMessageState.Idle,
+                    is VoiceMessageState.Recording -> if (voiceMessageState is VoiceMessageState.Recording) {
+                        CommonStrings.a11y_voice_message_stop_recording
+                    } else {
+                        CommonStrings.a11y_voice_message_record
+                    }
+                    is VoiceMessageState.Preview -> when (voiceMessageState.isSending) {
+                        true -> CommonStrings.common_sending
+                        false -> CommonStrings.action_send_voice_message
+                    }
+                }
+            composerMode.isEditing -> CommonStrings.action_send_edited_message
+            else -> CommonStrings.action_send_message
+        }
+    )
+    val endButtonA11y: (SemanticsPropertyReceiver.() -> Unit) = {
+        contentDescription = a11ySendButtonDescription
+        onClick(null, null)
+    }
+    return endButtonA11y
+}
+
 @Composable
 private fun StandardLayout(
     voiceMessageState: VoiceMessageState,
@@ -369,6 +417,7 @@ private fun StandardLayout(
     voiceRecording: @Composable () -> Unit,
     voiceDeleteButton: @Composable () -> Unit,
     endButton: @Composable () -> Unit,
+    endButtonA11y: (SemanticsPropertyReceiver.() -> Unit),
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -416,7 +465,8 @@ private fun StandardLayout(
             Box(
                 Modifier
                     .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                    .size(48.dp),
+                    .size(48.dp)
+                    .clearAndSetSemantics(endButtonA11y),
                 contentAlignment = Alignment.Center,
             ) {
                 endButton()
@@ -454,6 +504,7 @@ private fun TextFormattingLayout(
     dismissTextFormattingButton: @Composable () -> Unit,
     textFormatting: @Composable () -> Unit,
     sendButton: @Composable () -> Unit,
+    endButtonA11y: (SemanticsPropertyReceiver.() -> Unit),
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -485,10 +536,12 @@ private fun TextFormattingLayout(
                 textFormatting()
             }
             Box(
-                modifier = Modifier.padding(
-                    start = 14.dp,
-                    end = 6.dp
-                )
+                modifier = Modifier
+                    .padding(
+                        start = 14.dp,
+                        end = 6.dp,
+                    )
+                    .clearAndSetSemantics(endButtonA11y)
             ) {
                 sendButton()
             }

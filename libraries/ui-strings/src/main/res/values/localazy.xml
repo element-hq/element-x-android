@@ -12,7 +12,7 @@
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
-  <string name="a11y_other_user_avatar">"Other user avatar"</string>
+  <string name="a11y_other_user_avatar">"Other user\'s avatar"</string>
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
   <string name="a11y_paused_voice_message">"Voice message, duration: %1$s, current position: %2$s"</string>
@@ -125,7 +125,9 @@
   <string name="action_save">"Save"</string>
   <string name="action_search">"Search"</string>
   <string name="action_send">"Send"</string>
+  <string name="action_send_edited_message">"Send edited message"</string>
   <string name="action_send_message">"Send message"</string>
+  <string name="action_send_voice_message">"Send voice message"</string>
   <string name="action_share">"Share"</string>
   <string name="action_share_link">"Share link"</string>
   <string name="action_show">"Show"</string>
