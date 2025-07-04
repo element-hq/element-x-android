@@ -15,7 +15,6 @@ import java.util.UUID;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import okhttp3.internal.Util;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.ByteString;
@@ -56,7 +55,7 @@ public class BugReporterMultipartBody extends RequestBody {
     private BugReporterMultipartBody(ByteString boundary, List<Part> parts) {
         mBoundary = boundary;
         mContentType = MediaType.parse(FORM + "; boundary=" + boundary.utf8());
-        mParts = Util.toImmutableList(parts);
+        mParts = parts;
     }
 
     @Override
