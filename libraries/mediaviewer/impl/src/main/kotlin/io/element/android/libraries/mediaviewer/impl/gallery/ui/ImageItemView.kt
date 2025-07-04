@@ -21,12 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun ImageItemView(
@@ -38,7 +40,11 @@ fun ImageItemView(
     Box(
         modifier = modifier
             .aspectRatio(1f)
-            .combinedClickable(onClick = onClick, onLongClick = onLongClick),
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
+                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+            ),
     ) {
         var isLoaded by remember { mutableStateOf(false) }
         AsyncImage(

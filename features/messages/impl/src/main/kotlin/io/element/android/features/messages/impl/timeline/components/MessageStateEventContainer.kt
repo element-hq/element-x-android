@@ -17,10 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.ui.strings.CommonStrings
 
 private val CORNER_RADIUS = 8.dp
 
@@ -41,6 +43,7 @@ fun MessageStateEventContainer(
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,
+                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
                 indication = ripple(),
                 interactionSource = interactionSource
             ),

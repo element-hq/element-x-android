@@ -66,7 +66,17 @@ fun TimelineItemStickerView(
                     modifier = Modifier
                         .fillMaxSize()
                         .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
-                        .then(if (onContentClick != null) Modifier.combinedClickable(onClick = onContentClick, onLongClick = onLongClick) else Modifier),
+                        .then(
+                            if (onContentClick != null) {
+                                Modifier
+                                    .combinedClickable(
+                                        onClick = onContentClick,
+                                        onLongClick = onLongClick,
+                                        onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),                                    )
+                            } else {
+                                Modifier
+                            }
+                        ),
                     model = MediaRequestData(
                         source = content.preferredMediaSource,
                         kind = MediaRequestData.Kind.File(

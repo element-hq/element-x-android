@@ -100,7 +100,11 @@ private fun VoiceInfoRow(
                 color = ElementTheme.colors.bgSubtleSecondary,
                 shape = RoundedCornerShape(12.dp),
             )
-            .combinedClickable(onClick = {}, onLongClick = onLongClick)
+            .combinedClickable(
+                onClick = {},
+                onLongClick = onLongClick,
+                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+            )
             .fillMaxWidth()
             .padding(start = 12.dp, end = 36.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,

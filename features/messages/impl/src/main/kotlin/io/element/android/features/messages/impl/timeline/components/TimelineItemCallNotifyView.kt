@@ -51,7 +51,12 @@ internal fun TimelineItemCallNotifyView(
         modifier = modifier
             .fillMaxWidth()
             .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, RoundedCornerShape(8.dp))
-            .combinedClickable(enabled = true, onClick = {}, onLongClick = { onLongClick(event) })
+            .combinedClickable(
+                enabled = true,
+                onClick = {},
+                onLongClick = { onLongClick(event) },
+                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+            )
             .padding(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,

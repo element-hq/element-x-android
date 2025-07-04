@@ -173,6 +173,7 @@ private fun RoomSummaryScaffoldRow(
     val clickModifier = Modifier.combinedClickable(
         onClick = { onClick(room) },
         onLongClick = { onLongClick(room) },
+        onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
         indication = ripple(),
         interactionSource = remember { MutableInteractionSource() }
     )

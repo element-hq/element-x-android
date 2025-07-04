@@ -51,6 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 @Suppress("ModifierClickableOrder") // This is needed to display the right ripple shape
@@ -103,6 +104,7 @@ fun MessagesReactionButton(
                         userAlreadyReacted = content.isHighlighted
                     )
                 },
+                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
                 onLongClick = onLongClick
             )
             // Inner border, to highlight when selected
