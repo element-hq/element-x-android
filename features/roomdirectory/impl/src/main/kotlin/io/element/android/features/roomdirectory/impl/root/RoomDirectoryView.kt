@@ -44,7 +44,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.FilledTextField
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -91,12 +90,7 @@ private fun RoomDirectoryTopBar(
         navigationIcon = {
             BackButton(onClick = onBackClick)
         },
-        title = {
-            Text(
-                text = stringResource(id = R.string.screen_room_directory_search_title),
-                style = ElementTheme.typography.aliasScreenTitle,
-            )
-        }
+        titleStr = stringResource(id = R.string.screen_room_directory_search_title),
     )
 }
 

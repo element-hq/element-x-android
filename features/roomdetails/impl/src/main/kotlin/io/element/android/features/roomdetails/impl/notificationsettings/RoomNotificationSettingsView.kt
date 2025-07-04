@@ -30,9 +30,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -168,12 +166,7 @@ private fun RoomNotificationSettingsTopBar(
     onBackClick: () -> Unit,
 ) {
     TopAppBar(
-        title = {
-            Text(
-                text = stringResource(R.string.screen_room_details_notification_title),
-                style = ElementTheme.typography.aliasScreenTitle,
-            )
-        },
+        titleStr = stringResource(R.string.screen_room_details_notification_title),
         navigationIcon = { BackButton(onClick = onBackClick) },
     )
 }

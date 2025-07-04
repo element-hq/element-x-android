@@ -56,7 +56,6 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
@@ -96,16 +95,10 @@ fun ChangeRolesView(
             topBar = {
                 AnimatedVisibility(visible = !state.isSearchActive) {
                     TopAppBar(
-                        title = {
-                            val title = when (state.role) {
-                                RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_change_role_administrators_title)
-                                RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_change_role_moderators_title)
-                                RoomMember.Role.USER -> error("This should never be reached")
-                            }
-                            Text(
-                                text = title,
-                                style = ElementTheme.typography.aliasScreenTitle,
-                            )
+                        titleStr = when (state.role) {
+                            RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_change_role_administrators_title)
+                            RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_change_role_moderators_title)
+                            RoomMember.Role.USER -> error("This should never be reached")
                         },
                         navigationIcon = {
                             BackButton(onClick = { state.eventSink(ChangeRolesEvent.Exit) })

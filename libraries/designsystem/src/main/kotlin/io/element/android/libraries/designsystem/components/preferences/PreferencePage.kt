@@ -21,6 +21,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -78,6 +80,9 @@ private fun PreferenceTopAppBar(
         },
         title = {
             Text(
+                modifier = Modifier.semantics {
+                    heading()
+                },
                 text = title,
                 style = ElementTheme.typography.aliasScreenTitle,
                 maxLines = 1,

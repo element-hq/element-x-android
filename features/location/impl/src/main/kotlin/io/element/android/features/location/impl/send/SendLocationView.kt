@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
@@ -42,7 +41,6 @@ import io.element.android.features.location.impl.common.PermissionRationaleDialo
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -162,12 +160,7 @@ fun SendLocationView(
         sheetSwipeEnabled = false,
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(CommonStrings.screen_share_location_title),
-                        style = ElementTheme.typography.aliasScreenTitle,
-                    )
-                },
+                titleStr = stringResource(CommonStrings.screen_share_location_title),
                 navigationIcon = {
                     BackButton(onClick = navigateUp)
                 },

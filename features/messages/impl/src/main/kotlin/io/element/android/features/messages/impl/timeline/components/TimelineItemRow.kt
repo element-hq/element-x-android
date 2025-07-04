@@ -145,14 +145,15 @@ internal fun TimelineItemRow(
                                 // Custom clickable that applies over the whole item for accessibility
                                 .then(
                                     if (isTalkbackActive()) {
-                                    Modifier.combinedClickable(
-                                    onClick = { onContentClick(timelineItem) },
-                                    onLongClick = { onLongClick(timelineItem) }
-                                    )
-                                } else {
-                                    Modifier
-                                }
-                            ),
+                                        Modifier.combinedClickable(
+                                            onClick = { onContentClick(timelineItem) },
+                                            onLongClick = { onLongClick(timelineItem) },
+                                            onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+                                        )
+                                    } else {
+                                        Modifier
+                                    }
+                                ),
                             event = timelineItem,
                             timelineRoomInfo = timelineRoomInfo,
                             renderReadReceipts = renderReadReceipts,

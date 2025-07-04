@@ -38,7 +38,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -95,14 +94,9 @@ fun RoomSelectView(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = when (state.mode) {
-                            RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_message)
-                            RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
-                        },
-                        style = ElementTheme.typography.aliasScreenTitle
-                    )
+                titleStr = when (state.mode) {
+                    RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_message)
+                    RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                 },
                 navigationIcon = {
                     BackButton(onClick = { onBackButton(state) })

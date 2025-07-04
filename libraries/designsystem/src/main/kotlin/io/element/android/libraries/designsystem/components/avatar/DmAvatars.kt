@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
-import io.element.android.libraries.designsystem.modifiers.a11yClickLabel
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.text.toPx
@@ -52,7 +51,6 @@ fun DmAvatars(
     val boxSizePx = boxSize.toPx()
     val otherAvatarRadius = otherUserAvatarData.size.dp.toPx() / 2
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val actionView = stringResource(CommonStrings.action_view)
     Box(
         modifier = modifier.size(boxSize),
     ) {
@@ -84,10 +82,12 @@ fun DmAvatars(
                     )
                 }
                 .clip(CircleShape)
-                .clickable(enabled = userAvatarData.url != null) {
+                .clickable(
+                    enabled = userAvatarData.url != null,
+                    onClickLabel = stringResource(CommonStrings.action_view),
+                ) {
                     userAvatarData.url?.let { openAvatarPreview(it) }
                 }
-                .a11yClickLabel(userAvatarData.url?.let { actionView })
         )
         // Draw other user avatar
         Avatar(
@@ -97,11 +97,13 @@ fun DmAvatars(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .clip(CircleShape)
-                .clickable(enabled = otherUserAvatarData.url != null) {
+                .clickable(
+                    enabled = otherUserAvatarData.url != null,
+                    onClickLabel = stringResource(CommonStrings.action_view),
+                ) {
                     otherUserAvatarData.url?.let { openOtherAvatarPreview(it) }
                 }
                 .testTag(TestTags.memberDetailAvatar)
-                .a11yClickLabel(otherUserAvatarData.url?.let { actionView })
         )
     }
 }

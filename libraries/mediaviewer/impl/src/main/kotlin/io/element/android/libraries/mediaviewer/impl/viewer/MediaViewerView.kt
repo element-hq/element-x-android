@@ -43,6 +43,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -212,6 +214,9 @@ fun MediaViewerView(
                             title = {
                                 if (currentData is MediaViewerPageData.Loading) {
                                     Text(
+                                        modifier = Modifier.semantics {
+                                            heading()
+                                        },
                                         text = stringResource(id = CommonStrings.common_loading_more),
                                         style = ElementTheme.typography.fontBodyMdMedium,
                                         color = ElementTheme.colors.textPrimary,
@@ -454,6 +459,9 @@ private fun MediaViewerTopBar(
                         .fillMaxWidth()
                 ) {
                     Text(
+                        modifier = Modifier.semantics {
+                            heading()
+                        },
                         text = senderName,
                         style = ElementTheme.typography.fontBodyMdMedium,
                         color = ElementTheme.colors.textPrimary,

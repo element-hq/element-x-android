@@ -48,7 +48,6 @@ import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -189,12 +188,7 @@ private fun ConfigureRoomToolbar(
     onNextClick: () -> Unit,
 ) {
     TopAppBar(
-        title = {
-            Text(
-                text = stringResource(R.string.screen_create_room_title),
-                style = ElementTheme.typography.aliasScreenTitle,
-            )
-        },
+        titleStr = stringResource(R.string.screen_create_room_title),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             TextButton(

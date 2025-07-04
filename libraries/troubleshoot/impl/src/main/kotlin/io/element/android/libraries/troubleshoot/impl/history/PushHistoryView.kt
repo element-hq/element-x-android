@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -41,7 +40,6 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -78,14 +76,7 @@ fun PushHistoryView(
                 navigationIcon = {
                     BackButton(onClick = onBackClick)
                 },
-                title = {
-                    Text(
-                        text = stringResource(R.string.screen_push_history_title),
-                        style = ElementTheme.typography.aliasScreenTitle,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
+                titleStr = stringResource(R.string.screen_push_history_title),
                 actions = {
                     IconButton(onClick = { showMenu = !showMenu }) {
                         Icon(

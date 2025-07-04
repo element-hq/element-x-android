@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -28,7 +30,10 @@ fun DateItemView(
     Text(
         modifier = modifier
             .fillMaxWidth()
-            .padding(12.dp),
+            .padding(12.dp)
+            .semantics {
+                heading()
+            },
         text = item.formattedDate,
         textAlign = TextAlign.Center,
         style = ElementTheme.typography.fontBodyMdMedium,

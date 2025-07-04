@@ -23,7 +23,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +36,7 @@ fun DependenciesDetailsView(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(text = licenseItem.safeName) },
+                titleStr = licenseItem.safeName,
                 navigationIcon = { BackButton(onClick = onBack) },
             )
         },

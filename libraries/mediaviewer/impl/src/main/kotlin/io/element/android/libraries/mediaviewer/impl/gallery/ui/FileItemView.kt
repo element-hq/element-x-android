@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,7 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun FileItemView(
@@ -77,7 +79,11 @@ private fun FilenameRow(
                 color = ElementTheme.colors.bgSubtleSecondary,
                 shape = RoundedCornerShape(12.dp),
             )
-            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
+                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+            )
             .fillMaxWidth()
             .padding(start = 12.dp, end = 36.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
