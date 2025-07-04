@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Anonyme Umfrage"</string>
   <string name="screen_create_poll_answer_hint">"Option %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Ihre Änderungen wurden nicht gespeichert. Sind Sie sicher, dass Sie zurückgehen wollen?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Lösche Option %1$s"</string>
   <string name="screen_create_poll_question_desc">"Frage oder Thema"</string>
   <string name="screen_create_poll_question_hint">"Worum geht es bei der Umfrage?"</string>
   <string name="screen_create_poll_title">"Umfrage erstellen"</string>

@@ -3,5 +3,6 @@
   <string name="call_foreground_service_channel_title_android">"Chamada em andamento"</string>
   <string name="call_foreground_service_message_android">"Toque para retornar à chamada"</string>
   <string name="call_foreground_service_title_android">"☎️ Chamada em andamento"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"O Element Call não tem suporte a dispositivos de áudio Bluetooth nesta versão do Android. Por favor, selecione um dispositivo de áudio diferente."</string>
   <string name="screen_incoming_call_subtitle_android">"Chamada do Element recebida"</string>
 </resources>

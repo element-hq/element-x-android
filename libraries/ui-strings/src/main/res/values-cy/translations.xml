@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Ychwanegu adwaith: %1$s"</string>
   <string name="a11y_avatar">"Afatar"</string>
   <string name="a11y_delete">"Dileu"</string>
   <plurals name="a11y_digits_entered">
-    <item quantity="zero">"%1$d nodau wedi eu cynnig"</item>
-    <item quantity="one">"%1$d nod wedi ei gynnig"</item>
-    <item quantity="two">"%1$d nod wedi eu cynnig"</item>
-    <item quantity="few">"%1$d nod wedi eu cynnig"</item>
-    <item quantity="many">"%1$d nod wedi eu cynnig"</item>
-    <item quantity="other">"%1$d nod wedi eu cynnig"</item>
+    <item quantity="%1$d nodau wedi eu cynnig">"zero"</item>
+    <item quantity="%1$d nod wedi ei gynnig">"one"</item>
+    <item quantity="%1$d nod wedi eu cynnig">"two"</item>
+    <item quantity="%1$d nod wedi eu cynnig">"few"</item>
+    <item quantity="%1$d nod wedi eu cynnig">"many"</item>
+    <item quantity="%1$d nod wedi eu cynnig">"other"</item>
   </plurals>
   <string name="a11y_hide_password">"Cuddio cyfrinair"</string>
   <string name="a11y_join_call">"Ymuno â galwad"</string>
   <string name="a11y_jump_to_bottom">"Symud i\'r gwaelod"</string>
   <string name="a11y_notifications_mentions_only">"Crybwylliadau\'n unig"</string>
   <string name="a11y_notifications_muted">"Wedi\'i Dewi"</string>
+  <string name="a11y_other_user_avatar">"Afatar defnyddiwr arall"</string>
   <string name="a11y_page_n">"Tudalen %1$d"</string>
   <string name="a11y_pause">"Oedi"</string>
   <string name="a11y_paused_voice_message">"Neges llais, hyd: %1$s, safle presennol: %2$s"</string>
@@ -26,24 +28,29 @@
   <string name="a11y_react_with_other_emojis">"Ymateb gydag emojis eraill"</string>
   <string name="a11y_read_receipts_multiple">"Wedi\'i ddarllen gan %1$s a %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="zero">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="one">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="two">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="few">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="many">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="other">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"zero"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"one"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"two"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"few"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"many"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"other"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Wedi\'i ddarllen gan %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tapio i ddangos y cyfan"</string>
   <string name="a11y_remove_reaction">"Wedi dileu adwaith gyda %1$s"</string>
+  <string name="a11y_remove_reaction_with">"Wedi dileu adwaith gyda %1$s"</string>
+  <string name="a11y_room_avatar">"Afatar ystafell"</string>
   <string name="a11y_send_files">"Anfon ffeiliau"</string>
   <string name="a11y_show_password">"Dangos y cyfrinair"</string>
   <string name="a11y_start_call">"Cychwyn galwad"</string>
+  <string name="a11y_user_avatar">"Afatar defnyddiwr"</string>
   <string name="a11y_user_menu">"Dewislen defnyddiwr"</string>
+  <string name="a11y_view_avatar">"Gweld afatar"</string>
   <string name="a11y_view_details">"Manylion"</string>
   <string name="a11y_voice_message">"Neges llais, hyd: %1$s"</string>
   <string name="a11y_voice_message_record">"Recordio neges llais."</string>
   <string name="a11y_voice_message_stop_recording">"Stopio recordio"</string>
+  <string name="a11y_your_avatar">"Eich afatar"</string>
   <string name="action_accept">"Derbyn"</string>
   <string name="action_add_caption">"Ychwanegu capsiwn"</string>
   <string name="action_add_to_timeline">"Ychwanegu at y llinell amser"</string>
@@ -142,6 +149,7 @@
   <string name="action_tap_for_options">"Tapio am ddewisiadau"</string>
   <string name="action_try_again">"Ceisiwch eto"</string>
   <string name="action_unpin">"Dad-binio"</string>
+  <string name="action_view">"Golwg"</string>
   <string name="action_view_in_timeline">"Gweld yn yr amserlen"</string>
   <string name="action_view_source">"Gweld ffynhonnell"</string>
   <string name="action_yes">"Iawn"</string>
@@ -152,6 +160,7 @@
   <string name="common_acceptable_use_policy">"Polisi defnydd derbyniol"</string>
   <string name="common_adding_caption">"Ychwanegu capsiwn"</string>
   <string name="common_advanced_settings">"Gosodiadau uwch"</string>
+  <string name="common_an_image">"Delwedd wedi\'i thocio."</string>
   <string name="common_analytics">"Dadansoddeg"</string>
   <string name="common_appearance">"Gwedd"</string>
   <string name="common_audio">"Sain"</string>
@@ -207,20 +216,20 @@ Rheswm: %1$s."</string>
   <string name="common_loading">"Yn Llwytho…"</string>
   <string name="common_loading_more">"Wrthi\'n llwytho mwy…"</string>
   <plurals name="common_many_members">
-    <item quantity="zero">"%d arall"</item>
-    <item quantity="one">"%d arall"</item>
-    <item quantity="two">"%d arall"</item>
-    <item quantity="few">"%d arall"</item>
-    <item quantity="many">"%d arall"</item>
-    <item quantity="other">"%d arall"</item>
+    <item quantity="%d arall">"zero"</item>
+    <item quantity="%d arall">"one"</item>
+    <item quantity="%d arall">"two"</item>
+    <item quantity="%d arall">"few"</item>
+    <item quantity="%d arall">"many"</item>
+    <item quantity="%d arall">"other"</item>
   </plurals>
   <plurals name="common_member_count">
-    <item quantity="zero">"%1$d aelodau"</item>
-    <item quantity="one">"%1$d aelod"</item>
-    <item quantity="two">"%1$d aelod"</item>
-    <item quantity="few">"%1$d aelod"</item>
-    <item quantity="many">"%1$d aelod"</item>
-    <item quantity="other">"%1$d aelod"</item>
+    <item quantity="%1$d aelodau">"zero"</item>
+    <item quantity="%1$d aelod">"one"</item>
+    <item quantity="%1$d aelod">"two"</item>
+    <item quantity="%1$d aelod">"few"</item>
+    <item quantity="%1$d aelod">"many"</item>
+    <item quantity="%1$d aelod">"other"</item>
   </plurals>
   <string name="common_message">"Neges"</string>
   <string name="common_message_actions">"Gweithredoedd neges"</string>
@@ -247,12 +256,12 @@ Rheswm: %1$s."</string>
   <string name="common_poll_total_votes">"Cyfanswm y pleidleisiau: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Bydd y canlyniadau\'n dangos ar ôl i\'r bleidlais ddod i ben"</string>
   <plurals name="common_poll_votes_count">
-    <item quantity="zero">"%d pleidleisiau"</item>
-    <item quantity="one">"%d pleidlais"</item>
-    <item quantity="two">"%d pleidlais"</item>
-    <item quantity="few">"%d pleidlais"</item>
-    <item quantity="many">"%d pleidlais"</item>
-    <item quantity="other">"%d pleidlais"</item>
+    <item quantity="%d pleidleisiau">"zero"</item>
+    <item quantity="%d pleidlais">"one"</item>
+    <item quantity="%d pleidlais">"two"</item>
+    <item quantity="%d pleidlais">"few"</item>
+    <item quantity="%d pleidlais">"many"</item>
+    <item quantity="%d pleidlais">"other"</item>
   </plurals>
   <string name="common_privacy_policy">"Polisi preifatrwydd"</string>
   <string name="common_reaction">"Adwaith"</string>
@@ -279,6 +288,7 @@ Rheswm: %1$s."</string>
   <string name="common_sending">"Yn anfon…"</string>
   <string name="common_sending_failed">"Methodd anfon"</string>
   <string name="common_sent">"Anfonwyd"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Nid yw\'r gweinydd yn cael ei gynnal"</string>
   <string name="common_server_url">"URL gweinydd"</string>
   <string name="common_settings">"Gosodiadau"</string>
@@ -344,6 +354,7 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="error_failed_loading_messages">"Wedi methu llwytho negeseuon"</string>
   <string name="error_failed_locating_user">"Doedd dim modd i %1$s gael mynediad i\'ch lleoliad. Ceisiwch eto yn nes ymlaen."</string>
   <string name="error_failed_uploading_voice_message">"Wedi methu llwytho eich neges llais."</string>
+  <string name="error_invalid_invite">"Nid yw\'r ystafell yn bodoli mwyach neu nid yw\'r gwahoddiad yn ddilys mwyach."</string>
   <string name="error_message_not_found">"Neges heb ei chanfod"</string>
   <string name="error_missing_location_auth_android">"Does gan %1$s ddim caniatâd i gael mynediad i\'ch lleoliad. Gallwch alluogi mynediad yn y Gosodiadau."</string>
   <string name="error_missing_location_rationale_android">"Does gan %1$s ddim caniatâd i gael mynediad i\'ch lleoliad. Galluogwch fynediad isod."</string>
@@ -353,6 +364,7 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="error_room_address_invalid_symbols">"Dyw rhai nodau ddim yn cael eu caniatáu. Dim ond llythrennau, digidau a\'r symbolau canlynol sy\'n cael eu cefnogi ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Nid yw rhai negeseuon wedi\'u hanfon"</string>
   <string name="error_unknown">"Ymddiheuriadau, mae gwall wedi digwydd"</string>
+  <string name="event_shield_mismatched_sender">"Nid yw anfonwr y digwyddiad yn cyfateb i berchennog y ddyfais a\'i hanfonodd."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Nid oes modd gwarantu dilysrwydd y neges hon sydd wedi\'i hamgryptio ar y ddyfais hon."</string>
   <string name="event_shield_reason_previously_verified">"Wedi\'i amgryptio gan ddefnyddiwr a wiriwyd gynt."</string>
   <string name="event_shield_reason_sent_in_clear">"Heb ei amgryptio."</string>
@@ -363,6 +375,10 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="invite_friends_text">"Hei, siaradwch â mi ar %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"Android %1$s"</string>
   <string name="preference_rageshake">"Rageshake i adrodd gwall"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Dewisiadau"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Tynnu %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Gosodiadau"</string>
   <string name="screen_media_picker_error_failed_selection">"Wedi methu dewis cyfrwng, ceisiwch eto."</string>
   <string name="screen_media_upload_preview_caption_warning">"Efallai na fydd capsiynau yn weladwy i bobl sy\'n defnyddio apiau hŷn."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Wedi methu â phrosesu cyfryngau i\'w llwytho, ceisiwch eto."</string>
@@ -370,12 +386,12 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Pwyswch ar neges a dewis “%1$s” i\'w cynnwys yma."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pinio negeseuon pwysig fel y mae modd eu darganfod yn hawdd"</string>
   <plurals name="screen_pinned_timeline_screen_title">
-    <item quantity="zero">"%1$d Negeseuon wedi\'u pinio"</item>
-    <item quantity="one">"%1$d Neges wedi\'i phinio"</item>
-    <item quantity="two">"%1$d Neges wedi\'i phinio"</item>
-    <item quantity="few">"%1$d Neges wedi\'i phinio"</item>
-    <item quantity="many">"%1$d Neges wedi\'i phinio"</item>
-    <item quantity="other">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="%1$d Negeseuon wedi'u pinio">"zero"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"one"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"two"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"few"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"many"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"other"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Negeseuon wedi\'u pinio"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Rydych chi ar fin mynd i\'ch cyfrif %1$s i ailosod eich hunaniaeth. Wedi hynny byddwch yn cael eich tywys yn ôl i\'r ap."</string>
@@ -391,6 +407,9 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_room_error_failed_processing_media">"Wedi methu â phrosesu cyfryngau i\'w llwytho, ceisiwch eto."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Methu â nôl manylion defnyddiwr"</string>
   <string name="screen_room_event_pill">"Neges yn %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Dangos"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Lleihau"</string>
+  <string name="screen_room_permalink_same_room_android">"Eisoes yn gweld yr ystafell hon!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s o %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Neges wedi\'u pinio"</string>
   <string name="screen_room_pinned_banner_loading_description">"Wrthi\'n llwytho neges…"</string>

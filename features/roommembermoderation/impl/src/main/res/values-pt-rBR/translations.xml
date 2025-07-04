@@ -12,4 +12,9 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Remover da sala"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Remover membro e banir de entrar novamente no futuro?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Removendo %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Desbanir da sala"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Desbanir"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Essa pessoa poderia entrar na sala novamente se for convidada"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Tem certeza que quer desbanir esse membro?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Desbanindo %1$s"</string>
 </resources>

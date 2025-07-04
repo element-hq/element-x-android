@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"Riwayat dorongan"</string>
   <string name="troubleshoot_notifications_screen_action">"Jalankan tes"</string>
   <string name="troubleshoot_notifications_screen_action_again">"Jalankan tes lagi"</string>
   <string name="troubleshoot_notifications_screen_failure">"Beberapa tes gagal. Silakan periksa detailnya."</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"Cronologia push"</string>
   <string name="troubleshoot_notifications_screen_action">"Esegui i test"</string>
   <string name="troubleshoot_notifications_screen_action_again">"Esegui nuovamente i test"</string>
   <string name="troubleshoot_notifications_screen_failure">"Alcuni test sono falliti. Si prega di controllare i dettagli."</string>

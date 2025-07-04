@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Nonaktifkan pengoptimalan baterai untuk aplikasi ini, untuk memastikan semua notifikasi diterima."</string>
+  <string name="banner_battery_optimization_submit_android">"Nonaktifkan optimasi"</string>
+  <string name="banner_battery_optimization_title_android">"Notifikasi tidak masuk?"</string>
   <string name="banner_set_up_recovery_content">"Buat kunci pemulihan baru yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi Anda jika Anda kehilangan akses ke perangkat Anda."</string>
   <string name="banner_set_up_recovery_submit">"Siapkan pemulihan"</string>
   <string name="banner_set_up_recovery_title">"Siapkan pemulihan"</string>
@@ -18,6 +21,7 @@
   <string name="screen_migration_message">"Ini adalah proses satu kali, terima kasih telah menunggu."</string>
   <string name="screen_migration_title">"Menyiapkan akun Anda."</string>
   <string name="screen_roomlist_a11y_create_message">"Buat percakapan atau ruangan baru"</string>
+  <string name="screen_roomlist_clear_filters">"Hapus filter"</string>
   <string name="screen_roomlist_empty_message">"Mulailah dengan mengirim pesan kepada seseorang."</string>
   <string name="screen_roomlist_empty_title">"Belum ada obrolan."</string>
   <string name="screen_roomlist_filter_favourites">"Favorit"</string>
@@ -40,6 +44,7 @@ Anda tidak memiliki pesan yang belum dibaca!"</string>
   <string name="screen_roomlist_main_space_title">"Semua Obrolan"</string>
   <string name="screen_roomlist_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Ruangan ini telah ditingkatkan"</string>
   <string name="session_verification_banner_message">"Sepertinya Anda menggunakan perangkat baru. Verifikasi dengan perangkat lain untuk mengakses pesan terenkripsi Anda selanjutnya."</string>
   <string name="session_verification_banner_title">"Verifikasi bahwa ini Anda"</string>
 </resources>

@@ -3,5 +3,6 @@
   <string name="call_foreground_service_channel_title_android">"Galwad cyfredol"</string>
   <string name="call_foreground_service_message_android">"Tapio i ddychwelyd i\'r alwad"</string>
   <string name="call_foreground_service_title_android">"☎️ Galwad ar y gweill"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Nid yw Element Call yn cefnogi defnyddio dyfeisiau sain Bluetooth yn y fersiwn Android hon. Dewiswch ddyfais sain wahanol."</string>
   <string name="screen_incoming_call_subtitle_android">"Galwad Element"</string>
 </resources>

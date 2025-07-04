@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Tambahkan reaksi: %1$s"</string>
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Hapus"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"%1$d digit dimasukkan"</item>
   </plurals>
   <string name="a11y_hide_password">"Sembunyikan kata sandi"</string>
+  <string name="a11y_join_call">"Bergabung dalam panggilan"</string>
   <string name="a11y_jump_to_bottom">"Lompat ke bawah"</string>
   <string name="a11y_notifications_mentions_only">"Hanya sebutan"</string>
   <string name="a11y_notifications_muted">"Dibisukan"</string>
+  <string name="a11y_other_user_avatar">"Avatar pengguna lain"</string>
   <string name="a11y_page_n">"Halaman %1$d"</string>
   <string name="a11y_pause">"Jeda"</string>
+  <string name="a11y_paused_voice_message">"Pesan suara, durasi: %1$s, posisi saat ini: %2$s"</string>
   <string name="a11y_pin_field">"Kolom PIN"</string>
   <string name="a11y_play">"Putar"</string>
   <string name="a11y_poll">"Pemungutan suara"</string>
@@ -23,12 +28,19 @@
   <string name="a11y_read_receipts_single">"Dibaca oleh %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Ketuk untuk melihat semua"</string>
   <string name="a11y_remove_reaction">"Hapus reaksi dengan %1$s"</string>
+  <string name="a11y_remove_reaction_with">"Hapus reaksi dengan %1$s"</string>
+  <string name="a11y_room_avatar">"Avatar ruangan"</string>
   <string name="a11y_send_files">"Kirim berkas"</string>
   <string name="a11y_show_password">"Tampilkan kata sandi"</string>
   <string name="a11y_start_call">"Mulai panggilan"</string>
+  <string name="a11y_user_avatar">"Avatar pengguna"</string>
   <string name="a11y_user_menu">"Menu pengguna"</string>
+  <string name="a11y_view_avatar">"Lihat avatar"</string>
+  <string name="a11y_view_details">"Lihat detail"</string>
+  <string name="a11y_voice_message">"Pesan suara, durasi: %1$s"</string>
   <string name="a11y_voice_message_record">"Rekam pesan suara."</string>
   <string name="a11y_voice_message_stop_recording">"Berhenti merekam"</string>
+  <string name="a11y_your_avatar">"Avatar Anda"</string>
   <string name="action_accept">"Terima"</string>
   <string name="action_add_caption">"Tambahkan keterangan"</string>
   <string name="action_add_to_timeline">"Tambahkan ke lini masa"</string>
@@ -53,9 +65,11 @@
   <string name="action_deactivate">"Nonaktifkan"</string>
   <string name="action_deactivate_account">"Nonaktifkan akun"</string>
   <string name="action_decline">"Tolak"</string>
+  <string name="action_decline_and_block">"Tolak dan blokir"</string>
   <string name="action_delete_poll">"Hapus pemungutan suara"</string>
   <string name="action_disable">"Nonaktifkan"</string>
   <string name="action_discard">"Abaikan"</string>
+  <string name="action_dismiss">"Abaikan"</string>
   <string name="action_done">"Selesai"</string>
   <string name="action_edit">"Sunting"</string>
   <string name="action_edit_caption">"Sunting keterangan"</string>
@@ -97,8 +111,11 @@
   <string name="action_remove_message">"Hapus pesan"</string>
   <string name="action_reply">"Balas"</string>
   <string name="action_reply_in_thread">"Balas dalam utas"</string>
+  <string name="action_report">"Laporkan"</string>
   <string name="action_report_bug">"Laporkan kutu"</string>
   <string name="action_report_content">"Laporkan Konten"</string>
+  <string name="action_report_dm">"Laporkan percakapan"</string>
+  <string name="action_report_room">"Laporkan ruangan"</string>
   <string name="action_reset">"Atur ulang"</string>
   <string name="action_reset_identity">"Atur ulang identitas"</string>
   <string name="action_retry">"Coba lagi"</string>
@@ -122,6 +139,7 @@
   <string name="action_tap_for_options">"Ketuk untuk opsi"</string>
   <string name="action_try_again">"Coba lagi"</string>
   <string name="action_unpin">"Lepaskan sematan"</string>
+  <string name="action_view">"Lihat"</string>
   <string name="action_view_in_timeline">"Lihat di lini masa"</string>
   <string name="action_view_source">"Tampilkan sumber"</string>
   <string name="action_yes">"Ya"</string>
@@ -132,6 +150,7 @@
   <string name="common_acceptable_use_policy">"Kebijakan penggunaan wajar"</string>
   <string name="common_adding_caption">"Menambahkan keterangan"</string>
   <string name="common_advanced_settings">"Pengaturan tingkat lanjut"</string>
+  <string name="common_an_image">"sebuah gambar"</string>
   <string name="common_analytics">"Analitik"</string>
   <string name="common_appearance">"Penampilan"</string>
   <string name="common_audio">"Audio"</string>
@@ -142,7 +161,9 @@
   <string name="common_copied_to_clipboard">"Disalin ke papan klip"</string>
   <string name="common_copyright">"Hak cipta"</string>
   <string name="common_creating_room">"Membuat ruangan…"</string>
+  <string name="common_current_user_canceled_knock">"Permintaan dibatalkan"</string>
   <string name="common_current_user_left_room">"Keluar dari ruangan"</string>
+  <string name="common_current_user_rejected_invite">"Undangan ditolak"</string>
   <string name="common_dark">"Gelap"</string>
   <string name="common_decryption_error">"Kesalahan dekripsi"</string>
   <string name="common_developer_options">"Opsi pengembang"</string>
@@ -155,6 +176,7 @@
   <string name="common_editing">"Penyuntingan"</string>
   <string name="common_editing_caption">"Menyunting keterangan"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Berkas kosong"</string>
   <string name="common_encryption">"Enkripsi"</string>
   <string name="common_encryption_enabled">"Enkripsi diaktifkan"</string>
   <string name="common_enter_your_pin">"Masukkan PIN Anda"</string>
@@ -179,8 +201,10 @@ Alasan: %1$s."</string>
   <string name="common_invite_unknown_profile">"ID Matrix ini tidak dapat ditemukan, sehingga undangan mungkin tidak diterima."</string>
   <string name="common_leaving_room">"Meninggalkan ruangan"</string>
   <string name="common_light">"Terang"</string>
+  <string name="common_line_copied_to_clipboard">"Baris disalin ke papan klip"</string>
   <string name="common_link_copied_to_clipboard">"Tautan disalin ke papan klip"</string>
   <string name="common_loading">"Memuat…"</string>
+  <string name="common_loading_more">"Memuat lebih banyak…"</string>
   <plurals name="common_many_members">
     <item quantity="other">"%d lainnya"</item>
   </plurals>
@@ -193,8 +217,10 @@ Alasan: %1$s."</string>
   <string name="common_message_removed">"Pesan dihapus"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Bisukan"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Tidak ada hasil"</string>
   <string name="common_no_room_name">"Tidak ada nama ruangan"</string>
+  <string name="common_not_encrypted">"Tidak terenkripsi"</string>
   <string name="common_offline">"Luring"</string>
   <string name="common_open_source_licenses">"Lisensi sumber terbuka"</string>
   <string name="common_or">"atau"</string>
@@ -203,6 +229,7 @@ Alasan: %1$s."</string>
   <string name="common_permalink">"Tautan Permanen"</string>
   <string name="common_permission">"Perizinan"</string>
   <string name="common_pinned">"Disematkan"</string>
+  <string name="common_please_check_internet_connection">"Silakan periksa koneksi internet Anda"</string>
   <string name="common_please_wait">"Mohon tunggu…"</string>
   <string name="common_poll_end_confirmation">"Apakah Anda yakin ingin mengakhiri pemungutan suara ini?"</string>
   <string name="common_poll_summary">"Pemungutan suara: %1$s"</string>
@@ -214,8 +241,12 @@ Alasan: %1$s."</string>
   <string name="common_privacy_policy">"Kebijakan privasi"</string>
   <string name="common_reaction">"Reaksi"</string>
   <string name="common_reactions">"Reaksi"</string>
+  <string name="common_reason">"Alasan"</string>
   <string name="common_recovery_key">"Kunci pemulihan"</string>
   <string name="common_refreshing">"Menyegarkan…"</string>
+  <plurals name="common_replies">
+    <item quantity="other">"%1$d balasan"</item>
+  </plurals>
   <string name="common_replying_to">"Membalas %1$s"</string>
   <string name="common_report_a_bug">"Laporkan kutu"</string>
   <string name="common_report_a_problem">"Laporkan masalah"</string>
@@ -235,12 +266,14 @@ Alasan: %1$s."</string>
   <string name="common_sending">"Mengirim…"</string>
   <string name="common_sending_failed">"Pengiriman gagal"</string>
   <string name="common_sent">"Terkirim"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Server tidak didukung"</string>
   <string name="common_server_url">"URL Server"</string>
   <string name="common_settings">"Pengaturan"</string>
   <string name="common_shared_location">"Lokasi terbagi"</string>
   <string name="common_signing_out">"Mengeluarkan dari akun"</string>
   <string name="common_something_went_wrong">"Ada yang salah"</string>
+  <string name="common_something_went_wrong_message">"Kami mengalami masalah. Silakan coba lagi."</string>
   <string name="common_starting_chat">"Memulai obrolan…"</string>
   <string name="common_sticker">"Stiker"</string>
   <string name="common_success">"Berhasil"</string>
@@ -269,6 +302,7 @@ Alasan: %1$s."</string>
   <string name="common_verified">"Terverifikasi"</string>
   <string name="common_verify_device">"Verifikasi perangkat"</string>
   <string name="common_verify_identity">"Verifikasi identitas"</string>
+  <string name="common_verify_user">"Verifikasi pengguna"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Pesan suara"</string>
   <string name="common_waiting">"Menunggu…"</string>
@@ -277,6 +311,15 @@ Alasan: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Identitas %1$s telah diatur ulang. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Identitas %2$s %1$s telah diatur ulang. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Identitasnya %1$s sudah diatur ulang."</string>
+  <string name="crypto_identity_change_verification_violation_new">"Identitas %2$s %1$s telah diatur ulang. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Tolak verifikasi"</string>
+  <string name="dialog_confirm_link_message">"Tautan %1$s membawa Anda ke situs lain %2$s
+
+Apakah Anda yakin ingin melanjutkan?"</string>
+  <string name="dialog_confirm_link_title">"Periksa kembali tautan ini"</string>
+  <string name="dialog_room_reported">"Ruangan dilaporkan"</string>
+  <string name="dialog_room_reported_and_left">"Dilaporkan dan ruangan ditinggalkan"</string>
   <string name="dialog_title_confirmation">"Konfirmasi"</string>
   <string name="dialog_title_error">"Eror"</string>
   <string name="dialog_title_success">"Berhasil"</string>
@@ -289,14 +332,17 @@ Alasan: %1$s."</string>
   <string name="error_failed_loading_messages">"Gagal memuat pesan"</string>
   <string name="error_failed_locating_user">"%1$s tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti."</string>
   <string name="error_failed_uploading_voice_message">"Gagal mengunggah pesan suara Anda."</string>
+  <string name="error_invalid_invite">"Ruangan tidak ada lagi atau undangan tidak lagi valid."</string>
   <string name="error_message_not_found">"Pesan tidak ditemukan"</string>
   <string name="error_missing_location_auth_android">"%1$s tidak memiliki izin untuk mengakses lokasi Anda. Anda dapat mengaktifkan akses di Pengaturan."</string>
   <string name="error_missing_location_rationale_android">"%1$s tidak memiliki izin untuk mengakses lokasi Anda. Aktifkan akses di bawah ini."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s tidak memiliki izin untuk mengakses mikrofon. Aktifkan akses untuk merekam pesan suara."</string>
+  <string name="error_network_or_server_issue">"Hal ini mungkin disebabkan oleh masalah jaringan atau server."</string>
   <string name="error_room_address_already_exists">"Alamat ruangan sudah ada, silakan coba sunting kolom alamat ruangan atau ubah nama ruangan"</string>
   <string name="error_room_address_invalid_symbols">"Beberapa karakter tidak diperbolehkan. Hanya huruf, angka, dan simbol berikut didukung ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Beberapa pesan belum terkirim"</string>
   <string name="error_unknown">"Maaf, terjadi kesalahan"</string>
+  <string name="event_shield_mismatched_sender">"Pengirim peristiwa tidak cocok dengan pemilik perangkat yang mengirimnya."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini."</string>
   <string name="event_shield_reason_previously_verified">"Dienkripsi oleh pengguna yang telah diverifikasi sebelumnya."</string>
   <string name="event_shield_reason_sent_in_clear">"Tidak dienkripsi."</string>
@@ -307,6 +353,10 @@ Alasan: %1$s."</string>
   <string name="invite_friends_text">"Hai, bicaralah dengan saya di %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake untuk melaporkan kutu"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Opsi"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Hapus %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Pengaturan"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_caption_warning">"Keterangan mungkin tidak terlihat oleh orang yang menggunakan aplikasi lama."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
@@ -329,6 +379,10 @@ Alasan: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Pesan Anda tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda"</string>
   <string name="screen_room_error_failed_processing_media">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Tidak dapat mengambil detail pengguna"</string>
+  <string name="screen_room_event_pill">"Pesan dalam %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Buka"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Kurangi"</string>
+  <string name="screen_room_permalink_same_room_android">"Sudah melihat ruangan ini!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s dari %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pesan yang disematkan"</string>
   <string name="screen_room_pinned_banner_loading_description">"Memuat pesan…"</string>

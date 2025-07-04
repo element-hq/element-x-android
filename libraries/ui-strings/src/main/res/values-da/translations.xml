@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Tilføj reaktion: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Slet"</string>
   <plurals name="a11y_digits_entered">
@@ -28,10 +29,12 @@
   <string name="a11y_read_receipts_single">"Læst af%1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tryk for at vise alle"</string>
   <string name="a11y_remove_reaction">"Fjern reaktion med%1$s"</string>
+  <string name="a11y_remove_reaction_with">"Fjern reaktion med %1$s"</string>
   <string name="a11y_send_files">"Send filer"</string>
   <string name="a11y_show_password">"Vis adgangskode"</string>
   <string name="a11y_start_call">"Start et opkald"</string>
   <string name="a11y_user_menu">"Brugermenu"</string>
+  <string name="a11y_view_avatar">"Se avatar"</string>
   <string name="a11y_view_details">"Se detaljer"</string>
   <string name="a11y_voice_message">"Talebesked, varighed: %1$s"</string>
   <string name="a11y_voice_message_record">"Optag talebesked."</string>
@@ -329,6 +332,7 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="error_failed_loading_messages">"Fejl under indlæsning af beskeder"</string>
   <string name="error_failed_locating_user">"%1$s kunne ikke få adgang til din placering. Prøv igen senere."</string>
   <string name="error_failed_uploading_voice_message">"Kunne ikke uploade din talebesked."</string>
+  <string name="error_invalid_invite">"Rummet findes ikke længere, eller invitationen er ikke længere gyldig."</string>
   <string name="error_message_not_found">"Meddelelsen blev ikke fundet"</string>
   <string name="error_missing_location_auth_android">"%1$s har ikke tilladelse til at få adgang til din placering. Du kan aktivere adgang i Indstillinger."</string>
   <string name="error_missing_location_rationale_android">"%1$s har ikke tilladelse til at se din placering. Aktivér adgang nedenfor."</string>
@@ -377,6 +381,9 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_room_error_failed_processing_media">"Det lykkedes ikke at behandle medier til upload. Prøv venligst igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunne ikke hente brugeroplysninger"</string>
   <string name="screen_room_event_pill">"Besked i %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Udvid"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Reducér"</string>
+  <string name="screen_room_permalink_same_room_android">"Du ser allerede dette rum!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s af %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Fastgjorte beskeder"</string>
   <string name="screen_room_pinned_banner_loading_description">"Indlæser besked…"</string>

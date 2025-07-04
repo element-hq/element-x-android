@@ -8,14 +8,22 @@
   <string name="screen_advanced_settings_element_call_base_url">"URL dasar Element Call khusus"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Tetapkan URL dasar khusus untuk Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL tidak valid, pastikan Anda menyertakan protokol (http/https) dan alamat yang benar."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Sembunyikan avatar dalam permintaan undangan ruangan"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Sembunyikan pratinjau media pada lini masa"</string>
   <string name="screen_advanced_settings_media_compression_description">"Unggah foto dan video lebih cepat dan kurangi penggunaan data"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimalkan kualitas media"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderasi dan Keamanan"</string>
   <string name="screen_advanced_settings_push_provider_android">"Penyedia notifikasi dorongan"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Nonaktifkan penyunting teks kaya untuk mengetik Markdown secara manual."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Laporan dibaca"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Jika dimatikan, laporan dibaca Anda tidak akan dikirim kepada siapa pun. Anda masih akan menerima laporan dibaca dari pengguna lain."</string>
   <string name="screen_advanced_settings_share_presence">"Bagikan presensi"</string>
   <string name="screen_advanced_settings_share_presence_description">"Jika dimatikan, Anda tidak akan dapat mengirim atau menerima laporan dibaca atau notifikasi pengetikan"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Selalu sembunyikan"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Selalu tampilkan"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Dalam ruangan privat"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Media tersembunyi selalu dapat ditampilkan dengan mengetuknya"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Tampilkan media pada lini masa"</string>
   <string name="screen_advanced_settings_view_source_description">"Aktifkan opsi untuk melihat sumber pesan dalam lini masa."</string>
   <string name="screen_blocked_users_empty">"Anda tidak memiliki pengguna yang diblokir"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Buka blokir"</string>
@@ -57,6 +65,7 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"pengaturan sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Pemberitahuan sistem dimatikan"</string>
   <string name="screen_notification_settings_title">"Notifikasi"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Riwayat dorongan"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Pemecahan masalah"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Pecahkan masalah notifikasi"</string>
 </resources>

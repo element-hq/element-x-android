@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Adicionar reação: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Excluir"</string>
   <plurals name="a11y_digits_entered">
@@ -28,10 +29,12 @@
   <string name="a11y_read_receipts_single">"Lido por %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Toque para mostrar tudo"</string>
   <string name="a11y_remove_reaction">"Remover reação com %1$s"</string>
+  <string name="a11y_remove_reaction_with">"Remover reação com %1$s"</string>
   <string name="a11y_send_files">"Enviar arquivos"</string>
   <string name="a11y_show_password">"Mostrar senha"</string>
   <string name="a11y_start_call">"Iniciar uma chamada"</string>
   <string name="a11y_user_menu">"Menu do usuário"</string>
+  <string name="a11y_view_avatar">"Ver avatar"</string>
   <string name="a11y_view_details">"Visualizar detalhes"</string>
   <string name="a11y_voice_message">"Mensagem de voz, duração: %1$s"</string>
   <string name="a11y_voice_message_record">"Gravar mensagem de voz."</string>
@@ -127,7 +130,7 @@
   <string name="action_signout_anyway">"Sair mesmo assim"</string>
   <string name="action_skip">"Pular"</string>
   <string name="action_start">"Começar"</string>
-  <string name="action_start_chat">"Iniciar bate-papo"</string>
+  <string name="action_start_chat">"Iniciar conversa"</string>
   <string name="action_start_verification">"Iniciar verificação"</string>
   <string name="action_static_map_load">"Toque para carregar o mapa"</string>
   <string name="action_take_photo">"Tirar foto"</string>
@@ -144,6 +147,7 @@
   <string name="common_acceptable_use_policy">"Política de uso aceitável"</string>
   <string name="common_adding_caption">"Adicionando legenda"</string>
   <string name="common_advanced_settings">"Configurações avançadas"</string>
+  <string name="common_an_image">"uma imagem"</string>
   <string name="common_analytics">"Telemetria"</string>
   <string name="common_appearance">"Aparência"</string>
   <string name="common_audio">"Áudio"</string>
@@ -240,6 +244,10 @@ Motivo:​ %1$s."</string>
   <string name="common_reason">"Motivo"</string>
   <string name="common_recovery_key">"Chave de recuperação"</string>
   <string name="common_refreshing">"Atualizando…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d resposta"</item>
+    <item quantity="other">"%1$d respostas"</item>
+  </plurals>
   <string name="common_replying_to">"Respondendo a %1$s"</string>
   <string name="common_report_a_bug">"Reportar um erro"</string>
   <string name="common_report_a_problem">"Reportar um problema"</string>
@@ -259,6 +267,7 @@ Motivo:​ %1$s."</string>
   <string name="common_sending">"Enviando…"</string>
   <string name="common_sending_failed">"Envio falhou"</string>
   <string name="common_sent">"Enviado"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Servidor não suportado"</string>
   <string name="common_server_url">"URL do Servidor"</string>
   <string name="common_settings">"Configurações"</string>
@@ -324,6 +333,7 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="error_failed_loading_messages">"Falha ao carregar mensagens"</string>
   <string name="error_failed_locating_user">"%1$s não conseguiu acessar sua localização. Por favor, tente novamente mais tarde."</string>
   <string name="error_failed_uploading_voice_message">"Falha ao enviar sua mensagem de voz."</string>
+  <string name="error_invalid_invite">"A sala não existe mais ou o convite não é mais válido."</string>
   <string name="error_message_not_found">"Mensagem não encontrada"</string>
   <string name="error_missing_location_auth_android">"%1$s não tem permissão para acessar sua localização. Você pode ativar o acesso nas Configurações."</string>
   <string name="error_missing_location_rationale_android">"%1$s não tem permissão para acessar sua localização. Habilite o acesso abaixo."</string>
@@ -333,6 +343,7 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="error_room_address_invalid_symbols">"Alguns caracteres não são permitidos. Somente letras, dígitos e os seguintes símbolos são aceitos ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Algumas mensagens não foram enviadas"</string>
   <string name="error_unknown">"Desculpe, ocorreu um erro"</string>
+  <string name="event_shield_mismatched_sender">"O remetente do evento não corresponde com o proprietário do dispositivo que o enviou."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"A autenticidade desta mensagem criptografada não pode ser garantida neste aparelho."</string>
   <string name="event_shield_reason_previously_verified">"Criptografado por um usuário previamente verificado."</string>
   <string name="event_shield_reason_sent_in_clear">"Não criptografado."</string>
@@ -343,6 +354,10 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="invite_friends_text">"Ei, fale comigo em %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake para relatar um bug"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Opções"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Remover %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Configurações"</string>
   <string name="screen_media_picker_error_failed_selection">"Falha ao selecionar a mídia, tente novamente."</string>
   <string name="screen_media_upload_preview_caption_warning">"As legendas podem não ser visíveis para pessoas que usam aplicativos mais antigos."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Falha ao processar mídia para upload. Tente novamente."</string>
@@ -367,6 +382,9 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="screen_room_error_failed_processing_media">"Falha ao processar mídia para upload. Tente novamente."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Não foi possível recuperar os detalhes do usuário"</string>
   <string name="screen_room_event_pill">"Mensagem em %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Expandir"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Reduzir"</string>
+  <string name="screen_room_permalink_same_room_android">"Já está visualizando esta sala!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s de %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Mensagens fixadas"</string>
   <string name="screen_room_pinned_banner_loading_description">"Carregando mensagem…"</string>

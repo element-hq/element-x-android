@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Disabilita l\'ottimizzazione della batteria per questa app, per assicurarti che tutte le notifiche vengano ricevute."</string>
+  <string name="banner_battery_optimization_submit_android">"Disabilita l\'ottimizzazione"</string>
+  <string name="banner_battery_optimization_title_android">"Le notifiche non arrivano?"</string>
   <string name="banner_set_up_recovery_content">"Genera una nuova chiave di recupero che può essere usata per ripristinare la cronologia dei messaggi crittografati nel caso in cui tu perda l\'accesso ai tuoi dispositivi."</string>
   <string name="banner_set_up_recovery_submit">"Configura il recupero"</string>
   <string name="banner_set_up_recovery_title">"Configura il ripristino"</string>
@@ -18,6 +21,7 @@
   <string name="screen_migration_message">"Si tratta di una procedura che si effettua una sola volta, grazie per l\'attesa."</string>
   <string name="screen_migration_title">"Configurazione del tuo account."</string>
   <string name="screen_roomlist_a11y_create_message">"Crea una nuova conversazione o stanza"</string>
+  <string name="screen_roomlist_clear_filters">"Elimina filtri"</string>
   <string name="screen_roomlist_empty_message">"Inizia inviando un messaggio a qualcuno."</string>
   <string name="screen_roomlist_empty_title">"Ancora nessuna conversazione."</string>
   <string name="screen_roomlist_filter_favourites">"Preferiti"</string>
@@ -40,6 +44,7 @@ Non hai messaggi non letti!"</string>
   <string name="screen_roomlist_main_space_title">"Tutte le conversazioni"</string>
   <string name="screen_roomlist_mark_as_read">"Segna come letto"</string>
   <string name="screen_roomlist_mark_as_unread">"Segna come non letto"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Questa stanza è stata aggiornata"</string>
   <string name="session_verification_banner_message">"Sembra che tu stia usando un nuovo dispositivo. Verificati con un altro dispositivo per accedere ai tuoi messaggi cifrati."</string>
   <string name="session_verification_banner_title">"Verifica che sei tu"</string>
 </resources>

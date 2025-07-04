@@ -10,6 +10,7 @@
   <string name="screen_bug_report_error_description_too_short">"Mae\'r disgrifiad yn rhy fyr, rhowch fwy o fanylion am yr hyn ddigwyddodd. Diolch!"</string>
   <string name="screen_bug_report_include_crash_logs">"Anfonwch logiau chwalu"</string>
   <string name="screen_bug_report_include_logs">"Caniatáu logiau"</string>
+  <string name="screen_bug_report_include_logs_error">"Mae eich logiau\'n rhy fawr felly nid oes modd eu cynnwys yn yr adroddiad hwn, anfonwch nhw atom mewn ffordd arall."</string>
   <string name="screen_bug_report_include_screenshot">"Anfon luniau sgrin"</string>
   <string name="screen_bug_report_logs_description">"Bydd cofnodion yn cael eu cynnwys gyda\'ch neges i wneud yn siŵr bod popeth yn gweithio\'n iawn. I anfon eich neges heb logiau, diffoddwch y gosodiad hwn."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"Chwalodd %1$s y tro diwethaf iddo gael ei ddefnyddio. Hoffech chi rannu adroddiad gwall gyda ni?"</string>

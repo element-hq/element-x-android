@@ -9,6 +9,7 @@
   <string name="screen_chat_backup_recovery_action_confirm">"ورود کلید بازیابی"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده."</string>
   <string name="screen_chat_backup_recovery_action_setup">"برپایی بازیابی"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"اگر همه دستگاه‌هایتان را گم کردید یا از سیستم خارج شدید، به پیام‌های رمزگذاری‌شده‌تان دسترسی پیدا کنید%1$s همه جا."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"گشودن %1$s در افزارهٔ میزکار"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"ورود دوباره به حسابتان"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"گزینش %1$s هنگام درخواست تأیید افزاره‌تان"</string>
@@ -23,6 +24,12 @@
   <string name="screen_encryption_reset_footer">"فقط اگر به افزاره‌ای وارد شده از پیش دسترسی ندارید و کلید بازیابیتان را گم کرده‌اید بازنشانی کنید."</string>
   <string name="screen_encryption_reset_title">"نمی‌توانید تأیید کنید؟ لازم است هویتتان را بازنشانی کنید."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"خاموش کردن"</string>
+  <string name="screen_key_backup_disable_confirmation_description">"اگر از سیستم همه دستگاه ها خارج شده باشید، پیام های رمزگذاری شده خود را از دست خواهید داد."</string>
+  <string name="screen_key_backup_disable_confirmation_title">"آیا مطمئن هستید که می خواهید پشتیبان گیری را خاموش کنید؟"</string>
+  <string name="screen_key_backup_disable_description">"حذف فضای ذخیره سازی کلید، هویت رمزنگاری و کلیدهای پیام شما را از سرور حذف می کند و ویژگی های امنیتی زیر را خاموش می کند:"</string>
+  <string name="screen_key_backup_disable_description_point_1">"سابقه پیام رمزگذاری شده در دستگاه های جدید نخواهید داشت"</string>
+  <string name="screen_key_backup_disable_description_point_2">"اگر از %1$s در همه جا خارج شده باشید، دسترسی به پیام های رمزگذاری شده خود را از دست خواهید داد"</string>
+  <string name="screen_key_backup_disable_title">"آیا مطمئن هستید که می خواهید فضای ذخیره سازی کلید را خاموش کرده و آن را حذف کنید؟"</string>
   <string name="screen_recovery_key_change_description">"گرفتن کلید بازیابی جدید در صورت فراموشی کلید کنونی. پس از تغییر دادن کلید بازیابیتان، کلید پیشین دیگر کار نخواهد کرد."</string>
   <string name="screen_recovery_key_change_generate_key">"تولید کلید بازیابی جدید"</string>
   <string name="screen_recovery_key_change_generate_key_description">"با کسی هم‌رسانیش نکنید!"</string>
