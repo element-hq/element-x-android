@@ -46,6 +46,7 @@
   <string name="screen_room_timeline_reaction_you_a11y">"Du reagerede med %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Vis mindre"</string>
   <string name="screen_room_timeline_reactions_show_more">"Vis mere"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Vis oversigt over reaktioner"</string>
   <string name="screen_room_timeline_read_marker_title">"Ny"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d rumændring"</item>

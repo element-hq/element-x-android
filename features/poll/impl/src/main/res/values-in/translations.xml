@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Pemungutan suara anonim"</string>
   <string name="screen_create_poll_answer_hint">"Opsi %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Perubahan Anda belum disimpan. Apakah Anda yakin ingin kembali?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Hapus opsi %1$s"</string>
   <string name="screen_create_poll_question_desc">"Pertanyaan atau topik"</string>
   <string name="screen_create_poll_question_hint">"Tentang apa pemungutan suara ini?"</string>
   <string name="screen_create_poll_title">"Buat pemungutan suara"</string>

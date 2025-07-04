@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Desative a otimização de bateria para este app, para que tenha certeza que todas as notificações sejam recebidas."</string>
+  <string name="banner_battery_optimization_submit_android">"Desativar otimização"</string>
+  <string name="banner_battery_optimization_title_android">"As notificações não chegam?"</string>
   <string name="banner_set_up_recovery_content">"Recupere sua identidade criptográfica e o histórico de mensagens com uma chave de recuperação se você tiver perdido todos os dispositivos existentes."</string>
   <string name="banner_set_up_recovery_submit">"Configurar a recuperação"</string>
   <string name="banner_set_up_recovery_title">"Configure a recuperação para proteger sua conta"</string>
@@ -18,6 +21,7 @@
   <string name="screen_migration_message">"Este é um processo único, obrigado por esperar."</string>
   <string name="screen_migration_title">"Configurando sua conta."</string>
   <string name="screen_roomlist_a11y_create_message">"Criar uma nova conversa ou sala"</string>
+  <string name="screen_roomlist_clear_filters">"Limpar filtros"</string>
   <string name="screen_roomlist_empty_message">"Comece enviando uma mensagem para alguém."</string>
   <string name="screen_roomlist_empty_title">"Ainda não há conversas."</string>
   <string name="screen_roomlist_filter_favourites">"Favoritos"</string>
@@ -40,6 +44,7 @@ Você não tem nenhuma mensagem não lida!"</string>
   <string name="screen_roomlist_main_space_title">"Conversas"</string>
   <string name="screen_roomlist_mark_as_read">"Marcar como lido"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como não lido"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Esta sala foi atualizada"</string>
   <string name="session_verification_banner_message">"Parece que você está usando um novo dispositivo. Verifique com outro dispositivo para acessar suas mensagens criptografadas."</string>
   <string name="session_verification_banner_title">"Verifique se é você"</string>
 </resources>

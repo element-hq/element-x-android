@@ -34,5 +34,6 @@
   <string name="screen_roomlist_main_space_title">"گپ‌ها"</string>
   <string name="screen_roomlist_mark_as_read">"علامت‌گذاری به عنوان خوانده شده"</string>
   <string name="screen_roomlist_mark_as_unread">"نشان به ناخوانده"</string>
+  <string name="session_verification_banner_message">"به نظر می رسد از دستگاه جدیدی استفاده می کنید. برای دسترسی به پیام های رمزگذاری شده خود، با دستگاه دیگری این دستگاه را تأیید کنید."</string>
   <string name="session_verification_banner_title">"تأیید کنید که خودتانید"</string>
 </resources>

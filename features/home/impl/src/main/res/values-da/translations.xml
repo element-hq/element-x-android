@@ -21,6 +21,7 @@
   <string name="screen_migration_message">"Dette er en engangsproces, tak for din tålmodighed."</string>
   <string name="screen_migration_title">"Sætter din konto op."</string>
   <string name="screen_roomlist_a11y_create_message">"Opret en ny samtale eller et nyt rum"</string>
+  <string name="screen_roomlist_clear_filters">"Ryd filtre"</string>
   <string name="screen_roomlist_empty_message">"Kom i gang ved at sende en besked til nogen."</string>
   <string name="screen_roomlist_empty_title">"Ingen samtaler endnu."</string>
   <string name="screen_roomlist_filter_favourites">"Favoritter"</string>

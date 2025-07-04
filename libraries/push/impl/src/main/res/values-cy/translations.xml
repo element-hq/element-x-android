@@ -21,7 +21,7 @@
     <item quantity="many">"%d hysbysiad"</item>
     <item quantity="other">"%d hysbysiad"</item>
   </plurals>
-  <string name="notification_fallback_content">"Hysbysiad"</string>
+  <string name="notification_fallback_content">"Mae gennych chi negeseuon newydd."</string>
   <string name="notification_incoming_call">"📹 Galwad i mewn"</string>
   <string name="notification_inline_reply_failed">"** Wedi methu anfon - agorwch yr ystafell"</string>
   <string name="notification_invitation_action_join">"Ymuno"</string>

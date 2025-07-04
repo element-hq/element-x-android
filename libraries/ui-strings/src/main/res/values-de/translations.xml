@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Reaktion hinzufügen: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Löschen"</string>
   <plurals name="a11y_digits_entered">
@@ -11,6 +12,7 @@
   <string name="a11y_jump_to_bottom">"Nach unten springen"</string>
   <string name="a11y_notifications_mentions_only">"Nur Erwähnungen"</string>
   <string name="a11y_notifications_muted">"Stummgeschaltet"</string>
+  <string name="a11y_other_user_avatar">"Avatar des anderen Nutzers"</string>
   <string name="a11y_page_n">"Seite %1$d"</string>
   <string name="a11y_pause">"Pausieren"</string>
   <string name="a11y_paused_voice_message">"Sprachnachricht, Dauer:%1$s, aktuelle Position: %2$s"</string>
@@ -28,14 +30,19 @@
   <string name="a11y_read_receipts_single">"Gelesen von %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tippe, um alle anzuzeigen"</string>
   <string name="a11y_remove_reaction">"Reaktion mit %1$s entfernen"</string>
+  <string name="a11y_remove_reaction_with">"Entferne Reaktionen mit %1$s"</string>
+  <string name="a11y_room_avatar">"Raum-Avatar"</string>
   <string name="a11y_send_files">"Dateien senden"</string>
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_start_call">"Anruf starten"</string>
+  <string name="a11y_user_avatar">"Benutzer-Avatar"</string>
   <string name="a11y_user_menu">"Benutzermenü"</string>
+  <string name="a11y_view_avatar">"Avatar ansehen"</string>
   <string name="a11y_view_details">"Details anzeigen"</string>
   <string name="a11y_voice_message">"Sprachnachricht, Dauer: %1$s"</string>
   <string name="a11y_voice_message_record">"Sprachnachricht aufnehmen."</string>
   <string name="a11y_voice_message_stop_recording">"Aufnahme beenden"</string>
+  <string name="a11y_your_avatar">"Dein Avatar"</string>
   <string name="action_accept">"Akzeptieren"</string>
   <string name="action_add_caption">"Bildunterschrift hinzufügen"</string>
   <string name="action_add_to_timeline">"Zum Nachrichtenverlauf hinzufügen"</string>
@@ -94,6 +101,7 @@
   <string name="action_no">"Nein"</string>
   <string name="action_not_now">"Später"</string>
   <string name="action_ok">"Ok"</string>
+  <string name="action_open_context_menu">"Kontextmenü öffnen"</string>
   <string name="action_open_settings">"Einstellungen öffnen"</string>
   <string name="action_open_with">"Öffnen mit"</string>
   <string name="action_pin">"Fixieren"</string>
@@ -118,7 +126,9 @@
   <string name="action_save">"Speichern"</string>
   <string name="action_search">"Suchen"</string>
   <string name="action_send">"Senden"</string>
+  <string name="action_send_edited_message">"Bearbeitete Nachricht senden"</string>
   <string name="action_send_message">"Nachricht senden"</string>
+  <string name="action_send_voice_message">"Sprachnachricht senden"</string>
   <string name="action_share">"Teilen"</string>
   <string name="action_share_link">"Link teilen"</string>
   <string name="action_show">"Zeige"</string>
@@ -134,6 +144,7 @@
   <string name="action_tap_for_options">"Für Optionen tippen"</string>
   <string name="action_try_again">"Erneut versuchen"</string>
   <string name="action_unpin">"Lösen"</string>
+  <string name="action_view">"Ansicht"</string>
   <string name="action_view_in_timeline">"Im Nachrichtenverlauf anzeigen"</string>
   <string name="action_view_source">"Quellcode anzeigen"</string>
   <string name="action_yes">"Ja"</string>
@@ -144,12 +155,13 @@
   <string name="common_acceptable_use_policy">"Nutzungsrichtlinie"</string>
   <string name="common_adding_caption">"Hinzufügen einer Bildunterschrift"</string>
   <string name="common_advanced_settings">"Erweiterte Einstellungen"</string>
+  <string name="common_an_image">"ein Bild"</string>
   <string name="common_analytics">"Analysedaten"</string>
   <string name="common_appearance">"Erscheinungsbild"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Blockierte Nutzer"</string>
   <string name="common_bubbles">"Sprechblasen"</string>
-  <string name="common_call_started">"Aufruf gestartet"</string>
+  <string name="common_call_started">"Anruf gestartet"</string>
   <string name="common_chat_backup">"Chat-Backup"</string>
   <string name="common_copied_to_clipboard">"In die Zwischenablage kopiert"</string>
   <string name="common_copyright">"Copyright"</string>
@@ -240,6 +252,10 @@ Grund: %1$s."</string>
   <string name="common_reason">"Grund"</string>
   <string name="common_recovery_key">"Wiederherstellungsschlüssel"</string>
   <string name="common_refreshing">"Wird erneuert…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d Antwort"</item>
+    <item quantity="other">"%1$d Antworten"</item>
+  </plurals>
   <string name="common_replying_to">"%1$s antworten"</string>
   <string name="common_report_a_bug">"Einen Fehler melden"</string>
   <string name="common_report_a_problem">"Ein Problem melden"</string>
@@ -259,6 +275,7 @@ Grund: %1$s."</string>
   <string name="common_sending">"Wird gesendet…"</string>
   <string name="common_sending_failed">"Senden fehlgeschlagen"</string>
   <string name="common_sent">"Gesendet"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Server wird nicht unterstützt"</string>
   <string name="common_server_url">"Server-URL"</string>
   <string name="common_settings">"Einstellungen"</string>
@@ -324,6 +341,7 @@ Möchten Sie wirklich fortfahren?"</string>
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
   <string name="error_failed_locating_user">"%1$s konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut."</string>
   <string name="error_failed_uploading_voice_message">"Fehler beim Hochladen der Sprachnachricht."</string>
+  <string name="error_invalid_invite">"Der Raum existiert nicht mehr oder die Einladung ist nicht mehr gültig."</string>
   <string name="error_message_not_found">"Nachricht nicht gefunden"</string>
   <string name="error_missing_location_auth_android">"%1$s hat keine Erlaubnis, auf deinen Standort zuzugreifen. Du kannst den Zugriff in den Einstellungen aktivieren."</string>
   <string name="error_missing_location_rationale_android">"%1$s hat keine Erlaubnis, auf deinen Standort zuzugreifen. Aktiviere unten den Zugriff."</string>
@@ -333,6 +351,7 @@ Möchten Sie wirklich fortfahren?"</string>
   <string name="error_room_address_invalid_symbols">"Einige Zeichen sind nicht erlaubt. Es werden nur Buchstaben, Ziffern und die folgenden Symbole unterstützt: ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, es ist ein Fehler aufgetreten"</string>
+  <string name="event_shield_mismatched_sender">"Der Absender des Ereignisses stimmt nicht mit dem Besitzer des Gerätes überein, das es gesendet hat."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden."</string>
   <string name="event_shield_reason_previously_verified">"Verschlüsselt von einem zuvor verifizierten Nutzer."</string>
   <string name="event_shield_reason_sent_in_clear">"Unverschlüsselt."</string>
@@ -343,6 +362,10 @@ Möchten Sie wirklich fortfahren?"</string>
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Optionen"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Entferne %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Einstellungen"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_caption_warning">"Bildunterschriften sind für Nutzer älterer Apps möglicherweise nicht sichtbar."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
@@ -367,6 +390,9 @@ Möchten Sie wirklich fortfahren?"</string>
   <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Benutzerdetails konnten nicht abgerufen werden"</string>
   <string name="screen_room_event_pill">"Nachricht in %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Erweitern"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Verkleinern"</string>
+  <string name="screen_room_permalink_same_room_android">"Du siehst diesen Raum bereits!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s von %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s fixierte Nachrichten"</string>
   <string name="screen_room_pinned_banner_loading_description">"Nachricht wird geladen…"</string>

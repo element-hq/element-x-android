@@ -35,13 +35,27 @@
   <string name="screen_room_timeline_less_reactions">"Mostra meno"</string>
   <string name="screen_room_timeline_message_copied">"Messaggio copiato"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Non sei autorizzato a postare in questa stanza"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"un membro ha reagito con %2$s"</item>
+    <item quantity="other">"%1$d membri hanno reagito con %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"Tu e un altro membro avete reagito con %2$s"</item>
+    <item quantity="other">"Tu e %1$d altri membri avete reagito con %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"Hai reagito con %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Mostra meno"</string>
   <string name="screen_room_timeline_reactions_show_more">"Mostra di più"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Mostra il riepilogo delle reazioni"</string>
   <string name="screen_room_timeline_read_marker_title">"Nuovo"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d modifica alla stanza"</item>
     <item quantity="other">"%1$d modifiche alla stanza"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Vai alla nuova stanza"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Questa stanza è stata sostituita e non è più attiva"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Visualizza i vecchi messaggi"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Questa stanza è la continuazione di un\'altra stanza"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s e %3$d altro"</item>
     <item quantity="other">"%1$s, %2$s e altri %3$d"</item>

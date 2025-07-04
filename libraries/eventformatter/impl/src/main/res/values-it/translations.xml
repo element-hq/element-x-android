@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"Hai rimosso l\'avatar della stanza"</string>
   <string name="state_event_room_ban">"%1$s ha escluso %2$s"</string>
   <string name="state_event_room_ban_by_you">"Hai escluso %1$s"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"Hai bannato %1$s: %2$s"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s ha bannato %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s ha creato la stanza"</string>
   <string name="state_event_room_created_by_you">"Hai creato la stanza"</string>
   <string name="state_event_room_invite">"%1$s ha invitato %2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"Hai rifiutato l\'invito"</string>
   <string name="state_event_room_remove">"%1$s ha rimosso %2$s"</string>
   <string name="state_event_room_remove_by_you">"Hai rimosso %1$s"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"Hai rimosso%1$s: %2$s"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s ha rimosso %2$s: %3$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s ha inviato un invito a %2$s per unirsi alla stanza"</string>
   <string name="state_event_room_third_party_invite_by_you">"Hai inviato un invito a %1$s per unirsi alla stanza"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s ha revocato l\'invito di %2$s ad unirsi alla stanza."</string>

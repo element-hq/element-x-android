@@ -14,9 +14,14 @@
   <string name="screen_change_account_provider_subtitle">"Gunakan penyedia akun yang berbeda, seperti server pribadi Anda sendiri atau akun kerja."</string>
   <string name="screen_change_account_provider_title">"Ubah penyedia akun"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Kami tidak dapat menjangkau server ini. Periksa apakah Anda telah memasukkan URL homeserver dengan benar. Jika URL sudah benar, hubungi administrator homeserver Anda untuk bantuan lebih lanjut."</string>
-  <string name="screen_change_server_error_invalid_well_known">"Sliding sync tidak tersedia karena adanya masalah dalam berkas .well-known:
+  <string name="screen_change_server_error_invalid_well_known">"Server tidak tersedia karena ada masalah dalam berkas .well-known:
 %1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Penyedia akun yang dipilih tidak mendukung sinkronisasi geser. Peningkatan server diperlukan untuk digunakan %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s tidak diizinkan untuk terhubung ke %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Aplikasi ini telah diatur untuk mengizinkan: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Penyedia akun %1$s tidak diizinkan."</string>
   <string name="screen_change_server_form_header">"URL Homeserver"</string>
+  <string name="screen_change_server_form_notice">"Masukkan alamat domain."</string>
   <string name="screen_change_server_subtitle">"Apa alamat server Anda?"</string>
   <string name="screen_change_server_title">"Pilih server Anda"</string>
   <string name="screen_create_account_title">"Buat akun"</string>
@@ -29,7 +34,9 @@
   <string name="screen_login_subtitle">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
   <string name="screen_login_title">"Selamat datang kembali!"</string>
   <string name="screen_login_title_with_homeserver">"Masuk ke %1$s"</string>
+  <string name="screen_onboarding_app_version">"Versi %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Masuk secara manual"</string>
+  <string name="screen_onboarding_sign_in_to">"Masuk ke %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Masuk dengan kode QR"</string>
   <string name="screen_onboarding_sign_up">"Buat akun"</string>
   <string name="screen_onboarding_welcome_message">"Selamat datang di %1$s tercepat yang pernah ada. Berdaya besar untuk kecepatan dan kesederhanaan."</string>
@@ -83,5 +90,6 @@ Coba masuk secara manual, atau pindai kode QR dengan perangkat lain."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
   <string name="screen_server_confirmation_message_register">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
   <string name="screen_server_confirmation_title_login">"Anda akan masuk ke %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Pilih penyedia akun"</string>
   <string name="screen_server_confirmation_title_register">"Anda akan membuat akun di %1$s"</string>
 </resources>

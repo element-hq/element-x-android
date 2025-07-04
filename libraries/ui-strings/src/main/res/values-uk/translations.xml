@@ -148,6 +148,7 @@
   <string name="common_acceptable_use_policy">"Політика прийнятного використання"</string>
   <string name="common_adding_caption">"Додавання підпису"</string>
   <string name="common_advanced_settings">"Додаткові налаштування"</string>
+  <string name="common_an_image">"зображення"</string>
   <string name="common_analytics">"Аналітика"</string>
   <string name="common_appearance">"Тема"</string>
   <string name="common_audio">"Аудіо"</string>
@@ -247,6 +248,11 @@
   <string name="common_reason">"Причина"</string>
   <string name="common_recovery_key">"Ключ відновлення"</string>
   <string name="common_refreshing">"Оновлення…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d відповідь"</item>
+    <item quantity="few">"%1$d відповіді"</item>
+    <item quantity="many">"%1$d відповідей"</item>
+  </plurals>
   <string name="common_replying_to">"Відповідь %1$s"</string>
   <string name="common_report_a_bug">"Повідомити про ваду"</string>
   <string name="common_report_a_problem">"Повідомити про проблему"</string>

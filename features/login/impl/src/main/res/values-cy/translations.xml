@@ -34,6 +34,7 @@
   <string name="screen_login_subtitle">"Mae Matrix yn rhwydwaith agored ar gyfer cyfathrebu diogel, datganoledig."</string>
   <string name="screen_login_title">"Croeso nôl!"</string>
   <string name="screen_login_title_with_homeserver">"Mewngofnodi i %1$s"</string>
+  <string name="screen_onboarding_app_version">"Fersiwn %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Mewngofnodwch â llaw"</string>
   <string name="screen_onboarding_sign_in_to">"Mewngofnodi i %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Mewngofnodwch gyda chod QR"</string>

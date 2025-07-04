@@ -35,8 +35,10 @@
   <string name="screen_room_timeline_less_reactions">"Dangos llai"</string>
   <string name="screen_room_timeline_message_copied">"Neges wedi\'i chopïo"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Does gennych chi ddim caniatâd i bostio i\'r ystafell hon"</string>
+  <string name="screen_room_timeline_reaction_you_a11y">"Rydych chi wedi ymateb gyda %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Dangos llai"</string>
   <string name="screen_room_timeline_reactions_show_more">"Dangos rhagor"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Dangos crynodeb o ymatebion"</string>
   <string name="screen_room_timeline_read_marker_title">"Newydd"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="zero">"%1$d newid ystafelloedd"</item>
@@ -46,6 +48,10 @@
     <item quantity="many">"%1$d newid ystafell"</item>
     <item quantity="other">"%1$d newid ystafell"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Neidio i ystafell newydd"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Mae\'r ystafell hon wedi\'i disodli ac nid yw\'n weithredol mwyach"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Gweld hen negeseuon"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Mae\'r ystafell hon yn barhad o ystafell arall"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="zero">"%1$s, %2$s a %3$d arall"</item>
     <item quantity="one">"%1$s, %2$s a %3$d arall"</item>

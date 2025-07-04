@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Nascondi voti"</string>
   <string name="screen_create_poll_answer_hint">"Opzione %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Le modifiche non sono state salvate. Vuoi davvero tornare indietro?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Elimina l\'opzione %1$s"</string>
   <string name="screen_create_poll_question_desc">"Domanda o argomento"</string>
   <string name="screen_create_poll_question_hint">"Di cosa parla il sondaggio?"</string>
   <string name="screen_create_poll_title">"Crea sondaggio"</string>

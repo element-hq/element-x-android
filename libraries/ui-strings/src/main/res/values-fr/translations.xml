@@ -12,6 +12,7 @@
   <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
   <string name="a11y_notifications_mentions_only">"Mentions uniquement"</string>
   <string name="a11y_notifications_muted">"En sourdine"</string>
+  <string name="a11y_other_user_avatar">"Avatar de l’autre utilisateur"</string>
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
   <string name="a11y_paused_voice_message">"Message vocal, durée: %1$s, position actuelle: %2$s"</string>
@@ -30,15 +31,18 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Taper pour voir toute la liste"</string>
   <string name="a11y_remove_reaction">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_remove_reaction_with">"Supprimer la réaction avec %1$s"</string>
+  <string name="a11y_room_avatar">"Avatar du salon"</string>
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_start_call">"Démarrer un appel"</string>
+  <string name="a11y_user_avatar">"Avatar de l’utilisateur"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
   <string name="a11y_view_avatar">"Voir l’avatar"</string>
   <string name="a11y_view_details">"Afficher les détails"</string>
   <string name="a11y_voice_message">"Message vocal, durée: %1$s"</string>
   <string name="a11y_voice_message_record">"Enregistrer un message vocal."</string>
   <string name="a11y_voice_message_stop_recording">"Arrêter l’enregistrement"</string>
+  <string name="a11y_your_avatar">"Votre avatar"</string>
   <string name="action_accept">"Accepter"</string>
   <string name="action_add_caption">"Ajouter une légende"</string>
   <string name="action_add_to_timeline">"Ajouter à la discussion"</string>
@@ -97,6 +101,7 @@
   <string name="action_no">"Non"</string>
   <string name="action_not_now">"Pas maintenant"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Ouvrir le menu contextuel"</string>
   <string name="action_open_settings">"Ouvrir les paramètres"</string>
   <string name="action_open_with">"Ouvrir avec"</string>
   <string name="action_pin">"Épingler"</string>
@@ -121,7 +126,9 @@
   <string name="action_save">"Enregistrer"</string>
   <string name="action_search">"Rechercher"</string>
   <string name="action_send">"Envoyer"</string>
+  <string name="action_send_edited_message">"Envoyer un message modifié"</string>
   <string name="action_send_message">"Envoyer un message"</string>
+  <string name="action_send_voice_message">"Envoyer un message vocal"</string>
   <string name="action_share">"Partager"</string>
   <string name="action_share_link">"Partager le lien"</string>
   <string name="action_show">"Afficher"</string>
@@ -137,6 +144,7 @@
   <string name="action_tap_for_options">"Appuyez pour afficher les options"</string>
   <string name="action_try_again">"Essayer à nouveau"</string>
   <string name="action_unpin">"Désépingler"</string>
+  <string name="action_view">"Voir"</string>
   <string name="action_view_in_timeline">"Voir dans la discussion"</string>
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
