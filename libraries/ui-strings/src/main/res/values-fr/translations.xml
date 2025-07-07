@@ -126,7 +126,7 @@
   <string name="action_save">"Enregistrer"</string>
   <string name="action_search">"Rechercher"</string>
   <string name="action_send">"Envoyer"</string>
-  <string name="action_send_edited_message">"Envoyer un message modifié"</string>
+  <string name="action_send_edited_message">"Envoyer les modifications"</string>
   <string name="action_send_message">"Envoyer un message"</string>
   <string name="action_send_voice_message">"Envoyer un message vocal"</string>
   <string name="action_share">"Partager"</string>

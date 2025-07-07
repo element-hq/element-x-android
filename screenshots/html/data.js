@@ -1431,6 +1431,7 @@ export const screenshots = [
 ["features.messages.impl.timeline_TimelineView_Day_8_en","features.messages.impl.timeline_TimelineView_Night_8_en",20273,],
 ["features.messages.impl.timeline_TimelineView_Day_9_en","features.messages.impl.timeline_TimelineView_Night_9_en",0,],
 ["libraries.designsystem.components.avatar.internal_TombstonedRoomAvatar_Avatars_en","",0,],
+["libraries.designsystem.theme.components_TopAppBarStr_App_Bars_en","",0,],
 ["libraries.designsystem.theme.components_TopAppBar_App_Bars_en","",0,],
 ["libraries.troubleshoot.impl_TroubleshootNotificationsView_Day_0_en","libraries.troubleshoot.impl_TroubleshootNotificationsView_Night_0_en",20273,],
 ["libraries.troubleshoot.impl_TroubleshootNotificationsView_Day_1_en","libraries.troubleshoot.impl_TroubleshootNotificationsView_Night_1_en",20273,],
