@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.colors.gradientActionColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
@@ -68,12 +69,7 @@ fun SuperButton(
             ElementTheme.colors.textActionAccent,
         )
     } else {
-        listOf(
-            ElementTheme.colors.gradientActionStop1,
-            ElementTheme.colors.gradientActionStop2,
-            ElementTheme.colors.gradientActionStop3,
-            ElementTheme.colors.gradientActionStop4,
-        )
+        gradientActionColors()
     }
 
     val shaderBrush = remember(colors) {

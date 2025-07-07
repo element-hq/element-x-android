@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.colors.gradientActionColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -89,12 +90,7 @@ private fun Modifier.buttonBackgroundModifier(
     canSendMessage: Boolean,
 ) = then(
     if (canSendMessage) {
-        val colors = listOf(
-            ElementTheme.colors.gradientActionStop1,
-            ElementTheme.colors.gradientActionStop2,
-            ElementTheme.colors.gradientActionStop3,
-            ElementTheme.colors.gradientActionStop4,
-        )
+        val colors = gradientActionColors()
         Modifier.drawWithCache {
             val verticalGradientBrush = ShaderBrush(
                 LinearGradientShader(

@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.colors.gradientSubtleColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
@@ -51,12 +52,10 @@ fun subtleColorStops(
             add(0.75f to ElementTheme.colors.bgCanvasDefault)
             add(1f to Color.Transparent)
         } else {
-            add(0f to ElementTheme.colors.gradientSubtleStop1)
-            add(1 / 5f to ElementTheme.colors.gradientSubtleStop2)
-            add(2 / 5f to ElementTheme.colors.gradientSubtleStop3)
-            add(3 / 5f to ElementTheme.colors.gradientSubtleStop4)
-            add(4 / 5f to ElementTheme.colors.gradientSubtleStop5)
-            add(1f to ElementTheme.colors.gradientSubtleStop6)
+            val colors = gradientSubtleColors()
+            colors.forEachIndexed { index, color ->
+                add(index.toFloat() / (colors.size - 1) to color)
+            }
         }
     }.toTypedArray()
 }
