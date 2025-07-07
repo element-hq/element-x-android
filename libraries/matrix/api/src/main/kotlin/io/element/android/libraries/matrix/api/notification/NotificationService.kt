@@ -11,5 +11,5 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 
 interface NotificationService {
-    suspend fun getNotifications(ids: Map<RoomId, List<EventId>>): Result<Map<EventId, NotificationData>>
+    suspend fun getNotifications(ids: Map<RoomId, List<EventId>>): Result<Map<EventId, Result<NotificationData>>>
 }
