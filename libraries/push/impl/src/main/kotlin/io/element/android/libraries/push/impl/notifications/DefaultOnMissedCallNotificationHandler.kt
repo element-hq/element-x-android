@@ -33,6 +33,7 @@ class DefaultOnMissedCallNotificationHandler @Inject constructor(
             ?.getNotifications(mapOf(roomId to listOf(eventId)))
             ?.getOrNull()
             ?.get(eventId)
+            ?.getOrNull()
             ?: return
 
         val notifiableEvent = callNotificationEventResolver.resolveEvent(

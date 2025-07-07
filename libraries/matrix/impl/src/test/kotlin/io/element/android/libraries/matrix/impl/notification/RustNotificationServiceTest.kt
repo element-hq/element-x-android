@@ -8,9 +8,10 @@
 package io.element.android.libraries.matrix.impl.notification
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
-import io.element.android.libraries.matrix.impl.fixtures.factories.aRustNotificationItem
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustBatchNotificationResult
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiNotificationClient
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -30,12 +31,12 @@ class RustNotificationServiceTest {
     @Test
     fun test() = runTest {
         val notificationClient = FakeFfiNotificationClient(
-            notificationItemResult = mapOf(AN_EVENT_ID.value to aRustNotificationItem()),
+            notificationItemResult = mapOf(AN_EVENT_ID.value to aRustBatchNotificationResult()),
         )
         val sut = createRustNotificationService(
             notificationClient = notificationClient,
         )
-        val result = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!
+        val result = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!.getOrThrow()
         assertThat(result.isEncrypted).isTrue()
         assertThat(result.content).isEqualTo(
             NotificationContent.MessageLike.RoomMessage(
@@ -56,10 +57,8 @@ class RustNotificationServiceTest {
         val sut = createRustNotificationService(
             notificationClient = notificationClient,
         )
-        val result = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!
-        assertThat(result.content).isEqualTo(
-            NotificationContent.MessageLike.UnableToResolve
-        )
+        val exception = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!.exceptionOrNull()
+        assertThat(exception).isInstanceOf(NotificationResolverException::class.java)
     }
 
     @Test

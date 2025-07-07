@@ -12,26 +12,29 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.notification.NotificationContent
-import io.element.android.libraries.matrix.api.notification.NotificationData
+import io.element.android.libraries.matrix.api.exception.NotificationResolverException
+import io.element.android.libraries.matrix.api.notification.GetNotificationDataResult
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.BatchNotificationResult
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationItemsRequest
+import org.matrix.rustcomponents.sdk.NotificationStatus
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 
 class RustNotificationService(
     private val sessionId: SessionId,
     private val notificationClient: NotificationClient,
     private val dispatchers: CoroutineDispatchers,
-    private val clock: SystemClock,
+    clock: SystemClock,
 ) : NotificationService {
     private val notificationMapper: NotificationMapper = NotificationMapper(clock)
 
     override suspend fun getNotifications(
         ids: Map<RoomId, List<EventId>>
-    ): Result<Map<EventId, NotificationData>> = withContext(dispatchers.io) {
+    ): GetNotificationDataResult = withContext(dispatchers.io) {
         runCatchingExceptions {
             val requests = ids.map { (roomId, eventIds) ->
                 NotificationItemsRequest(
@@ -42,34 +45,41 @@ class RustNotificationService(
             val items = notificationClient.getNotifications(requests)
             buildMap {
                 val eventIds = requests.flatMap { it.eventIds }
-                for (eventId in eventIds) {
-                    val item = items[eventId]
-                    val roomId = RoomId(requests.find { it.eventIds.contains(eventId) }?.roomId!!)
-                    if (item != null) {
-                        put(EventId(eventId), notificationMapper.map(sessionId, EventId(eventId), roomId, item))
-                    } else {
-                        Timber.e("Could not retrieve event for notification with $eventId")
-                        put(
-                            EventId(eventId),
-                            NotificationData(
-                                sessionId = sessionId,
-                                eventId = EventId(eventId),
-                                threadId = null,
-                                roomId = roomId,
-                                senderAvatarUrl = null,
-                                senderDisplayName = null,
-                                senderIsNameAmbiguous = false,
-                                roomAvatarUrl = null,
-                                roomDisplayName = null,
-                                isDirect = false,
-                                isDm = false,
-                                isEncrypted = false,
-                                isNoisy = false,
-                                timestamp = clock.epochMillis(),
-                                content = NotificationContent.MessageLike.UnableToResolve,
-                                hasMention = false
-                            )
-                        )
+                for (rawEventId in eventIds) {
+                    val roomId = RoomId(requests.find { it.eventIds.contains(rawEventId) }?.roomId!!)
+                    val eventId = EventId(rawEventId)
+                    items[rawEventId].use { result ->
+                        when (result) {
+                            is BatchNotificationResult.Ok -> {
+                                when (val status = result.status) {
+                                    is NotificationStatus.Event -> {
+                                        put(eventId, Result.success(notificationMapper.map(sessionId, eventId, roomId, status.item)))
+                                    }
+                                    is NotificationStatus.EventNotFound -> {
+                                        Timber.e("Could not retrieve event for notification with $eventId - event not found")
+                                        put(eventId, Result.failure(NotificationResolverException.EventNotFound))
+                                    }
+                                    is NotificationStatus.EventFilteredOut -> {
+                                        Timber.d("Could not retrieve event for notification with $eventId - event filtered out")
+                                        put(eventId, Result.failure(NotificationResolverException.EventFilteredOut))
+                                    }
+                                }
+                            }
+                            is BatchNotificationResult.Error -> {
+                                Timber.e("Error while retrieving notification with $rawEventId - ${result.message}")
+                                put(
+                                    eventId,
+                                    Result.failure(NotificationResolverException.UnknownError(result.message))
+                                )
+                            }
+                            null -> {
+                                Timber.e("The notification data for $rawEventId was not in the retrieved results. This is unexpected.")
+                                put(
+                                    eventId,
+                                    Result.failure(NotificationResolverException.UnknownError("Notification data not found"))
+                                )
+                            }
+                        }
                     }
                 }
             }
