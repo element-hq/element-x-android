@@ -99,28 +99,28 @@ class DefaultPushHandler @Inject constructor(
                                 )
                             },
                             onFailure = { exception ->
-                                val reason = when (exception) {
-                                    is NotificationResolverException.EventNotFound -> "Event not found"
-                                    is NotificationResolverException.EventFilteredOut -> {
-                                        pushHistoryService.onSuccess(
-                                            providerInfo = request.providerInfo,
-                                            eventId = request.eventId,
-                                            roomId = request.roomId,
-                                            sessionId = request.sessionId,
-                                            comment = "Push handled successfully but notification was filtered out",
-                                        )
-                                        return@fold
+                                if (exception is NotificationResolverException.EventFilteredOut) {
+                                    pushHistoryService.onSuccess(
+                                        providerInfo = request.providerInfo,
+                                        eventId = request.eventId,
+                                        roomId = request.roomId,
+                                        sessionId = request.sessionId,
+                                        comment = "Push handled successfully but notification was filtered out",
+                                    )
+                                } else {
+                                    val reason = when (exception) {
+                                        is NotificationResolverException.EventNotFound -> "Event not found"
+                                        else -> "Unknown error: ${exception.message}"
                                     }
-                                    else -> "Unknown error: ${exception.message}"
+                                    pushHistoryService.onUnableToResolveEvent(
+                                        providerInfo = request.providerInfo,
+                                        eventId = request.eventId,
+                                        roomId = request.roomId,
+                                        sessionId = request.sessionId,
+                                        reason = "$reason - Showing fallback notification",
+                                    )
+                                    mutableBatteryOptimizationStore.showBatteryOptimizationBanner()
                                 }
-                                pushHistoryService.onUnableToResolveEvent(
-                                    providerInfo = request.providerInfo,
-                                    eventId = request.eventId,
-                                    roomId = request.roomId,
-                                    sessionId = request.sessionId,
-                                    reason = "$reason - Showing fallback notification",
-                                )
-                                mutableBatteryOptimizationStore.showBatteryOptimizationBanner()
                             }
                         )
                     }
