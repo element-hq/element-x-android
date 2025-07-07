@@ -77,24 +77,6 @@ val SemanticColors.mentionPillText
 val SemanticColors.bigCheckmarkBorderColor
     get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray400
 
-// Badge colors
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeNeutralBackgroundColor
-    get() = if (isLight) LightColorTokens.colorAlphaGray300 else DarkColorTokens.colorAlphaGray300
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeNeutralContentColor
-    get() = if (isLight) LightColorTokens.colorGray1100 else DarkColorTokens.colorGray1100
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeNegativeBackgroundColor
-    get() = if (isLight) LightColorTokens.colorAlphaRed300 else DarkColorTokens.colorAlphaRed300
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeNegativeContentColor
-    get() = if (isLight) LightColorTokens.colorRed1100 else DarkColorTokens.colorRed1100
-
 @OptIn(CoreColorToken::class)
 val SemanticColors.pinnedMessageBannerIndicator
     get() = if (isLight) LightColorTokens.colorAlphaGray600 else DarkColorTokens.colorAlphaGray600
