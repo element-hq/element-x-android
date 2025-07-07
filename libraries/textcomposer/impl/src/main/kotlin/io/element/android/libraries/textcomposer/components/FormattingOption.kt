@@ -47,7 +47,7 @@ internal fun FormattingOption(
     }
 
     val foregroundColor = when (state) {
-        FormattingOptionState.Selected -> ElementTheme.colors.iconSuccessPrimary
+        FormattingOptionState.Selected -> ElementTheme.colors.iconAccentPrimary
         FormattingOptionState.Default -> ElementTheme.colors.iconSecondary
         FormattingOptionState.Disabled -> ElementTheme.colors.iconDisabled
     }
