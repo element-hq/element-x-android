@@ -37,11 +37,11 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.libraries.designsystem.modifiers.subtleColorStops
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
-import io.element.android.libraries.designsystem.theme.highlightedMessageBackgroundColor
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -206,23 +206,20 @@ internal fun TimelineItemRow(
 @Suppress("ModifierComposable")
 @Composable
 private fun Modifier.focusedEvent(
-    focusedEventOffset: Dp
+    focusedEventOffset: Dp,
+    isEnterpriseBuild: Boolean = LocalBuildMeta.current.isEnterpriseBuild,
 ): Modifier {
-    val highlightedLineColor = ElementTheme.colors.textActionAccent
-    val gradientFirstColor = if (LocalBuildMeta.current.isEnterpriseBuild) {
-        ElementTheme.colors.textActionAccent.copy(alpha = 0.125f)
+    val highlightedLineColor = if (isEnterpriseBuild) {
+        ElementTheme.colors.textActionAccent
     } else {
-        ElementTheme.colors.highlightedMessageBackgroundColor
+        ElementTheme.colors.borderAccentSubtle
     }
-    val gradientColors = listOf(
-        gradientFirstColor,
-        ElementTheme.colors.bgCanvasDefault,
-    )
+    val gradientColors = subtleColorStops(isEnterpriseBuild)
     val verticalOffset = focusedEventOffset.toPx()
     val verticalRatio = 0.7f
     return drawWithCache {
         val brush = Brush.verticalGradient(
-            colors = gradientColors,
+            colorStops = gradientColors,
             endY = size.height * verticalRatio,
         )
         onDrawBehind {
@@ -249,5 +246,20 @@ internal fun FocusedEventPreview() = ElementPreview {
             .fillMaxWidth()
             .height(160.dp)
             .focusedEvent(0.dp),
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun FocusedEventEnterprisePreview() = ElementPreview {
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .height(160.dp)
+            .focusedEvent(
+                focusedEventOffset = 0.dp,
+                isEnterpriseBuild = true,
+            ),
     )
 }

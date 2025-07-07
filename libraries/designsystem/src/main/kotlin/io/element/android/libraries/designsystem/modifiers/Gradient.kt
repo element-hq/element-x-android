@@ -34,24 +34,31 @@ fun Modifier.backgroundVerticalGradient(
     if (!isVisible) return this
     return background(
         brush = Brush.verticalGradient(
-            colorStops = buildList {
-                if (isEnterpriseBuild) {
-                    // For enterprise builds, ensure that we are theming the gradient
-                    add(0f to ElementTheme.colors.textActionAccent.copy(alpha = 0.5f))
-                    add(0.75f to ElementTheme.colors.bgCanvasDefault)
-                    add(1f to Color.Transparent)
-                } else {
-                    add(0f to ElementTheme.colors.gradientSubtleStop1)
-                    add(1 / 5f to ElementTheme.colors.gradientSubtleStop2)
-                    add(2 / 5f to ElementTheme.colors.gradientSubtleStop3)
-                    add(3 / 5f to ElementTheme.colors.gradientSubtleStop4)
-                    add(4 / 5f to ElementTheme.colors.gradientSubtleStop5)
-                    add(1f to ElementTheme.colors.gradientSubtleStop6)
-                }
-            }.toTypedArray(),
+            colorStops = subtleColorStops(isEnterpriseBuild),
         ),
         alpha = 0.75f,
     )
+}
+
+@Composable
+fun subtleColorStops(
+    isEnterpriseBuild: Boolean = LocalBuildMeta.current.isEnterpriseBuild,
+): Array<Pair<Float, Color>> {
+    return buildList {
+        if (isEnterpriseBuild) {
+            // For enterprise builds, ensure that we are theming the gradient
+            add(0f to ElementTheme.colors.textActionAccent.copy(alpha = 0.5f))
+            add(0.75f to ElementTheme.colors.bgCanvasDefault)
+            add(1f to Color.Transparent)
+        } else {
+            add(0f to ElementTheme.colors.gradientSubtleStop1)
+            add(1 / 5f to ElementTheme.colors.gradientSubtleStop2)
+            add(2 / 5f to ElementTheme.colors.gradientSubtleStop3)
+            add(3 / 5f to ElementTheme.colors.gradientSubtleStop4)
+            add(4 / 5f to ElementTheme.colors.gradientSubtleStop5)
+            add(1f to ElementTheme.colors.gradientSubtleStop6)
+        }
+    }.toTypedArray()
 }
 
 @PreviewsDayNight

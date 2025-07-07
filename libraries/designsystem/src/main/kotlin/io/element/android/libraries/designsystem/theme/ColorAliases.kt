@@ -100,10 +100,6 @@ val SemanticColors.mentionPillBackground
 val SemanticColors.bigCheckmarkBorderColor
     get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray400
 
-@OptIn(CoreColorToken::class)
-val SemanticColors.highlightedMessageBackgroundColor
-    get() = if (isLight) LightColorTokens.colorGreen300 else DarkColorTokens.colorGreen300
-
 // Badge colors
 
 @OptIn(CoreColorToken::class)
@@ -148,7 +144,6 @@ internal fun ColorAliasesPreview() = ElementPreview {
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
             "iconSuccessPrimaryBackground" to ElementTheme.colors.iconSuccessPrimaryBackground,
             "bigCheckmarkBorderColor" to ElementTheme.colors.bigCheckmarkBorderColor,
-            "highlightedMessageBackgroundColor" to ElementTheme.colors.highlightedMessageBackgroundColor,
         )
     )
 }
