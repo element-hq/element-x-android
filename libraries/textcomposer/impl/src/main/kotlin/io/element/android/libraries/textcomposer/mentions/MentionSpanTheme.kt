@@ -70,9 +70,9 @@ class MentionSpanTheme(val currentUserId: UserId) {
     @Composable
     fun updateStyles() {
         currentUserTextColor = ElementTheme.colors.currentUserMentionPillText.toArgb()
-        currentUserBackgroundColor = ElementTheme.colors.currentUserMentionPillBackground.toArgb()
+        currentUserBackgroundColor = ElementTheme.colors.bgBadgeAccent.toArgb()
         otherTextColor = ElementTheme.colors.mentionPillText.toArgb()
-        otherBackgroundColor = ElementTheme.colors.mentionPillBackground.toArgb()
+        otherBackgroundColor = ElementTheme.colors.bgBadgeDefault.toArgb()
 
         typeface.value = ElementTheme.typography.fontBodyLgMedium.rememberTypeface().value
         val density = LocalDensity.current

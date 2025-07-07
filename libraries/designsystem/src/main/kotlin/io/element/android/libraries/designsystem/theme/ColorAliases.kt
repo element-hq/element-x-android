@@ -70,26 +70,8 @@ val SemanticColors.pinDigitBg
 val SemanticColors.currentUserMentionPillText
     get() = if (isLight) LightColorTokens.colorGreen1100 else DarkColorTokens.colorGreen1100
 
-val SemanticColors.currentUserMentionPillBackground
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGreenAlpha400
-        Color(0x3b07b661)
-    } else {
-        // We want DarkDesignTokens.colorGreenAlpha500
-        Color(0xff003d29)
-    }
-
 val SemanticColors.mentionPillText
     get() = textPrimary
-
-val SemanticColors.mentionPillBackground
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGray400
-        Color(0x1f052e61)
-    } else {
-        // We want DarkDesignTokens.colorGray500
-        Color(0x26f4f7fa)
-    }
 
 @OptIn(CoreColorToken::class)
 val SemanticColors.bigCheckmarkBorderColor
