@@ -30,7 +30,6 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.iconSuccessPrimaryBackground
 
 @Composable
 internal fun FormattingOption(
@@ -42,7 +41,7 @@ internal fun FormattingOption(
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor = when (state) {
-        FormattingOptionState.Selected -> ElementTheme.colors.iconSuccessPrimaryBackground
+        FormattingOptionState.Selected -> ElementTheme.colors.bgAccentSelected
         FormattingOptionState.Default,
         FormattingOptionState.Disabled -> Color.Transparent
     }

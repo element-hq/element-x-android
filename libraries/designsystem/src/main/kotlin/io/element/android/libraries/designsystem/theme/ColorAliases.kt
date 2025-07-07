@@ -54,11 +54,6 @@ val SemanticColors.progressIndicatorTrackColor
 
 // This color is not present in Semantic color, so put hard-coded value for now
 @OptIn(CoreColorToken::class)
-val SemanticColors.iconSuccessPrimaryBackground
-    get() = if (isLight) LightColorTokens.colorGreen300 else DarkColorTokens.colorGreen300
-
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
 val SemanticColors.bgSubtleTertiary
     get() = if (isLight) LightColorTokens.colorGray100 else DarkColorTokens.colorGray100
 
@@ -142,7 +137,6 @@ internal fun ColorAliasesPreview() = ElementPreview {
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
             "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
-            "iconSuccessPrimaryBackground" to ElementTheme.colors.iconSuccessPrimaryBackground,
             "bigCheckmarkBorderColor" to ElementTheme.colors.bigCheckmarkBorderColor,
         )
     )
