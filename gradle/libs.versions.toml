@@ -33,7 +33,7 @@ accompanist = "0.37.3"
 test_core = "1.6.1"
 
 # Jetbrain
-datetime = "0.7.0"
+datetime = "0.7.1-0.6.x-compat"
 serialization_json = "1.9.0"
 
 #other
