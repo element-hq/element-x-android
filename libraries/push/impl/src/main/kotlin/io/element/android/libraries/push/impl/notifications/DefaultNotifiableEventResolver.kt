@@ -55,6 +55,14 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.NotificationLoggerTag)
 
 /**
+ * Result of resolving a batch of push events.
+ * The outermost [Result] indicates whether the setup to resolve the events was successful.
+ * The results for each push notification will be a map of [NotificationEventRequest] to [Result] of [ResolvedPushEvent].
+ * If the resolution of a specific event fails, the innermost [Result] will contain an exception.
+ */
+typealias ResolvePushEventsResult = Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>
+
+/**
  * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.
  * It is used as a bridge between the Event Thread and the NotificationDrawerManager.
  * The NotifiableEventResolver is the only aware of session/store, the NotificationDrawerManager has no knowledge of that,
@@ -64,7 +72,7 @@ interface NotifiableEventResolver {
     suspend fun resolveEvents(
         sessionId: SessionId,
         notificationEventRequests: List<NotificationEventRequest>
-    ): Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>
+    ): ResolvePushEventsResult
 }
 
 @ContributesBinding(AppScope::class)
@@ -81,7 +89,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
     override suspend fun resolveEvents(
         sessionId: SessionId,
         notificationEventRequests: List<NotificationEventRequest>
-    ): Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>> {
+    ): ResolvePushEventsResult {
         Timber.d("Queueing notifications: $notificationEventRequests")
         val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
             return Result.failure(IllegalStateException("Couldn't get or restore client for session $sessionId"))

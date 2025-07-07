@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
-import io.element.android.libraries.matrix.api.notification.NotificationData
+import io.element.android.libraries.matrix.api.notification.GetNotificationDataResult
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.withContext
@@ -33,7 +33,7 @@ class RustNotificationService(
 
     override suspend fun getNotifications(
         ids: Map<RoomId, List<EventId>>
-    ): Result<Map<EventId, Result<NotificationData>>> = withContext(dispatchers.io) {
+    ): GetNotificationDataResult = withContext(dispatchers.io) {
         runCatchingExceptions {
             val requests = ids.map { (roomId, eventIds) ->
                 NotificationItemsRequest(
