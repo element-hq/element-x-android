@@ -21,6 +21,7 @@ import org.matrix.rustcomponents.sdk.BatchNotificationResult
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationItemsRequest
 import org.matrix.rustcomponents.sdk.NotificationStatus
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 
 class RustNotificationService(
@@ -45,38 +46,39 @@ class RustNotificationService(
             buildMap {
                 val eventIds = requests.flatMap { it.eventIds }
                 for (rawEventId in eventIds) {
-                    val result = items[rawEventId]
                     val roomId = RoomId(requests.find { it.eventIds.contains(rawEventId) }?.roomId!!)
                     val eventId = EventId(rawEventId)
-                    when (result) {
-                        is BatchNotificationResult.Ok -> {
-                            when (val status = result.status) {
-                                is NotificationStatus.Event -> {
-                                    put(eventId, Result.success(notificationMapper.map(sessionId, eventId, roomId, status.item)))
-                                }
-                                is NotificationStatus.EventNotFound -> {
-                                    Timber.e("Could not retrieve event for notification with $eventId - event not found")
-                                    put(eventId, Result.failure(NotificationResolverException.EventNotFound))
-                                }
-                                is NotificationStatus.EventFilteredOut -> {
-                                    Timber.d("Could not retrieve event for notification with $eventId - event filtered out")
-                                    put(eventId, Result.failure(NotificationResolverException.EventFilteredOut))
+                    items[rawEventId].use { result ->
+                        when (result) {
+                            is BatchNotificationResult.Ok -> {
+                                when (val status = result.status) {
+                                    is NotificationStatus.Event -> {
+                                        put(eventId, Result.success(notificationMapper.map(sessionId, eventId, roomId, status.item)))
+                                    }
+                                    is NotificationStatus.EventNotFound -> {
+                                        Timber.e("Could not retrieve event for notification with $eventId - event not found")
+                                        put(eventId, Result.failure(NotificationResolverException.EventNotFound))
+                                    }
+                                    is NotificationStatus.EventFilteredOut -> {
+                                        Timber.d("Could not retrieve event for notification with $eventId - event filtered out")
+                                        put(eventId, Result.failure(NotificationResolverException.EventFilteredOut))
+                                    }
                                 }
                             }
-                        }
-                        is BatchNotificationResult.Error -> {
-                            Timber.e("Error while retrieving notification with $rawEventId - ${result.message}")
-                            put(
-                                eventId,
-                                Result.failure(NotificationResolverException.UnknownError(result.message))
-                            )
-                        }
-                        null -> {
-                            Timber.e("The notification data for $rawEventId was not in the retrieved results. This is unexpected.")
-                            put(
-                                eventId,
-                                Result.failure(NotificationResolverException.UnknownError("Notification data not found"))
-                            )
+                            is BatchNotificationResult.Error -> {
+                                Timber.e("Error while retrieving notification with $rawEventId - ${result.message}")
+                                put(
+                                    eventId,
+                                    Result.failure(NotificationResolverException.UnknownError(result.message))
+                                )
+                            }
+                            null -> {
+                                Timber.e("The notification data for $rawEventId was not in the retrieved results. This is unexpected.")
+                                put(
+                                    eventId,
+                                    Result.failure(NotificationResolverException.UnknownError("Notification data not found"))
+                                )
+                            }
                         }
                     }
                 }
