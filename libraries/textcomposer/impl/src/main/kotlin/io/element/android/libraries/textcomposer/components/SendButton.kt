@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.LinearGradientShader
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.unit.dp
@@ -62,13 +61,7 @@ internal fun SendButton(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(36.dp)
-                .then(
-                    if (canSendMessage) {
-                        buttonBackgroundModifier()
-                    } else {
-                        Modifier
-                    }
-                )
+                .buttonBackgroundModifier(canSendMessage)
         ) {
             Icon(
                 modifier = Modifier
@@ -91,27 +84,35 @@ internal fun SendButton(
     }
 }
 
-private fun buttonBackgroundModifier() = Modifier.drawWithCache {
-    // We have a square button, so height == width.
-    val height = size.height
-    val verticalGradientBrush = ShaderBrush(
-        LinearGradientShader(
-            from = Offset(0f, 0f),
-            to = Offset(0f, height),
-            colors = listOf(
-                Color(0xFF79DD98),
-                Color(0xFF0DBD8B),
-                Color(0xFF128585),
-                Color(0xFF24446B),
+@Composable
+private fun Modifier.buttonBackgroundModifier(
+    canSendMessage: Boolean,
+) = then(
+    if (canSendMessage) {
+        val colors = listOf(
+            ElementTheme.colors.gradientActionStop1,
+            ElementTheme.colors.gradientActionStop2,
+            ElementTheme.colors.gradientActionStop3,
+            ElementTheme.colors.gradientActionStop4,
+        )
+        Modifier.drawWithCache {
+            val verticalGradientBrush = ShaderBrush(
+                LinearGradientShader(
+                    from = Offset(0f, 0f),
+                    to = Offset(0f, size.height),
+                    colors = colors,
+                )
             )
-        )
-    )
-    onDrawBehind {
-        drawRect(
-            brush = verticalGradientBrush,
-        )
+            onDrawBehind {
+                drawRect(
+                    brush = verticalGradientBrush,
+                )
+            }
+        }
+    } else {
+        Modifier
     }
-}
+)
 
 @PreviewsDayNight
 @Composable
