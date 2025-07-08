@@ -69,35 +69,36 @@ fun RoomListContentView(
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
-        when (contentState) {
-            is RoomListContentState.Skeleton -> {
-                SkeletonView(
-                    count = contentState.count,
-                    contentPadding = contentPadding,
-                )
-            }
-            is RoomListContentState.Empty -> {
-                EmptyView(
-                    state = contentState,
-                    eventSink = eventSink,
-                    onSetUpRecoveryClick = onSetUpRecoveryClick,
-                    onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                    onCreateRoomClick = onCreateRoomClick,
-                )
-            }
-            is RoomListContentState.Rooms -> {
-                RoomsView(
-                    state = contentState,
-                    hideInvitesAvatars = hideInvitesAvatars,
-                    filtersState = filtersState,
-                    eventSink = eventSink,
-                    onSetUpRecoveryClick = onSetUpRecoveryClick,
-                    onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                    onRoomClick = onRoomClick,
-                    contentPadding = contentPadding,
-                )
-            }
+    when (contentState) {
+        is RoomListContentState.Skeleton -> {
+            SkeletonView(
+                modifier = modifier,
+                count = contentState.count,
+                contentPadding = contentPadding,
+            )
+        }
+        is RoomListContentState.Empty -> {
+            EmptyView(
+                modifier = modifier,
+                state = contentState,
+                eventSink = eventSink,
+                onSetUpRecoveryClick = onSetUpRecoveryClick,
+                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                onCreateRoomClick = onCreateRoomClick,
+            )
+        }
+        is RoomListContentState.Rooms -> {
+            RoomsView(
+                modifier = modifier,
+                state = contentState,
+                hideInvitesAvatars = hideInvitesAvatars,
+                filtersState = filtersState,
+                eventSink = eventSink,
+                onSetUpRecoveryClick = onSetUpRecoveryClick,
+                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                onRoomClick = onRoomClick,
+                contentPadding = contentPadding,
+            )
         }
     }
 }
