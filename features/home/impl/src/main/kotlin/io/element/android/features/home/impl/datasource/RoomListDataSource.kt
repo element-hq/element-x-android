@@ -119,7 +119,7 @@ class RoomListDataSource @Inject constructor(
 
     private suspend fun rebuildAllRoomSummaries() {
         lock.withLock {
-            roomListService.allRooms.summaries.replayCache.firstOrNull()?.let { roomSummaries ->
+            roomListService.allRooms.filteredSummaries.replayCache.firstOrNull()?.let { roomSummaries ->
                 buildAndEmitAllRooms(roomSummaries, useCache = false)
             }
         }
