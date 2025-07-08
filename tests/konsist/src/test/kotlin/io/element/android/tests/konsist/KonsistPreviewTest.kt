@@ -8,8 +8,10 @@
 package io.element.android.tests.konsist
 
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import com.google.common.truth.Truth.assertThat
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
+import com.lemonappdev.konsist.api.ext.list.withName
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
@@ -52,95 +54,115 @@ class KonsistPreviewTest {
             }
     }
 
+    private val previewNameExceptions = listOf(
+        "AsyncIndicatorFailurePreview",
+        "AsyncIndicatorLoadingPreview",
+        "BackgroundVerticalGradientDisabledPreview",
+        "BackgroundVerticalGradientEnterprisePreview",
+        "BackgroundVerticalGradientPreview",
+        "ColorAliasesPreview",
+        "DefaultRoomListTopBarWithIndicatorPreview",
+        "FocusedEventEnterprisePreview",
+        "FocusedEventPreview",
+        "GradientFloatingActionButtonCircleShapePreview",
+        "HeaderFooterPageScrollablePreview",
+        "IconsCompoundPreview",
+        "IconsOtherPreview",
+        "MarkdownTextComposerEditPreview",
+        "MatrixBadgeAtomInfoPreview",
+        "MatrixBadgeAtomNegativePreview",
+        "MatrixBadgeAtomNeutralPreview",
+        "MatrixBadgeAtomPositivePreview",
+        "MessageComposerViewVoicePreview",
+        "MessagesReactionButtonAddPreview",
+        "MessagesReactionButtonExtraPreview",
+        "MessagesViewWithIdentityChangePreview",
+        "PageTitleWithIconFullPreview",
+        "PageTitleWithIconMinimalPreview",
+        "PendingMemberRowWithLongNamePreview",
+        "PinUnlockViewInAppPreview",
+        "PollAnswerViewDisclosedNotSelectedPreview",
+        "PollAnswerViewDisclosedSelectedPreview",
+        "PollAnswerViewEndedSelectedPreview",
+        "PollAnswerViewEndedWinnerNotSelectedPreview",
+        "PollAnswerViewEndedWinnerSelectedPreview",
+        "PollAnswerViewUndisclosedNotSelectedPreview",
+        "PollAnswerViewUndisclosedSelectedPreview",
+        "PollContentViewCreatorEditablePreview",
+        "PollContentViewCreatorEndedPreview",
+        "PollContentViewCreatorPreview",
+        "PollContentViewDisclosedPreview",
+        "PollContentViewEndedPreview",
+        "PollContentViewUndisclosedPreview",
+        "ReadReceiptBottomSheetPreview",
+        "RoomMemberListViewBannedPreview",
+        "SasEmojisPreview",
+        "SecureBackupSetupViewChangePreview",
+        "SelectedUserCannotRemovePreview",
+        "TextComposerAddCaptionPreview",
+        "TextComposerCaptionPreview",
+        "TextComposerEditCaptionPreview",
+        "TextComposerEditNotEncryptedPreview",
+        "TextComposerEditPreview",
+        "TextComposerFormattingNotEncryptedPreview",
+        "TextComposerFormattingPreview",
+        "TextComposerLinkDialogCreateLinkPreview",
+        "TextComposerLinkDialogCreateLinkWithoutTextPreview",
+        "TextComposerLinkDialogEditLinkPreview",
+        "TextComposerReplyPreview",
+        "TextComposerSimpleNotEncryptedPreview",
+        "TextComposerSimplePreview",
+        "TextComposerVoiceNotEncryptedPreview",
+        "TextComposerVoicePreview",
+        "TextFieldDialogWithErrorPreview",
+        "TimelineImageWithCaptionRowPreview",
+        "TimelineItemEventRowForDirectRoomPreview",
+        "TimelineItemEventRowShieldPreview",
+        "TimelineItemEventRowTimestampPreview",
+        "TimelineItemEventRowUtdPreview",
+        "TimelineItemEventRowWithManyReactionsPreview",
+        "TimelineItemEventRowWithRRPreview",
+        "TimelineItemEventRowWithReplyPreview",
+        "TimelineItemGroupedEventsRowContentCollapsePreview",
+        "TimelineItemGroupedEventsRowContentExpandedPreview",
+        "TimelineItemImageViewHideMediaContentPreview",
+        "TimelineItemVideoViewHideMediaContentPreview",
+        "TimelineItemVoiceViewUnifiedPreview",
+        "TimelineVideoWithCaptionRowPreview",
+        "TimelineViewMessageShieldPreview",
+        "UserAvatarColorsPreview",
+        "UserProfileHeaderSectionWithVerificationViolationPreview",
+        "VoiceItemViewPlayPreview",
+    )
+
+    @Test
+    fun `previewNameExceptions is sorted alphabetically`() {
+        assertThat(previewNameExceptions.sorted()).isEqualTo(previewNameExceptions)
+    }
+
+    @Test
+    fun `previewNameExceptions only contains existing functions`() {
+        val names = previewNameExceptions.toMutableSet()
+        Konsist
+            .scopeFromProject()
+            .functions()
+            .withAllAnnotationsOf(PreviewsDayNight::class)
+            .withName(previewNameExceptions)
+            .let {
+                it.forEach { function ->
+                    names.remove(function.name)
+                }
+            }
+        assertThat(names).isEmpty()
+    }
+
     @Test
     fun `Functions with '@PreviewsDayNight' have correct name`() {
         Konsist
             .scopeFromProject()
             .functions()
             .withAllAnnotationsOf(PreviewsDayNight::class)
-            .withoutName(
-                "AsyncIndicatorFailurePreview",
-                "AsyncIndicatorLoadingPreview",
-                "BloomInitialsPreview",
-                "BloomPreview",
-                "CallScreenPipViewPreview",
-                "ColorAliasesPreview",
-                "DefaultRoomListTopBarWithIndicatorPreview",
-                "FocusedEventPreview",
-                "GradientFloatingActionButtonCircleShapePreview",
-                "HeaderFooterPageScrollablePreview",
-                "IconsCompoundPreview",
-                "IconsOtherPreview",
-                "MarkdownTextComposerEditPreview",
-                "MatrixBadgeAtomPositivePreview",
-                "MatrixBadgeAtomNeutralPreview",
-                "MatrixBadgeAtomNegativePreview",
-                "MatrixBadgeAtomInfoPreview",
-                "MentionSpanPreview",
-                "MessageComposerViewVoicePreview",
-                "MessagesReactionButtonAddPreview",
-                "MessagesReactionButtonExtraPreview",
-                "MessagesViewWithIdentityChangePreview",
-                "MessagesViewWithTypingPreview",
-                "PageTitleWithIconFullPreview",
-                "PageTitleWithIconMinimalPreview",
-                "PendingMemberRowWithLongNamePreview",
-                "PinUnlockViewInAppPreview",
-                "PollAnswerViewDisclosedNotSelectedPreview",
-                "PollAnswerViewDisclosedSelectedPreview",
-                "PollAnswerViewEndedSelectedPreview",
-                "PollAnswerViewEndedWinnerNotSelectedPreview",
-                "PollAnswerViewEndedWinnerSelectedPreview",
-                "PollAnswerViewUndisclosedNotSelectedPreview",
-                "PollAnswerViewUndisclosedSelectedPreview",
-                "PollContentViewCreatorEditablePreview",
-                "PollContentViewCreatorEndedPreview",
-                "PollContentViewCreatorPreview",
-                "PollContentViewDisclosedPreview",
-                "PollContentViewEndedPreview",
-                "PollContentViewUndisclosedPreview",
-                "ReadReceiptBottomSheetPreview",
-                "RoomMemberListViewBannedPreview",
-                "SasEmojisPreview",
-                "SecureBackupSetupViewChangePreview",
-                "SelectedUserCannotRemovePreview",
-                "TextComposerAddCaptionPreview",
-                "TextComposerCaptionPreview",
-                "TextComposerEditPreview",
-                "TextComposerEditNotEncryptedPreview",
-                "TextComposerEditCaptionPreview",
-                "TextComposerFormattingPreview",
-                "TextComposerFormattingNotEncryptedPreview",
-                "TextComposerLinkDialogCreateLinkPreview",
-                "TextComposerLinkDialogCreateLinkWithoutTextPreview",
-                "TextComposerLinkDialogEditLinkPreview",
-                "TextComposerReplyPreview",
-                "TextComposerReplyNotEncryptedPreview",
-                "TextComposerSimplePreview",
-                "TextComposerSimpleNotEncryptedPreview",
-                "TextComposerVoicePreview",
-                "TextComposerVoiceNotEncryptedPreview",
-                "TextFieldDialogWithBorderPreview",
-                "TextFieldDialogWithErrorPreview",
-                "TimelineImageWithCaptionRowPreview",
-                "TimelineItemEventRowForDirectRoomPreview",
-                "TimelineItemEventRowShieldPreview",
-                "TimelineItemEventRowTimestampPreview",
-                "TimelineItemEventRowUtdPreview",
-                "TimelineItemEventRowWithManyReactionsPreview",
-                "TimelineItemEventRowWithRRPreview",
-                "TimelineItemEventRowWithReplyPreview",
-                "TimelineItemGroupedEventsRowContentCollapsePreview",
-                "TimelineItemGroupedEventsRowContentExpandedPreview",
-                "TimelineItemImageViewHideMediaContentPreview",
-                "TimelineItemVideoViewHideMediaContentPreview",
-                "TimelineItemVoiceViewUnifiedPreview",
-                "TimelineVideoWithCaptionRowPreview",
-                "TimelineViewMessageShieldPreview",
-                "UserAvatarColorsPreview",
-                "UserProfileHeaderSectionWithVerificationViolationPreview",
-                "VoiceItemViewPlayPreview",
-            )
+            .withoutName(previewNameExceptions)
             .assertTrue(
                 additionalMessage = "Functions for Preview should be named like this: <ViewUnderPreview>Preview. " +
                     "Exception can be added to the test, for multiple Previews of the same view",

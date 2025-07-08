@@ -28,10 +28,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.rememberTypeface
-import io.element.android.libraries.designsystem.theme.currentUserMentionPillBackground
-import io.element.android.libraries.designsystem.theme.currentUserMentionPillText
-import io.element.android.libraries.designsystem.theme.mentionPillBackground
-import io.element.android.libraries.designsystem.theme.mentionPillText
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -69,10 +65,10 @@ class MentionSpanTheme(val currentUserId: UserId) {
     @Suppress("ComposableNaming")
     @Composable
     fun updateStyles() {
-        currentUserTextColor = ElementTheme.colors.currentUserMentionPillText.toArgb()
-        currentUserBackgroundColor = ElementTheme.colors.currentUserMentionPillBackground.toArgb()
-        otherTextColor = ElementTheme.colors.mentionPillText.toArgb()
-        otherBackgroundColor = ElementTheme.colors.mentionPillBackground.toArgb()
+        currentUserTextColor = ElementTheme.colors.textBadgeAccent.toArgb()
+        currentUserBackgroundColor = ElementTheme.colors.bgBadgeAccent.toArgb()
+        otherTextColor = ElementTheme.colors.textPrimary.toArgb()
+        otherBackgroundColor = ElementTheme.colors.bgBadgeDefault.toArgb()
 
         typeface.value = ElementTheme.typography.fontBodyLgMedium.rememberTypeface().value
         val density = LocalDensity.current
