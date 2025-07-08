@@ -22,14 +22,14 @@ import kotlinx.collections.immutable.persistentMapOf
 /**
  * Room list.
  */
-@Composable
-fun ElementTheme.roomListRoomName() = colors.textPrimary
+val SemanticColors.roomListRoomName
+    get() = textPrimary
 
-@Composable
-fun ElementTheme.roomListRoomMessage() = colors.textSecondary
+val SemanticColors.roomListRoomMessage
+    get() = textSecondary
 
-@Composable
-fun ElementTheme.roomListRoomMessageDate() = colors.textSecondary
+val SemanticColors.roomListRoomMessageDate
+    get() = textSecondary
 
 val SemanticColors.unreadIndicator
     get() = iconAccentTertiary
@@ -81,9 +81,9 @@ internal fun ColorAliasesPreview() = ElementPreview {
         backgroundColor = Color.Black,
         foregroundColor = Color.White,
         colors = persistentMapOf(
-            "roomListRoomName" to ElementTheme.roomListRoomName(),
-            "roomListRoomMessage" to ElementTheme.roomListRoomMessage(),
-            "roomListRoomMessageDate" to ElementTheme.roomListRoomMessageDate(),
+            "roomListRoomName" to ElementTheme.colors.roomListRoomName,
+            "roomListRoomMessage" to ElementTheme.colors.roomListRoomMessage,
+            "roomListRoomMessageDate" to ElementTheme.colors.roomListRoomMessageDate,
             "unreadIndicator" to ElementTheme.colors.unreadIndicator,
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
