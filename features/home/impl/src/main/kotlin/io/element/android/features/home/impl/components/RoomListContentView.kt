@@ -79,7 +79,7 @@ fun RoomListContentView(
         }
         is RoomListContentState.Empty -> {
             EmptyView(
-                modifier = modifier,
+                modifier = modifier.padding(contentPadding),
                 state = contentState,
                 eventSink = eventSink,
                 onSetUpRecoveryClick = onSetUpRecoveryClick,
