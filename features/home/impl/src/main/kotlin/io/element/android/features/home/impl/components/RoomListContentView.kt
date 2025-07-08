@@ -74,6 +74,7 @@ fun RoomListContentView(
             is RoomListContentState.Skeleton -> {
                 SkeletonView(
                     count = contentState.count,
+                    contentPadding = contentPadding,
                 )
             }
             is RoomListContentState.Empty -> {
@@ -102,8 +103,15 @@ fun RoomListContentView(
 }
 
 @Composable
-private fun SkeletonView(count: Int, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
+private fun SkeletonView(
+    count: Int,
+    contentPadding: PaddingValues,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = contentPadding,
+    ) {
         repeat(count) { index ->
             item {
                 RoomSummaryPlaceholderRow()
