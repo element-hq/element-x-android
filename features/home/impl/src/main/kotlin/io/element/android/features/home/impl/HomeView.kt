@@ -56,7 +56,9 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.NavigationBar
+import io.element.android.libraries.designsystem.theme.components.NavigationBarIcon
 import io.element.android.libraries.designsystem.theme.components.NavigationBarItem
+import io.element.android.libraries.designsystem.theme.components.NavigationBarText
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
@@ -192,19 +194,21 @@ private fun HomeScaffold(
                         )
                 ) {
                     HomeNavigationBarItem.entries.forEach { item ->
+                        val isSelected = state.currentHomeNavigationBarItem == item
                         NavigationBarItem(
-                            selected = state.currentHomeNavigationBarItem == item,
+                            selected = isSelected,
                             onClick = {
                                 state.eventSink(HomeEvents.SelectHomeNavigationBarItem(item))
                             },
                             icon = {
-                                Icon(
-                                    imageVector = item.icon(),
-                                    contentDescription = null
+                                NavigationBarIcon(
+                                    imageVector = item.icon(isSelected),
                                 )
                             },
                             label = {
-                                Text(stringResource(item.labelRes))
+                                NavigationBarText(
+                                    text = stringResource(item.labelRes),
+                                )
                             }
                         )
                     }

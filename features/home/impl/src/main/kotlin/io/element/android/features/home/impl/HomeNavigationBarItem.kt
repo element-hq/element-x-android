@@ -16,18 +16,18 @@ enum class HomeNavigationBarItem(
     val labelRes: Int,
 ) {
     Chats(
-        labelRes = R.string.screen_roomlist_main_space_title
+        labelRes = R.string.screen_home_tab_chats
     ),
     Spaces(
-        // TODO Create a new entry in Localazy
-        labelRes = R.string.screen_roomlist_main_space_title
+        labelRes = R.string.screen_home_tab_spaces
     );
 
     @Composable
-    fun icon() = when (this) {
-        Chats -> CompoundIcons.ChatSolid()
-        // TODO Spaces -> CompoundIcons.Workspace()
-        Spaces -> CompoundIcons.Code()
+    fun icon(
+        isSelected: Boolean,
+    ) = when (this) {
+        Chats -> if (isSelected) CompoundIcons.ChatSolid() else CompoundIcons.Chat()
+        Spaces -> if (isSelected) CompoundIcons.WorkspaceSolid() else CompoundIcons.Workspace()
     }
 
     companion object {
