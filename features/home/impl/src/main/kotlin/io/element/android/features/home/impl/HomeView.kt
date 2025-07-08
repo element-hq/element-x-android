@@ -12,6 +12,7 @@ package io.element.android.features.home.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -181,6 +182,10 @@ private fun HomeScaffold(
                 displayFilters = roomListState.displayFilters && state.currentHomeNavigationBarItem == HomeNavigationBarItem.Chats,
                 filtersState = roomListState.filtersState,
                 canReportBug = state.canReportBug,
+                modifier = Modifier.hazeEffect(
+                    state = hazeState,
+                    style = HazeMaterials.thick(),
+                )
             )
         },
         bottomBar = {
@@ -190,7 +195,7 @@ private fun HomeScaffold(
                     modifier = Modifier
                         .hazeEffect(
                             state = hazeState,
-                            style = HazeMaterials.regular(),
+                            style = HazeMaterials.thick(),
                         )
                 ) {
                     HomeNavigationBarItem.entries.forEach { item ->
@@ -227,15 +232,18 @@ private fun HomeScaffold(
                         onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                         onRoomClick = ::onRoomClick,
                         onCreateRoomClick = onCreateRoomClick,
-                        // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80,
-                        // and include provided bottom padding
-                        contentBottomPadding = 80.dp + padding.calculateBottomPadding(),
+                        contentPadding = PaddingValues(
+                            // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80,
+                            // and include provided bottom padding
+                            bottom = 80.dp + padding.calculateBottomPadding(),
+                            top = padding.calculateTopPadding()
+                        ),
                         modifier = Modifier
                             .padding(
-                                top = padding.calculateTopPadding(),
-                                bottom = 0.dp,
-                                start = padding.calculateStartPadding(LocalLayoutDirection.current),
-                                end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                                PaddingValues(
+                                    start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                                    end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                                )
                             )
                             .consumeWindowInsets(padding)
                             .hazeSource(state = hazeState)

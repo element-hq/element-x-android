@@ -37,7 +37,6 @@ fun Modifier.backgroundVerticalGradient(
         brush = Brush.verticalGradient(
             colorStops = subtleColorStops(isEnterpriseBuild),
         ),
-        alpha = 0.75f,
     )
 }
 
