@@ -42,7 +42,6 @@ fun MainActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    contentDescription: String = title,
 ) {
     val ripple = ripple(bounded = false)
     val interactionSource = remember { MutableInteractionSource() }
@@ -58,8 +57,8 @@ fun MainActionButton(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
+            contentDescription = null,
             imageVector = imageVector,
-            contentDescription = contentDescription,
             tint = if (enabled) LocalContentColor.current else ElementTheme.colors.iconDisabled,
         )
         Spacer(modifier = Modifier.height(14.dp))
