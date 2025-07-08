@@ -28,9 +28,7 @@ import java.util.UUID
 /**
  * Copy of [okhttp3.MultipartBody] with addition of a listener to track progress (Last imported from OkHttp 5.0.0).
  * Patches are surrounded by ELEMENT-START and ELEMENT-END
- */
-
-/**
+ *
  * An [RFC 2387][rfc_2387]-compliant request body.
  *
  * [rfc_2387]: http://www.ietf.org/rfc/rfc2387.txt
@@ -294,6 +292,7 @@ class BugReporterMultipartBody internal constructor(
         // Element: use FORM as default type
         private var type = FORM
         // ELEMENT-END
+
         private val parts = mutableListOf<Part>()
 
         /**
