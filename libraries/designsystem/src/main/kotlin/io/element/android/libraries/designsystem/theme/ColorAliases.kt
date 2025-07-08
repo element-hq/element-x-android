@@ -67,10 +67,6 @@ val SemanticColors.pinDigitBg
     get() = if (isLight) LightColorTokens.colorGray300 else DarkColorTokens.colorGray400
 
 @OptIn(CoreColorToken::class)
-val SemanticColors.bigCheckmarkBorderColor
-    get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray400
-
-@OptIn(CoreColorToken::class)
 val SemanticColors.pinnedMessageBannerIndicator
     get() = if (isLight) LightColorTokens.colorAlphaGray600 else DarkColorTokens.colorAlphaGray600
 
@@ -94,7 +90,6 @@ internal fun ColorAliasesPreview() = ElementPreview {
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
             "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
-            "bigCheckmarkBorderColor" to ElementTheme.colors.bigCheckmarkBorderColor,
         )
     )
 }
