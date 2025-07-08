@@ -73,6 +73,7 @@ class KonsistPreviewTest {
         "MatrixBadgeAtomNegativePreview",
         "MatrixBadgeAtomNeutralPreview",
         "MatrixBadgeAtomPositivePreview",
+        "MentionSpanThemeInTimelinePreview",
         "MessageComposerViewVoicePreview",
         "MessagesReactionButtonAddPreview",
         "MessagesReactionButtonExtraPreview",
