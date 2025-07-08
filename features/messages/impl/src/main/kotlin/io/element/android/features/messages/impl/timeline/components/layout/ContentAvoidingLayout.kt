@@ -112,12 +112,11 @@ fun ContentAvoidingLayout(
  * @param nonOverlappingContentWidth The width of the part of the content that can't overlap with the timestamp.
  * @param nonOverlappingContentHeight The height of the part of the content that can't overlap with the timestamp.
  */
-@Suppress("DataClassShouldBeImmutable")
 data class ContentAvoidingLayoutData(
-    var contentWidth: Int = 0,
-    var contentHeight: Int = 0,
-    var nonOverlappingContentWidth: Int = contentWidth,
-    var nonOverlappingContentHeight: Int = contentHeight,
+    val contentWidth: Int = 0,
+    val contentHeight: Int = 0,
+    val nonOverlappingContentWidth: Int = contentWidth,
+    val nonOverlappingContentHeight: Int = contentHeight,
 )
 
 /**
