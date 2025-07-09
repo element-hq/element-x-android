@@ -140,7 +140,10 @@ internal fun TimelineItemRow(
                                         timelineItem.safeSenderName
                                     }
                                     // For Polls, allow the answers to be traversed by Talkback
-                                    isTraversalGroup = timelineItem.content is TimelineItemPollContent
+                                    isTraversalGroup = timelineItem.content is TimelineItemPollContent ||
+                                        timelineItem.failedToSend ||
+                                        timelineItem.messageShield != null
+                                    // TODO Also set to true when the event has link(s)
                                 }
                                 // Custom clickable that applies over the whole item for accessibility
                                 .then(

@@ -8,6 +8,7 @@
     <item quantity="other">"%1$d digits entered"</item>
   </plurals>
   <string name="a11y_edit_avatar">"Edit avatar"</string>
+  <string name="a11y_encryption_details">"Encryption details"</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
