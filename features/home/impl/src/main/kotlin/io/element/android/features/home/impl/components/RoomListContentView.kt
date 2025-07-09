@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -67,44 +66,53 @@ fun RoomListContentView(
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     onCreateRoomClick: () -> Unit,
-    contentBottomPadding: Dp,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
-        when (contentState) {
-            is RoomListContentState.Skeleton -> {
-                SkeletonView(
-                    count = contentState.count,
-                )
-            }
-            is RoomListContentState.Empty -> {
-                EmptyView(
-                    state = contentState,
-                    eventSink = eventSink,
-                    onSetUpRecoveryClick = onSetUpRecoveryClick,
-                    onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                    onCreateRoomClick = onCreateRoomClick,
-                )
-            }
-            is RoomListContentState.Rooms -> {
-                RoomsView(
-                    state = contentState,
-                    hideInvitesAvatars = hideInvitesAvatars,
-                    filtersState = filtersState,
-                    eventSink = eventSink,
-                    onSetUpRecoveryClick = onSetUpRecoveryClick,
-                    onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                    onRoomClick = onRoomClick,
-                    contentBottomPadding = contentBottomPadding,
-                )
-            }
+    when (contentState) {
+        is RoomListContentState.Skeleton -> {
+            SkeletonView(
+                modifier = modifier,
+                count = contentState.count,
+                contentPadding = contentPadding,
+            )
+        }
+        is RoomListContentState.Empty -> {
+            EmptyView(
+                modifier = modifier.padding(contentPadding),
+                state = contentState,
+                eventSink = eventSink,
+                onSetUpRecoveryClick = onSetUpRecoveryClick,
+                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                onCreateRoomClick = onCreateRoomClick,
+            )
+        }
+        is RoomListContentState.Rooms -> {
+            RoomsView(
+                modifier = modifier,
+                state = contentState,
+                hideInvitesAvatars = hideInvitesAvatars,
+                filtersState = filtersState,
+                eventSink = eventSink,
+                onSetUpRecoveryClick = onSetUpRecoveryClick,
+                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                onRoomClick = onRoomClick,
+                contentPadding = contentPadding,
+            )
         }
     }
 }
 
 @Composable
-private fun SkeletonView(count: Int, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
+private fun SkeletonView(
+    count: Int,
+    contentPadding: PaddingValues,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = contentPadding,
+    ) {
         repeat(count) { index ->
             item {
                 RoomSummaryPlaceholderRow()
@@ -167,7 +175,7 @@ private fun RoomsView(
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
-    contentBottomPadding: Dp,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
     if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
@@ -183,7 +191,7 @@ private fun RoomsView(
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
             onRoomClick = onRoomClick,
-            contentBottomPadding = contentBottomPadding,
+            contentPadding = contentPadding,
             modifier = modifier.fillMaxSize(),
         )
     }
@@ -197,7 +205,7 @@ private fun RoomsViewList(
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
-    contentBottomPadding: Dp,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
@@ -216,7 +224,7 @@ private fun RoomsViewList(
     LazyColumn(
         state = lazyListState,
         modifier = modifier,
-        contentPadding = PaddingValues(bottom = contentBottomPadding)
+        contentPadding = contentPadding,
     ) {
         when (state.securityBannerState) {
             SecurityBannerState.SetUpRecovery -> {
@@ -329,6 +337,6 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
         onConfirmRecoveryKeyClick = {},
         onRoomClick = {},
         onCreateRoomClick = {},
-        contentBottomPadding = 0.dp,
+        contentPadding = PaddingValues(0.dp),
     )
 }
