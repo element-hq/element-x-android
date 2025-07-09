@@ -22,14 +22,14 @@ import kotlinx.collections.immutable.persistentMapOf
 /**
  * Room list.
  */
-@Composable
-fun ElementTheme.roomListRoomName() = colors.textPrimary
+val SemanticColors.roomListRoomName
+    get() = textPrimary
 
-@Composable
-fun ElementTheme.roomListRoomMessage() = colors.textSecondary
+val SemanticColors.roomListRoomMessage
+    get() = textSecondary
 
-@Composable
-fun ElementTheme.roomListRoomMessageDate() = colors.textSecondary
+val SemanticColors.roomListRoomMessageDate
+    get() = textSecondary
 
 val SemanticColors.unreadIndicator
     get() = iconAccentTertiary
@@ -67,10 +67,6 @@ val SemanticColors.pinDigitBg
     get() = if (isLight) LightColorTokens.colorGray300 else DarkColorTokens.colorGray400
 
 @OptIn(CoreColorToken::class)
-val SemanticColors.bigCheckmarkBorderColor
-    get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray400
-
-@OptIn(CoreColorToken::class)
 val SemanticColors.pinnedMessageBannerIndicator
     get() = if (isLight) LightColorTokens.colorAlphaGray600 else DarkColorTokens.colorAlphaGray600
 
@@ -85,16 +81,15 @@ internal fun ColorAliasesPreview() = ElementPreview {
         backgroundColor = Color.Black,
         foregroundColor = Color.White,
         colors = persistentMapOf(
-            "roomListRoomName" to ElementTheme.roomListRoomName(),
-            "roomListRoomMessage" to ElementTheme.roomListRoomMessage(),
-            "roomListRoomMessageDate" to ElementTheme.roomListRoomMessageDate(),
+            "roomListRoomName" to ElementTheme.colors.roomListRoomName,
+            "roomListRoomMessage" to ElementTheme.colors.roomListRoomMessage,
+            "roomListRoomMessageDate" to ElementTheme.colors.roomListRoomMessageDate,
             "unreadIndicator" to ElementTheme.colors.unreadIndicator,
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
             "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
-            "bigCheckmarkBorderColor" to ElementTheme.colors.bigCheckmarkBorderColor,
         )
     )
 }
