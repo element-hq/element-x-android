@@ -182,10 +182,15 @@ private fun HomeScaffold(
                 displayFilters = roomListState.displayFilters && state.currentHomeNavigationBarItem == HomeNavigationBarItem.Chats,
                 filtersState = roomListState.filtersState,
                 canReportBug = state.canReportBug,
-                modifier = Modifier.hazeEffect(
-                    state = hazeState,
-                    style = HazeMaterials.thick(),
-                )
+                modifier = if (state.isSpaceFeatureEnabled) {
+                    Modifier.hazeEffect(
+                        state = hazeState,
+                        style = HazeMaterials.thick(),
+                    )
+                } else {
+                    Modifier
+                        .background(ElementTheme.colors.bgCanvasDefault)
+                }
             )
         },
         bottomBar = {
