@@ -149,23 +149,23 @@ internal object VideoStrategyFactory {
             else -> null
         }
 
-        val newBitrate = if (resizer is AtMostResizer) {
-            val maxSize = resizer.getOutputSize(Size(width, height))
-            // If we are resizing, we also want to reduce the bitrate
-            if (maxSize.major <= MAX_COMPRESSED_PIXEL_SIZE) {
-                2_000_000L
-            } else {
-                4_000_000L
-            }
-        } else {
-            originalBitrate
-        }
-
         val newFrameRate = if (resizer is AtMostResizer) {
             // If we are resizing, we also want to reduce the frame rate to 30fps
             DefaultVideoStrategy.DEFAULT_FRAME_RATE
         } else {
             originalFrameRate
+        }
+
+        val newBitrate = if (resizer is AtMostResizer) {
+            val maxSize = resizer.getOutputSize(Size(width, height))
+            val pixelsPerFrame = maxSize.major * maxSize.minor
+            val frameRate = newFrameRate ?: DefaultVideoStrategy.DEFAULT_FRAME_RATE
+            // Apparently, 0.1 bits per pixel is a sweet spot for video compression
+            val bitsPerPixel = 0.1f
+
+            (pixelsPerFrame * bitsPerPixel * frameRate / 1000).toLong()
+        } else {
+            originalBitrate
         }
 
         return if (resizer == null && expectedExtension == MP4_EXTENSION) {
