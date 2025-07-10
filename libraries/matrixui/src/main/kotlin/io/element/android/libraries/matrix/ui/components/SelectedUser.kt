@@ -62,7 +62,10 @@ fun SelectedUser(
                     // when talkback is not enabled
                     onClick(
                         label = actionRemove,
-                        action = { onUserRemove(matrixUser); true }
+                        action = {
+                            onUserRemove(matrixUser)
+                            true
+                        }
                     )
                 }
             }
