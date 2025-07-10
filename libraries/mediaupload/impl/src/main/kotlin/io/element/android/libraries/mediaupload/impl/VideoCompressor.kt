@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
+import kotlin.math.min
 
 private const val MP4_EXTENSION = "mp4"
 
@@ -90,7 +91,7 @@ class VideoCompressor @Inject constructor(
                 val width = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toIntOrNull() ?: -1
                 val height = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toIntOrNull() ?: -1
                 val bitrate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)?.toLongOrNull() ?: -1
-                val framerate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE)?.toIntOrNull() ?: -1
+                val frameRate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE)?.toIntOrNull() ?: -1
                 val rotation = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toIntOrNull() ?: 0
 
                 val (actualWidth, actualHeight) = if (width == -1 || height == -1) {
@@ -105,7 +106,7 @@ class VideoCompressor @Inject constructor(
                     width = actualWidth,
                     height = actualHeight,
                     bitrate = bitrate,
-                    frameRate = framerate,
+                    frameRate = frameRate,
                     rotation = rotation,
                 )
             }
@@ -143,8 +144,8 @@ internal object VideoStrategyFactory {
         val width = metadata?.width?.takeIf { it >= 0 } ?: Int.MAX_VALUE
         val height = metadata?.height?.takeIf { it >= 0 } ?: Int.MAX_VALUE
         val originalBitrate = metadata?.bitrate?.takeIf { it >= 0 }
-        val originalFrameRate = metadata?.frameRate?.takeIf { it >= 0 }
-        val rotation = metadata?.rotation?.takeIf { it >= 0 }
+        val originalFrameRate = metadata?.frameRate?.takeIf { it >= 0 } ?: DefaultVideoStrategy.DEFAULT_FRAME_RATE
+        val rotation = metadata?.rotation?.takeIf { it >= 0 } ?: 0
 
         // We only create a resizer if needed
         val resizer = when {
@@ -153,17 +154,18 @@ internal object VideoStrategyFactory {
             else -> null
         }
 
+        // If we are resizing, we also want to reduce set frame rate to the default value (30fps)
         val newFrameRate = if (resizer is AtMostResizer) {
-            // If we are resizing, we also want to reduce the frame rate to 30fps
-            DefaultVideoStrategy.DEFAULT_FRAME_RATE
+            min(originalFrameRate, DefaultVideoStrategy.DEFAULT_FRAME_RATE)
         } else {
             originalFrameRate
         }
 
+        // If we need to resize the video, we also want to recalculate the bitrate
         val newBitrate = if (resizer is AtMostResizer) {
             val maxSize = resizer.getOutputSize(Size(width, height))
             val pixelsPerFrame = maxSize.major * maxSize.minor
-            val frameRate = newFrameRate ?: DefaultVideoStrategy.DEFAULT_FRAME_RATE
+            val frameRate = newFrameRate
             // Apparently, 0.1 bits per pixel is a sweet spot for video compression
             val bitsPerPixel = 0.1f
 
@@ -178,10 +180,10 @@ internal object VideoStrategyFactory {
             PassThroughTrackStrategy()
         } else {
             DefaultVideoStrategy.Builder()
+                .frameRate(newFrameRate)
                 .apply {
                     resizer?.let { addResizer(it) }
                     newBitrate?.let { bitRate(it) }
-                    newFrameRate?.let { frameRate(it) }
                 }
                 .mimeType(MediaFormatConstants.MIMETYPE_VIDEO_AVC)
                 .build()
