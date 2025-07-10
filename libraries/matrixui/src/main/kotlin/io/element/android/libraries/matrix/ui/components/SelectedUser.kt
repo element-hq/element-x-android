@@ -101,7 +101,8 @@ fun SelectedUser(
             ) {
                 Icon(
                     imageVector = CompoundIcons.Close(),
-                    contentDescription = null,
+                    // Note: keep the context description for the test
+                    contentDescription = stringResource(id = CommonStrings.action_remove),
                     tint = ElementTheme.colors.iconOnSolidPrimary,
                     modifier = Modifier.padding(2.dp)
                 )
