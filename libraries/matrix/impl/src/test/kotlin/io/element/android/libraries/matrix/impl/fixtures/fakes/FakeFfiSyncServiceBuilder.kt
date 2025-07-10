@@ -13,5 +13,6 @@ import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 
 class FakeFfiSyncServiceBuilder : SyncServiceBuilder(NoPointer) {
     override fun withOfflineMode(): SyncServiceBuilder = this
+    override fun withSharePos(enable: Boolean): SyncServiceBuilder = this
     override suspend fun finish(): SyncService = FakeFfiSyncService()
 }

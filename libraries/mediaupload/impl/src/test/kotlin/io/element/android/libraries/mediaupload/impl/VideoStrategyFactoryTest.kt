@@ -39,7 +39,7 @@ class VideoStrategyFactoryTest {
     fun `if the video should be compressed and is larger than 720p it will be transcoded`() {
         // Given
         val expectedExtension = "mp4"
-        val metadata = VideoFileMetadata(width = 1920, height = 1080, bitrate = 1_000_000, frameRate = 50)
+        val metadata = VideoFileMetadata(width = 1920, height = 1080, bitrate = 1_000_000, frameRate = 50, rotation = 0)
         val shouldBeCompressed = true
 
         // When
@@ -57,7 +57,7 @@ class VideoStrategyFactoryTest {
     fun `if the video should be compressed, has the right format and is smaller or equal to 720p it will not be transcoded`() {
         // Given
         val expectedExtension = "mp4"
-        val metadata = VideoFileMetadata(width = 1280, height = 720, bitrate = 1_000_000, frameRate = 50)
+        val metadata = VideoFileMetadata(width = 1280, height = 720, bitrate = 1_000_000, frameRate = 50, rotation = 0)
         val shouldBeCompressed = true
 
         // When
@@ -75,7 +75,7 @@ class VideoStrategyFactoryTest {
     fun `if the video should not be compressed and is larger than 1080p it will be transcoded`() {
         // Given
         val expectedExtension = "mp4"
-        val metadata = VideoFileMetadata(width = 2560, height = 1440, bitrate = 1_000_000, frameRate = 50)
+        val metadata = VideoFileMetadata(width = 2560, height = 1440, bitrate = 1_000_000, frameRate = 50, rotation = 0)
         val shouldBeCompressed = false
 
         // When
@@ -93,7 +93,7 @@ class VideoStrategyFactoryTest {
     fun `if the video should not be compressed, has the right format and is smaller or equal than 1080p it will not be transcoded`() {
         // Given
         val expectedExtension = "mp4"
-        val metadata = VideoFileMetadata(width = 1920, height = 1080, bitrate = 1_000_000, frameRate = 50)
+        val metadata = VideoFileMetadata(width = 1920, height = 1080, bitrate = 1_000_000, frameRate = 50, rotation = 0)
         val shouldBeCompressed = false
 
         // When
@@ -111,7 +111,7 @@ class VideoStrategyFactoryTest {
     fun `if the video should not be compressed but has a wrong format it will be transcoded`() {
         // Given
         val expectedExtension = "mkv"
-        val metadata = VideoFileMetadata(width = 320, height = 240, bitrate = 1_000_000, frameRate = 50)
+        val metadata = VideoFileMetadata(width = 320, height = 240, bitrate = 1_000_000, frameRate = 50, rotation = 0)
         val shouldBeCompressed = false
 
         // When
@@ -129,8 +129,26 @@ class VideoStrategyFactoryTest {
     fun `if the video should be compressed and has a wrong format it will be transcoded`() {
         // Given
         val expectedExtension = "mkv"
-        val metadata = VideoFileMetadata(width = 320, height = 240, bitrate = 1_000_000, frameRate = 50)
+        val metadata = VideoFileMetadata(width = 320, height = 240, bitrate = 1_000_000, frameRate = 50, rotation = 0)
         val shouldBeCompressed = true
+
+        // When
+        val videoStrategy = VideoStrategyFactory.create(
+            expectedExtension = expectedExtension,
+            metadata = metadata,
+            shouldBeCompressed = shouldBeCompressed
+        )
+
+        // Then
+        assertIsTranscoded(videoStrategy)
+    }
+
+    @Test
+    fun `if the video should not be compressed but has a rotation not zero it will be transcoded`() {
+        // Given
+        val expectedExtension = "mp4"
+        val metadata = VideoFileMetadata(width = 320, height = 240, bitrate = 1_000_000, frameRate = 50, rotation = 90)
+        val shouldBeCompressed = false
 
         // When
         val videoStrategy = VideoStrategyFactory.create(
