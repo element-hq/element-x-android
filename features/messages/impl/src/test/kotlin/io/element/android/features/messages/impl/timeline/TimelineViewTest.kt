@@ -116,7 +116,7 @@ class TimelineViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        val contentDescription = rule.activity.getString(CommonStrings.event_shield_reason_unverified_identity)
+        val contentDescription = rule.activity.getString(CommonStrings.a11y_encryption_details)
         rule.onNodeWithContentDescription(contentDescription).performClick()
         eventsRecorder.assertList(
             listOf(
