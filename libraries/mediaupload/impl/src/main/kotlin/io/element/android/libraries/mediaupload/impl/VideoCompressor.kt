@@ -90,7 +90,7 @@ class VideoCompressor @Inject constructor(
                 val height = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toIntOrNull() ?: -1
                 val bitrate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)?.toLongOrNull() ?: -1
                 val framerate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE)?.toIntOrNull() ?: -1
-                val rotation = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toIntOrNull()
+                val rotation = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toIntOrNull() ?: 0
 
                 val (actualWidth, actualHeight) = if (width == -1 || height == -1) {
                     // Try getting the first frame instead
@@ -115,11 +115,11 @@ class VideoCompressor @Inject constructor(
 }
 
 internal data class VideoFileMetadata(
-    val width: Int?,
-    val height: Int?,
-    val bitrate: Long?,
-    val frameRate: Int?,
-    val rotation: Int?,
+    val width: Int,
+    val height: Int,
+    val bitrate: Long,
+    val frameRate: Int,
+    val rotation: Int,
 )
 
 sealed interface VideoTranscodingEvent {
@@ -139,11 +139,11 @@ internal object VideoStrategyFactory {
         metadata: VideoFileMetadata?,
         shouldBeCompressed: Boolean,
     ): TrackStrategy {
-        val width = metadata?.width ?: Int.MAX_VALUE
-        val height = metadata?.height ?: Int.MAX_VALUE
-        val bitrate = metadata?.bitrate
-        val frameRate = metadata?.frameRate
-        val rotation = metadata?.rotation
+        val width = metadata?.width?.takeIf { it >= 0 } ?: Int.MAX_VALUE
+        val height = metadata?.height?.takeIf { it >= 0 } ?: Int.MAX_VALUE
+        val bitrate = metadata?.bitrate?.takeIf { it >= 0 }
+        val frameRate = metadata?.frameRate?.takeIf { it >= 0 }
+        val rotation = metadata?.rotation?.takeIf { it >= 0 }
 
         // We only create a resizer if needed
         val resizer = when {
