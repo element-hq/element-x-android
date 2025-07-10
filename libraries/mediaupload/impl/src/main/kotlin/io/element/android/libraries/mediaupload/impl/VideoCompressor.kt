@@ -13,6 +13,7 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
+import com.otaliastudios.transcoder.common.Size
 import com.otaliastudios.transcoder.internal.media.MediaFormatConstants
 import com.otaliastudios.transcoder.resize.AtMostResizer
 import com.otaliastudios.transcoder.strategy.DefaultVideoStrategy
@@ -138,14 +139,33 @@ internal object VideoStrategyFactory {
     ): TrackStrategy {
         val width = metadata?.width ?: Int.MAX_VALUE
         val height = metadata?.height ?: Int.MAX_VALUE
-        val bitrate = metadata?.bitrate
-        val frameRate = metadata?.frameRate
+        val originalBitrate = metadata?.bitrate
+        val originalFrameRate = metadata?.frameRate
 
         // We only create a resizer if needed
         val resizer = when {
             shouldBeCompressed && (width > MAX_COMPRESSED_PIXEL_SIZE || height > MAX_COMPRESSED_PIXEL_SIZE) -> AtMostResizer(MAX_COMPRESSED_PIXEL_SIZE)
             width > MAX_PIXEL_SIZE || height > MAX_PIXEL_SIZE -> AtMostResizer(MAX_PIXEL_SIZE)
             else -> null
+        }
+
+        val newBitrate = if (resizer is AtMostResizer) {
+            val maxSize = resizer.getOutputSize(Size(width, height))
+            // If we are resizing, we also want to reduce the bitrate
+            if (maxSize.major <= MAX_COMPRESSED_PIXEL_SIZE) {
+                2_000_000L
+            } else {
+                4_000_000L
+            }
+        } else {
+            originalBitrate
+        }
+
+        val newFrameRate = if (resizer is AtMostResizer) {
+            // If we are resizing, we also want to reduce the frame rate to 30fps
+            DefaultVideoStrategy.DEFAULT_FRAME_RATE
+        } else {
+            originalFrameRate
         }
 
         return if (resizer == null && expectedExtension == MP4_EXTENSION) {
@@ -155,8 +175,8 @@ internal object VideoStrategyFactory {
             DefaultVideoStrategy.Builder()
                 .apply {
                     resizer?.let { addResizer(it) }
-                    bitrate?.let { bitRate(it) }
-                    frameRate?.let { frameRate(it) }
+                    newBitrate?.let { bitRate(it) }
+                    newFrameRate?.let { frameRate(it) }
                 }
                 .mimeType(MediaFormatConstants.MIMETYPE_VIDEO_AVC)
                 .build()
