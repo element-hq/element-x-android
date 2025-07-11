@@ -24,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,14 +41,20 @@ internal fun VerificationContentVerifying(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.fillMaxSize().padding(bottom = 20.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(bottom = 20.dp),
         contentAlignment = Alignment.Center
     ) {
         when (data) {
             is SessionVerificationData.Decimals -> {
-                val text = data.decimals.joinToString(separator = " - ") { it.toString() }
+                val text = data.decimals.joinToString(separator = " - ")
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .semantics {
+                            contentDescription = data.decimals.joinToString()
+                        },
                     text = text,
                     style = ElementTheme.typography.fontHeadingLgBold,
                     color = ElementTheme.colors.textPrimary,
@@ -57,7 +65,9 @@ internal fun VerificationContentVerifying(
                 // We want each row to have up to 4 emojis
                 val rows = data.emojis.chunked(4)
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .semantics(mergeDescendants = true) {},
                     verticalArrangement = Arrangement.spacedBy(40.dp),
                 ) {
                     rows.forEach { emojis ->

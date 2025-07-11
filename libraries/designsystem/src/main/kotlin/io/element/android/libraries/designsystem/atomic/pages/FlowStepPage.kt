@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -69,9 +69,10 @@ fun FlowStepPage(
             )
         },
         header = {
-            PageTitle(
+            IconTitleSubtitleMolecule(
+                modifier = Modifier.padding(bottom = 16.dp),
                 title = title,
-                subtitle = subTitle,
+                subTitle = subTitle,
                 iconStyle = iconStyle,
             )
         },

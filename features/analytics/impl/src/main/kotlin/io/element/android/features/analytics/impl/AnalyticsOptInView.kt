@@ -29,13 +29,13 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.ClickableLinkText
-import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
@@ -89,10 +89,10 @@ private fun AnalyticsOptInHeader(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        PageTitle(
-            modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
+        IconTitleSubtitleMolecule(
+            modifier = Modifier.padding(top = 60.dp, bottom = 28.dp),
             title = stringResource(id = R.string.screen_analytics_prompt_title, state.applicationName),
-            subtitle = stringResource(id = R.string.screen_analytics_prompt_help_us_improve),
+            subTitle = stringResource(id = R.string.screen_analytics_prompt_help_us_improve),
             iconStyle = BigIcon.Style.Default(CompoundIcons.Chart())
         )
         if (state.hasPolicyLink) {

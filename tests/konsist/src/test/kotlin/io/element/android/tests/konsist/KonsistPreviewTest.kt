@@ -78,8 +78,6 @@ class KonsistPreviewTest {
         "MessagesReactionButtonAddPreview",
         "MessagesReactionButtonExtraPreview",
         "MessagesViewWithIdentityChangePreview",
-        "PageTitleWithIconFullPreview",
-        "PageTitleWithIconMinimalPreview",
         "PendingMemberRowWithLongNamePreview",
         "PinUnlockViewInAppPreview",
         "PollAnswerViewDisclosedNotSelectedPreview",
