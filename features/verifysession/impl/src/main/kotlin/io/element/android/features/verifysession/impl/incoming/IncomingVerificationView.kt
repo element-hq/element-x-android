@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -140,10 +142,18 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
         }
         Step.Failure -> R.string.screen_session_verification_request_failure_subtitle
     }
+    val timeLimitMessage = if (step.isTimeLimited) {
+        stringResource(CommonStrings.a11y_time_limited_action_required)
+    } else {
+        ""
+    }
     PageTitle(
+        modifier = Modifier.semantics(mergeDescendants = true) {
+            contentDescription = timeLimitMessage
+        },
         iconStyle = iconStyle,
         title = stringResource(id = titleTextId),
-        subtitle = stringResource(id = subtitleTextId)
+        subtitle = stringResource(id = subtitleTextId),
     )
 }
 
@@ -187,7 +197,9 @@ private fun ContentInitial(
         }
         is VerificationRequest.Incoming.User -> {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp),
             ) {
                 VerificationUserProfileContent(
                     userId = request.details.senderProfile.userId,

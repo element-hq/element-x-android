@@ -22,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -180,11 +182,18 @@ private fun OutgoingVerificationHeader(step: Step, request: VerificationRequest.
         }
         is Step.Exit -> return
     }
-
+    val timeLimitMessage = if (step.isTimeLimited) {
+        stringResource(CommonStrings.a11y_time_limited_action_required)
+    } else {
+        ""
+    }
     PageTitle(
+        modifier = Modifier.semantics(mergeDescendants = true) {
+            contentDescription = timeLimitMessage
+        },
         iconStyle = iconStyle,
         title = stringResource(id = titleTextId),
-        subtitle = stringResource(id = subtitleTextId)
+        subtitle = stringResource(id = subtitleTextId),
     )
 }
 
