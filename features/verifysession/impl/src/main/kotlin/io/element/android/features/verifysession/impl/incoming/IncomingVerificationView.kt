@@ -20,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.focused
+import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -155,6 +157,10 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
             .semantics(mergeDescendants = true) {
                 contentDescription = timeLimitMessage
                 focused = true
+                if (iconStyle == BigIcon.Style.Loading) {
+                    // Same code than Modifier.progressSemantics()
+                    progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
+                }
             }
             .focusable(),
         iconStyle = iconStyle,
