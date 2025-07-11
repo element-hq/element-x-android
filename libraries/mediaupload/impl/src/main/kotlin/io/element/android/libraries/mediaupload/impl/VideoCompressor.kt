@@ -32,7 +32,9 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.math.min
 
-private const val MP4_EXTENSION = "mp4"
+// The metadata key for the video codec is not part of the public Android API, but it is used by MediaMetadataRetriever
+private const val METADATA_VIDEO_CODEC = 40
+private const val MP4_H264_AVC_CODEC = "video/avc"
 
 class VideoCompressor @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -40,15 +42,16 @@ class VideoCompressor @Inject constructor(
     fun compress(uri: Uri, shouldBeCompressed: Boolean) = callbackFlow {
         val metadata = getVideoMetadata(uri)
 
-        val expectedExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getMimeType(uri))
+        val mimeType = context.getMimeType(uri)
+        val fileExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
 
         val videoStrategy = VideoStrategyFactory.create(
-            expectedExtension = expectedExtension,
+            fileExtension = fileExtension,
             metadata = metadata,
             shouldBeCompressed = shouldBeCompressed
         )
 
-        val tmpFile = context.createTmpFile(extension = MP4_EXTENSION)
+        val tmpFile = context.createTmpFile(extension = "mp4")
         val future = Transcoder.into(tmpFile.path)
             .setVideoTrackStrategy(videoStrategy)
             .addDataSource(context, uri)
@@ -93,6 +96,7 @@ class VideoCompressor @Inject constructor(
                 val bitrate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)?.toLongOrNull() ?: -1
                 val frameRate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE)?.toIntOrNull() ?: -1
                 val rotation = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toIntOrNull() ?: 0
+                val videoCodec = it.extractMetadata(METADATA_VIDEO_CODEC)
 
                 val (actualWidth, actualHeight) = if (width == -1 || height == -1) {
                     // Try getting the first frame instead
@@ -108,6 +112,7 @@ class VideoCompressor @Inject constructor(
                     bitrate = bitrate,
                     frameRate = frameRate,
                     rotation = rotation,
+                    videoCodec = videoCodec,
                 )
             }
         }.onFailure {
@@ -122,6 +127,7 @@ internal data class VideoFileMetadata(
     val bitrate: Long,
     val frameRate: Int,
     val rotation: Int,
+    val videoCodec: String?,
 )
 
 sealed interface VideoTranscodingEvent {
@@ -137,7 +143,7 @@ internal object VideoStrategyFactory {
     private const val MAX_PIXEL_SIZE = 1920
 
     fun create(
-        expectedExtension: String?,
+        fileExtension: String?,
         metadata: VideoFileMetadata?,
         shouldBeCompressed: Boolean,
     ): TrackStrategy {
@@ -146,6 +152,7 @@ internal object VideoStrategyFactory {
         val originalBitrate = metadata?.bitrate?.takeIf { it >= 0 }
         val originalFrameRate = metadata?.frameRate?.takeIf { it >= 0 } ?: DefaultVideoStrategy.DEFAULT_FRAME_RATE
         val rotation = metadata?.rotation?.takeIf { it >= 0 } ?: 0
+        val videoCodec = metadata?.videoCodec
 
         // We only create a resizer if needed
         val resizer = when {
@@ -174,7 +181,8 @@ internal object VideoStrategyFactory {
             originalBitrate
         }
 
-        return if (resizer == null && rotation == 0 && expectedExtension == MP4_EXTENSION) {
+        val hasSameContainerAndCodecs = fileExtension == "mp4" && videoCodec == MP4_H264_AVC_CODEC
+        return if (resizer == null && rotation == 0 && hasSameContainerAndCodecs) {
             // If there's no transcoding or resizing needed for the video file, just create a new file with the same contents but no metadata
             // Rotation is not kept by the PassThroughTrackStrategy, so we need to ensure the video is not rotated
             PassThroughTrackStrategy()
