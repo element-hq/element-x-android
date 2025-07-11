@@ -156,8 +156,8 @@ internal object VideoStrategyFactory {
 
         // We only create a resizer if needed
         val resizer = when {
-            shouldBeCompressed && (width > MAX_COMPRESSED_PIXEL_SIZE || height > MAX_COMPRESSED_PIXEL_SIZE) -> AtMostResizer(MAX_COMPRESSED_PIXEL_SIZE)
-            width > MAX_PIXEL_SIZE || height > MAX_PIXEL_SIZE -> AtMostResizer(MAX_PIXEL_SIZE)
+            shouldBeCompressed && (width > MAX_COMPRESSED_PIXEL_SIZE || height > MAX_COMPRESSED_PIXEL_SIZE) -> AtMostResizer(720, 1280)
+            width > MAX_PIXEL_SIZE || height > MAX_PIXEL_SIZE -> AtMostResizer(1080, 1920)
             else -> null
         }
 
