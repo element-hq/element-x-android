@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Gela berria"</string>
+  <string name="screen_create_room_add_people_title">"Gonbidatu jendea"</string>
+  <string name="screen_create_room_error_creating_room">"Errorea gertatu da gela sortzean"</string>
+  <string name="screen_create_room_private_option_description">"Gonbidatutako jendea soilik sar daiteke gelara. Mezu guztiak daude ertzetik ertzera zifratuta."</string>
+  <string name="screen_create_room_private_option_title">"Gela pribatua"</string>
+  <string name="screen_create_room_public_option_description">"Edonork aurki dezake gela hau.
+Gelaren ezarpenetan aldatu dezakezu hobespena."</string>
+  <string name="screen_create_room_public_option_title">"Gela publikoa"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Edonor sar daiteke gela honetara"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Edonork"</string>
+  <string name="screen_create_room_room_access_section_header">"Gelarako sarbidea"</string>
+  <string name="screen_create_room_room_address_section_title">"Gelaren helbidea"</string>
+  <string name="screen_create_room_room_name_label">"Gelaren izena"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Gelaren ikusgarritasuna"</string>
+  <string name="screen_create_room_title">"Sortu gela"</string>
+  <string name="screen_create_room_topic_label">"Mintzagaia (aukerakoa)"</string>
+  <string name="screen_room_directory_search_title">"Gelen direktorioa"</string>
+  <string name="screen_start_chat_error_starting_chat">"Errorea gertatu da txata hasten saiatzean"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Sartu…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Ez da gela aurkitu"</string>
+</resources>

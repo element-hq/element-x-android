@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Uusi huone"</string>
+  <string name="screen_create_room_add_people_title">"Kutsu ihmisiä"</string>
+  <string name="screen_create_room_error_creating_room">"Huoneen luomisessa tapahtui virhe"</string>
+  <string name="screen_create_room_private_option_description">"Vain kutsutut henkilöt pääsevät tähän huoneeseen. Kaikki viestit ovat päästä päähän salattuja."</string>
+  <string name="screen_create_room_private_option_title">"Yksityinen huone"</string>
+  <string name="screen_create_room_public_option_description">"Kuka tahansa voi löytää tämän huoneen.
+Voit muuttaa tämän milloin tahansa huoneen asetuksista."</string>
+  <string name="screen_create_room_public_option_title">"Julkinen huone"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Kuka tahansa voi liittyä tähän huoneeseen"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Kuka tahansa"</string>
+  <string name="screen_create_room_room_access_section_header">"Huoneeseen Pääsy"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Kuka tahansa voi pyytää saada liittyä huoneeseen, mutta ylläpitäjän tai valvojan on hyväksyttävä pyyntö"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Pyydä liittymistä"</string>
+  <string name="screen_create_room_room_address_section_footer">"Jotta tämä huone näkyisi julkisessa huonehakemistossa, tarvitset huoneen osoitteen."</string>
+  <string name="screen_create_room_room_address_section_title">"Huoneen osoite"</string>
+  <string name="screen_create_room_room_name_label">"Huoneen nimi"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Huoneen näkyvyys"</string>
+  <string name="screen_create_room_title">"Luo huone"</string>
+  <string name="screen_create_room_topic_label">"Aihe (valinnainen)"</string>
+  <string name="screen_room_directory_search_title">"Huoneluettelo"</string>
+  <string name="screen_start_chat_error_starting_chat">"Keskustelun aloituksessa tapahtui virhe"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Liity huoneeseen osoitteella"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Osoite ei ole kelvollinen"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Syötä…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Täsmäävä huone löytyi"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Huonetta ei löytynyt"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"esim. #huoneen-nimi:matrix.org"</string>
+</resources>

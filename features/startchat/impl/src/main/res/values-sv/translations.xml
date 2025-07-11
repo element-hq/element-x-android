@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nytt rum"</string>
+  <string name="screen_create_room_add_people_title">"Bjud in personer"</string>
+  <string name="screen_create_room_error_creating_room">"Ett fel uppstod när rummet skapades"</string>
+  <string name="screen_create_room_private_option_description">"Endast inbjudna personer har tillgång till detta rum. Alla meddelanden är totalsträckskrypterade."</string>
+  <string name="screen_create_room_private_option_title">"Privat rum"</string>
+  <string name="screen_create_room_public_option_description">"Vem som helst kan hitta det här rummet.
+Du kan ändra detta när som helst i rumsinställningarna."</string>
+  <string name="screen_create_room_public_option_title">"Offentligt rum"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Vem som helst kan gå med i det här rummet"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Vem som helst"</string>
+  <string name="screen_create_room_room_access_section_header">"Rumsåtkomst"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Vem som helst kan be om att gå med i rummet men en administratör eller en moderator måste acceptera begäran"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Be om att gå med"</string>
+  <string name="screen_create_room_room_address_section_footer">"För att detta rum ska vara synligt i den allmänna rumskatalogen behöver du en rumsadress."</string>
+  <string name="screen_create_room_room_address_section_title">"Rumsadress"</string>
+  <string name="screen_create_room_room_name_label">"Rumsnamn"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Rumssynlighet"</string>
+  <string name="screen_create_room_title">"Skapa ett rum"</string>
+  <string name="screen_create_room_topic_label">"Ämne (valfritt)"</string>
+  <string name="screen_room_directory_search_title">"Rumskatalog"</string>
+  <string name="screen_start_chat_error_starting_chat">"Ett fel uppstod när du försökte starta en chatt"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Gå med i rum med adress"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Inte en giltig adress"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Ange …"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Matchande rum hittades"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Rummet hittades inte"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"t.ex. #rumsnamn:matrix.org"</string>
+</resources>

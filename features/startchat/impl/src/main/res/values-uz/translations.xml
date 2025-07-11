@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Yangi xona"</string>
+  <string name="screen_create_room_add_people_title">"Odamlarni taklif qiling"</string>
+  <string name="screen_create_room_error_creating_room">"Xonani yaratishda xatolik yuz berdi"</string>
+  <string name="screen_create_room_private_option_description">"Bu xonadagi xabarlar shifrlangan. Keyinchalik shifrlashni o‘chirib bo‘lmaydi."</string>
+  <string name="screen_create_room_private_option_title">"Shaxsiy xona (faqat taklif)"</string>
+  <string name="screen_create_room_public_option_description">"Xabarlar shifrlanmagan va har kim ularni o\'qiy oladi. Keyinchalik shifrlashni yoqishingiz mumkin."</string>
+  <string name="screen_create_room_room_name_label">"Xona nomi"</string>
+  <string name="screen_create_room_title">"Xonani yaratish"</string>
+  <string name="screen_create_room_topic_label">"Mavzu (ixtiyoriy)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Suhbatni boshlashda xatolik yuz berdi"</string>
+</resources>

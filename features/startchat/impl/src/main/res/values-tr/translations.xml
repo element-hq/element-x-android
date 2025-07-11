@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Yeni oda"</string>
+  <string name="screen_create_room_add_people_title">"İnsanları davet et"</string>
+  <string name="screen_create_room_error_creating_room">"Oda oluşturulurken bir hata oluştu"</string>
+  <string name="screen_create_room_private_option_description">"Bu odaya yalnızca davet edilen kişiler erişebilir. Tüm mesajlar uçtan uca şifrelenir."</string>
+  <string name="screen_create_room_private_option_title">"Özel oda"</string>
+  <string name="screen_create_room_public_option_description">"Bu odayı herkes bulabilir.
+Bunu istediğiniz zaman oda ayarlarından değiştirebilirsiniz."</string>
+  <string name="screen_create_room_public_option_title">"Herkese açık oda"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Bu odaya herkes katılabilir"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Herkes"</string>
+  <string name="screen_create_room_room_access_section_header">"Oda Erişimi"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Herkes odaya katılmayı isteyebilir ancak bir yönetici veya moderatörün isteği kabul etmesi gerekecektir"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Katılmak için sor"</string>
+  <string name="screen_create_room_room_address_section_footer">"Bu odanın genel oda dizininde görünür olması için bir oda adresine ihtiyacınız olacaktır."</string>
+  <string name="screen_create_room_room_address_section_title">"Oda adresi"</string>
+  <string name="screen_create_room_room_name_label">"Oda adı"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Oda görünürlüğü"</string>
+  <string name="screen_create_room_title">"Bir oda oluştur"</string>
+  <string name="screen_create_room_topic_label">"Konu (isteğe bağlı)"</string>
+  <string name="screen_room_directory_search_title">"Oda dizini"</string>
+  <string name="screen_start_chat_error_starting_chat">"Sohbet başlatmaya çalışırken bir hata oluştu"</string>
+</resources>

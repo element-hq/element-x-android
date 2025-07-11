@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Новы пакой"</string>
+  <string name="screen_create_room_add_people_title">"Запрасіць карыстальнікаў"</string>
+  <string name="screen_create_room_error_creating_room">"Пры стварэнні пакоя адбылася памылка"</string>
+  <string name="screen_create_room_private_option_description">"Толькі запрошаныя людзі могуць атрымаць доступ да гэтага пакоя. Усе паведамленні абаронены end-to-end шыфраваннем."</string>
+  <string name="screen_create_room_private_option_title">"Прыватны пакой"</string>
+  <string name="screen_create_room_public_option_description">"Любы можа знайсці гэты пакой. 
+Вы можаце змяніць гэта ў любы час у наладах пакоя."</string>
+  <string name="screen_create_room_public_option_title">"Публічны пакой"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Хто заўгодна"</string>
+  <string name="screen_create_room_room_access_section_header">"Доступ у пакой"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Папрасіце далучыцца"</string>
+  <string name="screen_create_room_room_name_label">"Назва пакоя"</string>
+  <string name="screen_create_room_title">"Стварыце пакой"</string>
+  <string name="screen_create_room_topic_label">"Тэма (неабавязкова)"</string>
+  <string name="screen_room_directory_search_title">"Каталог пакояў"</string>
+  <string name="screen_start_chat_error_starting_chat">"Пры спробе пачаць чат адбылася памылка"</string>
+</resources>

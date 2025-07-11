@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nieuwe kamer"</string>
+  <string name="screen_create_room_add_people_title">"Mensen uitnodigen"</string>
+  <string name="screen_create_room_error_creating_room">"Er is een fout opgetreden bij het aanmaken van de kamer"</string>
+  <string name="screen_create_room_private_option_description">"Alleen uitgenodigde personen hebben toegang tot deze kamer. Alle berichten zijn end-to-end versleuteld."</string>
+  <string name="screen_create_room_private_option_title">"Privé kamer"</string>
+  <string name="screen_create_room_public_option_description">"Iedereen kan deze kamer vinden.
+Je kunt dit op elk gewenst moment wijzigen in de kamerinstellingen."</string>
+  <string name="screen_create_room_public_option_title">"Openbare kamer"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Iedereen kan toetreden tot deze kamer"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Iedereen"</string>
+  <string name="screen_create_room_room_access_section_header">"Toegang tot de kamer"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Iedereen kan vragen om toe te treden tot de kamer, maar een beheerder of moderator moet het verzoek accepteren"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Vraag om toe te treden"</string>
+  <string name="screen_create_room_room_name_label">"Naam van de kamer"</string>
+  <string name="screen_create_room_title">"Creëer een kamer"</string>
+  <string name="screen_create_room_topic_label">"Onderwerp (optioneel)"</string>
+  <string name="screen_room_directory_search_title">"Kamergids"</string>
+  <string name="screen_start_chat_error_starting_chat">"Er is een fout opgetreden bij het starten van een chat"</string>
+</resources>

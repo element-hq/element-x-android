@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"اتاق جدید"</string>
+  <string name="screen_create_room_add_people_title">"دعوت افراد"</string>
+  <string name="screen_create_room_error_creating_room">"هنگام ایجاد اتاق خطایی رخ داد"</string>
+  <string name="screen_create_room_private_option_description">"تنها افراد دعوت شده می‌توانند به این اتاق دسترسی داشته باشند. همهٔ پیام‌ها رمزنگاری سرتاسری شده‌اند."</string>
+  <string name="screen_create_room_private_option_title">"اتاق خصوصی"</string>
+  <string name="screen_create_room_public_option_description">"هرکسی می‌تواند اتاق را بیابد.
+می‌توانید بعداً در تظیمات اتاق عوضش کنید."</string>
+  <string name="screen_create_room_public_option_title">"اتاق عمومی"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"هرکسی می‌تواند به این اتاق بپیوندد"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"هرکسی"</string>
+  <string name="screen_create_room_room_access_section_header">"دسترسی اتاق"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"درخواست دعوت"</string>
+  <string name="screen_create_room_room_address_section_title">"نشانی اتاق"</string>
+  <string name="screen_create_room_room_name_label">"نام اتاق"</string>
+  <string name="screen_create_room_room_visibility_section_title">"نمایانی اتاق"</string>
+  <string name="screen_create_room_title">"ایجاد اتاق"</string>
+  <string name="screen_create_room_topic_label">"موضوع (اختیاری)"</string>
+  <string name="screen_room_directory_search_title">"فهرست اتاق‌ها"</string>
+  <string name="screen_start_chat_error_starting_chat">"هنگام تلاش برای شروع چت خطایی روی داد"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"پیوستن به اتاق با نشانی"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"نشانی معتبری نیست"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"ورود…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"اتاق مطابق پیدا شد"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"اتاق پیدا نشد"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"نمونه: ‪#room-name:matrix.org"</string>
+</resources>

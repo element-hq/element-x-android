@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Cameră nouă"</string>
+  <string name="screen_create_room_add_people_title">"Invitați prieteni"</string>
+  <string name="screen_create_room_error_creating_room">"A apărut o eroare la crearea camerei"</string>
+  <string name="screen_create_room_private_option_description">"Doar persoanele invitate pot accesa această cameră. Toate mesajele sunt criptate end-to-end."</string>
+  <string name="screen_create_room_private_option_title">"Cameră privată"</string>
+  <string name="screen_create_room_public_option_description">"Oricine poate găsi această cameră.
+Puteți modifica acest lucru oricând în setări."</string>
+  <string name="screen_create_room_public_option_title">"Cameră publică"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Oricine se poate alătura acestei camere"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Oricine"</string>
+  <string name="screen_create_room_room_access_section_header">"Acces la cameră"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Oricine poate cere să se alăture camerei, dar un administrator sau un moderator va trebui să accepte solicitarea"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Cereți să vă alăturați"</string>
+  <string name="screen_create_room_room_address_section_footer">"Pentru ca această cameră să fie vizibilă în directorul de camere publice, veți avea nevoie de o adresă de cameră."</string>
+  <string name="screen_create_room_room_name_label">"Numele camerei"</string>
+  <string name="screen_create_room_title">"Creați o cameră"</string>
+  <string name="screen_create_room_topic_label">"Subiect (opțional)"</string>
+  <string name="screen_room_directory_search_title">"Director de camere"</string>
+  <string name="screen_start_chat_error_starting_chat">"A apărut o eroare la încercarea începerii conversației"</string>
+</resources>

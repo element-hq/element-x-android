@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"建立聊天室"</string>
+  <string name="screen_create_room_add_people_title">"邀請夥伴"</string>
+  <string name="screen_create_room_error_creating_room">"建立聊天室時發生錯誤"</string>
+  <string name="screen_create_room_private_option_description">"僅被邀請的人才能存取此聊天室。所有訊息均會端到端加密。"</string>
+  <string name="screen_create_room_private_option_title">"私密聊天室"</string>
+  <string name="screen_create_room_public_option_description">"任何人都可以找到此聊天室。
+您隨時都可以在聊天室設定中變更此設定。"</string>
+  <string name="screen_create_room_public_option_title">"公開的聊天室"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"任何人都可以加入此聊天室"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"任何人"</string>
+  <string name="screen_create_room_room_access_section_header">"聊天室存取權"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"任何人都可以要求加入聊天室，但管理員或版主必須接受該請求"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"要求加入"</string>
+  <string name="screen_create_room_room_address_section_footer">"為了讓此聊天室在公開聊天室目錄中可見，您需要聊天室地址。"</string>
+  <string name="screen_create_room_room_address_section_title">"聊天室地址"</string>
+  <string name="screen_create_room_room_name_label">"聊天室名稱"</string>
+  <string name="screen_create_room_room_visibility_section_title">"聊天室能見度"</string>
+  <string name="screen_create_room_title">"建立聊天室"</string>
+  <string name="screen_create_room_topic_label">"主題（非必填）"</string>
+  <string name="screen_room_directory_search_title">"聊天室目錄"</string>
+  <string name="screen_start_chat_error_starting_chat">"嘗試開始聊天時發生錯誤"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"按地址加入聊天室"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"不是有效的位址"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"輸入……"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"找到相符的聊天室"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"找不到聊天室"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"例如 #room-name:matrix.org"</string>
+</resources>

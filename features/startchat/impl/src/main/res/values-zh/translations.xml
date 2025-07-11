@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"新聊天室"</string>
+  <string name="screen_create_room_add_people_title">"邀请朋友"</string>
+  <string name="screen_create_room_error_creating_room">"创建聊天室时出错"</string>
+  <string name="screen_create_room_private_option_description">"只有受邀用户才能访问此聊天室。所有消息均经过端到端加密。"</string>
+  <string name="screen_create_room_private_option_title">"私有聊天室"</string>
+  <string name="screen_create_room_public_option_description">"任何人都能找到此聊天室。
+你可以随时在聊天室设置中更改。"</string>
+  <string name="screen_create_room_public_option_title">"公共聊天室"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"任何人都可以加入此房间"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"任何人"</string>
+  <string name="screen_create_room_room_access_section_header">"房间访问权限"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"任何人都可以请求加入房间，但必须由管理员或审核人接受"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"请求加入"</string>
+  <string name="screen_create_room_room_address_section_footer">"要使该房间在公开房间目录中可见，您需要一个房间地址。"</string>
+  <string name="screen_create_room_room_address_section_title">"房间地址"</string>
+  <string name="screen_create_room_room_name_label">"聊天室名称"</string>
+  <string name="screen_create_room_room_visibility_section_title">"房间可见性"</string>
+  <string name="screen_create_room_title">"创建聊天室"</string>
+  <string name="screen_create_room_topic_label">"主题（可选）"</string>
+  <string name="screen_room_directory_search_title">"聊天室目录"</string>
+  <string name="screen_start_chat_error_starting_chat">"在开始聊天时发生了错误"</string>
+</resources>

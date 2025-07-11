@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Uus jututuba"</string>
+  <string name="screen_create_room_add_people_title">"Kutsu osalejaid"</string>
+  <string name="screen_create_room_error_creating_room">"Jututoa loomisel tekkis viga"</string>
+  <string name="screen_create_room_private_option_description">"Ligipääs siia jututuppa on vaid kutse alusel. Kõik sõnumid siin jututoas on läbivalt krüptitud."</string>
+  <string name="screen_create_room_private_option_title">"Privaatne jututuba"</string>
+  <string name="screen_create_room_public_option_description">"Kõik saavad seda jututuba leida.
+Sa võid seda jututoa seadistustest alati muuta."</string>
+  <string name="screen_create_room_public_option_title">"Avalik jututuba"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Kõik võivad selle jututoaga liituda"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Kõik"</string>
+  <string name="screen_create_room_room_access_section_header">"Ligipääs jututoale"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Küsi võimalust liitumiseks"</string>
+  <string name="screen_create_room_room_address_section_footer">"Selleks, et see jututuba oleks nähtav jututubade avalikus kataloogis, sa vajad jututoa aadressi."</string>
+  <string name="screen_create_room_room_address_section_title">"Jututoa aadress"</string>
+  <string name="screen_create_room_room_name_label">"Jututoa nimi"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Jututoa nähtavus"</string>
+  <string name="screen_create_room_title">"Loo jututuba"</string>
+  <string name="screen_create_room_topic_label">"Teema (kui soovid lisada)"</string>
+  <string name="screen_room_directory_search_title">"Jututubade kataloog"</string>
+  <string name="screen_start_chat_error_starting_chat">"Vestluse alustamisel tekkis viga"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Liitu jututoaga aadressi alusel"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"See pole kehtiv aadress"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Sisene…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Leidsime vastava jututoa"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Jututuba ei leidu"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"nt. #jututoa-nimi:matrix.org"</string>
+</resources>

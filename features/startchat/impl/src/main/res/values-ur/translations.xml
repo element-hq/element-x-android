@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"نیا کمرہ"</string>
+  <string name="screen_create_room_add_people_title">"لوگوں کو مدعو کریں"</string>
+  <string name="screen_create_room_error_creating_room">"کمرہ تخلیق کرتے ہوئے ایک نقص واقع ہوا"</string>
+  <string name="screen_create_room_private_option_description">"صرف مدعو لوگ ہی اس کمرے تک رسائی حاصل کر سکتے ہیں۔ تمام پیغامات آخر تا آخر مرموز کردہ ہیں۔"</string>
+  <string name="screen_create_room_private_option_title">"نجی کمرہ"</string>
+  <string name="screen_create_room_public_option_description">"کوئی بھی یہ کمرہ ڈھونڈ سکتا ہے۔
+آپ اسے کمرے کی ترتیبات میں کسی بھی وقت تبدیل کرسکتے ہیں۔"</string>
+  <string name="screen_create_room_public_option_title">"عوامی کمرہ"</string>
+  <string name="screen_create_room_room_name_label">"کمرے کا نام"</string>
+  <string name="screen_create_room_title">"ایک کمرہ بنائیں"</string>
+  <string name="screen_create_room_topic_label">"موضوع (اختیاری)"</string>
+  <string name="screen_room_directory_search_title">"کمرے کا راہنامچہ"</string>
+  <string name="screen_start_chat_error_starting_chat">"گفتگو شروع کرنے کی کوشش کرتے وقت ایک خرابی واقع ہوگئی"</string>
+</resources>
