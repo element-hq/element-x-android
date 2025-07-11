@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Ruangan baru"</string>
+  <string name="screen_create_room_add_people_title">"Undang orang-orang"</string>
+  <string name="screen_create_room_error_creating_room">"Terjadi kesalahan saat membuat ruangan"</string>
+  <string name="screen_create_room_private_option_description">"Hanya orang-orang yang diundang dapat mengakses ruangan ini. Semua pesan terenkripsi secara ujung ke ujung."</string>
+  <string name="screen_create_room_private_option_title">"Ruangan pribadi"</string>
+  <string name="screen_create_room_public_option_description">"Siapa pun dapat mencari ruangan ini.
+Anda dapat mengubah ini kapan pun dalam pengaturan ruangan."</string>
+  <string name="screen_create_room_public_option_title">"Ruangan publik"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Siapa pun dapat bergabung dengan ruangan ini"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Siapa pun"</string>
+  <string name="screen_create_room_room_access_section_header">"Akses Ruangan"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Siapa pun dapat meminta untuk bergabung dengan ruangan tetapi administrator atau moderator harus menerima permintaan tersebut"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Minta untuk bergabung"</string>
+  <string name="screen_create_room_room_address_section_footer">"Supaya ruangan ini terlihat di direktori ruangan publik, Anda memerlukan alamat ruangan."</string>
+  <string name="screen_create_room_room_address_section_title">"Alamat ruangan"</string>
+  <string name="screen_create_room_room_name_label">"Nama ruangan"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Keterlihatan ruangan"</string>
+  <string name="screen_create_room_title">"Buat ruangan"</string>
+  <string name="screen_create_room_topic_label">"Topik (opsional)"</string>
+  <string name="screen_room_directory_search_title">"Direktori ruangan"</string>
+  <string name="screen_start_chat_error_starting_chat">"Terjadi kesalahan saat mencoba memulai obrolan"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Bergabung dalam ruangan berdasarkan alamat"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Bukan alamat yang valid"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Masuk…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Ruangan yang cocok ditemukan"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Ruangan tidak ditemukan"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"mis. #nama-ruangan:matrix.org"</string>
+</resources>

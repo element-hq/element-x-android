@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nyt rum"</string>
+  <string name="screen_create_room_add_people_title">"Invitér folk"</string>
+  <string name="screen_create_room_error_creating_room">"Der opstod en fejl ved oprettelsen af rummet"</string>
+  <string name="screen_create_room_private_option_description">"Kun inviterede personer kan få adgang til dette rum. Alle meddelelser er ende-til-ende krypteret."</string>
+  <string name="screen_create_room_private_option_title">"Privat rum"</string>
+  <string name="screen_create_room_public_option_description">"Alle kan finde dette rum.
+Du kan ændre dette når som helst i rummets indstillinger."</string>
+  <string name="screen_create_room_public_option_title">"Offentligt rum"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Alle kan deltage i dette rum"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Enhver"</string>
+  <string name="screen_create_room_room_access_section_header">"Adgang til rummet"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Alle kan bede om at deltage i rummet, men en administrator eller en moderator skal acceptere anmodningen"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Spørg om at deltage"</string>
+  <string name="screen_create_room_room_address_section_footer">"Hvis dette rum skal være synligt i det offentlige register, skal du bruge en rum-adresse."</string>
+  <string name="screen_create_room_room_address_section_title">"Rummets adresse"</string>
+  <string name="screen_create_room_room_name_label">"Navn på rum"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Rummets synlighed"</string>
+  <string name="screen_create_room_title">"Opret et rum"</string>
+  <string name="screen_create_room_topic_label">"Emne (valgfrit)"</string>
+  <string name="screen_room_directory_search_title">"Register over rum"</string>
+  <string name="screen_start_chat_error_starting_chat">"Der opstod en fejl under forsøget på at starte en samtale"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Tilslut dig rummet med adressen"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Ikke en gyldig adresse"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Indtast…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Matchende rum fundet"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Rum ikke fundet"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"f.eks. #rummets-navn:matrix.org"</string>
+</resources>

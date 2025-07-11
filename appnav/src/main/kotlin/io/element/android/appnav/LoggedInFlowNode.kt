@@ -46,7 +46,7 @@ import io.element.android.appnav.loggedin.SendQueues
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
-import io.element.android.features.createroom.api.CreateRoomEntryPoint
+import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
@@ -110,7 +110,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val homeEntryPoint: HomeEntryPoint,
     private val preferencesEntryPoint: PreferencesEntryPoint,
-    private val createRoomEntryPoint: CreateRoomEntryPoint,
+    private val startChatEntryPoint: StartChatEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
     private val userProfileEntryPoint: UserProfileEntryPoint,
@@ -291,7 +291,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.Settings())
                     }
 
-                    override fun onCreateRoomClick() {
+                    override fun onStartChatClick() {
                         backstack.push(NavTarget.CreateRoom)
                     }
 
@@ -409,7 +409,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .build()
             }
             NavTarget.CreateRoom -> {
-                val callback = object : CreateRoomEntryPoint.Callback {
+                val callback = object : StartChatEntryPoint.Callback {
                     override fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>) {
                         backstack.replace(NavTarget.Room(roomIdOrAlias = roomIdOrAlias, serverNames = serverNames))
                     }
@@ -419,7 +419,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
                 }
 
-                createRoomEntryPoint
+                startChatEntryPoint
                     .nodeBuilder(this, buildContext)
                     .callback(callback)
                     .build()

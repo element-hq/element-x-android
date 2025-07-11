@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"ახალი ოთახი"</string>
+  <string name="screen_create_room_add_people_title">"ხალხის მოწვევა"</string>
+  <string name="screen_create_room_error_creating_room">"ოთახის შექმნისას შეცდომა მოხდა"</string>
+  <string name="screen_create_room_private_option_description">"ამ ოთახში შეტყობინებები დაშიფრულია. შემდგომ დაშიფვრის გამორთვა შეუძლებელია."</string>
+  <string name="screen_create_room_private_option_title">"კერძო ოთახი"</string>
+  <string name="screen_create_room_public_option_description">"ყველას ამ ოთახის მოძებნა შეუძლია.
+თქვენ ნებისმიერ დროს შეგიძლიათ ამის შეცვლა ოთახის პარამეტრებში."</string>
+  <string name="screen_create_room_room_name_label">"ოთახის სახელი"</string>
+  <string name="screen_create_room_title">"ოთახის შექმნა"</string>
+  <string name="screen_create_room_topic_label">"თემა (სურვილისამებრ)"</string>
+  <string name="screen_room_directory_search_title">"ოთახის კატალოგი"</string>
+  <string name="screen_start_chat_error_starting_chat">"ჩატის დაწყების მცდელობისას შეცდომა მოხდა"</string>
+</resources>

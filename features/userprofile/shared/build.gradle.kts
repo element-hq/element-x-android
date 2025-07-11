@@ -39,7 +39,7 @@ dependencies {
     api(projects.features.userprofile.api)
     api(projects.services.apperror.api)
     implementation(libs.coil.compose)
-    implementation(projects.features.createroom.api)
+    implementation(projects.features.startchat.api)
     implementation(projects.services.analytics.api)
 
     testImplementation(libs.test.junit)

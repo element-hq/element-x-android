@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Νέα αίθουσα"</string>
+  <string name="screen_create_room_add_people_title">"Πρόσκληση ατόμων"</string>
+  <string name="screen_create_room_error_creating_room">"Προέκυψε σφάλμα κατά τη δημιουργία της αίθουσας"</string>
+  <string name="screen_create_room_private_option_description">"Μόνο τα άτομα που έχουν προσκληθεί μπορούν να έχουν πρόσβαση σε αυτή την αίθουσα. Όλα τα μηνύματα είναι κρυπτογραφημένα από άκρο σε άκρο."</string>
+  <string name="screen_create_room_private_option_title">"Ιδιωτική αίθουσα"</string>
+  <string name="screen_create_room_public_option_description">"Ο καθένας μπορεί να βρει αυτή την αίθουσα.
+Αυτό μπορείτε να το αλλάξετε ανά πάσα στιγμή στις ρυθμίσεις της αίθουσας."</string>
+  <string name="screen_create_room_public_option_title">"Δημόσια αίθουσα"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Οποιοσδήποτε μπορεί να συμμετάσχει σε αυτή την αίθουσα"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Οποιοσδήποτε"</string>
+  <string name="screen_create_room_room_access_section_header">"Πρόσβαση στην Αίθουσα"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στην αίθουσα, αλλά ένας διαχειριστής ή ένας συντονιστής θα πρέπει να αποδεχτεί το αίτημα"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Αίτημα συμμετοχής"</string>
+  <string name="screen_create_room_room_address_section_footer">"Για να είναι ορατή αυτή η αίθουσα στον δημόσιο κατάλογο αιθουσών, θα χρειαστείτε μια διεύθυνση αίθουσας."</string>
+  <string name="screen_create_room_room_address_section_title">"Διεύθυνση αίθουσας"</string>
+  <string name="screen_create_room_room_name_label">"Όνομα αίθουσας"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Ορατότητα αίθουσας"</string>
+  <string name="screen_create_room_title">"Δημιουργία αίθουσας"</string>
+  <string name="screen_create_room_topic_label">"Θέμα (προαιρετικό)"</string>
+  <string name="screen_room_directory_search_title">"Κατάλογος αιθουσών"</string>
+  <string name="screen_start_chat_error_starting_chat">"Παρουσιάστηκε σφάλμα κατά την προσπάθεια έναρξης μιας συνομιλίας"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Συμμετοχή σε αίθουσα μέσω διεύθυνσης"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Μη έγκυρη διεύθυνση"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Εισάγετε…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Βρέθηκε η αντίστοιχη αίθουσα"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Η αίθουσα δεν βρέθηκε"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"π.χ. #όνομα-αίθουσας:matrix.org"</string>
+</resources>

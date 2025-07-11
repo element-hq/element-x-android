@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nytt rom"</string>
+  <string name="screen_create_room_add_people_title">"Inviter folk"</string>
+  <string name="screen_create_room_error_creating_room">"Det oppsto en feil under opprettelsen av rommet"</string>
+  <string name="screen_create_room_private_option_description">"Bare inviterte personer har tilgang til dette rommet. Alle meldinger er ende-til-ende-kryptert."</string>
+  <string name="screen_create_room_private_option_title">"Privat rom"</string>
+  <string name="screen_create_room_public_option_description">"Alle kan finne dette rommet.
+Du kan endre dette når som helst i rominnstillingene."</string>
+  <string name="screen_create_room_public_option_title">"Offentlig rom"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Alle kan bli med i dette rommet"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Alle"</string>
+  <string name="screen_create_room_room_access_section_header">"Tilgang til rom"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Alle kan be om å få bli med i rommet, men en administrator eller moderator må godta forespørselen"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Be om å bli med"</string>
+  <string name="screen_create_room_room_address_section_footer">"For at dette rommet skal være synlig i den offentlige romkatalogen, trenger du en romadresse."</string>
+  <string name="screen_create_room_room_address_section_title">"Romadresse"</string>
+  <string name="screen_create_room_room_name_label">"Romnavn"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Romsynlighet"</string>
+  <string name="screen_create_room_title">"Opprett et rom"</string>
+  <string name="screen_create_room_topic_label">"Emne (valgfritt)"</string>
+  <string name="screen_room_directory_search_title">"Romkatalog"</string>
+  <string name="screen_start_chat_error_starting_chat">"Det oppstod en feil når du prøvde å starte en chat"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Bli med i rommet med adresse"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Ikke en gyldig adresse"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Gå inn…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Matchende rom funnet"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Rom ikke funnet"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"f.eks. #rom-navn:matrix.org"</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nouveau salon"</string>
+  <string name="screen_create_room_add_people_title">"Inviter des amis"</string>
+  <string name="screen_create_room_error_creating_room">"Une erreur s’est produite lors de la création du salon"</string>
+  <string name="screen_create_room_private_option_description">"Seules les personnes invitées peuvent accéder à ce salon. Tous les messages sont chiffrés de bout en bout."</string>
+  <string name="screen_create_room_private_option_title">"Salon privé"</string>
+  <string name="screen_create_room_public_option_description">"N’importe qui peut trouver ce salon.
+Vous pouvez modifier cela à tout moment dans les paramètres du salon."</string>
+  <string name="screen_create_room_public_option_title">"Salon public"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Tout le monde peut rejoindre ce salon"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Tout le monde"</string>
+  <string name="screen_create_room_room_access_section_header">"Accès au salon"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Tout le monde peut demander à rejoindre le salon, mais un administrateur ou un modérateur devra accepter la demande"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Demander à rejoindre"</string>
+  <string name="screen_create_room_room_address_section_footer">"Pour que ce salon soit visible dans le répertoire des salons publics, vous aurez besoin d’une adresse de salon."</string>
+  <string name="screen_create_room_room_address_section_title">"Adresse du salon"</string>
+  <string name="screen_create_room_room_name_label">"Nom du salon"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Visibilité du salon"</string>
+  <string name="screen_create_room_title">"Créer un salon"</string>
+  <string name="screen_create_room_topic_label">"Sujet (facultatif)"</string>
+  <string name="screen_room_directory_search_title">"Annuaire des salons"</string>
+  <string name="screen_start_chat_error_starting_chat">"Une erreur s’est produite lors de la tentative de création de la discussion"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Saisir une adresse de salon"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Ce n’est pas une adresse valide"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Saisir…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Ce salon existe"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Salon non trouvé"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"ex: #nom-du-salon:matrix.org"</string>
+</resources>

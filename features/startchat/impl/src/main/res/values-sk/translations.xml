@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nová miestnosť"</string>
+  <string name="screen_create_room_add_people_title">"Pozvať ľudí"</string>
+  <string name="screen_create_room_error_creating_room">"Pri vytváraní miestnosti došlo k chybe"</string>
+  <string name="screen_create_room_private_option_description">"Do tejto miestnosti majú prístup iba pozvaní ľudia. Všetky správy sú end-to-end šifrované."</string>
+  <string name="screen_create_room_private_option_title">"Súkromná miestnosť"</string>
+  <string name="screen_create_room_public_option_description">"Túto miestnosť môže nájsť ktokoľvek.
+Môžete to kedykoľvek zmeniť v nastaveniach miestnosti."</string>
+  <string name="screen_create_room_public_option_title">"Verejná miestnosť"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Do tejto miestnosti sa môže pripojiť ktokoľvek"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Ktokoľvek"</string>
+  <string name="screen_create_room_room_access_section_header">"Prístup do miestnosti"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Ktokoľvek môže požiadať o pripojenie sa k miestnosti, ale administrátor alebo moderátor bude musieť žiadosť schváliť"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Požiadať o pripojenie"</string>
+  <string name="screen_create_room_room_address_section_footer">"Aby bola táto miestnosť viditeľná v adresári verejných miestností, budete potrebovať adresu miestnosti."</string>
+  <string name="screen_create_room_room_address_section_title">"Adresa miestnosti"</string>
+  <string name="screen_create_room_room_name_label">"Názov miestnosti"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Viditeľnosť miestnosti"</string>
+  <string name="screen_create_room_title">"Vytvoriť miestnosť"</string>
+  <string name="screen_create_room_topic_label">"Téma (voliteľné)"</string>
+  <string name="screen_room_directory_search_title">"Adresár miestností"</string>
+  <string name="screen_start_chat_error_starting_chat">"Pri pokuse o spustenie konverzácie sa vyskytla chyba"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Pripojte sa do miestnosti podľa adresy"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Neplatná adresa"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Zadajte…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Nájdená zodpovedajúca miestnosť"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Miestnosť sa nenašla"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"napr. #nazov-miestnosti:matrix.org"</string>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Нова стая"</string>
+  <string name="screen_create_room_add_people_title">"Поканване на хора"</string>
+  <string name="screen_create_room_error_creating_room">"Възникна грешка при създаването на стаята"</string>
+  <string name="screen_create_room_private_option_description">"Само поканени хора имат достъп до тази стая. Всички съобщения са шифровани от край до край."</string>
+  <string name="screen_create_room_private_option_title">"Частна стая"</string>
+  <string name="screen_create_room_public_option_description">"Всеки може да намери тази стая.
+Можете да промените това по всяко време в настройките на стаята."</string>
+  <string name="screen_create_room_public_option_title">"Общодостъпна стая"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Всеки може да се присъедини към тази стая"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Всеки"</string>
+  <string name="screen_create_room_room_address_section_footer">"За да бъде тази стая видима в директорията на общодостъпните стаи, ще ви е необходим адрес на стаята."</string>
+  <string name="screen_create_room_room_name_label">"Име на стаята"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Видимост на стаята"</string>
+  <string name="screen_create_room_title">"Създаване на стая"</string>
+  <string name="screen_create_room_topic_label">"Тема за разговор (незадължително)"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Присъединяване към стая по адрес"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Не е валиден адрес"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Въведете…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Стаята не е намерена"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"напр. #room-name:matrix.org"</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"New room"</string>
+  <string name="screen_create_room_add_people_title">"Invite people"</string>
+  <string name="screen_create_room_error_creating_room">"An error occurred when creating the room"</string>
+  <string name="screen_create_room_private_option_description">"Only people invited can access this room. All messages are end-to-end encrypted."</string>
+  <string name="screen_create_room_private_option_title">"Private room"</string>
+  <string name="screen_create_room_public_option_description">"Anyone can find this room.
+You can change this anytime in room settings."</string>
+  <string name="screen_create_room_public_option_title">"Public room"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Anyone can join this room"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Anyone"</string>
+  <string name="screen_create_room_room_access_section_header">"Room Access"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Anyone can ask to join the room but an administrator or a moderator will have to accept the request"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Ask to join"</string>
+  <string name="screen_create_room_room_address_section_footer">"In order for this room to be visible in the public room directory, you will need a room address."</string>
+  <string name="screen_create_room_room_address_section_title">"Room address"</string>
+  <string name="screen_create_room_room_name_label">"Room name"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Room visibility"</string>
+  <string name="screen_create_room_title">"Create a room"</string>
+  <string name="screen_create_room_topic_label">"Topic (optional)"</string>
+  <string name="screen_room_directory_search_title">"Room directory"</string>
+  <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Join room by address"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Not a valid address"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Enter…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Matching room found"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Room not found"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"e.g. #room-name:matrix.org"</string>
+</resources>

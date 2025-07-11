@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Új szoba"</string>
+  <string name="screen_create_room_add_people_title">"Ismerősök meghívása"</string>
+  <string name="screen_create_room_error_creating_room">"Hiba történt a szoba létrehozásakor"</string>
+  <string name="screen_create_room_private_option_description">"Csak a meghívottak léphetnek be ebbe a szobába. Az összes üzenet végpontok közti titkosítással van védve."</string>
+  <string name="screen_create_room_private_option_title">"Privát szoba"</string>
+  <string name="screen_create_room_public_option_description">"Bárki megtalálhatja ezt a szobát.
+Ezt bármikor módosíthatja a szobabeállításokban."</string>
+  <string name="screen_create_room_public_option_title">"Nyilvános szoba"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Bárki csatlakozhat ehhez a szobához"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Bárki"</string>
+  <string name="screen_create_room_room_access_section_header">"Szobahozzáférés"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Bárki kérheti, hogy csatlakozzon a szobához, de egy adminisztrátornak vagy moderátornak el kell fogadnia a kérést"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Csatlakozás kérése"</string>
+  <string name="screen_create_room_room_address_section_footer">"Ahhoz, hogy ez a szoba látható legyen a nyilvános szobák címtárában, meg kell adnia a szoba címét."</string>
+  <string name="screen_create_room_room_address_section_title">"A szoba címe"</string>
+  <string name="screen_create_room_room_name_label">"Szoba neve"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Szoba láthatósága"</string>
+  <string name="screen_create_room_title">"Szoba létrehozása"</string>
+  <string name="screen_create_room_topic_label">"Téma (nem kötelező)"</string>
+  <string name="screen_room_directory_search_title">"Szobakatalógus"</string>
+  <string name="screen_start_chat_error_starting_chat">"Hiba történt a csevegés indításakor"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Csatlakozás a szobához cím szerint"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Nem érvényes cím"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Írja be…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Megfelelő szoba található"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Szoba nem található"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"pl. #szoba-neve:matrix.org"</string>
+</resources>

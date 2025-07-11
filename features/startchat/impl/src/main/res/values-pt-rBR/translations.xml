@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nova sala"</string>
+  <string name="screen_create_room_add_people_title">"Convidar pessoas"</string>
+  <string name="screen_create_room_error_creating_room">"Ocorreu um erro ao criar a sala"</string>
+  <string name="screen_create_room_private_option_description">"Apenas as pessoas convidadas podem aceder a esta sala. Todas as mensagens são criptografadas de ponta a ponta."</string>
+  <string name="screen_create_room_private_option_title">"Sala privada"</string>
+  <string name="screen_create_room_public_option_description">"Qualquer um pode encontrar esta sala.
+Você pode mudar isso a qualquer momento nas configurações da sala."</string>
+  <string name="screen_create_room_public_option_title">"Sala pública"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Qualquer pessoa pode entrar nesta sala"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Qualquer pessoa"</string>
+  <string name="screen_create_room_room_access_section_header">"Acesso à sala"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou moderador terá de aceitar a solicitação"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Pedir para entrar"</string>
+  <string name="screen_create_room_room_address_section_footer">"Para que esta sala fique visível no diretório público de salas, você precisará de um endereço de sala."</string>
+  <string name="screen_create_room_room_address_section_title">"Endereço da sala"</string>
+  <string name="screen_create_room_room_name_label">"Nome da sala"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Visibilidade da sala"</string>
+  <string name="screen_create_room_title">"Criar uma sala"</string>
+  <string name="screen_create_room_topic_label">"Tópico (opcional)"</string>
+  <string name="screen_room_directory_search_title">"Diretório de salas"</string>
+  <string name="screen_start_chat_error_starting_chat">"Ocorreu um erro ao tentar iniciar um chat"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Entrar na sala pelo endereço"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Não é um endereço válido"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Entrar…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Foi encontrada uma sala correspondente"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Sala não encontrada"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"Por exemplo, #nome-da-sala:matrix.org"</string>
+</resources>

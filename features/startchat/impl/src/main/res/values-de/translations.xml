@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Neuer Raum"</string>
+  <string name="screen_create_room_add_people_title">"Nutzer einladen"</string>
+  <string name="screen_create_room_error_creating_room">"Beim Erstellen des Chats ist ein Fehler aufgetreten"</string>
+  <string name="screen_create_room_private_option_description">"Nur eingeladene Personen haben Zutritt zu diesem Chatroom. Alle Nachrichten sind Ende-zu-Ende verschlüsselt."</string>
+  <string name="screen_create_room_private_option_title">"Privater Chatroom"</string>
+  <string name="screen_create_room_public_option_description">"Alle können diesen Chatroom finden.
+Sie können dies aber jederzeit in den Chatroomeinstellungen ändern."</string>
+  <string name="screen_create_room_public_option_title">"Öffentlicher Raum"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Jeder darf diesen Raum betreten"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Jeder"</string>
+  <string name="screen_create_room_room_access_section_header">"Chatroomzugang"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Jeder kann den Zutritt zum Raum beantragen, aber ein Moderator muss die Anfrage akzeptieren."</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Beitritt beantragen"</string>
+  <string name="screen_create_room_room_address_section_footer">"Damit dieser Chatroom im öffentlichen Chatroomverzeichnis sichtbar ist, benötigen Sie eine Chatroomadresse."</string>
+  <string name="screen_create_room_room_address_section_title">"Chatroomadresse"</string>
+  <string name="screen_create_room_room_name_label">"Raumname"</string>
+  <string name="screen_create_room_room_visibility_section_title">" Sichtbarkeit des Chatrooms"</string>
+  <string name="screen_create_room_title">"Raum erstellen"</string>
+  <string name="screen_create_room_topic_label">"Thema (optional)"</string>
+  <string name="screen_room_directory_search_title">"Raum-Verzeichnis"</string>
+  <string name="screen_start_chat_error_starting_chat">"Beim Versuch, einen Chat zu starten, ist ein Fehler aufgetreten"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Raum per Adresse betreten"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Keine gültige Adresse"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Eintreten…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Passender Raum gefunden"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Raum nicht gefunden"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"z. B. #room -name:matrix.org"</string>
+</resources>

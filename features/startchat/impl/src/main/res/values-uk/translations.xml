@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Нова кімната"</string>
+  <string name="screen_create_room_add_people_title">"Запросити людей"</string>
+  <string name="screen_create_room_error_creating_room">"Під час створення кімнати сталася помилка"</string>
+  <string name="screen_create_room_private_option_description">"Лише запрошені люди мають доступ до цієї кімнати. Усі повідомлення захищені наскрізним шифруванням."</string>
+  <string name="screen_create_room_private_option_title">"Приватна кімната (тільки за запрошенням)"</string>
+  <string name="screen_create_room_public_option_description">"Будь-хто може знайти цю кімнату. 
+Ви можете змінити це в будь-який час у налаштуваннях кімнати."</string>
+  <string name="screen_create_room_public_option_title">"Загальнодоступна кімната"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Будь-хто може приєднатися до цієї кімнати"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Кожний"</string>
+  <string name="screen_create_room_room_access_section_header">"Доступ до кімнати"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Будь-хто може попросити приєднатися до кімнати, але адміністратор або модератор повинен буде прийняти запит"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Запросити приєднатися"</string>
+  <string name="screen_create_room_room_address_section_footer">"Щоб цю кімнату було видно в каталозі загальнодоступних кімнат, вам знадобиться її адреса."</string>
+  <string name="screen_create_room_room_address_section_title">"Адреса кімнати"</string>
+  <string name="screen_create_room_room_name_label">"Назва кімнати"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Видимість кімнати"</string>
+  <string name="screen_create_room_title">"Створити кімнату"</string>
+  <string name="screen_create_room_topic_label">"Тема (необов\'язково)"</string>
+  <string name="screen_room_directory_search_title">"Каталог кімнат"</string>
+  <string name="screen_start_chat_error_starting_chat">"Під час спроби почати бесіду сталася помилка"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Приєднатися до кімнати за адресою"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Недійсна адреса"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Введіть…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Знайдено відповідну кімнату"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Кімната не знайдена"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"наприклад, #room-name:matrix.org"</string>
+</resources>

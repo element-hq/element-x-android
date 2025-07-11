@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nuova stanza"</string>
+  <string name="screen_create_room_add_people_title">"Invita persone"</string>
+  <string name="screen_create_room_error_creating_room">"Si è verificato un errore durante la creazione della stanza"</string>
+  <string name="screen_create_room_private_option_description">"Solo le persone invitate possono accedere a questa stanza. Tutti i messaggi sono cifrati end-to-end."</string>
+  <string name="screen_create_room_private_option_title">"Stanza privata"</string>
+  <string name="screen_create_room_public_option_description">"Chiunque può trovare questa stanza.
+Puoi modificarlo in qualsiasi momento nelle impostazioni della stanza."</string>
+  <string name="screen_create_room_public_option_title">"Stanza pubblica"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Chiunque può entrare in questa stanza"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Chiunque"</string>
+  <string name="screen_create_room_room_access_section_header">"Accesso alla stanza"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Chiunque può chiedere di entrare nella stanza, ma un amministratore o un moderatore dovrà accettare la richiesta"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Chiedi di entrare"</string>
+  <string name="screen_create_room_room_address_section_footer">"Affinché questa stanza sia visibile nell\'elenco delle stanze pubbliche, è necessario un indirizzo della stanza."</string>
+  <string name="screen_create_room_room_address_section_title">"Indirizzo della stanza"</string>
+  <string name="screen_create_room_room_name_label">"Nome stanza"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Visibilità della stanza"</string>
+  <string name="screen_create_room_title">"Crea una stanza"</string>
+  <string name="screen_create_room_topic_label">"Argomento (facoltativo)"</string>
+  <string name="screen_room_directory_search_title">"Elenco delle stanze"</string>
+  <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Accedi alla stanza tramite indirizzo"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Indirizzo non valido"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Inserisci…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Stanza trovata"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Stanza non trovata"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"ad esempio #room -name:matrix.org"</string>
+</resources>

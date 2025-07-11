@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Naujas kambarys"</string>
+  <string name="screen_create_room_add_people_title">"Pakviesti žmonių"</string>
+  <string name="screen_create_room_error_creating_room">"Kuriant kambarį įvyko klaida"</string>
+  <string name="screen_create_room_private_option_description">"Į šį kambarį gali patekti tik pakviesti žmonės. Visi pranešimai yra užšifruoti nuo pradžios iki galo."</string>
+  <string name="screen_create_room_private_option_title">"Privatus kambarys"</string>
+  <string name="screen_create_room_public_option_description">"Bet kas gali rasti šį kambarį.
+Tai galite bet kada pakeisti kambario nustatymuose."</string>
+  <string name="screen_create_room_room_name_label">"Kambario pavadinimas"</string>
+  <string name="screen_create_room_title">"Kurti kambarį"</string>
+  <string name="screen_create_room_topic_label">"Tema (nebūtina)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Bandant pradėti pokalbį įvyko klaida"</string>
+</resources>

@@ -16,7 +16,6 @@ sealed interface ConfigureRoomEvents {
     data class RoomVisibilityChanged(val visibilityItem: RoomVisibilityItem) : ConfigureRoomEvents
     data class RoomAccessChanged(val roomAccess: RoomAccessItem) : ConfigureRoomEvents
     data class RoomAddressChanged(val roomAddress: String) : ConfigureRoomEvents
-    data class RemoveUserFromSelection(val matrixUser: MatrixUser) : ConfigureRoomEvents
     data object CreateRoom : ConfigureRoomEvents
     data class HandleAvatarAction(val action: AvatarAction) : ConfigureRoomEvents
     data object CancelCreateRoom : ConfigureRoomEvents
