@@ -31,10 +31,10 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -59,7 +59,7 @@ fun NotificationsOptInView(
             .statusBarsPadding()
             .fillMaxSize(),
         background = { OnboardingBackground() },
-        header = { NotificationsOptInHeader(modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)) },
+        header = { NotificationsOptInHeader(modifier = Modifier.padding(top = 60.dp, bottom = 28.dp)) },
         footer = { NotificationsOptInFooter(state) },
     ) {
         NotificationsOptInContent()
@@ -70,10 +70,10 @@ fun NotificationsOptInView(
 private fun NotificationsOptInHeader(
     modifier: Modifier = Modifier,
 ) {
-    PageTitle(
+    IconTitleSubtitleMolecule(
         modifier = modifier,
         title = stringResource(R.string.screen_notification_optin_title),
-        subtitle = stringResource(R.string.screen_notification_optin_subtitle),
+        subTitle = stringResource(R.string.screen_notification_optin_subtitle),
         iconStyle = BigIcon.Style.Default(CompoundIcons.NotificationsSolid()),
     )
 }
