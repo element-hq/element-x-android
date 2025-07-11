@@ -9,12 +9,9 @@ package io.element.android.features.login.impl.screens.onboarding
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -99,13 +96,25 @@ class OnBoardingPresenter @AssistedInject constructor(
             }
         }
 
+//        return OnBoardingState(
+//            productionApplicationName = buildMeta.productionApplicationName,
+//            defaultAccountProvider = defaultAccountProvider,
+//            mustChooseAccountProvider = mustChooseAccountProvider,
+//            canLoginWithQrCode = canLoginWithQrCode,
+//            canCreateAccount = defaultAccountProvider == null && canConnectToAnyHomeserver && OnBoardingConfig.CAN_CREATE_ACCOUNT,
+//            canReportBug = canReportBug && showReportBug,
+//            loginMode = loginMode,
+//            version = buildMeta.versionName,
+//            eventSink = ::handleEvent,
+//        )
+
         return OnBoardingState(
-            productionApplicationName = buildMeta.productionApplicationName,
-            defaultAccountProvider = defaultAccountProvider,
-            mustChooseAccountProvider = mustChooseAccountProvider,
-            canLoginWithQrCode = canLoginWithQrCode,
-            canCreateAccount = defaultAccountProvider == null && canConnectToAnyHomeserver && OnBoardingConfig.CAN_CREATE_ACCOUNT,
-            canReportBug = canReportBug && showReportBug,
+            productionApplicationName = "Efael",
+            defaultAccountProvider = "efael.uz",
+            mustChooseAccountProvider = false,
+            canLoginWithQrCode = true,
+            canCreateAccount = true,
+            canReportBug = true,
             loginMode = loginMode,
             version = buildMeta.versionName,
             eventSink = ::handleEvent,

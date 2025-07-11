@@ -187,7 +187,8 @@ private fun OnBoardingButtons(
                 onClick = {
                     state.eventSink(OnBoardingEvents.OnSignIn(defaultAccountProvider))
                 },
-                enabled = state.submitEnabled || isLoading,
+//                enabled = state.submitEnabled || isLoading,
+                enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
             )

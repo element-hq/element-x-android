@@ -22,7 +22,7 @@ open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerStat
                 changeServerAction = AsyncData.Failure(
                     ChangeServerError.UnauthorizedAccountProvider(
                         unauthorisedAccountProviderTitle = "example.com",
-                        authorisedAccountProviderTitles = listOf("efael.net"),
+                        authorisedAccountProviderTitles = listOf("efael.uz"),
                     )
                 )
             ),
