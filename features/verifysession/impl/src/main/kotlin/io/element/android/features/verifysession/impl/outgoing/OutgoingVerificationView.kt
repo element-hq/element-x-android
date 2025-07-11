@@ -33,9 +33,9 @@ import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificat
 import io.element.android.features.verifysession.impl.ui.VerificationBottomMenu
 import io.element.android.features.verifysession.impl.ui.VerificationContentVerifying
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -187,13 +187,15 @@ private fun OutgoingVerificationHeader(step: Step, request: VerificationRequest.
     } else {
         ""
     }
-    PageTitle(
-        modifier = Modifier.semantics(mergeDescendants = true) {
-            contentDescription = timeLimitMessage
-        },
+    IconTitleSubtitleMolecule(
+        modifier = Modifier
+            .padding(bottom = 16.dp)
+            .semantics(mergeDescendants = true) {
+                contentDescription = timeLimitMessage
+            },
         iconStyle = iconStyle,
         title = stringResource(id = titleTextId),
-        subtitle = stringResource(id = subtitleTextId),
+        subTitle = stringResource(id = subtitleTextId),
     )
 }
 
