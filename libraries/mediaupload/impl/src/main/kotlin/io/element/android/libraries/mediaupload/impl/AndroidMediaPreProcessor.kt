@@ -192,12 +192,19 @@ class AndroidMediaPreProcessor @Inject constructor(
         val resultFile = runCatchingExceptions {
             videoCompressor.compress(uri, shouldBeCompressed)
                 .onEach {
-                    // TODO handle progress
+                    if (it is VideoTranscodingEvent.Progress) {
+                        Timber.d("Video compression progress: ${it.value}%")
+                    } else if (it is VideoTranscodingEvent.Completed) {
+                        Timber.d("Video compression completed: ${it.file.path}")
+                    }
                 }
                 .filterIsInstance<VideoTranscodingEvent.Completed>()
                 .first()
                 .file
         }
+            .onFailure {
+                Timber.e(it, "Failed to compress video: $uri")
+            }
             .getOrNull()
 
         if (resultFile != null) {
@@ -283,10 +290,18 @@ class AndroidMediaPreProcessor @Inject constructor(
     private fun extractVideoMetadata(file: File, mimeType: String?, thumbnailResult: ThumbnailResult?): VideoInfo =
         MediaMetadataRetriever().runAndRelease {
             setDataSource(context, Uri.fromFile(file))
+
+            val rotation = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toInt() ?: 0
+            val rawWidth = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toLong() ?: 0L
+            val rawHeight = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toLong() ?: 0L
+
+            val width = if (rotation == 90 || rotation == 270) rawHeight else rawWidth
+            val height = if (rotation == 90 || rotation == 270) rawWidth else rawHeight
+
             VideoInfo(
                 duration = extractDuration(),
-                width = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toLong() ?: 0L,
-                height = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toLong() ?: 0L,
+                width = width,
+                height = height,
                 mimetype = mimeType,
                 size = file.length(),
                 thumbnailInfo = thumbnailResult?.info,

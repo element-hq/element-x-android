@@ -33,8 +33,10 @@ dependencies {
     implementation(projects.services.toolbox.api)
     implementation(libs.inject)
     implementation(libs.androidx.exifinterface)
+    implementation(libs.androidx.media3.transformer)
+    implementation(libs.androidx.media3.effect)
+    implementation(libs.androidx.media3.common)
     implementation(libs.coroutines.core)
-    implementation(libs.otaliastudios.transcoder)
     implementation(libs.vanniktech.blurhash)
 
     testImplementation(libs.test.junit)
