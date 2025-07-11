@@ -9,6 +9,7 @@ package io.element.android.features.verifysession.impl.outgoing
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.focused
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -192,7 +194,9 @@ private fun OutgoingVerificationHeader(step: Step, request: VerificationRequest.
             .padding(bottom = 16.dp)
             .semantics(mergeDescendants = true) {
                 contentDescription = timeLimitMessage
-            },
+                focused = true
+            }
+            .focusable(),
         iconStyle = iconStyle,
         title = stringResource(id = titleTextId),
         subTitle = stringResource(id = subtitleTextId),
