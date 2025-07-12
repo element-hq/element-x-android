@@ -9,10 +9,10 @@ package extension
 
 import ModulesConfig
 import config.AnalyticsConfig
-import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
+import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.closureOf
@@ -34,27 +34,50 @@ private fun DependencyHandlerScope.debugImplementation(dependency: Any) = depend
 /**
  * Dependencies used by all the modules
  */
-fun DependencyHandlerScope.commonDependencies(libs: LibrariesForLibs) {
-    implementation(libs.timber)
+//fun DependencyHandlerScope.commonDependencies(libs: LibrariesForLibs) {
+//    implementation(libs.timber)
+//}
+
+/**
+ * Dependencies used by all the modules
+ */
+fun DependencyHandlerScope.commonDependencies(libs: VersionCatalog) {
+    implementation(libs.findLibrary("timber").get())
 }
 
 /**
  * Dependencies used by all the modules with composable items
  */
-fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
-    val composeBom = platform(libs.androidx.compose.bom)
+//fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
+//    val composeBom = platform(libs.androidx.compose.bom)
+//    implementation(composeBom)
+//    androidTestImplementation(composeBom)
+//    implementation(libs.androidx.compose.ui)
+//    implementation(libs.androidx.compose.material)
+//    implementation(libs.androidx.compose.material3)
+//    implementation(libs.androidx.compose.material.icons)
+//    implementation(libs.androidx.compose.ui.tooling.preview)
+//    implementation(libs.androidx.activity.compose)
+//    debugImplementation(libs.androidx.compose.ui.tooling)
+//    debugImplementation(libs.androidx.compose.ui.test.manifest)
+//    implementation(libs.showkase)
+//    implementation(libs.kotlinx.collections.immutable)
+//}
+
+fun DependencyHandlerScope.composeDependencies(libs: VersionCatalog) {
+    val composeBom = platform(libs.findLibrary("androidx.compose.bom").get())
     implementation(composeBom)
     androidTestImplementation(composeBom)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.icons)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.activity.compose)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation(libs.showkase)
-    implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.findLibrary("androidx.compose.ui").get())
+    implementation(libs.findLibrary("androidx.compose.material").get())
+    implementation(libs.findLibrary("androidx.compose.material3").get())
+    implementation(libs.findLibrary("androidx.compose.material.icons").get())
+    implementation(libs.findLibrary("androidx.compose.ui.tooling.preview").get())
+    implementation(libs.findLibrary("androidx.activity.compose").get())
+    debugImplementation(libs.findLibrary("androidx.compose.ui.tooling").get())
+    debugImplementation(libs.findLibrary("androidx.compose.ui.test.manifest").get())
+    implementation(libs.findLibrary("showkase").get())
+    implementation(libs.findLibrary("kotlinx.collections.immutable").get())
 }
 
 fun DependencyHandlerScope.allLibrariesImpl() {

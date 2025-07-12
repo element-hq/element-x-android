@@ -10,7 +10,7 @@ import extension.buildConfigFieldStr
 import extension.readLocalProperty
 
 plugins {
-    id("io.element.android-compose-library")
+    id("io.element.android.compose.library")
     id("kotlin-parcelize")
 }
 

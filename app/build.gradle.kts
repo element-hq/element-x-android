@@ -28,7 +28,7 @@ import extension.setupKover
 import java.util.Locale
 
 plugins {
-    id("io.element.android-compose-application")
+    id("io.element.android.compose.application")
     alias(libs.plugins.kotlin.android)
     // When using precompiled plugins, we need to apply the firebase plugin like this
     id(libs.plugins.firebaseAppDistribution.get().pluginId)

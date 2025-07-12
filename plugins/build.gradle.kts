@@ -6,7 +6,27 @@
  */
 plugins {
     `kotlin-dsl`
-    `kotlin-dsl-precompiled-script-plugins`
+}
+
+gradlePlugin {
+    plugins {
+        register("androidApplicationCompose") {
+            id = "io.element.android.compose.application"
+            implementationClass = "AndroidComposeApplicationPlugin"
+        }
+        register("androidComposeLibrary") {
+            id = "io.element.android.compose.library"
+            implementationClass = "AndroidComposeLibraryPlugin"
+        }
+        register("androidLibrary") {
+            id = "io.element.android.library"
+            implementationClass = "AndroidLibraryPlugin"
+        }
+        register("rootProjectPlugin") {
+            id = "io.element.android.root"
+            implementationClass = "RootProjectPlugin"
+        }
+    }
 }
 
 repositories {
@@ -20,7 +40,6 @@ dependencies {
     implementation(libs.kover.gradle.plugin)
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.firebase.appdistribution.gradle)
-    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
     implementation(libs.autonomousapps.dependencyanalysis.plugin)
     implementation(libs.anvil.gradle.plugin)
     implementation(libs.ksp.gradle.plugin)

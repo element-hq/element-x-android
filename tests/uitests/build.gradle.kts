@@ -10,7 +10,7 @@ import extension.allLibrariesImpl
 import extension.allServicesImpl
 
 plugins {
-    id("io.element.android-compose-library")
+    id("io.element.android.compose.library")
     alias(libs.plugins.paparazzi)
 }
 

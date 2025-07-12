@@ -8,9 +8,10 @@
 package extension
 
 import com.squareup.anvil.plugin.AnvilExtension
-import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.provider.Provider
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.the
 import org.gradle.plugin.use.PluginDependency
 
@@ -26,15 +27,15 @@ fun Project.setupAnvil(
     generateDaggerFactoriesUsingAnvil: Boolean = true,
     componentMergingStrategy: ComponentMergingStrategy = ComponentMergingStrategy.NONE,
 ) {
-    val libs = the<LibrariesForLibs>()
+    val libs = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
 
     // Add dagger dependency, needed for generated code
-    dependencies.implementation(libs.dagger)
+    dependencies.implementation(libs.findLibrary("dagger").get())
 
     // Apply Anvil plugin and configure it
-    applyPluginIfNeeded(libs.plugins.anvil)
+    applyPluginIfNeeded(libs.findPlugin("anvil").get())
 
-    project.pluginManager.withPlugin(libs.plugins.anvil.get().pluginId) {
+    project.pluginManager.withPlugin("dev.zacsweers.anvil") {
         // Setup extension
         extensions.configure(AnvilExtension::class.java) {
             this.generateDaggerFactories.set(generateDaggerFactoriesUsingAnvil)
@@ -49,12 +50,12 @@ fun Project.setupAnvil(
 
     if (generateDaggerCode) {
         // Needed at the top level since dagger code should be generated at a single point for performance reasons
-        dependencies.add("ksp", libs.dagger.compiler)
+        dependencies.add("ksp", libs.findLibrary("dagger.compiler").get())
     }
 
     // These dependencies are only needed for compose library or application modules
-    if (project.pluginManager.hasPlugin("io.element.android-compose-library")
-        || project.pluginManager.hasPlugin("io.element.android-compose-application")) {
+    if (project.pluginManager.hasPlugin("io.element.android.compose.library")
+        || project.pluginManager.hasPlugin("io.element.android.compose.application")) {
         // Annotations to generate DI code for Appyx nodes
         dependencies.implementation(project.project(":anvilannotations"))
         // Code generator for the annotations above

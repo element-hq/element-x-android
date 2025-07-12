@@ -8,7 +8,7 @@ import extension.setupAnvil
  */
 
 plugins {
-    id("io.element.android-library")
+    id("io.element.android.library")
 }
 
 android {
