@@ -4,5 +4,6 @@
     <item quantity="one">"%1$d protsent kõikidest antud häältest"</item>
     <item quantity="other">"%1$d protsenti kõikidest antud häältest"</item>
   </plurals>
+  <string name="a11y_polls_will_remove_selection">"See kustutab eelmise valiku"</string>
   <string name="a11y_polls_winning_answer">"See vastus võitis"</string>
 </resources>

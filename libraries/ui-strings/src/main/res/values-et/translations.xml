@@ -7,11 +7,16 @@
     <item quantity="one">"%1$d number sisestatud"</item>
     <item quantity="other">"%1$d numbrit sisestatud"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Muuda tunnuspilti"</string>
+  <string name="a11y_encryption_details">"Krüptimise üksikasjad"</string>
   <string name="a11y_hide_password">"Peida salasõna"</string>
   <string name="a11y_join_call">"Liitu kõnega"</string>
   <string name="a11y_jump_to_bottom">"Mine lõppu"</string>
   <string name="a11y_notifications_mentions_only">"Ainult mainimised"</string>
   <string name="a11y_notifications_muted">"Summutatud"</string>
+  <string name="a11y_notifications_new_mentions">"Uued mainimised"</string>
+  <string name="a11y_notifications_new_messages">"Uued sõnumid"</string>
+  <string name="a11y_notifications_ongoing_call">"Kõne on pooleli"</string>
   <string name="a11y_other_user_avatar">"Teise kasutaja tunnuspilt"</string>
   <string name="a11y_page_n">"%1$d. lehekülg"</string>
   <string name="a11y_pause">"Peata"</string>
@@ -35,6 +40,7 @@
   <string name="a11y_send_files">"Saada faile"</string>
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
+  <string name="a11y_time_limited_action_required">"Palun tee see ajapiiranguga toiming"</string>
   <string name="a11y_user_avatar">"Kasutaja tunnuspilt"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
   <string name="a11y_view_avatar">"Vaata tunnuspilti"</string>

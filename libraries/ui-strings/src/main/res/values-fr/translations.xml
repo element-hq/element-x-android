@@ -7,11 +7,16 @@
     <item quantity="one">"%1$d chiffre saisi"</item>
     <item quantity="other">"%1$d chiffres saisis"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Modifier l’avatar"</string>
+  <string name="a11y_encryption_details">"Détails du chiffrement"</string>
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
   <string name="a11y_join_call">"Rejoindre l’appel"</string>
   <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
   <string name="a11y_notifications_mentions_only">"Mentions uniquement"</string>
   <string name="a11y_notifications_muted">"En sourdine"</string>
+  <string name="a11y_notifications_new_mentions">"Nouvelles mentions"</string>
+  <string name="a11y_notifications_new_messages">"Nouveaux messages"</string>
+  <string name="a11y_notifications_ongoing_call">"Appel en cours"</string>
   <string name="a11y_other_user_avatar">"Avatar de l’autre utilisateur"</string>
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
@@ -35,6 +40,7 @@
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_start_call">"Démarrer un appel"</string>
+  <string name="a11y_time_limited_action_required">"Demande d’action qui expirera dans un instant"</string>
   <string name="a11y_user_avatar">"Avatar de l’utilisateur"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
   <string name="a11y_view_avatar">"Voir l’avatar"</string>

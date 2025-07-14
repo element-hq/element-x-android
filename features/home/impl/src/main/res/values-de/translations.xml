@@ -12,6 +12,8 @@
   <string name="confirm_recovery_key_banner_title">"Ihr Schlüsselspeicher ist nicht synchronisiert"</string>
   <string name="full_screen_intent_banner_message">"Damit Sie keine wichtigen Anrufe verpassen, ändern Sie bitte Ihre Einstellungen, so dass das gesperrte Telefon auch Benachrichtigungen im Vollbildmodus erhalten darf."</string>
   <string name="full_screen_intent_banner_title">"Verbessere dein Anruferlebnis"</string>
+  <string name="screen_home_tab_chats">"Chats"</string>
+  <string name="screen_home_tab_spaces">"Spaces"</string>
   <string name="screen_invites_decline_chat_message">"Möchten Sie die Einladung zum Betreten von %1$s wirklich ablehnen?"</string>
   <string name="screen_invites_decline_chat_title">"Einladung ablehnen"</string>
   <string name="screen_invites_decline_direct_chat_message">"Möchten Sie diesen privaten Chat mit %1$s wirklich ablehnen?"</string>
