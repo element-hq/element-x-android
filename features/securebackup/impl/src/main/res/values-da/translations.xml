@@ -15,7 +15,7 @@
   <string name="screen_chat_backup_recovery_action_setup_description">"Få adgang til dine krypterede meddelelser, hvis du mister alle dine enheder eller er logget ud af %1$s overalt."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Åbn %1$s på en stationær enhed"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Log ind på din konto igen"</string>
-  <string name="screen_create_new_recovery_key_list_item_3">"Når du bliver bedt om at bekræfte din enhed, skal du vælge %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Når du bliver bedt om at verificere din enhed, skal du vælge %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_3_reset_all">"\"Nulstil alle\""</string>
   <string name="screen_create_new_recovery_key_list_item_4">"Følg instruktionerne for at oprette en ny gendannelsesnøgle"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Gem din nye gendannelsesnøgle i en adgangskodeadministrator eller i en krypteret note"</string>

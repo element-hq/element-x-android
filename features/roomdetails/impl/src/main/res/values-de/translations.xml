@@ -127,7 +127,7 @@ Wir empfehlen nicht, die Verschlüsselung für Chatrooms die jeder finden und be
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Personen können nur beitreten, wenn sie eingeladen werden."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Nur auf Einladung"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Chatroomzugang"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Räume werden zur Zeit nicht unterstützt."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Spaces werden zur Zeit nicht unterstützt."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Spacemitglieder"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Um den Chatroom im Chatroomverzeichnis sichtbar zu machen, benötigen Sie eine Chatroomadresse."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Chatroomadresse"</string>
