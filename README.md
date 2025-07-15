@@ -8,11 +8,9 @@
 
 # Element X Android
 
-Element X Android is a [Matrix](https://matrix.org/) Android Client provided by [element.io](https://element.io/).
+Element X Android is the next-generation [Matrix](https://matrix.org/) client provided by [Element](https://element.io/).
 
-The application is a total rewrite of [Element-Android](https://github.com/element-hq/element-android) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running Android 7+. The UI layer is written using [Jetpack Compose](https://developer.android.com/jetpack/compose), and the navigation is managed using [Appyx](https://github.com/bumble-tech/appyx).
-
-Learn more about why we are building Element X in our blog post: [https://element.io/blog/element-x-experience-the-future-of-element/](https://element.io/blog/element-x-experience-the-future-of-element/).
+Compared to the previous-generation [Element Classic](https://github.com/element-hq/element-android), the application is a total rewrite, using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running Android 7+. The UI layer is written using [Jetpack Compose](https://developer.android.com/jetpack/compose), and the navigation is managed using [Appyx](https://github.com/bumble-tech/appyx).
 
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="80">](https://play.google.com/store/apps/details?id=io.element.android.x)[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/io.element.android.x)
 
@@ -72,7 +70,7 @@ We're doing this as a way to share code between platforms and while we've seen p
 
 ## Status
 
-This project is in an early rollout and migration phase.
+This project is actively developed and supported. New users are recommended to use Element X instead of the previous-generation app.
 
 ## Minimum SDK version
 

@@ -62,6 +62,7 @@ fun EditableAvatarView(
             modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
+                    onClickLabel = stringResource(CommonStrings.a11y_edit_avatar),
                     onClick = onAvatarClick,
                     indication = ripple(bounded = false),
                 )

@@ -18,8 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.hideFromAccessibility
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -44,15 +42,15 @@ fun TimelineEventTimestampView(
     modifier: Modifier = Modifier,
 ) {
     val formattedTime = event.sentTime
-    val hasError = event.localSendState is LocalEventSendState.Failed
+    val hasError = event.failedToSend
     val hasEncryptionCritical = event.messageShield?.isCritical.orFalse()
     val isMessageEdited = event.content.isEdited()
     val isMessageRedacted = event.content.isRedacted()
     val tint = if (hasError || hasEncryptionCritical && !isMessageRedacted) ElementTheme.colors.textCriticalPrimary else ElementTheme.colors.textSecondary
     Row(
         modifier = Modifier
-                .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
-                .then(modifier),
+            .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (isMessageEdited) {
@@ -76,11 +74,13 @@ fun TimelineEventTimestampView(
                 contentDescription = stringResource(id = CommonStrings.common_sending_failed),
                 tint = tint,
                 modifier = Modifier
-                        .size(15.dp, 18.dp)
-                        .clickable(isVerifiedUserSendFailure) {
-                            eventSink(TimelineEvents.ComputeVerifiedUserSendFailure(event))
-                        }
-                        .semantics { hideFromAccessibility() }
+                    .size(15.dp, 18.dp)
+                    .clickable(
+                        enabled = isVerifiedUserSendFailure,
+                        onClickLabel = stringResource(CommonStrings.action_open_context_menu),
+                    ) {
+                        eventSink(TimelineEvents.ComputeVerifiedUserSendFailure(event))
+                    }
             )
         }
 
@@ -89,13 +89,14 @@ fun TimelineEventTimestampView(
                 Spacer(modifier = Modifier.width(2.dp))
                 Icon(
                     imageVector = shield.toIcon(),
-                    contentDescription = shield.toText(),
+                    contentDescription = stringResource(id = CommonStrings.a11y_encryption_details),
                     modifier = Modifier
                         .size(15.dp)
-                        .clickable {
+                        .clickable(
+                            onClickLabel = stringResource(CommonStrings.a11y_view_details),
+                        ) {
                             eventSink(TimelineEvents.ShowShieldDialog(shield))
-                        }
-                        .semantics { hideFromAccessibility() },
+                        },
                     tint = shield.toIconColor(),
                 )
                 Spacer(modifier = Modifier.width(4.dp))
