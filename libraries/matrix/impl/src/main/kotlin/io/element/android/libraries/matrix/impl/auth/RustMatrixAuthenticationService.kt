@@ -199,6 +199,8 @@ class RustMatrixAuthenticationService @Inject constructor(
                     oidcConfiguration = oidcConfigurationProvider.get(),
                     prompt = prompt.toRustPrompt(),
                     loginHint = loginHint,
+                    // If we want to restore a previous session for which we have encryption keys, we can pass the deviceId here. At the moment, we don't
+                    deviceId = null,
                 )
                 val url = oAuthAuthorizationData.loginUrl()
                 pendingOAuthAuthorizationData = oAuthAuthorizationData
@@ -274,9 +276,13 @@ class RustMatrixAuthenticationService @Inject constructor(
                     sessionPaths = emptySessionPaths,
                     passphrase = pendingPassphrase,
                     qrCodeData = sdkQrCodeLoginData,
+                )
+                client.loginWithQrCode(
+                    qrCodeData = qrCodeData.rustQrCodeData,
                     oidcConfiguration = oidcConfiguration,
                     progressListener = progressListener,
                 )
+
                 val sessionData = client.session()
                     .toSessionData(
                         isTokenValid = true,
@@ -324,8 +330,6 @@ class RustMatrixAuthenticationService @Inject constructor(
         sessionPaths: SessionPaths,
         passphrase: String?,
         qrCodeData: QrCodeData,
-        oidcConfiguration: OidcConfiguration,
-        progressListener: QrLoginProgressListener,
     ): Client {
         Timber.d("Creating client for QR Code login with simplified sliding sync")
         return rustMatrixClientFactory
@@ -335,7 +339,8 @@ class RustMatrixAuthenticationService @Inject constructor(
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
             )
             .sessionPassphrase(passphrase)
-            .buildWithQrCode(qrCodeData, oidcConfiguration, progressListener)
+            .serverNameOrHomeserverUrl(qrCodeData.serverName()!!)
+            .build()
     }
 
     private fun clear() {
