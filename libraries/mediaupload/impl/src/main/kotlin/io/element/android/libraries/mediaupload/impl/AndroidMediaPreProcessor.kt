@@ -295,8 +295,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             val rawWidth = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toLong() ?: 0L
             val rawHeight = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toLong() ?: 0L
 
-            val width = if (rotation == 90 || rotation == 270) rawHeight else rawWidth
-            val height = if (rotation == 90 || rotation == 270) rawWidth else rawHeight
+            val (width, height) = if (rotation == 90 || rotation == 270) rawHeight to rawWidth else rawWidth to rawHeight
 
             VideoInfo(
                 duration = extractDuration(),

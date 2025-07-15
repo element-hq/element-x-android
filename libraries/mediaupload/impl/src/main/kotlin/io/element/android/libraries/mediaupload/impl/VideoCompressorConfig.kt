@@ -16,10 +16,10 @@ import kotlin.math.roundToInt
 
 @OptIn(UnstableApi::class)
 internal object VideoCompressorConfigFactory {
-    // 720p
+    // Major dimension of 720p
     private const val MAX_COMPRESSED_PIXEL_SIZE = 1280
 
-    // 1080p
+    // Major dimension of 1080p
     private const val MAX_PIXEL_SIZE = 1920
 
     private const val DEFAULT_FRAME_RATE = 30
@@ -40,7 +40,7 @@ internal object VideoCompressorConfigFactory {
             else -> null
         }
 
-        // If we are resizing, we also want to reduce set frame rate to the default value (30fps)
+        // If we are resizing, we also want to reduce the frame rate to the default value (30fps)
         val newFrameRate = if (resizer is VideoResizer) {
             min(originalFrameRate, DEFAULT_FRAME_RATE)
         } else {
@@ -50,7 +50,7 @@ internal object VideoCompressorConfigFactory {
         // If we need to resize the video, we also want to recalculate the bitrate
         val newBitrate = if (resizer is VideoResizer) {
             val maxSize = resizer.getOutputSize(Size(width, height))
-            val pixelsPerFrame = maxSize.major() * maxSize.minor()
+            val pixelsPerFrame = maxSize.width * maxSize.height
             val frameRate = newFrameRate
             // Apparently, 0.1 bits per pixel is a sweet spot for video compression
             val bitsPerPixel = 0.1f
