@@ -68,7 +68,6 @@ sealed interface NotificationContent {
         ) : MessageLike
 
         data object RoomEncrypted : MessageLike
-        data object UnableToResolve : MessageLike
         data class RoomMessage(
             val senderId: UserId,
             val messageType: MessageType

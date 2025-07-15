@@ -8,76 +8,146 @@
 package io.element.android.libraries.mediaupload.impl
 
 import android.content.Context
+import android.media.MediaCodecInfo
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.webkit.MimeTypeMap
-import com.otaliastudios.transcoder.Transcoder
-import com.otaliastudios.transcoder.TranscoderListener
-import com.otaliastudios.transcoder.internal.media.MediaFormatConstants
-import com.otaliastudios.transcoder.resize.AtMostResizer
-import com.otaliastudios.transcoder.strategy.DefaultVideoStrategy
-import com.otaliastudios.transcoder.strategy.PassThroughTrackStrategy
-import com.otaliastudios.transcoder.strategy.TrackStrategy
-import com.otaliastudios.transcoder.validator.WriteAlwaysValidator
+import androidx.annotation.OptIn
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
+import androidx.media3.common.util.Size
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.effect.Presentation
+import androidx.media3.transformer.Composition
+import androidx.media3.transformer.DefaultEncoderFactory
+import androidx.media3.transformer.EditedMediaItem
+import androidx.media3.transformer.Effects
+import androidx.media3.transformer.ExportException
+import androidx.media3.transformer.ExportResult
+import androidx.media3.transformer.ProgressHolder
+import androidx.media3.transformer.TransformationRequest
+import androidx.media3.transformer.Transformer
+import androidx.media3.transformer.VideoEncoderSettings
 import io.element.android.libraries.androidutils.file.createTmpFile
-import io.element.android.libraries.androidutils.file.getMimeType
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-private const val MP4_EXTENSION = "mp4"
-
 class VideoCompressor @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
-    fun compress(uri: Uri, shouldBeCompressed: Boolean) = callbackFlow {
+    @OptIn(UnstableApi::class)
+    fun compress(uri: Uri, shouldBeCompressed: Boolean): Flow<VideoTranscodingEvent> = callbackFlow {
         val metadata = getVideoMetadata(uri)
 
-        val expectedExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getMimeType(uri))
-
-        val videoStrategy = VideoStrategyFactory.create(
-            expectedExtension = expectedExtension,
+        val videoCompressorConfig = VideoCompressorConfigFactory.create(
             metadata = metadata,
             shouldBeCompressed = shouldBeCompressed
         )
 
-        val tmpFile = context.createTmpFile(extension = MP4_EXTENSION)
-        val future = Transcoder.into(tmpFile.path)
-            .setVideoTrackStrategy(videoStrategy)
-            .addDataSource(context, uri)
-            // Force the output to be written, even if no transcoding was actually needed
-            .setValidator(WriteAlwaysValidator())
-            .setListener(object : TranscoderListener {
-                override fun onTranscodeProgress(progress: Double) {
-                    trySend(VideoTranscodingEvent.Progress(progress.toFloat()))
-                }
+        val tmpFile = context.createTmpFile(extension = "mp4")
 
-                override fun onTranscodeCompleted(successCode: Int) {
+        val width = metadata?.width ?: Int.MAX_VALUE
+        val height = metadata?.height ?: Int.MAX_VALUE
+
+        val videoResizeEffect = videoCompressorConfig.resizer?.let {
+            val outputSize = it.getOutputSize(Size(width, height))
+            if (metadata?.rotation == 90 || metadata?.rotation == 270) {
+                // If the video is rotated, we need to swap width and height
+                Presentation.createForWidthAndHeight(
+                    outputSize.height,
+                    outputSize.width,
+                    Presentation.LAYOUT_SCALE_TO_FIT,
+                )
+            } else {
+                // Otherwise, we can use the original width and height
+                Presentation.createForWidthAndHeight(
+                    outputSize.width,
+                    outputSize.height,
+                    Presentation.LAYOUT_SCALE_TO_FIT,
+                )
+            }
+        }
+
+        // If we are resizing, we also want to reduce set frame rate to the default value (30fps)
+        val newFrameRate = videoCompressorConfig.newFrameRate
+
+        // If we need to resize the video, we also want to recalculate the bitrate
+        val newBitrate = videoCompressorConfig.newBitRate
+
+        val inputMediaItem = MediaItem.fromUri(uri)
+        val outputMediaItem = EditedMediaItem.Builder(inputMediaItem)
+            .setFrameRate(newFrameRate)
+            .run {
+                if (videoResizeEffect != null) {
+                    setEffects(Effects(emptyList(), listOf(videoResizeEffect)))
+                } else {
+                    this
+                }
+            }
+            .build()
+
+        val encoderFactory = DefaultEncoderFactory.Builder(context)
+            .setRequestedVideoEncoderSettings(
+                VideoEncoderSettings.Builder()
+                    .setBitrateMode(MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR)
+                    .setBitrate(newBitrate)
+                    .build()
+            )
+            .build()
+
+        val videoTransformer = Transformer.Builder(context)
+            .setVideoMimeType(MimeTypes.VIDEO_H264)
+            .setAudioMimeType(MimeTypes.AUDIO_AAC)
+            .setPortraitEncodingEnabled(false)
+            .setEncoderFactory(encoderFactory)
+            .addListener(object : Transformer.Listener {
+                override fun onCompleted(composition: Composition, exportResult: ExportResult) {
                     trySend(VideoTranscodingEvent.Completed(tmpFile))
                     close()
                 }
 
-                override fun onTranscodeCanceled() {
+                override fun onError(composition: Composition, exportResult: ExportResult, exportException: ExportException) {
+                    Timber.e(exportException, "Video transcoding failed")
                     tmpFile.safeDelete()
-                    close()
+                    close(exportException)
                 }
 
-                override fun onTranscodeFailed(exception: Throwable) {
-                    tmpFile.safeDelete()
-                    close(exception)
-                }
+                override fun onFallbackApplied(
+                    composition: Composition,
+                    originalTransformationRequest: TransformationRequest,
+                    fallbackTransformationRequest: TransformationRequest
+                ) = Unit
             })
-            .transcode()
+            .build()
+
+        val progressJob = launch(Dispatchers.Main) {
+            val progressHolder = ProgressHolder()
+            while (isActive) {
+                val state = videoTransformer.getProgress(progressHolder)
+                if (state != Transformer.PROGRESS_STATE_NOT_STARTED) {
+                    channel.send(VideoTranscodingEvent.Progress(progressHolder.progress.toFloat()))
+                }
+                delay(500)
+            }
+        }
+
+        withContext(Dispatchers.Main) {
+            videoTransformer.start(outputMediaItem, tmpFile.path)
+        }
 
         awaitClose {
-            if (!future.isDone) {
-                future.cancel(true)
-            }
+            progressJob.cancel()
         }
     }
 
@@ -89,7 +159,8 @@ class VideoCompressor @Inject constructor(
                 val width = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toIntOrNull() ?: -1
                 val height = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toIntOrNull() ?: -1
                 val bitrate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)?.toLongOrNull() ?: -1
-                val framerate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE)?.toIntOrNull() ?: -1
+                val frameRate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE)?.toIntOrNull() ?: -1
+                val rotation = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toIntOrNull() ?: 0
 
                 val (actualWidth, actualHeight) = if (width == -1 || height == -1) {
                     // Try getting the first frame instead
@@ -103,7 +174,8 @@ class VideoCompressor @Inject constructor(
                     width = actualWidth,
                     height = actualHeight,
                     bitrate = bitrate,
-                    frameRate = framerate
+                    frameRate = frameRate,
+                    rotation = rotation,
                 )
             }
         }.onFailure {
@@ -113,53 +185,14 @@ class VideoCompressor @Inject constructor(
 }
 
 internal data class VideoFileMetadata(
-    val width: Int?,
-    val height: Int?,
-    val bitrate: Long?,
-    val frameRate: Int?,
+    val width: Int,
+    val height: Int,
+    val bitrate: Long,
+    val frameRate: Int,
+    val rotation: Int,
 )
 
 sealed interface VideoTranscodingEvent {
     data class Progress(val value: Float) : VideoTranscodingEvent
     data class Completed(val file: File) : VideoTranscodingEvent
-}
-
-internal object VideoStrategyFactory {
-    // 720p
-    private const val MAX_COMPRESSED_PIXEL_SIZE = 1280
-
-    // 1080p
-    private const val MAX_PIXEL_SIZE = 1920
-
-    fun create(
-        expectedExtension: String?,
-        metadata: VideoFileMetadata?,
-        shouldBeCompressed: Boolean,
-    ): TrackStrategy {
-        val width = metadata?.width ?: Int.MAX_VALUE
-        val height = metadata?.height ?: Int.MAX_VALUE
-        val bitrate = metadata?.bitrate
-        val frameRate = metadata?.frameRate
-
-        // We only create a resizer if needed
-        val resizer = when {
-            shouldBeCompressed && (width > MAX_COMPRESSED_PIXEL_SIZE || height > MAX_COMPRESSED_PIXEL_SIZE) -> AtMostResizer(MAX_COMPRESSED_PIXEL_SIZE)
-            width > MAX_PIXEL_SIZE || height > MAX_PIXEL_SIZE -> AtMostResizer(MAX_PIXEL_SIZE)
-            else -> null
-        }
-
-        return if (resizer == null && expectedExtension == MP4_EXTENSION) {
-            // If there's no transcoding or resizing needed for the video file, just create a new file with the same contents but no metadata
-            PassThroughTrackStrategy()
-        } else {
-            DefaultVideoStrategy.Builder()
-                .apply {
-                    resizer?.let { addResizer(it) }
-                    bitrate?.let { bitRate(it) }
-                    frameRate?.let { frameRate(it) }
-                }
-                .mimeType(MediaFormatConstants.MIMETYPE_VIDEO_AVC)
-                .build()
-        }
-    }
 }

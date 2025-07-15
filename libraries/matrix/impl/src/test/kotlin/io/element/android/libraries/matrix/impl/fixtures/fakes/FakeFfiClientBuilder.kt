@@ -11,9 +11,6 @@ import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.NoPointer
-import org.matrix.rustcomponents.sdk.OidcConfiguration
-import org.matrix.rustcomponents.sdk.QrCodeData
-import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import uniffi.matrix_sdk.BackupDownloadStrategy
@@ -42,10 +39,6 @@ class FakeFfiClientBuilder : ClientBuilder(NoPointer) {
     override fun userAgent(userAgent: String) = this
     override fun username(username: String) = this
     override fun enableShareHistoryOnInvite(enableShareHistoryOnInvite: Boolean): ClientBuilder = this
-
-    override suspend fun buildWithQrCode(qrCodeData: QrCodeData, oidcConfiguration: OidcConfiguration, progressListener: QrLoginProgressListener): Client {
-        return FakeFfiClient()
-    }
 
     override suspend fun build(): Client {
         return FakeFfiClient(withUtdHook = {})

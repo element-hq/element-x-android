@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.network.interceptors
 
+import io.element.android.libraries.core.extensions.ellipsize
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
 import org.json.JSONException
@@ -28,7 +29,7 @@ internal class FormattedJsonHttpLogger(
      */
     @Synchronized
     override fun log(message: String) {
-        Timber.v(message)
+        Timber.v(message.ellipsize(200_000))
 
         // Try to log formatted Json only if there is a chance that [message] contains Json.
         // It can be only the case if we log the bodies of Http requests.

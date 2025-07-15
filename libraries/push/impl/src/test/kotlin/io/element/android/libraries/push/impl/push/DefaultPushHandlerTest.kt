@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -31,9 +32,9 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.push.impl.history.FakePushHistoryService
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
+import io.element.android.libraries.push.impl.notifications.FallbackNotificationFactory
 import io.element.android.libraries.push.impl.notifications.NotificationEventRequest
 import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
-import io.element.android.libraries.push.impl.notifications.ResolvingException
 import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
@@ -47,6 +48,8 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -271,7 +274,7 @@ class DefaultPushHandlerTest {
     fun `when classical PushData is received, but a failure occurs (session not found), nothing happen`() {
         `test notification resolver failure`(
             notificationResolveResult = { _ ->
-                Result.failure(ResolvingException("Unable to restore session"))
+                Result.failure(NotificationResolverException.UnknownError("Unable to restore session"))
             },
             shouldSetOptimizationBatteryBanner = false,
         )
@@ -282,7 +285,7 @@ class DefaultPushHandlerTest {
         `test notification resolver failure`(
             notificationResolveResult = { requests: List<NotificationEventRequest> ->
                 Result.success(
-                    requests.associateWith { Result.failure(ResolvingException("Unable to resolve event")) }
+                    requests.associateWith { Result.failure(NotificationResolverException.UnknownError("Unable to resolve event")) }
                 )
             },
             shouldSetOptimizationBatteryBanner = true,
@@ -336,8 +339,6 @@ class DefaultPushHandlerTest {
             notifiableEventResult.assertions()
                 .isCalledOnce()
                 .with(value(A_USER_ID), any())
-            onNotifiableEventsReceived.assertions()
-                .isNeverCalled()
             onPushReceivedResult.assertions()
                 .isCalledOnce()
                 .with(any(), value(AN_EVENT_ID), value(A_ROOM_ID), value(A_USER_ID), value(false), value(true), any())
@@ -662,6 +663,10 @@ class DefaultPushHandlerTest {
             pushHistoryService = pushHistoryService,
             resolverQueue = NotificationResolverQueue(notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventsResult), backgroundScope),
             appCoroutineScope = backgroundScope,
+            fallbackNotificationFactory = FallbackNotificationFactory(
+                clock = FakeSystemClock(),
+                stringProvider = FakeStringProvider(),
+            )
         )
     }
 }

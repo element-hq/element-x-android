@@ -13,11 +13,17 @@ import android.net.Uri
 import android.text.Spanned
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -28,10 +34,9 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.rememberTypeface
-import io.element.android.libraries.designsystem.theme.currentUserMentionPillBackground
-import io.element.android.libraries.designsystem.theme.currentUserMentionPillText
-import io.element.android.libraries.designsystem.theme.mentionPillBackground
-import io.element.android.libraries.designsystem.theme.mentionPillText
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.messageFromMeBackground
+import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -52,7 +57,8 @@ import javax.inject.Inject
 @Stable
 @SingleIn(SessionScope::class)
 class MentionSpanTheme(val currentUserId: UserId) {
-    @Inject constructor(matrixClient: MatrixClient) : this(matrixClient.sessionId)
+    @Inject
+    constructor(matrixClient: MatrixClient) : this(matrixClient.sessionId)
 
     internal var currentUserTextColor: Int = 0
     internal var currentUserBackgroundColor: Int = Color.WHITE
@@ -69,10 +75,10 @@ class MentionSpanTheme(val currentUserId: UserId) {
     @Suppress("ComposableNaming")
     @Composable
     fun updateStyles() {
-        currentUserTextColor = ElementTheme.colors.currentUserMentionPillText.toArgb()
-        currentUserBackgroundColor = ElementTheme.colors.currentUserMentionPillBackground.toArgb()
-        otherTextColor = ElementTheme.colors.mentionPillText.toArgb()
-        otherBackgroundColor = ElementTheme.colors.mentionPillBackground.toArgb()
+        currentUserTextColor = ElementTheme.colors.textBadgeAccent.toArgb()
+        currentUserBackgroundColor = ElementTheme.colors.bgBadgeAccent.toArgb()
+        otherTextColor = ElementTheme.colors.textPrimary.toArgb()
+        otherBackgroundColor = ElementTheme.colors.bgBadgeDefault.toArgb()
 
         typeface.value = ElementTheme.typography.fontBodyLgMedium.rememberTypeface().value
         val density = LocalDensity.current
@@ -164,5 +170,117 @@ internal fun MentionSpanThemePreview() {
                 setTextColor(textColor)
             }
         })
+    }
+}
+
+@Composable
+private fun MentionSpanThemeInTimelineContent(
+    bgColor: Int,
+    modifier: Modifier = Modifier,
+) {
+    val mentionSpanTheme = remember { MentionSpanTheme(UserId("@me:matrix.org")) }
+    val provider = remember {
+        MentionSpanProvider(
+            mentionSpanTheme = mentionSpanTheme,
+            mentionSpanFormatter = object : MentionSpanFormatter {
+                override fun formatDisplayText(mentionType: MentionType): CharSequence {
+                    return when (mentionType) {
+                        is MentionType.User -> mentionType.userId.value
+                        else -> throw AssertionError("Unexpected value $mentionType")
+                    }
+                }
+            },
+            permalinkParser = object : PermalinkParser {
+                override fun parse(uriString: String): PermalinkData {
+                    return when (uriString) {
+                        "https://matrix.to/#/@me:matrix.org" -> PermalinkData.UserLink(UserId("@me:matrix.org"))
+                        "https://matrix.to/#/@other:matrix.org" -> PermalinkData.UserLink(UserId("@other:matrix.org"))
+                        else -> throw AssertionError("Unexpected value $uriString")
+                    }
+                }
+            },
+        )
+    }
+
+    val textColor = ElementTheme.colors.textPrimary.toArgb()
+    fun mentionSpanMe() = provider.getMentionSpanFor("mention", "https://matrix.to/#/@me:matrix.org")
+    fun mentionSpanOther() = provider.getMentionSpanFor("mention", "https://matrix.to/#/@other:matrix.org")
+    mentionSpanTheme.updateStyles()
+
+    AndroidView(
+        modifier = modifier,
+        factory = { context ->
+            TextView(context).apply {
+                includeFontPadding = false
+                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                text = buildSpannedString {
+                    append("Hello ")
+                    append("@mention", mentionSpanMe(), 0)
+                    append(" ")
+                    append("@mention", mentionSpanOther(), 0)
+                }
+                setTextColor(textColor)
+                setBackgroundColor(bgColor)
+            }
+        }
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun MentionSpanThemeInTimelinePreview() = ElementPreview {
+    Column(
+        modifier = Modifier.padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        // Message from me
+        Text(
+            text = "Message from me",
+            style = ElementTheme.typography.fontBodySmMedium,
+        )
+        ElementTheme.colors.messageFromMeBackground.let { color ->
+            MentionSpanThemeInTimelineContent(
+                modifier = Modifier
+                    .padding(start = 60.dp, end = 8.dp)
+                    .background(
+                        color = color,
+                        shape = RoundedCornerShape(12.dp),
+                    )
+                    .padding(8.dp),
+                bgColor = color.toArgb()
+            )
+        }
+        // Message from other
+        ElementTheme.colors.messageFromOtherBackground.let { color ->
+            Text(
+                text = "Message from other",
+                style = ElementTheme.typography.fontBodySmMedium,
+            )
+            MentionSpanThemeInTimelineContent(
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 60.dp)
+                    .padding(4.dp)
+                    .background(
+                        color = color,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .padding(8.dp),
+                bgColor = color.toArgb()
+            )
+        }
+        // Composer
+        ElementTheme.colors.bgSubtleSecondary.let { color ->
+            Text(
+                text = "Composer",
+                style = ElementTheme.typography.fontBodySmMedium,
+            )
+            MentionSpanThemeInTimelineContent(
+                modifier = Modifier
+                    .padding(start = 4.dp, end = 4.dp)
+                    .background(color)
+                    .padding(8.dp),
+                bgColor = color.toArgb()
+            )
+        }
     }
 }

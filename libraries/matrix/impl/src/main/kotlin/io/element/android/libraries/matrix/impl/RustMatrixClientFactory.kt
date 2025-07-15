@@ -78,6 +78,7 @@ class RustMatrixClientFactory @Inject constructor(
         client.setUtdDelegate(UtdTracker(analyticsService))
 
         val syncService = client.syncService()
+            .withSharePos(enable = featureFlagService.isFeatureEnabled(FeatureFlags.SharePos))
             .withOfflineMode()
             .finish()
 

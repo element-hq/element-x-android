@@ -12,6 +12,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
@@ -57,7 +58,7 @@ class DefaultCallNotificationEventResolver @Inject constructor(
         forceNotify: Boolean
     ): Result<NotifiableEvent> = runCatchingExceptions {
         val content = notificationData.content as? NotificationContent.MessageLike.CallNotify
-            ?: throw ResolvingException("content is not a call notify")
+            ?: throw NotificationResolverException.UnknownError("content is not a call notify")
 
         val previousRingingCallStatus = appForegroundStateService.hasRingingCall.value
         // We need the sync service working to get the updated room info
@@ -65,8 +66,12 @@ class DefaultCallNotificationEventResolver @Inject constructor(
             if (content.type == CallNotifyType.RING) {
                 appForegroundStateService.updateHasRingingCall(true)
 
-                val client = clientProvider.getOrRestore(sessionId).getOrNull() ?: throw ResolvingException("Session $sessionId not found")
-                val room = client.getRoom(notificationData.roomId) ?: throw ResolvingException("Room ${notificationData.roomId} not found")
+                val client = clientProvider.getOrRestore(
+                    sessionId
+                ).getOrNull() ?: throw NotificationResolverException.UnknownError("Session $sessionId not found")
+                val room = client.getRoom(
+                    notificationData.roomId
+                ) ?: throw NotificationResolverException.UnknownError("Room ${notificationData.roomId} not found")
                 // Give a few seconds for the room info flow to catch up with the sync, if needed - this is usually instant
                 val isActive = withTimeoutOrNull(3.seconds) { room.roomInfoFlow.firstOrNull { it.hasRoomCall } }?.hasRoomCall ?: false
 

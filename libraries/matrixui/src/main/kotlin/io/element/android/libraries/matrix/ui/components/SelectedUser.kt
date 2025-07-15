@@ -23,6 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -48,9 +51,24 @@ fun SelectedUser(
     onUserRemove: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val actionRemove = stringResource(id = CommonStrings.action_remove)
     Box(
         modifier = modifier
             .width(AvatarSize.SelectedUser.dp)
+            .clearAndSetSemantics {
+                contentDescription = matrixUser.getBestName()
+                if (canRemove) {
+                    // Note: this does not set the click effect to the whole Box
+                    // when talkback is not enabled
+                    onClick(
+                        label = actionRemove,
+                        action = {
+                            onUserRemove(matrixUser)
+                            true
+                        }
+                    )
+                }
+            }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,6 +101,7 @@ fun SelectedUser(
             ) {
                 Icon(
                     imageVector = CompoundIcons.Close(),
+                    // Note: keep the context description for the test
                     contentDescription = stringResource(id = CommonStrings.action_remove),
                     tint = ElementTheme.colors.iconOnSolidPrimary,
                     modifier = Modifier.padding(2.dp)

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +21,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,14 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import io.element.android.appconfig.RoomListConfig
 import io.element.android.compound.theme.ElementTheme
@@ -51,12 +44,10 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
-import io.element.android.libraries.designsystem.components.avatarBloom
+import io.element.android.libraries.designsystem.modifiers.backgroundVerticalGradient
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.applyScaleDown
-import io.element.android.libraries.designsystem.text.roundToPx
-import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
@@ -72,8 +63,6 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
-
-private val avatarBloomSize = 430.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,24 +115,12 @@ private fun DefaultRoomListTopBar(
     canReportBug: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    // We need this to manually clip the top app bar in preview mode
-    val previewAppBarHeight = if (LocalInspectionMode.current) {
-        112.dp.roundToPx()
-    } else {
-        null
-    }
     val collapsedFraction = scrollBehavior.state.collapsedFraction
-    var appBarHeight by remember {
-        mutableIntStateOf(previewAppBarHeight ?: 0)
-    }
-
     val avatarData by remember(matrixUser) {
         derivedStateOf {
             matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
         }
     }
-
-    val statusBarPadding = with(LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
 
     Box(modifier = modifier) {
         val collapsedTitleTextStyle = ElementTheme.typography.aliasScreenTitle
@@ -160,40 +137,13 @@ private fun DefaultRoomListTopBar(
                 titleLarge = collapsedTitleTextStyle
             ),
         ) {
-            Column(
-                modifier = Modifier
-                    .onSizeChanged {
-                        appBarHeight = it.height
-                    }
-                    .avatarBloom(
-                        avatarData = avatarData,
-                        background = if (ElementTheme.isLightTheme) {
-                            // Workaround to display a very subtle bloom for avatars with very soft colors
-                            Color(0xFFF9F9F9)
-                        } else {
-                            ElementTheme.colors.bgCanvasDefault
-                        },
-                        blurSize = DpSize(avatarBloomSize, avatarBloomSize),
-                        offset = DpOffset(24.dp, 24.dp + statusBarPadding),
-                        clipToSize = if (appBarHeight > 0) {
-                            DpSize(
-                                avatarBloomSize,
-                                appBarHeight.toDp()
-                            )
-                        } else {
-                            DpSize.Unspecified
-                        },
-                        bottomSoftEdgeColor = ElementTheme.colors.bgCanvasDefault,
-                        bottomSoftEdgeAlpha = if (displayFilters) {
-                            1f
-                        } else {
-                            1f - collapsedFraction
-                        },
-                        alpha = if (areSearchResultsDisplayed) 0f else 1f,
-                    )
-                    .statusBarsPadding(),
-            ) {
+            Column {
                 MediumTopAppBar(
+                    modifier = Modifier
+                        .backgroundVerticalGradient(
+                            isVisible = !areSearchResultsDisplayed,
+                        )
+                        .statusBarsPadding(),
                     colors = TopAppBarDefaults.mediumTopAppBarColors(
                         containerColor = Color.Transparent,
                         scrolledContainerColor = Color.Transparent,

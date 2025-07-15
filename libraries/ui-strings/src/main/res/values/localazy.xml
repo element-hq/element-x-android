@@ -7,11 +7,16 @@
     <item quantity="one">"%1$d digit entered"</item>
     <item quantity="other">"%1$d digits entered"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Edit avatar"</string>
+  <string name="a11y_encryption_details">"Encryption details"</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
+  <string name="a11y_notifications_new_mentions">"New mentions"</string>
+  <string name="a11y_notifications_new_messages">"New messages"</string>
+  <string name="a11y_notifications_ongoing_call">"Ongoing call"</string>
   <string name="a11y_other_user_avatar">"Other user\'s avatar"</string>
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
@@ -35,6 +40,7 @@
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
+  <string name="a11y_time_limited_action_required">"Time limited action required"</string>
   <string name="a11y_user_avatar">"User avatar"</string>
   <string name="a11y_user_menu">"User menu"</string>
   <string name="a11y_view_avatar">"View avatar"</string>

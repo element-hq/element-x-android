@@ -22,14 +22,14 @@ import kotlinx.collections.immutable.persistentMapOf
 /**
  * Room list.
  */
-@Composable
-fun ElementTheme.roomListRoomName() = colors.textPrimary
+val SemanticColors.roomListRoomName
+    get() = textPrimary
 
-@Composable
-fun ElementTheme.roomListRoomMessage() = colors.textSecondary
+val SemanticColors.roomListRoomMessage
+    get() = textSecondary
 
-@Composable
-fun ElementTheme.roomListRoomMessageDate() = colors.textSecondary
+val SemanticColors.roomListRoomMessageDate
+    get() = textSecondary
 
 val SemanticColors.unreadIndicator
     get() = iconAccentTertiary
@@ -54,11 +54,6 @@ val SemanticColors.progressIndicatorTrackColor
 
 // This color is not present in Semantic color, so put hard-coded value for now
 @OptIn(CoreColorToken::class)
-val SemanticColors.iconSuccessPrimaryBackground
-    get() = if (isLight) LightColorTokens.colorGreen300 else DarkColorTokens.colorGreen300
-
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
 val SemanticColors.bgSubtleTertiary
     get() = if (isLight) LightColorTokens.colorGray100 else DarkColorTokens.colorGray100
 
@@ -70,57 +65,6 @@ val SemanticColors.temporaryColorBgSpecial
 @OptIn(CoreColorToken::class)
 val SemanticColors.pinDigitBg
     get() = if (isLight) LightColorTokens.colorGray300 else DarkColorTokens.colorGray400
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.currentUserMentionPillText
-    get() = if (isLight) LightColorTokens.colorGreen1100 else DarkColorTokens.colorGreen1100
-
-val SemanticColors.currentUserMentionPillBackground
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGreenAlpha400
-        Color(0x3b07b661)
-    } else {
-        // We want DarkDesignTokens.colorGreenAlpha500
-        Color(0xff003d29)
-    }
-
-val SemanticColors.mentionPillText
-    get() = textPrimary
-
-val SemanticColors.mentionPillBackground
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGray400
-        Color(0x1f052e61)
-    } else {
-        // We want DarkDesignTokens.colorGray500
-        Color(0x26f4f7fa)
-    }
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.bigCheckmarkBorderColor
-    get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray400
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.highlightedMessageBackgroundColor
-    get() = if (isLight) LightColorTokens.colorGreen300 else DarkColorTokens.colorGreen300
-
-// Badge colors
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeNeutralBackgroundColor
-    get() = if (isLight) LightColorTokens.colorAlphaGray300 else DarkColorTokens.colorAlphaGray300
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeNeutralContentColor
-    get() = if (isLight) LightColorTokens.colorGray1100 else DarkColorTokens.colorGray1100
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeNegativeBackgroundColor
-    get() = if (isLight) LightColorTokens.colorAlphaRed300 else DarkColorTokens.colorAlphaRed300
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeNegativeContentColor
-    get() = if (isLight) LightColorTokens.colorRed1100 else DarkColorTokens.colorRed1100
 
 @OptIn(CoreColorToken::class)
 val SemanticColors.pinnedMessageBannerIndicator
@@ -137,18 +81,15 @@ internal fun ColorAliasesPreview() = ElementPreview {
         backgroundColor = Color.Black,
         foregroundColor = Color.White,
         colors = persistentMapOf(
-            "roomListRoomName" to ElementTheme.roomListRoomName(),
-            "roomListRoomMessage" to ElementTheme.roomListRoomMessage(),
-            "roomListRoomMessageDate" to ElementTheme.roomListRoomMessageDate(),
+            "roomListRoomName" to ElementTheme.colors.roomListRoomName,
+            "roomListRoomMessage" to ElementTheme.colors.roomListRoomMessage,
+            "roomListRoomMessageDate" to ElementTheme.colors.roomListRoomMessageDate,
             "unreadIndicator" to ElementTheme.colors.unreadIndicator,
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
             "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
-            "iconSuccessPrimaryBackground" to ElementTheme.colors.iconSuccessPrimaryBackground,
-            "bigCheckmarkBorderColor" to ElementTheme.colors.bigCheckmarkBorderColor,
-            "highlightedMessageBackgroundColor" to ElementTheme.colors.highlightedMessageBackgroundColor,
         )
     )
 }

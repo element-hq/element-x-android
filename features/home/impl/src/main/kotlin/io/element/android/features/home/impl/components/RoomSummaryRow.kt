@@ -219,7 +219,7 @@ private fun NameAndTimestampRow(
             style = ElementTheme.typography.fontBodyLgMedium,
             text = name ?: stringResource(id = CommonStrings.common_no_room_name),
             fontStyle = FontStyle.Italic.takeIf { name == null },
-            color = ElementTheme.roomListRoomName(),
+            color = ElementTheme.colors.roomListRoomName,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -230,7 +230,7 @@ private fun NameAndTimestampRow(
             color = if (isHighlighted) {
                 ElementTheme.colors.unreadIndicator
             } else {
-                ElementTheme.roomListRoomMessageDate()
+                ElementTheme.colors.roomListRoomMessageDate
             },
         )
     }
@@ -253,7 +253,7 @@ private fun InviteSubtitle(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.roomListRoomMessage(),
+            color = ElementTheme.colors.roomListRoomMessage,
             modifier = modifier,
         )
     }
@@ -277,7 +277,7 @@ private fun MessagePreviewAndIndicatorRow(
         Text(
             modifier = Modifier.weight(1f),
             text = annotatedMessagePreview,
-            color = ElementTheme.roomListRoomMessage(),
+            color = ElementTheme.colors.roomListRoomMessage,
             style = ElementTheme.typography.fontBodyMdRegular,
             minLines = 2,
             maxLines = 2,
@@ -325,7 +325,7 @@ private fun InviteNameAndIndicatorRow(
             style = ElementTheme.typography.fontBodyLgMedium,
             text = name ?: stringResource(id = CommonStrings.common_no_room_name),
             fontStyle = FontStyle.Italic.takeIf { name == null },
-            color = ElementTheme.roomListRoomName(),
+            color = ElementTheme.colors.roomListRoomName,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )

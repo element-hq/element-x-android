@@ -43,7 +43,7 @@ class DefaultOnMissedCallNotificationHandlerTest {
         val matrixClientProvider = FakeMatrixClientProvider(getClient = {
             val notificationService = FakeNotificationService().apply {
                 givenGetNotificationsResult(
-                    Result.success(mapOf(AN_EVENT_ID to aNotificationData(senderDisplayName = A_USER_NAME, senderIsNameAmbiguous = false)))
+                    Result.success(mapOf(AN_EVENT_ID to Result.success(aNotificationData(senderDisplayName = A_USER_NAME, senderIsNameAmbiguous = false))))
                 )
             }
             Result.success(FakeMatrixClient(notificationService = notificationService))

@@ -164,6 +164,7 @@
     {
       "name" : ":features:home:impl",
       "includeRegex" : [
+        "screen\\.home\\..*",
         "screen_roomlist_.*",
         "screen\\.roomlist\\..*",
         "session_verification_banner_.*",

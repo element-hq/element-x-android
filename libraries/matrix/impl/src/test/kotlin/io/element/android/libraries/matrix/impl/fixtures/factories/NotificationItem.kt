@@ -16,6 +16,7 @@ import org.matrix.rustcomponents.sdk.NotificationEvent
 import org.matrix.rustcomponents.sdk.NotificationItem
 import org.matrix.rustcomponents.sdk.NotificationRoomInfo
 import org.matrix.rustcomponents.sdk.NotificationSenderInfo
+import org.matrix.rustcomponents.sdk.NotificationStatus
 import org.matrix.rustcomponents.sdk.TimelineEvent
 
 fun aRustNotificationItem(
@@ -32,6 +33,12 @@ fun aRustNotificationItem(
     isNoisy = isNoisy,
     hasMention = hasMention,
     threadId = threadId?.value,
+)
+
+fun aRustBatchNotificationResult(
+    notificationStatus: NotificationStatus = NotificationStatus.Event(aRustNotificationItem()),
+) = org.matrix.rustcomponents.sdk.BatchNotificationResult.Ok(
+    status = notificationStatus,
 )
 
 fun aRustNotificationSenderInfo(

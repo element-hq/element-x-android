@@ -12,6 +12,7 @@ package io.element.android.features.home.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -56,7 +57,9 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.NavigationBar
+import io.element.android.libraries.designsystem.theme.components.NavigationBarIcon
 import io.element.android.libraries.designsystem.theme.components.NavigationBarItem
+import io.element.android.libraries.designsystem.theme.components.NavigationBarText
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
@@ -179,6 +182,15 @@ private fun HomeScaffold(
                 displayFilters = roomListState.displayFilters && state.currentHomeNavigationBarItem == HomeNavigationBarItem.Chats,
                 filtersState = roomListState.filtersState,
                 canReportBug = state.canReportBug,
+                modifier = if (state.isSpaceFeatureEnabled) {
+                    Modifier.hazeEffect(
+                        state = hazeState,
+                        style = HazeMaterials.thick(),
+                    )
+                } else {
+                    Modifier
+                        .background(ElementTheme.colors.bgCanvasDefault)
+                }
             )
         },
         bottomBar = {
@@ -188,23 +200,25 @@ private fun HomeScaffold(
                     modifier = Modifier
                         .hazeEffect(
                             state = hazeState,
-                            style = HazeMaterials.regular(),
+                            style = HazeMaterials.thick(),
                         )
                 ) {
                     HomeNavigationBarItem.entries.forEach { item ->
+                        val isSelected = state.currentHomeNavigationBarItem == item
                         NavigationBarItem(
-                            selected = state.currentHomeNavigationBarItem == item,
+                            selected = isSelected,
                             onClick = {
                                 state.eventSink(HomeEvents.SelectHomeNavigationBarItem(item))
                             },
                             icon = {
-                                Icon(
-                                    imageVector = item.icon(),
-                                    contentDescription = null
+                                NavigationBarIcon(
+                                    imageVector = item.icon(isSelected),
                                 )
                             },
                             label = {
-                                Text(stringResource(item.labelRes))
+                                NavigationBarText(
+                                    text = stringResource(item.labelRes),
+                                )
                             }
                         )
                     }
@@ -223,15 +237,18 @@ private fun HomeScaffold(
                         onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                         onRoomClick = ::onRoomClick,
                         onCreateRoomClick = onCreateRoomClick,
-                        // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80,
-                        // and include provided bottom padding
-                        contentBottomPadding = 80.dp + padding.calculateBottomPadding(),
+                        contentPadding = PaddingValues(
+                            // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80,
+                            // and include provided bottom padding
+                            bottom = 80.dp + padding.calculateBottomPadding(),
+                            top = padding.calculateTopPadding()
+                        ),
                         modifier = Modifier
                             .padding(
-                                top = padding.calculateTopPadding(),
-                                bottom = 0.dp,
-                                start = padding.calculateStartPadding(LocalLayoutDirection.current),
-                                end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                                PaddingValues(
+                                    start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                                    end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                                )
                             )
                             .consumeWindowInsets(padding)
                             .hazeSource(state = hazeState)

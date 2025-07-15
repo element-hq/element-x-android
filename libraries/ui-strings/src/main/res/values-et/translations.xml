@@ -12,6 +12,7 @@
   <string name="a11y_jump_to_bottom">"Mine lõppu"</string>
   <string name="a11y_notifications_mentions_only">"Ainult mainimised"</string>
   <string name="a11y_notifications_muted">"Summutatud"</string>
+  <string name="a11y_other_user_avatar">"Teise kasutaja tunnuspilt"</string>
   <string name="a11y_page_n">"%1$d. lehekülg"</string>
   <string name="a11y_pause">"Peata"</string>
   <string name="a11y_paused_voice_message">"Häälsõnum, kestus:%1$s, praegune asukoht: %2$s"</string>
@@ -30,15 +31,18 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Vaata kõiki"</string>
   <string name="a11y_remove_reaction">"Eemalda reageerimine %1$s emotikoniga"</string>
   <string name="a11y_remove_reaction_with">"Eemalda reageerimine: %1$s"</string>
+  <string name="a11y_room_avatar">"Jututoa tunnuspilt"</string>
   <string name="a11y_send_files">"Saada faile"</string>
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
+  <string name="a11y_user_avatar">"Kasutaja tunnuspilt"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
   <string name="a11y_view_avatar">"Vaata tunnuspilti"</string>
   <string name="a11y_view_details">"Vaata üksikasju"</string>
   <string name="a11y_voice_message">"Häälsõnum, kestus:%1$s"</string>
   <string name="a11y_voice_message_record">"Salvesta häälsõnum."</string>
   <string name="a11y_voice_message_stop_recording">"Lõpeta salvestamine"</string>
+  <string name="a11y_your_avatar">"Sinu tunnuspilt"</string>
   <string name="action_accept">"Nõustu"</string>
   <string name="action_add_caption">"Lisa selgitus"</string>
   <string name="action_add_to_timeline">"Lisa ajajoonele"</string>
@@ -97,6 +101,7 @@
   <string name="action_no">"Ei"</string>
   <string name="action_not_now">"Mitte praegu"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Ava kontekstimenüü"</string>
   <string name="action_open_settings">"Seadistused"</string>
   <string name="action_open_with">"Ava rakendusega"</string>
   <string name="action_pin">"Tõsta esile"</string>
@@ -121,7 +126,9 @@
   <string name="action_save">"Salvesta"</string>
   <string name="action_search">"Otsi"</string>
   <string name="action_send">"Saada"</string>
+  <string name="action_send_edited_message">"Saada muudetud sõnum"</string>
   <string name="action_send_message">"Saada sõnum"</string>
+  <string name="action_send_voice_message">"Saada häälsõnum"</string>
   <string name="action_share">"Jaga"</string>
   <string name="action_share_link">"Jaga linki"</string>
   <string name="action_show">"Näita"</string>
@@ -137,6 +144,7 @@
   <string name="action_tap_for_options">"Valikuteks klõpsa"</string>
   <string name="action_try_again">"Proovi uuesti"</string>
   <string name="action_unpin">"Eemalda esiletõstmine"</string>
+  <string name="action_view">"Vaata"</string>
   <string name="action_view_in_timeline">"Vaata ajajoonel"</string>
   <string name="action_view_source">"Vaata lähtekoodi"</string>
   <string name="action_yes">"Jah"</string>

@@ -225,7 +225,10 @@ class ChangeRolesViewTest {
         )
         // Unselect the user from the row list
         val contentDescription = rule.activity.getString(CommonStrings.action_remove)
-        rule.onNodeWithContentDescription(contentDescription).performClick()
+        rule.onNodeWithContentDescription(
+            label = contentDescription,
+            useUnmergedTree = true,
+        ).performClick()
         eventsRecorder.assertList(
             listOf(
                 ChangeRolesEvent.QueryChanged(""),
@@ -248,7 +251,7 @@ class ChangeRolesViewTest {
         rule.setChangeRolesContent(
             state = state,
         )
-        // Select the user from the row list
+        // Select the user from the user list
         rule.onNodeWithText("Carol").performClick()
         eventsRecorder.assertList(
             listOf(
@@ -271,8 +274,11 @@ class ChangeRolesViewTest {
         rule.setChangeRolesContent(
             state = state,
         )
-        // Select the user from the rom list
-        rule.onAllNodesWithText("Bob")[1].performClick()
+        // Unselect the user from the user list
+        rule.onAllNodesWithText(
+            text = "Bob",
+            useUnmergedTree = true,
+        )[1].performClick()
         eventsRecorder.assertList(
             listOf(
                 ChangeRolesEvent.QueryChanged(""),
