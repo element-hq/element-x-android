@@ -274,7 +274,6 @@ private fun HomeScaffold(
         floatingActionButton = {
             if (state.displayActions) {
                 FloatingActionButton(
-                    containerColor = ElementTheme.colors.iconPrimary,
                     onClick = onCreateRoomClick
                 ) {
                     Icon(
