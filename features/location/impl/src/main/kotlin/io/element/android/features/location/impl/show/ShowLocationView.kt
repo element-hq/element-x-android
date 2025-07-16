@@ -27,10 +27,10 @@ import io.element.android.features.location.api.internal.rememberTileStyleUrl
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
+import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -118,14 +118,10 @@ fun ShowLocationView(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
+            LocationFloatingActionButton(
+                isMapCenteredOnUser = state.isTrackMyLocation,
                 onClick = { state.eventSink(ShowLocationEvents.TrackMyLocation(true)) },
-            ) {
-                when (state.isTrackMyLocation) {
-                    false -> Icon(imageVector = CompoundIcons.LocationNavigator(), contentDescription = null)
-                    true -> Icon(imageVector = CompoundIcons.LocationNavigatorCentred(), contentDescription = null)
-                }
-            }
+            )
         },
     ) { paddingValues ->
         Column(
