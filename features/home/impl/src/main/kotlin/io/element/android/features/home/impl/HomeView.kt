@@ -274,13 +274,11 @@ private fun HomeScaffold(
         floatingActionButton = {
             if (state.displayActions) {
                 FloatingActionButton(
-                    containerColor = ElementTheme.colors.iconPrimary,
-                    onClick = onCreateRoomClick
+                    onClick = onCreateRoomClick,
                 ) {
                     Icon(
                         imageVector = CompoundIcons.Plus(),
                         contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message),
-                        tint = ElementTheme.colors.iconOnSolidPrimary,
                     )
                 }
             }
