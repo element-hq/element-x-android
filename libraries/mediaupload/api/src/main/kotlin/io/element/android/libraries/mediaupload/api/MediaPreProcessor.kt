@@ -22,5 +22,10 @@ interface MediaPreProcessor {
         compressIfPossible: Boolean,
     ): Result<MediaUploadInfo>
 
+    /**
+     * Clean up any temporary files or resources used during the media processing.
+     */
+    fun cleanUp()
+
     data class Failure(override val cause: Throwable?) : Exception(cause)
 }

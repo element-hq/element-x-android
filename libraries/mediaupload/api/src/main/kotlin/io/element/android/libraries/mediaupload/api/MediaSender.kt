@@ -200,4 +200,9 @@ class MediaSender @Inject constructor(
                 uploadHandler.await()
             }
     }
+
+    /**
+     * Clean up any temporary files or resources used during the media processing.
+     */
+    fun cleanUp() = preProcessor.cleanUp()
 }

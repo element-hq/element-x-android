@@ -131,12 +131,17 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                                 dismissAfterSend = !useSendQueue,
                                 replyParameters = null,
                             )
+
+                            // Clean up the pre-processed media after it's been sent
+                            mediaSender.cleanUp()
                         }
                     }
                 }
                 AttachmentsPreviewEvents.CancelAndDismiss -> {
                     // Cancel media preprocessing and sending
                     preprocessMediaJob?.cancel()
+                    // If we couldn't send the pre-processed media, remove it
+                    mediaSender.cleanUp()
                     ongoingSendAttachmentJob.value?.cancel()
 
                     // Dismiss the screen

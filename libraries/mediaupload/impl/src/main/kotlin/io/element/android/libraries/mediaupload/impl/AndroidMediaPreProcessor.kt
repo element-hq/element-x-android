@@ -68,6 +68,9 @@ class AndroidMediaPreProcessor @Inject constructor(
 
     private val contentResolver = context.contentResolver
 
+    private val cacheDir = context.cacheDir
+    private val baseTmpFileDir = File(cacheDir, "uploads")
+
     override suspend fun process(
         uri: Uri,
         mimeType: String,
@@ -99,6 +102,11 @@ class AndroidMediaPreProcessor @Inject constructor(
             result.postProcess(uri)
         }
     }.mapFailure { MediaPreProcessor.Failure(it) }
+
+    override fun cleanUp() {
+        // Clear temporary files created by this pre-processor in the separate uploads directory
+        baseTmpFileDir.listFiles()?.onEach { it.delete() }
+    }
 
     private suspend fun processFile(uri: Uri, mimeType: String): MediaUploadInfo {
         val file = copyToTmpFile(uri)
@@ -280,7 +288,10 @@ class AndroidMediaPreProcessor @Inject constructor(
     private suspend fun createTmpFileWithInput(inputStream: InputStream): File? {
         return withContext(coroutineDispatchers.io) {
             tryOrNull {
-                val tmpFile = context.createTmpFile()
+                if (!baseTmpFileDir.exists()) {
+                    baseTmpFileDir.mkdirs()
+                }
+                val tmpFile = context.createTmpFile(baseTmpFileDir)
                 tmpFile.outputStream().use { inputStream.copyTo(it) }
                 tmpFile
             }
