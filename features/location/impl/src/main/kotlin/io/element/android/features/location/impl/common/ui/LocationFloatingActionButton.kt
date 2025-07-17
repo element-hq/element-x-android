@@ -34,7 +34,7 @@ internal fun LocationFloatingActionButton(
         contentColor = ElementTheme.colors.iconPrimary,
         onClick = onClick,
         modifier = modifier
-            // Note: design is 40do, but min is 48 for accessibility.
+            // Note: design is 40dp, but min is 48 for accessibility.
             .size(48.dp),
     ) {
         val iconImage = if (isMapCenteredOnUser) {
