@@ -32,7 +32,7 @@ import javax.inject.Inject
 /**
  * This class is responsible for managing the login flow, including handling OIDC actions and
  * submitting login requests.
- * It's an helper to avoid code duplication. It is used by [OnBoardingPresenter], [ConfirmAccountProviderPresenter]
+ * It's a helper to avoid code duplication. It is used by [OnBoardingPresenter], [ConfirmAccountProviderPresenter]
  * and [ChooseAccountProviderPresenter].
  */
 class LoginHelper @Inject constructor(
