@@ -33,7 +33,7 @@
 
 This doc is a quick introduction about the project and its architecture.
 
-It's aim is to help new developers to understand the overall project and where to start developing.
+Its aim is to help new developers to understand the overall project and where to start developing.
 
 Other useful documentation:
 

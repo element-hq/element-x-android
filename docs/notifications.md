@@ -149,7 +149,7 @@ That is why clients are able to **process the push rules client side** to decide
 
 As seen previously, App developers don't directly send a push to the end user's device, they use a Push Provider as intermediary. So technically this intermediary is able to read the content of what is sent.
 
-App developers usually mitigate this by sending a `silent notification`, that is a notification with no identifiable data, or with an encrypted payload. When the push is received the app can then synchronise to it's server in order to generate a local notification.
+App developers usually mitigate this by sending a `silent notification`, that is a notification with no identifiable data, or with an encrypted payload. When the push is received the app can then synchronise to its server in order to generate a local notification.
 
 
 ### Background processing limitations
