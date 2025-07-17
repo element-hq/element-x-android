@@ -9,6 +9,7 @@ package io.element.android.features.verifysession.impl.outgoing
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.focused
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -31,9 +37,9 @@ import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificat
 import io.element.android.features.verifysession.impl.ui.VerificationBottomMenu
 import io.element.android.features.verifysession.impl.ui.VerificationContentVerifying
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -180,11 +186,26 @@ private fun OutgoingVerificationHeader(step: Step, request: VerificationRequest.
         }
         is Step.Exit -> return
     }
-
-    PageTitle(
+    val timeLimitMessage = if (step.isTimeLimited) {
+        stringResource(CommonStrings.a11y_time_limited_action_required)
+    } else {
+        ""
+    }
+    IconTitleSubtitleMolecule(
+        modifier = Modifier
+            .padding(bottom = 16.dp)
+            .semantics(mergeDescendants = true) {
+                contentDescription = timeLimitMessage
+                focused = true
+                if (iconStyle == BigIcon.Style.Loading) {
+                    // Same code than Modifier.progressSemantics()
+                    progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
+                }
+            }
+            .focusable(),
         iconStyle = iconStyle,
         title = stringResource(id = titleTextId),
-        subtitle = stringResource(id = subtitleTextId)
+        subTitle = stringResource(id = subtitleTextId),
     )
 }
 

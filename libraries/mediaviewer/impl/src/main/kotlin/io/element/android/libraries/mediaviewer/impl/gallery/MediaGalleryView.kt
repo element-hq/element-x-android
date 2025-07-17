@@ -44,9 +44,9 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -472,14 +472,14 @@ private fun EmptyContent(
         modifier = Modifier.fillMaxSize(),
     ) {
         OnboardingBackground()
-        PageTitle(
+        IconTitleSubtitleMolecule(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 44.dp)
                 .padding(24.dp),
             title = stringResource(titleRes),
             iconStyle = BigIcon.Style.Default(icon),
-            subtitle = stringResource(subtitleRes),
+            subTitle = stringResource(subtitleRes),
         )
     }
 }

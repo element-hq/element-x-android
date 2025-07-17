@@ -24,9 +24,9 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -65,10 +65,11 @@ fun ChooseSelfVerificationModeView(
             )
         },
         header = {
-            PageTitle(
+            IconTitleSubtitleMolecule(
+                modifier = Modifier.padding(bottom = 16.dp),
                 iconStyle = BigIcon.Style.Default(CompoundIcons.LockSolid()),
                 title = stringResource(id = R.string.screen_identity_confirmation_title),
-                subtitle = stringResource(id = R.string.screen_identity_confirmation_subtitle)
+                subTitle = stringResource(id = R.string.screen_identity_confirmation_subtitle)
             )
         },
         footer = {

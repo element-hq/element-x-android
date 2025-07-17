@@ -11,7 +11,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -57,14 +59,15 @@ fun MediaDeleteConfirmationBottomSheet(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
-            PageTitle(
+            IconTitleSubtitleMolecule(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 8.dp),
                 title = stringResource(R.string.screen_media_browser_delete_confirmation_title),
                 iconStyle = BigIcon.Style.Default(CompoundIcons.Delete(), useCriticalTint = true),
-                subtitle = stringResource(R.string.screen_media_browser_delete_confirmation_subtitle),
+                subTitle = stringResource(R.string.screen_media_browser_delete_confirmation_subtitle),
             )
+            Spacer(modifier = Modifier.height(16.dp))
             MediaRow(
                 modifier = Modifier
                     .fillMaxWidth()
