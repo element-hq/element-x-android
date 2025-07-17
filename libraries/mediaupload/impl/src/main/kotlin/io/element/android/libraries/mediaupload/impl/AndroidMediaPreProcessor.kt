@@ -41,6 +41,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.InputStream
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -104,6 +105,23 @@ class AndroidMediaPreProcessor @Inject constructor(
     }.mapFailure { MediaPreProcessor.Failure(it) }
 
     override fun cleanUp() {
+        // Clear temporary files created in older versions of the app
+        cacheDir.listFiles()?.onEach { file ->
+            if (file.isFile) {
+                val nameWithoutExtension = file.nameWithoutExtension
+                // UUIDs are 36 characters long, so we check if we can take those 36 characters
+                val nameWithoutExtensionAndRandom = if (nameWithoutExtension.length > 36) {
+                    nameWithoutExtension.substring(0, 36)
+                } else {
+                    // Not a temp file
+                    return@onEach
+                }
+                val isUUID = tryOrNull { UUID.fromString(nameWithoutExtensionAndRandom) } != null
+                if (isUUID && file.extension.isNotEmpty()) {
+                    file.delete()
+                }
+            }
+        }
         // Clear temporary files created by this pre-processor in the separate uploads directory
         baseTmpFileDir.listFiles()?.onEach { it.delete() }
     }
