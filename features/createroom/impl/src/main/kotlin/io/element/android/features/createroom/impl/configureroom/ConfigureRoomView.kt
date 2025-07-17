@@ -30,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -213,11 +215,19 @@ private fun RoomNameWithAvatar(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        val a11yAvatar = stringResource(CommonStrings.a11y_room_avatar)
         UnsavedAvatar(
             avatarUri = avatarUri,
             avatarSize = AvatarSize.EditRoomDetails,
             avatarType = AvatarType.Room(),
-            modifier = Modifier.clickable(onClick = onAvatarClick),
+            modifier = Modifier
+                .clickable(
+                    onClick = onAvatarClick,
+                    onClickLabel = stringResource(CommonStrings.action_open_context_menu),
+                )
+                .clearAndSetSemantics {
+                    contentDescription = a11yAvatar
+                },
         )
 
         TextField(
