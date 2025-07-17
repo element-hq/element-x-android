@@ -157,6 +157,8 @@ Troubleshooting:
  - If you get the error `Unsupported class file major version <n>`, try changing your JVM version by setting
    `JAVA_HOME` and, if building via Android Studio, "File | Settings | Build, Execution, Deployment | Build Tools | Gradle | Gradle JDK".
 
+You can switch back to using the published version of the SDK by deleting `libraries/rustsdk/matrix-rust-sdk.aar`.
+
 ### The Android project
 
 The project should compile out of the box.
