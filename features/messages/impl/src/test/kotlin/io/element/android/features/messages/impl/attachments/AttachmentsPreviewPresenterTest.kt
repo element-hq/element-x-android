@@ -123,8 +123,10 @@ class AttachmentsPreviewPresenterTest {
             },
         )
         val onDoneListener = lambdaRecorder<Unit> { }
+        val mediaPreProcessor = FakeMediaPreProcessor()
         val presenter = createAttachmentsPreviewPresenter(
             room = room,
+            mediaPreProcessor = mediaPreProcessor,
             onDoneListener = { onDoneListener() },
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -143,6 +145,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
+            assertThat(mediaPreProcessor.cleanUpCallCount).isEqualTo(1)
         }
     }
 
@@ -159,11 +162,10 @@ class AttachmentsPreviewPresenterTest {
         )
         val onDoneListener = lambdaRecorder<Unit> { }
         val processLatch = CompletableDeferred<Unit>()
+        val mediaPreProcessor = FakeMediaPreProcessor(processLatch)
         val presenter = createAttachmentsPreviewPresenter(
             room = room,
-            mediaPreProcessor = FakeMediaPreProcessor(
-                processLatch = processLatch,
-            ),
+            mediaPreProcessor = mediaPreProcessor,
             onDoneListener = { onDoneListener() },
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -181,6 +183,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
+            assertThat(mediaPreProcessor.cleanUpCallCount).isEqualTo(1)
         }
     }
 
@@ -197,11 +200,10 @@ class AttachmentsPreviewPresenterTest {
         )
         val onDoneListener = lambdaRecorder<Unit> { }
         val processLatch = CompletableDeferred<Unit>()
+        val mediaPreProcessor = FakeMediaPreProcessor(processLatch)
         val presenter = createAttachmentsPreviewPresenter(
             room = room,
-            mediaPreProcessor = FakeMediaPreProcessor(
-                processLatch = processLatch,
-            ),
+            mediaPreProcessor = mediaPreProcessor,
             onDoneListener = { onDoneListener() },
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -219,6 +221,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
+            assertThat(mediaPreProcessor.cleanUpCallCount).isEqualTo(1)
         }
     }
 
@@ -279,7 +282,9 @@ class AttachmentsPreviewPresenterTest {
     fun `present - cancel scenario`() = runTest {
         val onDoneListener = lambdaRecorder<Unit> { }
         val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val mediaPreProcessor = FakeMediaPreProcessor()
         val presenter = createAttachmentsPreviewPresenter(
+            mediaPreProcessor = mediaPreProcessor,
             temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
             onDoneListener = { onDoneListener() },
         )
@@ -293,6 +298,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             deleteCallback.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
+            assertThat(mediaPreProcessor.cleanUpCallCount).isEqualTo(1)
         }
     }
 
