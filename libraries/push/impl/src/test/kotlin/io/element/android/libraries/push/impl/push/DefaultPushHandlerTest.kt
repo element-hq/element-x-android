@@ -10,6 +10,7 @@
 package io.element.android.libraries.push.impl.push
 
 import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.libraries.core.meta.BuildMeta
@@ -38,6 +39,7 @@ import io.element.android.libraries.push.impl.notifications.NotificationResolver
 import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
@@ -65,6 +67,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 private const val A_PUSHER_INFO = "info"
 
+@Suppress("LargeClass")
 class DefaultPushHandlerTest {
     @Test
     fun `check handleInvalid behavior`() = runTest {
@@ -626,6 +629,59 @@ class DefaultPushHandlerTest {
             .isCalledOnce()
         onPushReceivedResult.assertions()
             .isCalledExactly(2)
+    }
+
+    @Test
+    fun `when receiving a fallback event, we notify the push history service about it not being resolved`() = runTest {
+        val aNotifiableFallbackEvent = FallbackNotifiableEvent(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            eventId = AN_EVENT_ID,
+            editedEventId = null,
+            description = "A fallback notification",
+            canBeReplaced = false,
+            isRedacted = false,
+            isUpdated = false,
+            timestamp = 0L,
+            cause = "Unable to decrypt event",
+        )
+        val notifiableEventResult =
+            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableFallbackEvent))))
+            }
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val incrementPushCounterResult = lambdaRecorder<Unit> {}
+        var receivedFallbackEvent = false
+        val onPushReceivedResult =
+            lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, isResolved, _, comment ->
+            receivedFallbackEvent = !isResolved && comment == "Unable to resolve event: ${aNotifiableFallbackEvent.cause}"
+        }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
+        val aPushData = PushData(
+            eventId = AN_EVENT_ID,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+        val defaultPushHandler = createDefaultPushHandler(
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+            notifiableEventsResult = notifiableEventResult,
+            pushClientSecret = FakePushClientSecret(
+                getUserIdFromSecretResult = { A_USER_ID }
+            ),
+            incrementPushCounterResult = incrementPushCounterResult,
+            pushHistoryService = pushHistoryService,
+        )
+        defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+        advanceTimeBy(300.milliseconds)
+
+        onNotifiableEventsReceived.assertions().isCalledOnce()
+
+        assertThat(receivedFallbackEvent).isTrue()
     }
 
     private fun TestScope.createDefaultPushHandler(
