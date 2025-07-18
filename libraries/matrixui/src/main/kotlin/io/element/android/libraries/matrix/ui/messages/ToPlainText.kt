@@ -57,10 +57,16 @@ private class PlainTextNodeVisitor : NodeVisitor {
         if (node is TextNode && node.text().isNotBlank()) {
             builder.append(node.text())
         } else if (node is Element && node.tagName() == "li") {
-            val index = node.elementSiblingIndex()
+            val index = node.elementSiblingIndex() + 1
             val isOrdered = node.parent()?.nodeName()?.lowercase() == "ol"
             if (isOrdered) {
-                builder.append("${index + 1}. ")
+                val startIndex = node.parent()?.attr("start")?.toIntOrNull()
+                val actualIndex = if (startIndex != null) {
+                    startIndex + index - 1
+                } else {
+                    index
+                }
+                builder.append("$actualIndex. ")
             } else {
                 builder.append("• ")
             }
