@@ -54,9 +54,9 @@ adb shell am broadcast -a com.android.systemui.demo -e command exit
 
 ## Translations
 
-Element X Android supports many languages. You can help us to translate the app in your language by joining our [Localazy project](https://localazy.com/p/element). You can also help us to improve the existing translations.
+Element X Android supports many languages. You can help us translating the app in your language by joining our [Localazy project](https://localazy.com/p/element). You can also help us to improve the existing translations.
 
-Note that for now, we keep control on the French and German translations.
+Note that for now, we retain control over the French and German translations.
 
 Translations can be checked screen per screen using our tool Element X Android Gallery, available at https://element-hq.github.io/element-x-android/. Note that this page is updated every Tuesday.
 
@@ -66,7 +66,7 @@ More instructions about translating the application can be found at [CONTRIBUTIN
 
 Element X leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer that the final client can directly import and use.
 
-We're doing this as a way to share code between platforms and while we've seen promising results it's still in the experimental stage and bound to change.
+We're doing this as a way to share code between platforms. While we've seen promising results it is still in the experimental stage and is subject to change.
 
 ## Status
 
@@ -80,15 +80,15 @@ Element Android Enterprise requires a minimum SDK version of 33 (Android 13, Tir
 
 ## Contributing
 
-Want to get actively involved in the project? You're more than welcome! A good way to start is to check the issues that are labelled with the [good first issue](https://github.com/element-hq/element-x-android/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label. Let us know by commenting the issue that you're starting working on it.
+You're more than welcome to get actively involved in the project. A good way to start is to check the issues that are labelled with the [good first issue](https://github.com/element-hq/element-x-android/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label. Let us know by commenting in the issue that you have started working on it.
 
-But first make sure to read our [contribution guide](CONTRIBUTING.md) first.
+But first make sure to read our [contribution guide](CONTRIBUTING.md).
 
-You can also come chat with the community in the Matrix [room](https://matrix.to/#/#element-x-android:matrix.org) dedicated to the project.
+You can also come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-x-android:matrix.org)  to the project.
 
 ## Build instructions
 
-Just clone the project and open it in Android Studio. Make sure to select the
+Clone the project and open it in Android Studio. Make sure to select the
 `app` configuration when building (as we also have sample apps in the project).
 
 To build against a local copy of the Rust SDK, see the [Developer
@@ -98,7 +98,7 @@ onboarding](docs/_developer_onboarding.md#building-the-sdk-locally) instructions
 
 When you are experiencing an issue on Element X Android, please first search in [GitHub issues](https://github.com/element-hq/element-x-android/issues)
 and then in [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org).
-If after your research you still have a question, ask at [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting from the application settings. This is especially recommended when you encounter a crash.
+After your research if you still have a question, ask at [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by providing clear in detailed explanation of what has happened. You can also report bugs from the client application settings. This is especially recommended when you encounter a crash.
 
 ## Copyright and License
 
