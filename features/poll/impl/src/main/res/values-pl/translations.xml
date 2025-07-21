@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Ukryj głosy"</string>
   <string name="screen_create_poll_answer_hint">"Opcja %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Zmiany nie zostały zapisane. Czy na pewno chcesz wrócić?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Usuń opcję %1$s"</string>
   <string name="screen_create_poll_question_desc">"Pytanie lub temat"</string>
   <string name="screen_create_poll_question_hint">"Czego dotyczy ankieta?"</string>
   <string name="screen_create_poll_title">"Utwórz ankietę"</string>

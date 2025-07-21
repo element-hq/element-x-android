@@ -13,6 +13,7 @@
   <string name="screen_change_account_provider_other">"Muu teenusepakkuja"</string>
   <string name="screen_change_account_provider_subtitle">"Kasuta erinevat teenusepakkujat, milleks võib olla ka sinu oma server või töökoha hallatav server."</string>
   <string name="screen_change_account_provider_title">"Muuda teenusepakkujat"</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Vajalik on Element Pro"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Me ei suutnud luuaühendust selle koduserveriga. Palun kontrolli, kas koduserveri aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda koduserveri haldaja."</string>
   <string name="screen_change_server_error_invalid_well_known">"Server pole saadaval vea tõttu well-known failis:
 %1$s"</string>

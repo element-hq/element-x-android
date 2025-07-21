@@ -11,11 +11,16 @@
     <item quantity="many">"%1$d nod wedi eu cynnig"</item>
     <item quantity="other">"%1$d nod wedi eu cynnig"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Golygu afatar"</string>
+  <string name="a11y_encryption_details">"Manylion amgryptio"</string>
   <string name="a11y_hide_password">"Cuddio cyfrinair"</string>
   <string name="a11y_join_call">"Ymuno â galwad"</string>
   <string name="a11y_jump_to_bottom">"Symud i\'r gwaelod"</string>
   <string name="a11y_notifications_mentions_only">"Crybwylliadau\'n unig"</string>
   <string name="a11y_notifications_muted">"Wedi\'i Dewi"</string>
+  <string name="a11y_notifications_new_mentions">"Crybwylliadau newydd"</string>
+  <string name="a11y_notifications_new_messages">"Negeseuon newydd"</string>
+  <string name="a11y_notifications_ongoing_call">"Galwad cyfredol"</string>
   <string name="a11y_other_user_avatar">"Afatar defnyddiwr arall"</string>
   <string name="a11y_page_n">"Tudalen %1$d"</string>
   <string name="a11y_pause">"Oedi"</string>
@@ -43,6 +48,7 @@
   <string name="a11y_send_files">"Anfon ffeiliau"</string>
   <string name="a11y_show_password">"Dangos y cyfrinair"</string>
   <string name="a11y_start_call">"Cychwyn galwad"</string>
+  <string name="a11y_time_limited_action_required">"Mae angen gweithredu â chyfyngiad amser"</string>
   <string name="a11y_user_avatar">"Afatar defnyddiwr"</string>
   <string name="a11y_user_menu">"Dewislen defnyddiwr"</string>
   <string name="a11y_view_avatar">"Gweld afatar"</string>
@@ -109,6 +115,7 @@
   <string name="action_no">"Na"</string>
   <string name="action_not_now">"Nid nawr"</string>
   <string name="action_ok">"Iawn"</string>
+  <string name="action_open_context_menu">"Agor y ddewislen gyd-destun"</string>
   <string name="action_open_settings">"Gosodiadau"</string>
   <string name="action_open_with">"Agor gyda"</string>
   <string name="action_pin">"Pinio"</string>
@@ -133,7 +140,9 @@
   <string name="action_save">"Cadw"</string>
   <string name="action_search">"Chwilio"</string>
   <string name="action_send">"Anfon"</string>
+  <string name="action_send_edited_message">"Anfon neges wedi\'i golygu"</string>
   <string name="action_send_message">"Anfonwch neges"</string>
+  <string name="action_send_voice_message">"Anfon neges llais"</string>
   <string name="action_share">"Rhannu"</string>
   <string name="action_share_link">"Rhannwch ddolen"</string>
   <string name="action_show">"Dangos"</string>

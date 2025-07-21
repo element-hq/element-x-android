@@ -8,10 +8,12 @@
     <item quantity="other">"%1$d numbrit sisestatud"</item>
   </plurals>
   <string name="a11y_edit_avatar">"Muuda tunnuspilti"</string>
+  <string name="a11y_edit_room_address_hint">"Täisaadress saab olema %1$s"</string>
   <string name="a11y_encryption_details">"Krüptimise üksikasjad"</string>
   <string name="a11y_hide_password">"Peida salasõna"</string>
   <string name="a11y_join_call">"Liitu kõnega"</string>
   <string name="a11y_jump_to_bottom">"Mine lõppu"</string>
+  <string name="a11y_move_the_map_to_my_location">"Nihuta kaart minu asukohta"</string>
   <string name="a11y_notifications_mentions_only">"Ainult mainimised"</string>
   <string name="a11y_notifications_muted">"Summutatud"</string>
   <string name="a11y_notifications_new_mentions">"Uued mainimised"</string>

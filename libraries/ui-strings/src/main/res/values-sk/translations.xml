@@ -8,11 +8,18 @@
     <item quantity="few">"%1$d zadané číslice"</item>
     <item quantity="other">"%1$d zadaných číslic"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Upraviť obrázok"</string>
+  <string name="a11y_encryption_details">"Podrobnosti o šifrovaní"</string>
   <string name="a11y_hide_password">"Skryť heslo"</string>
   <string name="a11y_join_call">"Pripojiť sa k hovoru"</string>
   <string name="a11y_jump_to_bottom">"Prejsť na spodok"</string>
+  <string name="a11y_move_the_map_to_my_location">"Presunúť mapu na moju polohu"</string>
   <string name="a11y_notifications_mentions_only">"Iba zmienky"</string>
   <string name="a11y_notifications_muted">"Stlmené"</string>
+  <string name="a11y_notifications_new_mentions">"Nové zmienky"</string>
+  <string name="a11y_notifications_new_messages">"Nové správy"</string>
+  <string name="a11y_notifications_ongoing_call">"Prebiehajúci hovor"</string>
+  <string name="a11y_other_user_avatar">"Obrázok iného používateľa"</string>
   <string name="a11y_page_n">"Strana %1$d"</string>
   <string name="a11y_pause">"Pozastaviť"</string>
   <string name="a11y_paused_voice_message">"Hlasová správa, dĺžka:%1$s, aktuálna pozícia: %2$s"</string>
@@ -32,15 +39,19 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Ťuknutím zobrazíte všetko"</string>
   <string name="a11y_remove_reaction">"Odstrániť reakciu s %1$s"</string>
   <string name="a11y_remove_reaction_with">"Odstrániť reakciu s %1$s"</string>
+  <string name="a11y_room_avatar">"Obrázok miestnosti"</string>
   <string name="a11y_send_files">"Odoslať súbory"</string>
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_start_call">"Začať hovor"</string>
+  <string name="a11y_time_limited_action_required">"Vyžaduje sa časovo obmedzená akcia"</string>
+  <string name="a11y_user_avatar">"Profilový obrázok"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
   <string name="a11y_view_avatar">"Zobraziť profilový obrázok"</string>
   <string name="a11y_view_details">"Zobraziť podrobnosti"</string>
   <string name="a11y_voice_message">"Hlasová správa, dĺžka: %1$s"</string>
   <string name="a11y_voice_message_record">"Nahrať hlasovú správu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastaviť nahrávanie"</string>
+  <string name="a11y_your_avatar">"Váš profilový obrázok"</string>
   <string name="action_accept">"Prijať"</string>
   <string name="action_add_caption">"Pridať titulok"</string>
   <string name="action_add_to_timeline">"Pridať na časovú os"</string>
@@ -99,6 +110,7 @@
   <string name="action_no">"Nie"</string>
   <string name="action_not_now">"Teraz nie"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Otvoriť kontextovú ponuku"</string>
   <string name="action_open_settings">"Otvoriť nastavenia"</string>
   <string name="action_open_with">"Otvoriť pomocou"</string>
   <string name="action_pin">"Pripnúť"</string>
@@ -123,7 +135,9 @@
   <string name="action_save">"Uložiť"</string>
   <string name="action_search">"Hľadať"</string>
   <string name="action_send">"Odoslať"</string>
+  <string name="action_send_edited_message">"Odoslať upravenú správa"</string>
   <string name="action_send_message">"Odoslať správu"</string>
+  <string name="action_send_voice_message">"Odoslať hlasovú správu"</string>
   <string name="action_share">"Zdieľať"</string>
   <string name="action_share_link">"Zdieľať odkaz"</string>
   <string name="action_show">"Zobraziť"</string>
@@ -139,6 +153,7 @@
   <string name="action_tap_for_options">"Klepnutím získate možnosti"</string>
   <string name="action_try_again">"Skúste to znova"</string>
   <string name="action_unpin">"Odopnúť"</string>
+  <string name="action_view">"Zobraziť"</string>
   <string name="action_view_in_timeline">"Zobraziť na časovej osi"</string>
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>

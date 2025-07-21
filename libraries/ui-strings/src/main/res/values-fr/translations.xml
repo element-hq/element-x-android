@@ -12,6 +12,7 @@
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
   <string name="a11y_join_call">"Rejoindre l’appel"</string>
   <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
+  <string name="a11y_move_the_map_to_my_location">"Déplacer la carte vers ma position"</string>
   <string name="a11y_notifications_mentions_only">"Mentions uniquement"</string>
   <string name="a11y_notifications_muted">"En sourdine"</string>
   <string name="a11y_notifications_new_mentions">"Nouvelles mentions"</string>
