@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
@@ -158,12 +157,7 @@ private fun ExoPlayerMediaVideoView(
             override fun onVideoSizeChanged(videoSize: VideoSize) {
                 // Ensure that the user cannot zoom/move outside of the video bounds
                 localMediaViewState.zoomableState.setContentLocation(
-                    ZoomableContentLocation.scaledInsideAndCenterAligned(
-                        Size(
-                            videoSize.width.toFloat(),
-                            videoSize.height.toFloat(),
-                        )
-                    )
+                    ZoomableContentLocation.SameAsLayoutBounds
                 )
             }
         }
