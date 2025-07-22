@@ -49,7 +49,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.4.22")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.4.25")
         detektPlugins(project(":tests:detekt-rules"))
     }
 
