@@ -12,4 +12,9 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Usuń z pokoju"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Usunąć członka i zablokować możliwość dołączenia w przyszłości?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Usuwanie %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Odbanuj z pokoju"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Odbanuj"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Mogą ponownie dołączyć do pokoju, po otrzymaniu zaproszenia"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Czy na pewno chcesz odbanować tego członka?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Odbanowuję %1$s"</string>
 </resources>

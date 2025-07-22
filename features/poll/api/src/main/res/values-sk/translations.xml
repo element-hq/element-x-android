@@ -5,5 +5,6 @@
     <item quantity="few">"%1$d percentá z celkového počtu hlasov"</item>
     <item quantity="other">"%1$d percent z celkového počtu hlasov"</item>
   </plurals>
+  <string name="a11y_polls_will_remove_selection">"Odstráni predchádzajúci výber"</string>
   <string name="a11y_polls_winning_answer">"Toto je víťazná odpoveď"</string>
 </resources>

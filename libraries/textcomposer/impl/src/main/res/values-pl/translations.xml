@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Dodaj załącznik"</string>
   <string name="rich_text_editor_bullet_list">"Przełącz listę punktową"</string>
-  <string name="rich_text_editor_close_formatting_options">"Zamknij opcje formatowania"</string>
+  <string name="rich_text_editor_close_formatting_options">"Anuluj i zamknij formatowanie tekstu"</string>
   <string name="rich_text_editor_code_block">"Przełącz blok kodu"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Dodaj opis"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Wiadomość szyfrowana…"</string>
@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Niezaszyfrowana wiadomość…"</string>
   <string name="rich_text_editor_create_link">"Utwórz link"</string>
   <string name="rich_text_editor_edit_link">"Edytuj link"</string>
+  <string name="rich_text_editor_format_action">"%1$s, stan: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Zastosuj pogrubienie"</string>
   <string name="rich_text_editor_format_italic">"Zastosuj kursywę"</string>
+  <string name="rich_text_editor_format_state_disabled">"wyłączony"</string>
+  <string name="rich_text_editor_format_state_off">"wyłączony"</string>
+  <string name="rich_text_editor_format_state_on">"włączony"</string>
   <string name="rich_text_editor_format_strikethrough">"Zastosuj przekreślenie"</string>
   <string name="rich_text_editor_format_underline">"Zastosuj podkreślenie"</string>
   <string name="rich_text_editor_full_screen_toggle">"Przełącz pełny ekran"</string>
