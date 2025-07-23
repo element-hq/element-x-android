@@ -80,6 +80,7 @@
   <string name="screen_room_member_list_mode_members">"Members"</string>
   <string name="screen_room_member_list_pending_header_title">"Pending"</string>
   <string name="screen_room_member_list_role_administrator">"Admin"</string>
+  <string name="screen_room_member_list_role_creator">"Creator"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Room members"</string>
   <string name="screen_room_member_list_unbanning_user">"Unbanning %1$s"</string>

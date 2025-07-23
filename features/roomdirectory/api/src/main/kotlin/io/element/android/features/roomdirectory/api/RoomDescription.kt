@@ -30,6 +30,9 @@ data class RoomDescription(
     enum class JoinRule {
         PUBLIC,
         KNOCK,
+        RESTRICTED,
+        KNOCK_RESTRICTED,
+        INVITE,
         UNKNOWN
     }
 

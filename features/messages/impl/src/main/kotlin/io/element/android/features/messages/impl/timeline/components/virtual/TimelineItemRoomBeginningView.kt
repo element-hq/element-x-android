@@ -26,7 +26,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.allBooleans
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 
@@ -92,7 +91,7 @@ internal fun TimelineItemRoomBeginningViewPreview() = ElementPreview {
                 onPredecessorRoomClick = {},
             )
             TimelineItemRoomBeginningView(
-                predecessorRoom = PredecessorRoom(RoomId("!roomId:matrix.org"), EventId("\$eventId:matrix.org")),
+                predecessorRoom = PredecessorRoom(RoomId("!roomId:matrix.org")),
                 roomName = "Room Name",
                 isDm = isDm,
                 onPredecessorRoomClick = {},

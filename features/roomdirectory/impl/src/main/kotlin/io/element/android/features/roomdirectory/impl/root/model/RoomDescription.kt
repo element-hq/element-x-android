@@ -21,6 +21,9 @@ fun MatrixRoomDescription.toFeatureModel(): RoomDescription {
         joinRule = when (joinRule) {
             MatrixRoomDescription.JoinRule.PUBLIC -> RoomDescription.JoinRule.PUBLIC
             MatrixRoomDescription.JoinRule.KNOCK -> RoomDescription.JoinRule.KNOCK
+            MatrixRoomDescription.JoinRule.RESTRICTED -> RoomDescription.JoinRule.RESTRICTED
+            MatrixRoomDescription.JoinRule.KNOCK_RESTRICTED -> RoomDescription.JoinRule.KNOCK_RESTRICTED
+            MatrixRoomDescription.JoinRule.INVITE -> RoomDescription.JoinRule.INVITE
             MatrixRoomDescription.JoinRule.UNKNOWN -> RoomDescription.JoinRule.UNKNOWN
         }
     )

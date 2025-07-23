@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.room.member
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.impl.room.powerlevels.into
 import uniffi.matrix_sdk.RoomMemberRole
 import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
 import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
@@ -21,8 +22,8 @@ object RoomMemberMapper {
         avatarUrl = roomMember.avatarUrl,
         membership = mapMembership(roomMember.membership),
         isNameAmbiguous = roomMember.isNameAmbiguous,
-        powerLevel = roomMember.powerLevel,
-        normalizedPowerLevel = roomMember.normalizedPowerLevel,
+        powerLevel = roomMember.powerLevel.into(),
+        normalizedPowerLevel = roomMember.normalizedPowerLevel.into(),
         isIgnored = roomMember.isIgnored,
         role = mapRole(roomMember.suggestedRoleForPowerLevel),
         membershipChangeReason = roomMember.membershipChangeReason
@@ -30,6 +31,7 @@ object RoomMemberMapper {
 
     fun mapRole(role: RoomMemberRole): RoomMember.Role =
         when (role) {
+            RoomMemberRole.CREATOR -> RoomMember.Role.CREATOR
             RoomMemberRole.ADMINISTRATOR -> RoomMember.Role.ADMIN
             RoomMemberRole.MODERATOR -> RoomMember.Role.MODERATOR
             RoomMemberRole.USER -> RoomMember.Role.USER

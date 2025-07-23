@@ -20,9 +20,9 @@ import io.element.android.features.location.impl.common.permissions.PermissionsE
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.messages.test.FakeMessageComposerContext
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -264,7 +264,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `share sender location`() = runTest {
-        val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, ReplyParameters?, Result<Unit>> { _, _, _, _, _, _ ->
+        val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, EventId?, Result<Unit>> { _, _, _, _, _, _ ->
             Result.success(Unit)
         }
         val joinedRoom = FakeJoinedRoom(
@@ -328,7 +328,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `share pin location`() = runTest {
-        val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, ReplyParameters?, Result<Unit>> { _, _, _, _, _, _ ->
+        val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, EventId?, Result<Unit>> { _, _, _, _, _, _ ->
             Result.success(Unit)
         }
         val joinedRoom = FakeJoinedRoom(
@@ -392,7 +392,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `composer context passes through analytics`() = runTest {
-        val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, ReplyParameters?, Result<Unit>> { _, _, _, _, _, _ ->
+        val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, EventId?, Result<Unit>> { _, _, _, _, _, _ ->
             Result.success(Unit)
         }
         val joinedRoom = FakeJoinedRoom(

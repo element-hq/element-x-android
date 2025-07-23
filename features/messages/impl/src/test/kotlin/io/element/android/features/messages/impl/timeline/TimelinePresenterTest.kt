@@ -710,11 +710,7 @@ class TimelinePresenterTest {
     @Test
     fun `present - timeline room info includes predecessor room when room has predecessor`() = runTest {
         val predecessorRoomId = RoomId("!predecessor:server.org")
-        val predecessorEventId = EventId("\$predecessorEvent:server.org")
-        val predecessorRoom = PredecessorRoom(
-            roomId = predecessorRoomId,
-            lastEventId = predecessorEventId
-        )
+        val predecessorRoom = PredecessorRoom(roomId = predecessorRoomId)
 
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
@@ -730,7 +726,6 @@ class TimelinePresenterTest {
             val initialState = awaitFirstItem()
             assertThat(initialState.timelineRoomInfo.predecessorRoom).isNotNull()
             assertThat(initialState.timelineRoomInfo.predecessorRoom?.roomId).isEqualTo(predecessorRoomId)
-            assertThat(initialState.timelineRoomInfo.predecessorRoom?.lastEventId).isEqualTo(predecessorEventId)
         }
     }
 

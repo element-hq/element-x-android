@@ -19,7 +19,6 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -122,7 +121,7 @@ class FakeTimeline(
     )
 
     var replyMessageLambda: (
-        replyParameters: ReplyParameters,
+        inReplyToEventId: EventId?,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
@@ -132,13 +131,13 @@ class FakeTimeline(
     }
 
     override suspend fun replyMessage(
-        replyParameters: ReplyParameters,
+        repliedToEventId: EventId,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
     ): Result<Unit> = replyMessageLambda(
-        replyParameters,
+        repliedToEventId,
         body,
         htmlBody,
         intentionalMentions,
@@ -152,7 +151,7 @@ class FakeTimeline(
         body: String?,
         formattedBody: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
@@ -164,7 +163,7 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendImageLambda(
@@ -174,7 +173,7 @@ class FakeTimeline(
             caption,
             formattedCaption,
             progressCallback,
-            replyParameters,
+            inReplyToEventId,
         )
     }
 
@@ -185,7 +184,7 @@ class FakeTimeline(
         body: String?,
         formattedBody: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
@@ -197,7 +196,7 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendVideoLambda(
@@ -207,7 +206,7 @@ class FakeTimeline(
             caption,
             formattedCaption,
             progressCallback,
-            replyParameters,
+            inReplyToEventId,
         )
     }
 
@@ -217,7 +216,7 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
@@ -228,7 +227,7 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendAudioLambda(
@@ -237,7 +236,7 @@ class FakeTimeline(
             caption,
             formattedCaption,
             progressCallback,
-            replyParameters,
+            inReplyToEventId,
         )
     }
 
@@ -247,7 +246,7 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
@@ -258,7 +257,7 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendFileLambda(
@@ -267,7 +266,7 @@ class FakeTimeline(
             caption,
             formattedCaption,
             progressCallback,
-            replyParameters,
+            inReplyToEventId,
         )
     }
 
@@ -276,7 +275,7 @@ class FakeTimeline(
         audioInfo: AudioInfo,
         waveform: List<Float>,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ) -> Result<MediaUploadHandler> = { _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
@@ -286,7 +285,7 @@ class FakeTimeline(
         audioInfo: AudioInfo,
         waveform: List<Float>,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendVoiceMessageLambda(
@@ -294,7 +293,7 @@ class FakeTimeline(
             audioInfo,
             waveform,
             progressCallback,
-            replyParameters,
+            inReplyToEventId,
         )
     }
 
@@ -304,7 +303,7 @@ class FakeTimeline(
         description: String?,
         zoomLevel: Int?,
         assetType: AssetType?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ) -> Result<Unit> = { _, _, _, _, _, _ ->
         lambdaError()
     }
@@ -315,7 +314,7 @@ class FakeTimeline(
         description: String?,
         zoomLevel: Int?,
         assetType: AssetType?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId??,
     ): Result<Unit> = simulateLongTask {
         sendLocationLambda(
             body,
@@ -323,7 +322,7 @@ class FakeTimeline(
             description,
             zoomLevel,
             assetType,
-            replyParameters,
+            inReplyToEventId,
         )
     }
 

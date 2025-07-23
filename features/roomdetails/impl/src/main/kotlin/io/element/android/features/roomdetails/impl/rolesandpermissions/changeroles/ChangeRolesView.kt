@@ -98,7 +98,7 @@ fun ChangeRolesView(
                         titleStr = when (state.role) {
                             RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_change_role_administrators_title)
                             RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_change_role_moderators_title)
-                            RoomMember.Role.USER -> error("This should never be reached")
+                            RoomMember.Role.CREATOR, RoomMember.Role.USER -> error("This should never be reached")
                         },
                         navigationIcon = {
                             BackButton(onClick = { state.eventSink(ChangeRolesEvent.Exit) })

@@ -294,6 +294,7 @@ private fun RoomMemberListItem(
     modifier: Modifier = Modifier,
 ) {
     val roleText = when (roomMemberWithIdentity.roomMember.role) {
+        RoomMember.Role.CREATOR -> stringResource(R.string.screen_room_member_list_role_creator)
         RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_member_list_role_administrator)
         RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_member_list_role_moderator)
         RoomMember.Role.USER -> null

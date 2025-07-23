@@ -272,7 +272,7 @@ class RustMatrixClient(
             ?: sessionId.value.substringAfter(":")
     }
 
-    override suspend fun getUrl(url: String): Result<String> = withContext(sessionDispatcher) {
+    override suspend fun getUrl(url: String): Result<ByteArray> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.getUrl(url)
         }

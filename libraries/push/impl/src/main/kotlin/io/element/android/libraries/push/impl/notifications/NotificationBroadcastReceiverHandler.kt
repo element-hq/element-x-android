@@ -17,7 +17,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.isDm
-import io.element.android.libraries.matrix.api.room.message.replyInThread
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
@@ -173,7 +172,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
                 htmlBody = null,
                 intentionalMentions = emptyList(),
                 fromNotification = true,
-                replyParameters = replyInThread(replyToEventId),
+                repliedToEventId = replyToEventId,
             )
         } else {
             room.liveTimeline.sendMessage(

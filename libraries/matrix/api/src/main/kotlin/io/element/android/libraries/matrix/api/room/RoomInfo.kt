@@ -72,7 +72,7 @@ data class RoomInfo(
     val numUnreadMentions: Long,
     val heroes: ImmutableList<MatrixUser>,
     val pinnedEventIds: ImmutableList<EventId>,
-    val creator: UserId?,
+    val creators: ImmutableList<UserId>,
     val historyVisibility: RoomHistoryVisibility,
     val successorRoom: SuccessorRoom?,
 ) {

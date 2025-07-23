@@ -19,7 +19,6 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
@@ -76,7 +75,7 @@ interface Timeline : AutoCloseable {
     ): Result<Unit>
 
     suspend fun replyMessage(
-        replyParameters: ReplyParameters,
+        repliedToEventId: EventId,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
@@ -90,7 +89,7 @@ interface Timeline : AutoCloseable {
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
     suspend fun sendVideo(
@@ -100,7 +99,7 @@ interface Timeline : AutoCloseable {
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
     suspend fun sendAudio(
@@ -109,7 +108,7 @@ interface Timeline : AutoCloseable {
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
     suspend fun sendFile(
@@ -118,7 +117,7 @@ interface Timeline : AutoCloseable {
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
     /**
@@ -131,7 +130,7 @@ interface Timeline : AutoCloseable {
      * @param zoomLevel Optional zoom level to display the map at.
      * @param assetType Optional type of the location asset.
      *  Set to SENDER if sharing own location. Set to PIN if sharing any location.
-     * @param replyParameters Optional reply parameters to use when sending the location.
+     * @param inReplyToEventId Optional [EventId] for the event this message should reply to.
      */
     suspend fun sendLocation(
         body: String,
@@ -139,7 +138,7 @@ interface Timeline : AutoCloseable {
         description: String? = null,
         zoomLevel: Int? = null,
         assetType: AssetType? = null,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId?,
     ): Result<Unit>
 
     suspend fun sendVoiceMessage(
@@ -147,7 +146,7 @@ interface Timeline : AutoCloseable {
         audioInfo: AudioInfo,
         waveform: List<Float>,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
     suspend fun redactEvent(eventOrTransactionId: EventOrTransactionId, reason: String?): Result<Unit>

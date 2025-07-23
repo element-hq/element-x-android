@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsV
 import io.element.android.services.analytics.api.AnalyticsService
 
 internal fun RoomMember.Role.toAnalyticsMemberRole(): RoomModeration.Role = when (this) {
+    RoomMember.Role.CREATOR -> RoomModeration.Role.Administrator // TODO - distinguish creator from admin
     RoomMember.Role.ADMIN -> RoomModeration.Role.Administrator
     RoomMember.Role.MODERATOR -> RoomModeration.Role.Moderator
     RoomMember.Role.USER -> RoomModeration.Role.User

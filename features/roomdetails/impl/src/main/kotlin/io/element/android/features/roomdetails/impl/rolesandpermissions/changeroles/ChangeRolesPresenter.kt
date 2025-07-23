@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.model.roleOf
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
@@ -109,8 +110,8 @@ class ChangeRolesPresenter @AssistedInject constructor(
         val roomInfo by room.roomInfoFlow.collectAsState()
         fun canChangeMemberRole(userId: UserId): Boolean {
             // An admin can't remove or demote another admin
-            val powerLevel = roomInfo.roomPowerLevels?.users?.get(userId) ?: 0L
-            return RoomMember.Role.forPowerLevel(powerLevel) != RoomMember.Role.ADMIN
+            val role = roomInfo.roleOf(userId)
+            return role !in listOf(RoomMember.Role.ADMIN, RoomMember.Role.CREATOR)
         }
 
         fun handleEvent(event: ChangeRolesEvent) {

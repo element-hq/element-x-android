@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_6
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -78,7 +79,7 @@ class RoomInfoMapperTest {
                     numUnreadNotifications = 13uL,
                     numUnreadMentions = 14uL,
                     pinnedEventIds = listOf(AN_EVENT_ID.value),
-                    roomCreator = A_USER_ID,
+                    roomCreators = listOf(A_USER_ID.value),
                     historyVisibility = RustRoomHistoryVisibility.Joined,
                 )
             )
@@ -119,7 +120,7 @@ class RoomInfoMapperTest {
                     )
                 ).toImmutableList(),
                 pinnedEventIds = listOf(AN_EVENT_ID).toPersistentList(),
-                creator = A_USER_ID,
+                creators = persistentListOf(A_USER_ID),
                 isMarkedUnread = false,
                 numUnreadMessages = 12L,
                 numUnreadNotifications = 13L,
@@ -166,7 +167,7 @@ class RoomInfoMapperTest {
                     numUnreadNotifications = 13uL,
                     numUnreadMentions = 14uL,
                     pinnedEventIds = emptyList(),
-                    roomCreator = null,
+                    roomCreators = null,
                 )
             )
         ).isEqualTo(
@@ -201,7 +202,7 @@ class RoomInfoMapperTest {
                 activeRoomCallParticipants = emptyList<UserId>().toImmutableList(),
                 heroes = emptyList<MatrixUser>().toImmutableList(),
                 pinnedEventIds = emptyList<EventId>().toPersistentList(),
-                creator = null,
+                creators = persistentListOf(),
                 isMarkedUnread = true,
                 numUnreadMessages = 12L,
                 numUnreadNotifications = 13L,
