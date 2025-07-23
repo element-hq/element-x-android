@@ -13,7 +13,7 @@ import android.graphics.BitmapFactory
 import androidx.exifinterface.media.ExifInterface
 import io.element.android.libraries.androidutils.bitmap.calculateInSampleSize
 import io.element.android.libraries.androidutils.bitmap.resizeToMax
-import io.element.android.libraries.androidutils.bitmap.rotateToMetadataOrientation
+import io.element.android.libraries.androidutils.bitmap.rotateToExifMetadataOrientation
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -78,7 +78,7 @@ class ImageCompressor @Inject constructor(
             options.inJustDecodeBounds = false
             val decodedBitmap = BitmapFactory.decodeStream(input, null, options)
                 ?: error("Decoding Bitmap from InputStream failed")
-            val rotatedBitmap = decodedBitmap.rotateToMetadataOrientation(orientation)
+            val rotatedBitmap = decodedBitmap.rotateToExifMetadataOrientation(orientation)
             if (resizeMode is ResizeMode.Strict) {
                 rotatedBitmap.resizeToMax(resizeMode.maxWidth, resizeMode.maxHeight)
             } else {

@@ -64,7 +64,7 @@ fun BitmapFactory.Options.calculateInSampleSize(desiredWidth: Int, desiredHeight
  * Decodes the [inputStream] into a [Bitmap] and applies the needed rotation based on [orientation].
  * This orientation value must be one of `ExifInterface.ORIENTATION_*` constants.
  */
-fun Bitmap.rotateToMetadataOrientation(orientation: Int): Bitmap {
+fun Bitmap.rotateToExifMetadataOrientation(orientation: Int): Bitmap {
     val matrix = Matrix()
     when (orientation) {
         ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
