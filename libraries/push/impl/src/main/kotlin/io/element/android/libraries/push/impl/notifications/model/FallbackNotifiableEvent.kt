@@ -25,4 +25,5 @@ data class FallbackNotifiableEvent(
     override val isRedacted: Boolean,
     override val isUpdated: Boolean,
     val timestamp: Long,
+    val cause: String?,
 ) : NotifiableEvent

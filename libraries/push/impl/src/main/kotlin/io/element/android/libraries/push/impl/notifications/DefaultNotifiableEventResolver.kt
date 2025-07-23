@@ -236,7 +236,12 @@ class DefaultNotifiableEventResolver @Inject constructor(
             }
             NotificationContent.MessageLike.RoomEncrypted -> {
                 Timber.tag(loggerTag.value).w("Notification with encrypted content -> fallback")
-                val fallbackNotifiableEvent = fallbackNotificationFactory.create(userId, roomId, eventId)
+                val fallbackNotifiableEvent = fallbackNotificationFactory.create(
+                    sessionId = userId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    cause = "Unable to decrypt event content",
+                )
                 ResolvedPushEvent.Event(fallbackNotifiableEvent)
             }
             is NotificationContent.MessageLike.RoomRedaction -> {

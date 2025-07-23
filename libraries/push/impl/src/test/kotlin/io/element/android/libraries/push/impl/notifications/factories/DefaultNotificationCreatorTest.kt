@@ -71,6 +71,7 @@ class DefaultNotificationCreatorTest {
                 isRedacted = false,
                 isUpdated = false,
                 timestamp = A_FAKE_TIMESTAMP,
+                cause = null,
             )
         )
         result.commonAssertions(
