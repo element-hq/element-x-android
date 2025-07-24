@@ -22,15 +22,7 @@ import kotlinx.coroutines.flow.map
  */
 fun BaseRoom.usersWithRole(role: RoomMember.Role): Flow<ImmutableList<RoomMember>> {
     return roomInfoFlow
-        .map { roomInfo ->
-            if (role == RoomMember.Role.CREATOR) {
-                roomInfo.creators.toSet()
-            } else {
-                roomInfo.roomPowerLevels?.users.orEmpty().filter { (_, powerLevel) ->
-                    RoomMember.Role.forPowerLevel(powerLevel) == role
-                }.keys
-            }
-        }
+        .map { roomInfo -> roomInfo.usersWithRole(role) }
         .combine(membersStateFlow) { powerLevels, membersState ->
             membersState.activeRoomMembers()
                 .filter { powerLevels.contains(it.userId) }

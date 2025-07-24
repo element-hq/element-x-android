@@ -30,8 +30,6 @@ fun RoomInfo.roleOf(userId: UserId): RoomMember.Role {
     return if (creators.contains(userId)) {
         RoomMember.Role.CREATOR
     } else {
-        roomPowerLevels?.users?.get(userId)
-            ?.let(RoomMember.Role::forPowerLevel)
-            ?: RoomMember.Role.USER
+        roomPowerLevels?.roleOf(userId) ?: RoomMember.Role.USER
     }
 }

@@ -21,6 +21,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.ui.model.roleOf
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
@@ -59,9 +60,8 @@ class RolesAndPermissionsNode @AssistedInject constructor(
         lifecycleScope.launch {
             room.roomInfoFlow
                 .filter { info ->
-                    val userPowerLevel = info.roomPowerLevels?.users?.get(room.sessionId) ?: 0L
-                    val isCreator = info.creators.contains(room.sessionId)
-                    !isCreator && userPowerLevel < RoomMember.Role.ADMIN.powerLevel
+                    val role = info.roleOf(room.sessionId)
+                    role != RoomMember.Role.ADMIN && role != RoomMember.Role.CREATOR
                 }
                 .take(1)
                 .onEach { navigateUp() }
