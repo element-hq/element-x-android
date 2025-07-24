@@ -69,7 +69,7 @@ fun aDmRoomMember(
     powerLevel: Long = 0,
     normalizedPowerLevel: Long = powerLevel,
     isIgnored: Boolean = false,
-    role: RoomMember.Role = RoomMember.Role.USER,
+    role: RoomMember.Role = RoomMember.Role.User,
     membershipChangeReason: String? = null,
 ) = RoomMember(
     userId = userId,

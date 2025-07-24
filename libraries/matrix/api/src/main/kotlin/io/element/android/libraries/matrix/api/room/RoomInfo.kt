@@ -85,7 +85,7 @@ data class RoomInfo(
      * Returns the list of users with the given [role] in this room.
      */
     fun usersWithRole(role: RoomMember.Role): List<UserId> {
-        return if (role == RoomMember.Role.CREATOR) {
+        return if (role is RoomMember.Role.Owner && role.isCreator) {
             this.creators
         } else {
             this.roomPowerLevels?.usersWithRole(role).orEmpty().toList()

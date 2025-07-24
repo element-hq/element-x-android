@@ -22,14 +22,14 @@ fun RoomInfo.getAvatarData(size: AvatarSize) = AvatarData(
 
 /**
  * Returns the role of the user in the room.
- * If the user is a creator, returns [RoomMember.Role.CREATOR].
+ * If the user is a creator, returns [RoomMember.Role.Owner].
  * Otherwise, checks the power levels and returns the corresponding role.
- * If no specific power level is set for the user, defaults to [RoomMember.Role.USER].
+ * If no specific power level is set for the user, defaults to [RoomMember.Role.User].
  */
 fun RoomInfo.roleOf(userId: UserId): RoomMember.Role {
     return if (creators.contains(userId)) {
-        RoomMember.Role.CREATOR
+        RoomMember.Role.Owner(isCreator = true)
     } else {
-        roomPowerLevels?.roleOf(userId) ?: RoomMember.Role.USER
+        roomPowerLevels?.roleOf(userId) ?: RoomMember.Role.User
     }
 }
