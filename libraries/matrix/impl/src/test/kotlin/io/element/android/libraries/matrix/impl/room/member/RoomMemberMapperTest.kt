@@ -17,9 +17,19 @@ import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
 class RoomMemberMapperTest {
     @Test
     fun mapRole() {
-        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.USER)).isEqualTo(RoomMember.Role.USER)
-        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.MODERATOR)).isEqualTo(RoomMember.Role.MODERATOR)
-        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.ADMINISTRATOR)).isEqualTo(RoomMember.Role.ADMIN)
+        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.USER, 0L)).isEqualTo(RoomMember.Role.User)
+        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.MODERATOR, 50L)).isEqualTo(RoomMember.Role.Moderator)
+        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.ADMINISTRATOR, 100L)).isEqualTo(RoomMember.Role.Admin)
+        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.ADMINISTRATOR, 150L)).isEqualTo(RoomMember.Role.Owner(isCreator = false))
+        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.CREATOR, Long.MAX_VALUE)).isEqualTo(RoomMember.Role.Owner(isCreator = true))
+
+        // `null` power level defaults to USER role
+        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.ADMINISTRATOR, null)).isEqualTo(RoomMember.Role.Admin)
+
+        // Power level is only taken into account for ADMINISTRATOR role
+        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.USER, 123L)).isEqualTo(RoomMember.Role.User)
+        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.MODERATOR, 1L)).isEqualTo(RoomMember.Role.Moderator)
+        assertThat(RoomMemberMapper.mapRole(RoomMemberRole.CREATOR, 0L)).isEqualTo(RoomMember.Role.Owner(isCreator = true))
     }
 
     @Test
