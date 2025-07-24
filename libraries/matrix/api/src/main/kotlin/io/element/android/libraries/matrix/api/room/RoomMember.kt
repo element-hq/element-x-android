@@ -87,3 +87,11 @@ fun RoomMember.toMatrixUser() = MatrixUser(
     displayName = displayName,
     avatarUrl = avatarUrl,
 )
+
+/**
+ * Returns `true` if the [RoomMember] is an owner of the room.
+ * Owners are defined as members with either the [RoomMember.Role.CREATOR] role or a power level greater than or equal to [RoomMember.Role.SUPER_ADMIN_LEVEL].
+ */
+fun RoomMember.isOwner(): Boolean {
+    return role == RoomMember.Role.CREATOR || powerLevel >= RoomMember.Role.SUPER_ADMIN_LEVEL
+}
