@@ -45,7 +45,7 @@ class ChangeRolesViewTest {
         val exception = runCatchingExceptions {
             rule.setChangeRolesContent(
                 state = aChangeRolesState(
-                    role = RoomMember.Role.USER,
+                    role = RoomMember.Role.User,
                     eventSink = EnsureNeverCalledWithParam(),
                 ),
             )
@@ -166,7 +166,7 @@ class ChangeRolesViewTest {
         val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
         rule.setChangeRolesContent(
             state = aChangeRolesState(
-                role = RoomMember.Role.ADMIN,
+                role = RoomMember.Role.Admin,
                 isSearchActive = true,
                 savingState = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
@@ -183,7 +183,7 @@ class ChangeRolesViewTest {
         val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
         rule.setChangeRolesContent(
             state = aChangeRolesState(
-                role = RoomMember.Role.ADMIN,
+                role = RoomMember.Role.Admin,
                 isSearchActive = true,
                 savingState = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,

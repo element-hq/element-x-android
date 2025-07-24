@@ -109,9 +109,14 @@ class ChangeRolesPresenter @AssistedInject constructor(
 
         val roomInfo by room.roomInfoFlow.collectAsState()
         fun canChangeMemberRole(userId: UserId): Boolean {
-            // An admin can't remove or demote another admin
-            val role = roomInfo.roleOf(userId)
-            return role !in listOf(RoomMember.Role.ADMIN, RoomMember.Role.CREATOR)
+            // This is used to group the
+            val currentUserRole = roomInfo.roleOf(room.sessionId)
+            val otherUserRole = roomInfo.roleOf(userId)
+            return if (currentUserRole is RoomMember.Role.Owner && otherUserRole is RoomMember.Role.Owner) {
+                false
+            } else {
+                currentUserRole.powerLevel > otherUserRole.powerLevel
+            }
         }
 
         fun handleEvent(event: ChangeRolesEvent) {
@@ -133,11 +138,21 @@ class ChangeRolesPresenter @AssistedInject constructor(
                     selectedUsers.value = newList.toImmutableList()
                 }
                 is ChangeRolesEvent.Save -> {
-                    if (role == RoomMember.Role.ADMIN && selectedUsers != usersWithRole && !saveState.value.isConfirming()) {
-                        // Confirm adding admin
-                        saveState.value = AsyncAction.ConfirmingNoParams
-                    } else if (!saveState.value.isLoading()) {
-                        coroutineScope.save(usersWithRole.value, selectedUsers, saveState)
+                    val currentUserIsAdmin = roomInfo.roleOf(room.sessionId) == RoomMember.Role.Admin
+                    val isModifyingAdmins = role == RoomMember.Role.Admin
+                    val hasChanges = selectedUsers != usersWithRole
+                    val isConfirming = saveState.value.isConfirming()
+
+                    val needsConfirmation = currentUserIsAdmin && isModifyingAdmins && hasChanges && !isConfirming
+
+                    when {
+                        needsConfirmation -> {
+                            // Confirm modifying users
+                            saveState.value = AsyncAction.ConfirmingNoParams
+                        }
+                        !saveState.value.isLoading() -> {
+                            coroutineScope.save(usersWithRole.value, selectedUsers, saveState)
+                        }
                     }
                 }
                 is ChangeRolesEvent.ClearError -> {
@@ -175,10 +190,11 @@ class ChangeRolesPresenter @AssistedInject constructor(
     }
 
     private fun List<RoomMember>.groupedByRole(): MembersByRole {
+        val groupedMembers = MembersByRole(this)
         return MembersByRole(
-            admins = filter { it.role == RoomMember.Role.ADMIN }.sorted(),
-            moderators = filter { it.role == RoomMember.Role.MODERATOR }.sorted(),
-            members = filter { it.role == RoomMember.Role.USER }.sorted(),
+            admins = groupedMembers.admins.sorted(),
+            moderators = groupedMembers.moderators.sorted(),
+            members = groupedMembers.members.sorted(),
         )
     }
 
@@ -203,7 +219,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
             }
             for (selectedUser in toRemove) {
                 analyticsService.capture(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.User))
-                add(UserRoleChange(selectedUser.userId, RoomMember.Role.USER))
+                add(UserRoleChange(selectedUser.userId, RoomMember.Role.User))
             }
         }
 

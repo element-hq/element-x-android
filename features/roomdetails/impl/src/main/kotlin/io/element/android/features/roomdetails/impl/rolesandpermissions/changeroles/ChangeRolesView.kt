@@ -96,9 +96,9 @@ fun ChangeRolesView(
                 AnimatedVisibility(visible = !state.isSearchActive) {
                     TopAppBar(
                         titleStr = when (state.role) {
-                            RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_change_role_administrators_title)
-                            RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_change_role_moderators_title)
-                            RoomMember.Role.CREATOR, RoomMember.Role.USER -> error("This should never be reached")
+                            RoomMember.Role.Admin -> stringResource(R.string.screen_room_change_role_administrators_title)
+                            RoomMember.Role.Moderator -> stringResource(R.string.screen_room_change_role_moderators_title)
+                            is RoomMember.Role.Owner, RoomMember.Role.User -> error("This should never be reached")
                         },
                         navigationIcon = {
                             BackButton(onClick = { state.eventSink(ChangeRolesEvent.Exit) })
@@ -187,7 +187,7 @@ fun ChangeRolesView(
 
         when (state.savingState) {
             is AsyncAction.Confirming -> {
-                if (state.role == RoomMember.Role.ADMIN) {
+                if (state.role == RoomMember.Role.Admin) {
                     // Confirm adding new admins dialogs
                     ConfirmationDialog(
                         title = stringResource(R.string.screen_room_change_role_confirm_add_admin_title),
@@ -237,7 +237,7 @@ private fun SearchResultsList(
         if (searchResults.admins.isNotEmpty()) {
             stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_roles_and_permissions_admins)) }
             // Add a footer for the admin section in change role to moderator screen
-            if (currentRole == RoomMember.Role.MODERATOR) {
+            if (currentRole == RoomMember.Role.Moderator) {
                 item {
                     Text(
                         modifier = Modifier
@@ -303,11 +303,15 @@ private fun ListMemberItem(
 ) {
     val canToggle = canRemoveMember(roomMember.userId)
     val trailingContent: @Composable (() -> Unit) = {
-        Checkbox(
-            checked = selectedUsers.any { it.userId == roomMember.userId },
-            onCheckedChange = { onToggleSelection(roomMember) },
-            enabled = canToggle,
-        )
+        if (!canToggle && roomMember.role is RoomMember.Role.Owner) {
+            Text(stringResource(R.string.screen_room_member_list_role_owner))
+        } else {
+            Checkbox(
+                checked = selectedUsers.any { it.userId == roomMember.userId },
+                onCheckedChange = { onToggleSelection(roomMember) },
+                enabled = canToggle,
+            )
+        }
     }
     MemberRow(
         modifier = Modifier.clickable(enabled = canToggle, onClick = { onToggleSelection(roomMember) }),

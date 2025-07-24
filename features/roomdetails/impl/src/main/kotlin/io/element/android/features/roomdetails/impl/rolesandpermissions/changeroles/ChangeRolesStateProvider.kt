@@ -24,7 +24,7 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
     override val values: Sequence<ChangeRolesState>
         get() = sequenceOf(
             aChangeRolesState(),
-            aChangeRolesStateWithSelectedUsers().copy(role = RoomMember.Role.MODERATOR),
+            aChangeRolesStateWithSelectedUsers().copy(role = RoomMember.Role.Moderator),
             aChangeRolesStateWithSelectedUsers().copy(hasPendingChanges = false),
             aChangeRolesStateWithSelectedUsers(),
             aChangeRolesStateWithSelectedUsers().copy(
@@ -45,7 +45,7 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
 }
 
 internal fun aChangeRolesState(
-    role: RoomMember.Role = RoomMember.Role.ADMIN,
+    role: RoomMember.Role = RoomMember.Role.Admin,
     query: String? = null,
     isSearchActive: Boolean = false,
     searchResults: SearchBarResultState<MembersByRole> = SearchBarResultState.NoResultsFound(),
