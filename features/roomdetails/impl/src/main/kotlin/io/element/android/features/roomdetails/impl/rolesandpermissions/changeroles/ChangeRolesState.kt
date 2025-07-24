@@ -35,9 +35,9 @@ data class MembersByRole(
     val members: ImmutableList<RoomMember>,
 ) {
     constructor(members: List<RoomMember>) : this(
-            admins = members.filter { it.role == RoomMember.Role.ADMIN }.sorted(),
-            moderators = members.filter { it.role == RoomMember.Role.MODERATOR }.sorted(),
-            members = members.filter { it.role == RoomMember.Role.USER }.sorted(),
+            admins = members.filter { it.role.powerLevel >= RoomMember.Role.Admin.powerLevel }.sorted(),
+            moderators = members.filter { it.role == RoomMember.Role.Moderator }.sorted(),
+            members = members.filter { it.role == RoomMember.Role.User }.sorted(),
     )
 
     fun isEmpty() = admins.isEmpty() && moderators.isEmpty() && members.isEmpty()
