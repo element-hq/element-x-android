@@ -67,11 +67,13 @@ fun RolesAndPermissionsView(
             trailingContent = ListItemContent.Text("${state.moderatorCount}"),
             onClick = { rolesAndPermissionsNavigator.openModeratorList() },
         )
-        ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_change_my_role)) },
-            onClick = { state.eventSink(RolesAndPermissionsEvents.ChangeOwnRole) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Edit()))
-        )
+        if (state.canDemoteSelf) {
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_change_my_role)) },
+                onClick = { state.eventSink(RolesAndPermissionsEvents.ChangeOwnRole) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Edit()))
+            )
+        }
         ListSectionHeader(title = stringResource(R.string.screen_room_roles_and_permissions_permissions_header), hasDivider = true)
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_room_details)) },
@@ -170,7 +172,7 @@ private fun ChangeOwnRoleBottomSheet(
             headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_change_role_demote_to_moderator)) },
             onClick = {
                 sheetState.hide(coroutineScope) {
-                    eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.MODERATOR))
+                    eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
                 }
             },
             style = ListItemStyle.Destructive,
@@ -179,7 +181,7 @@ private fun ChangeOwnRoleBottomSheet(
             headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_change_role_demote_to_member)) },
             onClick = {
                 sheetState.hide(coroutineScope) {
-                    eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.USER))
+                    eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.User))
                 }
             },
             style = ListItemStyle.Destructive,

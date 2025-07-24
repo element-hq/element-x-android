@@ -66,7 +66,7 @@ class RolesAndPermissionPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.MODERATOR))
+            initialState.eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
 
             runCurrent()
             assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.Loading)
@@ -87,7 +87,7 @@ class RolesAndPermissionPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.MODERATOR))
+            initialState.eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
 
             runCurrent()
             assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.Loading)

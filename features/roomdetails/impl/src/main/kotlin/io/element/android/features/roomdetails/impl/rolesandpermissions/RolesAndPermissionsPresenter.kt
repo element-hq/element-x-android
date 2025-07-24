@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.activeRoomMembers
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.ui.model.roleOf
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -50,14 +51,18 @@ class RolesAndPermissionsPresenter @Inject constructor(
         }
         val moderatorCount by remember {
             derivedStateOf {
-                roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.MODERATOR)
+                roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Moderator)
             }
         }
         val adminCount by remember {
             derivedStateOf {
-                roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.ADMIN)
+                val admins = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Admin)
+                val superAdmins = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Owner(isCreator = false))
+                val creators = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Owner(isCreator = true))
+                admins + superAdmins + creators
             }
         }
+        val canDemoteSelf = remember { derivedStateOf { roomInfo.roleOf(room.sessionId) !is RoomMember.Role.Owner } }
         val changeOwnRoleAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val resetPermissionsAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
@@ -85,6 +90,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
         return RolesAndPermissionsState(
             adminCount = adminCount,
             moderatorCount = moderatorCount,
+            canDemoteSelf = canDemoteSelf.value,
             changeOwnRoleAction = changeOwnRoleAction.value,
             resetPermissionsAction = resetPermissionsAction.value,
             eventSink = { handleEvent(it) },

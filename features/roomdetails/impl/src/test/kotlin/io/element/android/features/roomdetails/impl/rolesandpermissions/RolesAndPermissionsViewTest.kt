@@ -126,7 +126,7 @@ class RolesAndPermissionsViewTest {
         )
         rule.clickOn(R.string.screen_room_roles_and_permissions_change_role_demote_to_moderator)
         rule.mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.MODERATOR))
+        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
     }
 
     @Test
@@ -140,7 +140,7 @@ class RolesAndPermissionsViewTest {
         )
         rule.clickOn(R.string.screen_room_roles_and_permissions_change_role_demote_to_member)
         rule.mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.USER))
+        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.User))
     }
 
     @Test

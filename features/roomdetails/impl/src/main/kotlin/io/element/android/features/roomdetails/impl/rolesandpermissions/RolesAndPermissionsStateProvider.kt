@@ -45,17 +45,20 @@ class RolesAndPermissionsStateProvider : PreviewParameterProvider<RolesAndPermis
                 moderatorCount = 2,
                 resetPermissionsAction = AsyncAction.Failure(IllegalStateException("Failed to reset permissions")),
             ),
+            aRolesAndPermissionsState(canDemoteSelf = false),
         )
 }
 
 internal fun aRolesAndPermissionsState(
     adminCount: Int = 0,
     moderatorCount: Int = 0,
+    canDemoteSelf: Boolean = true,
     changeOwnRoleAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     resetPermissionsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (RolesAndPermissionsEvents) -> Unit = {},
 ) = RolesAndPermissionsState(
     adminCount = adminCount,
+    canDemoteSelf = canDemoteSelf,
     moderatorCount = moderatorCount,
     changeOwnRoleAction = changeOwnRoleAction,
     resetPermissionsAction = resetPermissionsAction,
