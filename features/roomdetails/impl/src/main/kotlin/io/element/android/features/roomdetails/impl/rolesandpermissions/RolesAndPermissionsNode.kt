@@ -60,7 +60,8 @@ class RolesAndPermissionsNode @AssistedInject constructor(
             room.roomInfoFlow
                 .filter { info ->
                     val userPowerLevel = info.roomPowerLevels?.users?.get(room.sessionId) ?: 0L
-                    userPowerLevel < RoomMember.Role.ADMIN.powerLevel
+                    val isCreator = info.creators.contains(room.sessionId)
+                    !isCreator && userPowerLevel < RoomMember.Role.ADMIN.powerLevel
                 }
                 .take(1)
                 .onEach { navigateUp() }
