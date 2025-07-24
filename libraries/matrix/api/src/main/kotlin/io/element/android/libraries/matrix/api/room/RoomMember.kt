@@ -26,13 +26,17 @@ data class RoomMember(
      * Role of the RoomMember, based on its [powerLevel].
      */
     enum class Role(val powerLevel: Long) {
+        CREATOR(Long.MAX_VALUE),
         ADMIN(100L),
         MODERATOR(50L),
         USER(0L);
 
         companion object {
+            const val SUPER_ADMIN_LEVEL = 150L
+
             fun forPowerLevel(powerLevel: Long): Role {
                 return when {
+                    powerLevel > SUPER_ADMIN_LEVEL -> CREATOR
                     powerLevel >= ADMIN.powerLevel -> ADMIN
                     powerLevel >= MODERATOR.powerLevel -> MODERATOR
                     else -> USER
@@ -83,3 +87,11 @@ fun RoomMember.toMatrixUser() = MatrixUser(
     displayName = displayName,
     avatarUrl = avatarUrl,
 )
+
+/**
+ * Returns `true` if the [RoomMember] is an owner of the room.
+ * Owners are defined as members with either the [RoomMember.Role.CREATOR] role or a power level greater than or equal to [RoomMember.Role.SUPER_ADMIN_LEVEL].
+ */
+fun RoomMember.isOwner(): Boolean {
+    return role == RoomMember.Role.CREATOR || powerLevel >= RoomMember.Role.SUPER_ADMIN_LEVEL
+}

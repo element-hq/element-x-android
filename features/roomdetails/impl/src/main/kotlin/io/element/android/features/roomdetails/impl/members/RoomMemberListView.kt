@@ -61,6 +61,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.matrix.api.room.isOwner
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -293,10 +294,15 @@ private fun RoomMemberListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val roleText = when (roomMemberWithIdentity.roomMember.role) {
-        RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_member_list_role_administrator)
-        RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_member_list_role_moderator)
-        RoomMember.Role.USER -> null
+    val member = roomMemberWithIdentity.roomMember
+    val roleText = if (member.isOwner()) {
+        stringResource(R.string.screen_room_member_list_role_owner)
+    } else {
+        when (member.role) {
+            RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_member_list_role_administrator)
+            RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_member_list_role_moderator)
+            else -> null
+        }
     }
 
     MatrixUserRow(

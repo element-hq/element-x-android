@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.fixtures.factories
 
 import io.element.android.libraries.matrix.api.core.UserId
 import org.matrix.rustcomponents.sdk.MembershipState
+import org.matrix.rustcomponents.sdk.PowerLevel
 import org.matrix.rustcomponents.sdk.RoomMember
 import uniffi.matrix_sdk.RoomMemberRole
 
@@ -18,7 +19,7 @@ fun aRustRoomMember(
     avatarUrl: String? = null,
     membership: MembershipState = MembershipState.Join,
     isNameAmbiguous: Boolean = false,
-    powerLevel: Long = 0L,
+    powerLevel: PowerLevel = PowerLevel.Value(0L),
     isIgnored: Boolean = false,
     role: RoomMemberRole = RoomMemberRole.USER,
     membershipChangeReason: String? = null,

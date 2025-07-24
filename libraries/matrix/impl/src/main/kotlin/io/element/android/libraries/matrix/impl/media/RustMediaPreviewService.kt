@@ -79,8 +79,9 @@ private fun MediaPreviewValue.into(): MediaPreviews {
     }
 }
 
-private fun MediaPreviews.into(): MediaPreviewValue {
+private fun MediaPreviews?.into(): MediaPreviewValue {
     return when (this) {
+        null -> MediaPreviewValue.DEFAULT
         MediaPreviews.ON -> MediaPreviewValue.On
         MediaPreviews.OFF -> MediaPreviewValue.Off
         MediaPreviews.PRIVATE -> MediaPreviewValue.Private

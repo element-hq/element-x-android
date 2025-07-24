@@ -26,6 +26,9 @@ forbiddenTerms = {
         "call_invalid_audio_device_bluetooth_devices_disabled",
         # Contains "Element X"
         "screen_room_timeline_legacy_call",
+        # We explicitly want to mention Element Pro in these 2:
+        "screen_change_server_error_element_pro_required_title",
+        "screen_change_server_error_element_pro_required_message",
     ]
 }
 

@@ -21,12 +21,19 @@ import io.element.android.libraries.matrix.api.room.join.JoinRule
 enum class MediaPreviewValue {
     On,
     Off,
-    Private
+    Private;
+
+    companion object {
+        /**
+         * The default value if unknown (no local nor server config).
+         */
+        val DEFAULT = On
+    }
 }
 
-fun MediaPreviewValue.isPreviewEnabled(joinRule: JoinRule?): Boolean {
+fun MediaPreviewValue?.isPreviewEnabled(joinRule: JoinRule?): Boolean {
     return when (this) {
-        On -> true
+        null, On -> true
         Off -> false
         Private -> when (joinRule) {
             is JoinRule.Private,

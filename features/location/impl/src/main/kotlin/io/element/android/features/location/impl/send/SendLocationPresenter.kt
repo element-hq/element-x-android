@@ -26,9 +26,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
-import io.element.android.libraries.matrix.api.room.message.replyInThread
-import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.launch
@@ -103,17 +100,7 @@ class SendLocationPresenter @Inject constructor(
         mode: SendLocationState.Mode,
     ) {
         val replyMode = messageComposerContext.composerMode as? MessageComposerMode.Reply
-        val replyParams = replyMode?.replyToDetails?.let { details ->
-            if (replyMode.inThread) {
-                replyInThread(details.eventId())
-            } else {
-                ReplyParameters(
-                    inReplyToEventId = details.eventId(),
-                    enforceThreadReply = false,
-                    replyWithinThread = false
-                )
-            }
-        }
+        val inReplyToEventId = replyMode?.eventId
         when (mode) {
             SendLocationState.Mode.PinLocation -> {
                 val geoUri = event.cameraPosition.toGeoUri()
@@ -123,7 +110,7 @@ class SendLocationPresenter @Inject constructor(
                     description = null,
                     zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
                     assetType = AssetType.PIN,
-                    replyParameters = replyParams,
+                    inReplyToEventId = inReplyToEventId,
                 )
                 analyticsService.capture(
                     Composer(
@@ -142,7 +129,7 @@ class SendLocationPresenter @Inject constructor(
                     description = null,
                     zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
                     assetType = AssetType.SENDER,
-                    replyParameters = replyParams,
+                    inReplyToEventId = inReplyToEventId,
                 )
                 analyticsService.capture(
                     Composer(

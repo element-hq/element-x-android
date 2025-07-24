@@ -135,7 +135,7 @@ private fun SelectRoleItem(
     onClick: (RoomPermissionType, RoomMember.Role) -> Unit
 ) {
     val title = when (role) {
-        RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_change_permissions_administrators)
+        RoomMember.Role.ADMIN, RoomMember.Role.CREATOR -> stringResource(R.string.screen_room_change_permissions_administrators)
         RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_change_permissions_moderators)
         RoomMember.Role.USER -> stringResource(R.string.screen_room_change_permissions_everyone)
     }

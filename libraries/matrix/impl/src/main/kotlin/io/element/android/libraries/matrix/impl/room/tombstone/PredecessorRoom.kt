@@ -7,14 +7,10 @@
 
 package io.element.android.libraries.matrix.impl.room.tombstone
 
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import org.matrix.rustcomponents.sdk.PredecessorRoom as RustPredecessorRoom
 
 fun RustPredecessorRoom.map(): PredecessorRoom {
-    return PredecessorRoom(
-        roomId = RoomId(roomId),
-        lastEventId = EventId(lastEventId),
-    )
+    return PredecessorRoom(roomId = RoomId(roomId))
 }

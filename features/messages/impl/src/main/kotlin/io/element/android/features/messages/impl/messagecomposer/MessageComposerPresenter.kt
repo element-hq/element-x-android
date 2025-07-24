@@ -55,7 +55,6 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -466,12 +465,7 @@ class MessageComposerPresenter @AssistedInject constructor(
                             body = message.markdown,
                             htmlBody = message.html,
                             intentionalMentions = message.intentionalMentions,
-                            replyParameters = ReplyParameters(
-                                inReplyToEventId = eventId,
-                                enforceThreadReply = inThread,
-                                // This should be false until we add a way to make a reply in a thread an explicit reply to the provided eventId
-                                replyWithinThread = false,
-                            ),
+                            repliedToEventId = eventId,
                         )
                     }
                 }

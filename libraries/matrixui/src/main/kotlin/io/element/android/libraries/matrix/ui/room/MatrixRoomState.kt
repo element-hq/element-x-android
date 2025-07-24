@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canKick
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
+import io.element.android.libraries.matrix.ui.model.roleOf
 
 @Composable
 fun BaseRoom.canSendMessageAsState(type: MessageEventType, updateKey: Long): State<Boolean> {
@@ -106,8 +107,8 @@ fun BaseRoom.userPowerLevelAsState(updateKey: Long): State<Long> {
 @Composable
 fun BaseRoom.isOwnUserAdmin(): Boolean {
     val roomInfo by roomInfoFlow.collectAsState()
-    val powerLevel = roomInfo.roomPowerLevels?.users?.get(sessionId) ?: 0L
-    return RoomMember.Role.forPowerLevel(powerLevel) == RoomMember.Role.ADMIN
+    val role = roomInfo.roleOf(sessionId)
+    return role == RoomMember.Role.ADMIN || role == RoomMember.Role.CREATOR
 }
 
 @Composable

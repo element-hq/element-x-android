@@ -72,10 +72,21 @@ data class RoomInfo(
     val numUnreadMentions: Long,
     val heroes: ImmutableList<MatrixUser>,
     val pinnedEventIds: ImmutableList<EventId>,
-    val creator: UserId?,
+    val creators: ImmutableList<UserId>,
     val historyVisibility: RoomHistoryVisibility,
     val successorRoom: SuccessorRoom?,
 ) {
     val aliases: List<RoomAlias>
         get() = listOfNotNull(canonicalAlias) + alternativeAliases
+
+    /**
+     * Returns the list of users with the given [role] in this room.
+     */
+    fun usersWithRole(role: RoomMember.Role): List<UserId> {
+        return if (role == RoomMember.Role.CREATOR) {
+            this.creators
+        } else {
+            this.roomPowerLevels?.usersWithRole(role).orEmpty().toList()
+        }
+    }
 }

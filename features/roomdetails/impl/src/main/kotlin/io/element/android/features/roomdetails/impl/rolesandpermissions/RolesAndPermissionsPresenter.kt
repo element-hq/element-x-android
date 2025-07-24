@@ -110,8 +110,6 @@ class RolesAndPermissionsPresenter @Inject constructor(
     }
 
     private fun RoomInfo.userCountWithRole(userIds: List<UserId>, role: RoomMember.Role): Int {
-        return this.roomPowerLevels?.users?.count { (userId, level) ->
-            RoomMember.Role.forPowerLevel(level) == role && userId in userIds
-        } ?: 0
+        return usersWithRole(role).filter { it in userIds }.size
     }
 }

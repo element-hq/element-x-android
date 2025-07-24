@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomPowerLevels
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -52,7 +51,7 @@ fun aRustRoomInfo(
     numUnreadNotifications: ULong = 0uL,
     numUnreadMentions: ULong = 0uL,
     pinnedEventIds: List<String> = listOf(),
-    roomCreator: UserId? = null,
+    roomCreators: List<String>? = emptyList(),
     joinRule: JoinRule? = null,
     historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
     successorRoom: SuccessorRoom? = null,
@@ -86,7 +85,7 @@ fun aRustRoomInfo(
     numUnreadNotifications = numUnreadNotifications,
     numUnreadMentions = numUnreadMentions,
     pinnedEventIds = pinnedEventIds,
-    creator = roomCreator?.value,
+    creators = roomCreators,
     joinRule = joinRule,
     historyVisibility = historyVisibility,
     successorRoom = successorRoom,

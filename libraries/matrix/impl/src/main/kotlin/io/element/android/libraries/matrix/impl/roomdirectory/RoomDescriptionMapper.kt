@@ -32,6 +32,9 @@ internal fun PublicRoomJoinRule?.map(): RoomDescription.JoinRule {
     return when (this) {
         PublicRoomJoinRule.PUBLIC -> RoomDescription.JoinRule.PUBLIC
         PublicRoomJoinRule.KNOCK -> RoomDescription.JoinRule.KNOCK
+        PublicRoomJoinRule.RESTRICTED -> RoomDescription.JoinRule.RESTRICTED
+        PublicRoomJoinRule.KNOCK_RESTRICTED -> RoomDescription.JoinRule.KNOCK_RESTRICTED
+        PublicRoomJoinRule.INVITE -> RoomDescription.JoinRule.INVITE
         null -> RoomDescription.JoinRule.UNKNOWN
     }
 }
