@@ -21,6 +21,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
@@ -83,6 +85,11 @@ class WebViewAudioManager(
             ?.takeIf { it.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) }
             ?.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "${webView.context.packageName}:ProximitySensorCallWakeLock")
     }
+
+    /**
+     * Used to ensure that only one coroutine can access the proximity sensor wake lock at a time, preventing re-acquiring or re-releasing it.
+     */
+    private val proximitySensorMutex = Mutex()
 
     /**
      * This listener tracks the current communication device and updates the WebView when it changes.
@@ -208,8 +215,12 @@ class WebViewAudioManager(
             return
         }
 
-        if (proximitySensorWakeLock?.isHeld == true) {
-            proximitySensorWakeLock?.release()
+        coroutineScope.launch {
+            proximitySensorMutex.withLock {
+                if (proximitySensorWakeLock?.isHeld == true) {
+                    proximitySensorWakeLock?.release()
+                }
+            }
         }
 
         audioManager.mode = AudioManager.MODE_NORMAL
@@ -397,13 +408,17 @@ class WebViewAudioManager(
 
         expectedNewCommunicationDeviceId = null
 
-        @Suppress("WakeLock", "WakeLockTimeout")
-        if (device?.type == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE && proximitySensorWakeLock?.isHeld == false) {
-            // If the device is the built-in earpiece, we need to acquire the proximity sensor wake lock
-            proximitySensorWakeLock?.acquire()
-        } else if (proximitySensorWakeLock?.isHeld == true) {
-            // If the device is no longer the earpiece, we need to release the wake lock
-            proximitySensorWakeLock?.release()
+        coroutineScope.launch {
+            proximitySensorMutex.withLock {
+                @Suppress("WakeLock", "WakeLockTimeout")
+                if (device?.type == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE && proximitySensorWakeLock?.isHeld == false) {
+                    // If the device is the built-in earpiece, we need to acquire the proximity sensor wake lock
+                    proximitySensorWakeLock?.acquire()
+                } else if (proximitySensorWakeLock?.isHeld == true) {
+                    // If the device is no longer the earpiece, we need to release the wake lock
+                    proximitySensorWakeLock?.release()
+                }
+            }
         }
     }
 
