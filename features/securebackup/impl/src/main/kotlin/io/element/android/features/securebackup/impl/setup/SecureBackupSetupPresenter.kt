@@ -60,6 +60,7 @@ class SecureBackupSetupPresenter @AssistedInject constructor(
                     stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.UserSavedKey)
                 SecureBackupSetupEvents.DismissDialog -> {
                     showSaveConfirmationDialog = false
+                    stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.ClearError)
                 }
                 SecureBackupSetupEvents.Done -> {
                     showSaveConfirmationDialog = true
@@ -89,6 +90,7 @@ class SecureBackupSetupPresenter @AssistedInject constructor(
             SecureBackupSetupStateMachine.State.CreatingKey -> SetupState.Creating
             is SecureBackupSetupStateMachine.State.KeyCreated -> SetupState.Created(formattedRecoveryKey = key)
             is SecureBackupSetupStateMachine.State.KeyCreatedAndSaved -> SetupState.CreatedAndSaved(formattedRecoveryKey = key)
+            is SecureBackupSetupStateMachine.State.Error -> SetupState.Error(exception)
         }
     }
 
@@ -103,13 +105,20 @@ class SecureBackupSetupPresenter @AssistedInject constructor(
                     stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.SdkHasCreatedKey(it))
                 },
                 onFailure = {
-                    stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.SdkError(it))
+                    if (it is Exception) {
+                        stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.SdkError(it))
+                    }
                 }
             )
         } else {
             observeEncryptionService(stateAndDispatch)
             Timber.tag(loggerTagSetup.value).d("Calling encryptionService.enableRecovery()")
-            encryptionService.enableRecovery(waitForBackupsToUpload = false)
+            encryptionService.enableRecovery(waitForBackupsToUpload = false).onFailure {
+                Timber.tag(loggerTagSetup.value).e(it, "Failed to enable recovery")
+                if (it is Exception) {
+                    stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.SdkError(it))
+                }
+            }
         }
     }
 
