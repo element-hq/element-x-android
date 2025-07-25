@@ -23,6 +23,7 @@ sealed interface SetupState {
     data object Creating : SetupState
     data class Created(val formattedRecoveryKey: String) : SetupState
     data class CreatedAndSaved(val formattedRecoveryKey: String) : SetupState
+    data class Error(val exception: Exception) : SetupState
 }
 
 fun SetupState.recoveryKey(): String? = when (this) {

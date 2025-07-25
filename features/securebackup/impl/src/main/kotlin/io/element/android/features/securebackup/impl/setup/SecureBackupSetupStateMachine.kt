@@ -26,8 +26,8 @@ class SecureBackupSetupStateMachine @Inject constructor() : FlowReduxStateMachin
                 }
             }
             inState<State.CreatingKey> {
-                on { _: Event.SdkError, state: MachineState<State.CreatingKey> ->
-                    state.override { State.Initial }
+                on { event: Event.SdkError, state: MachineState<State.CreatingKey> ->
+                    state.override { State.Error(event.exception) }
                 }
                 on { event: Event.SdkHasCreatedKey, state: MachineState<State.CreatingKey> ->
                     state.override { State.KeyCreated(event.key) }
@@ -36,6 +36,11 @@ class SecureBackupSetupStateMachine @Inject constructor() : FlowReduxStateMachin
             inState<State.KeyCreated> {
                 on { _: Event.UserSavedKey, state: MachineState<State.KeyCreated> ->
                     state.override { State.KeyCreatedAndSaved(state.snapshot.key) }
+                }
+            }
+            inState<State.Error> {
+                on { _: Event.ClearError, state: MachineState<State.Error> ->
+                    state.override { State.Initial }
                 }
             }
             inState<State.KeyCreatedAndSaved> {
@@ -48,12 +53,14 @@ class SecureBackupSetupStateMachine @Inject constructor() : FlowReduxStateMachin
         data object CreatingKey : State
         data class KeyCreated(val key: String) : State
         data class KeyCreatedAndSaved(val key: String) : State
+        data class Error(val exception: Exception) : State
     }
 
     sealed interface Event {
         data object UserCreatesKey : Event
         data class SdkHasCreatedKey(val key: String) : Event
-        data class SdkError(val throwable: Throwable) : Event
+        data class SdkError(val exception: Exception) : Event
         data object UserSavedKey : Event
+        data object ClearError : Event
     }
 }
