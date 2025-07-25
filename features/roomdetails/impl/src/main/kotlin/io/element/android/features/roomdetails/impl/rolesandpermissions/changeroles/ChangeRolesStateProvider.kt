@@ -8,6 +8,7 @@
 package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -41,6 +42,32 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Loading),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Success(Unit)),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Failure(Exception("boom"))),
+            aChangeRolesStateWithSelectedUsers().copy(searchResults = SearchBarResultState.Results(
+                MembersByRole(
+                    members = persistentListOf(
+                        aRoomMember(
+                            userId = UserId("@alice:server.org"),
+                            displayName = "Alice",
+                            role = RoomMember.Role.Owner(isCreator = true),
+                        ),
+                        aRoomMember(
+                            userId = UserId("@bob:server.org"),
+                            displayName = "Bob",
+                            role = RoomMember.Role.Owner(isCreator = false),
+                        ),
+                        aRoomMember(
+                            userId = UserId("@carol:server.org"),
+                            displayName = "Carol",
+                            role = RoomMember.Role.Admin,
+                        ),
+                        aRoomMember(
+                            userId = UserId("@david:server.org"),
+                            displayName = "David",
+                            role = RoomMember.Role.User,
+                        ),
+                    )
+                )
+            )),
         )
 }
 

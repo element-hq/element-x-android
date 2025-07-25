@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -68,6 +69,51 @@ class ChangeRolesPresenterTest {
         }.test {
             skipItems(1)
             assertThat(awaitItem().searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
+        }
+    }
+
+    @Test
+    fun `present - canChangeRole of users with lower power level unless they are owners`() = runTest {
+        val creatorUserId = UserId("@creator:matrix.org")
+        val superAdminUserId = UserId("@super_admin:matrix.org")
+
+        val room = FakeJoinedRoom().apply {
+            // User is a creator, so they can change roles of other members. So is `creatorUserId`.
+            givenRoomInfo(
+                aRoomInfo(
+                    roomCreators = listOf(sessionId, creatorUserId),
+                    roomPowerLevels = RoomPowerLevels(
+                        defaultRoomPowerLevelValues(),
+                        users = persistentMapOf(
+                            // bob is Admin
+                            A_USER_ID_2 to RoomMember.Role.Admin.powerLevel,
+                            // carol is Moderator
+                            A_USER_ID_3 to RoomMember.Role.Moderator.powerLevel,
+                            // super_admin is Owner - Superadmin
+                            superAdminUserId to RoomMember.Role.Owner(isCreator = false).powerLevel,
+                        )
+                    )
+                )
+            )
+
+            val roomMemberList = aRoomMemberList() + listOf(
+                // Owner - superadmin
+                aRoomMember(userId = superAdminUserId, role = RoomMember.Role.Owner(isCreator = true)),
+                // Owner - creator
+                aRoomMember(userId = creatorUserId, role = RoomMember.Role.Owner(isCreator = true))
+            )
+            givenRoomMembersState(RoomMembersState.Ready(roomMemberList.toPersistentList()))
+        }
+        val presenter = createChangeRolesPresenter(room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            awaitItem().run {
+                assertThat(canChangeMemberRole(A_USER_ID_2)).isTrue() // Admin
+                assertThat(canChangeMemberRole(A_USER_ID_3)).isTrue() // Moderator
+                assertThat(canChangeMemberRole(creatorUserId)).isFalse() // Owner
+            }
         }
     }
 
