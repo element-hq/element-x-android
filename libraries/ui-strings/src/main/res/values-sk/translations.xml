@@ -9,6 +9,7 @@
     <item quantity="other">"%1$d zadaných číslic"</item>
   </plurals>
   <string name="a11y_edit_avatar">"Upraviť obrázok"</string>
+  <string name="a11y_edit_room_address_hint">"Celá adresa bude %1$s"</string>
   <string name="a11y_encryption_details">"Podrobnosti o šifrovaní"</string>
   <string name="a11y_hide_password">"Skryť heslo"</string>
   <string name="a11y_join_call">"Pripojiť sa k hovoru"</string>
@@ -44,6 +45,7 @@
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_start_call">"Začať hovor"</string>
   <string name="a11y_time_limited_action_required">"Vyžaduje sa časovo obmedzená akcia"</string>
+  <string name="a11y_tombstoned_room">"Opustená miestnosť"</string>
   <string name="a11y_user_avatar">"Profilový obrázok"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
   <string name="a11y_view_avatar">"Zobraziť profilový obrázok"</string>
@@ -375,14 +377,18 @@ Naozaj chcete pokračovať?"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Snímka obrazovky"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Možnosti"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Odstrániť %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Nastavenia"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie."</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Súbor sa nepodarilo nahrať."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
+  <string name="screen_media_upload_preview_error_too_large_message">"Maximálna povolená veľkosť súboru je %1$s."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"Súbor je príliš veľký na nahratie"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Stlačte správu a vyberte možnosť „%1$s“, ktorú chcete zahrnúť sem."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pripnite dôležité správy, aby sa dali ľahko nájsť"</string>
   <plurals name="screen_pinned_timeline_screen_title">

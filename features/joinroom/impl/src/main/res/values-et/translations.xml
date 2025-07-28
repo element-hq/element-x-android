@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Liitu jututoaga"</string>
   <string name="screen_join_room_join_restricted_message">"Selle jututoaga liitumiseks sa vajad kutset või pead juba olema kogukonna liige."</string>
   <string name="screen_join_room_knock_action">"Liitumiseks koputa jututoa uksele"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Lubatud tähemärke: %1$d / %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Selgitus (kui soovid lisada)"</string>
   <string name="screen_join_room_knock_sent_description">"Kui sinu liitumispalvega ollakse nõus, siis saad kutse jututoaga liitumiseks."</string>
   <string name="screen_join_room_knock_sent_title">"Liitumispalve on saadetud"</string>

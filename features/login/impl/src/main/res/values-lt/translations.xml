@@ -13,7 +13,7 @@
   <string name="screen_change_server_error_invalid_homeserver">"Nepavyko pasiekti šio serverio. Patikrinkite, ar teisingai įvedėte serverio URL. Jei URL yra teisingas, susisiekite su serverio administracija dėl tolimesnės pagalbos."</string>
   <string name="screen_change_server_form_header">"Serverio URL"</string>
   <string name="screen_change_server_subtitle">"Koks yra Jūsų serverio adresas?"</string>
-  <string name="screen_create_account_title">"Sukurti paskyrą"</string>
+  <string name="screen_create_account_title">"Kurti paskyrą"</string>
   <string name="screen_login_error_deactivated_account">"Ši paskyra buvo išjungta."</string>
   <string name="screen_login_error_invalid_credentials">"Neteisingas vartotojo vardas ir (arba) slaptažodis"</string>
   <string name="screen_login_error_invalid_user_id">"Tai nėra tinkamas vartotojo vardas. Reikalingas formatas: \'@vartotojas:serveris.org\'"</string>
@@ -22,10 +22,13 @@
   <string name="screen_login_subtitle">"Matrix yra atviras tinklas, skirtas saugiam, decentralizuotam bendravimui."</string>
   <string name="screen_login_title">"Sveiki sugrįžę!"</string>
   <string name="screen_login_title_with_homeserver">"Prisijungti prie %1$s"</string>
-  <string name="screen_onboarding_sign_in_manually">"Prisijunkite rankiniu būdu"</string>
-  <string name="screen_onboarding_sign_in_with_qr_code">"Prisijunkite naudodami QR kodą"</string>
-  <string name="screen_onboarding_sign_up">"Sukurti paskyrą"</string>
-  <string name="screen_onboarding_welcome_subtitle">"Sveiki atvykę į %1$s. Įkrautas greitumui ir paprastumui."</string>
+  <string name="screen_onboarding_app_version">"%1$s versija"</string>
+  <string name="screen_onboarding_sign_in_manually">"Prisijungti rankiniu būdu"</string>
+  <string name="screen_onboarding_sign_in_to">"Prisijungti prie %1$s"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Prisijungti su QR kodu"</string>
+  <string name="screen_onboarding_sign_up">"Kurti paskyrą"</string>
+  <string name="screen_onboarding_welcome_message">"Sveiki atvykę į sparčiausią „%1$s“ kada nors. Pagerintas spartai ir paprastumui."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Sveiki atvykę į „%1$s“. Pagerintas spartai ir paprastumui."</string>
   <string name="screen_onboarding_welcome_title">"Būkite savo elemente"</string>
   <string name="screen_server_confirmation_change_server">"Keisti paskyros teikėją"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Privatus serveris “Element” darbuotojams."</string>

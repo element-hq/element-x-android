@@ -43,6 +43,7 @@
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
   <string name="a11y_time_limited_action_required">"Palun tee see ajapiiranguga toiming"</string>
+  <string name="a11y_tombstoned_room">"Lõpetatuks märgitud jututuba"</string>
   <string name="a11y_user_avatar">"Kasutaja tunnuspilt"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
   <string name="a11y_view_avatar">"Vaata tunnuspilti"</string>
@@ -370,6 +371,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Veast teatamiseks raputa nutiseadet ägedalt"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Ekraanitõmmis"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Valikud"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Kustuta: %1$s"</string>

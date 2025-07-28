@@ -82,6 +82,7 @@
   <string name="screen_room_member_list_pending_header_title">"Čaká sa"</string>
   <string name="screen_room_member_list_role_administrator">"Administrátor"</string>
   <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
+  <string name="screen_room_member_list_role_owner">"Vlastník"</string>
   <string name="screen_room_member_list_room_members_header_title">"Členovia miestnosti"</string>
   <string name="screen_room_member_list_unbanning_user">"Zrušenie zákazu %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Povoliť vlastné nastavenie"</string>

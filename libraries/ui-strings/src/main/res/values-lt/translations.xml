@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Pridėti reakciją: %1$s"</string>
+  <string name="a11y_avatar">"Pseudoportretas"</string>
   <string name="a11y_hide_password">"Slėpti slaptažodį"</string>
   <string name="a11y_send_files">"Siųsti failus"</string>
   <string name="a11y_show_password">"Rodyti slaptažodį"</string>
@@ -29,7 +31,9 @@
   <string name="action_invites_list">"Kvietimai"</string>
   <string name="action_learn_more">"Sužinoti daugiau"</string>
   <string name="action_leave">"Palikti"</string>
+  <string name="action_leave_conversation">"Palikti pokalbį"</string>
   <string name="action_leave_room">"Palikti kambarį"</string>
+  <string name="action_load_more">"Įkelti daugiau"</string>
   <string name="action_next">"Toliau"</string>
   <string name="action_no">"Ne"</string>
   <string name="action_not_now">"Ne dabar"</string>
@@ -48,6 +52,9 @@
   <string name="action_send_message">"Siųsti žinutę"</string>
   <string name="action_share">"Dalintis"</string>
   <string name="action_share_link">"Bendrinti nuorodą"</string>
+  <string name="action_sign_in_again">"Prisijungti vėl"</string>
+  <string name="action_signout">"Atsijungti"</string>
+  <string name="action_signout_anyway">"Atsijungti vis tiek"</string>
   <string name="action_skip">"Praleisti"</string>
   <string name="action_start">"Pradėti"</string>
   <string name="action_start_chat">"Pradėti pokalbį"</string>
@@ -59,10 +66,12 @@
   <string name="common_analytics">"Analitika"</string>
   <string name="common_audio">"Garsas"</string>
   <string name="common_bubbles">"Burbulai"</string>
+  <string name="common_chat_backup">"Pokalbio atsarginė kopija"</string>
   <string name="common_creating_room">"Kuriamas kambarys…"</string>
   <string name="common_current_user_left_room">"Išėjo iš kambario"</string>
   <string name="common_decryption_error">"Iššifravimo klaida"</string>
   <string name="common_developer_options">"Kūrėjo nustatymai"</string>
+  <string name="common_direct_chat">"Asmeninis pokalbis"</string>
   <string name="common_edited_suffix">"(taisyta)"</string>
   <string name="common_editing">"Taisymas"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
@@ -103,6 +112,7 @@
   <string name="common_server_not_supported">"Serveris nepalaikomas"</string>
   <string name="common_server_url">"Serverio URL"</string>
   <string name="common_settings">"Nustatymai"</string>
+  <string name="common_signing_out">"Atsijungiama"</string>
   <string name="common_starting_chat">"Pradedamas pokalbis…"</string>
   <string name="common_sticker">"Lipdukas"</string>
   <string name="common_success">"Pavyko"</string>
