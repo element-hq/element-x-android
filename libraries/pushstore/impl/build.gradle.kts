@@ -27,6 +27,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.pushstore.api)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.datastore.preferences)

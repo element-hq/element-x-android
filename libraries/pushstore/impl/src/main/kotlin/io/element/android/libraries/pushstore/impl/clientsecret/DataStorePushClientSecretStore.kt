@@ -7,44 +7,42 @@
 
 package io.element.android.libraries.pushstore.impl.clientsecret
 
-import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "push_client_secret_store")
-
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DataStorePushClientSecretStore @Inject constructor(
-    @ApplicationContext private val context: Context,
+    preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : PushClientSecretStore {
+    private val dataStore = preferenceDataStoreFactory.create("push_client_secret_store")
+
     override suspend fun storeSecret(userId: SessionId, clientSecret: String) {
-        context.dataStore.edit { settings ->
+        dataStore.edit { settings ->
             settings[getPreferenceKeyForUser(userId)] = clientSecret
         }
     }
 
     override suspend fun getSecret(userId: SessionId): String? {
-        return context.dataStore.data.first()[getPreferenceKeyForUser(userId)]
+        return dataStore.data.first()[getPreferenceKeyForUser(userId)]
     }
 
     override suspend fun resetSecret(userId: SessionId) {
-        context.dataStore.edit { settings ->
+        dataStore.edit { settings ->
             settings.remove(getPreferenceKeyForUser(userId))
         }
     }
 
     override suspend fun getUserIdFromSecret(clientSecret: String): SessionId? {
-        val keyValues = context.dataStore.data.first().asMap()
+        val keyValues = dataStore.data.first().asMap()
         val matchingKey = keyValues.keys.find {
             keyValues[it] == clientSecret
         }
