@@ -240,6 +240,10 @@ Syy: %1$s."</string>
   <string name="common_reason">"Syy"</string>
   <string name="common_recovery_key">"Palautusavain"</string>
   <string name="common_refreshing">"Päivitetään…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d vastaus"</item>
+    <item quantity="other">"%1$d vastausta"</item>
+  </plurals>
   <string name="common_replying_to">"Vastataan käyttäjälle %1$s"</string>
   <string name="common_report_a_bug">"Ilmoita virheestä"</string>
   <string name="common_report_a_problem">"Ilmoita ongelmasta"</string>
@@ -333,6 +337,7 @@ Haluatko varmasti jatkaa?"</string>
   <string name="error_room_address_invalid_symbols">"Jotkin merkit eivät ole sallittuja. Vain kirjaimet, numerot ja seuraavat symbolit ovat tuettuja ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Joitakin viestejä ei ole lähetetty"</string>
   <string name="error_unknown">"Anteeksi, tapahtui virhe"</string>
+  <string name="event_shield_mismatched_sender">"Tapahtuman lähettäjä ei vastaa sitä lähettäneen laitteen omistajaa."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Tämän salatun viestin aitoutta ei voida taata tällä laitteella."</string>
   <string name="event_shield_reason_previously_verified">"Aiemmin vahvistetun käyttäjän salaama."</string>
   <string name="event_shield_reason_sent_in_clear">"Ei salattu."</string>

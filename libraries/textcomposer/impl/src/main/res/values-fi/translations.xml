@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Lisää liite"</string>
   <string name="rich_text_editor_bullet_list">"Numeroimaton luettelo päälle/pois"</string>
-  <string name="rich_text_editor_close_formatting_options">"Sulje muotoiluasetukset"</string>
+  <string name="rich_text_editor_close_formatting_options">"Peruuta ja sulje muotoiluasetukset"</string>
   <string name="rich_text_editor_code_block">"Koodilohko päälle/pois"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Lisää kuvateksti"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Salattu viesti…"</string>
@@ -12,6 +12,7 @@
   <string name="rich_text_editor_edit_link">"Muokkaa linkkiä"</string>
   <string name="rich_text_editor_format_bold">"Käytä lihavoitua muotoa"</string>
   <string name="rich_text_editor_format_italic">"Käytä kursiivimuotoa"</string>
+  <string name="rich_text_editor_format_state_off">"pois päältä"</string>
   <string name="rich_text_editor_format_strikethrough">"Käytä yliviivausmuotoa"</string>
   <string name="rich_text_editor_format_underline">"Käytä alleviivausmuotoa"</string>
   <string name="rich_text_editor_full_screen_toggle">"Koko näytön tila päälle/pois"</string>

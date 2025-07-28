@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Join room"</string>
   <string name="screen_join_room_join_restricted_message">"You may need to be invited or be a member of a space in order to join."</string>
   <string name="screen_join_room_knock_action">"Send request to join"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Allowed characters %1$d of %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Message (optional)"</string>
   <string name="screen_join_room_knock_sent_description">"You will receive an invite to join the room if your request is accepted."</string>
   <string name="screen_join_room_knock_sent_title">"Request to join sent"</string>
