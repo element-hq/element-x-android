@@ -10,10 +10,12 @@ package io.element.android.libraries.push.impl.notifications
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 interface ActiveNotificationsProvider {
@@ -30,7 +32,12 @@ class DefaultActiveNotificationsProvider @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
 ) : ActiveNotificationsProvider {
     override fun getNotificationsForSession(sessionId: SessionId): List<StatusBarNotification> {
-        return notificationManager.activeNotifications.filter { it.notification.group == sessionId.value }
+        return runCatchingExceptions { notificationManager.activeNotifications }
+            .onFailure {
+                Timber.e(it, "Failed to get active notifications")
+            }
+            .getOrElse { emptyList() }
+            .filter { it.notification.group == sessionId.value }
     }
 
     override fun getMembershipNotificationForSession(sessionId: SessionId): List<StatusBarNotification> {
