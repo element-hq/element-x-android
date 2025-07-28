@@ -57,6 +57,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Checkbox
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -234,6 +235,26 @@ private fun SearchResultsList(
         item {
             selectedUsersList(selectedUsers)
         }
+        if (searchResults.owners.isNotEmpty()) {
+            stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_roles_and_permissions_owners)) }
+            item {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                    text = stringResource(R.string.screen_room_change_role_moderators_owner_section_footer),
+                    color = ElementTheme.colors.textSecondary,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                )
+            }
+            items(searchResults.owners, key = { it.userId }) { roomMember ->
+                ListMemberItem(
+                    roomMember = roomMember,
+                    canRemoveMember = canRemoveMember,
+                    onToggleSelection = onToggleSelection,
+                    selectedUsers = selectedUsers
+                )
+            }
+        }
         if (searchResults.admins.isNotEmpty()) {
             stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_roles_and_permissions_admins)) }
             // Add a footer for the admin section in change role to moderator screen
@@ -303,24 +324,24 @@ private fun ListMemberItem(
 ) {
     val canToggle = canRemoveMember(roomMember.userId)
     val trailingContent: @Composable (() -> Unit) = {
-        if (!canToggle && roomMember.role is RoomMember.Role.Owner) {
-            Text(stringResource(R.string.screen_room_member_list_role_owner))
-        } else {
+        if (canToggle) {
             Checkbox(
                 checked = selectedUsers.any { it.userId == roomMember.userId },
                 onCheckedChange = { onToggleSelection(roomMember) },
-                enabled = canToggle,
             )
         }
     }
-    MemberRow(
-        modifier = Modifier.clickable(enabled = canToggle, onClick = { onToggleSelection(roomMember) }),
-        avatarData = roomMember.getAvatarData(size = AvatarSize.UserListItem),
-        name = roomMember.getBestName(),
-        userId = roomMember.userId.value.takeIf { roomMember.displayName?.isNotBlank() == true },
-        isPending = roomMember.membership == RoomMembershipState.INVITE,
-        trailingContent = trailingContent,
-    )
+    Column {
+        MemberRow(
+            modifier = Modifier.clickable(enabled = canToggle, onClick = { onToggleSelection(roomMember) }),
+            avatarData = roomMember.getAvatarData(size = AvatarSize.UserListItem),
+            name = roomMember.getBestName(),
+            userId = roomMember.userId.value.takeIf { roomMember.displayName?.isNotBlank() == true },
+            isPending = roomMember.membership == RoomMembershipState.INVITE,
+            trailingContent = trailingContent,
+        )
+        HorizontalDivider()
+    }
 }
 
 @Composable

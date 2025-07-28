@@ -75,18 +75,17 @@ class ChangeRolesPresenter @AssistedInject constructor(
         val exitState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val saveState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val usersWithRole = produceState(initialValue = persistentListOf()) {
-            room.usersWithRole(role)
-                .map { members -> members.map { it.toMatrixUser() } }
-                .onEach { users ->
-                    val previous: PersistentList<MatrixUser> = value
-                    value = users.toPersistentList()
-                    // Users who were selected but didn't have the role, so their role change was pending
-                    val toAdd = selectedUsers.value.filter { user -> users.none { it.userId == user.userId } && previous.none { it.userId == user.userId } }
-                    // Users who no longer have the role
-                    val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }.toSet()
-                    selectedUsers.value = (users + toAdd - toRemove).toImmutableList()
-                }
-                .launchIn(this)
+            room.usersWithRole(role).map { members -> members.map { it.toMatrixUser() } }
+                    .onEach { users ->
+                        val previous: PersistentList<MatrixUser> = value
+                        value = users.toPersistentList()
+                        // Users who were selected but didn't have the role, so their role change was pending
+                        val toAdd = selectedUsers.value.filter { user -> users.none { it.userId == user.userId } && previous.none { it.userId == user.userId } }
+                        // Users who no longer have the role
+                        val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }.toSet()
+                        selectedUsers.value = (users + toAdd - toRemove).toImmutableList()
+                    }
+                    .launchIn(this)
         }
 
         val roomMemberState by room.membersStateFlow.collectAsState()
@@ -97,7 +96,6 @@ class ChangeRolesPresenter @AssistedInject constructor(
                 .search(query.orEmpty())
                 .groupedByRole()
 
-            println(results)
             searchResults = if (results.isEmpty()) {
                 SearchBarResultState.NoResultsFound()
             } else {
@@ -112,11 +110,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
             // This is used to group the
             val currentUserRole = roomInfo.roleOf(room.sessionId)
             val otherUserRole = roomInfo.roleOf(userId)
-            return if (currentUserRole is RoomMember.Role.Owner && otherUserRole is RoomMember.Role.Owner) {
-                false
-            } else {
-                currentUserRole.powerLevel > otherUserRole.powerLevel
-            }
+            return currentUserRole.powerLevel > otherUserRole.powerLevel
         }
 
         fun handleEvent(event: ChangeRolesEvent) {
@@ -192,6 +186,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
     private fun List<RoomMember>.groupedByRole(): MembersByRole {
         val groupedMembers = MembersByRole(this)
         return MembersByRole(
+            owners = groupedMembers.owners.sorted(),
             admins = groupedMembers.admins.sorted(),
             moderators = groupedMembers.moderators.sorted(),
             members = groupedMembers.members.sorted(),

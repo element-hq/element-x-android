@@ -57,9 +57,14 @@ class RolesAndPermissionsPresenter @Inject constructor(
         val adminCount by remember {
             derivedStateOf {
                 val admins = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Admin)
-                val superAdmins = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Owner(isCreator = false))
-                val creators = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Owner(isCreator = true))
-                admins + superAdmins + creators
+                val ownersCount = if (roomInfo.privilegedCreatorRole) {
+                    val superAdmins = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Owner(isCreator = false))
+                    val creators = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Owner(isCreator = true))
+                    superAdmins + creators
+                } else {
+                    0
+                }
+                admins + ownersCount
             }
         }
         val canDemoteSelf = remember { derivedStateOf { roomInfo.roleOf(room.sessionId) !is RoomMember.Role.Owner } }
@@ -88,6 +93,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
         }
 
         return RolesAndPermissionsState(
+            roomSupportsOwnerRole = roomInfo.privilegedCreatorRole,
             adminCount = adminCount,
             moderatorCount = moderatorCount,
             canDemoteSelf = canDemoteSelf.value,

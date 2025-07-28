@@ -134,7 +134,10 @@ class ChangeRolesPresenterTest {
             skipItems(1)
             awaitItem().searchResults.run {
                 assertThat(this).isInstanceOf(SearchBarResultState.Results::class.java)
-                assertThat((this as SearchBarResultState.Results).results.admins.last().role).isEqualTo(RoomMember.Role.Owner(isCreator = true))
+                val results = (this as SearchBarResultState.Results).results
+                assertThat(results.admins).isNotEmpty()
+                assertThat(results.owners).isNotEmpty()
+                assertThat(results.owners.last().role).isEqualTo(RoomMember.Role.Owner(isCreator = true))
             }
         }
     }
@@ -473,7 +476,7 @@ class ChangeRolesPresenterTest {
             updateUserRoleResult = { Result.failure(IllegalStateException("Failed")) }
         ).apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Moderator)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(role = RoomMember.Role.Moderator, userId = A_USER_ID)))
         }
         val presenter = createChangeRolesPresenter(role = RoomMember.Role.Moderator, room = room)
         moleculeFlow(RecompositionMode.Immediate) {

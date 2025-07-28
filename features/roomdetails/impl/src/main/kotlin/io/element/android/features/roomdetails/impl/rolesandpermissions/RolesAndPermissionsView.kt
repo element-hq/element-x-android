@@ -55,8 +55,14 @@ fun RolesAndPermissionsView(
         onBackClick = rolesAndPermissionsNavigator::onBackClick,
     ) {
         ListSectionHeader(title = stringResource(R.string.screen_room_roles_and_permissions_roles_header), hasDivider = false)
+
+        val adminsTitle = if (state.roomSupportsOwnerRole) {
+            stringResource(R.string.screen_room_roles_and_permissions_admins_and_owners)
+        } else {
+            stringResource(R.string.screen_room_roles_and_permissions_admins)
+        }
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_admins)) },
+            headlineContent = { Text(adminsTitle) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
             trailingContent = ListItemContent.Text("${state.adminCount}"),
             onClick = { rolesAndPermissionsNavigator.openAdminList() },

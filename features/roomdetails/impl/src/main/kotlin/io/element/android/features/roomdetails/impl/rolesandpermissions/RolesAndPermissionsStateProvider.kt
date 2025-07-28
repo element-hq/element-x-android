@@ -13,7 +13,7 @@ import io.element.android.libraries.architecture.AsyncAction
 class RolesAndPermissionsStateProvider : PreviewParameterProvider<RolesAndPermissionsState> {
     override val values: Sequence<RolesAndPermissionsState>
         get() = sequenceOf(
-            aRolesAndPermissionsState(),
+            aRolesAndPermissionsState(roomSupportsOwners = false),
             aRolesAndPermissionsState(adminCount = 1, moderatorCount = 2),
             aRolesAndPermissionsState(
                 adminCount = 1,
@@ -50,6 +50,7 @@ class RolesAndPermissionsStateProvider : PreviewParameterProvider<RolesAndPermis
 }
 
 internal fun aRolesAndPermissionsState(
+    roomSupportsOwners: Boolean = true,
     adminCount: Int = 0,
     moderatorCount: Int = 0,
     canDemoteSelf: Boolean = true,
@@ -57,6 +58,7 @@ internal fun aRolesAndPermissionsState(
     resetPermissionsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (RolesAndPermissionsEvents) -> Unit = {},
 ) = RolesAndPermissionsState(
+    roomSupportsOwnerRole = roomSupportsOwners,
     adminCount = adminCount,
     canDemoteSelf = canDemoteSelf,
     moderatorCount = moderatorCount,
