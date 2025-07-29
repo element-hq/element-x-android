@@ -37,19 +37,18 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -66,7 +65,6 @@ class RoomFlowNode @AssistedInject constructor(
     private val joinRoomEntryPoint: JoinRoomEntryPoint,
     private val roomAliasResolverEntryPoint: RoomAliasResolverEntryPoint,
     private val syncService: SyncService,
-    private val membershipObserver: RoomMembershipObserver,
 ) : BaseFlowNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Loading,
@@ -124,8 +122,11 @@ class RoomFlowNode @AssistedInject constructor(
     private fun subscribeToRoomInfoFlow(roomId: RoomId, serverNames: List<String>) {
         val roomInfoFlow = client.getRoomInfoFlow(roomId)
         val isSpaceFlow = roomInfoFlow.map { it.getOrNull()?.isSpace.orFalse() }.distinctUntilChanged()
-        val currentMembershipFlow = roomInfoFlow.map { it.getOrNull()?.currentUserMembership }.distinctUntilChanged()
-        combine(currentMembershipFlow, isSpaceFlow) { membership, isSpace ->
+        val currentMembershipFlow = roomInfoFlow
+            .map { it.getOrNull()?.currentUserMembership }
+            .distinctUntilChanged()
+            .withPreviousValue()
+        combine(currentMembershipFlow, isSpaceFlow) { (previousMembership, membership), isSpace ->
             Timber.d("Room membership: $membership")
             when (membership) {
                 CurrentUserMembership.JOINED -> {
@@ -146,26 +147,21 @@ class RoomFlowNode @AssistedInject constructor(
                     }
                 }
                 else -> {
-                    // Was invited or the room is not known, display the join room screen
-                    backstack.newRoot(
-                        NavTarget.JoinRoom(
-                            roomId = roomId,
-                            serverNames = serverNames,
-                            trigger = inputs.trigger.getOrNull() ?: JoinedRoom.Trigger.Invite,
+                    if (membership == CurrentUserMembership.LEFT && previousMembership == CurrentUserMembership.JOINED) {
+                        navigateUp()
+                    } else {
+                        // Was invited or the room is not known, display the join room screen
+                        backstack.newRoot(
+                            NavTarget.JoinRoom(
+                                roomId = roomId,
+                                serverNames = serverNames,
+                                trigger = inputs.trigger.getOrNull() ?: JoinedRoom.Trigger.Invite,
+                            )
                         )
-                    )
+                    }
                 }
             }
         }.launchIn(lifecycleScope)
-
-        // If the user leaves the room from this client, close the room flow.
-        lifecycleScope.launch {
-            membershipObserver.updates
-                .first { it.roomId == roomId && !it.isUserInRoom }
-                .run {
-                    navigateUp()
-                }
-        }
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
