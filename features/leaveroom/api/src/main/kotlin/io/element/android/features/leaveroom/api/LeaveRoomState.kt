@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 data class LeaveRoomState(
     val confirmation: Confirmation,
     val progress: Progress,
+    val needsSelectingNewOwners: NeedsSelectingNewOwners,
     val error: Error,
     val eventSink: (LeaveRoomEvent) -> Unit,
 ) {
@@ -21,6 +22,12 @@ data class LeaveRoomState(
         data class Generic(val roomId: RoomId) : Confirmation
         data class PrivateRoom(val roomId: RoomId) : Confirmation
         data class LastUserInRoom(val roomId: RoomId) : Confirmation
+        data class LastOwnerInRoom(val roomId: RoomId) : Confirmation
+    }
+
+    sealed interface NeedsSelectingNewOwners {
+        data class Shown(val roomId: RoomId) : NeedsSelectingNewOwners
+        data object Hidden : NeedsSelectingNewOwners
     }
 
     sealed interface Progress {

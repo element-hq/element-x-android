@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
+package io.element.android.features.changeroommemberroles.impl
 
 import io.element.android.libraries.matrix.api.user.MatrixUser
 

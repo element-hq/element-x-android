@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
+package io.element.android.features.changeroommemberroles.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,9 +22,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.RoomModeration
-import io.element.android.features.roomdetails.impl.analytics.toAnalyticsMemberRole
-import io.element.android.features.roomdetails.impl.members.PowerLevelRoomMemberComparator
-import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
+import io.element.android.features.changeroommemberroles.impl.RoomMemberListDataSource
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -37,6 +35,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.roleOf
+import io.element.android.libraries.matrix.ui.room.PowerLevelRoomMemberComparator
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
@@ -228,4 +227,11 @@ class ChangeRolesPresenter @AssistedInject constructor(
                 launch { room.updateMembers() }
             }
     }
+}
+
+internal fun RoomMember.Role.toAnalyticsMemberRole(): RoomModeration.Role = when (this) {
+    is RoomMember.Role.Owner -> RoomModeration.Role.Administrator // TODO - distinguish creator from admin
+    RoomMember.Role.Admin -> RoomModeration.Role.Administrator
+    RoomMember.Role.Moderator -> RoomModeration.Role.Moderator
+    RoomMember.Role.User -> RoomModeration.Role.User
 }

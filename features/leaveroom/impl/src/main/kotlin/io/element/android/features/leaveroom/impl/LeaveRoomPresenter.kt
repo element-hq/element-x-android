@@ -22,7 +22,9 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -38,10 +40,12 @@ class LeaveRoomPresenter @Inject constructor(
         val confirmation = remember { mutableStateOf<LeaveRoomState.Confirmation>(LeaveRoomState.Confirmation.Hidden) }
         val progress = remember { mutableStateOf<LeaveRoomState.Progress>(LeaveRoomState.Progress.Hidden) }
         val error = remember { mutableStateOf<LeaveRoomState.Error>(LeaveRoomState.Error.Hidden) }
+        val needsSelectingNewOwners = remember { mutableStateOf<LeaveRoomState.NeedsSelectingNewOwners>(LeaveRoomState.NeedsSelectingNewOwners.Hidden) }
 
         return LeaveRoomState(
             confirmation = confirmation.value,
             progress = progress.value,
+            needsSelectingNewOwners = needsSelectingNewOwners.value,
             error = error.value,
         ) { event ->
             when (event) {
@@ -64,6 +68,11 @@ class LeaveRoomPresenter @Inject constructor(
                 }
 
                 is LeaveRoomEvent.HideError -> error.value = LeaveRoomState.Error.Hidden
+
+                is LeaveRoomEvent.SelectNewOwners -> {
+                    // Navigate to the new owners selection screen
+                    needsSelectingNewOwners.value = LeaveRoomState.NeedsSelectingNewOwners.Shown(event.roomId)
+                }
             }
         }
     }
@@ -74,12 +83,14 @@ private suspend fun showLeaveRoomAlert(
     roomId: RoomId,
     confirmation: MutableState<LeaveRoomState.Confirmation>,
 ) {
+    val isLastOwner = matrixClient.isLastOwner(roomId)
     matrixClient.getRoom(roomId)?.use { room ->
         val roomInfo = room.roomInfoFlow.first()
         confirmation.value = when {
             roomInfo.isDm -> Dm(roomId)
             // If unknown, assume the room is private
             roomInfo.isPublic == null || roomInfo.isPublic == false -> PrivateRoom(roomId)
+            isLastOwner && roomInfo.joinedMembersCount > 1L -> LeaveRoomState.Confirmation.LastOwnerInRoom(roomId)
             roomInfo.joinedMembersCount == 1L -> LastUserInRoom(roomId)
             else -> Generic(roomId)
         }
@@ -102,4 +113,18 @@ private suspend fun MatrixClient.leaveRoom(
             }
     }
     progress.value = LeaveRoomState.Progress.Hidden
+}
+
+private suspend fun MatrixClient.isLastOwner(roomId: RoomId): Boolean {
+    val room = getJoinedRoom(roomId) ?: return false
+    if (room.roomInfoFlow.value.isDm) {
+        // DMs are not owned by the user, so we can return false
+        return false
+    } else {
+        val creators = room.usersWithRole(RoomMember.Role.Owner(isCreator = true)).first()
+        val superAdmins = room.usersWithRole(RoomMember.Role.Owner(isCreator = false)).first()
+        val owners = creators + superAdmins
+
+        return owners.size == 1 && owners.first().userId == sessionId
+    }
 }

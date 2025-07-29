@@ -108,7 +108,7 @@ fun HomeView(
                 )
             }
 
-            LeaveRoomView(state = state.leaveRoomState)
+            LeaveRoomView(state = state.leaveRoomState, onSelectNewOwners = {})
 
             HomeScaffold(
                 state = homeState,

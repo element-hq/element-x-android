@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
+package io.element.android.features.changeroommemberroles.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -40,7 +40,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -97,9 +96,9 @@ fun ChangeRolesView(
                 AnimatedVisibility(visible = !state.isSearchActive) {
                     TopAppBar(
                         titleStr = when (state.role) {
-                            RoomMember.Role.Admin -> stringResource(R.string.screen_room_change_role_administrators_title)
+                            is RoomMember.Role.Owner, RoomMember.Role.Admin -> stringResource(R.string.screen_room_change_role_administrators_title)
                             RoomMember.Role.Moderator -> stringResource(R.string.screen_room_change_role_moderators_title)
-                            is RoomMember.Role.Owner, RoomMember.Role.User -> error("This should never be reached")
+                            RoomMember.Role.User -> error("This should never be reached")
                         },
                         navigationIcon = {
                             BackButton(onClick = { state.eventSink(ChangeRolesEvent.Exit) })

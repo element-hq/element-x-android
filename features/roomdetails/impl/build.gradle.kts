@@ -55,6 +55,7 @@ dependencies {
     implementation(projects.features.verifysession.api)
     implementation(projects.features.reportroom.api)
     implementation(projects.features.roommembermoderation.api)
+    implementation(projects.features.changeroommemberroles.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

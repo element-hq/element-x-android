@@ -131,7 +131,7 @@ fun RoomDetailsView(
                 .verticalScroll(rememberScrollState())
                 .consumeWindowInsets(padding)
         ) {
-            LeaveRoomView(state = state.leaveRoomState)
+            LeaveRoomView(state = state.leaveRoomState, onSelectNewOwners = {})
 
             when (state.roomType) {
                 RoomDetailsType.Room -> {

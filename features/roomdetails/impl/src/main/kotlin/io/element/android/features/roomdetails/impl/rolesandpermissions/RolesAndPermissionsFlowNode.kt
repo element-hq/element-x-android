@@ -18,19 +18,23 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesNode
+import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesEntryPoint
+import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesListType
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsNode
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsSection
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
 class RolesAndPermissionsFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
+    private val joinedRoom: JoinedRoom,
 ) : BaseFlowNode<RolesAndPermissionsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.AdminSettings,
@@ -83,18 +87,16 @@ class RolesAndPermissionsFlowNode @AssistedInject constructor(
                 )
             }
             is NavTarget.AdminList -> {
-                val inputs = ChangeRolesNode.Inputs(ChangeRolesNode.ListType.Admins)
-                createNode<ChangeRolesNode>(
-                    buildContext = buildContext,
-                    plugins = listOf(inputs),
-                )
+                changeRoomMemberRolesEntryPoint
+                    .room(joinedRoom)
+                    .listType(ChangeRoomMemberRolesListType.Admins)
+                    .createNode(this, buildContext)
             }
             is NavTarget.ModeratorList -> {
-                val inputs = ChangeRolesNode.Inputs(ChangeRolesNode.ListType.Moderators)
-                createNode<ChangeRolesNode>(
-                    buildContext = buildContext,
-                    plugins = listOf(inputs),
-                )
+                changeRoomMemberRolesEntryPoint
+                    .room(joinedRoom)
+                    .listType(ChangeRoomMemberRolesListType.Moderators)
+                    .createNode(this, buildContext)
             }
             is NavTarget.ChangeRoomPermissions -> {
                 val inputs = ChangeRoomPermissionsNode.Inputs(navTarget.section)

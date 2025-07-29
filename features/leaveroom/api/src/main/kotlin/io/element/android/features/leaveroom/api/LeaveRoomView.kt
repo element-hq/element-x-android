@@ -11,6 +11,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -25,8 +26,12 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LeaveRoomView(
-    state: LeaveRoomState
+    state: LeaveRoomState,
+    onSelectNewOwners: () -> Unit,
 ) {
+    if (state.needsSelectingNewOwners is LeaveRoomState.NeedsSelectingNewOwners.Shown) {
+        LaunchedEffect(Unit) { onSelectNewOwners() }
+    }
     LeaveRoomConfirmationDialog(state)
     LeaveRoomProgressDialog(state)
     LeaveRoomErrorDialog(state)
@@ -36,35 +41,44 @@ fun LeaveRoomView(
 private fun LeaveRoomConfirmationDialog(
     state: LeaveRoomState,
 ) {
+    val defaultOnSubmitClick = { roomId: RoomId -> { state.eventSink(LeaveRoomEvent.LeaveRoom(roomId)) } }
+    val defaultDismissAction = { state.eventSink(LeaveRoomEvent.HideConfirmation) }
     when (state.confirmation) {
         is LeaveRoomState.Confirmation.Hidden -> {}
 
         is LeaveRoomState.Confirmation.Dm -> LeaveRoomConfirmationDialog(
             text = R.string.leave_room_alert_private_subtitle,
-            roomId = state.confirmation.roomId,
             isDm = false,
-            eventSink = state.eventSink,
+            onSubmitClick = defaultOnSubmitClick(state.confirmation.roomId),
+            onDismiss = defaultDismissAction,
         )
 
         is LeaveRoomState.Confirmation.PrivateRoom -> LeaveRoomConfirmationDialog(
             text = R.string.leave_room_alert_private_subtitle,
-            roomId = state.confirmation.roomId,
             isDm = false,
-            eventSink = state.eventSink,
+            onSubmitClick = defaultOnSubmitClick(state.confirmation.roomId),
+            onDismiss = defaultDismissAction,
         )
 
         is LeaveRoomState.Confirmation.LastUserInRoom -> LeaveRoomConfirmationDialog(
             text = R.string.leave_room_alert_empty_subtitle,
-            roomId = state.confirmation.roomId,
             isDm = false,
-            eventSink = state.eventSink,
+            onSubmitClick = defaultOnSubmitClick(state.confirmation.roomId),
+            onDismiss = defaultDismissAction,
+        )
+
+        is LeaveRoomState.Confirmation.LastOwnerInRoom -> LeaveRoomConfirmationDialog(
+            text = R.string.leave_room_alert_empty_subtitle,
+            isDm = false,
+            onSubmitClick = { state}, // TODO: do something
+            onDismiss = defaultDismissAction,
         )
 
         is LeaveRoomState.Confirmation.Generic -> LeaveRoomConfirmationDialog(
             text = R.string.leave_room_alert_subtitle,
-            roomId = state.confirmation.roomId,
             isDm = false,
-            eventSink = state.eventSink,
+            onSubmitClick = defaultOnSubmitClick(state.confirmation.roomId),
+            onDismiss = defaultDismissAction,
         )
     }
 }
@@ -72,16 +86,16 @@ private fun LeaveRoomConfirmationDialog(
 @Composable
 private fun LeaveRoomConfirmationDialog(
     @StringRes text: Int,
-    roomId: RoomId,
     isDm: Boolean,
-    eventSink: (LeaveRoomEvent) -> Unit,
+    onSubmitClick: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
     ConfirmationDialog(
         title = stringResource(if (isDm) CommonStrings.action_leave_conversation else CommonStrings.action_leave_room),
         content = stringResource(text),
         submitText = stringResource(CommonStrings.action_leave),
-        onSubmitClick = { eventSink(LeaveRoomEvent.LeaveRoom(roomId)) },
-        onDismiss = { eventSink(LeaveRoomEvent.HideConfirmation) },
+        onSubmitClick = onSubmitClick,
+        onDismiss = onDismiss,
     )
 }
 
@@ -119,6 +133,6 @@ internal fun LeaveRoomViewPreview(
         modifier = Modifier.size(300.dp, 300.dp),
         propagateMinConstraints = true,
     ) {
-        LeaveRoomView(state = state)
+        LeaveRoomView(state = state, onSelectNewOwners = {})
     }
 }

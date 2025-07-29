@@ -57,10 +57,12 @@ fun aLeaveRoomState(
     confirmation: LeaveRoomState.Confirmation = LeaveRoomState.Confirmation.Hidden,
     progress: LeaveRoomState.Progress = LeaveRoomState.Progress.Hidden,
     error: LeaveRoomState.Error = LeaveRoomState.Error.Hidden,
+    needsSelectingNewOwners: LeaveRoomState.NeedsSelectingNewOwners = LeaveRoomState.NeedsSelectingNewOwners.Hidden,
     eventSink: (LeaveRoomEvent) -> Unit = {},
 ) = LeaveRoomState(
     confirmation = confirmation,
     progress = progress,
     error = error,
+    needsSelectingNewOwners = needsSelectingNewOwners,
     eventSink = eventSink,
 )
