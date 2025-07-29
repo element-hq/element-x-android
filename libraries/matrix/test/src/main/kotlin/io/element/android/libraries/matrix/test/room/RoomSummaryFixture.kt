@@ -80,6 +80,8 @@ fun aRoomSummary(
     numUnreadMentions: Long = 0,
     historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
     lastMessage: RoomMessage? = aRoomMessage(),
+    roomVersion: String? = "11",
+    privilegedCreatorRole: Boolean = false,
 ) = RoomSummary(
     info = RoomInfo(
         id = roomId,
@@ -115,6 +117,8 @@ fun aRoomSummary(
         numUnreadNotifications = numUnreadNotifications,
         numUnreadMentions = numUnreadMentions,
         historyVisibility = historyVisibility,
+        roomVersion = roomVersion,
+        privilegedCreatorRole = privilegedCreatorRole,
     ),
     lastMessage = lastMessage,
 )

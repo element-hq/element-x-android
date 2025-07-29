@@ -18,22 +18,6 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        // Snapshot versions
-        maven {
-            url = URI("https://s01.oss.sonatype.org/content/repositories/snapshots")
-            content {
-                includeModule("org.matrix.rustcomponents", "sdk-android")
-                includeModule("io.element.android", "wysiwyg")
-                includeModule("io.element.android", "wysiwyg-compose")
-            }
-        }
-        // To have immediate access to Rust SDK versions without a sync with Maven Central
-        maven {
-            url = URI("https://s01.oss.sonatype.org/content/repositories/releases")
-            content {
-                includeModule("org.matrix.rustcomponents", "sdk-android")
-            }
-        }
         google()
         mavenCentral()
         maven {

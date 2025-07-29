@@ -55,6 +55,8 @@ fun aRustRoomInfo(
     joinRule: JoinRule? = null,
     historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
     successorRoom: SuccessorRoom? = null,
+    roomVersion: String? = "11",
+    privilegedCreatorsRole: Boolean = false,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -89,4 +91,6 @@ fun aRustRoomInfo(
     joinRule = joinRule,
     historyVisibility = historyVisibility,
     successorRoom = successorRoom,
+    roomVersion = roomVersion,
+    privilegedCreatorsRole = privilegedCreatorsRole,
 )
