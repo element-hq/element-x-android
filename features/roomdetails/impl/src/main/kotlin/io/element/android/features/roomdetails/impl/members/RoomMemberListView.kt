@@ -294,14 +294,11 @@ private fun RoomMemberListItem(
     modifier: Modifier = Modifier,
 ) {
     val member = roomMemberWithIdentity.roomMember
-    val roleText = if (member.role is RoomMember.Role.Owner) {
-        stringResource(R.string.screen_room_member_list_role_owner)
-    } else {
-        when (member.role) {
-            RoomMember.Role.Admin -> stringResource(R.string.screen_room_member_list_role_administrator)
-            RoomMember.Role.Moderator -> stringResource(R.string.screen_room_member_list_role_moderator)
-            else -> null
-        }
+    val roleText = when (member.role) {
+        RoomMember.Role.Admin -> stringResource(R.string.screen_room_member_list_role_administrator)
+        RoomMember.Role.Moderator -> stringResource(R.string.screen_room_member_list_role_moderator)
+        is RoomMember.Role.Owner -> stringResource(R.string.screen_room_member_list_role_owner)
+        else -> null
     }
 
     MatrixUserRow(
