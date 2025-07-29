@@ -99,7 +99,7 @@ fun BaseRoom.canHandleKnockRequestsAsState(updateKey: Long): State<Boolean> {
 fun BaseRoom.userPowerLevelAsState(updateKey: Long): State<Long> {
     return produceState(initialValue = 0, key1 = updateKey) {
         value = userRole(sessionId)
-            .getOrDefault(RoomMember.Role.USER)
+            .getOrDefault(RoomMember.Role.User)
             .powerLevel
     }
 }
@@ -108,7 +108,7 @@ fun BaseRoom.userPowerLevelAsState(updateKey: Long): State<Long> {
 fun BaseRoom.isOwnUserAdmin(): Boolean {
     val roomInfo by roomInfoFlow.collectAsState()
     val role = roomInfo.roleOf(sessionId)
-    return role == RoomMember.Role.ADMIN || role == RoomMember.Role.CREATOR
+    return role == RoomMember.Role.Admin || role is RoomMember.Role.Owner
 }
 
 @Composable

@@ -10,8 +10,10 @@ package io.element.android.features.roomdetails.impl.rolesandpermissions
 import io.element.android.libraries.architecture.AsyncAction
 
 data class RolesAndPermissionsState(
+    val roomSupportsOwnerRole: Boolean,
     val adminCount: Int,
     val moderatorCount: Int,
+    val canDemoteSelf: Boolean,
     val changeOwnRoleAction: AsyncAction<Unit>,
     val resetPermissionsAction: AsyncAction<Unit>,
     val eventSink: (RolesAndPermissionsEvents) -> Unit,

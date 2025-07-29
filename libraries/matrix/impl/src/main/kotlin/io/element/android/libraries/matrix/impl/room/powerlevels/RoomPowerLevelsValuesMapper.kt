@@ -28,6 +28,6 @@ object RoomPowerLevelsValuesMapper {
 }
 
 fun PowerLevel.into(): Long = when (this) {
-    PowerLevel.Infinite -> RoomMember.Role.CREATOR.powerLevel
+    PowerLevel.Infinite -> RoomMember.Role.Owner(isCreator = true).powerLevel
     is PowerLevel.Value -> this.value
 }

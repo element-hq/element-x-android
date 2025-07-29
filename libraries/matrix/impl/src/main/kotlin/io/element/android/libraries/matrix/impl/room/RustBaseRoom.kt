@@ -128,7 +128,11 @@ class RustBaseRoom(
 
     override suspend fun userRole(userId: UserId): Result<RoomMember.Role> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            RoomMemberMapper.mapRole(innerRoom.suggestedRoleForUser(userId.value))
+            val powerLevel = roomInfoFlow.value.roomPowerLevels?.powerLevelOf(userId) ?: 0L
+            RoomMemberMapper.mapRole(
+                role = innerRoom.suggestedRoleForUser(userId.value),
+                powerLevel = powerLevel,
+            )
         }
     }
 

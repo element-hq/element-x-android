@@ -41,11 +41,25 @@ class ChangeRolesViewTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun `passing a 'USER' role throws an exception`() {
+    fun `passing a 'User' role throws an exception`() {
         val exception = runCatchingExceptions {
             rule.setChangeRolesContent(
                 state = aChangeRolesState(
-                    role = RoomMember.Role.USER,
+                    role = RoomMember.Role.User,
+                    eventSink = EnsureNeverCalledWithParam(),
+                ),
+            )
+        }.exceptionOrNull()
+
+        assertThat(exception).isNotNull()
+    }
+
+    @Test
+    fun `passing an 'Owner' role throws an exception`() {
+        val exception = runCatchingExceptions {
+            rule.setChangeRolesContent(
+                state = aChangeRolesState(
+                    role = RoomMember.Role.Owner(isCreator = true),
                     eventSink = EnsureNeverCalledWithParam(),
                 ),
             )
@@ -166,7 +180,7 @@ class ChangeRolesViewTest {
         val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
         rule.setChangeRolesContent(
             state = aChangeRolesState(
-                role = RoomMember.Role.ADMIN,
+                role = RoomMember.Role.Admin,
                 isSearchActive = true,
                 savingState = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
@@ -183,7 +197,7 @@ class ChangeRolesViewTest {
         val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
         rule.setChangeRolesContent(
             state = aChangeRolesState(
-                role = RoomMember.Role.ADMIN,
+                role = RoomMember.Role.Admin,
                 isSearchActive = true,
                 savingState = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,

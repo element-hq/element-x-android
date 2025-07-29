@@ -26,13 +26,22 @@ data class RoomPowerLevels(
     private val users: ImmutableMap<UserId, Long>,
 ) {
     /**
+     * Returns the power level of the user in the room.
+     *
+     * If the user is not found, returns 0.
+     */
+    fun powerLevelOf(userId: UserId): Long {
+        return users[userId] ?: 0L
+    }
+
+    /**
      * Returns the set of [UserId]s that have the given role in the room.
      *
-     * **WARNING**: This method must not be used with the [RoomMember.Role.CREATOR] role. It'll result in a runtime error.
+     * **WARNING**: This method must not be used with a creator role. It'll result in a runtime error.
      */
     fun usersWithRole(role: RoomMember.Role): Set<UserId> {
-        return if (role == RoomMember.Role.CREATOR) {
-            error("RoomPowerLevels.usersWithRole should not be used with CREATOR role, use roomInfo.creators instead")
+        return if (role is RoomMember.Role.Owner && role.isCreator) {
+            error("RoomPowerLevels.usersWithRole should not be used with a creator role, use roomInfo.creators instead")
         } else {
             users.filterValues { RoomMember.Role.forPowerLevel(it) == role }.keys
         }
@@ -42,7 +51,7 @@ data class RoomPowerLevels(
      * Returns the role of the user in the room based on their power level.
      * If the user is not found, returns null.
      *
-     * **WARNING**: This method must not be used with the [RoomMember.Role.CREATOR] role, as it won't return any results.
+     * **WARNING**: This method must not be used with a creator role, as it won't return any results.
      */
     fun roleOf(userId: UserId): RoomMember.Role? {
         return users[userId]?.let(RoomMember.Role::forPowerLevel)

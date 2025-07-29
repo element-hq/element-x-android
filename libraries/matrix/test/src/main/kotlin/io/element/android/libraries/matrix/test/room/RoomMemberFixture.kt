@@ -20,7 +20,7 @@ fun aRoomMember(
     powerLevel: Long = 0L,
     normalizedPowerLevel: Long = 0L,
     isIgnored: Boolean = false,
-    role: RoomMember.Role = RoomMember.Role.USER,
+    role: RoomMember.Role = RoomMember.Role.User,
     membershipChangeReason: String? = null,
 ) = RoomMember(
     userId = userId,

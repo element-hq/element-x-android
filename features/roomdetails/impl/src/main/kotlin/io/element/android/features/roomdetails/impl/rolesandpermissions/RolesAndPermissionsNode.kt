@@ -61,7 +61,7 @@ class RolesAndPermissionsNode @AssistedInject constructor(
             room.roomInfoFlow
                 .filter { info ->
                     val role = info.roleOf(room.sessionId)
-                    role != RoomMember.Role.ADMIN && role != RoomMember.Role.CREATOR
+                    role != RoomMember.Role.Admin && role !is RoomMember.Role.Owner
                 }
                 .take(1)
                 .onEach { navigateUp() }
