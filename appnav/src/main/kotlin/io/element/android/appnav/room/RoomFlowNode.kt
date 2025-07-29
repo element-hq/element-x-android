@@ -48,11 +48,14 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -125,6 +128,14 @@ class RoomFlowNode @AssistedInject constructor(
     private fun subscribeToRoomInfoFlow(roomId: RoomId, serverNames: List<String>) {
         val roomInfoFlow = client.getRoomInfoFlow(roomId)
         val isSpaceFlow = roomInfoFlow.map { it.getOrNull()?.isSpace.orFalse() }.distinctUntilChanged()
+
+        // This observes the local membership changes for the room
+        val membershipUpdateFlow = membershipObserver.updates
+            .filter { it.roomId == roomId }
+            .distinctUntilChanged()
+            // We add a replay so we can check the last local membership update
+            .shareIn(lifecycleScope, started = SharingStarted.Eagerly, replay = 1)
+
         val currentMembershipFlow = roomInfoFlow
             .map { it.getOrNull()?.currentUserMembership }
             .distinctUntilChanged()
@@ -151,7 +162,8 @@ class RoomFlowNode @AssistedInject constructor(
                 }
                 else -> {
                     if (membership == CurrentUserMembership.LEFT && previousMembership == CurrentUserMembership.JOINED) {
-                        val lastLocalMembershipUpdate = membershipObserver.updates.first()
+                        // The user left the room in this device, remove the room from the backstack
+                        val lastLocalMembershipUpdate = membershipUpdateFlow.first()
                         if (lastLocalMembershipUpdate.roomId == roomId && !lastLocalMembershipUpdate.isUserInRoom) {
                             navigateUp()
                         }
