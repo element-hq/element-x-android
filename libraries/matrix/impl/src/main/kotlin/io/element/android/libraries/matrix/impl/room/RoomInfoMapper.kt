@@ -71,6 +71,8 @@ class RoomInfoMapper {
             numUnreadNotifications = it.numUnreadNotifications.toLong(),
             historyVisibility = it.historyVisibility.map(),
             successorRoom = it.successorRoom?.map(),
+            roomVersion = it.roomVersion,
+            privilegedCreatorRole = it.privilegedCreatorsRole,
         )
     }
 }

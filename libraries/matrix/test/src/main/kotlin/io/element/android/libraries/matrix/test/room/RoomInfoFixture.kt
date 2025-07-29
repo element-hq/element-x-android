@@ -65,6 +65,8 @@ fun aRoomInfo(
     numUnreadNotifications: Long = 0,
     numUnreadMentions: Long = 0,
     historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
+    roomVersion: String? = "11",
+    privilegedCreatorRole: Boolean = false,
 ) = RoomInfo(
     id = id,
     name = name,
@@ -99,4 +101,6 @@ fun aRoomInfo(
     numUnreadNotifications = numUnreadNotifications,
     numUnreadMentions = numUnreadMentions,
     historyVisibility = historyVisibility,
+    roomVersion = roomVersion,
+    privilegedCreatorRole = privilegedCreatorRole,
 )

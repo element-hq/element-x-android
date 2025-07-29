@@ -81,6 +81,8 @@ class RoomInfoMapperTest {
                     pinnedEventIds = listOf(AN_EVENT_ID.value),
                     roomCreators = listOf(A_USER_ID.value),
                     historyVisibility = RustRoomHistoryVisibility.Joined,
+                    roomVersion = "12",
+                    privilegedCreatorsRole = true,
                 )
             )
         ).isEqualTo(
@@ -126,7 +128,9 @@ class RoomInfoMapperTest {
                 numUnreadNotifications = 13L,
                 numUnreadMentions = 14L,
                 historyVisibility = RoomHistoryVisibility.Joined,
-                successorRoom = null
+                successorRoom = null,
+                roomVersion = "12",
+                privilegedCreatorRole = true,
             )
         )
     }
@@ -168,6 +172,8 @@ class RoomInfoMapperTest {
                     numUnreadMentions = 14uL,
                     pinnedEventIds = emptyList(),
                     roomCreators = null,
+                    roomVersion = "12",
+                    privilegedCreatorsRole = true,
                 )
             )
         ).isEqualTo(
@@ -208,6 +214,8 @@ class RoomInfoMapperTest {
                 numUnreadNotifications = 13L,
                 numUnreadMentions = 14L,
                 historyVisibility = RoomHistoryVisibility.Joined,
+                roomVersion = "12",
+                privilegedCreatorRole = true,
             )
         )
     }
