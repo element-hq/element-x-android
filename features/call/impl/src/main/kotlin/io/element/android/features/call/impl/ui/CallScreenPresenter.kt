@@ -248,9 +248,7 @@ class CallScreenPresenter @AssistedInject constructor(
                 Timber.d("Observing sync state in-call for sessionId: ${roomCallType.sessionId}")
                 client.syncService().syncState
                     .collect { state ->
-                        if (state == SyncState.Running) {
-                            client.notifyCallStartIfNeeded(callType.roomId)
-                        } else {
+                        if (state != SyncState.Running) {
                             appForegroundStateService.updateIsInCallState(true)
                         }
                     }
@@ -261,32 +259,6 @@ class CallScreenPresenter @AssistedInject constructor(
                 appForegroundStateService.updateIsInCallState(false)
             }
         }
-    }
-
-    private suspend fun MatrixClient.notifyCallStartIfNeeded(roomId: RoomId) {
-        if (notifiedCallStart) return
-
-        val activeRoomForSession = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)
-        val sendCallNotificationResult = if (activeRoomForSession != null) {
-            Timber.d("Notifying call start for room $roomId. Has room call: ${activeRoomForSession.info().hasRoomCall}")
-            activeRoomForSession.sendCallNotificationIfNeeded()
-        } else {
-            // Instantiate the room from the session and roomId and send the notification
-            getJoinedRoom(roomId)?.use { room ->
-                Timber.d("Notifying call start for room $roomId. Has room call: ${room.info().hasRoomCall}")
-                room.sendCallNotificationIfNeeded()
-            } ?: run {
-                Timber.w("No room found for session $sessionId and room $roomId, skipping call notification.")
-                return
-            }
-        }
-
-        sendCallNotificationResult.fold(
-            onSuccess = { notifiedCallStart = true },
-            onFailure = { error ->
-                Timber.e(error, "Failed to send call notification for room $roomId.")
-            }
-        )
     }
 
     private fun parseMessage(message: String): WidgetMessage? {
