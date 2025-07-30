@@ -48,6 +48,11 @@ class LeaveRoomStateProvider : PreviewParameterProvider<LeaveRoomState> {
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
+            aLeaveRoomState(
+                confirmation = LeaveRoomState.Confirmation.LastOwnerInRoom(roomId = A_ROOM_ID),
+                progress = LeaveRoomState.Progress.Hidden,
+                error = LeaveRoomState.Error.Hidden,
+            ),
         )
 }
 

@@ -78,6 +78,7 @@ fun HomeView(
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     onReportRoomClick: (roomId: RoomId) -> Unit,
     onDeclineInviteAndBlockUser: (roomSummary: RoomListRoomSummary) -> Unit,
+    onSelectNewOwnersWhenLeavingRoom: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
@@ -108,7 +109,10 @@ fun HomeView(
                 )
             }
 
-            LeaveRoomView(state = state.leaveRoomState, onSelectNewOwners = {})
+            LeaveRoomView(
+                state = state.leaveRoomState,
+                onSelectNewOwners = onSelectNewOwnersWhenLeavingRoom,
+            )
 
             HomeScaffold(
                 state = homeState,
@@ -304,5 +308,6 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: 
         onMenuActionClick = {},
         onDeclineInviteAndBlockUser = {},
         acceptDeclineInviteView = {},
+        onSelectNewOwnersWhenLeavingRoom = {},
     )
 }

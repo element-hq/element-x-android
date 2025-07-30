@@ -80,6 +80,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun ChangeRolesView(
     state: ChangeRolesState,
     navigateUp: () -> Unit,
+    onSaveChanges: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     val latestNavigateUp by rememberUpdatedState(newValue = navigateUp)
@@ -96,7 +97,8 @@ fun ChangeRolesView(
                 AnimatedVisibility(visible = !state.isSearchActive) {
                     TopAppBar(
                         titleStr = when (state.role) {
-                            is RoomMember.Role.Owner, RoomMember.Role.Admin -> stringResource(R.string.screen_room_change_role_administrators_title)
+                            is RoomMember.Role.Owner -> stringResource(R.string.screen_room_change_role_owners_title)
+                            RoomMember.Role.Admin -> stringResource(R.string.screen_room_change_role_administrators_title)
                             RoomMember.Role.Moderator -> stringResource(R.string.screen_room_change_role_moderators_title)
                             RoomMember.Role.User -> error("This should never be reached")
                         },
@@ -187,14 +189,26 @@ fun ChangeRolesView(
 
         when (state.savingState) {
             is AsyncAction.Confirming -> {
-                if (state.role == RoomMember.Role.Admin) {
-                    // Confirm adding new admins dialogs
-                    ConfirmationDialog(
-                        title = stringResource(R.string.screen_room_change_role_confirm_add_admin_title),
-                        content = stringResource(R.string.screen_room_change_role_confirm_add_admin_description),
-                        onSubmitClick = { state.eventSink(ChangeRolesEvent.Save) },
-                        onDismiss = { state.eventSink(ChangeRolesEvent.ClearError) }
-                    )
+                when (state.role) {
+                    is RoomMember.Role.Owner -> {
+                        ConfirmationDialog(
+                            title = stringResource(R.string.screen_room_change_role_confirm_change_owners_title),
+                            content = stringResource(R.string.screen_room_change_role_confirm_change_owners_description),
+                            submitText = stringResource(CommonStrings.action_continue),
+                            onSubmitClick = { state.eventSink(ChangeRolesEvent.Save) },
+                            onDismiss = { state.eventSink(ChangeRolesEvent.ClearError) },
+                            destructiveSubmit = true,
+                        )
+                    }
+                    is RoomMember.Role.Admin -> {
+                        ConfirmationDialog(
+                            title = stringResource(R.string.screen_room_change_role_confirm_add_admin_title),
+                            content = stringResource(R.string.screen_room_change_role_confirm_add_admin_description),
+                            onSubmitClick = { state.eventSink(ChangeRolesEvent.Save) },
+                            onDismiss = { state.eventSink(ChangeRolesEvent.ClearError) }
+                        )
+                    }
+                    else -> Unit // No confirmation needed for Moderator or User roles
                 }
             }
             is AsyncAction.Loading -> {
@@ -212,6 +226,8 @@ fun ChangeRolesView(
                         AsyncIndicator.Custom(text = stringResource(CommonStrings.common_saved_changes))
                     }
                 }
+
+                onSaveChanges?.invoke()
             }
             else -> Unit
         }
@@ -410,6 +426,7 @@ internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::
         ChangeRolesView(
             state = state,
             navigateUp = {},
+            onSaveChanges = null,
         )
     }
 }

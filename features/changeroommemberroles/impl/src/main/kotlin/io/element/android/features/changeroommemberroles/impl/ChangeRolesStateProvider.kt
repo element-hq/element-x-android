@@ -44,6 +44,7 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Success(Unit)),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Failure(Exception("boom"))),
             aChangeRolesStateWithOwners(),
+            aChangeRolesStateWithOwners().copy(role = RoomMember.Role.Owner(isCreator = false)),
         )
 }
 

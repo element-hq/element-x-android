@@ -7,7 +7,6 @@
 
 package io.element.android.features.leaveroom.api
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -27,10 +26,10 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun LeaveRoomView(
     state: LeaveRoomState,
-    onSelectNewOwners: () -> Unit,
+    onSelectNewOwners: (RoomId) -> Unit,
 ) {
     if (state.needsSelectingNewOwners is LeaveRoomState.NeedsSelectingNewOwners.Shown) {
-        LaunchedEffect(Unit) { onSelectNewOwners() }
+        LaunchedEffect(Unit) { onSelectNewOwners(state.needsSelectingNewOwners.roomId) }
     }
     LeaveRoomConfirmationDialog(state)
     LeaveRoomProgressDialog(state)
@@ -47,35 +46,38 @@ private fun LeaveRoomConfirmationDialog(
         is LeaveRoomState.Confirmation.Hidden -> {}
 
         is LeaveRoomState.Confirmation.Dm -> LeaveRoomConfirmationDialog(
-            text = R.string.leave_room_alert_private_subtitle,
+            text = stringResource(R.string.leave_room_alert_private_subtitle),
             isDm = false,
             onSubmitClick = defaultOnSubmitClick(state.confirmation.roomId),
             onDismiss = defaultDismissAction,
         )
 
         is LeaveRoomState.Confirmation.PrivateRoom -> LeaveRoomConfirmationDialog(
-            text = R.string.leave_room_alert_private_subtitle,
+            text = stringResource(R.string.leave_room_alert_private_subtitle),
             isDm = false,
             onSubmitClick = defaultOnSubmitClick(state.confirmation.roomId),
             onDismiss = defaultDismissAction,
         )
 
         is LeaveRoomState.Confirmation.LastUserInRoom -> LeaveRoomConfirmationDialog(
-            text = R.string.leave_room_alert_empty_subtitle,
+            text = stringResource(R.string.leave_room_alert_empty_subtitle),
             isDm = false,
             onSubmitClick = defaultOnSubmitClick(state.confirmation.roomId),
             onDismiss = defaultDismissAction,
         )
 
         is LeaveRoomState.Confirmation.LastOwnerInRoom -> LeaveRoomConfirmationDialog(
-            text = R.string.leave_room_alert_empty_subtitle,
+            title = stringResource(R.string.leave_room_alert_select_new_owner_title),
+            text = stringResource(R.string.leave_room_alert_select_new_owner_subtitle),
             isDm = false,
-            onSubmitClick = { state}, // TODO: do something
+            submitText = stringResource(R.string.leave_room_alert_select_new_owner_action),
+            destructiveSubmit = true,
+            onSubmitClick = { state.eventSink(LeaveRoomEvent.SelectNewOwners(state.confirmation.roomId)) },
             onDismiss = defaultDismissAction,
         )
 
         is LeaveRoomState.Confirmation.Generic -> LeaveRoomConfirmationDialog(
-            text = R.string.leave_room_alert_subtitle,
+            text = stringResource(R.string.leave_room_alert_subtitle),
             isDm = false,
             onSubmitClick = defaultOnSubmitClick(state.confirmation.roomId),
             onDismiss = defaultDismissAction,
@@ -85,17 +87,21 @@ private fun LeaveRoomConfirmationDialog(
 
 @Composable
 private fun LeaveRoomConfirmationDialog(
-    @StringRes text: Int,
     isDm: Boolean,
+    title: String = stringResource(if (isDm) CommonStrings.action_leave_conversation else CommonStrings.action_leave_room),
+    text: String,
+    submitText: String = stringResource(CommonStrings.action_leave),
+    destructiveSubmit: Boolean = false,
     onSubmitClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     ConfirmationDialog(
-        title = stringResource(if (isDm) CommonStrings.action_leave_conversation else CommonStrings.action_leave_room),
-        content = stringResource(text),
-        submitText = stringResource(CommonStrings.action_leave),
+        title = title,
+        content = text,
+        submitText = submitText,
         onSubmitClick = onSubmitClick,
         onDismiss = onDismiss,
+        destructiveSubmit = destructiveSubmit,
     )
 }
 

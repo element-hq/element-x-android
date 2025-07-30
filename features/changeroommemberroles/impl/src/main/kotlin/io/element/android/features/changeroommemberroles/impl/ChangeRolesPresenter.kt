@@ -22,7 +22,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.RoomModeration
-import io.element.android.features.changeroommemberroles.impl.RoomMemberListDataSource
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -135,8 +134,9 @@ class ChangeRolesPresenter @AssistedInject constructor(
                     val isModifyingAdmins = role == RoomMember.Role.Admin
                     val hasChanges = selectedUsers != usersWithRole
                     val isConfirming = saveState.value.isConfirming()
+                    val modifyingOwners = role is RoomMember.Role.Owner
 
-                    val needsConfirmation = currentUserIsAdmin && isModifyingAdmins && hasChanges && !isConfirming
+                    val needsConfirmation = (modifyingOwners || currentUserIsAdmin && isModifyingAdmins) && hasChanges && !isConfirming
 
                     when {
                         needsConfirmation -> {

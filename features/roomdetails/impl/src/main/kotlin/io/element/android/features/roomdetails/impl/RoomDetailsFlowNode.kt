@@ -11,6 +11,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -53,13 +54,13 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -204,6 +205,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openReportRoom() {
                         backstack.push(NavTarget.ReportRoom)
+                    }
+
+                    override fun onSelectNewOwnersWhenLeaving() {
+                        backstack.push(NavTarget.SelectNewOwnersWhenLeaving)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -365,7 +370,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     .listType(ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving)
                     .callback(object : ChangeRoomMemberRolesEntryPoint.Callback {
                         override fun onRolesChanged() {
-                            // TODO: leave the room
+                            lifecycleScope.launch { room.leave() }
                         }
                     })
                     .createNode(this, buildContext)

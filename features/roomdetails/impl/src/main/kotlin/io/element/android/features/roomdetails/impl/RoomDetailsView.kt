@@ -111,6 +111,7 @@ fun RoomDetailsView(
     onSecurityAndPrivacyClick: () -> Unit,
     onProfileClick: (UserId) -> Unit,
     onReportRoomClick: () -> Unit,
+    onSelectNewOwnersWhenLeaving: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -131,7 +132,10 @@ fun RoomDetailsView(
                 .verticalScroll(rememberScrollState())
                 .consumeWindowInsets(padding)
         ) {
-            LeaveRoomView(state = state.leaveRoomState, onSelectNewOwners = {})
+            LeaveRoomView(
+                state = state.leaveRoomState,
+                onSelectNewOwners = { onSelectNewOwnersWhenLeaving() },
+            )
 
             when (state.roomType) {
                 RoomDetailsType.Room -> {
@@ -776,5 +780,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onSecurityAndPrivacyClick = {},
         onProfileClick = {},
         onReportRoomClick = {},
+        onSelectNewOwnersWhenLeaving = {},
     )
 }

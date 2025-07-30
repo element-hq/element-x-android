@@ -7,7 +7,6 @@
 
 package io.element.android.features.changeroommemberroles.impl
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
@@ -23,7 +22,6 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.RoomMember
-import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
 class ChangeRolesNode @AssistedInject constructor(
@@ -55,6 +53,7 @@ class ChangeRolesNode @AssistedInject constructor(
             modifier = modifier,
             state = state,
             navigateUp = this::navigateUp,
+            onSaveChanges = { callback.onEach { it.onRolesChanged() } }
         )
     }
 }

@@ -54,6 +54,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openDmUserProfile(userId: UserId)
         fun onJoinCall()
         fun openReportRoom()
+        fun onSelectNewOwnersWhenLeaving()
     }
 
     private val callbacks = plugins<Callback>()
@@ -137,6 +138,10 @@ class RoomDetailsNode @AssistedInject constructor(
         callbacks.forEach { it.openReportRoom() }
     }
 
+    private fun onSelectNewOwnersWhenLeaving() {
+        callbacks.forEach { it.onSelectNewOwnersWhenLeaving() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
@@ -172,6 +177,7 @@ class RoomDetailsNode @AssistedInject constructor(
             onSecurityAndPrivacyClick = ::openSecurityAndPrivacy,
             onProfileClick = ::onProfileClick,
             onReportRoomClick = ::onReportRoomClick,
+            onSelectNewOwnersWhenLeaving = ::onSelectNewOwnersWhenLeaving,
         )
     }
 }

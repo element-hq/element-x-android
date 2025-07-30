@@ -41,9 +41,7 @@ class ChangeRoomMemberRolesRootNode @AssistedInject constructor(
     ),
     buildContext = buildContext,
     plugins = plugins,
-),
-    DaggerComponentOwner {
-
+), DaggerComponentOwner {
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget

@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -70,8 +71,15 @@ class LeaveRoomPresenter @Inject constructor(
                 is LeaveRoomEvent.HideError -> error.value = LeaveRoomState.Error.Hidden
 
                 is LeaveRoomEvent.SelectNewOwners -> {
+                    // Hide the confirmation dialog
+                    confirmation.value = LeaveRoomState.Confirmation.Hidden
                     // Navigate to the new owners selection screen
                     needsSelectingNewOwners.value = LeaveRoomState.NeedsSelectingNewOwners.Shown(event.roomId)
+
+                    scope.launch {
+                        delay(100)
+                        needsSelectingNewOwners.value = LeaveRoomState.NeedsSelectingNewOwners.Hidden
+                    }
                 }
             }
         }
@@ -88,9 +96,9 @@ private suspend fun showLeaveRoomAlert(
         val roomInfo = room.roomInfoFlow.first()
         confirmation.value = when {
             roomInfo.isDm -> Dm(roomId)
+            isLastOwner && roomInfo.joinedMembersCount > 1L -> LeaveRoomState.Confirmation.LastOwnerInRoom(roomId)
             // If unknown, assume the room is private
             roomInfo.isPublic == null || roomInfo.isPublic == false -> PrivateRoom(roomId)
-            isLastOwner && roomInfo.joinedMembersCount > 1L -> LeaveRoomState.Confirmation.LastOwnerInRoom(roomId)
             roomInfo.joinedMembersCount == 1L -> LastUserInRoom(roomId)
             else -> Generic(roomId)
         }
@@ -116,11 +124,14 @@ private suspend fun MatrixClient.leaveRoom(
 }
 
 private suspend fun MatrixClient.isLastOwner(roomId: RoomId): Boolean {
-    val room = getJoinedRoom(roomId) ?: return false
+    val room = getRoom(roomId) ?: return false
     if (room.roomInfoFlow.value.isDm) {
         // DMs are not owned by the user, so we can return false
         return false
     } else {
+        val hasPrivilegedCreatorRole = room.roomInfoFlow.value.privilegedCreatorRole
+        if (!hasPrivilegedCreatorRole) return false
+
         val creators = room.usersWithRole(RoomMember.Role.Owner(isCreator = true)).first()
         val superAdmins = room.usersWithRole(RoomMember.Role.Owner(isCreator = false)).first()
         val owners = creators + superAdmins

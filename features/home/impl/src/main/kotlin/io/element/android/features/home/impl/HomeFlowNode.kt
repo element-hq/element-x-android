@@ -121,6 +121,10 @@ class HomeFlowNode @AssistedInject constructor(
         }
     }
 
+    private fun onSelectNewOwnersWhenLeavingRoom(roomId: RoomId) {
+        plugins<HomeEntryPoint.Callback>().forEach { it.onSelectNewOwnersWhenLeavingRoom(roomId) }
+    }
+
     fun rootNode(buildContext: BuildContext): Node {
         return node(buildContext) { modifier ->
             val state = presenter.present()
@@ -137,6 +141,7 @@ class HomeFlowNode @AssistedInject constructor(
                 onMenuActionClick = { onMenuActionClick(activity, it) },
                 onReportRoomClick = this::onReportRoomClick,
                 onDeclineInviteAndBlockUser = this::onDeclineInviteAndBlockUserClick,
+                onSelectNewOwnersWhenLeavingRoom = this::onSelectNewOwnersWhenLeavingRoom,
                 modifier = modifier,
             ) {
                 acceptDeclineInviteView.Render(

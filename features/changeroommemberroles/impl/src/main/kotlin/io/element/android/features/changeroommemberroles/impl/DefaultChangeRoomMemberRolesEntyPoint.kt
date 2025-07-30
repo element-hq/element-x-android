@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultChangeRoomMemberRolesEntyPoint @Inject constructor(): ChangeRoomMemberRolesEntryPoint {
+class DefaultChangeRoomMemberRolesEntyPoint @Inject constructor() : ChangeRoomMemberRolesEntryPoint {
     private lateinit var changeRoomMemberRolesListType: ChangeRoomMemberRolesListType
     private lateinit var room: JoinedRoom
     private var callback: ChangeRoomMemberRolesEntryPoint.Callback? = null

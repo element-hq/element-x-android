@@ -8,8 +8,6 @@
 package io.element.android.features.leaveroom.api
 
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
-import kotlinx.collections.immutable.ImmutableList
 
 sealed interface LeaveRoomEvent {
     data class ShowConfirmation(val roomId: RoomId) : LeaveRoomEvent

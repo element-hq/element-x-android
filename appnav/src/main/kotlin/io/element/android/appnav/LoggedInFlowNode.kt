@@ -46,6 +46,8 @@ import io.element.android.appnav.loggedin.SendQueues
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesEntryPoint
+import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesListType
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
@@ -84,6 +86,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -125,6 +128,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val logoutEntryPoint: LogoutEntryPoint,
     private val incomingVerificationEntryPoint: IncomingVerificationEntryPoint,
     private val mediaPreviewConfigMigration: MediaPreviewConfigMigration,
+    private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -268,6 +272,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class IncomingVerificationRequest(val data: VerificationRequest.Incoming) : NavTarget
+
+        @Parcelize
+        data class SelectNewOwnersWhenLeavingRoom(val roomId: RoomId) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -313,6 +320,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onLogoutForNativeSlidingSyncMigrationNeeded() {
                         backstack.push(NavTarget.LogoutForNativeSlidingSyncMigrationNeeded)
+                    }
+
+                    override fun onSelectNewOwnersWhenLeavingRoom(roomId: RoomId) {
+                        backstack.push(NavTarget.SelectNewOwnersWhenLeavingRoom(roomId))
                     }
                 }
                 homeEntryPoint
@@ -487,6 +498,18 @@ class LoggedInFlowNode @AssistedInject constructor(
                         }
                     })
                     .build()
+            }
+            is NavTarget.SelectNewOwnersWhenLeavingRoom -> {
+                val room = runBlocking { matrixClient.getJoinedRoom(navTarget.roomId) } ?: error("Room ${navTarget.roomId} not found")
+                changeRoomMemberRolesEntryPoint.room(room)
+                    .listType(ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving)
+                    .callback(object : ChangeRoomMemberRolesEntryPoint.Callback {
+                        override fun onRolesChanged() {
+                            lifecycleScope.launch { room.leave() }
+                            backstack.pop()
+                        }
+                    })
+                    .createNode(this, buildContext)
             }
         }
     }
