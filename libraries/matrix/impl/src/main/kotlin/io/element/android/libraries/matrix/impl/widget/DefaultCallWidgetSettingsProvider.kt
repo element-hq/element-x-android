@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.newVirtualElementCallWidget
 import uniffi.matrix_sdk.EncryptionSystem
 import uniffi.matrix_sdk.HeaderStyle
+import uniffi.matrix_sdk.NotificationType
 import uniffi.matrix_sdk.VirtualElementCallWidgetOptions
 import javax.inject.Inject
 import uniffi.matrix_sdk.Intent as CallIntent
@@ -29,7 +30,7 @@ class DefaultCallWidgetSettingsProvider @Inject constructor(
     private val callAnalyticsCredentialsProvider: CallAnalyticCredentialsProvider,
     private val analyticsService: AnalyticsService,
 ) : CallWidgetSettingsProvider {
-    override suspend fun provide(baseUrl: String, widgetId: String, encrypted: Boolean): MatrixWidgetSettings {
+    override suspend fun provide(baseUrl: String, widgetId: String, encrypted: Boolean, direct: Boolean): MatrixWidgetSettings {
         val isAnalyticsEnabled = analyticsService.userConsentFlow.first()
         val options = VirtualElementCallWidgetOptions(
             elementCallUrl = baseUrl,
@@ -53,6 +54,7 @@ class DefaultCallWidgetSettingsProvider @Inject constructor(
             hideHeader = true,
             controlledMediaDevices = true,
             header = HeaderStyle.APP_BAR,
+            sendNotificationType = if (direct) NotificationType.RING else NotificationType.NOTIFICATION,
         )
         val rustWidgetSettings = newVirtualElementCallWidget(options)
         return MatrixWidgetSettings.fromRustWidgetSettings(rustWidgetSettings)
