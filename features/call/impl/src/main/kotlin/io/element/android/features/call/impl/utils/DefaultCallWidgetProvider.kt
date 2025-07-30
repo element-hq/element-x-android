@@ -13,6 +13,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
@@ -44,7 +45,7 @@ class DefaultCallWidgetProvider @Inject constructor(
         val baseUrl = customBaseUrl ?: EMBEDDED_CALL_WIDGET_BASE_URL
 
         val isEncrypted = room.info().isEncrypted ?: room.getUpdatedIsEncrypted().getOrThrow()
-        val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = isEncrypted)
+        val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = isEncrypted, direct = room.isDm())
         val callUrl = room.generateWidgetWebViewUrl(
             widgetSettings = widgetSettings,
             clientId = clientId,
