@@ -7,12 +7,10 @@
 
 package io.element.android.features.changeroommemberroes.api
 
-import android.os.Parcelable
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import kotlinx.parcelize.Parcelize
 
 interface ChangeRoomMemberRolesEntryPoint : SimpleFeatureEntryPoint {
     fun room(room: JoinedRoom): ChangeRoomMemberRolesEntryPoint
@@ -24,13 +22,8 @@ interface ChangeRoomMemberRolesEntryPoint : SimpleFeatureEntryPoint {
     }
 }
 
-sealed interface ChangeRoomMemberRolesListType : NodeInputs, Parcelable {
-    @Parcelize
-    data object SelectNewOwnersWhenLeaving : ChangeRoomMemberRolesListType
-
-    @Parcelize
-    data object Admins : ChangeRoomMemberRolesListType
-
-    @Parcelize
-    data object Moderators : ChangeRoomMemberRolesListType
+enum class ChangeRoomMemberRolesListType : NodeInputs{
+    SelectNewOwnersWhenLeaving,
+    Admins,
+    Moderators
 }

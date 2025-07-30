@@ -39,9 +39,9 @@ class ChangeRolesNode @AssistedInject constructor(
 
     private val presenter = presenterFactory.run {
         val role = when (inputs.listType) {
-            is ChangeRoomMemberRolesListType.Admins -> RoomMember.Role.Admin
-            is ChangeRoomMemberRolesListType.Moderators -> RoomMember.Role.Moderator
-            is ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving -> RoomMember.Role.Owner(isCreator = false)
+            ChangeRoomMemberRolesListType.Admins -> RoomMember.Role.Admin
+            ChangeRoomMemberRolesListType.Moderators -> RoomMember.Role.Moderator
+            ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving -> RoomMember.Role.Owner(isCreator = false)
         }
         create(role)
     }
