@@ -1,19 +1,17 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
+package io.element.android.features.changeroommemberroles.impl
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
-import io.element.android.features.roomdetails.impl.members.aRoomMember
-import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -28,14 +26,18 @@ import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.room.aRoomMemberList
 import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.collections.plus
 
 class ChangeRolesPresenterTest {
     @Test
@@ -431,6 +433,44 @@ class ChangeRolesPresenterTest {
     }
 
     @Test
+    fun `present - Save will ask for confirmation before assigning new owners`() = runTest {
+        val analyticsService = FakeAnalyticsService()
+        val room = FakeJoinedRoom(
+            updateUserRoleResult = { Result.success(Unit) },
+            baseRoom = FakeBaseRoom(updateMembersResult = { Result.success(Unit) }),
+        ).apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
+            givenRoomInfo(
+                aRoomInfo(
+                    roomCreators = listOf(sessionId),
+                    roomPowerLevels = roomPowerLevelsWithRoles(
+                        A_USER_ID to RoomMember.Role.Owner(isCreator = false),
+                        A_USER_ID_2 to RoomMember.Role.Admin,
+                    )
+                )
+            )
+        }
+        val presenter = createChangeRolesPresenter(
+            role = RoomMember.Role.Owner(isCreator = false),
+            room = room,
+            analyticsService = analyticsService
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.selectedUsers).hasSize(1)
+
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
+
+            awaitItem().eventSink(ChangeRolesEvent.Save)
+
+            assertThat(awaitItem().savingState.isConfirming()).isTrue()
+        }
+    }
+
+    @Test
     fun `present - Save will just save the changes if the current user is a room creator and the selected users are not`() = runTest {
         val analyticsService = FakeAnalyticsService()
         val room = FakeJoinedRoom(
@@ -510,9 +550,16 @@ class ChangeRolesPresenterTest {
         )
     }
 
+    private fun roomPowerLevelsWithRoles(vararg pairs: Pair<UserId, RoomMember.Role>): RoomPowerLevels {
+        return RoomPowerLevels(
+            values = defaultRoomPowerLevelValues(),
+            users = pairs.associate { (userId, role) -> userId to role.powerLevel }.toPersistentMap()
+        )
+    }
+
     private fun TestScope.createChangeRolesPresenter(
         role: RoomMember.Role = RoomMember.Role.Admin,
-        room: FakeJoinedRoom = FakeJoinedRoom(),
+        room: FakeJoinedRoom = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {})),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): ChangeRolesPresenter {

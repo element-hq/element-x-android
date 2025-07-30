@@ -14,6 +14,12 @@ plugins {
 
 android {
     namespace = "io.element.android.features.changeroommemberroles.impl"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 setupAnvil()
@@ -31,8 +37,14 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.services.analytics.api)
 
+    testImplementation(projects.services.analytics.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
+    testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
     testImplementation(projects.tests.testutils)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

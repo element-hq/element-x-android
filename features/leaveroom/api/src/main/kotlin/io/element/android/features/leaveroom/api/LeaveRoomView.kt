@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -29,7 +31,8 @@ fun LeaveRoomView(
     onSelectNewOwners: (RoomId) -> Unit,
 ) {
     if (state.needsSelectingNewOwners is LeaveRoomState.NeedsSelectingNewOwners.Shown) {
-        LaunchedEffect(Unit) { onSelectNewOwners(state.needsSelectingNewOwners.roomId) }
+        val rememberedOnSelectNewOwners by rememberUpdatedState(onSelectNewOwners)
+        LaunchedEffect(Unit) { rememberedOnSelectNewOwners(state.needsSelectingNewOwners.roomId) }
     }
     LeaveRoomConfirmationDialog(state)
     LeaveRoomProgressDialog(state)
@@ -88,11 +91,11 @@ private fun LeaveRoomConfirmationDialog(
 @Composable
 private fun LeaveRoomConfirmationDialog(
     isDm: Boolean,
-    title: String = stringResource(if (isDm) CommonStrings.action_leave_conversation else CommonStrings.action_leave_room),
     text: String,
+    onSubmitClick: () -> Unit,
+    title: String = stringResource(if (isDm) CommonStrings.action_leave_conversation else CommonStrings.action_leave_room),
     submitText: String = stringResource(CommonStrings.action_leave),
     destructiveSubmit: Boolean = false,
-    onSubmitClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     ConfirmationDialog(

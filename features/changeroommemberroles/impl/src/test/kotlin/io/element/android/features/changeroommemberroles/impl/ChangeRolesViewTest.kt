@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
+package io.element.android.features.changeroommemberroles.impl
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -46,20 +46,6 @@ class ChangeRolesViewTest {
             rule.setChangeRolesContent(
                 state = aChangeRolesState(
                     role = RoomMember.Role.User,
-                    eventSink = EnsureNeverCalledWithParam(),
-                ),
-            )
-        }.exceptionOrNull()
-
-        assertThat(exception).isNotNull()
-    }
-
-    @Test
-    fun `passing an 'Owner' role throws an exception`() {
-        val exception = runCatchingExceptions {
-            rule.setChangeRolesContent(
-                state = aChangeRolesState(
-                    role = RoomMember.Role.Owner(isCreator = true),
                     eventSink = EnsureNeverCalledWithParam(),
                 ),
             )
@@ -193,6 +179,23 @@ class ChangeRolesViewTest {
     }
 
     @Test
+    fun `save owners confirmation dialog - continue saves the changes`() {
+        val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
+        rule.setChangeRolesContent(
+            state = aChangeRolesState(
+                role = RoomMember.Role.Owner(isCreator = false),
+                isSearchActive = true,
+                savingState = AsyncAction.ConfirmingNoParams,
+                eventSink = eventsRecorder,
+            ),
+        )
+
+        rule.clickOn(CommonStrings.action_continue)
+
+        eventsRecorder.assertSingle(ChangeRolesEvent.Save)
+    }
+
+    @Test
     fun `save confirmation dialog - cancel removes the dialog`() {
         val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
         rule.setChangeRolesContent(
@@ -304,11 +307,13 @@ class ChangeRolesViewTest {
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setChangeRolesContent(
         state: ChangeRolesState,
         onBackClick: () -> Unit = EnsureNeverCalled(),
+        onSaveChanges: (() -> Unit)? = null,
     ) {
         setContent {
             ChangeRolesView(
                 state = state,
                 navigateUp = onBackClick,
+                onSaveChanges = onSaveChanges,
             )
         }
     }
