@@ -140,9 +140,9 @@ enum class FeatureFlags(
     MediaUploadOnSendQueue(
         key = "feature.media_upload_through_send_queue",
         title = "Media upload through send queue",
-        description = "Experimental support for treating media uploads as regular events, with an improved retry and cancellation implementation.",
-        defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
-        isFinished = false,
+        description = "Support for treating media uploads as regular events, with an improved retry and cancellation implementation.",
+        defaultValue = { true },
+        isFinished = true,
     ),
     MediaCaptionCreation(
         key = "feature.media_caption_creation",
