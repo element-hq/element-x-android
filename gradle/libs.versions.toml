@@ -30,7 +30,7 @@ coroutines = "1.10.2"
 accompanist = "0.37.3"
 
 # Test
-test_core = "1.6.1"
+test_core = "1.7.0"
 
 # Jetbrain
 datetime = "0.7.1"
