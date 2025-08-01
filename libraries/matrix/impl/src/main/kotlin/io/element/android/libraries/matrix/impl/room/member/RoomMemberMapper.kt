@@ -10,29 +10,42 @@ package io.element.android.libraries.matrix.impl.room.member
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.impl.room.powerlevels.into
 import uniffi.matrix_sdk.RoomMemberRole
 import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
 import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 object RoomMemberMapper {
-    fun map(roomMember: RustRoomMember): RoomMember = RoomMember(
-        userId = UserId(roomMember.userId),
-        displayName = roomMember.displayName,
-        avatarUrl = roomMember.avatarUrl,
-        membership = mapMembership(roomMember.membership),
-        isNameAmbiguous = roomMember.isNameAmbiguous,
-        powerLevel = roomMember.powerLevel,
-        normalizedPowerLevel = roomMember.normalizedPowerLevel,
-        isIgnored = roomMember.isIgnored,
-        role = mapRole(roomMember.suggestedRoleForPowerLevel),
-        membershipChangeReason = roomMember.membershipChangeReason
-    )
+    fun map(roomMember: RustRoomMember): RoomMember {
+        val powerLevel = roomMember.powerLevel.into()
+        return RoomMember(
+            userId = UserId(roomMember.userId),
+            displayName = roomMember.displayName,
+            avatarUrl = roomMember.avatarUrl,
+            membership = mapMembership(roomMember.membership),
+            isNameAmbiguous = roomMember.isNameAmbiguous,
+            powerLevel = powerLevel,
+            normalizedPowerLevel = roomMember.normalizedPowerLevel.into(),
+            isIgnored = roomMember.isIgnored,
+            role = mapRole(roomMember.suggestedRoleForPowerLevel, powerLevel),
+            membershipChangeReason = roomMember.membershipChangeReason
+        )
+    }
 
-    fun mapRole(role: RoomMemberRole): RoomMember.Role =
+    fun mapRole(role: RoomMemberRole, powerLevel: Long?): RoomMember.Role =
         when (role) {
-            RoomMemberRole.ADMINISTRATOR -> RoomMember.Role.ADMIN
-            RoomMemberRole.MODERATOR -> RoomMember.Role.MODERATOR
-            RoomMemberRole.USER -> RoomMember.Role.USER
+            RoomMemberRole.CREATOR -> RoomMember.Role.Owner(isCreator = true)
+            RoomMemberRole.ADMINISTRATOR -> {
+                val superAdmin = RoomMember.Role.Owner(isCreator = false)
+                val powerLevelOrDefault = powerLevel ?: 0L
+                if (powerLevelOrDefault >= superAdmin.powerLevel) {
+                    superAdmin
+                } else {
+                    RoomMember.Role.Admin
+                }
+            }
+            RoomMemberRole.MODERATOR -> RoomMember.Role.Moderator
+            RoomMemberRole.USER -> RoomMember.Role.User
         }
 
     fun mapMembership(membershipState: RustMembershipState): RoomMembershipState =

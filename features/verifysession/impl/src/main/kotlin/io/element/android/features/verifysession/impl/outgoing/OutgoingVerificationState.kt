@@ -29,5 +29,11 @@ data class OutgoingVerificationState(
         data class Verifying(val data: SessionVerificationData, val state: AsyncData<Unit>) : Step
         data object Completed : Step
         data object Exit : Step
+
+        val isTimeLimited: Boolean
+            get() = this is Initial ||
+                this is AwaitingOtherDeviceResponse ||
+                this is Ready ||
+                this is Verifying
     }
 }

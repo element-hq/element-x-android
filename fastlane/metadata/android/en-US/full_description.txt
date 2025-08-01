@@ -22,7 +22,7 @@ Choose where to host your data - from any public server (the largest free server
 Use Element everywhere. Stay in touch wherever you are with fully synchronised message history across all your devices, including on the web at https://app.element.io
 
 <b>Element X is our next-generation app</b>
-If you’re using the original Element app, it’s time to try Element X! It’s faster, easier to use, and more powerful than the original app. It’s better in every way and we’re adding new features all the time.
+If you’re using the previous-generation Element Classic app, it’s time to try Element X! It’s faster, easier to use, and more powerful than the classic app. It’s better in every way and we’re adding new features all the time.
 
 The application requires the android.permission.REQUEST_INSTALL_PACKAGES permission to enable the installation of applications received as attachments, ensuring seamless and convenient access to new software within the app.
 

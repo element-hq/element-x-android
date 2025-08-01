@@ -12,6 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
+import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -23,6 +24,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -43,7 +45,7 @@ class ChangeRolesPresenterTest {
             presenter.present()
         }.test {
             with(awaitItem()) {
-                assertThat(role).isEqualTo(RoomMember.Role.ADMIN)
+                assertThat(role).isEqualTo(RoomMember.Role.Admin)
                 assertThat(query).isNull()
                 assertThat(isSearchActive).isFalse()
                 assertThat(searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
@@ -67,6 +69,76 @@ class ChangeRolesPresenterTest {
         }.test {
             skipItems(1)
             assertThat(awaitItem().searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
+        }
+    }
+
+    @Test
+    fun `present - canChangeRole of users with lower power level unless they are owners`() = runTest {
+        val creatorUserId = UserId("@creator:matrix.org")
+        val superAdminUserId = UserId("@super_admin:matrix.org")
+
+        val room = FakeJoinedRoom().apply {
+            // User is a creator, so they can change roles of other members. So is `creatorUserId`.
+            givenRoomInfo(
+                aRoomInfo(
+                    roomCreators = listOf(sessionId, creatorUserId),
+                    roomPowerLevels = RoomPowerLevels(
+                        defaultRoomPowerLevelValues(),
+                        users = persistentMapOf(
+                            // bob is Admin
+                            A_USER_ID_2 to RoomMember.Role.Admin.powerLevel,
+                            // carol is Moderator
+                            A_USER_ID_3 to RoomMember.Role.Moderator.powerLevel,
+                            // super_admin is Owner - Superadmin
+                            superAdminUserId to RoomMember.Role.Owner(isCreator = false).powerLevel,
+                        )
+                    )
+                )
+            )
+
+            val roomMemberList = aRoomMemberList() + listOf(
+                // Owner - superadmin
+                aRoomMember(userId = superAdminUserId, role = RoomMember.Role.Owner(isCreator = true)),
+                // Owner - creator
+                aRoomMember(userId = creatorUserId, role = RoomMember.Role.Owner(isCreator = true))
+            )
+            givenRoomMembersState(RoomMembersState.Ready(roomMemberList.toPersistentList()))
+        }
+        val presenter = createChangeRolesPresenter(room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            awaitItem().run {
+                assertThat(canChangeMemberRole(A_USER_ID_2)).isTrue() // Admin
+                assertThat(canChangeMemberRole(A_USER_ID_3)).isTrue() // Moderator
+                assertThat(canChangeMemberRole(creatorUserId)).isFalse() // Owner
+            }
+        }
+    }
+
+    @Test
+    fun `present - when modifying admins, creators are displayed too`() = runTest {
+        val room = FakeJoinedRoom().apply {
+            val creatorUserId = UserId("@creator:matrix.org")
+            val memberList = aRoomMemberList()
+                .plus(aRoomMember(displayName = "CREATOR", role = RoomMember.Role.Owner(isCreator = true), userId = creatorUserId))
+                .toPersistentList()
+            givenRoomInfo(aRoomInfo(roomCreators = listOf(creatorUserId)))
+            givenRoomMembersState(RoomMembersState.Ready(memberList))
+        }
+        val presenter = createChangeRolesPresenter(room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            awaitItem().searchResults.run {
+                assertThat(this).isInstanceOf(SearchBarResultState.Results::class.java)
+                val results = (this as SearchBarResultState.Results).results
+                assertThat(results.admins).isNotEmpty()
+                assertThat(results.owners).isNotEmpty()
+                assertThat(results.owners.last().role).isEqualTo(RoomMember.Role.Owner(isCreator = true))
+            }
         }
     }
 
@@ -145,7 +217,7 @@ class ChangeRolesPresenterTest {
     fun `present - UserSelectionToggle adds and removes users from the selected user list`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -167,7 +239,7 @@ class ChangeRolesPresenterTest {
     fun `present - hasPendingChanges is true when the initial selected users don't match the new ones`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -196,7 +268,7 @@ class ChangeRolesPresenterTest {
     fun `present - Exit will display success if no pending changes`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -216,7 +288,7 @@ class ChangeRolesPresenterTest {
     fun `present - CancelExit will remove exit confirmation`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -242,7 +314,7 @@ class ChangeRolesPresenterTest {
     fun `present - Exit will display a confirmation dialog if there are pending changes, calling it again will actually exit`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -273,9 +345,9 @@ class ChangeRolesPresenterTest {
             baseRoom = FakeBaseRoom(updateMembersResult = { Result.success(Unit) }),
         ).apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
         }
-        val presenter = createChangeRolesPresenter(role = RoomMember.Role.ADMIN, room = room)
+        val presenter = createChangeRolesPresenter(role = RoomMember.Role.Admin, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -302,9 +374,9 @@ class ChangeRolesPresenterTest {
     fun `present - CancelSave will remove the confirmation dialog`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.ADMIN)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
         }
-        val presenter = createChangeRolesPresenter(role = RoomMember.Role.ADMIN, room = room)
+        val presenter = createChangeRolesPresenter(role = RoomMember.Role.Admin, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -331,10 +403,10 @@ class ChangeRolesPresenterTest {
             baseRoom = FakeBaseRoom(updateMembersResult = { Result.success(Unit) }),
         ).apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.MODERATOR)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Moderator)))
         }
         val presenter = createChangeRolesPresenter(
-            role = RoomMember.Role.MODERATOR,
+            role = RoomMember.Role.Moderator,
             room = room,
             analyticsService = analyticsService
         )
@@ -359,14 +431,54 @@ class ChangeRolesPresenterTest {
     }
 
     @Test
+    fun `present - Save will just save the changes if the current user is a room creator and the selected users are not`() = runTest {
+        val analyticsService = FakeAnalyticsService()
+        val room = FakeJoinedRoom(
+            updateUserRoleResult = { Result.success(Unit) },
+            baseRoom = FakeBaseRoom(updateMembersResult = { Result.success(Unit) }),
+        ).apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
+            givenRoomInfo(
+                aRoomInfo(
+                    roomCreators = listOf(sessionId),
+                    roomPowerLevels = roomPowerLevelsWithRole(role = RoomMember.Role.Admin, userId = A_USER_ID_2)
+                )
+            )
+        }
+        val presenter = createChangeRolesPresenter(
+            role = RoomMember.Role.Admin,
+            room = room,
+            analyticsService = analyticsService
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.selectedUsers).hasSize(1)
+
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
+
+            awaitItem().eventSink(ChangeRolesEvent.Save)
+
+            val loadingState = awaitItem()
+            assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
+            skipItems(1)
+
+            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.User))
+        }
+    }
+
+    @Test
     fun `present - Save can handle failures and ClearError clears them`() = runTest {
         val room = FakeJoinedRoom(
             updateUserRoleResult = { Result.failure(IllegalStateException("Failed")) }
         ).apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
-            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.MODERATOR)))
+            givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(role = RoomMember.Role.Moderator, userId = A_USER_ID)))
         }
-        val presenter = createChangeRolesPresenter(role = RoomMember.Role.MODERATOR, room = room)
+        val presenter = createChangeRolesPresenter(role = RoomMember.Role.Moderator, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -399,7 +511,7 @@ class ChangeRolesPresenterTest {
     }
 
     private fun TestScope.createChangeRolesPresenter(
-        role: RoomMember.Role = RoomMember.Role.ADMIN,
+        role: RoomMember.Role = RoomMember.Role.Admin,
         room: FakeJoinedRoom = FakeJoinedRoom(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),

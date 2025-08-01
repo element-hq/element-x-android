@@ -128,7 +128,11 @@ class RustBaseRoom(
 
     override suspend fun userRole(userId: UserId): Result<RoomMember.Role> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            RoomMemberMapper.mapRole(innerRoom.suggestedRoleForUser(userId.value))
+            val powerLevel = roomInfoFlow.value.roomPowerLevels?.powerLevelOf(userId) ?: 0L
+            RoomMemberMapper.mapRole(
+                role = innerRoom.suggestedRoleForUser(userId.value),
+                powerLevel = powerLevel,
+            )
         }
     }
 
@@ -293,7 +297,7 @@ class RustBaseRoom(
     override suspend fun reportRoom(reason: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
             Timber.d("reportRoom $roomId")
-            innerRoom.reportRoom(reason)
+            innerRoom.reportRoom(reason.orEmpty())
         }
     }
 }

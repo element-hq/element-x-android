@@ -200,6 +200,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                     loginHint = loginHint,
                     // If we want to restore a previous session for which we have encryption keys, we can pass the deviceId here. At the moment, we don't
                     deviceId = null,
+                    additionalScopes = emptyList(),
                 )
                 val url = oAuthAuthorizationData.loginUrl()
                 pendingOAuthAuthorizationData = oAuthAuthorizationData

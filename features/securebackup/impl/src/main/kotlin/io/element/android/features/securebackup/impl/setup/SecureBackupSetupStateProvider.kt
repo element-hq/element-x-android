@@ -23,6 +23,7 @@ open class SecureBackupSetupStateProvider : PreviewParameterProvider<SecureBacku
                 setupState = SetupState.CreatedAndSaved(aFormattedRecoveryKey()),
                 showSaveConfirmationDialog = true,
             ),
+            aSecureBackupSetupState(setupState = SetupState.Error(Exception("Test error"))),
             // Add other states here
         )
 }

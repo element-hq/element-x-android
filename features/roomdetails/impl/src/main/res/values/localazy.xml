@@ -28,6 +28,7 @@
   <string name="screen_room_change_role_invited_member_name">"%1$s (Pending)"</string>
   <string name="screen_room_change_role_invited_member_name_android">"(Pending)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Admins automatically have moderator privileges"</string>
+  <string name="screen_room_change_role_moderators_owner_section_footer">"Owners automatically have admin privileges."</string>
   <string name="screen_room_change_role_moderators_title">"Edit Moderators"</string>
   <string name="screen_room_change_role_section_administrators">"Admins"</string>
   <string name="screen_room_change_role_section_moderators">"Moderators"</string>
@@ -81,6 +82,7 @@
   <string name="screen_room_member_list_pending_header_title">"Pending"</string>
   <string name="screen_room_member_list_role_administrator">"Admin"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
+  <string name="screen_room_member_list_role_owner">"Owner"</string>
   <string name="screen_room_member_list_room_members_header_title">"Room members"</string>
   <string name="screen_room_member_list_unbanning_user">"Unbanning %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Allow custom setting"</string>
@@ -98,12 +100,14 @@
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In this room, notify me for"</string>
   <string name="screen_room_roles_and_permissions_admins">"Admins"</string>
+  <string name="screen_room_roles_and_permissions_admins_and_owners">"Admins and owners"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Change my role"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_member">"Demote to member"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_moderator">"Demote to moderator"</string>
   <string name="screen_room_roles_and_permissions_member_moderation">"Member moderation"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Messages and content"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderators"</string>
+  <string name="screen_room_roles_and_permissions_owners">"Owners"</string>
   <string name="screen_room_roles_and_permissions_permissions_header">"Permissions"</string>
   <string name="screen_room_roles_and_permissions_reset">"Reset permissions"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Once you reset permissions, you will lose the current settings."</string>

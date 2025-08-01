@@ -80,21 +80,21 @@ fun ChangeRoomPermissionsView(
                     ListSectionHeader(titleForSection(item = permissionItem), hasDivider = index > 0)
                     SelectRoleItem(
                         permissionsItem = permissionItem,
-                        role = RoomMember.Role.ADMIN,
+                        role = RoomMember.Role.Admin,
                         currentPermissions = state.currentPermissions
                     ) { item, role ->
                         state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
                     }
                     SelectRoleItem(
                         permissionsItem = permissionItem,
-                        role = RoomMember.Role.MODERATOR,
+                        role = RoomMember.Role.Moderator,
                         currentPermissions = state.currentPermissions
                     ) { item, role ->
                         state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
                     }
                     SelectRoleItem(
                         permissionsItem = permissionItem,
-                        role = RoomMember.Role.USER,
+                        role = RoomMember.Role.User,
                         currentPermissions = state.currentPermissions
                     ) { item, role ->
                         state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
@@ -135,9 +135,10 @@ private fun SelectRoleItem(
     onClick: (RoomPermissionType, RoomMember.Role) -> Unit
 ) {
     val title = when (role) {
-        RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_change_permissions_administrators)
-        RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_change_permissions_moderators)
-        RoomMember.Role.USER -> stringResource(R.string.screen_room_change_permissions_everyone)
+        RoomMember.Role.Admin -> stringResource(R.string.screen_room_change_permissions_administrators)
+        RoomMember.Role.Moderator -> stringResource(R.string.screen_room_change_permissions_moderators)
+        RoomMember.Role.User -> stringResource(R.string.screen_room_change_permissions_everyone)
+        else -> error("Unsupported role selected: $role")
     }
     ListItem(
         headlineContent = { Text(text = title) },

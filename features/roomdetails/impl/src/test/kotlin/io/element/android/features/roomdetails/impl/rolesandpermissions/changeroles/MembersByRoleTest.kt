@@ -14,6 +14,8 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
 import io.element.android.libraries.matrix.test.A_USER_ID_5
+import io.element.android.libraries.matrix.test.A_USER_ID_6
+import io.element.android.libraries.matrix.test.A_USER_ID_7
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
@@ -22,22 +24,28 @@ class MembersByRoleTest {
     @Test
     fun `constructor - with single member list categorizes and sorts members`() {
         val members = listOf(
-            aRoomMember(A_USER_ID_2, displayName = "Bob", role = RoomMember.Role.ADMIN),
-            aRoomMember(A_USER_ID, displayName = "Alice", role = RoomMember.Role.ADMIN),
-            aRoomMember(A_USER_ID_3, displayName = "Carol", role = RoomMember.Role.USER),
-            aRoomMember(A_USER_ID_5, displayName = "Eve", role = RoomMember.Role.USER),
-            aRoomMember(A_USER_ID_4, displayName = "David", role = RoomMember.Role.USER),
+            aRoomMember(A_USER_ID_2, displayName = "Bob", role = RoomMember.Role.Admin),
+            aRoomMember(A_USER_ID, displayName = "Alice", role = RoomMember.Role.Admin),
+            aRoomMember(A_USER_ID_3, displayName = "Carol", role = RoomMember.Role.User),
+            aRoomMember(A_USER_ID_5, displayName = "Eve", role = RoomMember.Role.User),
+            aRoomMember(A_USER_ID_4, displayName = "David", role = RoomMember.Role.User),
+            aRoomMember(A_USER_ID_6, displayName = "Justin", role = RoomMember.Role.Owner(isCreator = true)),
+            aRoomMember(A_USER_ID_7, displayName = "Mallory", role = RoomMember.Role.Owner(isCreator = false)),
         )
         val membersByRole = MembersByRole(members = members)
+        assertThat(membersByRole.owners).containsExactly(
+            aRoomMember(A_USER_ID_6, displayName = "Justin", role = RoomMember.Role.Owner(isCreator = true)),
+            aRoomMember(A_USER_ID_7, displayName = "Mallory", role = RoomMember.Role.Owner(isCreator = false)),
+        )
         assertThat(membersByRole.admins).containsExactly(
-            aRoomMember(A_USER_ID, displayName = "Alice", role = RoomMember.Role.ADMIN),
-            aRoomMember(A_USER_ID_2, displayName = "Bob", role = RoomMember.Role.ADMIN),
+            aRoomMember(A_USER_ID, displayName = "Alice", role = RoomMember.Role.Admin),
+            aRoomMember(A_USER_ID_2, displayName = "Bob", role = RoomMember.Role.Admin),
         )
         assertThat(membersByRole.moderators).isEmpty()
         assertThat(membersByRole.members).containsExactly(
-            aRoomMember(A_USER_ID_3, displayName = "Carol", role = RoomMember.Role.USER),
-            aRoomMember(A_USER_ID_4, displayName = "David", role = RoomMember.Role.USER),
-            aRoomMember(A_USER_ID_5, displayName = "Eve", role = RoomMember.Role.USER),
+            aRoomMember(A_USER_ID_3, displayName = "Carol", role = RoomMember.Role.User),
+            aRoomMember(A_USER_ID_4, displayName = "David", role = RoomMember.Role.User),
+            aRoomMember(A_USER_ID_5, displayName = "Eve", role = RoomMember.Role.User),
         )
     }
 
@@ -46,24 +54,35 @@ class MembersByRoleTest {
         val emptyMembersByRole = MembersByRole(emptyList())
         assertThat(emptyMembersByRole.isEmpty()).isTrue()
 
+        val membersByRoleWithOwners = MembersByRole(
+            owners = persistentListOf(aRoomMember(A_USER_ID, role = RoomMember.Role.Admin)),
+            admins = persistentListOf(),
+            moderators = persistentListOf(),
+            members = persistentListOf(),
+        )
+        assertThat(membersByRoleWithOwners.isEmpty()).isFalse()
+
         val membersByRoleWithAdmins = MembersByRole(
-            admins = persistentListOf(aRoomMember(A_USER_ID, role = RoomMember.Role.ADMIN)),
+            owners = persistentListOf(),
+            admins = persistentListOf(aRoomMember(A_USER_ID, role = RoomMember.Role.Admin)),
             moderators = persistentListOf(),
             members = persistentListOf(),
         )
         assertThat(membersByRoleWithAdmins.isEmpty()).isFalse()
 
         val membersByRoleWithModerators = MembersByRole(
+            owners = persistentListOf(),
             admins = persistentListOf(),
-            moderators = persistentListOf(aRoomMember(A_USER_ID, role = RoomMember.Role.MODERATOR)),
+            moderators = persistentListOf(aRoomMember(A_USER_ID, role = RoomMember.Role.Moderator)),
             members = persistentListOf(),
         )
         assertThat(membersByRoleWithModerators.isEmpty()).isFalse()
 
         val membersByRoleWithMembers = MembersByRole(
+            owners = persistentListOf(),
             admins = persistentListOf(),
             moderators = persistentListOf(),
-            members = persistentListOf(aRoomMember(A_USER_ID, role = RoomMember.Role.USER)),
+            members = persistentListOf(aRoomMember(A_USER_ID, role = RoomMember.Role.User)),
         )
         assertThat(membersByRoleWithMembers.isEmpty()).isFalse()
     }

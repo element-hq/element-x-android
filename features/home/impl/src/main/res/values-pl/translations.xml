@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Wyłącz optymalizację baterii dla tej aplikacji, aby upewnić się, że wszystkie powiadomienia są odbierane."</string>
+  <string name="banner_battery_optimization_submit_android">"Wyłącz optymalizację"</string>
+  <string name="banner_battery_optimization_title_android">"Powiadomienia nie dochodzą?"</string>
   <string name="banner_set_up_recovery_content">"Wygeneruj nowy klucz przywracania, którego można użyć do przywrócenia historii wiadomości szyfrowanych w przypadku utraty dostępu do swoich urządzeń."</string>
   <string name="banner_set_up_recovery_submit">"Skonfiguruj przywracanie"</string>
   <string name="banner_set_up_recovery_title">"Skonfiguruj przywracanie"</string>
@@ -9,6 +12,8 @@
   <string name="confirm_recovery_key_banner_title">"Magazyn kluczy nie jest zsynchronizowany"</string>
   <string name="full_screen_intent_banner_message">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
   <string name="full_screen_intent_banner_title">"Popraw jakość swoich rozmów"</string>
+  <string name="screen_home_tab_chats">"Czaty"</string>
+  <string name="screen_home_tab_spaces">"Przestrzenie"</string>
   <string name="screen_invites_decline_chat_message">"Czy na pewno chcesz odrzucić zaproszenie dołączenia do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odrzuć zaproszenie"</string>
   <string name="screen_invites_decline_direct_chat_message">"Czy na pewno chcesz odrzucić rozmowę prywatną z %1$s?"</string>
@@ -18,6 +23,7 @@
   <string name="screen_migration_message">"Jest to jednorazowy proces, dziękujemy za czekanie."</string>
   <string name="screen_migration_title">"Konfigurowanie Twojego konta."</string>
   <string name="screen_roomlist_a11y_create_message">"Utwórz nową rozmowę lub pokój"</string>
+  <string name="screen_roomlist_clear_filters">"Wyczyść filtry"</string>
   <string name="screen_roomlist_empty_message">"Wyślij komuś wiadomość, aby rozpocząć."</string>
   <string name="screen_roomlist_empty_title">"Brak czatów."</string>
   <string name="screen_roomlist_filter_favourites">"Ulubione"</string>
@@ -40,6 +46,7 @@ Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_roomlist_main_space_title">"Wszystkie czaty"</string>
   <string name="screen_roomlist_mark_as_read">"Oznacz jako przeczytane"</string>
   <string name="screen_roomlist_mark_as_unread">"Oznacz jako nieprzeczytane"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Ten pokój został ulepszony"</string>
   <string name="session_verification_banner_message">"Wygląda na to, że używasz nowego urządzenia. Zweryfikuj się innym urządzeniem, aby uzyskać dostęp do zaszyfrowanych wiadomości."</string>
   <string name="session_verification_banner_title">"Potwierdź, że to Ty"</string>
 </resources>

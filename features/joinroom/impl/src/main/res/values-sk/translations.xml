@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Pripojiť sa do miestnosti"</string>
   <string name="screen_join_room_join_restricted_message">"Možno budete musieť byť pozvaní alebo byť členom priestoru, aby ste sa mohli pripojiť."</string>
   <string name="screen_join_room_knock_action">"Zaklopaním sa pripojíte"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Povolené znaky %1$d z %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Správa (voliteľné)"</string>
   <string name="screen_join_room_knock_sent_description">"Ak bude vaša žiadosť prijatá, dostanete pozvánku na vstup do miestnosti."</string>
   <string name="screen_join_room_knock_sent_title">"Žiadosť o pripojenie bola odoslaná"</string>

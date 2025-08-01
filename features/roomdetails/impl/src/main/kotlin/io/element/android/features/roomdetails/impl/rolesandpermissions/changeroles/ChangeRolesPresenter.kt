@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.model.roleOf
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
@@ -74,18 +75,17 @@ class ChangeRolesPresenter @AssistedInject constructor(
         val exitState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val saveState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val usersWithRole = produceState(initialValue = persistentListOf()) {
-            room.usersWithRole(role)
-                .map { members -> members.map { it.toMatrixUser() } }
-                .onEach { users ->
-                    val previous: PersistentList<MatrixUser> = value
-                    value = users.toPersistentList()
-                    // Users who were selected but didn't have the role, so their role change was pending
-                    val toAdd = selectedUsers.value.filter { user -> users.none { it.userId == user.userId } && previous.none { it.userId == user.userId } }
-                    // Users who no longer have the role
-                    val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }.toSet()
-                    selectedUsers.value = (users + toAdd - toRemove).toImmutableList()
-                }
-                .launchIn(this)
+            room.usersWithRole(role).map { members -> members.map { it.toMatrixUser() } }
+                    .onEach { users ->
+                        val previous: PersistentList<MatrixUser> = value
+                        value = users.toPersistentList()
+                        // Users who were selected but didn't have the role, so their role change was pending
+                        val toAdd = selectedUsers.value.filter { user -> users.none { it.userId == user.userId } && previous.none { it.userId == user.userId } }
+                        // Users who no longer have the role
+                        val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }.toSet()
+                        selectedUsers.value = (users + toAdd - toRemove).toImmutableList()
+                    }
+                    .launchIn(this)
         }
 
         val roomMemberState by room.membersStateFlow.collectAsState()
@@ -96,7 +96,6 @@ class ChangeRolesPresenter @AssistedInject constructor(
                 .search(query.orEmpty())
                 .groupedByRole()
 
-            println(results)
             searchResults = if (results.isEmpty()) {
                 SearchBarResultState.NoResultsFound()
             } else {
@@ -108,9 +107,10 @@ class ChangeRolesPresenter @AssistedInject constructor(
 
         val roomInfo by room.roomInfoFlow.collectAsState()
         fun canChangeMemberRole(userId: UserId): Boolean {
-            // An admin can't remove or demote another admin
-            val powerLevel = roomInfo.roomPowerLevels?.users?.get(userId) ?: 0L
-            return RoomMember.Role.forPowerLevel(powerLevel) != RoomMember.Role.ADMIN
+            // This is used to group the
+            val currentUserRole = roomInfo.roleOf(room.sessionId)
+            val otherUserRole = roomInfo.roleOf(userId)
+            return currentUserRole.powerLevel > otherUserRole.powerLevel
         }
 
         fun handleEvent(event: ChangeRolesEvent) {
@@ -132,11 +132,21 @@ class ChangeRolesPresenter @AssistedInject constructor(
                     selectedUsers.value = newList.toImmutableList()
                 }
                 is ChangeRolesEvent.Save -> {
-                    if (role == RoomMember.Role.ADMIN && selectedUsers != usersWithRole && !saveState.value.isConfirming()) {
-                        // Confirm adding admin
-                        saveState.value = AsyncAction.ConfirmingNoParams
-                    } else if (!saveState.value.isLoading()) {
-                        coroutineScope.save(usersWithRole.value, selectedUsers, saveState)
+                    val currentUserIsAdmin = roomInfo.roleOf(room.sessionId) == RoomMember.Role.Admin
+                    val isModifyingAdmins = role == RoomMember.Role.Admin
+                    val hasChanges = selectedUsers != usersWithRole
+                    val isConfirming = saveState.value.isConfirming()
+
+                    val needsConfirmation = currentUserIsAdmin && isModifyingAdmins && hasChanges && !isConfirming
+
+                    when {
+                        needsConfirmation -> {
+                            // Confirm modifying users
+                            saveState.value = AsyncAction.ConfirmingNoParams
+                        }
+                        !saveState.value.isLoading() -> {
+                            coroutineScope.save(usersWithRole.value, selectedUsers, saveState)
+                        }
                     }
                 }
                 is ChangeRolesEvent.ClearError -> {
@@ -174,10 +184,12 @@ class ChangeRolesPresenter @AssistedInject constructor(
     }
 
     private fun List<RoomMember>.groupedByRole(): MembersByRole {
+        val groupedMembers = MembersByRole(this)
         return MembersByRole(
-            admins = filter { it.role == RoomMember.Role.ADMIN }.sorted(),
-            moderators = filter { it.role == RoomMember.Role.MODERATOR }.sorted(),
-            members = filter { it.role == RoomMember.Role.USER }.sorted(),
+            owners = groupedMembers.owners.sorted(),
+            admins = groupedMembers.admins.sorted(),
+            moderators = groupedMembers.moderators.sorted(),
+            members = groupedMembers.members.sorted(),
         )
     }
 
@@ -202,7 +214,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
             }
             for (selectedUser in toRemove) {
                 analyticsService.capture(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.User))
-                add(UserRoleChange(selectedUser.userId, RoomMember.Role.USER))
+                add(UserRoleChange(selectedUser.userId, RoomMember.Role.User))
             }
         }
 

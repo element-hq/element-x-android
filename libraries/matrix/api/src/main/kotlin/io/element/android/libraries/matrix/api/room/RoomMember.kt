@@ -25,17 +25,34 @@ data class RoomMember(
     /**
      * Role of the RoomMember, based on its [powerLevel].
      */
-    enum class Role(val powerLevel: Long) {
-        ADMIN(100L),
-        MODERATOR(50L),
-        USER(0L);
+    sealed interface Role {
+        data class Owner(val isCreator: Boolean) : Role
+        data object Admin : Role
+        data object Moderator : Role
+        data object User : Role
+
+        val powerLevel: Long
+            get() = when (this) {
+                is Owner -> if (isCreator) CREATOR_POWERLEVEL else SUPERADMIN_POWERLEVEL
+                Admin -> ADMIN_POWERLEVEL
+                Moderator -> MODERATOR_POWERLEVEL
+                User -> USER_POWERLEVEL
+            }
 
         companion object {
+            private const val CREATOR_POWERLEVEL = Long.MAX_VALUE
+            private const val SUPERADMIN_POWERLEVEL = 150L
+            private const val ADMIN_POWERLEVEL = 100L
+            private const val MODERATOR_POWERLEVEL = 50L
+            private const val USER_POWERLEVEL = 0L
+
             fun forPowerLevel(powerLevel: Long): Role {
                 return when {
-                    powerLevel >= ADMIN.powerLevel -> ADMIN
-                    powerLevel >= MODERATOR.powerLevel -> MODERATOR
-                    else -> USER
+                    powerLevel == CREATOR_POWERLEVEL -> Owner(isCreator = true)
+                    powerLevel >= SUPERADMIN_POWERLEVEL -> Owner(isCreator = false)
+                    powerLevel >= ADMIN_POWERLEVEL -> Admin
+                    powerLevel >= MODERATOR_POWERLEVEL -> Moderator
+                    else -> User
                 }
             }
         }

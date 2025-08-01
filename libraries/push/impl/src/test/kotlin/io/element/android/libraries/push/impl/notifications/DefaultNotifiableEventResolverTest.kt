@@ -625,6 +625,7 @@ class DefaultNotifiableEventResolverTest {
                 isRedacted = false,
                 isUpdated = false,
                 timestamp = A_FAKE_TIMESTAMP,
+                cause = "Unable to decrypt event content",
             )
         )
         assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))

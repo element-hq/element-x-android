@@ -140,9 +140,9 @@ enum class FeatureFlags(
     MediaUploadOnSendQueue(
         key = "feature.media_upload_through_send_queue",
         title = "Media upload through send queue",
-        description = "Experimental support for treating media uploads as regular events, with an improved retry and cancellation implementation.",
-        defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
-        isFinished = false,
+        description = "Support for treating media uploads as regular events, with an improved retry and cancellation implementation.",
+        defaultValue = { true },
+        isFinished = true,
     ),
     MediaCaptionCreation(
         key = "feature.media_caption_creation",
@@ -176,11 +176,11 @@ enum class FeatureFlags(
         isFinished = false,
     ),
     SharePos(
-        key = "feature.share_pos",
+        key = "feature.share_pos_v2",
         title = "Share pos in sliding sync",
         description = "Keep the sliding sync pos to make initial syncs faster. Requires an app restart to take effect." +
             "\n\nWARNING: this may cause issues with syncs.",
-        defaultValue = { false },
+        defaultValue = { true },
         // False so it's displayed in the developer options screen
         isFinished = false,
     ),

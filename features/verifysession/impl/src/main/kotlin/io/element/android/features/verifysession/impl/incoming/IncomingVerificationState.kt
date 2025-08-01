@@ -36,5 +36,9 @@ data class IncomingVerificationState(
         data object Canceled : Step
         data object Completed : Step
         data object Failure : Step
+
+        val isTimeLimited: Boolean
+            get() = this is Initial ||
+                this is Verifying
     }
 }

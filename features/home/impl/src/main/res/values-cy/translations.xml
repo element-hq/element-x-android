@@ -12,6 +12,8 @@
   <string name="confirm_recovery_key_banner_title">"Dyw eich allwedd storfa heb ei gydweddu"</string>
   <string name="full_screen_intent_banner_message">"Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi\'i gloi."</string>
   <string name="full_screen_intent_banner_title">"Gwella profiad eich galwadau"</string>
+  <string name="screen_home_tab_chats">"Sgyrsiau"</string>
+  <string name="screen_home_tab_spaces">"Gofodau"</string>
   <string name="screen_invites_decline_chat_message">"Ydych chi\'n siŵr eich bod am wrthod y gwahoddiad i ymuno â %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Gwrthod y gwahoddiad"</string>
   <string name="screen_invites_decline_direct_chat_message">"Ydych chi\'n siŵr eich bod am wrthod y sgwrs breifat hon gyda %1$s?"</string>

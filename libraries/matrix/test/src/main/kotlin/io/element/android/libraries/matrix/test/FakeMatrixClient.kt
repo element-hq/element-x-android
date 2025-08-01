@@ -84,7 +84,7 @@ class FakeMatrixClient(
     private val getNotJoinedRoomResult: (RoomIdOrAlias, List<String>) -> Result<NotJoinedRoom> = { _, _ -> lambdaError() },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
-    private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
+    private val getUrlLambda: (String) -> Result<ByteArray> = { lambdaError() },
     private val canDeactivateAccountResult: () -> Boolean = { lambdaError() },
     private val deactivateAccountResult: (String, Boolean) -> Result<Unit> = { _, _ -> lambdaError() },
     private val currentSlidingSyncVersionLambda: () -> Result<SlidingSyncVersion> = { lambdaError() },
@@ -324,7 +324,7 @@ class FakeMatrixClient(
         return userIdServerNameLambda()
     }
 
-    override suspend fun getUrl(url: String): Result<String> {
+    override suspend fun getUrl(url: String): Result<ByteArray> {
         return getUrlLambda(url)
     }
 

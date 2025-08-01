@@ -48,7 +48,6 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
@@ -610,7 +609,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: ReplyParameters, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -1100,7 +1099,7 @@ class MessageComposerPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - send messages with intentional mentions`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: ReplyParameters, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
             Result.success(Unit)
         }
         val editMessageLambda = lambdaRecorder { _: EventOrTransactionId, _: String, _: String?, _: List<IntentionalMention> ->

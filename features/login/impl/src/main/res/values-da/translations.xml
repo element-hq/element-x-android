@@ -83,7 +83,7 @@ Prøv at logge ind manuelt, eller scan QR-koden med en anden enhed."</string>
   <string name="screen_qr_code_login_start_over_button">"Begynd forfra"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Der opstod en uventet fejl. Prøv venligst igen."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Venter på din anden enhed"</string>
-  <string name="screen_qr_code_login_verify_code_subtitle">"Din kontoudbyder kan bede om følgende kode for at bekræfte login."</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"Din kontoudbyder kan bede om følgende kode for at verificere login\'et."</string>
   <string name="screen_qr_code_login_verify_code_title">"Din bekræftelseskode"</string>
   <string name="screen_server_confirmation_change_server">"Skift kontoudbyder"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"En privat server til Element-medarbejdere."</string>

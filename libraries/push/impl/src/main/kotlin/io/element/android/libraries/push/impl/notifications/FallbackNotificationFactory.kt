@@ -24,6 +24,7 @@ class FallbackNotificationFactory @Inject constructor(
         sessionId: SessionId,
         roomId: RoomId,
         eventId: EventId,
+        cause: String?,
     ): FallbackNotifiableEvent = FallbackNotifiableEvent(
         sessionId = sessionId,
         roomId = roomId,
@@ -34,5 +35,6 @@ class FallbackNotificationFactory @Inject constructor(
         isUpdated = false,
         timestamp = clock.epochMillis(),
         description = stringProvider.getString(R.string.notification_fallback_content),
+        cause = cause,
     )
 }

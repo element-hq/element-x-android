@@ -7,11 +7,19 @@
     <item quantity="one">"%1$d megadott számjegy"</item>
     <item quantity="other">"%1$d megadott számjegy"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Profilkép szerkesztése"</string>
+  <string name="a11y_edit_room_address_hint">"A teljes cím ez lesz: %1$s"</string>
+  <string name="a11y_encryption_details">"Titkosítás részletei"</string>
   <string name="a11y_hide_password">"Jelszó elrejtése"</string>
   <string name="a11y_join_call">"Csatlakozás a híváshoz"</string>
   <string name="a11y_jump_to_bottom">"Ugrás az aljára"</string>
+  <string name="a11y_move_the_map_to_my_location">"Térkép áthelyezése a jelenlegi helyre"</string>
   <string name="a11y_notifications_mentions_only">"Csak megemlítések"</string>
   <string name="a11y_notifications_muted">"Némítva"</string>
+  <string name="a11y_notifications_new_mentions">"Új említések"</string>
+  <string name="a11y_notifications_new_messages">"Új üzenetek"</string>
+  <string name="a11y_notifications_ongoing_call">"Folyamatban lévő hívás"</string>
+  <string name="a11y_other_user_avatar">"Más felhasználó profilképe"</string>
   <string name="a11y_page_n">"%1$d. oldal"</string>
   <string name="a11y_pause">"Szüneteltetés"</string>
   <string name="a11y_paused_voice_message">"Hangüzenet, időtartam:%1$s, jelenlegi pozíció:%2$s"</string>
@@ -30,15 +38,20 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Koppintson az összes megjelenítéséhez"</string>
   <string name="a11y_remove_reaction">"Reakció eltávolítása: %1$s"</string>
   <string name="a11y_remove_reaction_with">"Reakció eltávolítása: %1$s"</string>
+  <string name="a11y_room_avatar">"Szoba profilképe"</string>
   <string name="a11y_send_files">"Fájlküldés"</string>
   <string name="a11y_show_password">"Jelszó megjelenítése"</string>
   <string name="a11y_start_call">"Hanghívás indítása"</string>
+  <string name="a11y_time_limited_action_required">"Időkorlátos művelet szükséges"</string>
+  <string name="a11y_tombstoned_room">"Elévült szoba"</string>
+  <string name="a11y_user_avatar">"Felhasználói profilkép"</string>
   <string name="a11y_user_menu">"Felhasználói menü"</string>
   <string name="a11y_view_avatar">"Profilkép megtekintése"</string>
   <string name="a11y_view_details">"Részletek megtekintése"</string>
   <string name="a11y_voice_message">"Hangüzenet, időtartam: %1$s"</string>
   <string name="a11y_voice_message_record">"Hangüzenet felvétele."</string>
   <string name="a11y_voice_message_stop_recording">"Rögzítés leállítása"</string>
+  <string name="a11y_your_avatar">"Saját profilkép"</string>
   <string name="action_accept">"Elfogadás"</string>
   <string name="action_add_caption">"Felirat hozzáadása"</string>
   <string name="action_add_to_timeline">"Hozzáadás az idővonalhoz"</string>
@@ -97,6 +110,7 @@
   <string name="action_no">"Nem"</string>
   <string name="action_not_now">"Most nem"</string>
   <string name="action_ok">"Rendben"</string>
+  <string name="action_open_context_menu">"Helyi menü megnyitása"</string>
   <string name="action_open_settings">"Beállítások megnyitása"</string>
   <string name="action_open_with">"Megnyitás a következővel"</string>
   <string name="action_pin">"Kitűzés"</string>
@@ -121,7 +135,9 @@
   <string name="action_save">"Mentés"</string>
   <string name="action_search">"Keresés"</string>
   <string name="action_send">"Küldés"</string>
+  <string name="action_send_edited_message">"Szerkesztett üzenet küldése"</string>
   <string name="action_send_message">"Üzenet küldése"</string>
+  <string name="action_send_voice_message">"Hangüzenet küldése"</string>
   <string name="action_share">"Megosztás"</string>
   <string name="action_share_link">"Hivatkozás megosztása"</string>
   <string name="action_show">"Megjelenítés"</string>
@@ -137,6 +153,7 @@
   <string name="action_tap_for_options">"Koppintson a beállításokért"</string>
   <string name="action_try_again">"Próbálja újra"</string>
   <string name="action_unpin">"Kitűzés feloldása"</string>
+  <string name="action_view">"Megtekintés"</string>
   <string name="action_view_in_timeline">"Megtekintés az idővonalon"</string>
   <string name="action_view_source">"Forrás megtekintése"</string>
   <string name="action_yes">"Igen"</string>
@@ -353,6 +370,7 @@ Biztos, hogy folytatja?"</string>
   <string name="invite_friends_text">"Beszélgessünk itt: %1$s, %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Az eszköz rázása a hibajelentéshez"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Képernyőkép"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Lehetőségek"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Eltávolítás: %1$s"</string>

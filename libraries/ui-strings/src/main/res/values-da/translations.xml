@@ -12,6 +12,7 @@
   <string name="a11y_jump_to_bottom">"Hop til bunden"</string>
   <string name="a11y_notifications_mentions_only">"Kun omtaler"</string>
   <string name="a11y_notifications_muted">"Lyd slået fra"</string>
+  <string name="a11y_other_user_avatar">"Anden brugers avatar"</string>
   <string name="a11y_page_n">"Side %1$d"</string>
   <string name="a11y_pause">"Pausér"</string>
   <string name="a11y_paused_voice_message">"Talebesked, varighed: %1$s, aktuel position: %2$s"</string>
@@ -30,15 +31,18 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Tryk for at vise alle"</string>
   <string name="a11y_remove_reaction">"Fjern reaktion med%1$s"</string>
   <string name="a11y_remove_reaction_with">"Fjern reaktion med %1$s"</string>
+  <string name="a11y_room_avatar">"Avatar for rummet"</string>
   <string name="a11y_send_files">"Send filer"</string>
   <string name="a11y_show_password">"Vis adgangskode"</string>
   <string name="a11y_start_call">"Start et opkald"</string>
+  <string name="a11y_user_avatar">"Avatar for bruger"</string>
   <string name="a11y_user_menu">"Brugermenu"</string>
   <string name="a11y_view_avatar">"Se avatar"</string>
   <string name="a11y_view_details">"Se detaljer"</string>
   <string name="a11y_voice_message">"Talebesked, varighed: %1$s"</string>
   <string name="a11y_voice_message_record">"Optag talebesked."</string>
   <string name="a11y_voice_message_stop_recording">"Stop optagelsen"</string>
+  <string name="a11y_your_avatar">"Din avatar"</string>
   <string name="action_accept">"Accepter"</string>
   <string name="action_add_caption">"Tilføj billedtekst"</string>
   <string name="action_add_to_timeline">"Føj til tidslinje"</string>
@@ -97,6 +101,7 @@
   <string name="action_no">"Nej"</string>
   <string name="action_not_now">"Ikke nu"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Åbn kontekstmenu"</string>
   <string name="action_open_settings">"Indstillinger"</string>
   <string name="action_open_with">"Åbn med"</string>
   <string name="action_pin">"Fastgør"</string>
@@ -121,7 +126,9 @@
   <string name="action_save">"Gem"</string>
   <string name="action_search">"Søg"</string>
   <string name="action_send">"Send"</string>
+  <string name="action_send_edited_message">"Send redigeret besked"</string>
   <string name="action_send_message">"Send besked"</string>
+  <string name="action_send_voice_message">"Send talebesked"</string>
   <string name="action_share">"Del"</string>
   <string name="action_share_link">"Del link"</string>
   <string name="action_show">"Vis"</string>
@@ -137,6 +144,7 @@
   <string name="action_tap_for_options">"Tryk for indstillinger"</string>
   <string name="action_try_again">"Prøv igen"</string>
   <string name="action_unpin">"Frigør"</string>
+  <string name="action_view">"Vis"</string>
   <string name="action_view_in_timeline">"Se i tidslinjen"</string>
   <string name="action_view_source">"Se kilde"</string>
   <string name="action_yes">"Ja"</string>
@@ -300,7 +308,7 @@
   <string name="common_verification_complete">"Bekræftelse fuldført"</string>
   <string name="common_verification_failed">"Verifikation mislykkedes"</string>
   <string name="common_verified">"Verificeret"</string>
-  <string name="common_verify_device">"Bekræft enhed"</string>
+  <string name="common_verify_device">"Verificér enhed"</string>
   <string name="common_verify_identity">"Verificér identitet"</string>
   <string name="common_verify_user">"Verificér bruger"</string>
   <string name="common_video">"Video"</string>

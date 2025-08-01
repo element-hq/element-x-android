@@ -26,6 +26,9 @@ class FakeMediaPreProcessor(
     var processCallCount = 0
         private set
 
+    var cleanUpCallCount = 0
+        private set
+
     private var result: Result<MediaUploadInfo> = Result.success(
         MediaUploadInfo.AnyFile(
             File("test"),
@@ -107,5 +110,9 @@ class FakeMediaPreProcessor(
                 )
             )
         )
+    }
+
+    override fun cleanUp() {
+        cleanUpCallCount += 1
     }
 }

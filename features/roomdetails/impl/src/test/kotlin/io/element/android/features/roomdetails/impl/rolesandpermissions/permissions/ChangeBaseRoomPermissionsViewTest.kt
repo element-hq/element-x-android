@@ -115,9 +115,9 @@ class ChangeBaseRoomPermissionsViewTest {
         rule.onAllNodesWithText(users).onFirst().performClick()
         recorder.assertList(
             listOf(
-                ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.ADMIN),
-                ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.MODERATOR),
-                ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.USER),
+                ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.Admin),
+                ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.Moderator),
+                ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.User),
             )
         )
     }

@@ -272,7 +272,7 @@ class RustMatrixClient(
             ?: sessionId.value.substringAfter(":")
     }
 
-    override suspend fun getUrl(url: String): Result<String> = withContext(sessionDispatcher) {
+    override suspend fun getUrl(url: String): Result<ByteArray> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.getUrl(url)
         }
@@ -343,7 +343,7 @@ class RustMatrixClient(
                 powerLevelContentOverride = defaultRoomCreationPowerLevels.copy(
                     invite = if (createRoomParams.joinRuleOverride == JoinRule.Knock) {
                         // override the invite power level so it's the same as kick.
-                        RoomMember.Role.MODERATOR.powerLevel.toInt()
+                        RoomMember.Role.Moderator.powerLevel.toInt()
                     } else {
                         null
                     }

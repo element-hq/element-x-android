@@ -61,8 +61,8 @@ class RoomMemberModerationPresenterTest {
         val room = aJoinedRoom(
             canBan = false,
             canKick = false,
-            myUserRole = RoomMember.Role.USER,
-            targetRoomMember = aRoomMember(userId = A_USER_ID, powerLevel = RoomMember.Role.USER.powerLevel)
+            myUserRole = RoomMember.Role.User,
+            targetRoomMember = aRoomMember(userId = A_USER_ID, powerLevel = RoomMember.Role.User.powerLevel)
         )
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
@@ -81,7 +81,7 @@ class RoomMemberModerationPresenterTest {
         val room = aJoinedRoom(
             canBan = true,
             canKick = true,
-            myUserRole = RoomMember.Role.ADMIN,
+            myUserRole = RoomMember.Role.Admin,
             targetRoomMember = null
         )
         createRoomMemberModerationPresenter(room = room).test {
@@ -103,8 +103,8 @@ class RoomMemberModerationPresenterTest {
         val room = aJoinedRoom(
             canBan = true,
             canKick = true,
-            myUserRole = RoomMember.Role.ADMIN,
-            targetRoomMember = aRoomMember(userId = A_USER_ID, powerLevel = RoomMember.Role.USER.powerLevel)
+            myUserRole = RoomMember.Role.Admin,
+            targetRoomMember = aRoomMember(userId = A_USER_ID, powerLevel = RoomMember.Role.User.powerLevel)
         )
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
@@ -125,8 +125,8 @@ class RoomMemberModerationPresenterTest {
         val room = aJoinedRoom(
             canBan = true,
             canKick = true,
-            myUserRole = RoomMember.Role.MODERATOR,
-            targetRoomMember = aRoomMember(userId = A_USER_ID, powerLevel = RoomMember.Role.ADMIN.powerLevel)
+            myUserRole = RoomMember.Role.Moderator,
+            targetRoomMember = aRoomMember(userId = A_USER_ID, powerLevel = RoomMember.Role.Admin.powerLevel)
         )
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
@@ -147,7 +147,7 @@ class RoomMemberModerationPresenterTest {
         val room = aJoinedRoom(
             canBan = true,
             canKick = true,
-            myUserRole = RoomMember.Role.MODERATOR,
+            myUserRole = RoomMember.Role.Moderator,
             targetRoomMember = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.BAN)
         )
         createRoomMemberModerationPresenter(room = room).test {
@@ -321,7 +321,7 @@ class RoomMemberModerationPresenterTest {
     private fun aJoinedRoom(
         canKick: Boolean = false,
         canBan: Boolean = false,
-        myUserRole: RoomMember.Role = RoomMember.Role.USER,
+        myUserRole: RoomMember.Role = RoomMember.Role.User,
         kickUserResult: Result<Unit> = Result.success(Unit),
         banUserResult: Result<Unit> = Result.success(Unit),
         unBanUserResult: Result<Unit> = Result.success(Unit),

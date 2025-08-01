@@ -3,5 +3,6 @@
   <string name="call_foreground_service_channel_title_android">"Połączenie w trakcie"</string>
   <string name="call_foreground_service_message_android">"Stuknij, aby wrócić do rozmowy"</string>
   <string name="call_foreground_service_title_android">"☎️ Rozmowa w toku"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Call nie obsługuje korzystania z urządzeń audio Bluetooth w tej wersji Androida. Wybierz inne urządzenie audio."</string>
   <string name="screen_incoming_call_subtitle_android">"Przychodzące połączenie Element"</string>
 </resources>

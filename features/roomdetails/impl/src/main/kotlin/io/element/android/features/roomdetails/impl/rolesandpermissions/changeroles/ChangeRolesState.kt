@@ -30,17 +30,19 @@ data class ChangeRolesState(
 )
 
 data class MembersByRole(
+    val owners: ImmutableList<RoomMember>,
     val admins: ImmutableList<RoomMember>,
     val moderators: ImmutableList<RoomMember>,
     val members: ImmutableList<RoomMember>,
 ) {
     constructor(members: List<RoomMember>) : this(
-            admins = members.filter { it.role == RoomMember.Role.ADMIN }.sorted(),
-            moderators = members.filter { it.role == RoomMember.Role.MODERATOR }.sorted(),
-            members = members.filter { it.role == RoomMember.Role.USER }.sorted(),
+            owners = members.filter { it.role is RoomMember.Role.Owner }.sorted(),
+            admins = members.filter { it.role == RoomMember.Role.Admin }.sorted(),
+            moderators = members.filter { it.role == RoomMember.Role.Moderator }.sorted(),
+            members = members.filter { it.role == RoomMember.Role.User }.sorted(),
     )
 
-    fun isEmpty() = admins.isEmpty() && moderators.isEmpty() && members.isEmpty()
+    fun isEmpty() = owners.isEmpty() && admins.isEmpty() && moderators.isEmpty() && members.isEmpty()
 }
 
 private fun Iterable<RoomMember>.sorted(): ImmutableList<RoomMember> {

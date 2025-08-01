@@ -4,5 +4,6 @@
     <item quantity="one">"az összes szavazat %1$d százaléka"</item>
     <item quantity="other">"az összes szavazat %1$d százaléka"</item>
   </plurals>
+  <string name="a11y_polls_will_remove_selection">"Eltávolítja a korábbi kijelölést"</string>
   <string name="a11y_polls_winning_answer">"Ez a győztes válasz"</string>
 </resources>

@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Csatlakozás a szobához"</string>
   <string name="screen_join_room_join_restricted_message">"A csatlakozáshoz meghívásra vagy tértagságra lehet szüksége."</string>
   <string name="screen_join_room_knock_action">"Kopogtasson a csatlakozáshoz"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Engedélyezett karakterek: %1$d / %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Üzenet (nem kötelező)"</string>
   <string name="screen_join_room_knock_sent_description">"Ha a kérését elfogadják, meghívót kap a szobához való csatlakozáshoz."</string>
   <string name="screen_join_room_knock_sent_title">"Csatlakozási kérés elküldve"</string>

@@ -142,7 +142,7 @@ interface MatrixClient {
     /**
      * Execute generic GET requests through the SDKs internal HTTP client.
      */
-    suspend fun getUrl(url: String): Result<String>
+    suspend fun getUrl(url: String): Result<ByteArray>
 
     /**
      * Get a room preview for a given room ID or alias. This is especially useful for rooms that the user is not a member of, or hasn't joined yet.

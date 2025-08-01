@@ -1,3 +1,51 @@
+Changes in Element X v25.07.1
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v25.07.1 -->
+
+## What's Changed
+### 🐛 Bugfixes
+* fix ( room list) : rebuild with filteredSummaries to avoid bad state by @ganfra in https://github.com/element-hq/element-x-android/pull/4993
+* Keep video rotation metadata when transcoding by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5008
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4988
+### 🧱 Build
+* Update Gradle Wrapper from 8.14.2 to 8.14.3 by @ElementBot in https://github.com/element-hq/element-x-android/pull/4985
+* Stop ignoring dependencies, but instead set `open-pull-requests-limit to 0 by @bmarty in https://github.com/element-hq/element-x-android/pull/5013
+### 📄 Documentation
+* Update to the status and clarifications with respect to the legacy app. by @mxandreas in https://github.com/element-hq/element-x-android/pull/5016
+### 🚧 In development 🚧
+* Home navigation bar fixes by @bmarty in https://github.com/element-hq/element-x-android/pull/4990
+* Home screen iteration by @bmarty in https://github.com/element-hq/element-x-android/pull/5003
+### Dependency upgrades
+* Update dependency io.element.android:compound-android to v25.7.4 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/4984
+* Update dependency org.matrix.rustcomponents:sdk-android to v25.7.7 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/4989
+* Update plugin ktlint to v13 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/4992
+* Update dependency org.jetbrains.kotlinx:kotlinx-datetime to v0.7.1-0.6.x-compat by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/4991
+* Update haze to v1.6.7 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/4987
+* Update dependency com.squareup.okhttp3:okhttp-bom to v5 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/4979
+* Update dependency io.sentry:sentry-android to v8.17.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/4998
+* Update dependency com.squareup.okhttp3:okhttp-bom to v5.1.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/4997
+* Update dependency org.maplibre.gl:android-sdk to v11.12.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5001
+* Update dependency com.posthog:posthog-android to v3.19.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5009
+* Update dependency org.maplibre.gl:android-sdk to v11.12.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5006
+* Update android.gradle.plugin to v8.11.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5014
+* Update rnkdsh/action-upload-diawi action to v1.5.10 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5019
+* Update wysiwyg to v2.38.5 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5025
+* Update haze to v1.6.8 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5026
+* Update dependency org.matrix.rustcomponents:sdk-android to v25.7.15 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5011
+### Others
+* Remove bloom effect and replace by linear gradient by @bmarty in https://github.com/element-hq/element-x-android/pull/4926
+* misc (a11y) : mark MainActionButton icon as decorative by @ganfra in https://github.com/element-hq/element-x-android/pull/4996
+* Make `ContentAvoidingLayoutData` an immutable data class by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4999
+* Remove unused composable and cleanup colors by @bmarty in https://github.com/element-hq/element-x-android/pull/5000
+* Add a feature flag to reuse the last `pos` value for initial syncs by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5010
+* [a11y] Fix several issues around accessibility by @bmarty in https://github.com/element-hq/element-x-android/pull/5007
+* Replace video transcoder with Media3 Transformer by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5018
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.07.0...v25.07.1
+
 Changes in Element X v25.07.0
 =============================
 

@@ -94,7 +94,9 @@ class MatrixPatternsTest {
         assertThat(MatrixPatterns.isRoomId("#room:server.com")).isFalse()
         assertThat(MatrixPatterns.isRoomId("\$room:server.com")).isFalse()
         assertThat(MatrixPatterns.isRoomId("!${longLocalPart}a:server.com")).isFalse()
+        assertThat(MatrixPatterns.isRoomId("!9BozuV4TBw6rfRW@rMEgZ5v-jNk1D6FA8Hd1OsWqT9k")).isFalse()
 
+        assertThat(MatrixPatterns.isRoomId("!9BozuV4TBw6rfRW3rMEgZ5v-jNk1D6FA8Hd1OsWqT9k")).isTrue()
         assertThat(MatrixPatterns.isRoomId("!room:server.com")).isTrue()
         assertThat(MatrixPatterns.isRoomId("!$longLocalPart:server.com")).isTrue()
         assertThat(MatrixPatterns.isRoomId("!#test/room\nversion <u>11</u>, with @🐈️:maunium.net")).isTrue()

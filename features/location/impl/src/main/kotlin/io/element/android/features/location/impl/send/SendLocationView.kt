@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
@@ -38,11 +37,11 @@ import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
+import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
-import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -189,17 +188,13 @@ fun SendLocationView(
                 tint = Color.Unspecified,
                 modifier = Modifier.centerBottomEdge(this),
             )
-            FloatingActionButton(
+            LocationFloatingActionButton(
+                isMapCenteredOnUser = state.mode == SendLocationState.Mode.SenderLocation,
                 onClick = { state.eventSink(SendLocationEvents.SwitchToMyLocationMode) },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 16.dp, bottom = 72.dp + navBarPadding),
-            ) {
-                when (state.mode) {
-                    SendLocationState.Mode.PinLocation -> Icon(imageVector = CompoundIcons.LocationNavigator(), contentDescription = null)
-                    SendLocationState.Mode.SenderLocation -> Icon(imageVector = CompoundIcons.LocationNavigatorCentred(), contentDescription = null)
-                }
-            }
+                    .padding(end = 18.dp, bottom = 72.dp + navBarPadding),
+            )
         }
     }
 }

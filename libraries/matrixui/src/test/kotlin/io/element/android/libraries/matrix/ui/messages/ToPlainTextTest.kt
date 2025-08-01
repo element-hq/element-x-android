@@ -97,6 +97,29 @@ class ToPlainTextTest {
     }
 
     @Test
+    fun `TextMessageType toPlainText - respects the ol start attr if present`() {
+        val messageType = TextMessageType(
+            body = "1. First item\n2. Second item\n",
+            formatted = FormattedBody(
+                format = MessageFormat.HTML,
+                body = """
+                    <ol start='11'>
+                        <li>First item.</li>
+                        <li>Second item.</li>  
+                    </ol>
+                    <br />
+                """.trimIndent()
+            )
+        )
+        assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo(
+            """
+            11. First item.
+            12. Second item.
+            """.trimIndent()
+        )
+    }
+
+    @Test
     fun `TextMessageType toPlainText - returns the markdown body if the formatted one cannot be parsed`() {
         val messageType = TextMessageType(
             body = "This is the fallback text",

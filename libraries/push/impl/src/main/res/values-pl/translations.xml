@@ -15,6 +15,7 @@
     <item quantity="few">"%d powiadomienia"</item>
     <item quantity="many">"%d powiadomień"</item>
   </plurals>
+  <string name="notification_fallback_content">"Masz nowe wiadomości."</string>
   <string name="notification_incoming_call">"📹 Połączenie przychodzące"</string>
   <string name="notification_inline_reply_failed">"** Nie udało się wysłać - proszę otworzyć pokój"</string>
   <string name="notification_invitation_action_join">"Dołącz"</string>
@@ -24,7 +25,7 @@
     <item quantity="few">"%d zaproszenia"</item>
     <item quantity="many">"%d zaproszeń"</item>
   </plurals>
-  <string name="notification_invite_body">"Zaprosił(a) cię do czatu"</string>
+  <string name="notification_invite_body">"Zaprosił Cię do czatu"</string>
   <string name="notification_invite_body_with_sender">"%1$s zaprosił Cię do czatu"</string>
   <string name="notification_mentioned_you_body">"Wspomniano o Tobie: %1$s"</string>
   <string name="notification_new_messages">"Nowe wiadomości"</string>

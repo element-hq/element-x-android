@@ -9,10 +9,10 @@ package io.element.android.libraries.mediaupload.api
 
 import android.net.Uri
 import io.element.android.libraries.core.extensions.flatMapCatching
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CancellationException
@@ -48,14 +48,14 @@ class MediaSender @Inject constructor(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId?,
     ): Result<Unit> {
         return room.liveTimeline.sendMedia(
             uploadInfo = mediaUploadInfo,
             progressCallback = progressCallback,
             caption = caption,
             formattedCaption = formattedCaption,
-            replyParameters = replyParameters,
+            inReplyToEventId = inReplyToEventId,
         )
             .handleSendResult()
     }
@@ -66,7 +66,7 @@ class MediaSender @Inject constructor(
         caption: String? = null,
         formattedCaption: String? = null,
         progressCallback: ProgressCallback? = null,
-        replyParameters: ReplyParameters? = null,
+        inReplyToEventId: EventId? = null,
     ): Result<Unit> {
         val compressIfPossible = sessionPreferencesStore.doesCompressMedia().first()
         return preProcessor
@@ -82,7 +82,7 @@ class MediaSender @Inject constructor(
                     progressCallback = progressCallback,
                     caption = caption,
                     formattedCaption = formattedCaption,
-                    replyParameters = replyParameters,
+                    inReplyToEventId = inReplyToEventId,
                 )
             }
             .handleSendResult()
@@ -93,7 +93,7 @@ class MediaSender @Inject constructor(
         mimeType: String,
         waveForm: List<Float>,
         progressCallback: ProgressCallback? = null,
-        replyParameters: ReplyParameters? = null,
+        inReplyToEventId: EventId? = null,
     ): Result<Unit> {
         return preProcessor
             .process(
@@ -114,7 +114,7 @@ class MediaSender @Inject constructor(
                     progressCallback = progressCallback,
                     caption = null,
                     formattedCaption = null,
-                    replyParameters = replyParameters,
+                    inReplyToEventId = inReplyToEventId,
                 )
             }
             .handleSendResult()
@@ -136,7 +136,7 @@ class MediaSender @Inject constructor(
         progressCallback: ProgressCallback?,
         caption: String?,
         formattedCaption: String?,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId?,
     ): Result<Unit> {
         val handler = when (uploadInfo) {
             is MediaUploadInfo.Image -> {
@@ -147,7 +147,7 @@ class MediaSender @Inject constructor(
                     caption = caption,
                     formattedCaption = formattedCaption,
                     progressCallback = progressCallback,
-                    replyParameters = replyParameters,
+                    inReplyToEventId = inReplyToEventId,
                 )
             }
             is MediaUploadInfo.Video -> {
@@ -158,7 +158,7 @@ class MediaSender @Inject constructor(
                     caption = caption,
                     formattedCaption = formattedCaption,
                     progressCallback = progressCallback,
-                    replyParameters = replyParameters,
+                    inReplyToEventId = inReplyToEventId,
                 )
             }
             is MediaUploadInfo.Audio -> {
@@ -168,7 +168,7 @@ class MediaSender @Inject constructor(
                     caption = caption,
                     formattedCaption = formattedCaption,
                     progressCallback = progressCallback,
-                    replyParameters = replyParameters,
+                    inReplyToEventId = inReplyToEventId,
                 )
             }
             is MediaUploadInfo.VoiceMessage -> {
@@ -177,7 +177,7 @@ class MediaSender @Inject constructor(
                     audioInfo = uploadInfo.audioInfo,
                     waveform = uploadInfo.waveform,
                     progressCallback = progressCallback,
-                    replyParameters = replyParameters,
+                    inReplyToEventId = inReplyToEventId,
                 )
             }
             is MediaUploadInfo.AnyFile -> {
@@ -187,7 +187,7 @@ class MediaSender @Inject constructor(
                     caption = caption,
                     formattedCaption = formattedCaption,
                     progressCallback = progressCallback,
-                    replyParameters = replyParameters,
+                    inReplyToEventId = inReplyToEventId,
                 )
             }
         }
@@ -200,4 +200,9 @@ class MediaSender @Inject constructor(
                 uploadHandler.await()
             }
     }
+
+    /**
+     * Clean up any temporary files or resources used during the media processing.
+     */
+    fun cleanUp() = preProcessor.cleanUp()
 }

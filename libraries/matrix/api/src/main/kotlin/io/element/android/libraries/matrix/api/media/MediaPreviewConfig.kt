@@ -19,7 +19,7 @@ data class MediaPreviewConfig(
          * The default config if unknown (no local nor server config).
          */
         val DEFAULT = MediaPreviewConfig(
-            mediaPreviewValue = MediaPreviewValue.On,
+            mediaPreviewValue = MediaPreviewValue.DEFAULT,
             hideInviteAvatar = false
         )
     }

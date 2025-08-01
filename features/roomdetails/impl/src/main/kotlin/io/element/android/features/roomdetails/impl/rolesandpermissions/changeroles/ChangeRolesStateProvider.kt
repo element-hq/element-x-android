@@ -8,6 +8,7 @@
 package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -15,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -24,7 +26,7 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
     override val values: Sequence<ChangeRolesState>
         get() = sequenceOf(
             aChangeRolesState(),
-            aChangeRolesStateWithSelectedUsers().copy(role = RoomMember.Role.MODERATOR),
+            aChangeRolesStateWithSelectedUsers().copy(role = RoomMember.Role.Moderator),
             aChangeRolesStateWithSelectedUsers().copy(hasPendingChanges = false),
             aChangeRolesStateWithSelectedUsers(),
             aChangeRolesStateWithSelectedUsers().copy(
@@ -41,11 +43,12 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Loading),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Success(Unit)),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Failure(Exception("boom"))),
+            aChangeRolesStateWithOwners(),
         )
 }
 
 internal fun aChangeRolesState(
-    role: RoomMember.Role = RoomMember.Role.ADMIN,
+    role: RoomMember.Role = RoomMember.Role.Admin,
     query: String? = null,
     isSearchActive: Boolean = false,
     searchResults: SearchBarResultState<MembersByRole> = SearchBarResultState.NoResultsFound(),
@@ -83,4 +86,48 @@ internal fun aChangeRolesStateWithSelectedUsers() = aChangeRolesState(
     ),
     hasPendingChanges = true,
     canRemoveMember = { it != UserId("@alice:server.org") },
+)
+
+internal fun aChangeRolesStateWithOwners() = aChangeRolesState(
+    role = RoomMember.Role.Admin,
+    searchResults = SearchBarResultState.Results(
+        MembersByRole(
+            members = persistentListOf(
+                aRoomMember(
+                    userId = UserId("@alice:server.org"),
+                    displayName = "Alice",
+                    role = RoomMember.Role.Owner(isCreator = true),
+                ),
+                aRoomMember(
+                    userId = UserId("@bob:server.org"),
+                    displayName = "Bob",
+                    role = RoomMember.Role.Owner(isCreator = false),
+                ),
+                aRoomMember(
+                    userId = UserId("@carol:server.org"),
+                    displayName = "Carol",
+                    role = RoomMember.Role.Admin,
+                ),
+                aRoomMember(
+                    userId = UserId("@david:server.org"),
+                    displayName = "David",
+                    role = RoomMember.Role.User,
+                ),
+            )
+        ),
+    ),
+    canRemoveMember = { userId ->
+        when (userId) {
+            UserId("@alice:server.org") -> false // Owner - creator
+            UserId("@bob:server.org") -> false // Owner - super admin
+            UserId("@carol:server.org") -> true // Admin
+            UserId("@david:server.org") -> true // User
+            else -> false
+        }
+    },
+    selectedUsers = persistentListOf(
+        aMatrixUser(id = "@alice:server.org", displayName = "Alice"),
+        aMatrixUser(id = "@bob:server.org", displayName = "Bob"),
+        aMatrixUser(id = "@carol:server.org", displayName = "Carol"),
+    )
 )

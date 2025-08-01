@@ -31,9 +31,9 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.allFiles
@@ -129,14 +129,19 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                                 caption = caption,
                                 sendActionState = sendActionState,
                                 dismissAfterSend = !useSendQueue,
-                                replyParameters = null,
+                                inReplyToEventId = null,
                             )
+
+                            // Clean up the pre-processed media after it's been sent
+                            mediaSender.cleanUp()
                         }
                     }
                 }
                 AttachmentsPreviewEvents.CancelAndDismiss -> {
                     // Cancel media preprocessing and sending
                     preprocessMediaJob?.cancel()
+                    // If we couldn't send the pre-processed media, remove it
+                    mediaSender.cleanUp()
                     ongoingSendAttachmentJob.value?.cancel()
 
                     // Dismiss the screen
@@ -240,7 +245,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         caption: String?,
         sendActionState: MutableState<SendActionState>,
         dismissAfterSend: Boolean,
-        replyParameters: ReplyParameters?,
+        inReplyToEventId: EventId?,
     ) = runCatchingExceptions {
         val context = coroutineContext
         val progressCallback = object : ProgressCallback {
@@ -256,7 +261,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             caption = caption,
             formattedCaption = null,
             progressCallback = progressCallback,
-            replyParameters = replyParameters,
+            inReplyToEventId = inReplyToEventId,
         ).getOrThrow()
     }.fold(
         onSuccess = {

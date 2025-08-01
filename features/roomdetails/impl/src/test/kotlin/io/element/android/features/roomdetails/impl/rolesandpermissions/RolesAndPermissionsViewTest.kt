@@ -47,9 +47,27 @@ class RolesAndPermissionsViewTest {
     fun `tapping on Admins opens admin list`() {
         ensureCalledOnce { callback ->
             rule.setRolesAndPermissionsView(
+                aRolesAndPermissionsState(
+                    roomSupportsOwners = false,
+                    eventSink = EventsRecorder(expectEvents = false)
+                ),
                 openAdminList = callback,
             )
             rule.clickOn(R.string.screen_room_roles_and_permissions_admins)
+        }
+    }
+
+    @Test
+    fun `tapping on Admins and Owners opens admin list`() {
+        ensureCalledOnce { callback ->
+            rule.setRolesAndPermissionsView(
+                aRolesAndPermissionsState(
+                    roomSupportsOwners = true,
+                    eventSink = EventsRecorder(expectEvents = false)
+                ),
+                openAdminList = callback,
+            )
+            rule.clickOn(R.string.screen_room_roles_and_permissions_admins_and_owners)
         }
     }
 
@@ -126,7 +144,7 @@ class RolesAndPermissionsViewTest {
         )
         rule.clickOn(R.string.screen_room_roles_and_permissions_change_role_demote_to_moderator)
         rule.mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.MODERATOR))
+        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
     }
 
     @Test
@@ -140,7 +158,7 @@ class RolesAndPermissionsViewTest {
         )
         rule.clickOn(R.string.screen_room_roles_and_permissions_change_role_demote_to_member)
         rule.mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.USER))
+        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.User))
     }
 
     @Test
@@ -160,6 +178,7 @@ class RolesAndPermissionsViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRolesAndPermissionsView(
     state: RolesAndPermissionsState = aRolesAndPermissionsState(
+        roomSupportsOwners = false,
         eventSink = EventsRecorder(expectEvents = false),
     ),
     goBack: () -> Unit = EnsureNeverCalled(),

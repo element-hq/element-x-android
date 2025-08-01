@@ -28,10 +28,14 @@ object MatrixPatterns {
     private const val MATRIX_USER_IDENTIFIER_REGEX = "^@\\S*?$DOMAIN_REGEX$"
     private val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex()
 
-    // regex pattern to match room ids.
+    // !localpart:domain" used in most room versions prior to MSC4291
     // Note: roomId can be arbitrary strings, including space and new line char
     private const val MATRIX_ROOM_IDENTIFIER_REGEX = "^!.+$DOMAIN_REGEX$"
     private val PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER = MATRIX_ROOM_IDENTIFIER_REGEX.toRegex(RegexOption.DOT_MATCHES_ALL)
+
+    // "!event_id_base_64" used in room versions post MSC4291
+    private const val MATRIX_ROOM_IDENTIFIER_DOMAINLESS_REGEX = "!$BASE_64_URL_SAFE_ALPHABET"
+    private val PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER_DOMAINLESS = MATRIX_ROOM_IDENTIFIER_DOMAINLESS_REGEX.toRegex()
 
     // regex pattern to match room aliases.
     private const val MATRIX_ROOM_ALIAS_REGEX = "^#\\S+$DOMAIN_REGEX$"
@@ -82,7 +86,8 @@ object MatrixPatterns {
     fun isRoomId(str: String?): Boolean {
         return str != null &&
             str.length <= MAX_IDENTIFIER_LENGTH &&
-            str matches PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER
+            (str matches PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER_DOMAINLESS ||
+                str matches PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER)
     }
 
     /**

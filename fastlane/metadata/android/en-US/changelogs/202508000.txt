@@ -1,0 +1,2 @@
+Main changes in this version: start support for room v12, bug fixes and general improvements.
+Full changelog: https://github.com/element-hq/element-x-android/releases

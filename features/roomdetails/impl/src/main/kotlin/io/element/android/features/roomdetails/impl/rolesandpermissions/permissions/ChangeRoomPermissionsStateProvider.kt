@@ -55,15 +55,15 @@ internal fun aChangeRoomPermissionsState(
 private fun previewPermissions(): RoomPowerLevelsValues {
     return RoomPowerLevelsValues(
         // MembershipModeration section
-        invite = RoomMember.Role.ADMIN.powerLevel,
-        kick = RoomMember.Role.MODERATOR.powerLevel,
-        ban = RoomMember.Role.USER.powerLevel,
+        invite = RoomMember.Role.Admin.powerLevel,
+        kick = RoomMember.Role.Moderator.powerLevel,
+        ban = RoomMember.Role.User.powerLevel,
         // MessagesAndContent section
-        redactEvents = RoomMember.Role.MODERATOR.powerLevel,
-        sendEvents = RoomMember.Role.ADMIN.powerLevel,
+        redactEvents = RoomMember.Role.Moderator.powerLevel,
+        sendEvents = RoomMember.Role.Admin.powerLevel,
         // RoomDetails section
-        roomName = RoomMember.Role.ADMIN.powerLevel,
-        roomAvatar = RoomMember.Role.MODERATOR.powerLevel,
-        roomTopic = RoomMember.Role.USER.powerLevel,
+        roomName = RoomMember.Role.Admin.powerLevel,
+        roomAvatar = RoomMember.Role.Moderator.powerLevel,
+        roomTopic = RoomMember.Role.User.powerLevel,
     )
 }
