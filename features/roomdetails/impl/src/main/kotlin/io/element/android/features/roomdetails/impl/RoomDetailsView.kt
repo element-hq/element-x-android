@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomcall.api.hasPermissionToJoin
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
@@ -111,7 +110,7 @@ fun RoomDetailsView(
     onSecurityAndPrivacyClick: () -> Unit,
     onProfileClick: (UserId) -> Unit,
     onReportRoomClick: () -> Unit,
-    onSelectNewOwnersWhenLeaving: () -> Unit,
+    leaveRoomView: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -132,10 +131,7 @@ fun RoomDetailsView(
                 .verticalScroll(rememberScrollState())
                 .consumeWindowInsets(padding)
         ) {
-            LeaveRoomView(
-                state = state.leaveRoomState,
-                onSelectNewOwners = { onSelectNewOwnersWhenLeaving() },
-            )
+            leaveRoomView()
 
             when (state.roomType) {
                 RoomDetailsType.Room -> {
@@ -780,6 +776,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onSecurityAndPrivacyClick = {},
         onProfileClick = {},
         onReportRoomClick = {},
-        onSelectNewOwnersWhenLeaving = {},
+        leaveRoomView = {},
     )
 }

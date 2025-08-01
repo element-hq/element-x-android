@@ -23,6 +23,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.leaveroom.api.LeaveRoomRenderer
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.di.RoomScope
@@ -41,6 +42,7 @@ class RoomDetailsNode @AssistedInject constructor(
     private val presenter: RoomDetailsPresenter,
     private val room: BaseRoom,
     private val analyticsService: AnalyticsService,
+    private val leaveRoomRenderer: LeaveRoomRenderer,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun openRoomMemberList()
@@ -186,7 +188,13 @@ class RoomDetailsNode @AssistedInject constructor(
             onSecurityAndPrivacyClick = ::openSecurityAndPrivacy,
             onProfileClick = ::onProfileClick,
             onReportRoomClick = ::onReportRoomClick,
-            onSelectNewOwnersWhenLeaving = ::onSelectNewOwnersWhenLeaving,
+            leaveRoomView = {
+                leaveRoomRenderer.Render(
+                    state = state.leaveRoomState,
+                    onSelectNewOwners = { onSelectNewOwnersWhenLeaving() },
+                    modifier = Modifier
+                )
+            }
         )
     }
 }

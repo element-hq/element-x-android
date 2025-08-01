@@ -38,6 +38,7 @@ import io.element.android.features.home.impl.roomlist.RoomListEvents
 import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBlockEntryPoint
+import io.element.android.features.leaveroom.api.LeaveRoomRenderer
 import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.libraries.architecture.BackstackView
@@ -67,6 +68,7 @@ class HomeFlowNode @AssistedInject constructor(
     private val reportRoomEntryPoint: ReportRoomEntryPoint,
     private val declineInviteAndBlockUserEntryPoint: DeclineInviteAndBlockEntryPoint,
     private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
+    private val leaveRoomRenderer: LeaveRoomRenderer,
 ) : BaseFlowNode<HomeFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -177,17 +179,23 @@ class HomeFlowNode @AssistedInject constructor(
                 onMenuActionClick = { onMenuActionClick(activity, it) },
                 onReportRoomClick = this::onReportRoomClick,
                 onDeclineInviteAndBlockUser = this::onDeclineInviteAndBlockUserClick,
-                onSelectNewOwnersWhenLeavingRoom = this::onSelectNewOwnersWhenLeavingRoom,
                 modifier = modifier,
-            ) {
-                acceptDeclineInviteView.Render(
-                    state = state.roomListState.acceptDeclineInviteState,
-                    onAcceptInviteSuccess = this::onRoomClick,
-                    onDeclineInviteSuccess = { },
-                    modifier = Modifier
-                )
-            }
-
+                acceptDeclineInviteView = {
+                    acceptDeclineInviteView.Render(
+                        state = state.roomListState.acceptDeclineInviteState,
+                        onAcceptInviteSuccess = this::onRoomClick,
+                        onDeclineInviteSuccess = { },
+                        modifier = Modifier
+                    )
+                },
+                leaveRoomView = {
+                    leaveRoomRenderer.Render(
+                        state = state.roomListState.leaveRoomState,
+                        onSelectNewOwners = this::onSelectNewOwnersWhenLeavingRoom,
+                        modifier = Modifier
+                    )
+                }
+            )
             directLogoutView.Render(state.directLogoutState)
         }
     }

@@ -128,11 +128,7 @@ class RoomListPresenter @Inject constructor(
                     contextMenu.value = RoomListState.ContextMenu.Hidden
                 }
                 is RoomListEvents.LeaveRoom -> {
-                    if(event.needsConfirmation) {
-                        leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
-                    }else {
-                        leaveRoomState.eventSink(LeaveRoomEvent.LeaveRoom(event.roomId))
-                    }
+                    leaveRoomState.eventSink(LeaveRoomEvent.LeaveRoom(event.roomId, needsConfirmation = event.needsConfirmation))
                 }
                 is RoomListEvents.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event.roomId, event.isFavorite)
                 is RoomListEvents.MarkAsRead -> coroutineScope.markAsRead(event.roomId)

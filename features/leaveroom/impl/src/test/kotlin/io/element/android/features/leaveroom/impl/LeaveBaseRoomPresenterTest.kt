@@ -12,7 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -23,6 +23,8 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -36,15 +38,12 @@ class LeaveBaseRoomPresenterTest {
 
     @Test
     fun `present - initial state hides all dialogs`() = runTest {
-        val presenter = createLeaveRoomPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.confirmation).isEqualTo(LeaveRoomState.Confirmation.Hidden)
-            assertThat(initialState.progress).isEqualTo(LeaveRoomState.Progress.Hidden)
-            assertThat(initialState.error).isEqualTo(LeaveRoomState.Error.Hidden)
-        }
+        createLeaveRoomPresenter()
+            .stateFlow()
+            .test {
+                val initialState = awaitItem()
+                assertThat(initialState.leaveAction).isEqualTo(AsyncAction.Uninitialized)
+            }
     }
 
     @Test
@@ -59,13 +58,11 @@ class LeaveBaseRoomPresenterTest {
                 )
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.stateFlow().test {
             val initialState = awaitItem()
-            initialState.eventSink(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
+            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = true))
             val confirmationState = awaitItem()
-            assertThat(confirmationState.confirmation).isEqualTo(LeaveRoomState.Confirmation.Generic(A_ROOM_ID))
+            assertThat(confirmationState.leaveAction).isEqualTo(Confirmation.Generic(A_ROOM_ID))
         }
     }
 
@@ -81,13 +78,11 @@ class LeaveBaseRoomPresenterTest {
                 )
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.stateFlow().test {
             val initialState = awaitItem()
-            initialState.eventSink(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
+            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = true))
             val confirmationState = awaitItem()
-            assertThat(confirmationState.confirmation).isEqualTo(LeaveRoomState.Confirmation.PrivateRoom(A_ROOM_ID))
+            assertThat(confirmationState.leaveAction).isEqualTo(Confirmation.PrivateRoom(A_ROOM_ID))
         }
     }
 
@@ -103,13 +98,11 @@ class LeaveBaseRoomPresenterTest {
                 )
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.stateFlow().test {
             val initialState = awaitItem()
-            initialState.eventSink(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
+            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = true))
             val confirmationState = awaitItem()
-            assertThat(confirmationState.confirmation).isEqualTo(LeaveRoomState.Confirmation.LastUserInRoom(A_ROOM_ID))
+            assertThat(confirmationState.leaveAction).isEqualTo(Confirmation.LastUserInRoom(A_ROOM_ID))
         }
     }
 
@@ -125,13 +118,11 @@ class LeaveBaseRoomPresenterTest {
                 )
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.stateFlow().test {
             val initialState = awaitItem()
-            initialState.eventSink(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
+            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = true))
             val confirmationState = awaitItem()
-            assertThat(confirmationState.confirmation).isEqualTo(LeaveRoomState.Confirmation.Dm(A_ROOM_ID))
+            assertThat(confirmationState.leaveAction).isEqualTo(Confirmation.Dm(A_ROOM_ID))
         }
     }
 
@@ -148,11 +139,9 @@ class LeaveBaseRoomPresenterTest {
                 )
             },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.stateFlow().test {
             val initialState = awaitItem()
-            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID))
+            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = false))
             advanceUntilIdle()
             cancelAndIgnoreRemainingEvents()
             assert(leaveRoomLambda)
@@ -173,44 +162,20 @@ class LeaveBaseRoomPresenterTest {
                 )
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.stateFlow().test {
             val initialState = awaitItem()
-            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID))
-            skipItems(1) // Skip show progress state
+            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = false))
+            val progressState = awaitItem()
+            assertThat(progressState.leaveAction).isEqualTo(AsyncAction.Loading)
             val errorState = awaitItem()
-            assertThat(errorState.error).isEqualTo(LeaveRoomState.Error.Shown)
+            assertThat(errorState.leaveAction).isInstanceOf(AsyncAction.Failure::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
 
-    @Test
-    fun `present - show progress indicator while leaving a room`() = runTest {
-        val presenter = createLeaveRoomPresenter(
-            client = FakeMatrixClient().apply {
-                givenGetRoomResult(
-                    roomId = A_ROOM_ID,
-                    result = FakeBaseRoom(
-                        leaveRoomLambda = { Result.success(Unit) }
-                    ),
-                )
-            }
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID))
-            val progressState = awaitItem()
-            assertThat(progressState.progress).isEqualTo(LeaveRoomState.Progress.Shown)
-            val finalState = awaitItem()
-            assertThat(finalState.progress).isEqualTo(LeaveRoomState.Progress.Hidden)
-        }
-    }
 
     @Test
-    fun `present - hide error hides the error`() = runTest {
+    fun `present - reset state after error`() = runTest {
         val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
@@ -221,19 +186,22 @@ class LeaveBaseRoomPresenterTest {
                 )
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.stateFlow().test {
             val initialState = awaitItem()
-            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID))
+            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = false))
             skipItems(1) // Skip show progress state
             val errorState = awaitItem()
-            assertThat(errorState.error).isEqualTo(LeaveRoomState.Error.Shown)
-            skipItems(1) // Skip hide progress state
-            errorState.eventSink(LeaveRoomEvent.HideError)
+            assertThat(errorState.leaveAction).isInstanceOf(AsyncAction.Failure::class.java)
+            errorState.eventSink(InternalLeaveRoomEvent.ResetState)
             val hiddenErrorState = awaitItem()
-            assertThat(hiddenErrorState.error).isEqualTo(LeaveRoomState.Error.Hidden)
+            assertThat(hiddenErrorState.leaveAction).isEqualTo(AsyncAction.Uninitialized)
         }
+    }
+
+    private fun LeaveRoomPresenter.stateFlow(): Flow<InternalLeaveRoomState> {
+        return moleculeFlow(RecompositionMode.Immediate) {
+            present()
+        }.filterIsInstance(InternalLeaveRoomState::class)
     }
 }
 

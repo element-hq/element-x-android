@@ -8,8 +8,8 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
@@ -155,6 +155,12 @@ fun aRoomDetailsState(
     showDebugInfo = showDebugInfo,
     eventSink = eventSink,
 )
+
+internal fun aLeaveRoomState(
+    eventSink: (LeaveRoomEvent) -> Unit = {}
+) = object : LeaveRoomState {
+    override val eventSink: (LeaveRoomEvent) -> Unit = eventSink
+}
 
 fun aRoomNotificationSettings(
     mode: RoomNotificationMode = RoomNotificationMode.MUTE,

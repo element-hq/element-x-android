@@ -290,7 +290,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
             onDeclineInviteAndBlockUser = onDeclineInviteAndBlockUser,
             onReportRoomClick = onReportRoomClick,
             acceptDeclineInviteView = {},
-            onSelectNewOwnersWhenLeavingRoom = {},
+            leaveRoomView = {},
         )
     }
 }

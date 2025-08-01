@@ -27,7 +27,6 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteS
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
@@ -320,7 +319,7 @@ class RoomListPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomListEvents.LeaveRoom(A_ROOM_ID, needsConfirmation = true))
-            leaveRoomEventsRecorder.assertSingle(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
+            leaveRoomEventsRecorder.assertSingle(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = true))
             cancelAndIgnoreRemainingEvents()
         }
     }
