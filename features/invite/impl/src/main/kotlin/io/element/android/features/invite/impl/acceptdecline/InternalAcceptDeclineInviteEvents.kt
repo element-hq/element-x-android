@@ -10,7 +10,6 @@ package io.element.android.features.invite.impl.acceptdecline
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 
 sealed interface InternalAcceptDeclineInviteEvents : AcceptDeclineInviteEvents {
-    data object CancelDeclineInvite : InternalAcceptDeclineInviteEvents
-    data object DismissAcceptError : InternalAcceptDeclineInviteEvents
-    data object DismissDeclineError : InternalAcceptDeclineInviteEvents
+    data object ClearAcceptActionState : InternalAcceptDeclineInviteEvents
+    data object ClearDeclineActionState : InternalAcceptDeclineInviteEvents
 }

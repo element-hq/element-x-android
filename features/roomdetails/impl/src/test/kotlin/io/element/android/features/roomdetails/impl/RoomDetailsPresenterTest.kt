@@ -548,7 +548,7 @@ class RoomDetailsPresenterTest {
             dispatchers = testCoroutineDispatchers()
         )
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
-            awaitItem().eventSink(RoomDetailsEvent.LeaveRoom)
+            awaitItem().eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
             leaveRoomEventRecorder.assertSingle(LeaveRoomEvent.ShowConfirmation(room.roomId))
             cancelAndIgnoreRemainingEvents()
         }

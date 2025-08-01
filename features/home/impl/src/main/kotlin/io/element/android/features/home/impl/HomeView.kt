@@ -308,6 +308,6 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: 
         onMenuActionClick = {},
         onDeclineInviteAndBlockUser = {},
         acceptDeclineInviteView = {},
-        onSelectNewOwnersWhenLeavingRoom = {},
+        onSelectNewOwnersWhenLeavingRoom = { Unit},
     )
 }

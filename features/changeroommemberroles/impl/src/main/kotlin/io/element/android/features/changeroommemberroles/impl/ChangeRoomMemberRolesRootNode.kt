@@ -20,12 +20,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.RoomComponentFactory
+import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesEntryPoint
 import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesListType
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import kotlinx.parcelize.Parcelize
 
@@ -41,7 +43,7 @@ class ChangeRoomMemberRolesRootNode @AssistedInject constructor(
     ),
     buildContext = buildContext,
     plugins = plugins,
-), DaggerComponentOwner {
+), DaggerComponentOwner, ChangeRoomMemberRolesEntryPoint.NodeProxy {
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
@@ -61,9 +63,7 @@ class ChangeRoomMemberRolesRootNode @AssistedInject constructor(
             NavTarget.Root -> {
                 createNode<ChangeRolesNode>(
                     buildContext = buildContext,
-                    plugins = plugins + ChangeRolesNode.Inputs(
-                        listType = inputs.listType,
-                    ),
+                    plugins = listOf(ChangeRolesNode.Inputs(listType = inputs.listType)),
                 )
             }
         }
@@ -72,5 +72,11 @@ class ChangeRoomMemberRolesRootNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         Children(modifier = modifier, navModel = navModel)
+    }
+
+    override val roomId: RoomId = inputs.joinedRoom.roomId
+
+    override suspend fun waitForRoleChanged() {
+        waitForChildAttached<ChangeRolesNode>().waitForRoleChanged()
     }
 }

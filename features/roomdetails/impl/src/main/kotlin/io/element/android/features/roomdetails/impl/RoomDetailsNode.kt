@@ -9,6 +9,8 @@ package io.element.android.features.roomdetails.impl
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +24,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
+import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.BaseRoom
@@ -57,7 +60,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun onSelectNewOwnersWhenLeaving()
     }
 
-    private val callbacks = plugins<Callback>()
+    private val callback = plugins<Callback>().first()
 
     init {
         lifecycle.subscribe(
@@ -68,27 +71,27 @@ class RoomDetailsNode @AssistedInject constructor(
     }
 
     private fun openRoomMemberList() {
-        callbacks.forEach { it.openRoomMemberList() }
+        callback.openRoomMemberList()
     }
 
     private fun openRoomNotificationSettings() {
-        callbacks.forEach { it.openRoomNotificationSettings() }
+        callback.openRoomNotificationSettings()
     }
 
     private fun invitePeople() {
-        callbacks.forEach { it.openInviteMembers() }
+        callback.openInviteMembers()
     }
 
     private fun openPollHistory() {
-        callbacks.forEach { it.openPollHistory() }
+        callback.openPollHistory()
     }
 
     private fun openMediaGallery() {
-        callbacks.forEach { it.openMediaGallery() }
+        callback.openMediaGallery()
     }
 
     private fun onJoinCall() {
-        callbacks.forEach { it.onJoinCall() }
+        callback.onJoinCall()
     }
 
     private fun CoroutineScope.onShareRoom(context: Context) = launch {
@@ -107,45 +110,51 @@ class RoomDetailsNode @AssistedInject constructor(
     }
 
     private fun onEditRoomDetails() {
-        callbacks.forEach { it.editRoomDetails() }
+        callback.editRoomDetails()
     }
 
     private fun openAvatarPreview(name: String, url: String) {
-        callbacks.forEach { it.openAvatarPreview(name, url) }
+        callback.openAvatarPreview(name, url)
     }
 
     private fun openAdminSettings() {
-        callbacks.forEach { it.openAdminSettings() }
+        callback.openAdminSettings()
     }
 
     private fun openPinnedMessages() {
-        callbacks.forEach { it.openPinnedMessagesList() }
+        callback.openPinnedMessagesList()
     }
 
     private fun openKnockRequestsLists() {
-        callbacks.forEach { it.openKnockRequestsList() }
+        callback.openKnockRequestsList()
     }
 
     private fun openSecurityAndPrivacy() {
-        callbacks.forEach { it.openSecurityAndPrivacy() }
+        callback.openSecurityAndPrivacy()
     }
 
     private fun onProfileClick(userId: UserId) {
-        callbacks.forEach { it.openDmUserProfile(userId) }
+        callback.openDmUserProfile(userId)
     }
 
     private fun onReportRoomClick() {
-        callbacks.forEach { it.openReportRoom() }
+        callback.openReportRoom()
     }
 
     private fun onSelectNewOwnersWhenLeaving() {
-        callbacks.forEach { it.onSelectNewOwnersWhenLeaving() }
+        return callback.onSelectNewOwnersWhenLeaving()
+    }
+
+    private val stateFlow = launchMolecule { presenter.present() }
+
+    fun onNewOwnersSelected() {
+        stateFlow.value.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = false))
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
-        val state = presenter.present()
+        val state by stateFlow.collectAsState()
 
         fun onShareRoom() {
             lifecycleScope.onShareRoom(context)

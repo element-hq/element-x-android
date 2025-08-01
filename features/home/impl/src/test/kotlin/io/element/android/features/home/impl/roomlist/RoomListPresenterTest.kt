@@ -319,7 +319,7 @@ class RoomListPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(RoomListEvents.LeaveRoom(A_ROOM_ID))
+            initialState.eventSink(RoomListEvents.LeaveRoom(A_ROOM_ID, needsConfirmation = true))
             leaveRoomEventsRecorder.assertSingle(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
             cancelAndIgnoreRemainingEvents()
         }

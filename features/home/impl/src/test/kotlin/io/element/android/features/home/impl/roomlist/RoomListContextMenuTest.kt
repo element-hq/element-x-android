@@ -73,7 +73,7 @@ class RoomListContextMenuTest {
         eventsRecorder.assertList(
             listOf(
                 RoomListEvents.HideContextMenu,
-                RoomListEvents.LeaveRoom(contextMenu.roomId),
+                RoomListEvents.LeaveRoom(contextMenu.roomId, needsConfirmation = true),
             )
         )
     }

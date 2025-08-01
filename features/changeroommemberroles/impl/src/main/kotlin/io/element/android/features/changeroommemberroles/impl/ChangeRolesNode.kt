@@ -8,20 +8,22 @@
 package io.element.android.features.changeroommemberroles.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesEntryPoint
 import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesListType
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.RoomMember
+import kotlinx.coroutines.flow.first
 
 @ContributesNode(RoomScope::class)
 class ChangeRolesNode @AssistedInject constructor(
@@ -35,8 +37,6 @@ class ChangeRolesNode @AssistedInject constructor(
 
     private val inputs: Inputs = inputs()
 
-    private val callback = plugins<ChangeRoomMemberRolesEntryPoint.Callback>()
-
     private val presenter = presenterFactory.run {
         val role = when (inputs.listType) {
             ChangeRoomMemberRolesListType.Admins -> RoomMember.Role.Admin
@@ -46,14 +46,19 @@ class ChangeRolesNode @AssistedInject constructor(
         create(role)
     }
 
+    private val stateFlow = launchMolecule { presenter.present() }
+
+    suspend fun waitForRoleChanged(){
+        stateFlow.first { it.savingState.isSuccess() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
+        val state by stateFlow.collectAsState()
         ChangeRolesView(
             modifier = modifier,
             state = state,
             navigateUp = this::navigateUp,
-            onSaveChanges = { callback.onEach { it.onRolesChanged() } }
         )
     }
 }

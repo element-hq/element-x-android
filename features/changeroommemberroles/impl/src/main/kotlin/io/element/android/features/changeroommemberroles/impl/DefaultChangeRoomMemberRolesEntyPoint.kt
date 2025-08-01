@@ -19,32 +19,33 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class DefaultChangeRoomMemberRolesEntyPoint @Inject constructor() : ChangeRoomMemberRolesEntryPoint {
-    private lateinit var changeRoomMemberRolesListType: ChangeRoomMemberRolesListType
-    private lateinit var room: JoinedRoom
-    private var callback: ChangeRoomMemberRolesEntryPoint.Callback? = null
 
-    override fun room(room: JoinedRoom): ChangeRoomMemberRolesEntryPoint {
-        this.room = room
-        return this
-    }
+    override fun builder(parentNode: Node, buildContext: BuildContext): ChangeRoomMemberRolesEntryPoint.Builder {
+        return object : ChangeRoomMemberRolesEntryPoint.Builder {
 
-    override fun listType(changeRoomMemberRolesListType: ChangeRoomMemberRolesListType): ChangeRoomMemberRolesEntryPoint {
-        this.changeRoomMemberRolesListType = changeRoomMemberRolesListType
-        return this
-    }
+            private lateinit var changeRoomMemberRolesListType: ChangeRoomMemberRolesListType
+            private lateinit var room: JoinedRoom
 
-    override fun callback(callback: ChangeRoomMemberRolesEntryPoint.Callback): ChangeRoomMemberRolesEntryPoint {
-        this.callback = callback
-        return this
-    }
+            override fun room(room: JoinedRoom): ChangeRoomMemberRolesEntryPoint.Builder {
+                this.room = room
+                return this
+            }
 
-    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
-        return parentNode.createNode<ChangeRoomMemberRolesRootNode>(
-            buildContext = buildContext,
-            plugins = listOfNotNull(
-                ChangeRoomMemberRolesRootNode.Inputs(joinedRoom = room, listType = changeRoomMemberRolesListType),
-                callback
-            )
-        )
+            override fun listType(changeRoomMemberRolesListType: ChangeRoomMemberRolesListType): ChangeRoomMemberRolesEntryPoint.Builder {
+                this.changeRoomMemberRolesListType = changeRoomMemberRolesListType
+                return this
+            }
+
+
+            override fun build(): Node {
+                return parentNode.createNode<ChangeRoomMemberRolesRootNode>(
+                    buildContext = buildContext,
+                    plugins = listOf(
+                        ChangeRoomMemberRolesRootNode.Inputs(joinedRoom = room, listType = changeRoomMemberRolesListType),
+                    )
+                )
+            }
+        }
+
     }
 }

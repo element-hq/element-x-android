@@ -80,14 +80,12 @@ import kotlinx.collections.immutable.ImmutableList
 fun ChangeRolesView(
     state: ChangeRolesState,
     navigateUp: () -> Unit,
-    onSaveChanges: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     val latestNavigateUp by rememberUpdatedState(newValue = navigateUp)
     BackHandler(enabled = !state.isSearchActive) {
         state.eventSink(ChangeRolesEvent.Exit)
     }
-
     Box(modifier = modifier) {
         Scaffold(
             modifier = Modifier
@@ -226,8 +224,6 @@ fun ChangeRolesView(
                         AsyncIndicator.Custom(text = stringResource(CommonStrings.common_saved_changes))
                     }
                 }
-
-                onSaveChanges?.invoke()
             }
             else -> Unit
         }
@@ -426,7 +422,6 @@ internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::
         ChangeRolesView(
             state = state,
             navigateUp = {},
-            onSaveChanges = null,
         )
     }
 }

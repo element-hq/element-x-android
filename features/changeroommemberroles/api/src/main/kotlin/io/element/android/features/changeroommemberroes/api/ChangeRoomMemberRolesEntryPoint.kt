@@ -7,20 +7,29 @@
 
 package io.element.android.features.changeroommemberroes.api
 
-import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
-interface ChangeRoomMemberRolesEntryPoint : SimpleFeatureEntryPoint {
-    fun room(room: JoinedRoom): ChangeRoomMemberRolesEntryPoint
-    fun listType(changeRoomMemberRolesListType: ChangeRoomMemberRolesListType): ChangeRoomMemberRolesEntryPoint
-    fun callback(callback: Callback): ChangeRoomMemberRolesEntryPoint
+interface ChangeRoomMemberRolesEntryPoint : FeatureEntryPoint {
 
-    interface Callback : Plugin {
-        fun onRolesChanged()
+    fun builder(parentNode: Node, buildContext: BuildContext): Builder
+
+    interface Builder {
+        fun room(room: JoinedRoom): Builder
+        fun listType(changeRoomMemberRolesListType: ChangeRoomMemberRolesListType): Builder
+        fun build(): Node
+    }
+
+    interface NodeProxy {
+        val roomId: RoomId
+        suspend fun waitForRoleChanged()
     }
 }
+
 
 enum class ChangeRoomMemberRolesListType : NodeInputs{
     SelectNewOwnersWhenLeaving,

@@ -29,6 +29,5 @@ interface HomeEntryPoint : FeatureEntryPoint {
         fun onRoomSettingsClick(roomId: RoomId)
         fun onReportBugClick()
         fun onLogoutForNativeSlidingSyncMigrationNeeded()
-        fun onSelectNewOwnersWhenLeavingRoom(roomId: RoomId)
     }
 }

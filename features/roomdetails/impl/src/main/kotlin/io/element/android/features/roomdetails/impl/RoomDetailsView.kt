@@ -266,7 +266,7 @@ fun RoomDetailsView(
             OtherActionsSection(
                 canReportRoom = state.canReportRoom,
                 onReportRoomClick = onReportRoomClick,
-                onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
+                onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true)) }
             )
 
             if (state.showDebugInfo) {
