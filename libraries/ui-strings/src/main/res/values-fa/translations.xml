@@ -3,10 +3,6 @@
   <string name="a11y_add_reaction">"افزودن واکنش: %1$s"</string>
   <string name="a11y_avatar">"چهرک"</string>
   <string name="a11y_delete">"حذف"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="%1$d رقم وارد شده">"one"</item>
-    <item quantity="%1$d رقم وارد شده">"other"</item>
-  </plurals>
   <string name="a11y_edit_avatar">"ویرایش چهرک"</string>
   <string name="a11y_edit_room_address_hint">"نشانی کامل %1$s خواهد بود"</string>
   <string name="a11y_encryption_details">"جزییات رمزنگاری"</string>
@@ -209,10 +205,6 @@
   <string name="common_link_copied_to_clipboard">"پیوند در تخته‌گیره رونوشت شد"</string>
   <string name="common_loading">"بار کردن…"</string>
   <string name="common_loading_more">"بار کردن بیش‌تر…"</string>
-  <plurals name="common_member_count">
-    <item quantity="%1$d عضو">"one"</item>
-    <item quantity="%1$d عضو">"other"</item>
-  </plurals>
   <string name="common_message">"پیام"</string>
   <string name="common_message_actions">"کنش‌های پیام"</string>
   <string name="common_message_layout">"جینش پیام"</string>
@@ -237,10 +229,6 @@
   <string name="common_poll_summary">"نظرسنجی: %1$s"</string>
   <string name="common_poll_total_votes">"مجموع آرا: %1$s"</string>
   <string name="common_poll_undisclosed_text">"نتیجه‌ها پس از پایان نظرسنجی نشان داده خواهند شد"</string>
-  <plurals name="common_poll_votes_count">
-    <item quantity="%d رأی">"one"</item>
-    <item quantity="%d رأی">"other"</item>
-  </plurals>
   <string name="common_preparing">"آماده سازی…"</string>
   <string name="common_privacy_policy">"سیاست محرمانگی"</string>
   <string name="common_reaction">"واکنش"</string>

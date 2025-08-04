@@ -65,10 +65,6 @@
   <string name="screen_room_details_title">"اطّلاعات اتاق"</string>
   <string name="screen_room_details_topic_title">"موضوع"</string>
   <string name="screen_room_details_updating_room">"به‌روز کردن اتاق…"</string>
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="%1$d نفر">"one"</item>
-    <item quantity="%1$d نفر">"other"</item>
-  </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"برداشت و تحریم عضو"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"تنها برداشتن عضو"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"رفع انسداد"</string>
