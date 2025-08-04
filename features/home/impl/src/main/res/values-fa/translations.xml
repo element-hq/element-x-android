@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"از کار انداختن بهینه‌سازی باتری برای این کاره برای اطمینان از گرفتن همهٔ آگاهی‌ها."</string>
+  <string name="banner_battery_optimization_submit_android">"از کار انداختن بهینه سازی"</string>
+  <string name="banner_battery_optimization_title_android">"آگاهی‌ها نمی‌رسند؟"</string>
+  <string name="banner_set_up_recovery_content">"بازگردانی تاریخچهٔ پیام‌ها و هویت رمزنگاشته‌تان با کلید بازیابی در صورت از دست دادن همهٔ افزاره‌های موجودتان."</string>
   <string name="banner_set_up_recovery_submit">"برپایی بازیابی"</string>
   <string name="banner_set_up_recovery_title">"برپایی بازیابی"</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"ورود کلید بازیابیتان"</string>
   <string name="confirm_recovery_key_banner_title">"ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده"</string>
   <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
+  <string name="screen_home_tab_chats">"گپ‌ها"</string>
+  <string name="screen_home_tab_spaces">"فضاها"</string>
   <string name="screen_invites_decline_chat_message">"مطمئنید که می‌خواهید دعوت پیوستن به %1$s را رد کنید؟"</string>
   <string name="screen_invites_decline_chat_title">"رد دعوت"</string>
   <string name="screen_invites_decline_direct_chat_message">"مطمئنید که می‌خواهید این گپ خصوصی با %1$s را رد کنید؟"</string>
@@ -34,6 +40,6 @@
   <string name="screen_roomlist_main_space_title">"گپ‌ها"</string>
   <string name="screen_roomlist_mark_as_read">"علامت‌گذاری به عنوان خوانده شده"</string>
   <string name="screen_roomlist_mark_as_unread">"نشان به ناخوانده"</string>
-  <string name="session_verification_banner_message">"به نظر می رسد از دستگاه جدیدی استفاده می کنید. برای دسترسی به پیام های رمزگذاری شده خود، با دستگاه دیگری این دستگاه را تأیید کنید."</string>
+  <string name="session_verification_banner_message">"گویا از افزاره‌ای جدید استفاده می‌کنید. تأیید با افزاره‌ای دیگر برای دسترسی به پیام‌های رمزنگاری شده‌تان."</string>
   <string name="session_verification_banner_title">"تأیید کنید که خودتانید"</string>
 </resources>

@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_battery_optimization_content_android">"Ota tämän sovelluksen akunkäytön optimointi pois käytöstä varmistaaksesi, että kaikki ilmoitukset tulevat perille."</string>
   <string name="banner_battery_optimization_submit_android">"Ota optimointi pois käytöstä"</string>
+  <string name="banner_battery_optimization_title_android">"Eikö ilmoitukset tule perille?"</string>
   <string name="banner_set_up_recovery_content">"Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, mikäli menetät pääsyn kaikkiin laitteisiisi."</string>
   <string name="banner_set_up_recovery_submit">"Ota palautus käyttöön"</string>
   <string name="banner_set_up_recovery_title">"Ota palautus käyttöön tilisi suojaamiseksi"</string>
@@ -20,6 +21,7 @@
   <string name="screen_migration_message">"Tämä on kertaluonteinen prosessi, kiitos odottamisesta."</string>
   <string name="screen_migration_title">"Tiliä määritetään."</string>
   <string name="screen_roomlist_a11y_create_message">"Luo uusi keskustelu tai huone"</string>
+  <string name="screen_roomlist_clear_filters">"Tyhjennä suodattimet"</string>
   <string name="screen_roomlist_empty_message">"Aloita lähettämällä viesti jollekin."</string>
   <string name="screen_roomlist_empty_title">"Sinulla ei ole vielä keskusteluja."</string>
   <string name="screen_roomlist_filter_favourites">"Suosikit"</string>

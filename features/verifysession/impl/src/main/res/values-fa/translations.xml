@@ -14,7 +14,7 @@
   <string name="screen_session_verification_compare_emojis_subtitle">"تأیید کنید که ایموجی های زیر با ایموجی های نشان داده شده در جلسه دیگر شما مطابقت دارند."</string>
   <string name="screen_session_verification_compare_emojis_title">"مقایسهٔ شکلک‌ها"</string>
   <string name="screen_session_verification_compare_numbers_title">"مقایسهٔ اعداد"</string>
-  <string name="screen_session_verification_complete_subtitle">"نشست جدید شما اکنون تأیید شده‌است. این نشست به پیام‌های رمزگذاری شده‌ی شما دسترسی داشته و سایر کاربران نیز این نشست را قابل اعتماد می دانند."</string>
+  <string name="screen_session_verification_complete_subtitle">"اکنون نشست جدیدتان تأیید شده‌. این نشست به پیام‌های رمزنگارش شده‌تان دسترسی داشته و دیگر کاربران مطمئن می‌بینندش."</string>
   <string name="screen_session_verification_enter_recovery_key">"ورود کلید بازیابی"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"برای دسترسی به تاریخچه پیام‌های رمزگذاری‌شده‌تان، ثابت کنید که خودتان هستید."</string>
   <string name="screen_session_verification_open_existing_session_title">"گشودن نشستی موجود"</string>

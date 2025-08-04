@@ -13,6 +13,8 @@
   <string name="screen_change_account_provider_other">"Muu"</string>
   <string name="screen_change_account_provider_subtitle">"Käytä toista palveluntarjoajaa, kuten omaa yksityistä palvelintasi tai työpaikkaasi."</string>
   <string name="screen_change_account_provider_title">"Vaihda palveluntarjoajaa"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"Element Pro -sovellus on pakollinen %1$s -palvelimella. Lataa se sovelluskaupasta."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Element Pro vaaditaan"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään."</string>
   <string name="screen_change_server_error_invalid_well_known">"Palvelin ei ole saatavilla .well-known tiedostossa olevan ongelman vuoksi:
 %1$s"</string>
@@ -34,6 +36,7 @@
   <string name="screen_login_subtitle">"Matrix on avoin verkko turvallista, hajautettua viestintää varten."</string>
   <string name="screen_login_title">"Tervetuloa takaisin!"</string>
   <string name="screen_login_title_with_homeserver">"Kirjaudu sisään %1$s -palvelimelle"</string>
+  <string name="screen_onboarding_app_version">"Versio %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Kirjaudu sisään manuaalisesti"</string>
   <string name="screen_onboarding_sign_in_to">"Kirjaudu sisään %1$s -palvelimelle"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Kirjaudu sisään QR-koodilla"</string>

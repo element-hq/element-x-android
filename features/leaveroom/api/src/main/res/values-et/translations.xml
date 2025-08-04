@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Kas sa oled kindel, et soovid sellest vestlusest lahkuda? See vestlus pole avalik ja uuesti liitumiseks vajad kutset."</string>
   <string name="leave_room_alert_empty_subtitle">"Kas sa oled kindel, et soovid sellest jututoast lahkuda? Sa oled siin viimane osaleja ja peale sinu lahkumist ei saa keegi enam liituda, isegi sina mitte."</string>
   <string name="leave_room_alert_private_subtitle">"Kas sa oled kindel, et soovid sellest jututoast lahkuda? See jututuba pole avalik ja uuesti liitumiseks vajad kutset."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Vali omanikud"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Sa oled selle jututoa ainus omanik. Enne jututoast lahkumist pead omandi üle andma kellelegi teisele."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Anna omand üle"</string>
   <string name="leave_room_alert_subtitle">"Kas sa oled kindel, et soovid sellest jututoast lahkuda?"</string>
 </resources>

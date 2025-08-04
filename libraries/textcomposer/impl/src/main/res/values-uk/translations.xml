@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Додати вкладення"</string>
   <string name="rich_text_editor_bullet_list">"Перемкнути маркований список"</string>
-  <string name="rich_text_editor_close_formatting_options">"Закрити параметри форматування"</string>
+  <string name="rich_text_editor_close_formatting_options">"Скасувати та закрити форматування тексту"</string>
   <string name="rich_text_editor_code_block">"Перемкнути блок коду"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Необов\'язковий підпис…"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Зашифроване повідомлення…"</string>

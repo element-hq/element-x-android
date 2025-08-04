@@ -7,6 +7,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"نشانی پایهٔ تماس المنتی سفارشی"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"تنظمی نشانی پایه‌‌ای سفارشی برای تماس المنتی."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL نامعتبر، لطفا مطمئن شوید که پروتکل (http/https) و آدرس صحیح را درج کرده اید."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"نهفتن چهرک‌ها در درخواست‌های دعوت اتاق"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"نهفتن رسانه در خط زمانی"</string>
   <string name="screen_advanced_settings_media_compression_title">"بهینه سازی کیفیت رسانه"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"نظارت و امنیت"</string>
@@ -17,6 +18,7 @@
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"نهفتن همیشگی"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"نمایش همیشگی"</string>
   <string name="screen_advanced_settings_show_media_timeline_private_rooms">"در اتاق‌های خصوصی"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"رسانه‌های نهفته همواره خواهند توانست با زدن رویشان نمایان شوند"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"نمایش رسانه در خط زمانی"</string>
   <string name="screen_blocked_users_empty">"هیچ کاربر مسدودی ندارید"</string>
   <string name="screen_blocked_users_unblock_alert_action">"رفع انسداد"</string>
@@ -56,6 +58,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"تنظیمات سامانه"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"آگاهی‌های سامانه‌ای خاموش شدند"</string>
   <string name="screen_notification_settings_title">"آگاهی‌ها"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"تاریخچهٔ فرستادن"</string>
   <string name="troubleshoot_notifications_entry_point_section">"رفع‌اشکال"</string>
   <string name="troubleshoot_notifications_entry_point_title">"رفع‌اشکال آگاهی‌ها"</string>
 </resources>

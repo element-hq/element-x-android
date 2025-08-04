@@ -5,5 +5,6 @@
     <item quantity="few">"%1$d відсотки від усіх голосів"</item>
     <item quantity="many">"%1$d відсотків від усіх голосів"</item>
   </plurals>
+  <string name="a11y_polls_will_remove_selection">"Попередній вибір буде прибрано"</string>
   <string name="a11y_polls_winning_answer">"Ця відповідь перемогла"</string>
 </resources>

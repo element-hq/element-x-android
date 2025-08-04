@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Ste si istí, že chcete opustiť konverzáciu?"</string>
   <string name="leave_room_alert_empty_subtitle">"Ste si istí, že chcete opustiť túto miestnosť? Ste tu jediná osoba. Ak odídete, nikto sa do nej nebude môcť v budúcnosti pripojiť, vrátane vás."</string>
   <string name="leave_room_alert_private_subtitle">"Ste si istí, že chcete opustiť túto miestnosť? Táto miestnosť nie je verejná a bez pozvania sa do nej nebudete môcť vrátiť."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Vybrať vlastníkov"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Ste jediným vlastníkom tejto miestnosti. Pred opustením miestnosti musíte previesť vlastníctvo na niekoho iného."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Preniesť vlastníctvo"</string>
   <string name="leave_room_alert_subtitle">"Ste si istí, že chcete opustiť miestnosť?"</string>
 </resources>

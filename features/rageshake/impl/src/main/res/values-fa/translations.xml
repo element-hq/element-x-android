@@ -4,13 +4,13 @@
   <string name="screen_bug_report_contact_me">"اگر پرسش دیگری دارید، می‌توانید با من در تماس باشید."</string>
   <string name="screen_bug_report_contact_me_title">"تماس با من"</string>
   <string name="screen_bug_report_edit_screenshot">"ویرایش نماگرفت"</string>
-  <string name="screen_bug_report_editor_description">"لطفا مشکل را توصیف کنید. چيکار کردي؟ انتظار داشتید چه اتفاقی بیفتد؟ واقعا چه اتفاقی افتاد لطفا تا جایی که می توانید جزئیات را وارد کنید."</string>
+  <string name="screen_bug_report_editor_description">"لطفاً مشکل را شرح دهید. چه‌کار کردید؟ انتظار داشتید چه بشود؟ ولی چه شد؟ لطفاً‌تا جای ممکن وارد جزییات شوید."</string>
   <string name="screen_bug_report_editor_placeholder">"شرح مشکل…"</string>
   <string name="screen_bug_report_editor_supporting">"ترجیحاً توضیحات را به زبان انگلیسی بنویسید."</string>
   <string name="screen_bug_report_include_crash_logs">"ارسال رخدادنگارهای خطا"</string>
   <string name="screen_bug_report_include_logs">"اجازه به گزارش‌ها"</string>
   <string name="screen_bug_report_include_screenshot">"ارسال تصویر صفحه"</string>
-  <string name="screen_bug_report_logs_description">"گزارش ها در پیام شما گنجانده می شوند تا مطمئن شوید همه چیز به درستی کار می کند. برای ارسال پیام بدون گزارش، این تنظیم را خاموش کنید."</string>
+  <string name="screen_bug_report_logs_description">"برای اطمینان از درست کار کردن همه‌چیز گزارش‌ها در پیامتان قرار خواهد گرفت. برای فرستادن پیام بدون گزارش‌ها این تنظیم را خاموش کنید."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$sآخرین باری که استفاده شد، از کار افتاد. آیا مایلید گزارش خرابی را با ما به اشتراک بگذارید؟"</string>
   <string name="screen_bug_report_view_logs">"دیدن گزارش‌ها"</string>
 </resources>

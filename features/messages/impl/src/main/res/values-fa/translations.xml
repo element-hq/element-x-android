@@ -10,7 +10,7 @@
   <string name="emoji_picker_category_symbols">"نمادها"</string>
   <string name="screen_report_content_block_user">"انسداد کاربر"</string>
   <string name="screen_report_content_block_user_hint">"اگر می‌خواهید همه پیام‌های فعلی و آینده را از این کاربر را پنهان کنید، علامت بزنید"</string>
-  <string name="screen_report_content_explanation">"این پیام به مدیر سرور خانگی شما گزارش خواهد شد. آنها قادر به خواندن پیام های رمزگذاری شده نخواهند بود."</string>
+  <string name="screen_report_content_explanation">"این پیام به مدیر کارساز خانگی شما گزارش خواهد شد. آنها قادر به خواندن پیام های رمزگذاری شده نخواهند بود."</string>
   <string name="screen_report_content_hint">"دلیل گزارش این محتوا"</string>
   <string name="screen_room_attachment_source_camera">"دوربین"</string>
   <string name="screen_room_attachment_source_camera_photo">"عکس گرفتن"</string>
@@ -37,8 +37,8 @@
   <string name="screen_room_timeline_reactions_show_more">"نمایش بیش‌تر"</string>
   <string name="screen_room_timeline_read_marker_title">"جدید"</string>
   <plurals name="screen_room_timeline_state_changes">
-    <item quantity="one">"%1$dتغییر اتاق"</item>
-    <item quantity="other">"%1$dتغییر اتاق"</item>
+    <item quantity="%1$dتغییر اتاق">"one"</item>
+    <item quantity="%1$dتغییر اتاق">"other"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s و %2$s"</string>
 </resources>

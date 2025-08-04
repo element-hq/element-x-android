@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_title">"حذف پرونده؟"</string>
+  <string name="screen_media_browser_download_error_message">"بررسی اتّصال اینترنتیتان و تلاش دوباره"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"سندها، پرونده‌ها و پیام‌های صوتی بار گذاشته در این اتاق این‌جا نشان داده خواهند شد."</string>
+  <string name="screen_media_browser_files_empty_state_title">"هنوز هیچ پرونده‌ای بارگذاشته نشده"</string>
+  <string name="screen_media_browser_list_loading_files">"بار کردن پرونده‌ها…"</string>
+  <string name="screen_media_browser_list_loading_media">"بار کردن رسانه‌ها…"</string>
   <string name="screen_media_browser_list_mode_files">"پرونده‌ها"</string>
   <string name="screen_media_browser_list_mode_media">"رسانه"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"تصویرها و ویدیوهای بار گذاشته در این اتاق این‌جا نشان داده خواهند شد."</string>
+  <string name="screen_media_browser_media_empty_state_title">"هنوز هیچ رسانه‌ای بارگذاشته نشده"</string>
+  <string name="screen_media_browser_title">"رسانه‌ها و پرونده‌ها"</string>
   <string name="screen_media_details_file_format">"قالب پرونده"</string>
   <string name="screen_media_details_filename">"نام پرونده"</string>
   <string name="screen_media_details_uploaded_by">"بارگذاشته به دست"</string>

@@ -8,11 +8,19 @@
     <item quantity="few">"Введено %1$d цифри"</item>
     <item quantity="many">"Введено %1$d цифр"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Редагувати аватар"</string>
+  <string name="a11y_edit_room_address_hint">"Повна адреса буде %1$s"</string>
+  <string name="a11y_encryption_details">"Подробиці шифрування"</string>
   <string name="a11y_hide_password">"Cховати пароль"</string>
   <string name="a11y_join_call">"Приєднатися до виклику"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
+  <string name="a11y_move_the_map_to_my_location">"Перемістити карту до мого місця перебування"</string>
   <string name="a11y_notifications_mentions_only">"Тільки згадки"</string>
   <string name="a11y_notifications_muted">"Звук вимкнено"</string>
+  <string name="a11y_notifications_new_mentions">"Нові згадки"</string>
+  <string name="a11y_notifications_new_messages">"Нові повідомлення"</string>
+  <string name="a11y_notifications_ongoing_call">"Поточний виклик"</string>
+  <string name="a11y_other_user_avatar">"Аватар іншого користувача"</string>
   <string name="a11y_page_n">"Сторінка %1$d"</string>
   <string name="a11y_pause">"Пауза"</string>
   <string name="a11y_paused_voice_message">"Голосове повідомлення, тривалість: %1$s, поточна позиція: %2$s"</string>
@@ -32,14 +40,19 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Натисніть, щоб показати все"</string>
   <string name="a11y_remove_reaction">"Видалити реакцію з %1$s"</string>
   <string name="a11y_remove_reaction_with">"Прибрати реакцію %1$s"</string>
+  <string name="a11y_room_avatar">"Аватар кімнати"</string>
   <string name="a11y_send_files">"Надіслати файли"</string>
   <string name="a11y_show_password">"Показати пароль"</string>
   <string name="a11y_start_call">"Розпочати виклик"</string>
+  <string name="a11y_time_limited_action_required">"Необхідно виконати дію, обмежену в часі"</string>
+  <string name="a11y_user_avatar">"Аватар користувача"</string>
   <string name="a11y_user_menu">"Меню користувача"</string>
+  <string name="a11y_view_avatar">"Переглянути аватар"</string>
   <string name="a11y_view_details">"Переглянути подробиці"</string>
   <string name="a11y_voice_message">"Голосове повідомлення, тривалість: %1$s"</string>
   <string name="a11y_voice_message_record">"Записати голосове повідомлення."</string>
   <string name="a11y_voice_message_stop_recording">"Припинити запис"</string>
+  <string name="a11y_your_avatar">"Ваш аватар"</string>
   <string name="action_accept">"Прийняти"</string>
   <string name="action_add_caption">"Додати підпис"</string>
   <string name="action_add_to_timeline">"Додати до стрічки"</string>
@@ -98,6 +111,7 @@
   <string name="action_no">"Ні"</string>
   <string name="action_not_now">"Не зараз"</string>
   <string name="action_ok">"Гаразд"</string>
+  <string name="action_open_context_menu">"Відкрити контекстне меню"</string>
   <string name="action_open_settings">"Налаштування"</string>
   <string name="action_open_with">"Відкрити за допомогою"</string>
   <string name="action_pin">"Закріпити"</string>
@@ -122,7 +136,9 @@
   <string name="action_save">"Зберегти"</string>
   <string name="action_search">"Шукати"</string>
   <string name="action_send">"Надіслати"</string>
+  <string name="action_send_edited_message">"Надіслати змінене повідомлення"</string>
   <string name="action_send_message">"Надіслати повідомлення"</string>
+  <string name="action_send_voice_message">"Надіслати голосове повідомлення"</string>
   <string name="action_share">"Поділитися"</string>
   <string name="action_share_link">"Поділитися посиланням"</string>
   <string name="action_show">"Показати"</string>
@@ -138,6 +154,7 @@
   <string name="action_tap_for_options">"Торкніться, щоб переглянути параметри"</string>
   <string name="action_try_again">"Спробуйте ще раз"</string>
   <string name="action_unpin">"Відкріпити"</string>
+  <string name="action_view">"Переглянути"</string>
   <string name="action_view_in_timeline">"Переглянути на шкалі часу"</string>
   <string name="action_view_source">"Переглянути джерело"</string>
   <string name="action_yes">"Так"</string>
@@ -242,6 +259,7 @@
     <item quantity="few">"%d голоси"</item>
     <item quantity="many">"%d голосів"</item>
   </plurals>
+  <string name="common_preparing">"Приготування…"</string>
   <string name="common_privacy_policy">"Політика конфіденційності"</string>
   <string name="common_reaction">"Реакція"</string>
   <string name="common_reactions">"Реакції"</string>
@@ -359,14 +377,17 @@
   <string name="invite_friends_text">"Вітаю, поспілкуйтеся зі мною в %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Повідомити про ваду за допомогою Rageshake"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Знімок екрана"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Варіанти"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Вилучити %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Налаштування"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_caption_warning">"Користувачі старих застосунків можуть не бачити підписи."</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Файл не може бути вивантажено."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не вдалося завантажити медіафайл, спробуйте ще раз."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"Файл завеликий для вивантаження"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Натисніть на повідомлення і виберіть \"%1$s\", щоб додати його сюди."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закріпіть важливі повідомлення, щоб їх можна було легко знайти"</string>
   <plurals name="screen_pinned_timeline_screen_title">
