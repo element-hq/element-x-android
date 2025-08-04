@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -65,6 +66,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
@@ -120,6 +122,7 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
     private val suggestionsProcessor: SuggestionsProcessor,
+    private val notificationConversationService: NotificationConversationService,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
@@ -471,6 +474,23 @@ class MessageComposerPresenter @AssistedInject constructor(
                 }
             }
         }
+
+        val roomInfo = room.info()
+        val roomMembers = room.membersStateFlow.value.roomMembers()
+
+        notificationConversationService.onSendMessage(
+            sessionId = room.sessionId,
+            roomId = roomInfo.id,
+            roomName = roomInfo.name ?: roomInfo.id.value,
+            roomIsDirect = roomInfo.isDm,
+            roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers
+                ?.filter { it.membership.isActive() }
+                ?.takeIf { it.size == 2 && roomInfo.isDirect }
+                ?.find { it.userId != room.sessionId }
+                ?.avatarUrl,
+            threadId = null,
+        )
+
         analyticsService.capture(
             Composer(
                 inThread = capturedMode.inThread,
