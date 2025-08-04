@@ -28,6 +28,7 @@
   <string name="screen_room_change_role_invited_member_name">"%1$s (Kutsuttu)"</string>
   <string name="screen_room_change_role_invited_member_name_android">"(Kutsuttu)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Ylläpitäjillä on automaattisesti valvojan oikeudet"</string>
+  <string name="screen_room_change_role_moderators_owner_section_footer">"Omistajilla on automaattisesti ylläpitäjän oikeudet."</string>
   <string name="screen_room_change_role_moderators_title">"Muokkaa valvojia"</string>
   <string name="screen_room_change_role_section_administrators">"Ylläpitäjät"</string>
   <string name="screen_room_change_role_section_moderators">"Valvojat"</string>
@@ -81,6 +82,7 @@
   <string name="screen_room_member_list_pending_header_title">"Kutsuttu"</string>
   <string name="screen_room_member_list_role_administrator">"Ylläpitäjä"</string>
   <string name="screen_room_member_list_role_moderator">"Valvoja"</string>
+  <string name="screen_room_member_list_role_owner">"Omistaja"</string>
   <string name="screen_room_member_list_room_members_header_title">"Huoneen jäsenet"</string>
   <string name="screen_room_member_list_unbanning_user">"Poistetaan käyttäjän %1$s porttikieltoa"</string>
   <string name="screen_room_notification_settings_allow_custom">"Salli mukautettu asetus"</string>
@@ -98,12 +100,14 @@
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Vain maininnoista ja avainsanoista"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Ilmoita minulle tässä huoneessa"</string>
   <string name="screen_room_roles_and_permissions_admins">"Ylläpitäjät"</string>
+  <string name="screen_room_roles_and_permissions_admins_and_owners">"Ylläpitäjät ja omistajat"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Vaihda rooliani"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_member">"Alenna jäseneksi"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_moderator">"Alenna valvojaksi"</string>
   <string name="screen_room_roles_and_permissions_member_moderation">"Jäsenten valvonta"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Viestit ja sisältö"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Valvojat"</string>
+  <string name="screen_room_roles_and_permissions_owners">"Omistajat"</string>
   <string name="screen_room_roles_and_permissions_permissions_header">"Oikeudet"</string>
   <string name="screen_room_roles_and_permissions_reset">"Nollaa oikeudet"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Kun nollaat käyttöoikeudet, menetät nykyiset asetukset."</string>

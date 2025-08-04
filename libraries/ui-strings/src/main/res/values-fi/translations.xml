@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Lisää reaktio: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Poista"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d numero syötetty"</item>
     <item quantity="other">"%1$d numeroa syötetty"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Muokkaa avataria"</string>
+  <string name="a11y_edit_room_address_hint">"Täysi osoite tulee olemaan %1$s"</string>
+  <string name="a11y_encryption_details">"Salauksen tiedot"</string>
   <string name="a11y_hide_password">"Piilota salasana"</string>
   <string name="a11y_join_call">"Liity puheluun"</string>
   <string name="a11y_jump_to_bottom">"Siirry loppuun"</string>
+  <string name="a11y_move_the_map_to_my_location">"Siirrä kartta sijaintiini"</string>
   <string name="a11y_notifications_mentions_only">"Vain maininnat"</string>
   <string name="a11y_notifications_muted">"Mykistetty"</string>
+  <string name="a11y_notifications_new_mentions">"Uusia mainintoja"</string>
+  <string name="a11y_notifications_new_messages">"Uusia viestejä"</string>
+  <string name="a11y_notifications_ongoing_call">"Käynnissä oleva puhelu"</string>
+  <string name="a11y_other_user_avatar">"Toisen käyttäjän avatar"</string>
   <string name="a11y_page_n">"Sivu %1$d"</string>
   <string name="a11y_pause">"Keskeytä"</string>
   <string name="a11y_paused_voice_message">"Ääniviesti, kesto: %1$s, nykyinen sijainti: %2$s"</string>
@@ -18,7 +27,7 @@
   <string name="a11y_play">"Toista"</string>
   <string name="a11y_poll">"Kysely"</string>
   <string name="a11y_poll_end">"Päättynyt kysely"</string>
-  <string name="a11y_react_with">"Reagoi emojilla %1$s"</string>
+  <string name="a11y_react_with">"Lisää reaktio: %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagoi muilla emojeilla"</string>
   <string name="a11y_read_receipts_multiple">"%1$s ja %2$s on lukenut viestin"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
@@ -27,15 +36,22 @@
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s on lukenut viestin"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Näytä kaikki napauttamalla"</string>
-  <string name="a11y_remove_reaction">"Poista reaktio emojilla %1$s"</string>
+  <string name="a11y_remove_reaction">"Poista reaktio: %1$s"</string>
+  <string name="a11y_remove_reaction_with">"Poista reaktio: %1$s"</string>
+  <string name="a11y_room_avatar">"Huoneen avatar"</string>
   <string name="a11y_send_files">"Lähetä tiedostoja"</string>
   <string name="a11y_show_password">"Näytä salasana"</string>
   <string name="a11y_start_call">"Aloita puhelu"</string>
+  <string name="a11y_time_limited_action_required">"Aikarajoitettu toimenpide vaaditaan"</string>
+  <string name="a11y_tombstoned_room">"Haudattu huone"</string>
+  <string name="a11y_user_avatar">"Käyttäjän avatar"</string>
   <string name="a11y_user_menu">"Käyttäjävalikko"</string>
+  <string name="a11y_view_avatar">"Näytä avatar"</string>
   <string name="a11y_view_details">"Näytä tiedot"</string>
   <string name="a11y_voice_message">"Ääniviesti, kesto: %1$s"</string>
   <string name="a11y_voice_message_record">"Nauhoita ääniviesti."</string>
   <string name="a11y_voice_message_stop_recording">"Lopeta nauhoittaminen"</string>
+  <string name="a11y_your_avatar">"Avatarisi"</string>
   <string name="action_accept">"Hyväksy"</string>
   <string name="action_add_caption">"Lisää kuvateksti"</string>
   <string name="action_add_to_timeline">"Lisää aikajanalle"</string>
@@ -94,6 +110,7 @@
   <string name="action_no">"Ei"</string>
   <string name="action_not_now">"Ei nyt"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Avaa kontekstivalikko"</string>
   <string name="action_open_settings">"Asetukset"</string>
   <string name="action_open_with">"Avaa sovelluksessa"</string>
   <string name="action_pin">"Kiinnitä"</string>
@@ -118,7 +135,9 @@
   <string name="action_save">"Tallenna"</string>
   <string name="action_search">"Hae"</string>
   <string name="action_send">"Lähetä"</string>
+  <string name="action_send_edited_message">"Lähetä muokattu viesti"</string>
   <string name="action_send_message">"Lähetä viesti"</string>
+  <string name="action_send_voice_message">"Lähetä ääniviesti"</string>
   <string name="action_share">"Jaa"</string>
   <string name="action_share_link">"Jaa linkki"</string>
   <string name="action_show">"Näytä"</string>
@@ -134,6 +153,7 @@
   <string name="action_tap_for_options">"Näytä vaihtoehdot napauttamalla"</string>
   <string name="action_try_again">"Yritä uudelleen"</string>
   <string name="action_unpin">"Poista kiinnitys"</string>
+  <string name="action_view">"Näytä"</string>
   <string name="action_view_in_timeline">"Näytä aikajanalla"</string>
   <string name="action_view_source">"Näytä lähde"</string>
   <string name="action_yes">"Kyllä"</string>
@@ -144,6 +164,7 @@
   <string name="common_acceptable_use_policy">"Hyväksyttävän käytön käytäntö"</string>
   <string name="common_adding_caption">"Lisätään kuvatekstiä"</string>
   <string name="common_advanced_settings">"Edistyneet asetukset"</string>
+  <string name="common_an_image">"kuva"</string>
   <string name="common_analytics">"Analytiikka"</string>
   <string name="common_appearance">"Ulkoasu"</string>
   <string name="common_audio">"Ääni"</string>
@@ -234,6 +255,7 @@ Syy: %1$s."</string>
     <item quantity="one">"%d ääni"</item>
     <item quantity="other">"%d ääntä"</item>
   </plurals>
+  <string name="common_preparing">"Valmistellaan…"</string>
   <string name="common_privacy_policy">"Tietosuojakäytäntö"</string>
   <string name="common_reaction">"Reaktio"</string>
   <string name="common_reactions">"Reaktiot"</string>
@@ -263,6 +285,7 @@ Syy: %1$s."</string>
   <string name="common_sending">"Lähetetään…"</string>
   <string name="common_sending_failed">"Lähetys epäonnistui"</string>
   <string name="common_sent">"Lähetetty"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Palvelin ei ole tuettu"</string>
   <string name="common_server_url">"Palvelimen osoite"</string>
   <string name="common_settings">"Asetukset"</string>
@@ -328,6 +351,7 @@ Haluatko varmasti jatkaa?"</string>
   <string name="error_failed_loading_messages">"Viestien lataaminen epäonnistui"</string>
   <string name="error_failed_locating_user">"%1$s ei päässyt käsiksi sijaintiisi. Yritä myöhemmin uudelleen."</string>
   <string name="error_failed_uploading_voice_message">"Ääniviestin lähettäminen epäonnistui."</string>
+  <string name="error_invalid_invite">"Huone ei ole enää olemassa tai kutsu ei ole enää voimassa."</string>
   <string name="error_message_not_found">"Viestiä ei löytynyt"</string>
   <string name="error_missing_location_auth_android">"%1$s -sovelluksella ei ole lupaa sijaintiisi. Voit sallia sen asetuksista."</string>
   <string name="error_missing_location_rationale_android">"%1$s -sovelluksella ei ole lupaa sijaintiisi. Voit sallia sen painamalla alla olevaa nappia."</string>
@@ -348,10 +372,18 @@ Haluatko varmasti jatkaa?"</string>
   <string name="invite_friends_text">"Hei, keskustele kanssani %1$s -sovelluksessa: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Raivostunut ravistaminen ilmoittaa virheestä"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Näyttökuva"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Vaihtoehdot"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Poista %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Asetukset"</string>
   <string name="screen_media_picker_error_failed_selection">"Median valinta epäonnistui, yritä uudelleen."</string>
   <string name="screen_media_upload_preview_caption_warning">"Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia."</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Tiedostoa ei voitu lähettää."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Median käsittely epäonnistui, yritä uudelleen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Median lähettäminen epäonnistui, yritä uudelleen."</string>
+  <string name="screen_media_upload_preview_error_too_large_message">"Suurin sallittu tiedostokoko on %1$s."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"Tiedosto on liian suuri lähetettäväksi"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Paina viestiä ja valitse “%1$s” lisätäksesi sen tänne."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Kiinnitä tärkeät viestit, jotta ne löytyvät helposti."</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -372,6 +404,9 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_room_error_failed_processing_media">"Median käsittely epäonnistui, yritä uudelleen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Käyttäjän tietojen hakeminen epäonnistui"</string>
   <string name="screen_room_event_pill">"Viesti huoneessa %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Laajenna"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Pienennä"</string>
+  <string name="screen_room_permalink_same_room_android">"Katselet jo tätä huonetta!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"Kiinnitetty viesti %1$s"</string>
   <string name="screen_room_pinned_banner_loading_description">"Viestiä ladataan…"</string>

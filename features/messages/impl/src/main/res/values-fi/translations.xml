@@ -28,15 +28,25 @@
   <string name="screen_room_mentions_at_room_title">"Kaikki"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Lähetä uudelleen"</string>
   <string name="screen_room_retry_send_menu_title">"Viestisi lähettäminen epäonnistui"</string>
-  <string name="screen_room_timeline_add_reaction">"Lisää emoji"</string>
+  <string name="screen_room_timeline_add_reaction">"Lisää reaktio"</string>
   <string name="screen_room_timeline_beginning_of_room">"Tämä on huoneen %1$s alku."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Tämä on tämän keskustelun alku."</string>
   <string name="screen_room_timeline_legacy_call">"Puhelu, jota ei tueta. Kysy, voiko soittaja käyttää uutta Element X -sovellusta."</string>
   <string name="screen_room_timeline_less_reactions">"Näytä vähemmän"</string>
   <string name="screen_room_timeline_message_copied">"Viesti kopioitu"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Sinulla ei ole oikeutta kirjoittaa tässä huoneessa"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"%1$d jäsen reagoi %2$s"</item>
+    <item quantity="other">"%1$d jäsentä reagoivat %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"Sinä ja %1$d jäsen reagoitte %2$s"</item>
+    <item quantity="other">"Sinä ja %1$d jäsentä reagoitte %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"Reagoit seuraavasti: %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Näytä vähemmän"</string>
   <string name="screen_room_timeline_reactions_show_more">"Näytä lisää"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Näytä reaktioiden yhteenveto"</string>
   <string name="screen_room_timeline_read_marker_title">"Uusi"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d muutos huoneeseen"</item>

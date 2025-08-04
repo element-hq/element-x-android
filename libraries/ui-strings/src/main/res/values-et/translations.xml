@@ -255,6 +255,7 @@ Põhjus: %1$s."</string>
     <item quantity="one">"%d hääl"</item>
     <item quantity="other">"%d häält"</item>
   </plurals>
+  <string name="common_preparing">"Ettevalmistamisel…"</string>
   <string name="common_privacy_policy">"Privaatsuspoliitika"</string>
   <string name="common_reaction">"Reaktsioon"</string>
   <string name="common_reactions">"Reaktsioonid"</string>
@@ -378,8 +379,11 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_create_poll_settings_section_title">"Seadistused"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Faili üleslaadimine ei õnnestunud."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti."</string>
+  <string name="screen_media_upload_preview_error_too_large_message">"Maksimaalne lubatud failisuurus on %1$s."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"Fail on üleslaadimiseks liiga suur"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Siia lisamiseks vajuta sõnumil ja vali „%1$s“."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile"</string>
   <plurals name="screen_pinned_timeline_screen_title">

@@ -260,6 +260,7 @@ Dôvod: %1$s."</string>
     <item quantity="few">"%d hlasy"</item>
     <item quantity="other">"%d hlasov"</item>
   </plurals>
+  <string name="common_preparing">"Pripravuje sa…"</string>
   <string name="common_privacy_policy">"Zásady ochrany osobných údajov"</string>
   <string name="common_reaction">"Reakcia"</string>
   <string name="common_reactions">"Reakcie"</string>

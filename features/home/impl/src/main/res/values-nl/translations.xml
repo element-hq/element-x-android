@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_submit_android">"Optimalisatie uitschakelen"</string>
   <string name="banner_set_up_recovery_content">"Herstel je cryptografische identiteit en berichtengeschiedenis met een herstelsleutel voor als je al je bestaande apparaten kwijt bent."</string>
   <string name="banner_set_up_recovery_submit">"Herstelmogelijkheid instellen"</string>
   <string name="banner_set_up_recovery_title">"Herstel instellen om je account te beschermen"</string>

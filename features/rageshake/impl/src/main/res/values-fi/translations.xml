@@ -10,6 +10,7 @@
   <string name="screen_bug_report_error_description_too_short">"Kuvaus on liian lyhyt. Kerro tarkemmin mitä tapahtui, kiitos!"</string>
   <string name="screen_bug_report_include_crash_logs">"Lähetä kaatumislokit"</string>
   <string name="screen_bug_report_include_logs">"Lähetä lokitiedostot"</string>
+  <string name="screen_bug_report_include_logs_error">"Lokitiedostosi ovat liian suuria, joten niitä ei voida sisällyttää tähän raporttiin. Lähetä ne meille toisella tavalla."</string>
   <string name="screen_bug_report_include_screenshot">"Lähetä kuvakaappaus"</string>
   <string name="screen_bug_report_logs_description">"Lähetä lokitiedostot viestisi kanssa, jotta voimme varmistaa, että kaikki toimii oikein. Jos haluat lähettää viestisi ilman lokeja, jätä tämä asetus valitsematta."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s kaatui edellisellä käyttökerralla. Haluatko jakaa virheraportin kanssamme?"</string>

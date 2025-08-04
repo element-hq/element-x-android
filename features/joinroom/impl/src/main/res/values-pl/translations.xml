@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Dołącz do pokoju"</string>
   <string name="screen_join_room_join_restricted_message">"Aby dołączyć, musisz uzyskać zaproszenie lub być członkiem danej przestrzeni."</string>
   <string name="screen_join_room_knock_action">"Wyślij prośbę o dołączenie"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Dozwolone znaki %1$d z %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Wiadomość (opcjonalne)"</string>
   <string name="screen_join_room_knock_sent_description">"Otrzymasz zaproszenie dołączenia do pokoju, jeśli prośba zostanie zaakceptowana."</string>
   <string name="screen_join_room_knock_sent_title">"Wysłano prośbę o dołączenie"</string>

@@ -2,8 +2,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Bijlage toevoegen"</string>
   <string name="rich_text_editor_bullet_list">"Lijst met opsommingstekens in-/uitschakelen"</string>
-  <string name="rich_text_editor_close_formatting_options">"Opmaakopties sluiten"</string>
+  <string name="rich_text_editor_close_formatting_options">"Annuleren en opmaakopties sluiten"</string>
   <string name="rich_text_editor_code_block">"Codeblok in-/uitschakelen"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Bijschrift toevoegen"</string>
   <string name="rich_text_editor_composer_placeholder">"Bericht…"</string>
   <string name="rich_text_editor_create_link">"Maak een link"</string>
   <string name="rich_text_editor_edit_link">"Link bewerken"</string>
