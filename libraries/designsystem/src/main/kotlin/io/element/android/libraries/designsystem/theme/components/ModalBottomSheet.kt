@@ -23,6 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -54,7 +59,17 @@ fun ModalBottomSheet(
     val safeSheetState = if (LocalInspectionMode.current) sheetStateForPreview() else sheetState
     androidx.compose.material3.ModalBottomSheet(
         onDismissRequest = onDismissRequest,
-        modifier = modifier,
+        modifier = modifier.onKeyEvent { keyEvent ->
+            // It seems that on some devices, we have to handle the Escape key manually to close the bottom sheet.
+            // This is not the case using an emulator, but is necessary on some physical devices.
+            if (keyEvent.type == KeyEventType.KeyUp &&
+                keyEvent.key == Key.Escape) {
+                onDismissRequest()
+                true
+            } else {
+                false
+            }
+        },
         sheetState = safeSheetState,
         shape = shape,
         containerColor = containerColor,
