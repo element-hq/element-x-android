@@ -242,8 +242,9 @@ private fun HomeScaffold(
                             // and include provided bottom padding
                             // Disable contentPadding due to navigation issue using the keyboard
                             // See https://issuetracker.google.com/issues/436432313
-                            bottom = 80.dp, // + padding.calculateBottomPadding(),
-                            //top = padding.calculateTopPadding()
+                            bottom = 80.dp,
+                            // bottom = 80.dp + padding.calculateBottomPadding(),
+                            // top = padding.calculateTopPadding()
                         ),
                         modifier = Modifier
                             .padding(
