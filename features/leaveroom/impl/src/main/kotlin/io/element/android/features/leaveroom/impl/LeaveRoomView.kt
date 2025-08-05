@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 
+@Suppress("LambdaParameterEventTrailing")
 @Composable
 fun LeaveRoomView(
     state: InternalLeaveRoomState,
@@ -109,11 +110,11 @@ private fun LeaveRoomConfirmationDialog(
     isDm: Boolean,
     text: String,
     onSubmitClick: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(if (isDm) CommonStrings.action_leave_conversation else CommonStrings.action_leave_room),
     submitText: String = stringResource(CommonStrings.action_leave),
     destructiveSubmit: Boolean = false,
-    onDismiss: () -> Unit,
 ) {
     ConfirmationDialog(
         title = title,
@@ -137,7 +138,7 @@ private fun LeaveRoomProgressDialog(modifier: Modifier = Modifier) {
 @PreviewsDayNight
 @Composable
 internal fun LeaveRoomViewPreview(
-    @PreviewParameter(LeaveRoomStateProvider::class) state: InternalLeaveRoomState
+    @PreviewParameter(InternalLeaveRoomStateProvider::class) state: InternalLeaveRoomState
 ) = ElementPreview {
     Box(
         modifier = Modifier.size(300.dp, 300.dp),

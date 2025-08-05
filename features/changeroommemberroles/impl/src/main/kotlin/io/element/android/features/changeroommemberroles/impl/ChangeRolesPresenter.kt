@@ -18,8 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.bumble.appyx.core.plugin.NodeAware
-import com.bumble.appyx.core.plugin.NodeAwareImpl
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -54,7 +52,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
     private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
-) : Presenter<ChangeRolesState>{
+) : Presenter<ChangeRolesState> {
     @AssistedFactory
     interface Factory {
         fun create(role: RoomMember.Role): ChangeRolesPresenter

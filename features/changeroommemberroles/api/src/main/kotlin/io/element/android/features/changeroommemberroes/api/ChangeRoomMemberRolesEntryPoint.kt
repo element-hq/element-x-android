@@ -15,7 +15,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 interface ChangeRoomMemberRolesEntryPoint : FeatureEntryPoint {
-
     fun builder(parentNode: Node, buildContext: BuildContext): Builder
 
     interface Builder {
@@ -30,8 +29,7 @@ interface ChangeRoomMemberRolesEntryPoint : FeatureEntryPoint {
     }
 }
 
-
-enum class ChangeRoomMemberRolesListType : NodeInputs{
+enum class ChangeRoomMemberRolesListType : NodeInputs {
     SelectNewOwnersWhenLeaving,
     Admins,
     Moderators

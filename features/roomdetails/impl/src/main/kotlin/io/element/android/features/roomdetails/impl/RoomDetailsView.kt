@@ -110,8 +110,8 @@ fun RoomDetailsView(
     onSecurityAndPrivacyClick: () -> Unit,
     onProfileClick: (UserId) -> Unit,
     onReportRoomClick: () -> Unit,
-    leaveRoomView: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    leaveRoomView: @Composable () -> Unit,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     Scaffold(

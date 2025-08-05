@@ -77,7 +77,6 @@ class HomeFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     private val stateFlow = launchMolecule { presenter.present() }
 
     override fun onBuilt() {

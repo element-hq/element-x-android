@@ -173,7 +173,6 @@ class LeaveBaseRoomPresenterTest {
         }
     }
 
-
     @Test
     fun `present - reset state after error`() = runTest {
         val presenter = createLeaveRoomPresenter(

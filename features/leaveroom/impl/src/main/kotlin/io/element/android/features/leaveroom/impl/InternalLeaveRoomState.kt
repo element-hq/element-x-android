@@ -7,6 +7,7 @@
 
 package io.element.android.features.leaveroom.impl
 
+import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.architecture.AsyncAction
@@ -17,6 +18,7 @@ data class InternalLeaveRoomState(
     override val eventSink: (LeaveRoomEvent) -> Unit
 ) : LeaveRoomState
 
+@Immutable
 sealed interface Confirmation : AsyncAction.Confirming {
     data class Dm(val roomId: RoomId) : Confirmation
     data class Generic(val roomId: RoomId) : Confirmation

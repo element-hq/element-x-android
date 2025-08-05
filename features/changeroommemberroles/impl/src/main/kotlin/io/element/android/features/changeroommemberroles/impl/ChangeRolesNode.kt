@@ -48,7 +48,7 @@ class ChangeRolesNode @AssistedInject constructor(
 
     private val stateFlow = launchMolecule { presenter.present() }
 
-    suspend fun waitForRoleChanged(){
+    suspend fun waitForRoleChanged() {
         stateFlow.first { it.savingState.isSuccess() }
     }
 

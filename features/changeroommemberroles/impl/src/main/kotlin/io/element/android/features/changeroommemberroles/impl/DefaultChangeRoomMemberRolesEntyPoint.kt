@@ -19,10 +19,8 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class DefaultChangeRoomMemberRolesEntyPoint @Inject constructor() : ChangeRoomMemberRolesEntryPoint {
-
     override fun builder(parentNode: Node, buildContext: BuildContext): ChangeRoomMemberRolesEntryPoint.Builder {
         return object : ChangeRoomMemberRolesEntryPoint.Builder {
-
             private lateinit var changeRoomMemberRolesListType: ChangeRoomMemberRolesListType
             private lateinit var room: JoinedRoom
 
@@ -36,7 +34,6 @@ class DefaultChangeRoomMemberRolesEntyPoint @Inject constructor() : ChangeRoomMe
                 return this
             }
 
-
             override fun build(): Node {
                 return parentNode.createNode<ChangeRoomMemberRolesRootNode>(
                     buildContext = buildContext,
@@ -46,6 +43,5 @@ class DefaultChangeRoomMemberRolesEntyPoint @Inject constructor() : ChangeRoomMe
                 )
             }
         }
-
     }
 }

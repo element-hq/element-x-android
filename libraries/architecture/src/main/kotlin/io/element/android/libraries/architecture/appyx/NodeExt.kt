@@ -12,7 +12,6 @@ package io.element.android.libraries.architecture.appyx
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.InternalComposeApi
 import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import app.cash.molecule.AndroidUiDispatcher
@@ -24,7 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 fun <State> Node.launchMolecule(body: @Composable () -> State): StateFlow<State> {
     val scope = CoroutineScope(lifecycleScope.coroutineContext + AndroidUiDispatcher.Main)
-    return scope.launchMolecule(mode = RecompositionMode.ContextClock){
+    return scope.launchMolecule(mode = RecompositionMode.ContextClock) {
         currentComposer.startProviders(
             values = arrayOf(LocalLifecycleOwner provides this),
         )

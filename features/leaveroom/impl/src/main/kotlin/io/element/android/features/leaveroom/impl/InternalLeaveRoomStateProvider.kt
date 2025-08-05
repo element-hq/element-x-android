@@ -9,11 +9,10 @@ package io.element.android.features.leaveroom.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 
-class LeaveRoomStateProvider : PreviewParameterProvider<InternalLeaveRoomState> {
+class InternalLeaveRoomStateProvider : PreviewParameterProvider<InternalLeaveRoomState> {
     override val values: Sequence<InternalLeaveRoomState>
         get() = sequenceOf(
             aLeaveRoomState(),

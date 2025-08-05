@@ -77,8 +77,8 @@ fun HomeView(
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     onReportRoomClick: (roomId: RoomId) -> Unit,
     onDeclineInviteAndBlockUser: (roomSummary: RoomListRoomSummary) -> Unit,
-    modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     leaveRoomView: @Composable () -> Unit,
 ) {
     val state: RoomListState = homeState.roomListState
