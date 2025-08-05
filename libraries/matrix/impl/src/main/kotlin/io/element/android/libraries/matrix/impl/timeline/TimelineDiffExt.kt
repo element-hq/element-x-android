@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
-import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import uniffi.matrix_sdk_ui.EventItemOrigin
@@ -17,25 +16,13 @@ import uniffi.matrix_sdk_ui.EventItemOrigin
  * If there is multiple events in the diff, uses the first one as it should be a good indicator.
  */
 internal fun TimelineDiff.eventOrigin(): EventItemOrigin? {
-    return when (change()) {
-        TimelineChange.APPEND -> {
-            append()?.firstOrNull()?.eventOrigin()
-        }
-        TimelineChange.PUSH_BACK -> {
-            pushBack()?.eventOrigin()
-        }
-        TimelineChange.PUSH_FRONT -> {
-            pushFront()?.eventOrigin()
-        }
-        TimelineChange.SET -> {
-            set()?.item?.eventOrigin()
-        }
-        TimelineChange.INSERT -> {
-            insert()?.item?.eventOrigin()
-        }
-        TimelineChange.RESET -> {
-            reset()?.firstOrNull()?.eventOrigin()
-        }
+    return when (this) {
+        is TimelineDiff.Append -> values.firstOrNull()?.eventOrigin()
+        is TimelineDiff.PushBack -> value.eventOrigin()
+        is TimelineDiff.PushFront -> value.eventOrigin()
+        is TimelineDiff.Set -> value.eventOrigin()
+        is TimelineDiff.Insert -> value.eventOrigin()
+        is TimelineDiff.Reset -> values.firstOrNull()?.eventOrigin()
         else -> null
     }
 }
