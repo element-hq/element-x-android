@@ -46,7 +46,7 @@ import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
-import io.element.android.libraries.designsystem.modifiers.onShiftF10
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -179,7 +179,7 @@ private fun RoomSummaryScaffoldRow(
             indication = ripple(),
             interactionSource = remember { MutableInteractionSource() }
         )
-        .onShiftF10 { onLongClick(room) }
+        .onKeyboardContextMenuAction { onLongClick(room) }
     Row(
         modifier = modifier
             .fillMaxWidth()

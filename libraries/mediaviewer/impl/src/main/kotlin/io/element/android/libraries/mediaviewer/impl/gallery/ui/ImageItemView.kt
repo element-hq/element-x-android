@@ -24,7 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
-import io.element.android.libraries.designsystem.modifiers.onShiftF10
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
@@ -46,7 +46,7 @@ fun ImageItemView(
                 onLongClick = onLongClick,
                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
             )
-            .onShiftF10(onLongClick),
+            .onKeyboardContextMenuAction(onLongClick),
     ) {
         var isLoaded by remember { mutableStateOf(false) }
         AsyncImage(

@@ -19,12 +19,12 @@ import androidx.compose.ui.input.key.type
  * Modifier to handle Shift + F10 key events.
  * This is typically used to trigger context menus in desktop applications.
  *
- * @param onShiftF10Press The callback to invoke when Shift + F10 is pressed.
+ * @param action The callback to invoke when Shift + F10 is pressed.
  */
-fun Modifier.onShiftF10(
-    onShiftF10Press: (() -> Unit)?,
+fun Modifier.onKeyboardContextMenuAction(
+    action: (() -> Unit)?,
 ): Modifier = then(
-    if (onShiftF10Press == null) {
+    if (action == null) {
         Modifier
     } else {
         Modifier.onKeyEvent { keyEvent ->
@@ -32,7 +32,7 @@ fun Modifier.onShiftF10(
             if (keyEvent.type == KeyEventType.KeyUp &&
                 keyEvent.isShiftPressed &&
                 keyEvent.key == Key.F10) {
-                onShiftF10Press()
+                action()
                 true
             } else {
                 false

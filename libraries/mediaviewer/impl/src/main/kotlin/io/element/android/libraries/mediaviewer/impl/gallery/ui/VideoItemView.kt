@@ -33,7 +33,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.modifiers.onShiftF10
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -56,7 +56,7 @@ fun VideoItemView(
                 onLongClick = onLongClick,
                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
             )
-            .onShiftF10(onLongClick),
+            .onKeyboardContextMenuAction(onLongClick),
     ) {
         var isLoaded by remember { mutableStateOf(false) }
         AsyncImage(

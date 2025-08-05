@@ -48,7 +48,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.features.messages.impl.timeline.protection.coerceRatioWhenHidingContent
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
-import io.element.android.libraries.designsystem.modifiers.onShiftF10
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
@@ -97,7 +97,7 @@ fun TimelineItemImageView(
                                         onClick = onContentClick,
                                         onLongClick = onLongClick,
                                     )
-                                    .onShiftF10(onLongClick)
+                                    .onKeyboardContextMenuAction(onLongClick)
                             } else {
                                 Modifier
                             }

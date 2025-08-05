@@ -37,7 +37,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.libraries.designsystem.modifiers.onShiftF10
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.modifiers.subtleColorStops
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -155,7 +155,7 @@ internal fun TimelineItemRow(
                                                 onLongClick = { onLongClick(timelineItem) },
                                                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
                                             )
-                                            .onShiftF10 { onLongClick(timelineItem) }
+                                            .onKeyboardContextMenuAction { onLongClick(timelineItem) }
                                     } else {
                                         Modifier
                                     }
