@@ -335,6 +335,14 @@
       "includeRegex" : [
         "screen\\.bottom_sheet\\.manage_room_member\\..*"
       ]
+    },
+    {
+      "name" : ":features:changeroommemberroles:impl",
+      "includeRegex" : [
+        "screen_room_change_.*",
+        "screen_room_roles_.*",
+        "screen_room_member_list.*"
+      ]
     }
   ]
 }

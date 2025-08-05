@@ -149,8 +149,9 @@ class RoomDetailsPresenter @Inject constructor(
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
-                RoomDetailsEvent.LeaveRoom ->
-                    leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(room.roomId))
+                is RoomDetailsEvent.LeaveRoom -> {
+                    leaveRoomState.eventSink(LeaveRoomEvent.LeaveRoom(room.roomId, needsConfirmation = event.needsConfirmation))
+                }
                 RoomDetailsEvent.MuteNotification -> {
                     scope.launch(dispatchers.io) {
                         client.notificationSettingsService().muteRoom(room.roomId)

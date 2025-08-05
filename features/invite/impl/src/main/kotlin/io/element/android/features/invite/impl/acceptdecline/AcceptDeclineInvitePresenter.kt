@@ -56,15 +56,11 @@ class AcceptDeclineInvitePresenter @Inject constructor(
                         )
                     }
                 }
-                is InternalAcceptDeclineInviteEvents.CancelDeclineInvite -> {
-                    declinedAction.value = AsyncAction.Uninitialized
-                }
-
-                is InternalAcceptDeclineInviteEvents.DismissAcceptError -> {
+                is InternalAcceptDeclineInviteEvents.ClearAcceptActionState -> {
                     acceptedAction.value = AsyncAction.Uninitialized
                 }
 
-                is InternalAcceptDeclineInviteEvents.DismissDeclineError -> {
+                is InternalAcceptDeclineInviteEvents.ClearDeclineActionState -> {
                     declinedAction.value = AsyncAction.Uninitialized
                 }
             }

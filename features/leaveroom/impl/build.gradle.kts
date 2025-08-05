@@ -18,10 +18,12 @@ android {
 setupAnvil()
 
 dependencies {
+    api(projects.features.leaveroom.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
-    api(projects.features.leaveroom.api)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.uiStrings)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

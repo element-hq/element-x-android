@@ -49,7 +49,6 @@ import io.element.android.features.home.impl.roomlist.RoomListDeclineInviteMenu
 import io.element.android.features.home.impl.roomlist.RoomListEvents
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.search.RoomListSearchView
-import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -78,8 +77,9 @@ fun HomeView(
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     onReportRoomClick: (roomId: RoomId) -> Unit,
     onDeclineInviteAndBlockUser: (roomSummary: RoomListRoomSummary) -> Unit,
-    modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    leaveRoomView: @Composable () -> Unit,
 ) {
     val state: RoomListState = homeState.roomListState
     val coroutineScope = rememberCoroutineScope()
@@ -108,7 +108,7 @@ fun HomeView(
                 )
             }
 
-            LeaveRoomView(state = state.leaveRoomState)
+            leaveRoomView()
 
             HomeScaffold(
                 state = homeState,
@@ -304,5 +304,6 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: 
         onMenuActionClick = {},
         onDeclineInviteAndBlockUser = {},
         acceptDeclineInviteView = {},
+        leaveRoomView = {}
     )
 }

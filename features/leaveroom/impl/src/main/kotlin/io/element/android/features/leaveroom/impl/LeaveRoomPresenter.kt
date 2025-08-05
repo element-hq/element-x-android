@@ -14,15 +14,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.Dm
-import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.Generic
-import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.LastUserInRoom
-import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.PrivateRoom
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -35,71 +37,65 @@ class LeaveRoomPresenter @Inject constructor(
     @Composable
     override fun present(): LeaveRoomState {
         val scope = rememberCoroutineScope()
-        val confirmation = remember { mutableStateOf<LeaveRoomState.Confirmation>(LeaveRoomState.Confirmation.Hidden) }
-        val progress = remember { mutableStateOf<LeaveRoomState.Progress>(LeaveRoomState.Progress.Hidden) }
-        val error = remember { mutableStateOf<LeaveRoomState.Error>(LeaveRoomState.Error.Hidden) }
-
-        return LeaveRoomState(
-            confirmation = confirmation.value,
-            progress = progress.value,
-            error = error.value,
+        val leaveAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+        return InternalLeaveRoomState(
+            leaveAction = leaveAction.value,
         ) { event ->
             when (event) {
-                is LeaveRoomEvent.ShowConfirmation -> scope.launch(dispatchers.io) {
-                    showLeaveRoomAlert(
-                        matrixClient = client,
-                        roomId = event.roomId,
-                        confirmation = confirmation,
-                    )
-                }
-
-                is LeaveRoomEvent.HideConfirmation -> confirmation.value = LeaveRoomState.Confirmation.Hidden
-                is LeaveRoomEvent.LeaveRoom -> scope.launch(dispatchers.io) {
-                    client.leaveRoom(
-                        roomId = event.roomId,
-                        confirmation = confirmation,
-                        progress = progress,
-                        error = error,
-                    )
-                }
-
-                is LeaveRoomEvent.HideError -> error.value = LeaveRoomState.Error.Hidden
+                is LeaveRoomEvent.LeaveRoom ->
+                    if (event.needsConfirmation) {
+                        scope.showLeaveRoomAlert(roomId = event.roomId, leaveAction = leaveAction)
+                    } else {
+                        scope.leaveRoom(roomId = event.roomId, leaveAction = leaveAction)
+                    }
+                InternalLeaveRoomEvent.ResetState -> leaveAction.value = AsyncAction.Uninitialized
             }
         }
     }
-}
 
-private suspend fun showLeaveRoomAlert(
-    matrixClient: MatrixClient,
-    roomId: RoomId,
-    confirmation: MutableState<LeaveRoomState.Confirmation>,
-) {
-    matrixClient.getRoom(roomId)?.use { room ->
-        val roomInfo = room.roomInfoFlow.first()
-        confirmation.value = when {
-            roomInfo.isDm -> Dm(roomId)
-            // If unknown, assume the room is private
-            roomInfo.isPublic == null || roomInfo.isPublic == false -> PrivateRoom(roomId)
-            roomInfo.joinedMembersCount == 1L -> LastUserInRoom(roomId)
-            else -> Generic(roomId)
+    private fun CoroutineScope.showLeaveRoomAlert(
+        roomId: RoomId,
+        leaveAction: MutableState<AsyncAction<Unit>>,
+    ) = launch(dispatchers.io) {
+        client.getRoom(roomId)?.use { room ->
+            val roomInfo = room.roomInfoFlow.first()
+            leaveAction.value = when {
+                roomInfo.isDm -> Confirmation.Dm(roomId)
+                room.isLastOwner() && roomInfo.joinedMembersCount > 1L -> Confirmation.LastOwnerInRoom(roomId)
+                // If unknown, assume the room is private
+                roomInfo.isPublic == null || roomInfo.isPublic == false -> Confirmation.PrivateRoom(roomId)
+                roomInfo.joinedMembersCount == 1L -> Confirmation.LastUserInRoom(roomId)
+                else -> Confirmation.Generic(roomId)
+            }
         }
     }
-}
 
-private suspend fun MatrixClient.leaveRoom(
-    roomId: RoomId,
-    confirmation: MutableState<LeaveRoomState.Confirmation>,
-    progress: MutableState<LeaveRoomState.Progress>,
-    error: MutableState<LeaveRoomState.Error>,
-) {
-    confirmation.value = LeaveRoomState.Confirmation.Hidden
-    progress.value = LeaveRoomState.Progress.Shown
-    getRoom(roomId)?.use { room ->
-        room.leave()
-            .onFailure {
-                Timber.e(it, "Error while leaving room ${room.roomId}")
-                error.value = LeaveRoomState.Error.Shown
+    private fun CoroutineScope.leaveRoom(
+        roomId: RoomId,
+        leaveAction: MutableState<AsyncAction<Unit>>,
+    ) = launch(dispatchers.io) {
+        leaveAction.runCatchingUpdatingState {
+            client.getRoom(roomId)!!.use { room ->
+                room
+                    .leave()
+                    .onFailure { Timber.e(it, "Error while leaving room ${room.roomId}") }
+                    .getOrThrow()
             }
+        }
     }
-    progress.value = LeaveRoomState.Progress.Hidden
+
+    private suspend fun BaseRoom.isLastOwner(): Boolean {
+        if (roomInfoFlow.value.isDm) {
+            // DMs are not owned by the user, so we can return false
+            return false
+        } else {
+            val hasPrivilegedCreatorRole = roomInfoFlow.value.privilegedCreatorRole
+            if (!hasPrivilegedCreatorRole) return false
+
+            val creators = usersWithRole(RoomMember.Role.Owner(isCreator = true)).first()
+            val superAdmins = usersWithRole(RoomMember.Role.Owner(isCreator = false)).first()
+            val owners = creators + superAdmins
+            return owners.size == 1 && owners.first().userId == sessionId
+        }
+    }
 }

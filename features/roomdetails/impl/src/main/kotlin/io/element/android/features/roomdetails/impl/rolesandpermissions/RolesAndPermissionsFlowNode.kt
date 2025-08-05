@@ -10,27 +10,34 @@ package io.element.android.features.roomdetails.impl.rolesandpermissions
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.coroutineScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesNode
+import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesEntryPoint
+import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesListType
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsNode
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsSection
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
 class RolesAndPermissionsFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
+    private val joinedRoom: JoinedRoom,
 ) : BaseFlowNode<RolesAndPermissionsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.AdminSettings,
@@ -51,6 +58,16 @@ class RolesAndPermissionsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class ChangeRoomPermissions(val section: ChangeRoomPermissionsSection) : NavTarget
+    }
+
+    override fun onBuilt() {
+        super.onBuilt()
+        whenChildAttached { lifecycle, node: ChangeRoomMemberRolesEntryPoint.NodeProxy ->
+            lifecycle.coroutineScope.launch {
+                node.waitForRoleChanged()
+                backstack.pop()
+            }
+        }
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -83,18 +100,16 @@ class RolesAndPermissionsFlowNode @AssistedInject constructor(
                 )
             }
             is NavTarget.AdminList -> {
-                val inputs = ChangeRolesNode.Inputs(ChangeRolesNode.ListType.Admins)
-                createNode<ChangeRolesNode>(
-                    buildContext = buildContext,
-                    plugins = listOf(inputs),
-                )
+                changeRoomMemberRolesEntryPoint.builder(this, buildContext)
+                    .room(joinedRoom)
+                    .listType(ChangeRoomMemberRolesListType.Admins)
+                    .build()
             }
             is NavTarget.ModeratorList -> {
-                val inputs = ChangeRolesNode.Inputs(ChangeRolesNode.ListType.Moderators)
-                createNode<ChangeRolesNode>(
-                    buildContext = buildContext,
-                    plugins = listOf(inputs),
-                )
+                changeRoomMemberRolesEntryPoint.builder(this, buildContext)
+                    .room(joinedRoom)
+                    .listType(ChangeRoomMemberRolesListType.Moderators)
+                    .build()
             }
             is NavTarget.ChangeRoomPermissions -> {
                 val inputs = ChangeRoomPermissionsNode.Inputs(navTarget.section)

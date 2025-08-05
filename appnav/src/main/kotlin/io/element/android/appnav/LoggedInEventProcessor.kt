@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MembershipCha
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -28,6 +29,7 @@ class LoggedInEventProcessor @Inject constructor(
     fun observeEvents(coroutineScope: CoroutineScope) {
         observingJob = roomMembershipObserver.updates
             .filter { !it.isUserInRoom }
+            .distinctUntilChanged()
             .onEach {
                 when (it.change) {
                     MembershipChange.LEFT -> displayMessage(CommonStrings.common_current_user_left_room)

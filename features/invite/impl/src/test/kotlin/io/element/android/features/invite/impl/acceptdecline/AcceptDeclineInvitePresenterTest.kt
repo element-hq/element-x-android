@@ -56,7 +56,7 @@ class AcceptDeclineInvitePresenterTest {
             awaitItem().also { state ->
                 assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, false))
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.CancelDeclineInvite
+                    InternalAcceptDeclineInviteEvents.ClearDeclineActionState
                 )
             }
             awaitItem().also { state ->
@@ -90,7 +90,7 @@ class AcceptDeclineInvitePresenterTest {
             awaitItem().also { state ->
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Failure::class.java)
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.DismissDeclineError
+                    InternalAcceptDeclineInviteEvents.ClearDeclineActionState
                 )
             }
             awaitItem().also { state ->
@@ -154,7 +154,7 @@ class AcceptDeclineInvitePresenterTest {
             awaitItem().also { state ->
                 assertThat(state.acceptAction).isInstanceOf(AsyncAction.Failure::class.java)
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.DismissAcceptError
+                    InternalAcceptDeclineInviteEvents.ClearAcceptActionState
                 )
             }
             awaitItem().also { state ->

@@ -280,7 +280,7 @@ class RoomDetailsViewTest {
             ),
         )
         rule.clickOn(R.string.screen_room_details_leave_room_title)
-        eventsRecorder.assertSingle(RoomDetailsEvent.LeaveRoom)
+        eventsRecorder.assertSingle(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
     }
 
     @Config(qualifiers = "h1500dp")
@@ -368,6 +368,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             onSecurityAndPrivacyClick = onSecurityAndPrivacyClick,
             onProfileClick = onProfileClick,
             onReportRoomClick = onReportRoomClick,
+            leaveRoomView = {},
         )
     }
 }
