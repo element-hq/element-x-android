@@ -7,7 +7,14 @@
 
 package io.element.android.features.login.impl.changeserver
 
-class UnauthorizedAccountProviderException(
-    val unauthorisedAccountProviderTitle: String,
-    val authorisedAccountProviderTitles: List<String>,
-) : Exception()
+sealed class AccountProviderAccessException : Exception() {
+    data class NeedElementProException(
+        val unauthorisedAccountProviderTitle: String,
+        val applicationId: String,
+    ) : AccountProviderAccessException()
+
+    data class UnauthorizedAccountProviderException(
+        val unauthorisedAccountProviderTitle: String,
+        val authorisedAccountProviderTitles: List<String>,
+    ) : AccountProviderAccessException()
+}

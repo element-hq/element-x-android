@@ -36,6 +36,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.features.login.api)
 
     implementation(libs.coil)
 

@@ -12,6 +12,9 @@ import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.DefaultLoginUserStory
+import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
+import io.element.android.features.login.impl.accesscontrol.ElementWellknownRetriever
+import io.element.android.features.login.impl.accesscontrol.FakeElementWellknownRetriever
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
@@ -235,6 +238,7 @@ private fun createPresenter(
     buildMeta: BuildMeta = aBuildMeta(),
     featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
+    elementWellknownRetriever: ElementWellknownRetriever = FakeElementWellknownRetriever(),
     rageshakeFeatureAvailability: () -> Boolean = { true },
     loginHelper: LoginHelper = createLoginHelper(),
 ) = OnBoardingPresenter(
@@ -242,6 +246,10 @@ private fun createPresenter(
     buildMeta = buildMeta,
     featureFlagService = featureFlagService,
     enterpriseService = enterpriseService,
+    defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
+        enterpriseService = enterpriseService,
+        elementWellknownRetriever = elementWellknownRetriever,
+    ),
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     loginHelper = loginHelper,
 )

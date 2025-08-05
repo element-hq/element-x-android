@@ -15,8 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
+import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.qrcode.QrCodeLoginManager
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
@@ -38,7 +37,7 @@ class QrCodeScanPresenter @Inject constructor(
     private val qrCodeLoginDataFactory: MatrixQrCodeLoginDataFactory,
     private val qrCodeLoginManager: QrCodeLoginManager,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val enterpriseService: EnterpriseService,
+    private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,
 ) : Presenter<QrCodeScanState> {
     private var isScanning by mutableStateOf(true)
 
@@ -97,10 +96,10 @@ class QrCodeScanPresenter @Inject constructor(
                     Timber.e(it, "Error parsing QR code data")
                 }.getOrThrow()
                 val serverName = data.serverName()
-                if (serverName != null && enterpriseService.isAllowedToConnectToHomeserver(serverName).not()) {
-                    throw UnauthorizedAccountProviderException(
-                        unauthorisedAccountProviderTitle = serverName,
-                        authorisedAccountProviderTitles = enterpriseService.defaultHomeserverList(),
+                if (serverName != null) {
+                    defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(
+                        title = serverName,
+                        accountProviderUrl = serverName,
                     )
                 }
                 data
