@@ -29,6 +29,7 @@ import org.matrix.rustcomponents.sdk.RoomList as InnerRoomList
 
 private val ROOM_LIST_RUST_FILTERS = listOf(
     RoomListEntriesDynamicFilterKind.NonLeft,
+    RoomListEntriesDynamicFilterKind.NonSpace,
     RoomListEntriesDynamicFilterKind.DeduplicateVersions
 )
 
