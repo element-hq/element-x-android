@@ -52,12 +52,14 @@ import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.room.getDirectRoomMember
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
+import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -468,18 +470,14 @@ class MessageComposerPresenter @AssistedInject constructor(
         }
 
         val roomInfo = room.info()
-        val roomMembers = room.membersStateFlow.value.roomMembers()
+        val roomMembers = room.membersStateFlow.value
 
         notificationConversationService.onSendMessage(
             sessionId = room.sessionId,
             roomId = roomInfo.id,
             roomName = roomInfo.name ?: roomInfo.id.value,
             roomIsDirect = roomInfo.isDm,
-            roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers
-                ?.filter { it.membership.isActive() }
-                ?.takeIf { it.size == 2 && roomInfo.isDirect }
-                ?.find { it.userId != room.sessionId }
-                ?.avatarUrl,
+            roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers.getDirectRoomMember(roomInfo = roomInfo, sessionId = room.sessionId)?.avatarUrl,
             threadId = null,
         )
 
