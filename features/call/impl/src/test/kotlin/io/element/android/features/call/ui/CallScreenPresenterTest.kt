@@ -26,13 +26,11 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
-import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.analytics.test.FakeScreenTracker
-import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule
@@ -82,19 +80,12 @@ import kotlin.time.Duration.Companion.seconds
     }
 
     @Test
-    fun `present - with CallType RoomCall sets call as active, loads URL, runs WidgetDriver and notifies the other clients a call started`() = runTest {
-        val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Boolean>> { Result.success(true) }
-        val syncService = FakeSyncService(SyncState.Running)
-        val fakeRoom = FakeJoinedRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
-        val client = FakeMatrixClient(syncService = syncService).apply {
-            givenGetRoomResult(A_ROOM_ID, fakeRoom)
-        }
+    fun `present - with CallType RoomCall sets call as active, loads URL and runs WidgetDriver`() = runTest {
         val widgetDriver = FakeMatrixWidgetDriver()
         val widgetProvider = FakeCallWidgetProvider(widgetDriver)
         val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> {}
         val joinedCallLambda = lambdaRecorder<CallType, Unit> {}
         val presenter = createCallScreenPresenter(
-            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(client) }),
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
             widgetProvider = widgetProvider,
@@ -116,7 +107,6 @@ import kotlin.time.Duration.Companion.seconds
             assertThat(widgetProvider.getWidgetCalled).isTrue()
             assertThat(widgetDriver.runCalledCount).isEqualTo(1)
             analyticsLambda.assertions().isCalledOnce().with(value(MobileScreen.ScreenName.RoomCall))
-            sendCallNotificationIfNeededLambda.assertions().isCalledOnce()
 
             // Wait until the WidgetDriver is loaded
             skipItems(1)
@@ -399,7 +389,6 @@ import kotlin.time.Duration.Companion.seconds
         activeCallManager: FakeActiveCallManager = FakeActiveCallManager(),
         screenTracker: ScreenTracker = FakeScreenTracker(),
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
-        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ): CallScreenPresenter {
         val userAgentProvider = object : UserAgentProvider {
             override fun provide(): String {
@@ -420,7 +409,6 @@ import kotlin.time.Duration.Companion.seconds
             languageTagProvider = FakeLanguageTagProvider("en-US"),
             appForegroundStateService = appForegroundStateService,
             appCoroutineScope = backgroundScope,
-            activeRoomsHolder = activeRoomsHolder,
         )
     }
 }

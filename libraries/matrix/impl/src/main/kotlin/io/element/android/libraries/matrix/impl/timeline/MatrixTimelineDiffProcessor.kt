@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
@@ -49,13 +48,13 @@ internal class MatrixTimelineDiffProcessor(
         }
 
     private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
-        when (diff.change()) {
-            TimelineChange.APPEND -> {
-                val items = diff.append()?.map { it.asMatrixTimelineItem() } ?: return
+        when (diff) {
+            is TimelineDiff.Append -> {
+                val items = diff.values.map { it.asMatrixTimelineItem() }
                 addAll(items)
             }
-            TimelineChange.PUSH_BACK -> {
-                val item = diff.pushBack()?.asMatrixTimelineItem() ?: return
+            is TimelineDiff.PushBack -> {
+                val item = diff.value.asMatrixTimelineItem()
                 if (item is MatrixTimelineItem.Event && item.event.content is RoomMembershipContent) {
                     // TODO - This is a temporary solution to notify the room screen about membership changes
                     // Ideally, this should be implemented by the Rust SDK
@@ -63,41 +62,37 @@ internal class MatrixTimelineDiffProcessor(
                 }
                 add(item)
             }
-            TimelineChange.PUSH_FRONT -> {
-                val item = diff.pushFront()?.asMatrixTimelineItem() ?: return
+            is TimelineDiff.PushFront -> {
+                val item = diff.value.asMatrixTimelineItem()
                 add(0, item)
             }
-            TimelineChange.SET -> {
-                val updateAtData = diff.set() ?: return
-                val item = updateAtData.item.asMatrixTimelineItem()
-                set(updateAtData.index.toInt(), item)
+            is TimelineDiff.Set -> {
+                val item = diff.value.asMatrixTimelineItem()
+                set(diff.index.toInt(), item)
             }
-            TimelineChange.INSERT -> {
-                val insertAtData = diff.insert() ?: return
-                val item = insertAtData.item.asMatrixTimelineItem()
-                add(insertAtData.index.toInt(), item)
+            is TimelineDiff.Insert -> {
+                val item = diff.value.asMatrixTimelineItem()
+                add(diff.index.toInt(), item)
             }
-            TimelineChange.REMOVE -> {
-                val removeAtData = diff.remove() ?: return
-                removeAt(removeAtData.toInt())
+            is TimelineDiff.Remove -> {
+                removeAt(diff.index.toInt())
             }
-            TimelineChange.RESET -> {
+            is TimelineDiff.Reset -> {
                 clear()
-                val items = diff.reset()?.map { it.asMatrixTimelineItem() } ?: return
+                val items = diff.values.map { it.asMatrixTimelineItem() }
                 addAll(items)
             }
-            TimelineChange.POP_FRONT -> {
+            TimelineDiff.PopFront -> {
                 removeFirstOrNull()
             }
-            TimelineChange.POP_BACK -> {
+            TimelineDiff.PopBack -> {
                 removeLastOrNull()
             }
-            TimelineChange.CLEAR -> {
+            TimelineDiff.Clear -> {
                 clear()
             }
-            TimelineChange.TRUNCATE -> {
-                val index = diff.truncate() ?: return
-                subList(index.toInt(), size).clear()
+            is TimelineDiff.Truncate -> {
+                subList(diff.length.toInt(), size).clear()
             }
         }
     }
