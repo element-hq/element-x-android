@@ -14,10 +14,10 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.test.room.aRoomMember
-import io.element.android.libraries.matrix.test.room.aRoomMemberList
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.previewutils.room.aRoomMember
+import io.element.android.libraries.previewutils.room.aRoomMemberList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

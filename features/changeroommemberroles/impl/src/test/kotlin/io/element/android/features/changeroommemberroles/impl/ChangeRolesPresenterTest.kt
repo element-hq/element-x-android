@@ -27,8 +27,8 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
-import io.element.android.libraries.matrix.test.room.aRoomMemberList
 import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
+import io.element.android.libraries.previewutils.room.aRoomMemberList
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentMapOf
