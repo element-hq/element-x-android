@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.impl.timeline
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineDiff
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineItem
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.TimelineChange
+import org.matrix.rustcomponents.sdk.TimelineDiff
 
 class MatrixTimelineDiffProcessorTest {
     private val timelineItems = MutableStateFlow<List<MatrixTimelineItem>>(emptyList())
@@ -33,7 +33,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `Append adds new entries at the end of the list`() = runTest {
         timelineItems.value = listOf(anEvent)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.APPEND)))
+        processor.postDiffs(listOf(TimelineDiff.Append(listOf(FakeFfiTimelineItem()))))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
             anEvent,
@@ -45,7 +45,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `PushBack adds a new entry at the end of the list`() = runTest {
         timelineItems.value = listOf(anEvent)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.PUSH_BACK)))
+        processor.postDiffs(listOf(TimelineDiff.PushBack(FakeFfiTimelineItem())))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
             anEvent,
@@ -57,7 +57,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `PushFront inserts a new entry at the start of the list`() = runTest {
         timelineItems.value = listOf(anEvent)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.PUSH_FRONT)))
+        processor.postDiffs(listOf(TimelineDiff.PushFront(FakeFfiTimelineItem())))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
             MatrixTimelineItem.Other,
@@ -69,7 +69,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `Set replaces an entry at some index`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.SET)))
+        processor.postDiffs(listOf(TimelineDiff.Set(1u, FakeFfiTimelineItem())))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
             anEvent,
@@ -81,7 +81,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `Insert inserts a new entry at the provided index`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.INSERT)))
+        processor.postDiffs(listOf(TimelineDiff.Insert(1u, FakeFfiTimelineItem())))
         assertThat(timelineItems.value.count()).isEqualTo(3)
         assertThat(timelineItems.value).containsExactly(
             anEvent,
@@ -94,7 +94,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `Remove removes an entry at some index`() = runTest {
         timelineItems.value = listOf(anEvent, MatrixTimelineItem.Other, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.REMOVE)))
+        processor.postDiffs(listOf(TimelineDiff.Remove(1u)))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
             anEvent,
@@ -106,7 +106,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `PopBack removes an entry at the end of the list`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.POP_BACK)))
+        processor.postDiffs(listOf(TimelineDiff.PopBack))
         assertThat(timelineItems.value.count()).isEqualTo(1)
         assertThat(timelineItems.value).containsExactly(
             anEvent,
@@ -117,7 +117,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `PopFront removes an entry at the start of the list`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.POP_FRONT)))
+        processor.postDiffs(listOf(TimelineDiff.PopFront))
         assertThat(timelineItems.value.count()).isEqualTo(1)
         assertThat(timelineItems.value).containsExactly(
             anEvent2,
@@ -128,7 +128,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `Clear removes all the entries`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.CLEAR)))
+        processor.postDiffs(listOf(TimelineDiff.Clear))
         assertThat(timelineItems.value).isEmpty()
     }
 
@@ -136,7 +136,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `Truncate removes all entries after the provided length`() = runTest {
         timelineItems.value = listOf(anEvent, MatrixTimelineItem.Other, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.TRUNCATE)))
+        processor.postDiffs(listOf(TimelineDiff.Truncate(1u)))
         assertThat(timelineItems.value.count()).isEqualTo(1)
         assertThat(timelineItems.value).containsExactly(
             anEvent,
@@ -147,7 +147,7 @@ class MatrixTimelineDiffProcessorTest {
     fun `Reset removes all entries and add the provided ones`() = runTest {
         timelineItems.value = listOf(anEvent, MatrixTimelineItem.Other, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
-        processor.postDiffs(listOf(FakeFfiTimelineDiff(change = TimelineChange.RESET)))
+        processor.postDiffs(listOf(TimelineDiff.Reset(listOf(FakeFfiTimelineItem()))))
         assertThat(timelineItems.value.count()).isEqualTo(1)
         assertThat(timelineItems.value).containsExactly(
             MatrixTimelineItem.Other,

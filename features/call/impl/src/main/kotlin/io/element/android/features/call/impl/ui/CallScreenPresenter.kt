@@ -33,14 +33,11 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
-import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -64,7 +61,6 @@ class CallScreenPresenter @AssistedInject constructor(
     private val activeCallManager: ActiveCallManager,
     private val languageTagProvider: LanguageTagProvider,
     private val appForegroundStateService: AppForegroundStateService,
-    private val activeRoomsHolder: ActiveRoomsHolder,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
@@ -75,7 +71,6 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private val isInWidgetMode = callType is CallType.RoomCall
     private val userAgent = userAgentProvider.provide()
-    private var notifiedCallStart = false
 
     @Composable
     override fun present(): CallScreenState {
