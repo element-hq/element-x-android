@@ -22,14 +22,17 @@ import com.bumble.appyx.core.navigation.NavElements
 import com.bumble.appyx.core.navigation.NavKey
 import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.node.childrenOfType
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.BackStack.State.ACTIVE
 import com.bumble.appyx.navmodel.backstack.BackStack.State.CREATED
+import com.bumble.appyx.navmodel.backstack.BackStack.State.DESTROYED
 import com.bumble.appyx.navmodel.backstack.BackStack.State.STASHED
 import com.bumble.appyx.navmodel.backstack.BackStackElement
 import com.bumble.appyx.navmodel.backstack.BackStackElements
+import com.bumble.appyx.navmodel.backstack.active
 import com.bumble.appyx.navmodel.backstack.operation.BackStackOperation
 import com.bumble.appyx.navmodel.backstack.operation.Push
 import com.bumble.appyx.navmodel.backstack.operation.pop
@@ -91,15 +94,6 @@ import java.time.Duration
 import java.time.Instant
 import java.util.Optional
 import java.util.UUID
-import kotlin.collections.List
-import kotlin.collections.any
-import kotlin.collections.emptyList
-import kotlin.collections.first
-import kotlin.collections.forEach
-import kotlin.collections.listOf
-import kotlin.collections.mapNotNull
-import kotlin.collections.plus
-import kotlin.collections.setOf
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
@@ -510,6 +504,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                     focusedEventId = eventId
                 )
             )
+            val existingRoomFlowChild = childrenOfType<RoomFlowNode>().firstOrNull()
+            existingRoomFlowChild?.keepOnlyRootNode()
+
             backstack.accept(AttachRoomOperation(roomNavTarget, clearBackstack))
         }
     }
@@ -565,9 +562,18 @@ private class AttachRoomOperation(
 
     override fun invoke(elements: BackStackElements<LoggedInFlowNode.NavTarget>): BackStackElements<LoggedInFlowNode.NavTarget> {
         return if (clearBackstack) {
+            val lastNavTargetIsSame = (elements.lastOrNull()?.key?.navTarget as? LoggedInFlowNode.NavTarget.Room)?.roomIdOrAlias == roomTarget.roomIdOrAlias
+
+            if (lastNavTargetIsSame) {
+                // If the last element is the same room, we just return the elements as is
+                return elements
+            } else {
+                elements.active?.transitionTo(DESTROYED, this)
+            }
+
             // Makes sure the room list target is alone in the backstack and stashed
             elements.mapNotNull { element ->
-                if (element.key.navTarget == LoggedInFlowNode.NavTarget.Home) {
+                if (element.key.navTarget is LoggedInFlowNode.NavTarget.Home) {
                     element.transitionTo(STASHED, this)
                 } else {
                     null

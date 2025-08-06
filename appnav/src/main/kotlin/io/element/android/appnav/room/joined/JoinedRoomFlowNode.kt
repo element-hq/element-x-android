@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.navigation.transition.JumpToEndTransitionHandler
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.node.childrenOfType
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
@@ -111,6 +112,10 @@ class JoinedRoomFlowNode @AssistedInject constructor(
                 loadingNode(buildContext, this::navigateUp)
             }
         }
+    }
+
+    fun keepOnlyLoadedRoomNode() {
+        childrenOfType<JoinedRoomLoadedFlowNode>().firstOrNull()?.keepOnlyRootNode()
     }
 
     private fun loadingNode(buildContext: BuildContext, onBackClick: () -> Unit) = node(buildContext) { modifier ->
