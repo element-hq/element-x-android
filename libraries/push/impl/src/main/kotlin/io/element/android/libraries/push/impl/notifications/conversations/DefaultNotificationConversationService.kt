@@ -14,6 +14,8 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -21,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.ui.media.DefaultImageLoaderHolder
+import io.element.android.libraries.matrix.ui.media.InitialsAvatarBitmapGenerator
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationBitmapLoader
@@ -48,10 +51,15 @@ class DefaultNotificationConversationService @Inject constructor(
 
         val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
         val imageLoader = imageLoaderHolder.get(client)
+        val icon = bitmapLoader.getRoomBitmap(roomAvatarUrl, imageLoader)?.let(IconCompat::createWithBitmap)
+            ?: InitialsAvatarBitmapGenerator()
+                .generateBitmap(512, AvatarData(id = roomId.value, name = roomName, size = AvatarSize.RoomHeader))?.let(
+                IconCompat::createWithAdaptiveBitmap
+            )
 
         val shortcutInfo = ShortcutInfoCompat.Builder(context, roomId.value)
             .setShortLabel(roomName)
-            .setIcon(bitmapLoader.getRoomBitmap(roomAvatarUrl, imageLoader)?.let(IconCompat::createWithBitmap))
+            .setIcon(icon)
             .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null))
             .setCategories(categories)
             .setLongLived(true)
