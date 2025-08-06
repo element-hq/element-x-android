@@ -23,12 +23,20 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.time.withTimeout
+import kotlinx.coroutines.withTimeout
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
 @ExperimentalCoroutinesApi
 class RoomMemberListPresenterTest {
@@ -64,6 +72,59 @@ class RoomMemberListPresenterTest {
             assertThat(loadedMembersState.roomMembers.dataOrNull()?.invited)
                 .isEqualTo(listOf(RoomMemberWithIdentityState(aVictor(), null), RoomMemberWithIdentityState(aWalter(), null)))
             assertThat(loadedMembersState.roomMembers.dataOrNull()?.joined).isNotEmpty()
+        }
+    }
+
+    @Test
+    fun `member loading is done automatically when RoomInfo's activeMemberCount changes`() = runTest {
+        val reloadMembersMutex = Mutex()
+        val updateMembersLambda = lambdaRecorder<Unit> {
+            if (reloadMembersMutex.isLocked) {
+                reloadMembersMutex.unlock()
+            }
+        }
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                updateMembersResult = updateMembersLambda,
+                canInviteResult = { Result.success(true) }
+            ).apply {
+                // Needed to avoid discarding the loaded members as a partial and invalid result
+                givenRoomInfo(aRoomInfo(joinedMembersCount = 2))
+            }
+        )
+        val presenter = createPresenter(joinedRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.roomMembers.isLoading()).isTrue()
+            room.givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
+            // Skip item while the new members state is processed
+            skipItems(1)
+            val loadedMembersState = awaitItem()
+            assertThat(loadedMembersState.roomMembers.isLoading()).isFalse()
+            assertThat(loadedMembersState.roomMembers.dataOrNull()?.joined).isNotEmpty()
+
+            // Assert no events are emitted only with that change
+            expectNoEvents()
+
+            // This will only progress if the `Room.updateMembers()` function is called, triggered by the RoomInfo change
+            withTimeout(10.seconds) {
+                reloadMembersMutex.withLock {
+                    launch { room.givenRoomInfo(aRoomInfo(activeMembersCount = 0L)) }
+                }
+            }
+
+            // Wait for the update to be processed
+            skipItems(1)
+
+            // Update the room members state as `Room.updateMembers()` would have done with the actual implementation
+            room.givenRoomMembersState(RoomMembersState.Ready(persistentListOf()))
+            // Wait for another update
+            skipItems(1)
+            // The members should be reloaded now
+            assertThat(awaitItem().roomMembers.dataOrNull()?.joined).isEmpty()
         }
     }
 
