@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -46,7 +47,8 @@ fun MessageStateEventContainer(
                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
                 indication = ripple(),
                 interactionSource = interactionSource
-            ),
+            )
+            .onKeyboardContextMenuAction(onLongClick),
         color = backgroundColor,
         shape = shape,
         content = content

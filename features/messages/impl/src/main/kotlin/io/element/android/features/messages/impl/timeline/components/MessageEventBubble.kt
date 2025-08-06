@@ -38,6 +38,7 @@ import io.element.android.features.messages.impl.timeline.model.bubble.BubbleSta
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStateProvider
 import io.element.android.libraries.core.extensions.to01
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
@@ -96,12 +97,14 @@ fun MessageEventBubble(
     val clickableModifier = if (isTalkbackActive()) {
         Modifier
     } else {
-        Modifier.combinedClickable(
-            onClick = onClick,
-            onLongClick = onLongClick,
-            indication = ripple(),
-            interactionSource = interactionSource
-        )
+        Modifier
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
+                indication = ripple(),
+                interactionSource = interactionSource
+            )
+            .onKeyboardContextMenuAction(onLongClick)
     }
 
     // Ignore state.isHighlighted for now, we need a design decision on it.

@@ -37,6 +37,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.modifiers.subtleColorStops
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -148,11 +149,13 @@ internal fun TimelineItemRow(
                                 // Custom clickable that applies over the whole item for accessibility
                                 .then(
                                     if (isTalkbackActive()) {
-                                        Modifier.combinedClickable(
-                                            onClick = { onContentClick(timelineItem) },
-                                            onLongClick = { onLongClick(timelineItem) },
-                                            onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
-                                        )
+                                        Modifier
+                                            .combinedClickable(
+                                                onClick = { onContentClick(timelineItem) },
+                                                onLongClick = { onLongClick(timelineItem) },
+                                                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+                                            )
+                                            .onKeyboardContextMenuAction { onLongClick(timelineItem) }
                                     } else {
                                         Modifier
                                     }
