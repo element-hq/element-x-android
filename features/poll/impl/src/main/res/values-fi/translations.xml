@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Piilota äänet"</string>
   <string name="screen_create_poll_answer_hint">"Vaihtoehto %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Muutoksiasi ei ole tallennettu. Haluatko varmasti palata takaisin?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Poista vaihtoehto %1$s"</string>
   <string name="screen_create_poll_question_desc">"Kysymys tai aihe"</string>
   <string name="screen_create_poll_question_hint">"Mistä kyselyssä on kyse?"</string>
   <string name="screen_create_poll_title">"Luo kysely"</string>

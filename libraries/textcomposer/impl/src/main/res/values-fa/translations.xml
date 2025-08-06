@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"پیام رمزنگاری نشده…"</string>
   <string name="rich_text_editor_create_link">"ایجاد پیوند"</string>
   <string name="rich_text_editor_edit_link">"ویرایش پیوند"</string>
+  <string name="rich_text_editor_format_action">"‏%1$s. وضعیت: %2$s"</string>
   <string name="rich_text_editor_format_bold">"اعمال قالب توپر"</string>
   <string name="rich_text_editor_format_italic">"اعمال قالب کج"</string>
+  <string name="rich_text_editor_format_state_disabled">"از کار افتاده"</string>
+  <string name="rich_text_editor_format_state_off">"خاموش"</string>
+  <string name="rich_text_editor_format_state_on">"روشن"</string>
   <string name="rich_text_editor_format_strikethrough">"اعمال قالب خط‌خورده"</string>
   <string name="rich_text_editor_format_underline">"اعمال قالب زیرخط‌دار"</string>
   <string name="rich_text_editor_full_screen_toggle">"تغییر حالت تمام‌صفحه"</string>

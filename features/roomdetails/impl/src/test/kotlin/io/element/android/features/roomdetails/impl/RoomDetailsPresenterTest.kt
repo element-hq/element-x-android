@@ -12,7 +12,6 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
@@ -548,8 +547,8 @@ class RoomDetailsPresenterTest {
             dispatchers = testCoroutineDispatchers()
         )
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
-            awaitItem().eventSink(RoomDetailsEvent.LeaveRoom)
-            leaveRoomEventRecorder.assertSingle(LeaveRoomEvent.ShowConfirmation(room.roomId))
+            awaitItem().eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
+            leaveRoomEventRecorder.assertSingle(LeaveRoomEvent.LeaveRoom(room.roomId, needsConfirmation = true))
             cancelAndIgnoreRemainingEvents()
         }
     }

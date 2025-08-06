@@ -12,7 +12,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustEventTimelineItem
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimeline
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineDiff
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineItem
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -24,7 +23,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Timeline
-import org.matrix.rustcomponents.sdk.TimelineChange
+import org.matrix.rustcomponents.sdk.TimelineDiff
 import uniffi.matrix_sdk_ui.EventItemOrigin
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -42,7 +41,7 @@ class TimelineItemsSubscriberTest {
             timelineItemsSubscriber.subscribeIfNeeded()
             // Wait for the listener to be set.
             runCurrent()
-            timeline.emitDiff(listOf(FakeFfiTimelineDiff(item = null, change = TimelineChange.RESET)))
+            timeline.emitDiff(listOf(TimelineDiff.Reset(emptyList())))
             val final = awaitItem()
             assertThat(final).isEmpty()
             timelineItemsSubscriber.unsubscribeIfNeeded()
@@ -62,7 +61,7 @@ class TimelineItemsSubscriberTest {
             timelineItemsSubscriber.subscribeIfNeeded()
             // Wait for the listener to be set.
             runCurrent()
-            timeline.emitDiff(listOf(FakeFfiTimelineDiff(item = FakeFfiTimelineItem(), change = TimelineChange.RESET)))
+            timeline.emitDiff(listOf(TimelineDiff.Reset(listOf(FakeFfiTimelineItem()))))
             val final = awaitItem()
             assertThat(final).isNotEmpty()
             timelineItemsSubscriber.unsubscribeIfNeeded()
@@ -86,11 +85,10 @@ class TimelineItemsSubscriberTest {
             runCurrent()
             timeline.emitDiff(
                 listOf(
-                    FakeFfiTimelineDiff(
-                        item = FakeFfiTimelineItem(
+                    TimelineDiff.Reset(
+                        listOf(FakeFfiTimelineItem(
                             asEventResult = aRustEventTimelineItem(origin = EventItemOrigin.SYNC),
-                        ),
-                        change = TimelineChange.RESET,
+                        ))
                     )
                 )
             )

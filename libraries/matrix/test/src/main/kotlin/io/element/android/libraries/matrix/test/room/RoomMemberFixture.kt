@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.test.room
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import kotlinx.collections.immutable.persistentListOf
 
 fun aRoomMember(
     userId: UserId = UserId("@alice:server.org"),
@@ -33,4 +34,32 @@ fun aRoomMember(
     isIgnored = isIgnored,
     role = role,
     membershipChangeReason = membershipChangeReason,
+)
+
+fun aRoomMemberList() = persistentListOf(
+    anAlice(),
+    aBob(),
+    aRoomMember(UserId("@carol:server.org"), "Carol"),
+    aRoomMember(UserId("@david:server.org"), "David"),
+    aRoomMember(UserId("@eve:server.org"), "Eve"),
+    aRoomMember(UserId("@justin:server.org"), "Justin"),
+    aRoomMember(UserId("@mallory:server.org"), "Mallory"),
+    aRoomMember(UserId("@susie:server.org"), "Susie"),
+    aVictor(),
+    aWalter(),
+)
+
+fun anAlice() = aRoomMember(UserId("@alice:server.org"), "Alice", role = RoomMember.Role.Admin)
+fun aBob() = aRoomMember(UserId("@bob:server.org"), "Bob", role = RoomMember.Role.Moderator)
+
+fun aVictor() = aRoomMember(
+    UserId("@victor:server.org"),
+    "Victor",
+    membership = RoomMembershipState.INVITE
+)
+
+fun aWalter() = aRoomMember(
+    UserId("@walter:server.org"),
+    "Walter",
+    membership = RoomMembershipState.INVITE
 )

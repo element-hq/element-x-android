@@ -10,9 +10,11 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Salaamaton viesti…"</string>
   <string name="rich_text_editor_create_link">"Luo linkki"</string>
   <string name="rich_text_editor_edit_link">"Muokkaa linkkiä"</string>
+  <string name="rich_text_editor_format_action">"%1$s, tila: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Käytä lihavoitua muotoa"</string>
   <string name="rich_text_editor_format_italic">"Käytä kursiivimuotoa"</string>
   <string name="rich_text_editor_format_state_off">"pois päältä"</string>
+  <string name="rich_text_editor_format_state_on">"päällä"</string>
   <string name="rich_text_editor_format_strikethrough">"Käytä yliviivausmuotoa"</string>
   <string name="rich_text_editor_format_underline">"Käytä alleviivausmuotoa"</string>
   <string name="rich_text_editor_full_screen_toggle">"Koko näytön tila päälle/pois"</string>

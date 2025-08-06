@@ -8,7 +8,7 @@
 package io.element.android.features.roomdetails.impl
 
 sealed interface RoomDetailsEvent {
-    data object LeaveRoom : RoomDetailsEvent
+    data class LeaveRoom(val needsConfirmation: Boolean) : RoomDetailsEvent
     data object MuteNotification : RoomDetailsEvent
     data object UnmuteNotification : RoomDetailsEvent
     data class CopyToClipboard(val text: String) : RoomDetailsEvent

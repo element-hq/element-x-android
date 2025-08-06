@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Are you sure that you want to leave this conversation? This conversation is not public and you won\'t be able to rejoin without an invite."</string>
   <string name="leave_room_alert_empty_subtitle">"Are you sure that you want to leave this room? You\'re the only person here. If you leave, no one will be able to join in the future, including you."</string>
   <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you won\'t be able to rejoin without an invite."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Choose owners"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"You\'re the only owner of this room. You need to transfer ownership to someone else before you leave the room."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Transfer ownership"</string>
   <string name="leave_room_alert_subtitle">"Are you sure that you want to leave the room?"</string>
 </resources>

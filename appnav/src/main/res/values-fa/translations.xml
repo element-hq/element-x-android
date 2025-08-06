@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_migrate_to_native_sliding_sync_action">"خروج و ارتقا"</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"‏%1$s دیگر از شیوه‌نامهٔ قدیمی پشتیبانی نمی‌کند. لطفاً برای ادامهٔ استفاده از کاره، خارج شده و دوباره وارد شوید."</string>
 </resources>

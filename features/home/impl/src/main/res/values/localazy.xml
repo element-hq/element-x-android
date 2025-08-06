@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="banner_battery_optimization_content_android">"Disable battery optimization for this app, to make sure all notifications are received."</string>
-  <string name="banner_battery_optimization_submit_android">"Disable optimization"</string>
+  <string name="banner_battery_optimization_content_android">"Disable battery optimisation for this app, to make sure all notifications are received."</string>
+  <string name="banner_battery_optimization_submit_android">"Disable optimisation"</string>
   <string name="banner_battery_optimization_title_android">"Notifications not arriving?"</string>
   <string name="banner_set_up_recovery_content">"Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices."</string>
   <string name="banner_set_up_recovery_submit">"Set up recovery"</string>

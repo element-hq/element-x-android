@@ -7,29 +7,6 @@
 
 package io.element.android.features.leaveroom.api
 
-import io.element.android.libraries.matrix.api.core.RoomId
-
-data class LeaveRoomState(
-    val confirmation: Confirmation,
-    val progress: Progress,
-    val error: Error,
-    val eventSink: (LeaveRoomEvent) -> Unit,
-) {
-    sealed interface Confirmation {
-        data object Hidden : Confirmation
-        data class Dm(val roomId: RoomId) : Confirmation
-        data class Generic(val roomId: RoomId) : Confirmation
-        data class PrivateRoom(val roomId: RoomId) : Confirmation
-        data class LastUserInRoom(val roomId: RoomId) : Confirmation
-    }
-
-    sealed interface Progress {
-        data object Hidden : Progress
-        data object Shown : Progress
-    }
-
-    sealed interface Error {
-        data object Hidden : Error
-        data object Shown : Error
-    }
+interface LeaveRoomState {
+    val eventSink: (LeaveRoomEvent) -> Unit
 }

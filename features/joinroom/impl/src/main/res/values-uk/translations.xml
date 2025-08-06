@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Приєднатися до кімнати"</string>
   <string name="screen_join_room_join_restricted_message">"Можливо, вам знадобиться отримати запрошення або стати учасником простору, щоб приєднатися."</string>
   <string name="screen_join_room_knock_action">"Постукати, щоб приєднатися"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Дозволені символи %1$d з %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Повідомлення (необов\'язково)"</string>
   <string name="screen_join_room_knock_sent_description">"Ви отримаєте запрошення приєднатися до кімнати, якщо ваш запит буде прийнятий."</string>
   <string name="screen_join_room_knock_sent_title">"Запит на приєднання надіслано"</string>

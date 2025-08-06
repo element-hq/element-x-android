@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Êtes-vous sûr de vouloir quitter cette discussion ? Vous ne pourrez pas la rejoindre à nouveau sans y être invité."</string>
   <string name="leave_room_alert_empty_subtitle">"Êtes-vous sûr de vouloir quitter ce salon ? Vous êtes la seule personne ici. Si vous partez, personne ne pourra rejoindre le salon à l’avenir, y compris vous."</string>
   <string name="leave_room_alert_private_subtitle">"Êtes-vous sûr de vouloir quitter ce salon ? Ce salon n’est pas public et vous ne pourrez pas le rejoindre sans invitation."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Choisissez les propriétaires"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Vous êtes le seul propriétaire de ce salon. Vous devez en transférer la propriété à quelqu’un d’autre avant de le quitter."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Transférer la propriété"</string>
   <string name="leave_room_alert_subtitle">"Êtes-vous sûr de vouloir quitter le salon ?"</string>
 </resources>

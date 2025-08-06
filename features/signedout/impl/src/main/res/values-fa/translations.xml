@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signed_out_reason_1">"گذرواژه‌تان را در نشستی دیگر تغییر داده‌اید"</string>
   <string name="screen_signed_out_reason_2">"این نشست را از نشستی دیگر حذف کرده‌اید"</string>
-  <string name="screen_signed_out_reason_3">"مدیر سرور شما دسترسی شما را لغو کرده است."</string>
+  <string name="screen_signed_out_reason_3">"مدیر کارسازتان دسترسیتان را نامعتبر کرده است"</string>
   <string name="screen_signed_out_subtitle">"ممکن است به یکی از دلایل ذکر شده در زیر از سیستم خارج شده باشید. لطفا برای ادامه استفاده از %s دوباره وارد شوید."</string>
   <string name="screen_signed_out_title">"خارج شده‌اید"</string>
 </resources>

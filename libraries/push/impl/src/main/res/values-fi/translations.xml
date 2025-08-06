@@ -30,7 +30,7 @@
     <item quantity="one">"%d uusi viesti"</item>
     <item quantity="other">"%d uutta viestiä"</item>
   </plurals>
-  <string name="notification_reaction_body">"Reagoi emojilla %1$s"</string>
+  <string name="notification_reaction_body">"Reaktio: %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Merkitse luetuksi"</string>
   <string name="notification_room_action_quick_reply">"Pikavastaus"</string>
   <string name="notification_room_invite_body">"Kutsui sinut liittymään huoneeseen"</string>

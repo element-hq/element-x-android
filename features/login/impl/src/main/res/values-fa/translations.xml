@@ -13,7 +13,7 @@
   <string name="screen_change_account_provider_other">"دیگر"</string>
   <string name="screen_change_account_provider_subtitle">"استفاده از فراهم کنندهٔ حسابی دیگر چون کارساز خصوصی خوتان یا حسابی کاری."</string>
   <string name="screen_change_account_provider_title">"تغییر فراهم کنندهٔ حساب"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"ما نتوانستیم به این سرور خانگی برسیم. لطفاً بررسی کنید که URL سرور اصلی را به درستی وارد کرده اید. اگر URL صحیح است، برای کمک بیشتر با مدیر سرور خانگی خود تماس بگیرید."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"ما نتوانستیم به این کارساز خانگی برسیم. لطفاً بررسی کنید که URL کارساز اصلی را به درستی وارد کرده اید. اگر URL صحیح است، برای کمک بیشتر با مدیر کارساز خانگی خود تماس بگیرید."</string>
   <string name="screen_change_server_form_header">"نشانی کارساز خانگی"</string>
   <string name="screen_change_server_form_notice">"ورود نشانی دامنه."</string>
   <string name="screen_change_server_subtitle">"نشانی کارسازتان چیست؟"</string>
@@ -22,12 +22,14 @@
   <string name="screen_login_error_deactivated_account">"این حساب از کار افتاده است."</string>
   <string name="screen_login_error_invalid_credentials">"نام کاربری یا گذرواژه نامعتبر است"</string>
   <string name="screen_login_error_invalid_user_id">"این یک شناسه کاربری معتبر نیست. قالب صحیح: ‪«@user:homeserver.or"</string>
-  <string name="screen_login_error_unsupported_authentication">"سرور اصلی انتخاب شده از رمز عبور یا ورود OIDC پشتیبانی نمی کند. لطفا با مدیر خود تماس بگیرید یا یک سرور خانگی دیگر را انتخاب کنید."</string>
+  <string name="screen_login_error_unsupported_authentication">"کارساز اصلی انتخاب شده از رمز عبور یا ورود OIDC پشتیبانی نمی کند. لطفا با مدیر خود تماس بگیرید یا یک کارساز خانگی دیگر را انتخاب کنید."</string>
   <string name="screen_login_form_header">"جزییاتتان را وارد کنید"</string>
   <string name="screen_login_subtitle">"ماتریکس شبکه‌ای بار برای ارتباطات نامتمرکز و امن است."</string>
   <string name="screen_login_title">"خوش برگشتید!"</string>
   <string name="screen_login_title_with_homeserver">"ورود به %1$s"</string>
+  <string name="screen_onboarding_app_version">"نگارش %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"ورود دستی"</string>
+  <string name="screen_onboarding_sign_in_to">"ورود به %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"ورود با کد QR"</string>
   <string name="screen_onboarding_sign_up">"ایجاد حساب"</string>
   <string name="screen_onboarding_welcome_message">"به سریع‌ترین %1$s خوش آمدید. بازطرّاحی شده برای سرعت و سادگی."</string>
@@ -74,7 +76,7 @@
   <string name="screen_qr_code_login_verify_code_subtitle">"ممکن است فراهم کنندهٔ حسابتان کد زیر را برای تأیید ورود بخواهد."</string>
   <string name="screen_qr_code_login_verify_code_title">"کد تأییدتان"</string>
   <string name="screen_server_confirmation_change_server">"تغییر فراهم کنندهٔ حساب"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"یک سرور خصوصی برای کارمندان Element."</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"کارساز خصوصی برای کارمندان المنت."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"ماتریکس شبکه‌ای بار برای ارتباطات نامتمرکز و امن است."</string>
   <string name="screen_server_confirmation_message_register">"جایی که گفت‌وگوهایتان خواهند زیست — درست مثل استفاده‌تان از فراهم کنندهٔ رایانامه‌ای برای نگه داشتن رایانامه‌هایتان."</string>
   <string name="screen_server_confirmation_title_login">"دارید به %1$s وارد می‌شوید"</string>

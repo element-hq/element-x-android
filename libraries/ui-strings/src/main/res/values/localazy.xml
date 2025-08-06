@@ -255,6 +255,7 @@ Reason: %1$s."</string>
     <item quantity="one">"%d vote"</item>
     <item quantity="other">"%d votes"</item>
   </plurals>
+  <string name="common_preparing">"Preparing…"</string>
   <string name="common_privacy_policy">"Privacy policy"</string>
   <string name="common_reaction">"Reaction"</string>
   <string name="common_reactions">"Reactions"</string>

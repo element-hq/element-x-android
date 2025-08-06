@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Deltag i rummet"</string>
   <string name="screen_join_room_join_restricted_message">"Du skal muligvis være inviteret eller være medlem af en klynge for at deltage."</string>
   <string name="screen_join_room_knock_action">"Send anmodning om at deltage"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Tilladte tegn %1$d af %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Besked (valgfrit)"</string>
   <string name="screen_join_room_knock_sent_description">"Du vil modtage en invitation til at deltage i rummet, hvis din anmodning accepteres."</string>
   <string name="screen_join_room_knock_sent_title">"Anmodning om at deltage sendt"</string>

@@ -42,6 +42,7 @@ import androidx.media3.exoplayer.ExoPlaybackException
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.PlayerMessage
 import androidx.media3.exoplayer.Renderer
+import androidx.media3.exoplayer.ScrubbingModeParameters
 import androidx.media3.exoplayer.SeekParameters
 import androidx.media3.exoplayer.analytics.AnalyticsCollector
 import androidx.media3.exoplayer.analytics.AnalyticsListener
@@ -108,15 +109,10 @@ class ExoPlayerForPreview(
     override fun getSeekForwardIncrement(): Long = throw NotImplementedError()
     override fun seekForward() {}
     override fun hasPreviousMediaItem(): Boolean = throw NotImplementedError()
-    override fun seekToPreviousWindow() {}
     override fun seekToPreviousMediaItem() {}
     override fun getMaxSeekToPreviousPosition(): Long = throw NotImplementedError()
     override fun seekToPrevious() {}
-    override fun hasNext(): Boolean = throw NotImplementedError()
-    override fun hasNextWindow(): Boolean = throw NotImplementedError()
     override fun hasNextMediaItem(): Boolean = throw NotImplementedError()
-    override fun next() {}
-    override fun seekToNextWindow() {}
     override fun seekToNextMediaItem() {}
     override fun seekToNext() {}
     override fun setPlaybackParameters(playbackParameters: PlaybackParameters) {}
@@ -211,6 +207,7 @@ class ExoPlayerForPreview(
     override fun addMediaSources(mediaSources: MutableList<MediaSource>) {}
     override fun addMediaSources(index: Int, mediaSources: MutableList<MediaSource>) {}
     override fun setShuffleOrder(shuffleOrder: ShuffleOrder) {}
+    override fun getShuffleOrder(): ShuffleOrder = ShuffleOrder.DefaultShuffleOrder(0)
     override fun setPreloadConfiguration(preloadConfiguration: ExoPlayer.PreloadConfiguration) {}
     override fun getPreloadConfiguration(): ExoPlayer.PreloadConfiguration = throw NotImplementedError()
     override fun setAudioSessionId(audioSessionId: Int) {}
@@ -220,6 +217,10 @@ class ExoPlayerForPreview(
     override fun setPreferredAudioDevice(audioDeviceInfo: AudioDeviceInfo?) {}
     override fun setSkipSilenceEnabled(skipSilenceEnabled: Boolean) {}
     override fun getSkipSilenceEnabled(): Boolean = throw NotImplementedError()
+    override fun setScrubbingModeEnabled(scrubbingModeEnabled: Boolean) {}
+    override fun isScrubbingModeEnabled(): Boolean = false
+    override fun setScrubbingModeParameters(scrubbingModeParameters: ScrubbingModeParameters) {}
+    override fun getScrubbingModeParameters(): ScrubbingModeParameters = ScrubbingModeParameters.DEFAULT
     override fun setVideoEffects(videoEffects: MutableList<Effect>) {}
     override fun setVideoScalingMode(videoScalingMode: Int) {}
     override fun getVideoScalingMode(): Int = throw NotImplementedError()
