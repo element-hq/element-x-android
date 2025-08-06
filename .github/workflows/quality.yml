@@ -284,7 +284,7 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Download reports from previous jobs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
       - name: Prepare Danger
         if: always()
         run: |
