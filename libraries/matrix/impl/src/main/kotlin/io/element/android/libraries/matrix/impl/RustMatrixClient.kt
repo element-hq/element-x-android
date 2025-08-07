@@ -692,6 +692,10 @@ class RustMatrixClient(
         innerClient.isLivekitRtcSupported()
     }
 
+    override suspend fun getMaxFileUploadSize(): Result<Long> = withContext(sessionDispatcher) {
+        runCatchingExceptions { innerClient.getMaxMediaUploadSize().toLong() }
+    }
+
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
