@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import org.matrix.rustcomponents.sdk.TracingFileConfiguration
+import org.matrix.rustcomponents.sdk.reloadTracingFileWriter
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,6 +23,12 @@ import javax.inject.Inject
 class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) : TracingService {
     override fun createTimberTree(target: String): Timber.Tree {
         return RustTracingTree(target = target, retrieveFromStackTrace = buildMeta.isDebuggable)
+    }
+
+    override fun updateWriteToFilesConfiguration(config: WriteToFilesConfiguration) {
+        config.toTracingFileConfiguration()?.let {
+            reloadTracingFileWriter(it)
+        }
     }
 }
 

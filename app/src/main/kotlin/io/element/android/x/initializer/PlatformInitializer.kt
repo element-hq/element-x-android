@@ -10,11 +10,10 @@ package io.element.android.x.initializer
 import android.content.Context
 import android.system.Os
 import androidx.startup.Initializer
-import io.element.android.features.rageshake.api.reporter.BugReporter
+import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
-import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import io.element.android.x.di.AppBindings
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -34,7 +33,7 @@ class PlatformInitializer : Initializer<Unit> {
         val logLevel = runBlocking { preferencesStore.getTracingLogLevelFlow().first() }
         val tracingConfiguration = TracingConfiguration(
             writesToLogcat = runBlocking { featureFlagService.isFeatureEnabled(FeatureFlags.PrintLogsToLogcat) },
-            writesToFilesConfiguration = defaultWriteToDiskConfiguration(bugReporter),
+            writesToFilesConfiguration = bugReporter.createWriteToFilesConfiguration(),
             logLevel = logLevel,
             extraTargets = listOf(ELEMENT_X_TARGET),
             traceLogPacks = runBlocking { preferencesStore.getTracingLogPacksFlow().first() },
@@ -43,15 +42,6 @@ class PlatformInitializer : Initializer<Unit> {
         platformService.init(tracingConfiguration)
         // Also set env variable for rust back trace
         Os.setenv("RUST_BACKTRACE", "1", true)
-    }
-
-    private fun defaultWriteToDiskConfiguration(bugReporter: BugReporter): WriteToFilesConfiguration.Enabled {
-        return WriteToFilesConfiguration.Enabled(
-            directory = bugReporter.logDirectory().absolutePath,
-            filenamePrefix = "logs",
-            // Keep a maximum of 1 week of log files.
-            numberOfFiles = 7 * 24,
-        )
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = mutableListOf()
