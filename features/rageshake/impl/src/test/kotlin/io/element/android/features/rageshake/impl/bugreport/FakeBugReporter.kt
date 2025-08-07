@@ -53,6 +53,10 @@ class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
         return File("fake")
     }
 
+    override fun setLogDirectorySubfolder(subfolderName: String?) {
+        // No op
+    }
+
     override fun setCurrentTracingLogLevel(logLevel: String) {
         // No op
     }

@@ -10,14 +10,19 @@ package io.element.android.features.rageshake.impl.reporter
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.RageshakeConfig
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
+import io.element.android.features.rageshake.impl.crash.CrashDataStore
 import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.impl.screenshot.FakeScreenshotHolder
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
+import io.element.android.libraries.matrix.test.tracing.FakeTracingService
 import io.element.android.libraries.network.useragent.DefaultUserAgentProvider
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -45,7 +50,7 @@ class DefaultBugReporterTest {
                 .setResponseCode(200)
         )
         server.start()
-        val sut = createDefaultBugReporter(server)
+        val sut = createDefaultBugReporter(server = server)
         var onUploadCancelledCalled = false
         var onUploadFailedCalled = false
         val progressValues = mutableListOf<Int>()
@@ -97,22 +102,14 @@ class DefaultBugReporterTest {
             storeData(aSessionData(sessionId = "@foo:example.com", deviceId = "ABCDEFGH"))
         }
 
-        val buildMeta = aBuildMeta()
         val fakeEncryptionService = FakeEncryptionService()
         val matrixClient = FakeMatrixClient(encryptionService = fakeEncryptionService)
 
         fakeEncryptionService.givenDeviceKeys("CURVECURVECURVE", "EDKEYEDKEYEDKY")
-        val sut = DefaultBugReporter(
-            context = RuntimeEnvironment.getApplication(),
-            screenshotHolder = FakeScreenshotHolder(),
+        val sut = createDefaultBugReporter(
+            server = server,
             crashDataStore = FakeCrashDataStore(),
-            coroutineDispatchers = testCoroutineDispatchers(),
-            okHttpClient = { OkHttpClient.Builder().build() },
-            userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
             sessionStore = mockSessionStore,
-            buildMeta = buildMeta,
-            bugReporterUrlProvider = { server.url("/") },
-            sdkMetadata = FakeSdkMetadata("123456789"),
             matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
         )
 
@@ -166,22 +163,13 @@ class DefaultBugReporterTest {
             storeData(aSessionData("@foo:example.com", "ABCDEFGH"))
         }
 
-        val buildMeta = aBuildMeta()
         val fakeEncryptionService = FakeEncryptionService()
         val matrixClient = FakeMatrixClient(encryptionService = fakeEncryptionService)
 
         fakeEncryptionService.givenDeviceKeys(null, null)
-        val sut = DefaultBugReporter(
-            context = RuntimeEnvironment.getApplication(),
-            screenshotHolder = FakeScreenshotHolder(),
-            crashDataStore = FakeCrashDataStore(),
-            coroutineDispatchers = testCoroutineDispatchers(),
-            okHttpClient = { OkHttpClient.Builder().build() },
-            userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
+        val sut = createDefaultBugReporter(
+            server = server,
             sessionStore = mockSessionStore,
-            buildMeta = buildMeta,
-            bugReporterUrlProvider = { server.url("/") },
-            sdkMetadata = FakeSdkMetadata("123456789"),
             matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
         )
 
@@ -209,21 +197,13 @@ class DefaultBugReporterTest {
         )
         server.start()
 
-        val buildMeta = aBuildMeta()
         val fakeEncryptionService = FakeEncryptionService()
 
         fakeEncryptionService.givenDeviceKeys(null, null)
-        val sut = DefaultBugReporter(
-            context = RuntimeEnvironment.getApplication(),
-            screenshotHolder = FakeScreenshotHolder(),
+        val sut = createDefaultBugReporter(
+            server = server,
             crashDataStore = FakeCrashDataStore("I did crash", true),
-            coroutineDispatchers = testCoroutineDispatchers(),
-            okHttpClient = { OkHttpClient.Builder().build() },
-            userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
             sessionStore = InMemorySessionStore(),
-            buildMeta = buildMeta,
-            bugReporterUrlProvider = { server.url("/") },
-            sdkMetadata = FakeSdkMetadata("123456789"),
             matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.failure(Exception("Mock no client")) })
         )
 
@@ -276,7 +256,7 @@ class DefaultBugReporterTest {
                 .setBody("""{"error": "An error body"}""")
         )
         server.start()
-        val sut = createDefaultBugReporter(server)
+        val sut = createDefaultBugReporter(server = server)
         var onUploadCancelledCalled = false
         var onUploadFailedCalled = false
         var onUploadFailedReason: String? = null
@@ -319,21 +299,26 @@ class DefaultBugReporterTest {
     }
 
     private fun TestScope.createDefaultBugReporter(
-        server: MockWebServer
+        sessionStore: SessionStore = InMemorySessionStore(),
+        matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
+        crashDataStore: CrashDataStore = FakeCrashDataStore(),
+        server: MockWebServer = MockWebServer(),
     ): DefaultBugReporter {
         val buildMeta = aBuildMeta()
         return DefaultBugReporter(
             context = RuntimeEnvironment.getApplication(),
             screenshotHolder = FakeScreenshotHolder(),
-            crashDataStore = FakeCrashDataStore(),
+            crashDataStore = crashDataStore,
             coroutineDispatchers = testCoroutineDispatchers(),
             okHttpClient = { OkHttpClient.Builder().build() },
             userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
-            sessionStore = InMemorySessionStore(),
+            sessionStore = sessionStore,
             buildMeta = buildMeta,
             bugReporterUrlProvider = { server.url("/") },
             sdkMetadata = FakeSdkMetadata("123456789"),
-            matrixClientProvider = FakeMatrixClientProvider()
+            matrixClientProvider = matrixClientProvider,
+            tracingService = FakeTracingService(),
+            matrixAuthenticationService = FakeMatrixAuthenticationService(),
         )
     }
 
