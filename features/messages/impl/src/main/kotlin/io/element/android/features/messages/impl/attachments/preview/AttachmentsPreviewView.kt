@@ -236,7 +236,7 @@ private fun ImageOptimizationSelector(state: MediaOptimizationSelectorState) {
         ) {
             Text(
                 modifier = Modifier.weight(1f).align(Alignment.CenterVertically),
-                text = stringResource(R.string.screen_media_upload_preview_processing),
+                text = stringResource(R.string.screen_media_upload_preview_optimize_image_quality_title),
                 style = ElementTheme.materialTypography.bodyLarge,
             )
             Switch(
