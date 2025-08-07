@@ -191,8 +191,6 @@
   <string name="login_initial_device_name_android">"%1$sAndroid"</string>
   <string name="preference_rageshake">"Xato haqida xabar berish uchun G\'azablanish"</string>
   <string name="screen_media_picker_error_failed_selection">"Media tanlash jarayonida xatolik yuz berdi, qayta urinib ko\'ring"</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Mediani yuklab bo‘lmadi, qayta urinib ko‘ring."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Media yuklanmadi, qayta urinib ko‘ring."</string>
   <string name="screen_room_error_failed_processing_media">"Mediani yuklab bo‘lmadi, qayta urinib ko‘ring."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Foydalanuvchi tafsilotlarini olinmadi"</string>
   <string name="screen_share_location_title">"Joylashuvni ulashish"</string>

@@ -274,8 +274,6 @@
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"خطاء کی اطلاع دینے کیلئے غصے سے ہلائیں"</string>
   <string name="screen_media_picker_error_failed_selection">"وسائط منتخب کرنا ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"وسائط کا معالجہ برائے ترفیع ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"وسائط رفع کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <plurals name="screen_pinned_timeline_screen_title">
     <item quantity="one">"%1$d مثبوتہ پیغام"</item>
     <item quantity="other">"%1$d مثبوتہ پیغامات"</item>

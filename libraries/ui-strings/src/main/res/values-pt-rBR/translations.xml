@@ -361,9 +361,6 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remover %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Configurações"</string>
   <string name="screen_media_picker_error_failed_selection">"Falha ao selecionar a mídia, tente novamente."</string>
-  <string name="screen_media_upload_preview_caption_warning">"As legendas podem não ser visíveis para pessoas que usam aplicativos mais antigos."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Falha ao processar mídia para upload. Tente novamente."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Falha ao enviar mídia. Tente novamente."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Pressione em uma mensagem e escolha \"%1$s\" para incluir aqui."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fixe mensagens importantes para que elas possam ser facilmente descobertas"</string>
   <plurals name="screen_pinned_timeline_screen_title">
