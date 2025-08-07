@@ -86,6 +86,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
                     filename = messageType.filename,
+                    fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     isEdited = content.isEdited,
@@ -106,6 +107,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemStickerContent(
                     filename = messageType.filename,
+                    fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     isEdited = content.isEdited,
@@ -142,6 +144,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemVideoContent(
                     filename = messageType.filename,
+                    fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     isEdited = content.isEdited,
@@ -162,6 +165,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is AudioMessageType -> {
                 TimelineItemAudioContent(
                     filename = messageType.filename,
+                    fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     isEdited = content.isEdited,
@@ -178,6 +182,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                         TimelineItemVoiceContent(
                             eventId = eventId,
                             filename = messageType.filename,
+                            fileSize = messageType.info?.size ?: 0,
                             caption = messageType.caption?.trimEnd(),
                             formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                             isEdited = content.isEdited,
@@ -192,6 +197,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     false -> {
                         TimelineItemAudioContent(
                             filename = messageType.filename,
+                            fileSize = messageType.info?.size ?: 0,
                             caption = messageType.caption?.trimEnd(),
                             formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                             isEdited = content.isEdited,
@@ -208,6 +214,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val fileExtension = fileExtensionExtractor.extractFromName(messageType.filename)
                 TimelineItemFileContent(
                     filename = messageType.filename,
+                    fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     isEdited = content.isEdited,
