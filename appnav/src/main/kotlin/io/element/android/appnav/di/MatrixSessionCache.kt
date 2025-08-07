@@ -42,7 +42,7 @@ class MatrixSessionCache @Inject constructor(
 
     init {
         authenticationService.listenToNewMatrixClients { matrixClient ->
-            onMatrixClient(matrixClient)
+            onNewMatrixClient(matrixClient)
         }
     }
 
@@ -100,14 +100,14 @@ class MatrixSessionCache @Inject constructor(
         Timber.d("Restore matrix session: $sessionId")
         return authenticationService.restoreSession(sessionId)
             .onSuccess { matrixClient ->
-                onMatrixClient(matrixClient)
+                onNewMatrixClient(matrixClient)
             }
             .onFailure {
                 Timber.e(it, "Fail to restore session")
             }
     }
 
-    private fun onMatrixClient(matrixClient: MatrixClient) {
+    private fun onNewMatrixClient(matrixClient: MatrixClient) {
         val syncOrchestrator = syncOrchestratorFactory.create(matrixClient)
         sessionIdsToMatrixSession[matrixClient.sessionId] = InMemoryMatrixSession(
             matrixClient = matrixClient,
