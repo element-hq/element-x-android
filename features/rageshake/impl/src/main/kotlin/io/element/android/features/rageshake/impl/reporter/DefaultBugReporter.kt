@@ -93,13 +93,16 @@ class DefaultBugReporter @Inject constructor(
     private var currentLogDirectory: File = baseLogDirectory
 
     init {
-        val logSubfolder = runBlocking {
-            sessionStore.getLatestSession()
-        }?.userId?.substringAfter(":")
-        setCurrentLogDirectory(logSubfolder)
-        matrixAuthenticationService.listenToNewMatrixClients {
-            // When a new Matrix client is created, we update the tracing configuration to write to files
-            setLogDirectorySubfolder(it.userIdServerName())
+        if (buildMeta.isEnterpriseBuild) {
+            val logSubfolder = runBlocking {
+                sessionStore.getLatestSession()
+            }?.userId?.substringAfter(":")
+            setCurrentLogDirectory(logSubfolder)
+            matrixAuthenticationService.listenToNewMatrixClients {
+                // When a new Matrix client is created, we update the tracing configuration to write
+                // the files in a dedicated subfolders.
+                setLogDirectorySubfolder(it.userIdServerName())
+            }
         }
     }
 
@@ -312,8 +315,10 @@ class DefaultBugReporter @Inject constructor(
     }
 
     override fun setLogDirectorySubfolder(subfolderName: String?) {
-        setCurrentLogDirectory(subfolderName)
-        tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
+        if (buildMeta.isEnterpriseBuild) {
+            setCurrentLogDirectory(subfolderName)
+            tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
+        }
     }
 
     private fun setCurrentLogDirectory(subfolderName: String?) {
