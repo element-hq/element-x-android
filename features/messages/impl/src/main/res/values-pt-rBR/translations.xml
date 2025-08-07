@@ -8,6 +8,9 @@
   <string name="emoji_picker_category_people">"Sorrisos &amp; Pessoas"</string>
   <string name="emoji_picker_category_places">"Viagens &amp; Lugares"</string>
   <string name="emoji_picker_category_symbols">"Símbolos"</string>
+  <string name="screen_media_upload_preview_caption_warning">"As legendas podem não ser visíveis para pessoas que usam aplicativos mais antigos."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Falha ao processar mídia para upload. Tente novamente."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Falha ao enviar mídia. Tente novamente."</string>
   <string name="screen_report_content_block_user">"Bloquear usuário"</string>
   <string name="screen_report_content_block_user_hint">"Marque se você deseja ocultar todas as mensagens atuais e futuras desse usuário"</string>
   <string name="screen_report_content_explanation">"Essa mensagem será reportada ao administrador do seu homeserver. Eles não conseguirão ler nenhuma mensagem criptografada."</string>

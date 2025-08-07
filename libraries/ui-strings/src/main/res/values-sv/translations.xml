@@ -235,11 +235,17 @@ Anledning:%1$s."</string>
     <item quantity="other">"%d röster"</item>
   </plurals>
   <string name="common_privacy_policy">"Integritetspolicy"</string>
+  <string name="common_private_room">"Privat rum"</string>
+  <string name="common_public_room">"Offentligt rum"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktioner"</string>
   <string name="common_reason">"Orsak"</string>
   <string name="common_recovery_key">"Återställningsnyckel"</string>
   <string name="common_refreshing">"Uppdaterar …"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d svar"</item>
+    <item quantity="other">"%1$d svar"</item>
+  </plurals>
   <string name="common_replying_to">"Svarar till %1$s"</string>
   <string name="common_report_a_bug">"Rapportera en bugg"</string>
   <string name="common_report_a_problem">"Rapportera ett problem"</string>
@@ -259,6 +265,7 @@ Anledning:%1$s."</string>
   <string name="common_sending">"Skickar …"</string>
   <string name="common_sending_failed">"Misslyckades att skicka"</string>
   <string name="common_sent">"Skickat"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Servern stöds inte"</string>
   <string name="common_server_url">"Server-URL"</string>
   <string name="common_settings">"Inställningar"</string>
@@ -333,6 +340,7 @@ Anledning:%1$s."</string>
   <string name="error_room_address_invalid_symbols">"Vissa tecken är inte tillåtna. Endast bokstäver, siffror och följande symboler stöds ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Vissa meddelanden har inte skickats"</string>
   <string name="error_unknown">"Tyvärr, ett fel uppstod"</string>
+  <string name="event_shield_mismatched_sender">"Avsändaren av händelsen matchar inte ägaren av den enhet som skickade den."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten."</string>
   <string name="event_shield_reason_previously_verified">"Krypterat av en tidigare verifierad användare."</string>
   <string name="event_shield_reason_sent_in_clear">"Inte krypterad."</string>
@@ -344,9 +352,6 @@ Anledning:%1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Raseriskaka för att rapportera bugg"</string>
   <string name="screen_media_picker_error_failed_selection">"Misslyckades att välja media, vänligen pröva igen."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Bildtexter kanske inte är synliga för personer som använder äldre appar."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Misslyckades att ladda upp media, vänligen pröva igen."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Tryck på ett meddelande och välj ”%1$s” för att inkludera det här."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fäst viktiga meddelanden så att de lätt kan upptäckas"</string>
   <plurals name="screen_pinned_timeline_screen_title">

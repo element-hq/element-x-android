@@ -220,6 +220,8 @@ Reden: %1$s."</string>
     <item quantity="other">"%d stemmen"</item>
   </plurals>
   <string name="common_privacy_policy">"Privacybeleid"</string>
+  <string name="common_private_room">"Privé kamer"</string>
+  <string name="common_public_room">"Openbare kamer"</string>
   <string name="common_reaction">"Reactie"</string>
   <string name="common_reactions">"Reacties"</string>
   <string name="common_recovery_key">"Herstelsleutel"</string>
@@ -309,8 +311,6 @@ Reden: %1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Schudden om een bug te melden"</string>
   <string name="screen_media_picker_error_failed_selection">"Het selecteren van media is mislukt. Probeer het opnieuw."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Het verwerken van media voor uploaden is mislukt. Probeer het opnieuw."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Het uploaden van media is mislukt. Probeer het opnieuw."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Druk op een bericht en kies „%1$s” om het hier toe te voegen."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Zet belangrijke berichten vast zodat ze gemakkelijk te vinden zijn"</string>
   <plurals name="screen_pinned_timeline_screen_title">

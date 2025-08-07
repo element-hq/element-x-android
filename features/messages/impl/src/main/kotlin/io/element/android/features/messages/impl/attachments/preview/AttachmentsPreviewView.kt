@@ -13,6 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,31 +22,62 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorEvent
+import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.api.attachments.video.VideoUploadEstimation
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
+import io.element.android.libraries.androidutils.filesize.AndroidFileSizeFormatter
+import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.ProgressDialogType
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
+import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
+import io.element.android.libraries.designsystem.components.list.ListItemContent
+import io.element.android.libraries.designsystem.modifiers.niceClickable
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Switch
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.textcomposer.TextComposer
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.wysiwyg.display.TextDisplay
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+
+private val sdkIntProvider = object : BuildVersionSdkIntProvider {
+    override fun get(): Int = android.os.Build.VERSION.SDK_INT
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,7 +141,7 @@ private fun AttachmentSendStateView(
             if (sendActionState.displayProgress) {
                 ProgressDialog(
                     type = ProgressDialogType.Indeterminate,
-                    text = stringResource(id = CommonStrings.common_sending),
+                    text = "Processing...",
                     showCancelButton = true,
                     onDismissRequest = onDismissClick,
                 )
@@ -157,6 +189,27 @@ private fun AttachmentPreviewContent(
                 }
             }
         }
+        val mimeType = (state.attachment as? Attachment.Media)?.localMedia?.info?.mimeType
+        if (mimeType?.isMimeTypeImage() == true) {
+            ImageOptimizationSelector(state.mediaOptimizationSelectorState)
+        } else if (mimeType?.isMimeTypeVideo() == true) {
+            VideoPresetSelector(state = state.mediaOptimizationSelectorState)
+        }
+
+        val context = LocalContext.current
+        val sizeFormatter = remember { AndroidFileSizeFormatter(context, sdkIntProvider) }
+        if (state.displayFileTooLargeError) {
+            val maxFileUploadSize = state.mediaOptimizationSelectorState.maxUploadSize.dataOrNull()
+            if (maxFileUploadSize != null) {
+                val content = stringResource(CommonStrings.dialog_file_too_large_to_upload_subtitle, sizeFormatter.format(maxFileUploadSize, true))
+                AlertDialog(
+                    title = stringResource(CommonStrings.dialog_file_too_large_to_upload_title),
+                    content = content,
+                    onDismiss = { state.eventSink(AttachmentsPreviewEvents.CancelAndDismiss) },
+                )
+            }
+        }
+
         AttachmentsPreviewBottomActions(
             state = state,
             onSendClick = onSendClick,
@@ -166,6 +219,147 @@ private fun AttachmentPreviewContent(
                 .height(IntrinsicSize.Min)
                 .imePadding(),
         )
+    }
+}
+
+@Composable
+private fun ImageOptimizationSelector(state: MediaOptimizationSelectorState) {
+    if (state.displayMediaSelectorViews == true) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .niceClickable {
+                    state.isImageOptimizationEnabled?.let { value ->
+                        state.eventSink(MediaOptimizationSelectorEvent.SelectImageOptimization(!value))
+                    }
+                }
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            Text(
+                modifier = Modifier.weight(1f).align(Alignment.CenterVertically),
+                text = stringResource(R.string.screen_media_upload_preview_processing),
+                style = ElementTheme.materialTypography.bodyLarge,
+            )
+            Switch(
+                modifier = Modifier.height(32.dp),
+                checked = state.isImageOptimizationEnabled.orFalse(),
+                onCheckedChange = { value -> state.eventSink(MediaOptimizationSelectorEvent.SelectImageOptimization(value)) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun VideoPresetSelector(
+    state: MediaOptimizationSelectorState,
+) {
+    val videoPresets = state.videoSizeEstimations.dataOrNull()
+    var selectedPreset by remember(state.selectedVideoPreset) { mutableStateOf(state.selectedVideoPreset) }
+
+    var displayDialog by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val sizeFormatter = remember { AndroidFileSizeFormatter(context, sdkIntProvider) }
+
+    if (state.displayMediaSelectorViews == true && videoPresets != null && state.selectedVideoPreset != null) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .niceClickable { displayDialog = true }
+        ) {
+            val estimation = videoPresets.find { it.preset == selectedPreset }
+            val estimationMb = estimation?.sizeInBytes?.let { sizeFormatter.format(it, true) }
+            val title = buildString {
+                append(state.selectedVideoPreset!!.title())
+                if (estimationMb != null) {
+                    append(" ($estimationMb)")
+                }
+            }
+            Text(text = title, style = ElementTheme.typography.fontBodyLgMedium)
+            Text(
+                text = stringResource(R.string.screen_media_upload_preview_change_video_quality_prompt),
+                style = ElementTheme.typography.fontBodyLgMedium,
+                color = ElementTheme.colors.textSecondary,
+            )
+        }
+    }
+
+    if (displayDialog) {
+        VideoQualitySelectorDialog(
+            selectedPreset = selectedPreset ?: VideoCompressionPreset.STANDARD,
+            videoSizeEstimations = videoPresets ?: persistentListOf(),
+            maxFileUploadSize = state.maxUploadSize.dataOrNull(),
+            onSubmit = { preset ->
+                selectedPreset = preset
+                state.eventSink(MediaOptimizationSelectorEvent.SelectVideoPreset(preset))
+                displayDialog = false
+            },
+            onDismiss = { displayDialog = false }
+        )
+    }
+}
+
+@Composable
+private fun VideoQualitySelectorDialog(
+    selectedPreset: VideoCompressionPreset,
+    videoSizeEstimations: ImmutableList<VideoUploadEstimation>,
+    maxFileUploadSize: Long?,
+    onSubmit: (VideoCompressionPreset) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val context = LocalContext.current
+    val sizeFormatter = remember { AndroidFileSizeFormatter(context, sdkIntProvider) }
+
+    var localSelectedPreset by remember(selectedPreset) { mutableStateOf(selectedPreset) }
+    val subtitlePartNoFileSize = stringResource(CommonStrings.dialog_video_quality_selector_subtitle_no_file_size)
+    val subtitlePartWithFileSize = stringResource(CommonStrings.dialog_video_quality_selector_subtitle_file_size)
+    val subtitle = remember(maxFileUploadSize) {
+        buildString {
+            append(subtitlePartNoFileSize)
+            if (maxFileUploadSize != null) {
+                append(String.format(subtitlePartWithFileSize, sizeFormatter.format(maxFileUploadSize, true)))
+            }
+        }
+    }
+    ListDialog(
+        title = stringResource(CommonStrings.dialog_video_quality_selector_title),
+        subtitle = subtitle,
+        onSubmit = { onSubmit(localSelectedPreset) },
+        onDismissRequest = onDismiss,
+        applyPaddingToContents = false,
+    ) {
+        for (videoEstimation in videoSizeEstimations) {
+            val preset = videoEstimation.preset
+            val isSelected = preset == selectedPreset
+            item(
+                key = preset,
+                contentType = preset,
+            ) {
+                val estimationMb = sizeFormatter.format(videoEstimation.sizeInBytes, true)
+                val title = "${preset.title()} ($estimationMb)"
+                ListItem(
+                    headlineContent = {
+                        Text(
+                            text = title,
+                            style = ElementTheme.typography.fontBodyLgMedium,
+                        )
+                    },
+                    supportingContent = {
+                        Text(
+                            text = preset.subtitle(),
+                            style = ElementTheme.materialTypography.bodyMedium,
+                            color = ElementTheme.colors.textSecondary,
+                        )
+                    },
+                    leadingContent = ListItemContent.RadioButton(
+                        selected = isSelected,
+                    ),
+                    onClick = {
+                        localSelectedPreset = preset
+                    },
+                    enabled = videoEstimation.canUpload,
+                )
+            }
+        }
     }
 }
 
@@ -218,6 +412,46 @@ internal fun AttachmentsPreviewViewPreview(@PreviewParameter(AttachmentsPreviewS
                     contentDescription = null,
                 )
             }
+        }
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun VideoQualitySelectorDialogPreview() {
+    ElementPreview {
+        VideoQualitySelectorDialog(
+            selectedPreset = VideoCompressionPreset.STANDARD,
+            videoSizeEstimations = persistentListOf(
+                VideoUploadEstimation(VideoCompressionPreset.HIGH, 2_000_000, canUpload = false),
+                VideoUploadEstimation(VideoCompressionPreset.STANDARD, 1_000_000, canUpload = true),
+                VideoUploadEstimation(VideoCompressionPreset.LOW, 500_000, canUpload = true)
+            ),
+            maxFileUploadSize = 1_500_000,
+            onSubmit = {},
+            onDismiss = {},
+        )
+    }
+}
+
+@Composable
+fun VideoCompressionPreset.title(): String {
+    return stringResource(
+        when (this) {
+            VideoCompressionPreset.STANDARD -> CommonStrings.common_video_quality_standard
+            VideoCompressionPreset.HIGH -> CommonStrings.common_video_quality_high
+            VideoCompressionPreset.LOW -> CommonStrings.common_video_quality_low
+        }
+    )
+}
+
+@Composable
+fun VideoCompressionPreset.subtitle(): String {
+    return stringResource(
+        when (this) {
+            VideoCompressionPreset.STANDARD -> CommonStrings.common_video_quality_standard_description
+            VideoCompressionPreset.HIGH -> CommonStrings.common_video_quality_high_description
+            VideoCompressionPreset.LOW -> CommonStrings.common_video_quality_low_description
         }
     )
 }

@@ -8,6 +8,9 @@
   <string name="emoji_picker_category_people">"Φατσούλες &amp; Άνθρωποι"</string>
   <string name="emoji_picker_category_places">"Ταξίδια &amp; Μέρη"</string>
   <string name="emoji_picker_category_symbols">"Σύμβολα"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Οι λεζάντες ενδέχεται να μην είναι ορατές σε άτομα που χρησιμοποιούν παλαιότερες εφαρμογές."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά."</string>
   <string name="screen_report_content_block_user">"Αποκλεισμός χρήστη"</string>
   <string name="screen_report_content_block_user_hint">"Επέλεξε εάν θες να αποκρύψεις όλα τα τρέχοντα και μελλοντικά μηνύματα από αυτόν τον χρήστη"</string>
   <string name="screen_report_content_explanation">"Αυτό το μήνυμα θα αναφερθεί στον διαχειριστή του οικιακού διακομιστή σας. Δεν θα μπορεί να διαβάσει κρυπτογραφημένα μηνύματα."</string>

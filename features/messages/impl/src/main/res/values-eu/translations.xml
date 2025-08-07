@@ -8,6 +8,7 @@
   <string name="emoji_picker_category_people">"Irribartxoak eta jendea"</string>
   <string name="emoji_picker_category_places">"Bidaiak eta tokiak"</string>
   <string name="emoji_picker_category_symbols">"Ikurrak"</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Huts egin du multimedia igotzeak, saiatu berriro."</string>
   <string name="screen_report_content_block_user">"Blokeatu erabiltzailea"</string>
   <string name="screen_report_content_explanation">"Mezua zure zerbitzariko administratzaileari jakinaraziko zaio. Ezingo dute zifratutako mezurik irakurri."</string>
   <string name="screen_report_content_hint">"Edukia salatzeko arrazoia"</string>

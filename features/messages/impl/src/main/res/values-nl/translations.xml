@@ -8,6 +8,8 @@
   <string name="emoji_picker_category_people">"Smileys &amp; Mensen"</string>
   <string name="emoji_picker_category_places">"Reizen &amp; Locaties"</string>
   <string name="emoji_picker_category_symbols">"Symbolen"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Het verwerken van media voor uploaden is mislukt. Probeer het opnieuw."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Het uploaden van media is mislukt. Probeer het opnieuw."</string>
   <string name="screen_report_content_block_user">"Gebruiker blokkeren"</string>
   <string name="screen_report_content_block_user_hint">"Vink aan als je alle huidige en toekomstige berichten van deze gebruiker wilt verbergen"</string>
   <string name="screen_report_content_explanation">"Dit bericht wordt gerapporteerd aan de beheerder van je homeserver. Ze zullen geen versleutelde berichten kunnen lezen."</string>
