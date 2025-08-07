@@ -71,9 +71,9 @@ class RustMatrixAuthenticationService @Inject constructor(
     private var currentClient: Client? = null
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
-    private var newMatrixClientObserver: ((MatrixClient) -> Unit)? = null
+    private val newMatrixClientObservers = mutableListOf<(MatrixClient) -> Unit>()
     override fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit) {
-        newMatrixClientObserver = lambda
+        newMatrixClientObservers.add(lambda)
     }
 
     private fun rotateSessionPath(): SessionPaths {
@@ -155,7 +155,8 @@ class RustMatrixAuthenticationService @Inject constructor(
                         passphrase = pendingPassphrase,
                         sessionPaths = currentSessionPaths,
                     )
-                newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
+                val matrixClient = rustMatrixClientFactory.create(client)
+                newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.storeData(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
@@ -246,7 +247,8 @@ class RustMatrixAuthenticationService @Inject constructor(
                 pendingOAuthAuthorizationData?.close()
                 pendingOAuthAuthorizationData = null
 
-                newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
+                val matrixClient = rustMatrixClientFactory.create(client)
+                newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.storeData(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
@@ -290,7 +292,8 @@ class RustMatrixAuthenticationService @Inject constructor(
                         passphrase = pendingPassphrase,
                         sessionPaths = emptySessionPaths,
                     )
-                newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
+                val matrixClient = rustMatrixClientFactory.create(client)
+                newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.storeData(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary

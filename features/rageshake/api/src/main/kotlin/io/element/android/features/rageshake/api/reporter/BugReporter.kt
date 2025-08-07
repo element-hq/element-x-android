@@ -35,6 +35,14 @@ interface BugReporter {
     fun logDirectory(): File
 
     /**
+     * Set the subfolder name for the log directory.
+     * This will create a subfolder in the log directory with the given name.
+     * It will also configure the Rust SDK to use this subfolder for its logs.
+     * If the name is null, the log files will be stored in the base folder for the logs.
+     */
+    fun setLogDirectorySubfolder(subfolderName: String?)
+
+    /**
      * Set the current tracing log level.
      */
     fun setCurrentTracingLogLevel(logLevel: String)

@@ -36,6 +36,7 @@ import io.element.android.appnav.root.RootView
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
+import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
 import io.element.android.libraries.architecture.BackstackView
@@ -73,6 +74,7 @@ class RootFlowNode @AssistedInject constructor(
     private val signedOutEntryPoint: SignedOutEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
+    private val bugReporter: BugReporter,
 ) : BaseFlowNode<RootFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.SplashScreen,
@@ -123,6 +125,7 @@ class RootFlowNode @AssistedInject constructor(
 
     private fun switchToNotLoggedInFlow(params: LoginParams?) {
         matrixSessionCache.removeAll()
+        bugReporter.setLogDirectorySubfolder(null)
         backstack.safeRoot(NavTarget.NotLoggedInFlow(params))
     }
 
