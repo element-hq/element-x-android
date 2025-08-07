@@ -19,8 +19,7 @@ import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
-import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -34,6 +33,11 @@ import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 class MediaSenderTest {
+    private val mediaOptimizationConfig = MediaOptimizationConfig(
+        compressImages = true,
+        videoCompressionPreset = VideoCompressionPreset.STANDARD,
+    )
+
     @Test
     fun `given an attachment when sending it the preprocessor always runs`() = runTest {
         val preProcessor = FakeMediaPreProcessor()
@@ -57,7 +61,7 @@ class MediaSenderTest {
         )
 
         val uri = Uri.parse("content://image.jpg")
-        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
+        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, mediaOptimizationConfig = mediaOptimizationConfig)
 
         assertThat(preProcessor.processCallCount).isEqualTo(1)
     }
@@ -76,7 +80,7 @@ class MediaSenderTest {
         val sender = createMediaSender(room = room)
 
         val uri = Uri.parse("content://image.jpg")
-        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
+        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, mediaOptimizationConfig = mediaOptimizationConfig)
     }
 
     @Test
@@ -87,7 +91,7 @@ class MediaSenderTest {
         val sender = createMediaSender(preProcessor)
 
         val uri = Uri.parse("content://image.jpg")
-        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
+        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, mediaOptimizationConfig = mediaOptimizationConfig)
 
         assertThat(result.exceptionOrNull()).isNotNull()
     }
@@ -112,7 +116,7 @@ class MediaSenderTest {
         )
 
         val uri = Uri.parse("content://image.jpg")
-        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
+        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, mediaOptimizationConfig = mediaOptimizationConfig)
 
         assertThat(result.exceptionOrNull()).isNotNull()
     }
@@ -132,7 +136,7 @@ class MediaSenderTest {
         val sender = createMediaSender(room = room)
         val sendJob = launch {
             val uri = Uri.parse("content://image.jpg")
-            sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
+            sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, mediaOptimizationConfig = mediaOptimizationConfig)
         }
         // Wait until several internal tasks run and the file is being uploaded
         advanceTimeBy(3L)
@@ -154,10 +158,10 @@ class MediaSenderTest {
     private fun createMediaSender(
         preProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
         room: JoinedRoom = FakeJoinedRoom(),
-        sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
+        mediaOptimizationConfigProvider: MediaOptimizationConfigProvider = MediaOptimizationConfigProvider { mediaOptimizationConfig },
     ) = MediaSender(
         preProcessor = preProcessor,
         room = room,
-        sessionPreferencesStore = sessionPreferencesStore,
+        mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
     )
 }

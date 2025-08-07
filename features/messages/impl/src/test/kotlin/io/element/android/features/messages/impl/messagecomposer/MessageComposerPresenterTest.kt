@@ -74,15 +74,18 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
@@ -1542,6 +1545,7 @@ class MessageComposerPresenterTest {
         textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
+        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
@@ -1550,7 +1554,11 @@ class MessageComposerPresenterTest {
         featureFlagService = featureFlagService,
         sessionPreferencesStore = sessionPreferencesStore,
         localMediaFactory = localMediaFactory,
-        mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
+        mediaSender = MediaSender(
+            preProcessor = mediaPreProcessor,
+            room = room,
+            mediaOptimizationConfigProvider = { MediaOptimizationConfig(compressImages = true, videoCompressionPreset = VideoCompressionPreset.STANDARD) }
+        ),
         snackbarDispatcher = snackbarDispatcher,
         analyticsService = analyticsService,
         locationService = locationService,
@@ -1565,6 +1573,7 @@ class MessageComposerPresenterTest {
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
         suggestionsProcessor = SuggestionsProcessor(),
+        mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

@@ -14,12 +14,16 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.api.attachments.video.VideoUploadEstimation
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewEvents
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
 import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
+import io.element.android.features.messages.test.attachments.video.FakeMediaOptimizationSelectorPresenterFactory
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -36,15 +40,19 @@ import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
+import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
-import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -53,6 +61,7 @@ import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -64,6 +73,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.File
 
+@Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
 class AttachmentsPreviewPresenterTest {
     @get:Rule
@@ -548,6 +558,109 @@ class AttachmentsPreviewPresenterTest {
         }
     }
 
+    @Test
+    fun `present - file too large will display error`() = runTest {
+        val onDoneListenerResult = lambdaRecorder<Unit> {}
+
+        val localMedia = aLocalMedia(uri = Uri.EMPTY, mediaInfo = anApkMediaInfo())
+        val maxUploadSize = 999L // Set a max upload size smaller than the file size
+
+        val presenter = createAttachmentsPreviewPresenter(
+            localMedia = localMedia,
+            room = FakeJoinedRoom(
+                liveTimeline = FakeTimeline().apply {
+                    sendFileLambda = { _, _, _, _, _, _ ->
+                        Result.success(FakeMediaUploadHandler())
+                    }
+                }
+            ),
+            mediaUploadOnSendQueueEnabled = true,
+            onDoneListener = onDoneListenerResult,
+            mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
+                MediaOptimizationSelectorState(
+                    // Set a max upload size smaller than the file size
+                    maxUploadSize = AsyncData.Success(maxUploadSize),
+                    videoSizeEstimations = AsyncData.Uninitialized,
+                    isImageOptimizationEnabled = null,
+                    selectedVideoPreset = null,
+                    displayMediaSelectorViews = false,
+                    eventSink = {},
+                )
+            }
+        )
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(localMedia.info.fileSize).isGreaterThan(maxUploadSize)
+
+            consumeItemsUntilPredicate { it.mediaOptimizationSelectorState.maxUploadSize.isSuccess() }
+
+            assertThat(awaitItem().displayFileTooLargeError).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - video size estimations too large will display error`() = runTest {
+        val onDoneListenerResult = lambdaRecorder<Unit> {}
+
+        val localMedia = aLocalMedia(uri = Uri.EMPTY, mediaInfo = aVideoMediaInfo())
+
+        val presenter = createAttachmentsPreviewPresenter(
+            localMedia = localMedia,
+            room = FakeJoinedRoom(
+                liveTimeline = FakeTimeline().apply {
+                    sendFileLambda = { _, _, _, _, _, _ ->
+                        Result.success(FakeMediaUploadHandler())
+                    }
+                }
+            ),
+            mediaUploadOnSendQueueEnabled = true,
+            onDoneListener = onDoneListenerResult,
+            mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
+                MediaOptimizationSelectorState(
+                    // Set a max upload size smaller than the file size
+                    maxUploadSize = AsyncData.Success(Long.MAX_VALUE),
+                    videoSizeEstimations = AsyncData.Success(
+                        persistentListOf(
+                            VideoUploadEstimation(
+                                preset = VideoCompressionPreset.LOW,
+                                // The important field is canUpload, it will normally be based on the sizeInBytes
+                                canUpload = false,
+                                sizeInBytes = 0L,
+                            ),
+                            VideoUploadEstimation(
+                                preset = VideoCompressionPreset.STANDARD,
+                                canUpload = false,
+                                sizeInBytes = 0L,
+                            ),
+                            VideoUploadEstimation(
+                                preset = VideoCompressionPreset.HIGH,
+                                canUpload = false,
+                                sizeInBytes = 0L,
+                            ),
+                        )
+                    ),
+                    isImageOptimizationEnabled = null,
+                    selectedVideoPreset = null,
+                    displayMediaSelectorViews = false,
+                    eventSink = {},
+                )
+            }
+        )
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            consumeItemsUntilPredicate {
+                it.mediaOptimizationSelectorState.maxUploadSize.isSuccess() &&
+                    it.mediaOptimizationSelectorState.videoSizeEstimations.dataOrNull()?.isNotEmpty() == true
+            }
+
+            assertThat(awaitItem().displayFileTooLargeError).isTrue()
+        }
+    }
+
     private fun TestScope.createAttachmentsPreviewPresenter(
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
@@ -560,11 +673,26 @@ class AttachmentsPreviewPresenterTest {
         mediaUploadOnSendQueueEnabled: Boolean = true,
         allowCaption: Boolean = true,
         showCaptionCompatibilityWarning: Boolean = true,
+        displayMediaQualitySelectorViews: Boolean = false,
+        mediaOptimizationSelectorPresenterFactory: FakeMediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory(
+            fakePresenter = {
+                MediaOptimizationSelectorState(
+                    maxUploadSize = AsyncData.Uninitialized,
+                    videoSizeEstimations = AsyncData.Uninitialized,
+                    isImageOptimizationEnabled = null,
+                    selectedVideoPreset = null,
+                    displayMediaSelectorViews = displayMediaQualitySelectorViews,
+                    eventSink = {},
+                )
+            }
+        ),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = aMediaAttachment(localMedia),
             onDoneListener = onDoneListener,
-            mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
+            mediaSender = MediaSender(mediaPreProcessor, room, {
+                MediaOptimizationConfig(compressImages = true, videoCompressionPreset = VideoCompressionPreset.STANDARD)
+            }),
             permalinkBuilder = permalinkBuilder,
             temporaryUriDeleter = temporaryUriDeleter,
             featureFlagService = FakeFeatureFlagService(
@@ -576,6 +704,7 @@ class AttachmentsPreviewPresenterTest {
             ),
             sessionCoroutineScope = this,
             dispatchers = testCoroutineDispatchers(),
+            mediaOptimizationSelectorPresenterFactory = mediaOptimizationSelectorPresenterFactory,
         )
     }
 

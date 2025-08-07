@@ -232,6 +232,7 @@ class TimelineMediaGalleryDataSourceTest {
                                 eventId = AN_EVENT_ID,
                                 mediaInfo = MediaInfo(
                                     filename = "body.jpg",
+                                    fileSize = 888L,
                                     caption = "body.jpg caption",
                                     mimeType = MimeTypes.Jpeg,
                                     formattedFileSize = "888 Bytes",
