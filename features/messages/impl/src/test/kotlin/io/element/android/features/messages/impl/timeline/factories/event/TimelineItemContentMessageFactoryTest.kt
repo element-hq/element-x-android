@@ -231,6 +231,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemVideoContent(
             filename = "filename",
+            fileSize = 0L,
             caption = null,
             formattedCaption = null,
             isEdited = false,
@@ -283,6 +284,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemVideoContent(
             filename = "body.mp4",
+            fileSize = 555L,
             caption = "body.mp4 caption",
             formattedCaption = SpannedString("formatted"),
             isEdited = true,
@@ -312,6 +314,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemAudioContent(
             filename = "filename",
+            fileSize = 0L,
             caption = null,
             formattedCaption = null,
             isEdited = false,
@@ -347,6 +350,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemAudioContent(
             filename = "body.mp3",
+            fileSize = 123L,
             caption = null,
             formattedCaption = null,
             isEdited = true,
@@ -369,6 +373,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemVoiceContent(
             filename = "filename",
+            fileSize = 0L,
             eventId = AN_EVENT_ID,
             caption = null,
             formattedCaption = null,
@@ -411,6 +416,7 @@ class TimelineItemContentMessageFactoryTest {
         val expected = TimelineItemVoiceContent(
             eventId = AN_EVENT_ID,
             filename = "body.ogg",
+            fileSize = 123L,
             caption = null,
             formattedCaption = null,
             isEdited = true,
@@ -440,6 +446,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemAudioContent(
             filename = "filename",
+            fileSize = 0L,
             caption = null,
             formattedCaption = null,
             isEdited = false,
@@ -462,6 +469,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemImageContent(
             filename = "filename",
+            fileSize = 0L,
             caption = "body",
             formattedCaption = null,
             isEdited = false,
@@ -492,6 +500,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemStickerContent(
             filename = "filename",
+            fileSize = 8_192L,
             caption = null,
             formattedCaption = null,
             isEdited = false,
@@ -540,6 +549,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemImageContent(
             filename = "body.jpg",
+            fileSize = 888L,
             caption = "body.jpg caption",
             formattedCaption = SpannedString("formatted"),
             isEdited = true,
@@ -568,6 +578,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemFileContent(
             filename = "filename",
+            fileSize = 0L,
             caption = null,
             formattedCaption = null,
             isEdited = false,
@@ -609,6 +620,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemFileContent(
             filename = "body.pdf",
+            fileSize = 123L,
             caption = null,
             formattedCaption = null,
             isEdited = true,

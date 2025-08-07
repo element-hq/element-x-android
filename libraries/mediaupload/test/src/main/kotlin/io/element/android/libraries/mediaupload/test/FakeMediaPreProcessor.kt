@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.tests.testutils.simulateLongTask
@@ -45,7 +46,7 @@ class FakeMediaPreProcessor(
         uri: Uri,
         mimeType: String,
         deleteOriginal: Boolean,
-        compressIfPossible: Boolean
+        mediaOptimizationConfig: MediaOptimizationConfig,
     ): Result<MediaUploadInfo> = simulateLongTask {
         processLatch?.await()
         processCallCount++
