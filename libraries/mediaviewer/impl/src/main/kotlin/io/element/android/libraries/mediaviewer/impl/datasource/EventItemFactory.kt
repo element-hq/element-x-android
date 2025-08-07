@@ -92,6 +92,7 @@ class EventItemFactory @Inject constructor(
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
                             filename = type.filename,
+                            fileSize = type.info?.size,
                             caption = type.caption,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
@@ -111,6 +112,7 @@ class EventItemFactory @Inject constructor(
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
                             filename = type.filename,
+                            fileSize = type.info?.size,
                             caption = type.caption,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
@@ -131,6 +133,7 @@ class EventItemFactory @Inject constructor(
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
                             filename = type.filename,
+                            fileSize = type.info?.size,
                             caption = type.caption,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
@@ -151,6 +154,7 @@ class EventItemFactory @Inject constructor(
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
                             filename = type.filename,
+                            fileSize = type.info?.size,
                             caption = type.caption,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
@@ -171,6 +175,7 @@ class EventItemFactory @Inject constructor(
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
                             filename = type.filename,
+                            fileSize = type.info?.size,
                             caption = type.caption,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
@@ -191,6 +196,7 @@ class EventItemFactory @Inject constructor(
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
                             filename = type.filename,
+                            fileSize = type.info?.size,
                             caption = type.caption,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),

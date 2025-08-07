@@ -28,6 +28,7 @@ fun aTimelineItemVideoContent(
     blurhash: String? = A_BLUR_HASH,
 ) = TimelineItemVideoContent(
     filename = "Video.mp4",
+    fileSize = 14 * 1024 * 1024L,
     caption = null,
     formattedCaption = null,
     isEdited = false,
