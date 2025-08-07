@@ -32,8 +32,10 @@ import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
@@ -76,7 +78,7 @@ class AndroidMediaPreProcessor @Inject constructor(
         uri: Uri,
         mimeType: String,
         deleteOriginal: Boolean,
-        compressIfPossible: Boolean,
+        mediaOptimizationConfig: MediaOptimizationConfig,
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatchingExceptions {
             val result = when {
@@ -85,10 +87,10 @@ class AndroidMediaPreProcessor @Inject constructor(
                     processFile(uri, mimeType)
                 }
                 mimeType.isMimeTypeImage() -> {
-                    val shouldBeCompressed = compressIfPossible && mimeType !in notCompressibleImageTypes
+                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && mimeType !in notCompressibleImageTypes
                     processImage(uri, mimeType, shouldBeCompressed)
                 }
-                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, compressIfPossible)
+                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, mediaOptimizationConfig.videoCompressionPreset)
                 mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
                 else -> processFile(uri, mimeType)
             }
@@ -214,9 +216,9 @@ class AndroidMediaPreProcessor @Inject constructor(
         }
     }
 
-    private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean): MediaUploadInfo {
+    private suspend fun processVideo(uri: Uri, mimeType: String?, videoCompressionPreset: VideoCompressionPreset): MediaUploadInfo {
         val resultFile = runCatchingExceptions {
-            videoCompressor.compress(uri, shouldBeCompressed)
+            videoCompressor.compress(uri, videoCompressionPreset)
                 .onEach {
                     if (it is VideoTranscodingEvent.Progress) {
                         Timber.d("Video compression progress: ${it.value}%")

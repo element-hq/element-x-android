@@ -19,7 +19,7 @@ interface MediaPreProcessor {
         uri: Uri,
         mimeType: String,
         deleteOriginal: Boolean,
-        compressIfPossible: Boolean,
+        mediaOptimizationConfig: MediaOptimizationConfig,
     ): Result<MediaUploadInfo>
 
     /**
