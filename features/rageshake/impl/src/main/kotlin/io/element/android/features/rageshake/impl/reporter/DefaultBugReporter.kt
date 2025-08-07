@@ -326,9 +326,22 @@ class DefaultBugReporter @Inject constructor(
 
     suspend fun deleteAllFiles(predicate: (File) -> Boolean) {
         withContext(coroutineDispatchers.io) {
-            getLogFiles()
-                .filter(predicate)
-                .forEach { it.safeDelete() }
+            deleteAllFilesRecursive(baseLogDirectory, predicate)
+        }
+    }
+
+    private fun deleteAllFilesRecursive(
+        directory: File,
+        predicate: (File) -> Boolean,
+    ) {
+        directory.listFiles()?.forEach { file ->
+            if (file.isDirectory) {
+                deleteAllFilesRecursive(file, predicate)
+            } else {
+                if (predicate(file)) {
+                    file.safeDelete()
+                }
+            }
         }
     }
 
