@@ -21,6 +21,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.startchat.DefaultStartChatNavigator
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.startchat.impl.joinbyaddress.JoinRoomByAddressNode
@@ -36,6 +37,7 @@ import kotlinx.parcelize.Parcelize
 class StartChatFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val createRoomEntryPoint: CreateRoomEntryPoint,
 ) : BaseFlowNode<StartChatFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -72,7 +74,7 @@ class StartChatFlowNode @AssistedInject constructor(
                 createNode<StartChatNode>(buildContext = buildContext, plugins = listOf(navigator))
             }
             NavTarget.NewRoom -> {
-                createNode<CreateRoomFlowNode>(buildContext = buildContext, plugins = listOf(navigator))
+                createRoomEntryPoint.createNode(parentNode = this, buildContext = buildContext)
             }
             NavTarget.JoinByAddress -> {
                 createNode<JoinRoomByAddressNode>(buildContext = buildContext, plugins = listOf(navigator))

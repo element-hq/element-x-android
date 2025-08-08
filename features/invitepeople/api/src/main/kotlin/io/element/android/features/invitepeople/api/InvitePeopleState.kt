@@ -7,4 +7,6 @@
 
 package io.element.android.features.invitepeople.api
 
-interface InvitePeopleState
+interface InvitePeopleState {
+    val eventSink: (InvitePeopleEvents) -> Unit
+}

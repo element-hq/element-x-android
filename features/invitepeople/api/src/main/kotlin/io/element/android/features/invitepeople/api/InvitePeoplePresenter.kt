@@ -7,9 +7,13 @@
 
 package io.element.android.features.invitepeople.api
 
-import androidx.compose.runtime.Composable
+import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 
-interface InvitePeoplePresenter {
-    @Composable
-    fun present(): InvitePeopleState
+interface InvitePeoplePresenter : Presenter<InvitePeopleState> {
+
+    interface Factory {
+        fun create(room: JoinedRoom): InvitePeoplePresenter
+    }
+
 }

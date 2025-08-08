@@ -7,11 +7,40 @@
 
 package io.element.android.features.createroom.impl.addpeople
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.squareup.anvil.annotations.ContributesBinding
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.invitepeople.api.InvitePeoplePresenter
+import io.element.android.features.invitepeople.api.InvitePeopleRenderer
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 
-class AddPeopleNode(
-    buildContext: BuildContext,
-    plugins: List<Plugin>,
-) : Node(buildContext, plugins = plugins)
+@ContributesNode(SessionScope::class)
+class AddPeopleNode @AssistedInject constructor(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
+    private val invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,
+    private val invitePeopleRenderer: InvitePeopleRenderer,
+) : Node(buildContext, plugins = plugins) {
+
+    data class Inputs(
+        val joinedRoom: JoinedRoom
+    ): NodeInputs
+
+    private val joinedRoom = inputs<Inputs>().joinedRoom
+    private val invitePeoplePresenter = invitePeoplePresenterFactory.create(joinedRoom)
+
+    @Composable
+    override fun View(modifier: Modifier) {
+        val state = invitePeoplePresenter.present()
+        invitePeopleRenderer.Render(state, Modifier)
+    }
+}

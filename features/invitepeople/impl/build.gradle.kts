@@ -1,4 +1,3 @@
-import extension.ComponentMergingStrategy
 import extension.setupAnvil
 
 /*
@@ -23,7 +22,7 @@ android {
     }
 }
 
-setupAnvil(componentMergingStrategy = ComponentMergingStrategy.KSP)
+setupAnvil()
 
 dependencies {
     implementation(projects.libraries.core)
@@ -33,14 +32,8 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.deeplink)
-    implementation(projects.libraries.mediapickers.api)
-    implementation(projects.libraries.mediaupload.api)
-    implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.usersearch.impl)
-    implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
-    implementation(projects.libraries.featureflag.api)
     api(projects.features.invitepeople.api)
 
     testImplementation(libs.test.junit)
@@ -50,14 +43,8 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.robolectric)
-    testImplementation(projects.services.analytics.test)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.mediapickers.test)
-    testImplementation(projects.libraries.mediaupload.test)
-    testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.usersearch.test)
-    testImplementation(projects.features.startchat.test)
-    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)

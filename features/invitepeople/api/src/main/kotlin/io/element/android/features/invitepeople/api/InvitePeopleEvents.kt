@@ -7,13 +7,6 @@
 
 package io.element.android.features.invitepeople.api
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-
-interface InvitePeopleRenderer {
-    @Composable
-    fun Render(
-        state: InvitePeopleState,
-        modifier: Modifier,
-    )
+interface InvitePeopleEvents {
+    data object SendInvites : InvitePeopleEvents
 }
