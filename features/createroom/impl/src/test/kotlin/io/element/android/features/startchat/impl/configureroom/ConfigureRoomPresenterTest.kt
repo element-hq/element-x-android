@@ -11,9 +11,15 @@ import android.net.Uri
 import app.cash.turbine.TurbineTestContext
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CreatedRoom
-import io.element.android.features.invitepeople.impl.CreateRoomConfig
-import io.element.android.features.invitepeople.impl.CreateRoomDataStore
-import io.element.android.features.invitepeople.impl.userlist.UserListDataStore
+import io.element.android.features.createroom.impl.configureroom.ConfigureRoomEvents
+import io.element.android.features.createroom.impl.configureroom.ConfigureRoomPresenter
+import io.element.android.features.createroom.impl.configureroom.ConfigureRoomState
+import io.element.android.features.createroom.impl.configureroom.CreateRoomConfig
+import io.element.android.features.createroom.impl.configureroom.CreateRoomConfigStore
+import io.element.android.features.createroom.impl.configureroom.RoomAccess
+import io.element.android.features.createroom.impl.configureroom.RoomAddress
+import io.element.android.features.createroom.impl.configureroom.RoomVisibilityItem
+import io.element.android.features.createroom.impl.configureroom.RoomVisibilityState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -28,7 +34,6 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.alias.FakeRoomAliasHelper
-import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -48,8 +53,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -67,7 +70,7 @@ private const val AN_URI_FROM_CAMERA_2 = "content://uri_from_camera_2"
 private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 
 @RunWith(RobolectricTestRunner::class)
-class ConfigureBaseRoomPresenterTest {
+class ConfigureRoomPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -124,12 +127,11 @@ class ConfigureBaseRoomPresenterTest {
 
     @Test
     fun `present - state is updated when fields are changed`() = runTest {
-        val userListDataStore = UserListDataStore()
         val pickerProvider = FakePickerProvider()
         val permissionsPresenter = FakePermissionsPresenter()
         val roomAliasHelper = FakeRoomAliasHelper()
         val presenter = createConfigureRoomPresenter(
-            createRoomDataStore = CreateRoomDataStore(userListDataStore, roomAliasHelper),
+            dataStore = CreateRoomConfigStore(roomAliasHelper),
             pickerProvider = pickerProvider,
             permissionsPresenter = permissionsPresenter,
         )
@@ -138,19 +140,10 @@ class ConfigureBaseRoomPresenterTest {
             var expectedConfig = CreateRoomConfig()
             assertThat(initialState.config).isEqualTo(expectedConfig)
 
-            // Select User
-            val selectedUser1 = aMatrixUser()
-            val selectedUser2 = aMatrixUser("@id_of_bob:server.org", "Bob")
-            userListDataStore.selectUser(selectedUser1)
-            skipItems(1)
-            userListDataStore.selectUser(selectedUser2)
-            var newState = awaitItem()
-            expectedConfig = expectedConfig.copy(invites = persistentListOf(selectedUser1, selectedUser2))
-            assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room name
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
-            newState = awaitItem()
+            var newState = awaitItem()
             expectedConfig = expectedConfig.copy(roomName = A_ROOM_NAME)
             assertThat(newState.config).isEqualTo(expectedConfig)
 
@@ -206,12 +199,6 @@ class ConfigureBaseRoomPresenterTest {
                 )
             )
             assertThat(newState.config).isEqualTo(expectedConfig)
-
-            // Remove user
-            newState.eventSink(ConfigureRoomEvents.RemoveUserFromSelection(selectedUser1))
-            newState = awaitItem()
-            expectedConfig = expectedConfig.copy(invites = expectedConfig.invites.minus(selectedUser1).toImmutableList())
-            assertThat(newState.config).isEqualTo(expectedConfig)
         }
     }
 
@@ -263,16 +250,16 @@ class ConfigureBaseRoomPresenterTest {
         val matrixClient = createMatrixClient()
         val analyticsService = FakeAnalyticsService()
         val mediaPreProcessor = FakeMediaPreProcessor()
-        val createRoomDataStore = CreateRoomDataStore(UserListDataStore(), FakeRoomAliasHelper())
+        val dataStore = CreateRoomConfigStore( FakeRoomAliasHelper())
         val presenter = createConfigureRoomPresenter(
-            createRoomDataStore = createRoomDataStore,
+            dataStore = dataStore,
             mediaPreProcessor = mediaPreProcessor,
             matrixClient = matrixClient,
             analyticsService = analyticsService
         )
         presenter.test {
             val initialState = initialState()
-            createRoomDataStore.setAvatarUri(Uri.parse(AN_URI_FROM_GALLERY))
+            dataStore.setAvatarUri(Uri.parse(AN_URI_FROM_GALLERY))
             skipItems(1)
             mediaPreProcessor.givenResult(Result.success(MediaUploadInfo.Image(mockk(), mockk(), mockk())))
             matrixClient.givenUploadMediaResult(Result.failure(AN_EXCEPTION))
@@ -405,7 +392,7 @@ class ConfigureBaseRoomPresenterTest {
 
     private fun createConfigureRoomPresenter(
         roomAliasHelper: RoomAliasHelper = FakeRoomAliasHelper(),
-        createRoomDataStore: CreateRoomDataStore = CreateRoomDataStore(UserListDataStore(), roomAliasHelper),
+        dataStore: CreateRoomConfigStore = CreateRoomConfigStore(roomAliasHelper),
         matrixClient: MatrixClient = createMatrixClient(),
         pickerProvider: PickerProvider = FakePickerProvider(),
         mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
@@ -414,7 +401,7 @@ class ConfigureBaseRoomPresenterTest {
         isKnockFeatureEnabled: Boolean = true,
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ) = ConfigureRoomPresenter(
-        dataStore = createRoomDataStore,
+        dataStore = dataStore,
         matrixClient = matrixClient,
         mediaPickerProvider = pickerProvider,
         mediaPreProcessor = mediaPreProcessor,
