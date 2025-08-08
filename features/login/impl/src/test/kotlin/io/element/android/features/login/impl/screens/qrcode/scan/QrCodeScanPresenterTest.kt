@@ -13,7 +13,10 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
-import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
+import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
+import io.element.android.features.login.impl.accesscontrol.ElementWellknownRetriever
+import io.element.android.features.login.impl.accesscontrol.FakeElementWellknownRetriever
+import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.features.login.impl.qrcode.FakeQrCodeLoginManager
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
@@ -91,9 +94,15 @@ class QrCodeScanPresenterTest {
             assertThat(awaitItem().isScanning).isFalse()
             assertThat(awaitItem().authenticationAction.isLoading()).isTrue()
             awaitItem().also { state ->
-                assertThat((state.authenticationAction.errorOrNull() as UnauthorizedAccountProviderException).unauthorisedAccountProviderTitle)
+                assertThat(
+                    (state.authenticationAction
+                        .errorOrNull() as AccountProviderAccessException.UnauthorizedAccountProviderException).unauthorisedAccountProviderTitle
+                )
                     .isEqualTo("example.com")
-                assertThat((state.authenticationAction.errorOrNull() as UnauthorizedAccountProviderException).authorisedAccountProviderTitles)
+                assertThat(
+                    (state.authenticationAction
+                        .errorOrNull() as AccountProviderAccessException.UnauthorizedAccountProviderException).authorisedAccountProviderTitles
+                )
                     .containsExactly("element.io")
             }
         }
@@ -153,10 +162,14 @@ class QrCodeScanPresenterTest {
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         qrCodeLoginManager: FakeQrCodeLoginManager = FakeQrCodeLoginManager(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
+        elementWellknownRetriever: ElementWellknownRetriever = FakeElementWellknownRetriever(),
     ) = QrCodeScanPresenter(
         qrCodeLoginDataFactory = qrCodeLoginDataFactory,
         qrCodeLoginManager = qrCodeLoginManager,
         coroutineDispatchers = coroutineDispatchers,
-        enterpriseService = enterpriseService,
+        defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
+            enterpriseService = enterpriseService,
+            elementWellknownRetriever = elementWellknownRetriever,
+        ),
     )
 }

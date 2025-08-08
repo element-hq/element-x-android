@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
+import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.ui.strings.CommonStrings
 
-sealed class ChangeServerError : Throwable() {
+sealed class ChangeServerError : Exception() {
     data class Error(
         @StringRes val messageId: Int? = null,
         val messageStr: String? = null,
@@ -25,6 +25,11 @@ sealed class ChangeServerError : Throwable() {
         @ReadOnlyComposable
         fun message(): String = messageStr ?: stringResource(messageId ?: CommonStrings.error_unknown)
     }
+
+    data class NeedElementPro(
+        val unauthorisedAccountProviderTitle: String,
+        val applicationId: String,
+    ) : ChangeServerError()
 
     data class UnauthorizedAccountProvider(
         val unauthorisedAccountProviderTitle: String,
@@ -37,7 +42,11 @@ sealed class ChangeServerError : Throwable() {
         fun from(error: Throwable): ChangeServerError = when (error) {
             is AuthenticationException.SlidingSyncVersion -> SlidingSyncAlert
             is AuthenticationException.Oidc -> Error(messageStr = error.message)
-            is UnauthorizedAccountProviderException -> UnauthorizedAccountProvider(
+            is AccountProviderAccessException.NeedElementProException -> NeedElementPro(
+                unauthorisedAccountProviderTitle = error.unauthorisedAccountProviderTitle,
+                applicationId = error.applicationId,
+            )
+            is AccountProviderAccessException.UnauthorizedAccountProviderException -> UnauthorizedAccountProvider(
                 unauthorisedAccountProviderTitle = error.unauthorisedAccountProviderTitle,
                 authorisedAccountProviderTitles = error.authorisedAccountProviderTitles,
             )

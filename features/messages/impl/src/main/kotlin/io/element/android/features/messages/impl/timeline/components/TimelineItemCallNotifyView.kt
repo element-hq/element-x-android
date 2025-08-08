@@ -34,6 +34,7 @@ import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.RoomCallStateProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
@@ -57,6 +58,7 @@ internal fun TimelineItemCallNotifyView(
                 onLongClick = { onLongClick(event) },
                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
             )
+            .onKeyboardContextMenuAction { onLongClick(event) }
             .padding(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,

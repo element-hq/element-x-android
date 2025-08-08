@@ -26,6 +26,14 @@ open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerStat
                     )
                 )
             ),
+            aChangeServerState(
+                changeServerAction = AsyncData.Failure(
+                    ChangeServerError.NeedElementPro(
+                        unauthorisedAccountProviderTitle = "example.com",
+                        applicationId = "applicationId",
+                    ),
+                )
+            ),
         )
 }
 

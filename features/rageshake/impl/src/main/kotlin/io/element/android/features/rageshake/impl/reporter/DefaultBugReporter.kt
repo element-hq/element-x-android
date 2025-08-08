@@ -13,6 +13,7 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.RageshakeConfig
+import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.impl.crash.CrashDataStore
@@ -28,11 +29,14 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.SdkMetadata
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -71,6 +75,8 @@ class DefaultBugReporter @Inject constructor(
     private val bugReporterUrlProvider: BugReporterUrlProvider,
     private val sdkMetadata: SdkMetadata,
     private val matrixClientProvider: MatrixClientProvider,
+    private val tracingService: TracingService,
+    matrixAuthenticationService: MatrixAuthenticationService,
 ) : BugReporter {
     companion object {
         // filenames
@@ -81,7 +87,24 @@ class DefaultBugReporter @Inject constructor(
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
     private var currentTracingLogLevel: String? = null
 
-    private val logCatErrFile = File(logDirectory().absolutePath, LOG_CAT_FILENAME)
+    private val logCatErrFile: File
+        get() = File(logDirectory(), LOG_CAT_FILENAME)
+    private val baseLogDirectory = File(context.cacheDir, LOG_DIRECTORY_NAME)
+    private var currentLogDirectory: File = baseLogDirectory
+
+    init {
+        if (buildMeta.isEnterpriseBuild) {
+            val logSubfolder = runBlocking {
+                sessionStore.getLatestSession()
+            }?.userId?.substringAfter(":")
+            setCurrentLogDirectory(logSubfolder)
+            matrixAuthenticationService.listenToNewMatrixClients {
+                // When a new Matrix client is created, we update the tracing configuration to write
+                // the files in a dedicated subfolders.
+                setLogDirectorySubfolder(it.userIdServerName())
+            }
+        }
+    }
 
     override suspend fun sendBugReport(
         withDevicesLogs: Boolean,
@@ -286,16 +309,44 @@ class DefaultBugReporter @Inject constructor(
     }
 
     override fun logDirectory(): File {
-        return File(context.cacheDir, LOG_DIRECTORY_NAME).apply {
+        return currentLogDirectory.apply {
             mkdirs()
+        }
+    }
+
+    override fun setLogDirectorySubfolder(subfolderName: String?) {
+        if (buildMeta.isEnterpriseBuild) {
+            setCurrentLogDirectory(subfolderName)
+            tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
+        }
+    }
+
+    private fun setCurrentLogDirectory(subfolderName: String?) {
+        currentLogDirectory = if (subfolderName == null) {
+            baseLogDirectory
+        } else {
+            File(baseLogDirectory, subfolderName)
         }
     }
 
     suspend fun deleteAllFiles(predicate: (File) -> Boolean) {
         withContext(coroutineDispatchers.io) {
-            getLogFiles()
-                .filter(predicate)
-                .forEach { it.safeDelete() }
+            deleteAllFilesRecursive(baseLogDirectory, predicate)
+        }
+    }
+
+    private fun deleteAllFilesRecursive(
+        directory: File,
+        predicate: (File) -> Boolean,
+    ) {
+        directory.listFiles()?.forEach { file ->
+            if (file.isDirectory) {
+                deleteAllFilesRecursive(file, predicate)
+            } else {
+                if (predicate(file)) {
+                    file.safeDelete()
+                }
+            }
         }
     }
 
@@ -325,11 +376,12 @@ class DefaultBugReporter @Inject constructor(
      * @return the file if the operation succeeds
      */
     override fun saveLogCat() {
-        if (logCatErrFile.exists()) {
-            logCatErrFile.safeDelete()
+        val file = logCatErrFile
+        if (file.exists()) {
+            file.safeDelete()
         }
         try {
-            logCatErrFile.writer().use {
+            file.writer().use {
                 getLogCatError(it)
             }
         } catch (error: OutOfMemoryError) {

@@ -15,7 +15,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -31,7 +30,6 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.preview.sheetStateForPreview
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -145,11 +143,7 @@ private fun ChangeOwnRoleBottomSheet(
     eventSink: (RolesAndPermissionsEvents) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val sheetState = if (LocalInspectionMode.current) {
-        sheetStateForPreview()
-    } else {
-        rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     fun dismiss() {
         sheetState.hide(coroutineScope) {
             eventSink(RolesAndPermissionsEvents.CancelPendingAction)

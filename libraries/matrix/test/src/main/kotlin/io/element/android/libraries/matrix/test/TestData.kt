@@ -69,6 +69,7 @@ const val A_REDACTION_REASON = "A redaction reason"
 const val A_HOMESERVER_URL = "matrix.org"
 const val A_HOMESERVER_URL_2 = "matrix-client.org"
 
+const val AN_ACCOUNT_PROVIDER_URL = "https://account.provider.org"
 const val AN_ACCOUNT_PROVIDER = "matrix.org"
 const val AN_ACCOUNT_PROVIDER_2 = "element.io"
 const val AN_ACCOUNT_PROVIDER_3 = "other.io"

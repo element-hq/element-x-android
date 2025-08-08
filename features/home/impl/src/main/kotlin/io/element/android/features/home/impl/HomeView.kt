@@ -240,14 +240,20 @@ private fun HomeScaffold(
                         contentPadding = PaddingValues(
                             // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80,
                             // and include provided bottom padding
-                            bottom = 80.dp + padding.calculateBottomPadding(),
-                            top = padding.calculateTopPadding()
+                            // Disable contentPadding due to navigation issue using the keyboard
+                            // See https://issuetracker.google.com/issues/436432313
+                            bottom = 80.dp,
+                            // bottom = 80.dp + padding.calculateBottomPadding(),
+                            // top = padding.calculateTopPadding()
                         ),
                         modifier = Modifier
                             .padding(
                                 PaddingValues(
                                     start = padding.calculateStartPadding(LocalLayoutDirection.current),
                                     end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                                    // Remove these two lines once https://issuetracker.google.com/issues/436432313 has been fixed
+                                    bottom = padding.calculateBottomPadding(),
+                                    top = padding.calculateTopPadding()
                                 )
                             )
                             .consumeWindowInsets(padding)

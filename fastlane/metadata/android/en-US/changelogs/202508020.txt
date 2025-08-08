@@ -1,0 +1,3 @@
+Main changes in this version:
+- Fix a bug with notifications being incorrectly dropped.
+Full changelog: https://github.com/element-hq/element-x-android/releases

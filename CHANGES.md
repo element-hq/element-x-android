@@ -1,3 +1,22 @@
+Changes in Element X v25.08.1
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v25.08.1 -->
+
+## What's Changed
+### 🙌 Improvements
+* Force last owner of a room to pass ownership when leaving by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5094
+### 🐛 Bugfixes
+* Reload room member list when active members count changes by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5129
+* Delegate call notifications to Element Call, upgrade SDK and EC embedded by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5119
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/5112
+### Dependency upgrades
+* Update media3 to v1.8.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5101
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.08.0...v25.08.1
+
 Changes in Element X v25.08.0
 =============================
 

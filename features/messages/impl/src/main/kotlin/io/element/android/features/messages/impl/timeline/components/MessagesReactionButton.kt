@@ -43,6 +43,7 @@ import io.element.android.features.messages.impl.timeline.model.AggregatedReacti
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
+import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
@@ -107,6 +108,7 @@ fun MessagesReactionButton(
                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
                 onLongClick = onLongClick
             )
+            .onKeyboardContextMenuAction(onLongClick)
             // Inner border, to highlight when selected
             .border(BorderStroke(1.dp, borderColor), RoundedCornerShape(corner = CornerSize(12.dp)))
             .background(buttonColor, RoundedCornerShape(corner = CornerSize(12.dp)))

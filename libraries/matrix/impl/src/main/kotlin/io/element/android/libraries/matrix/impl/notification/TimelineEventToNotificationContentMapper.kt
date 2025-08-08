@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.notification
 
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.CallNotifyType
@@ -21,10 +22,12 @@ import org.matrix.rustcomponents.sdk.TimelineEventType
 import org.matrix.rustcomponents.sdk.use
 
 class TimelineEventToNotificationContentMapper {
-    fun map(timelineEvent: TimelineEvent): NotificationContent {
-        return timelineEvent.use {
-            timelineEvent.eventType().use { eventType ->
-                eventType.toContent(senderId = UserId(timelineEvent.senderId()))
+    fun map(timelineEvent: TimelineEvent): Result<NotificationContent> {
+        return runCatchingExceptions {
+            timelineEvent.use {
+                timelineEvent.eventType().use { eventType ->
+                    eventType.toContent(senderId = UserId(timelineEvent.senderId()))
+                }
             }
         }
     }
