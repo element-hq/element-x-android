@@ -7,8 +7,10 @@
 
 package io.element.android.services.apperror.impl
 
+import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.services.apperror.api.AppErrorState
 import io.element.android.services.apperror.api.AppErrorStateService
@@ -18,7 +20,9 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class DefaultAppErrorStateService @Inject constructor() : AppErrorStateService {
+class DefaultAppErrorStateService @Inject constructor(
+    @ApplicationContext private val context: Context,
+) : AppErrorStateService {
     private val currentAppErrorState = MutableStateFlow<AppErrorState>(AppErrorState.NoError)
     override val appErrorStateFlow: StateFlow<AppErrorState> = currentAppErrorState
 
@@ -30,5 +34,11 @@ class DefaultAppErrorStateService @Inject constructor() : AppErrorStateService {
                 currentAppErrorState.value = AppErrorState.NoError
             },
         )
+    }
+
+    override fun showError(titleRes: Int, bodyRes: Int) {
+        val title = context.getString(titleRes)
+        val body = context.getString(bodyRes)
+        showError(title, body)
     }
 }

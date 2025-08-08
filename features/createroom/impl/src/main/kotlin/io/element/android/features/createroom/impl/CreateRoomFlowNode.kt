@@ -15,6 +15,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.replace
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -48,7 +49,7 @@ class CreateRoomFlowNode @AssistedInject constructor(
             NavTarget.ConfigureRoom -> {
                 val callback = object : ConfigureRoomNode.Callback {
                     override fun onCreateRoomSuccess(roomId: RoomId) {
-                        backstack.push(NavTarget.AddPeople(roomId))
+                        backstack.replace(NavTarget.AddPeople(roomId))
                     }
                 }
                 createNode<ConfigureRoomNode>(buildContext, plugins = listOf(callback))

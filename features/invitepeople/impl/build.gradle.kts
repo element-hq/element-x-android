@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.usersearch.impl)
     implementation(libs.coil.compose)
+    implementation(projects.services.apperror.api)
     api(projects.features.invitepeople.api)
 
     testImplementation(libs.test.junit)

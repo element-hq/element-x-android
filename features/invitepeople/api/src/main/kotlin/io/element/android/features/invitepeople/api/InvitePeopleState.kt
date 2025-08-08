@@ -8,5 +8,7 @@
 package io.element.android.features.invitepeople.api
 
 interface InvitePeopleState {
+    val canInvite: Boolean
+    val isSearchActive: Boolean
     val eventSink: (InvitePeopleEvents) -> Unit
 }

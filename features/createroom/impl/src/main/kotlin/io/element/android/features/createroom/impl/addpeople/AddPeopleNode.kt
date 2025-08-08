@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -27,13 +26,13 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 class AddPeopleNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,
+    invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,
     private val invitePeopleRenderer: InvitePeopleRenderer,
 ) : Node(buildContext, plugins = plugins) {
 
     data class Inputs(
         val joinedRoom: JoinedRoom
-    ): NodeInputs
+    ) : NodeInputs
 
     private val joinedRoom = inputs<Inputs>().joinedRoom
     private val invitePeoplePresenter = invitePeoplePresenterFactory.create(joinedRoom)
@@ -41,6 +40,10 @@ class AddPeopleNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = invitePeoplePresenter.present()
-        invitePeopleRenderer.Render(state, Modifier)
+        AddPeopleView(
+            state = state,
+            invitePeopleView = { invitePeopleRenderer.Render(state, Modifier) },
+            onFinish = {}
+        )
     }
 }
