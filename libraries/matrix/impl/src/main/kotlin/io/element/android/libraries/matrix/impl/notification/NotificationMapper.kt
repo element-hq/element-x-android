@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.notification
 
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -30,31 +31,33 @@ class NotificationMapper(
         eventId: EventId,
         roomId: RoomId,
         notificationItem: NotificationItem
-    ): NotificationData {
-        return notificationItem.use { item ->
-            val isDm = isDm(
-                isDirect = item.roomInfo.isDirect,
-                activeMembersCount = item.roomInfo.joinedMembersCount.toInt(),
-            )
-            NotificationData(
-                sessionId = sessionId,
-                eventId = eventId,
-                // FIXME once the `NotificationItem` in the SDK returns the thread id
-                threadId = null,
-                roomId = roomId,
-                senderAvatarUrl = item.senderInfo.avatarUrl,
-                senderDisplayName = item.senderInfo.displayName,
-                senderIsNameAmbiguous = item.senderInfo.isNameAmbiguous,
-                roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { isDm },
-                roomDisplayName = item.roomInfo.displayName,
-                isDirect = item.roomInfo.isDirect,
-                isDm = isDm,
-                isEncrypted = item.roomInfo.isEncrypted.orFalse(),
-                isNoisy = item.isNoisy.orFalse(),
-                timestamp = item.timestamp() ?: clock.epochMillis(),
-                content = item.event.use { notificationContentMapper.map(it) },
-                hasMention = item.hasMention.orFalse(),
-            )
+    ): Result<NotificationData> {
+        return runCatchingExceptions {
+            notificationItem.use { item ->
+                val isDm = isDm(
+                    isDirect = item.roomInfo.isDirect,
+                    activeMembersCount = item.roomInfo.joinedMembersCount.toInt(),
+                )
+                NotificationData(
+                    sessionId = sessionId,
+                    eventId = eventId,
+                    // FIXME once the `NotificationItem` in the SDK returns the thread id
+                    threadId = null,
+                    roomId = roomId,
+                    senderAvatarUrl = item.senderInfo.avatarUrl,
+                    senderDisplayName = item.senderInfo.displayName,
+                    senderIsNameAmbiguous = item.senderInfo.isNameAmbiguous,
+                    roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { isDm },
+                    roomDisplayName = item.roomInfo.displayName,
+                    isDirect = item.roomInfo.isDirect,
+                    isDm = isDm,
+                    isEncrypted = item.roomInfo.isEncrypted.orFalse(),
+                    isNoisy = item.isNoisy.orFalse(),
+                    timestamp = item.timestamp() ?: clock.epochMillis(),
+                    content = item.event.use { notificationContentMapper.map(it) }.getOrThrow(),
+                    hasMention = item.hasMention.orFalse(),
+                )
+            }
         }
     }
 }
@@ -62,11 +65,13 @@ class NotificationMapper(
 class NotificationContentMapper {
     private val timelineEventToNotificationContentMapper = TimelineEventToNotificationContentMapper()
 
-    fun map(notificationEvent: NotificationEvent): NotificationContent =
+    fun map(notificationEvent: NotificationEvent): Result<NotificationContent> =
         when (notificationEvent) {
             is NotificationEvent.Timeline -> timelineEventToNotificationContentMapper.map(notificationEvent.event)
-            is NotificationEvent.Invite -> NotificationContent.Invite(
-                senderId = UserId(notificationEvent.sender),
+            is NotificationEvent.Invite -> Result.success(
+                NotificationContent.Invite(
+                    senderId = UserId(notificationEvent.sender),
+                )
             )
         }
 }
