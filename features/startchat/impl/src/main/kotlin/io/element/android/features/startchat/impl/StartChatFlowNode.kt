@@ -31,6 +31,8 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.OverlayView
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -74,7 +76,14 @@ class StartChatFlowNode @AssistedInject constructor(
                 createNode<StartChatNode>(buildContext = buildContext, plugins = listOf(navigator))
             }
             NavTarget.NewRoom -> {
-                createRoomEntryPoint.createNode(parentNode = this, buildContext = buildContext)
+                val callback = object : CreateRoomEntryPoint.Callback {
+                    override fun onRoomCreated(roomId: RoomId) {
+                        navigator.onOpenRoom(roomId.toRoomIdOrAlias(), emptyList())
+                    }
+                }
+                createRoomEntryPoint.nodeBuilder(parentNode = this, buildContext = buildContext)
+                    .callback(callback)
+                    .build()
             }
             NavTarget.JoinByAddress -> {
                 createNode<JoinRoomByAddressNode>(buildContext = buildContext, plugins = listOf(navigator))

@@ -13,12 +13,13 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
 import io.element.android.libraries.architecture.BackstackView
@@ -44,6 +45,10 @@ class CreateRoomFlowNode @AssistedInject constructor(
     plugins = plugins
 ) {
 
+    private fun onRoomCreated(roomId: RoomId) {
+        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onRoomCreated(roomId) }
+    }
+
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.ConfigureRoom -> {
@@ -57,7 +62,12 @@ class CreateRoomFlowNode @AssistedInject constructor(
             is NavTarget.AddPeople -> {
                 val joinedRoom = runBlocking { client.getJoinedRoom(navTarget.roomId) } ?: error("Room not found")
                 val inputs = AddPeopleNode.Inputs(joinedRoom)
-                createNode<AddPeopleNode>(buildContext, plugins = listOf(inputs))
+                val callback: AddPeopleNode.Callback = object : AddPeopleNode.Callback {
+                    override fun onFinish() {
+                        onRoomCreated(navTarget.roomId)
+                    }
+                }
+                createNode<AddPeopleNode>(buildContext, plugins = listOf(inputs, callback))
             }
         }
     }

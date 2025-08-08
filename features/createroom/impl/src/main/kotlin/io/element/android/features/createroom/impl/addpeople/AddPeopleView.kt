@@ -8,15 +8,20 @@
 package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.features.invitepeople.api.InvitePeopleState
+import io.element.android.features.invitepeople.api.InvitePeopleStateProvider
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -38,9 +43,14 @@ fun AddPeopleView(
         footer = {
             Button(
                 text = "Finish",
-                onClick = { state.eventSink(InvitePeopleEvents.SendInvites) },
+                onClick = {
+                    state.eventSink(InvitePeopleEvents.SendInvites)
+                    onFinish()
+                },
                 enabled = state.canInvite,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
             )
         },
         content = invitePeopleView
@@ -60,5 +70,15 @@ private fun AddPeopleTopBar(
                 onClick = onSkipClick,
             )
         }
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun AddPeopleViewPreview(@PreviewParameter(InvitePeopleStateProvider::class) state: InvitePeopleState) = ElementPreview {
+    AddPeopleView(
+        state = state,
+        invitePeopleView = {},
+        onFinish = {},
     )
 }

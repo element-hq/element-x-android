@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -34,6 +35,14 @@ class AddPeopleNode @AssistedInject constructor(
         val joinedRoom: JoinedRoom
     ) : NodeInputs
 
+    interface Callback : Plugin {
+        fun onFinish()
+    }
+
+    private fun onFinish() {
+        plugins<Callback>().forEach { it.onFinish() }
+    }
+
     private val joinedRoom = inputs<Inputs>().joinedRoom
     private val invitePeoplePresenter = invitePeoplePresenterFactory.create(joinedRoom)
 
@@ -43,7 +52,7 @@ class AddPeopleNode @AssistedInject constructor(
         AddPeopleView(
             state = state,
             invitePeopleView = { invitePeopleRenderer.Render(state, Modifier) },
-            onFinish = {}
+            onFinish = ::onFinish
         )
     }
 }
