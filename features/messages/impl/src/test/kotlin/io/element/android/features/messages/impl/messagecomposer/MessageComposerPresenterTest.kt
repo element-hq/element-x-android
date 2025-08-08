@@ -84,6 +84,7 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -130,6 +131,7 @@ class MessageComposerPresenterTest {
     private val mockMediaUrl: Uri = mockk("localMediaUri")
     private val localMediaFactory = FakeLocalMediaFactory(mockMediaUrl)
     private val analyticsService = FakeAnalyticsService()
+    private val notificationConversationService = FakeNotificationConversationService()
 
     @Test
     fun `present - initial state`() = runTest {
@@ -1565,6 +1567,7 @@ class MessageComposerPresenterTest {
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
         suggestionsProcessor = SuggestionsProcessor(),
+        notificationConversationService = notificationConversationService,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled
