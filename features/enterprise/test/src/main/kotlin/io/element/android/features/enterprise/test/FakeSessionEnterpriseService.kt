@@ -14,6 +14,9 @@ import io.element.android.tests.testutils.simulateLongTask
 class FakeSessionEnterpriseService(
     private val isElementCallAvailableResult: () -> Boolean = { lambdaError() },
 ) : SessionEnterpriseService {
+    override suspend fun init() {
+    }
+
     override suspend fun isElementCallAvailable(): Boolean = simulateLongTask {
         isElementCallAvailableResult()
     }

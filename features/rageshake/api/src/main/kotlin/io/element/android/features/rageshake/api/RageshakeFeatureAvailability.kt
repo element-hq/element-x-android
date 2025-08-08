@@ -7,6 +7,8 @@
 
 package io.element.android.features.rageshake.api
 
+import kotlinx.coroutines.flow.Flow
+
 fun interface RageshakeFeatureAvailability {
-    fun isAvailable(): Boolean
+    fun isAvailable(): Flow<Boolean>
 }

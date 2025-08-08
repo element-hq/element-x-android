@@ -25,4 +25,6 @@ data class InternalElementWellKnown(
     val registrationHelperUrl: String? = null,
     @SerialName("enforce_element_pro")
     val enforceElementPro: Boolean? = null,
+    @SerialName("rageshake_url")
+    val rageshakeUrl: String? = null,
 )

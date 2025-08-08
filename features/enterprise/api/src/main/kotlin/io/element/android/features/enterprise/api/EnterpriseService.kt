@@ -9,6 +9,7 @@ package io.element.android.features.enterprise.api
 
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.matrix.api.core.SessionId
+import kotlinx.coroutines.flow.Flow
 
 interface EnterpriseService {
     val isEnterpriseBuild: Boolean
@@ -21,6 +22,8 @@ interface EnterpriseService {
 
     fun firebasePushGateway(): String?
     fun unifiedPushDefaultPushGateway(): String?
+
+    val bugReportUrlFlow: Flow<BugReportUrl>
 
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"

@@ -7,8 +7,10 @@
 
 package io.element.android.features.enterprise.api
 
-interface SessionEnterpriseService {
-    suspend fun isElementCallAvailable(): Boolean
-
-    suspend fun init()
+sealed interface BugReportUrl {
+    data object UseDefault : BugReportUrl
+    data object Disabled : BugReportUrl
+    data class Custom(
+        val url: String,
+    ) : BugReportUrl
 }

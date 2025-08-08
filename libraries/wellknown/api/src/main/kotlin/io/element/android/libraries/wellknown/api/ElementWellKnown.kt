@@ -8,6 +8,7 @@
 package io.element.android.libraries.wellknown.api
 
 data class ElementWellKnown(
-    val registrationHelperUrl: String? = null,
-    val enforceElementPro: Boolean? = null,
+    val registrationHelperUrl: String?,
+    val enforceElementPro: Boolean?,
+    val rageshakeUrl: String?,
 )

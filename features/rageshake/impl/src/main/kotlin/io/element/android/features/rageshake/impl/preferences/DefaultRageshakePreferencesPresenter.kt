@@ -39,7 +39,7 @@ class DefaultRageshakePreferencesPresenter @Inject constructor(
         val isSupported: MutableState<Boolean> = rememberSaveable {
             mutableStateOf(rageshake.isAvailable())
         }
-        val isFeatureAvailable = remember { rageshakeFeatureAvailability.isAvailable() }
+        val isFeatureAvailable by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
         val isEnabled by remember {
             rageshakeDataStore.isEnabled()
         }.collectAsState(initial = false)

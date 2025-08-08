@@ -15,6 +15,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
+import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.matrix.test.A_HOMESERVER
@@ -114,7 +115,7 @@ class ChangeServerPresenterTest {
     @Test
     fun `present - change server element pro required error`() = runTest {
         val getElementWellKnownResult = lambdaRecorder<String, ElementWellKnown> {
-            ElementWellKnown(
+            anElementWellKnown(
                 enforceElementPro = true,
             )
         }

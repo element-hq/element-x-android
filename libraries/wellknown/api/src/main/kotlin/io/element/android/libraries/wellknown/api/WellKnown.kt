@@ -8,10 +8,10 @@
 package io.element.android.libraries.wellknown.api
 
 data class WellKnown(
-    val homeServer: WellKnownBaseConfig? = null,
-    val identityServer: WellKnownBaseConfig? = null,
+    val homeServer: WellKnownBaseConfig?,
+    val identityServer: WellKnownBaseConfig?,
 )
 
 data class WellKnownBaseConfig(
-    val baseURL: String? = null
+    val baseURL: String?
 )

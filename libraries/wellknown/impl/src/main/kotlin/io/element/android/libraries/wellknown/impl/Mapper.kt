@@ -14,6 +14,7 @@ import io.element.android.libraries.wellknown.api.WellKnownBaseConfig
 internal fun InternalElementWellKnown.map() = ElementWellKnown(
     registrationHelperUrl = registrationHelperUrl,
     enforceElementPro = enforceElementPro,
+    rageshakeUrl = rageshakeUrl,
 )
 
 internal fun InternalWellKnown.map() = WellKnown(

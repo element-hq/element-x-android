@@ -36,6 +36,8 @@ import io.element.android.libraries.oidc.test.customtab.FakeOidcActionFlow
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -78,7 +80,6 @@ class OnBoardingPresenterTest {
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, EnterpriseService.ANY_ACCOUNT_PROVIDER) },
             ),
-            rageshakeFeatureAvailability = { true },
         )
         presenter.test {
             val initialState = awaitItem()
@@ -94,7 +95,7 @@ class OnBoardingPresenterTest {
     @Test
     fun `present - clicking on version 7 times has no effect if rageshake not available`() = runTest {
         val presenter = createPresenter(
-            rageshakeFeatureAvailability = { false },
+            rageshakeFeatureAvailability = { flowOf(false) },
         )
         presenter.test {
             skipItems(1)
@@ -239,7 +240,7 @@ private fun createPresenter(
     featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
-    rageshakeFeatureAvailability: () -> Boolean = { true },
+    rageshakeFeatureAvailability: () -> Flow<Boolean> = { flowOf(true) },
     loginHelper: LoginHelper = createLoginHelper(),
 ) = OnBoardingPresenter(
     params = params,

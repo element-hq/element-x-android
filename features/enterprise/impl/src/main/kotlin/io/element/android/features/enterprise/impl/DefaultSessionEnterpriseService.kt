@@ -14,5 +14,6 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class DefaultSessionEnterpriseService @Inject constructor() : SessionEnterpriseService {
+    override suspend fun init() = Unit
     override suspend fun isElementCallAvailable(): Boolean = true
 }

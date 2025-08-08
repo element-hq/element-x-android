@@ -11,6 +11,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
+import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_URL
@@ -25,7 +26,7 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = false,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = ElementWellKnown(
+            elementWellKnown = anElementWellKnown(
                 enforceElementPro = true,
             ),
         )
@@ -38,7 +39,7 @@ class DefaultAccountProviderAccessControlTest {
             isEnterpriseBuild = false,
             // false here.
             isAllowedToConnectToHomeserver = false,
-            elementWellKnown = ElementWellKnown(
+            elementWellKnown = anElementWellKnown(
                 enforceElementPro = true,
             ),
         )
@@ -50,7 +51,7 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = false,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = ElementWellKnown(
+            elementWellKnown = anElementWellKnown(
                 enforceElementPro = false,
             ),
         )
@@ -62,7 +63,7 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = false,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = ElementWellKnown(
+            elementWellKnown = anElementWellKnown(
                 enforceElementPro = null,
             ),
         )
@@ -85,7 +86,7 @@ class DefaultAccountProviderAccessControlTest {
             isEnterpriseBuild = false,
             isAllowedToConnectToHomeserver = false,
             allowedAccountProviders = listOf(AN_ACCOUNT_PROVIDER_2),
-            elementWellKnown = ElementWellKnown(
+            elementWellKnown = anElementWellKnown(
                 enforceElementPro = false,
             ),
         )
@@ -97,7 +98,7 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = true,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = ElementWellKnown(
+            elementWellKnown = anElementWellKnown(
                 enforceElementPro = true,
             ),
         )
@@ -109,7 +110,7 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = true,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = ElementWellKnown(
+            elementWellKnown = anElementWellKnown(
                 enforceElementPro = false,
             ),
         )
@@ -122,7 +123,7 @@ class DefaultAccountProviderAccessControlTest {
             isEnterpriseBuild = true,
             isAllowedToConnectToHomeserver = false,
             allowedAccountProviders = listOf(AN_ACCOUNT_PROVIDER_2),
-            elementWellKnown = ElementWellKnown(
+            elementWellKnown = anElementWellKnown(
                 enforceElementPro = true,
             ),
         )
@@ -135,7 +136,7 @@ class DefaultAccountProviderAccessControlTest {
             isEnterpriseBuild = true,
             isAllowedToConnectToHomeserver = false,
             allowedAccountProviders = listOf(AN_ACCOUNT_PROVIDER_2),
-            elementWellKnown = ElementWellKnown(
+            elementWellKnown = anElementWellKnown(
                 enforceElementPro = false,
             ),
         )
