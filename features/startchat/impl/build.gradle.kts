@@ -41,6 +41,7 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
     implementation(projects.libraries.featureflag.api)
+    implementation(projects.features.createroom.api)
     api(projects.features.startchat.api)
 
     testImplementation(libs.test.junit)

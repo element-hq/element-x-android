@@ -8,25 +8,32 @@
 package io.element.android.features.createroom.impl
 
 import android.os.Parcelable
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
+import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.runBlocking
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
 class CreateRoomFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val client: MatrixClient,
 ) : BaseFlowNode<CreateRoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.ConfigureRoom,
@@ -35,11 +42,28 @@ class CreateRoomFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
+
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.ConfigureRoom -> createNode<ConfigureRoomNode>(buildContext)
-            is NavTarget.AddPeople -> createNode<AddPeopleNode>(buildContext)
+            NavTarget.ConfigureRoom -> {
+                val callback = object : ConfigureRoomNode.Callback {
+                    override fun onCreateRoomSuccess(roomId: RoomId) {
+                        backstack.push(NavTarget.AddPeople(roomId))
+                    }
+                }
+                createNode<ConfigureRoomNode>(buildContext, plugins = listOf(callback))
+            }
+            is NavTarget.AddPeople -> {
+                val joinedRoom = runBlocking { client.getJoinedRoom(navTarget.roomId) } ?: error("Room not found")
+                val inputs = AddPeopleNode.Inputs(joinedRoom)
+                createNode<AddPeopleNode>(buildContext, plugins = listOf(inputs))
+            }
         }
+    }
+
+    @Composable
+    override fun View(modifier: Modifier) {
+        BackstackView()
     }
 
     sealed interface NavTarget : Parcelable {

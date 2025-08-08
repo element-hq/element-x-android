@@ -23,7 +23,7 @@ android {
     }
 }
 
-setupAnvil(componentMergingStrategy = ComponentMergingStrategy.KSP)
+setupAnvil()
 
 dependencies {
     implementation(projects.libraries.core)
@@ -41,6 +41,7 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
     implementation(projects.libraries.featureflag.api)
+    implementation(projects.features.invitepeople.api)
     api(projects.features.createroom.api)
 
     testImplementation(libs.test.junit)
