@@ -14,15 +14,15 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
-import io.element.android.features.login.impl.accesscontrol.ElementWellknownRetriever
-import io.element.android.features.login.impl.accesscontrol.FakeElementWellknownRetriever
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.features.login.impl.qrcode.FakeQrCodeLoginManager
+import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
 import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginData
 import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginDataFactory
+import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -162,14 +162,14 @@ class QrCodeScanPresenterTest {
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         qrCodeLoginManager: FakeQrCodeLoginManager = FakeQrCodeLoginManager(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
-        elementWellknownRetriever: ElementWellknownRetriever = FakeElementWellknownRetriever(),
+        wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
     ) = QrCodeScanPresenter(
         qrCodeLoginDataFactory = qrCodeLoginDataFactory,
         qrCodeLoginManager = qrCodeLoginManager,
         coroutineDispatchers = coroutineDispatchers,
         defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
             enterpriseService = enterpriseService,
-            elementWellknownRetriever = elementWellknownRetriever,
+            wellknownRetriever = wellknownRetriever,
         ),
     )
 }

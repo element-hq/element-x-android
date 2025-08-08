@@ -5,14 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.login.impl.resolver.network
+package io.element.android.libraries.wellknown.impl
 
 import retrofit2.http.GET
 
 internal interface WellknownAPI {
     @GET(".well-known/matrix/client")
-    suspend fun getWellKnown(): WellKnown
+    suspend fun getWellKnown(): InternalWellKnown
 
     @GET(".well-known/element/element.json")
-    suspend fun getElementWellKnown(): ElementWellKnown
+    suspend fun getElementWellKnown(): InternalElementWellKnown
 }

@@ -10,10 +10,11 @@ package io.element.android.features.login.impl.accesscontrol
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
-import io.element.android.features.login.impl.resolver.network.ElementWellKnown
+import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_URL
+import io.element.android.libraries.wellknown.api.ElementWellKnown
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -152,8 +153,8 @@ class DefaultAccountProviderAccessControlTest {
             isAllowedToConnectToHomeserverResult = { isAllowedToConnectToHomeserver },
             defaultHomeserverListResult = { allowedAccountProviders },
         ),
-        elementWellknownRetriever = FakeElementWellknownRetriever(
-            retrieveResult = { elementWellKnown }
+        wellknownRetriever = FakeWellknownRetriever(
+            getElementWellKnownResult = { elementWellKnown },
         ),
     )
 
