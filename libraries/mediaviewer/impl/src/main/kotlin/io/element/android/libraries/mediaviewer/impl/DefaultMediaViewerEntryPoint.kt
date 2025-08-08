@@ -46,6 +46,7 @@ class DefaultMediaViewerEntryPoint @Inject constructor() : MediaViewerEntryPoint
                         eventId = null,
                         mediaInfo = MediaInfo(
                             filename = filename,
+                            fileSize = null,
                             caption = null,
                             mimeType = mimeType,
                             formattedFileSize = "",

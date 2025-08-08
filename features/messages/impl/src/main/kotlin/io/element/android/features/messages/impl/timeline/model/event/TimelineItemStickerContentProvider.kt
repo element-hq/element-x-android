@@ -27,6 +27,7 @@ fun aTimelineItemStickerContent(
     blurhash: String? = A_BLUR_HASH,
 ) = TimelineItemStickerContent(
     filename = "a sticker.gif",
+    fileSize = 4 * 1024 * 1024L,
     caption = "a body",
     formattedCaption = null,
     isEdited = false,

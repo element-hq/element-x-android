@@ -22,9 +22,9 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
-import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -37,8 +37,8 @@ class SharePresenter @AssistedInject constructor(
     private val shareIntentHandler: ShareIntentHandler,
     private val matrixClient: MatrixClient,
     private val mediaPreProcessor: MediaPreProcessor,
-    private val sessionPreferencesStore: SessionPreferencesStore,
     private val activeRoomsHolder: ActiveRoomsHolder,
+    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<ShareState> {
     @AssistedFactory
     interface Factory {
@@ -88,13 +88,14 @@ class SharePresenter @AssistedInject constructor(
                                 val mediaSender = MediaSender(
                                     preProcessor = mediaPreProcessor,
                                     room = room,
-                                    sessionPreferencesStore = sessionPreferencesStore,
+                                    mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
                                 )
                                 filesToShare
                                     .map { fileToShare ->
                                         val result = mediaSender.sendMedia(
                                             uri = fileToShare.uri,
                                             mimeType = fileToShare.mimeType,
+                                            mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
                                         )
                                         // If the coroutine was cancelled, destroy the room and rethrow the exception
                                         val cancellationException = result.exceptionOrNull() as? CancellationException

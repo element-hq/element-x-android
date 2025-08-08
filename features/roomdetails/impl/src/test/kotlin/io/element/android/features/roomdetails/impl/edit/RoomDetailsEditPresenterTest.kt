@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_RAW_NAME
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
@@ -77,6 +78,7 @@ class RoomDetailsEditPresenterTest {
         room: JoinedRoom,
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
+        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ): RoomDetailsEditPresenter {
         return RoomDetailsEditPresenter(
             room = room,
@@ -84,6 +86,7 @@ class RoomDetailsEditPresenterTest {
             mediaPreProcessor = fakeMediaPreProcessor,
             permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
             temporaryUriDeleter = temporaryUriDeleter,
+            mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         )
     }
 

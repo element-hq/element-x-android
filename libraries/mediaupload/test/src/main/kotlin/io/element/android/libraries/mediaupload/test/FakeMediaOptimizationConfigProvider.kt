@@ -1,0 +1,21 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.libraries.mediaupload.test
+
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
+
+class FakeMediaOptimizationConfigProvider(
+    val config: MediaOptimizationConfig = MediaOptimizationConfig(
+        compressImages = true,
+        videoCompressionPreset = VideoCompressionPreset.STANDARD,
+    )
+) : MediaOptimizationConfigProvider {
+    override suspend fun get(): MediaOptimizationConfig = config
+}

@@ -34,6 +34,7 @@ class TimelineItemContentStickerFactory @Inject constructor(
 
         return TimelineItemStickerContent(
             filename = content.filename,
+            fileSize = content.info.size ?: 0L,
             caption = content.body,
             formattedCaption = null,
             isEdited = false,

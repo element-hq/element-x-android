@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -46,6 +47,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
     private val temporaryUriDeleter: TemporaryUriDeleter,
+    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<EditUserProfileState> {
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
@@ -175,7 +177,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
                     uri = avatarUri,
                     mimeType = MimeTypes.Jpeg,
                     deleteOriginal = false,
-                    compressIfPossible = false,
+                    mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
                 ).getOrThrow()
                 matrixClient.uploadAvatar(MimeTypes.Jpeg, preprocessed.file.readBytes()).getOrThrow()
             } else {

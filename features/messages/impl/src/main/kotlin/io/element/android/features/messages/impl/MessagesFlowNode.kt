@@ -462,6 +462,7 @@ class MessagesFlowNode @AssistedInject constructor(
             eventId = event.eventId,
             mediaInfo = MediaInfo(
                 filename = content.filename,
+                fileSize = content.fileSize,
                 caption = content.caption,
                 mimeType = content.mimeType,
                 formattedFileSize = content.formattedFileSize,

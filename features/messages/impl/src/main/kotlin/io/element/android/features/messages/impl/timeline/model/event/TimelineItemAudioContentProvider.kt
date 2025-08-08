@@ -28,6 +28,7 @@ fun aTimelineItemAudioContent(
     caption: String? = null,
 ) = TimelineItemAudioContent(
     filename = fileName,
+    fileSize = 100 * 1024L,
     caption = caption,
     formattedCaption = null,
     isEdited = false,

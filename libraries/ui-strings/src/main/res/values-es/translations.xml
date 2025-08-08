@@ -235,6 +235,8 @@ Motivo: %1$s."</string>
     <item quantity="other">"%d votos"</item>
   </plurals>
   <string name="common_privacy_policy">"Política de privacidad"</string>
+  <string name="common_private_room">"Sala privada"</string>
+  <string name="common_public_room">"Sala pública"</string>
   <string name="common_reaction">"Reacción"</string>
   <string name="common_reactions">"Reacciones"</string>
   <string name="common_reason">"Motivo"</string>
@@ -344,9 +346,6 @@ Motivo: %1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Agitar con fuerza para informar de un error"</string>
   <string name="screen_media_picker_error_failed_selection">"Error al seleccionar archivos multimedia, por favor inténtalo de nuevo."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Es posible que las leyendas no sean visibles para las personas que usan aplicaciones más antiguas."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Error al procesar el contenido multimedia, por favor inténtalo de nuevo."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Error al subir el contenido multimedia, por favor inténtalo de nuevo."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Presiona sobre un mensaje y selecciona «%1$s» para incluirlo aquí."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fija los mensajes importantes para que se puedan descubrir fácilmente"</string>
   <plurals name="screen_pinned_timeline_screen_title">

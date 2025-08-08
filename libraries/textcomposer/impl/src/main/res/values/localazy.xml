@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Remove link"</string>
   <string name="rich_text_editor_unindent">"Unindent"</string>
   <string name="rich_text_editor_url_placeholder">"Link"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
   <string name="screen_room_voice_message_tooltip">"Hold to record"</string>
 </resources>

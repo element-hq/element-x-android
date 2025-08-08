@@ -155,6 +155,7 @@ class DefaultEventItemFactoryTest {
                 mediaInfo = MediaInfo(
                     mimeType = MimeTypes.Apk,
                     filename = "filename.apk",
+                    fileSize = 123L,
                     caption = "caption",
                     formattedFileSize = "123 Bytes",
                     fileExtension = "apk",
@@ -205,6 +206,7 @@ class DefaultEventItemFactoryTest {
                 mediaInfo = MediaInfo(
                     mimeType = MimeTypes.Jpeg,
                     filename = "filename.jpg",
+                    fileSize = 123L,
                     caption = "caption",
                     formattedFileSize = "123 Bytes",
                     fileExtension = "jpg",
@@ -252,6 +254,7 @@ class DefaultEventItemFactoryTest {
                 mediaInfo = MediaInfo(
                     mimeType = MimeTypes.Mp3,
                     filename = "filename.mp3",
+                    fileSize = 123L,
                     caption = "caption",
                     formattedFileSize = "123 Bytes",
                     fileExtension = "mp3",
@@ -303,6 +306,7 @@ class DefaultEventItemFactoryTest {
                 mediaInfo = MediaInfo(
                     mimeType = MimeTypes.Mp4,
                     filename = "filename.mp4",
+                    fileSize = 123L,
                     caption = "caption",
                     formattedFileSize = "123 Bytes",
                     fileExtension = "mp4",
@@ -354,6 +358,7 @@ class DefaultEventItemFactoryTest {
                 mediaInfo = MediaInfo(
                     mimeType = MimeTypes.Ogg,
                     filename = "filename.ogg",
+                    fileSize = 123L,
                     caption = "caption",
                     formattedFileSize = "123 Bytes",
                     fileExtension = "ogg",
@@ -404,6 +409,7 @@ class DefaultEventItemFactoryTest {
                 mediaInfo = MediaInfo(
                     mimeType = MimeTypes.Gif,
                     filename = "filename.gif",
+                    fileSize = 123L,
                     caption = "caption",
                     formattedFileSize = "123 Bytes",
                     fileExtension = "gif",

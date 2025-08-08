@@ -325,6 +325,7 @@ class MessagesPresenterTest {
             val mediaMessage = aMessageEvent(
                 content = TimelineItemImageContent(
                     filename = "image.jpg",
+                    fileSize = 4 * 1024 * 1024L,
                     caption = null,
                     formattedCaption = null,
                     isEdited = false,
@@ -365,6 +366,7 @@ class MessagesPresenterTest {
             val mediaMessage = aMessageEvent(
                 content = TimelineItemVideoContent(
                     filename = "video.mp4",
+                    fileSize = 50 * 1024 * 1024L,
                     caption = null,
                     formattedCaption = null,
                     isEdited = false,
@@ -406,6 +408,7 @@ class MessagesPresenterTest {
             val mediaMessage = aMessageEvent(
                 content = TimelineItemFileContent(
                     filename = "file.pdf",
+                    fileSize = 10 * 1024 * 1024L,
                     caption = null,
                     isEdited = false,
                     formattedCaption = null,

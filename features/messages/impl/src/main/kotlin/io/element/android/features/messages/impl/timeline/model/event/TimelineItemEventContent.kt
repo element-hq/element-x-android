@@ -26,6 +26,7 @@ sealed interface TimelineItemEventContentWithAttachment :
     TimelineItemEventContent,
     TimelineItemEventMutableContent {
     val filename: String
+    val fileSize: Long?
     val caption: String?
     val formattedCaption: CharSequence?
     val mediaSource: MediaSource

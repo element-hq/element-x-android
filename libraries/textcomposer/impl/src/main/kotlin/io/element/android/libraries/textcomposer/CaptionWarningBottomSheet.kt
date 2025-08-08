@@ -48,7 +48,7 @@ fun CaptionWarningBottomSheet(
                 style = BigIcon.Style.AlertSolid,
             )
             Text(
-                text = stringResource(CommonStrings.screen_media_upload_preview_caption_warning),
+                text = stringResource(R.string.screen_media_upload_preview_caption_warning),
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textPrimary,
                 textAlign = TextAlign.Center,

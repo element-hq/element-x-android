@@ -171,6 +171,11 @@ interface MatrixClient {
      * Return true if Livekit Rtc is supported, i.e. if Element Call is available.
      */
     suspend fun isLivekitRtcSupported(): Boolean
+
+    /**
+     * Returns the maximum file upload size allowed by the Matrix server.
+     */
+    suspend fun getMaxFileUploadSize(): Result<Long>
 }
 
 /**

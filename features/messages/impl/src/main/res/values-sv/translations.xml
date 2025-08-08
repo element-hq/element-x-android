@@ -8,6 +8,9 @@
   <string name="emoji_picker_category_people">"Smileys &amp; personer"</string>
   <string name="emoji_picker_category_places">"Resor &amp; platser"</string>
   <string name="emoji_picker_category_symbols">"Symboler"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Bildtexter kanske inte är synliga för personer som använder äldre appar."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Misslyckades att ladda upp media, vänligen pröva igen."</string>
   <string name="screen_report_content_block_user">"Blockera användare"</string>
   <string name="screen_report_content_block_user_hint">"Markera om du vill dölja alla nuvarande och framtida meddelanden från denna användare"</string>
   <string name="screen_report_content_explanation">"Det här meddelandet kommer att rapporteras till din hemservers administratör. Denne kommer inte att kunna läsa några krypterade meddelanden."</string>

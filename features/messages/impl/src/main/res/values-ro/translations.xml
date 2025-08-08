@@ -8,6 +8,8 @@
   <string name="emoji_picker_category_people">"Fețe zâmbitoare &amp; Oameni"</string>
   <string name="emoji_picker_category_places">"Călătorii &amp; Locuri"</string>
   <string name="emoji_picker_category_symbols">"Simboluri"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Încărcarea fișierelor media a eșuat, încercați din nou."</string>
   <string name="screen_report_content_block_user">"Blocați utilizatorul"</string>
   <string name="screen_report_content_block_user_hint">"Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator"</string>
   <string name="screen_report_content_explanation">"Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat."</string>

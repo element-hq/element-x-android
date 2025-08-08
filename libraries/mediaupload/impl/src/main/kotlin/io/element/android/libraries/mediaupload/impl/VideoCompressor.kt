@@ -11,10 +11,10 @@ import android.content.Context
 import android.media.MediaCodecInfo
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.util.Size
 import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
-import androidx.media3.common.util.Size
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.Presentation
 import androidx.media3.transformer.Composition
@@ -31,6 +31,7 @@ import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -47,12 +48,12 @@ class VideoCompressor @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
     @OptIn(UnstableApi::class)
-    fun compress(uri: Uri, shouldBeCompressed: Boolean): Flow<VideoTranscodingEvent> = callbackFlow {
+    fun compress(uri: Uri, videoCompressionPreset: VideoCompressionPreset): Flow<VideoTranscodingEvent> = callbackFlow {
         val metadata = getVideoMetadata(uri)
 
         val videoCompressorConfig = VideoCompressorConfigFactory.create(
             metadata = metadata,
-            shouldBeCompressed = shouldBeCompressed
+            preset = videoCompressionPreset,
         )
 
         val tmpFile = context.createTmpFile(extension = "mp4")
@@ -60,7 +61,7 @@ class VideoCompressor @Inject constructor(
         val width = metadata?.width ?: Int.MAX_VALUE
         val height = metadata?.height ?: Int.MAX_VALUE
 
-        val videoResizeEffect = videoCompressorConfig.resizer?.let {
+        val videoResizeEffect = videoCompressorConfig.videoCompressorHelper?.let {
             val outputSize = it.getOutputSize(Size(width, height))
             if (metadata?.rotation == 90 || metadata?.rotation == 270) {
                 // If the video is rotated, we need to swap width and height

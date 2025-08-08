@@ -16,4 +16,6 @@ android {
 dependencies {
     api(projects.features.messages.api)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.mediaviewer.api)
+    implementation(projects.libraries.preferences.api)
 }

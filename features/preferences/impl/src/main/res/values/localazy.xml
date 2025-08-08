@@ -13,6 +13,13 @@
   <string name="screen_advanced_settings_media_compression_description">"Upload photos and videos faster and reduce data usage"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimise media quality"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderation and Safety"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Automatically optimise images for faster uploads and smaller file sizes."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimise image upload quality"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Tap here to change."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"High (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Low (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Video upload quality"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push notification provider"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Disable the rich text editor to type Markdown manually."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Read receipts"</string>

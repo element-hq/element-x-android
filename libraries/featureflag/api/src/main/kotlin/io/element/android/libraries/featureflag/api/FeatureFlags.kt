@@ -184,4 +184,12 @@ enum class FeatureFlags(
         // False so it's displayed in the developer options screen
         isFinished = false,
     ),
+    SelectableMediaQuality(
+        key = "feature.selectable_media_quality",
+        title = "Select media quality per upload",
+        description = "You can select the media quality for each attachment you upload.",
+        defaultValue = { false },
+        // False so it's displayed in the developer options screen
+        isFinished = false,
+    ),
 }

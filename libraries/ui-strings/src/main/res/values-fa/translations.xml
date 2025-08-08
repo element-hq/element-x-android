@@ -231,6 +231,8 @@
   <string name="common_poll_undisclosed_text">"نتیجه‌ها پس از پایان نظرسنجی نشان داده خواهند شد"</string>
   <string name="common_preparing">"آماده سازی…"</string>
   <string name="common_privacy_policy">"سیاست محرمانگی"</string>
+  <string name="common_private_room">"اتاق خصوصی"</string>
+  <string name="common_public_room">"اتاق عمومی"</string>
   <string name="common_reaction">"واکنش"</string>
   <string name="common_reactions">"واکنش‌ها"</string>
   <string name="common_reason">"دلیل"</string>
@@ -332,8 +334,6 @@
   <string name="screen_create_poll_options_section_title">"گزینه‌ها"</string>
   <string name="screen_create_poll_settings_section_title">"تنظیمات"</string>
   <string name="screen_media_picker_error_failed_selection">"گزینش رسانه شکست خورد. لطفاً دوباره تلاش کنید."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"پردازش رسانه برای بارگذاری شکست خورد. لطفاً دوباره تلاش کنید."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"بارگذاری رسانه شکست خورد. لطفاً دوباره تلاش کنید."</string>
   <string name="screen_pinned_timeline_screen_title_empty">"پیام‌های سنجاق شده"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"داردید برای بازنشانی هویتتان به حساب %1$s می‌روید. پس از آن به کاره برگردانده خواهید شد."</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"فرستادن پیام به هر روی"</string>
