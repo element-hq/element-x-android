@@ -27,23 +27,30 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.filterMembers
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.usersearch.api.UserRepository
+import io.element.android.services.apperror.api.AppErrorStateService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DefaultInvitePeoplePresenter @AssistedInject constructor(
     @Assisted private val room: JoinedRoom,
     private val userRepository: UserRepository,
     private val coroutineDispatchers: CoroutineDispatchers,
+    @AppCoroutineScope private val coroutineScope: CoroutineScope,
+    private val appErrorStateService: AppErrorStateService,
 ) : InvitePeoplePresenter {
 
     @AssistedFactory
@@ -97,10 +104,28 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
                         searchResults.toggleUser(it.user)
                     }
                     is InvitePeopleEvents.SendInvites -> {
+                        coroutineScope.sendInvites(selectedUsers.value)
+                    }
+                    is InvitePeopleEvents.CloseSearch -> {
+                        searchActive = false
+                        searchQuery = ""
                     }
                 }
             }
         )
+    }
+
+    private fun CoroutineScope.sendInvites(selectedUsers: List<MatrixUser>) = launch {
+        val anyInviteFailed = selectedUsers
+            .map { room.inviteUserById(it.userId) }
+            .any { it.isFailure }
+
+        if (anyInviteFailed) {
+            appErrorStateService.showError(
+                titleRes = CommonStrings.common_unable_to_invite_title,
+                bodyRes = CommonStrings.common_unable_to_invite_message,
+            )
+        }
     }
 
     @JvmName("toggleUserInSelectedUsers")

@@ -22,8 +22,6 @@ class DefaultInvitePeopleRenderer @Inject constructor() : InvitePeopleRenderer {
         if (state is DefaultInvitePeopleState) {
             InvitePeopleView(
                 state = state,
-                onBackClick = {},
-                onSubmitClick = {},
                 modifier = modifier
             )
         } else {
