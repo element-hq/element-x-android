@@ -13,9 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.NavElements
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.active
+import com.bumble.appyx.navmodel.backstack.operation.BackStackOperation
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -186,6 +189,10 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
             .build()
     }
 
+    fun keepOnlyRootNode() {
+        backstack.accept(KeepOnlyRootRoomNode())
+    }
+
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data class Messages(val focusedEventId: EventId? = null) : NavTarget
@@ -203,5 +210,32 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         BackstackView()
+    }
+}
+
+@Parcelize
+private class KeepOnlyRootRoomNode : BackStackOperation<JoinedRoomLoadedFlowNode.NavTarget> {
+    override fun isApplicable(elements: NavElements<JoinedRoomLoadedFlowNode.NavTarget, BackStack.State>): Boolean {
+        return true
+    }
+
+    override fun invoke(elements: NavElements<JoinedRoomLoadedFlowNode.NavTarget, BackStack.State>): NavElements<JoinedRoomLoadedFlowNode.NavTarget, BackStack.State> {
+        val activeElement = elements.active ?: return elements
+
+        if (activeElement.key.navTarget is JoinedRoomLoadedFlowNode.NavTarget.Messages) {
+            // If the last element is already Messages, we don't need to do anything
+            return elements
+        } else {
+            // Otherwise, we transition the active element to DESTROYED state to have a nice animation
+            activeElement.transitionTo(BackStack.State.DESTROYED, this)
+        }
+
+        return elements.mapNotNull {
+            if (it.key.navTarget is JoinedRoomLoadedFlowNode.NavTarget.Messages) {
+                it.transitionTo(BackStack.State.ACTIVE, this)
+            } else {
+                null
+            }
+        }
     }
 }
