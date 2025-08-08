@@ -8,6 +8,7 @@
 package io.element.android.features.securebackup.impl.setup.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +21,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
@@ -32,6 +36,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -39,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
+import io.element.android.features.securebackup.impl.tools.RecoveryKeyHiddenVisualTransformation
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyVisualTransformation
 import io.element.android.libraries.designsystem.modifiers.clickableIfNotNull
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -176,10 +182,19 @@ private fun RecoveryKeyFormContent(
 ) {
     onChange ?: error("onChange should not be null")
     onSubmit ?: error("onSubmit should not be null")
+    var passwordVisible by remember { mutableStateOf(false) }
+    if (state.inProgress) {
+        // Ensure recovery key is hidden when user submits the form
+        passwordVisible = false
+    }
     val keyHasSpace = state.formattedRecoveryKey.orEmpty().contains(" ")
-    val recoveryKeyVisualTransformation = remember(keyHasSpace) {
-        // Do not apply a visual transformation if the key has spaces, to let user enter passphrase
-        if (keyHasSpace) VisualTransformation.None else RecoveryKeyVisualTransformation()
+    val recoveryKeyVisualTransformation = remember(keyHasSpace, passwordVisible) {
+        if (passwordVisible) {
+            // Do not apply a visual transformation if the key has spaces, to let user enter passphrase
+            if (keyHasSpace) VisualTransformation.None else RecoveryKeyVisualTransformation()
+        } else {
+            if (keyHasSpace) PasswordVisualTransformation() else RecoveryKeyHiddenVisualTransformation()
+        }
     }
     TextField(
         modifier = Modifier
@@ -201,6 +216,18 @@ private fun RecoveryKeyFormContent(
             onDone = { onSubmit() }
         ),
         placeholder = stringResource(id = R.string.screen_recovery_key_confirm_key_placeholder),
+        trailingIcon = {
+            val image =
+                if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
+            val description =
+                if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
+            Box(Modifier.clickable { passwordVisible = !passwordVisible }) {
+                Icon(
+                    imageVector = image,
+                    contentDescription = description,
+                )
+            }
+        },
     )
 }
 
