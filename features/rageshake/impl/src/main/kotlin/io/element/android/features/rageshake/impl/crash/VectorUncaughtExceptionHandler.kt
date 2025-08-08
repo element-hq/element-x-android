@@ -9,6 +9,8 @@ package io.element.android.features.rageshake.impl.crash
 
 import android.content.Context
 import android.os.Build
+import io.element.android.features.rageshake.impl.di.RageshakeBindings
+import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.data.tryOrNull
 import timber.log.Timber
 import java.io.PrintWriter
@@ -17,7 +19,7 @@ import java.io.StringWriter
 class VectorUncaughtExceptionHandler(
     context: Context
 ) : Thread.UncaughtExceptionHandler {
-    private val crashDataStore = PreferencesCrashDataStore(context)
+    private val crashDataStore = context.bindings<RageshakeBindings>().preferencesCrashDataStore()
     private var previousHandler: Thread.UncaughtExceptionHandler? = null
 
     /**
