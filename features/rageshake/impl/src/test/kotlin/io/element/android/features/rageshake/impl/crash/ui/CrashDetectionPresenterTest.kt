@@ -18,6 +18,7 @@ import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -104,6 +105,6 @@ class CrashDetectionPresenterTest {
     ) = DefaultCrashDetectionPresenter(
         buildMeta = buildMeta,
         crashDataStore = crashDataStore,
-        rageshakeFeatureAvailability = { isFeatureAvailable },
+        rageshakeFeatureAvailability = { flowOf(isFeatureAvailable) },
     )
 }

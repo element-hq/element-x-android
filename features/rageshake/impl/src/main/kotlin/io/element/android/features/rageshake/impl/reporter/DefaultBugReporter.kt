@@ -114,6 +114,12 @@ class DefaultBugReporter @Inject constructor(
         canContact: Boolean,
         listener: BugReporterListener,
     ) {
+        val url = bugReporterUrlProvider.provide().first()
+        if (url == null) {
+            // It should not happen, but if the URL is null, we cannot proceed
+            Timber.e("## sendBugReport() : bug report URL is null")
+            error("Bug report URL is null, cannot send bug report")
+        }
         // enumerate files to delete
         val bugReportFiles: MutableList<File> = ArrayList()
         var response: Response? = null
@@ -243,7 +249,7 @@ class DefaultBugReporter @Inject constructor(
                 }
                 // build the request
                 val request = Request.Builder()
-                    .url(bugReporterUrlProvider.provide())
+                    .url(url)
                     .post(requestBody)
                     .build()
                 var errorMessage: String? = null

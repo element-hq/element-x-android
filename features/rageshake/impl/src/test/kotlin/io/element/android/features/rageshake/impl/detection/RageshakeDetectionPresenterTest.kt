@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -52,7 +53,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
-                rageshakeFeatureAvailability = { true },
+                rageshakeFeatureAvailability = { flowOf(true) },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -77,7 +78,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
-                rageshakeFeatureAvailability = { true },
+                rageshakeFeatureAvailability = { flowOf(true) },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -103,7 +104,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
-                rageshakeFeatureAvailability = { true },
+                rageshakeFeatureAvailability = { flowOf(true) },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -138,7 +139,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
-                rageshakeFeatureAvailability = { true },
+                rageshakeFeatureAvailability = { flowOf(true) },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -173,7 +174,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
-                rageshakeFeatureAvailability = { true },
+                rageshakeFeatureAvailability = { flowOf(true) },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {

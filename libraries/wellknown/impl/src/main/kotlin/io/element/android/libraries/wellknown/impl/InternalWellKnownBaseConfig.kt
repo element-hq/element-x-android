@@ -5,24 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.login.impl.resolver.network
+package io.element.android.libraries.wellknown.impl
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Example:
+ * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery
  * <pre>
  * {
- *     "registration_helper_url": "https://element.io"
+ *     "base_url": "https://element.io"
  * }
  * </pre>
  * .
  */
 @Serializable
-data class ElementWellKnown(
-    @SerialName("registration_helper_url")
-    val registrationHelperUrl: String? = null,
-    @SerialName("enforce_element_pro")
-    val enforceElementPro: Boolean? = null,
+data class InternalWellKnownBaseConfig(
+    @SerialName("base_url")
+    val baseURL: String? = null
 )

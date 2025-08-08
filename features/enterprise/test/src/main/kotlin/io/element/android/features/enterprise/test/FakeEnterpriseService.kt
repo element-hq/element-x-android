@@ -8,10 +8,14 @@
 package io.element.android.features.enterprise.test
 
 import io.element.android.compound.tokens.generated.SemanticColors
+import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class FakeEnterpriseService(
     override val isEnterpriseBuild: Boolean = false,
@@ -51,7 +55,6 @@ class FakeEnterpriseService(
         return unifiedPushDefaultPushGatewayResult()
     }
 
-    companion object {
-        const val A_FAKE_HOMESERVER = "a_fake_homeserver"
-    }
+    val bugReportUrlMutableFlow = MutableStateFlow<BugReportUrl>(BugReportUrl.UseDefault)
+    override val bugReportUrlFlow: Flow<BugReportUrl> = bugReportUrlMutableFlow.asStateFlow()
 }

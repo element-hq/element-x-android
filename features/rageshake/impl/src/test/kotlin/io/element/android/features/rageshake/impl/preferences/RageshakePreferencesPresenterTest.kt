@@ -16,6 +16,7 @@ import io.element.android.features.rageshake.impl.rageshake.A_SENSITIVITY
 import io.element.android.features.rageshake.impl.rageshake.FakeRageShake
 import io.element.android.features.rageshake.impl.rageshake.FakeRageshakeDataStore
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +30,7 @@ class RageshakePreferencesPresenterTest {
         val presenter = DefaultRageshakePreferencesPresenter(
             FakeRageShake(isAvailableValue = true),
             FakeRageshakeDataStore(isEnabled = true),
-            rageshakeFeatureAvailability = { true },
+            rageshakeFeatureAvailability = { flowOf(true) },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -46,7 +47,7 @@ class RageshakePreferencesPresenterTest {
         val presenter = DefaultRageshakePreferencesPresenter(
             FakeRageShake(isAvailableValue = false),
             FakeRageshakeDataStore(isEnabled = true),
-            rageshakeFeatureAvailability = { true },
+            rageshakeFeatureAvailability = { flowOf(true) },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -63,7 +64,7 @@ class RageshakePreferencesPresenterTest {
         val presenter = DefaultRageshakePreferencesPresenter(
             FakeRageShake(isAvailableValue = true),
             FakeRageshakeDataStore(isEnabled = true),
-            rageshakeFeatureAvailability = { true },
+            rageshakeFeatureAvailability = { flowOf(true) },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -83,7 +84,7 @@ class RageshakePreferencesPresenterTest {
         val presenter = DefaultRageshakePreferencesPresenter(
             FakeRageShake(isAvailableValue = true),
             FakeRageshakeDataStore(isEnabled = true),
-            rageshakeFeatureAvailability = { true },
+            rageshakeFeatureAvailability = { flowOf(true) },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

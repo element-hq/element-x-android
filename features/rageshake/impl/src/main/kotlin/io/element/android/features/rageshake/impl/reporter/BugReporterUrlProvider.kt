@@ -7,8 +7,9 @@
 
 package io.element.android.features.rageshake.impl.reporter
 
+import kotlinx.coroutines.flow.Flow
 import okhttp3.HttpUrl
 
 fun interface BugReporterUrlProvider {
-    fun provide(): HttpUrl
+    fun provide(): Flow<HttpUrl?>
 }

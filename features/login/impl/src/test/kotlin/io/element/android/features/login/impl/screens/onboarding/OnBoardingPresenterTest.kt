@@ -13,11 +13,10 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
-import io.element.android.features.login.impl.accesscontrol.ElementWellknownRetriever
-import io.element.android.features.login.impl.accesscontrol.FakeElementWellknownRetriever
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
+import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -34,8 +33,11 @@ import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationSer
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.oidc.api.OidcActionFlow
 import io.element.android.libraries.oidc.test.customtab.FakeOidcActionFlow
+import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -78,7 +80,6 @@ class OnBoardingPresenterTest {
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, EnterpriseService.ANY_ACCOUNT_PROVIDER) },
             ),
-            rageshakeFeatureAvailability = { true },
         )
         presenter.test {
             val initialState = awaitItem()
@@ -94,7 +95,7 @@ class OnBoardingPresenterTest {
     @Test
     fun `present - clicking on version 7 times has no effect if rageshake not available`() = runTest {
         val presenter = createPresenter(
-            rageshakeFeatureAvailability = { false },
+            rageshakeFeatureAvailability = { flowOf(false) },
         )
         presenter.test {
             skipItems(1)
@@ -238,8 +239,8 @@ private fun createPresenter(
     buildMeta: BuildMeta = aBuildMeta(),
     featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
-    elementWellknownRetriever: ElementWellknownRetriever = FakeElementWellknownRetriever(),
-    rageshakeFeatureAvailability: () -> Boolean = { true },
+    wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
+    rageshakeFeatureAvailability: () -> Flow<Boolean> = { flowOf(true) },
     loginHelper: LoginHelper = createLoginHelper(),
 ) = OnBoardingPresenter(
     params = params,
@@ -248,7 +249,7 @@ private fun createPresenter(
     enterpriseService = enterpriseService,
     defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
         enterpriseService = enterpriseService,
-        elementWellknownRetriever = elementWellknownRetriever,
+        wellknownRetriever = wellknownRetriever,
     ),
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     loginHelper = loginHelper,

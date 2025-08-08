@@ -36,7 +36,6 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.network)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
@@ -44,10 +43,9 @@ dependencies {
     implementation(projects.libraries.qrcode)
     implementation(projects.libraries.oidc.api)
     implementation(projects.libraries.uiUtils)
+    implementation(projects.libraries.wellknown.api)
     implementation(libs.androidx.browser)
-    implementation(platform(libs.network.retrofit.bom))
     implementation(libs.androidx.webkit)
-    implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
     api(projects.features.login.api)
 
@@ -65,6 +63,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.oidc.test)
     testImplementation(projects.libraries.permissions.test)
+    testImplementation(projects.libraries.wellknown.test)
     testImplementation(projects.tests.testutils)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

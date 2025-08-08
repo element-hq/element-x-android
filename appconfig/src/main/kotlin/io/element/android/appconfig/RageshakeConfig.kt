@@ -25,9 +25,3 @@ object RageshakeConfig {
      */
     const val MAX_LOG_UPLOAD_SIZE = 50 * 1024 * 1024L
 }
-
-/**
- * Whether the rageshake feature is enabled.
- */
-val RageshakeConfig.isEnabled: Boolean
-    get() = BUG_REPORT_URL.isNotEmpty() && BUG_REPORT_APP_NAME.isNotEmpty()
