@@ -20,6 +20,7 @@ android {
 setupAnvil()
 
 dependencies {
+    api(projects.libraries.wellknown.api)
     implementation(libs.androidx.annotationjvm)
     implementation(libs.coroutines.core)
     implementation(platform(libs.network.retrofit.bom))
@@ -29,5 +30,4 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.network)
-    implementation(projects.libraries.wellknown.api)
 }
