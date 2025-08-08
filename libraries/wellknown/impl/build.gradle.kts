@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.network)
     implementation(projects.libraries.wellknown.api)
 }

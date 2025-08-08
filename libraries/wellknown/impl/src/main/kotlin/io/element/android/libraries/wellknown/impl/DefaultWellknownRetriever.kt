@@ -53,17 +53,3 @@ class DefaultWellknownRetriever @Inject constructor(
         }
     }
 }
-
-private fun InternalElementWellKnown.map() = ElementWellKnown(
-    registrationHelperUrl = registrationHelperUrl,
-    enforceElementPro = enforceElementPro,
-)
-
-private fun InternalWellKnown.map() = WellKnown(
-    homeServer = homeServer?.map(),
-    identityServer = identityServer?.map(),
-)
-
-private fun InternalWellKnownBaseConfig.map() = WellKnownBaseConfig(
-    baseURL = baseURL,
-)
