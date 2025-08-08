@@ -165,6 +165,7 @@ fun Context.startSharePlainTextIntent(
 fun Context.openUrlInExternalApp(
     url: String,
     errorMessage: String = getString(R.string.error_no_compatible_app_found),
+    throwInCaseOfError: Boolean = false,
 ) {
     val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     if (this !is Activity) {
@@ -173,7 +174,24 @@ fun Context.openUrlInExternalApp(
     try {
         startActivity(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
+        if (throwInCaseOfError) throw activityNotFoundException
         toast(errorMessage)
+    }
+}
+
+/**
+ * Open Google Play on the provided application Id.
+ */
+fun Context.openGooglePlay(
+    appId: String,
+) {
+    try {
+        openUrlInExternalApp(
+            url = "market://details?id=$appId",
+            throwInCaseOfError = true,
+        )
+    } catch (_: ActivityNotFoundException) {
+        openUrlInExternalApp("https://play.google.com/store/apps/details?id=$appId")
     }
 }
 

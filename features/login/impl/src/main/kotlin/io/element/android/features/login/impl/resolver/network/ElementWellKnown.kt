@@ -23,4 +23,6 @@ import kotlinx.serialization.Serializable
 data class ElementWellKnown(
     @SerialName("registration_helper_url")
     val registrationHelperUrl: String? = null,
+    @SerialName("enforce_element_pro")
+    val enforceElementPro: Boolean? = null,
 )

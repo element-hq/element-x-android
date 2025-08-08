@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
+import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -145,7 +145,10 @@ private fun ColumnScope.Buttons(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = when (error) {
-                                is UnauthorizedAccountProviderException -> {
+                                is AccountProviderAccessException.NeedElementProException -> {
+                                    stringResource(R.string.screen_change_server_error_element_pro_required_title)
+                                }
+                                is AccountProviderAccessException.UnauthorizedAccountProviderException -> {
                                     stringResource(
                                         id = R.string.screen_change_server_error_unauthorized_homeserver_title,
                                         error.unauthorisedAccountProviderTitle,
@@ -163,7 +166,13 @@ private fun ColumnScope.Buttons(
                     }
                     Text(
                         text = when (error) {
-                            is UnauthorizedAccountProviderException -> {
+                            is AccountProviderAccessException.NeedElementProException -> {
+                                stringResource(
+                                    R.string.screen_change_server_error_element_pro_required_message,
+                                    error.unauthorisedAccountProviderTitle,
+                                )
+                            }
+                            is AccountProviderAccessException.UnauthorizedAccountProviderException -> {
                                 stringResource(
                                     id = R.string.screen_change_server_error_unauthorized_homeserver_content,
                                     error.authorisedAccountProviderTitles.joinToString(),
