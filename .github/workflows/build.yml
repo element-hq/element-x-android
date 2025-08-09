@@ -69,7 +69,7 @@ jobs:
           retention-days: 5
           overwrite: true
           if-no-files-found: error
-      - uses: rnkdsh/action-upload-diawi@993c2e9f871486114a171cf7fb40554716dac3c5 # v1.5.10
+      - uses: rnkdsh/action-upload-diawi@26292a7b424bdc9f4ab4ccea6202fc513f571370 # v1.5.11
         id: diawi
         # Do not fail the whole build if Diawi upload fails
         continue-on-error: true
