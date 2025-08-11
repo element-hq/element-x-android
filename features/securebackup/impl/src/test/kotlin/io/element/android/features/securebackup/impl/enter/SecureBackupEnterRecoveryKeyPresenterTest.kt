@@ -40,7 +40,7 @@ class SecureBackupEnterRecoveryKeyPresenterTest {
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Enter,
                     formattedRecoveryKey = "",
-                    displayTextFieldContents = true,
+                    displayTextFieldContents = false,
                     inProgress = false,
                 )
             )
@@ -62,7 +62,7 @@ class SecureBackupEnterRecoveryKeyPresenterTest {
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Enter,
                     formattedRecoveryKey = "1234",
-                    displayTextFieldContents = true,
+                    displayTextFieldContents = false,
                     inProgress = false,
                 )
             )

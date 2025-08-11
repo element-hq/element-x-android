@@ -83,6 +83,7 @@ class SecureBackupEnterRecoveryKeyViewTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `toggling the visibility of the textfield changes it`() {
         val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
         val keyValue = aFormattedRecoveryKey()
@@ -91,7 +92,10 @@ class SecureBackupEnterRecoveryKeyViewTest {
         // Initially, the text field should be visible
         rule.onNodeWithText(keyValue).assertExists()
 
-        rule.onNodeWithContentDescription("Hide password").performClick()
+        rule.onNodeWithContentDescription(rule.activity.getString(CommonStrings.a11y_hide_password)).performClick()
+
+        rule.waitForIdle()
+
         recorder.assertSingle(SecureBackupEnterRecoveryKeyEvents.ChangeRecoveryKeyFieldContentsVisibility(false))
     }
 
