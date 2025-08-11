@@ -11,6 +11,8 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -83,6 +85,7 @@ class JoinedRustRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
+    private val featureFlagService: FeatureFlagService,
 ) : JoinedRoom, BaseRoom by baseRoom {
     // Create a dispatcher for all room methods...
     private val roomDispatcher = coroutineDispatchers.io.limitedParallelism(32)
@@ -153,21 +156,22 @@ class JoinedRustRoom(
     override suspend fun createTimeline(
         createTimelineParams: CreateTimelineParams,
     ): Result<Timeline> = withContext(roomDispatcher) {
+        val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.HideThreadedEvents)
         val focus = when (createTimelineParams) {
             is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents(
                 maxEventsToLoad = 100u,
                 maxConcurrentRequests = 10u,
             )
-            is CreateTimelineParams.MediaOnly -> TimelineFocus.Live(hideThreadedEvents = false)
+            is CreateTimelineParams.MediaOnly -> TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents)
             is CreateTimelineParams.Focused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
-                hideThreadedEvents = false,
+                hideThreadedEvents = hideThreadedEvents,
             )
             is CreateTimelineParams.MediaOnlyFocused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
-                hideThreadedEvents = false,
+                hideThreadedEvents = hideThreadedEvents,
             )
         }
 

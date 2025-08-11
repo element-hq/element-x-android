@@ -150,7 +150,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
         val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
         return buildSet {
             if (timelineItem.canBeRepliedTo && usersEventPermissions.canSendMessage) {
-                if (timelineItem.isThreaded) {
+                if (timelineItem.threadInfo.threadRootId != null) {
                     add(TimelineItemAction.ReplyInThread)
                 } else {
                     add(TimelineItemAction.Reply)

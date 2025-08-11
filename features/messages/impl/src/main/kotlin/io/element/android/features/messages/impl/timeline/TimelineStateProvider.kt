@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -140,7 +141,7 @@ internal fun aTimelineItemEvent(
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: LocalEventSendState? = null,
     inReplyTo: InReplyToDetails? = null,
-    isThreaded: Boolean = false,
+    threadInfo: EventThreadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
     readReceiptState: TimelineItemReadReceipts = aTimelineItemReadReceipts(),
@@ -166,7 +167,7 @@ internal fun aTimelineItemEvent(
         groupPosition = groupPosition,
         localSendState = sendState,
         inReplyTo = inReplyTo,
-        isThreaded = isThreaded,
+        threadInfo = threadInfo,
         origin = null,
         timelineItemDebugInfoProvider = { debugInfo },
         messageShieldProvider = { messageShield },

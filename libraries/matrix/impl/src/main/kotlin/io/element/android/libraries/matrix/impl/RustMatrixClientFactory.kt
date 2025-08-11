@@ -131,6 +131,7 @@ class RustMatrixClientFactory @Inject constructor(
                 )
             )
             .enableShareHistoryOnInvite(featureFlagService.isFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite))
+            .threadsEnabled(featureFlagService.isFeatureEnabled(FeatureFlags.HideThreadedEvents))
             .run {
                 // Apply sliding sync version settings
                 when (slidingSyncType) {

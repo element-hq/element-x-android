@@ -93,4 +93,11 @@ enum class FeatureFlags(
         // False so it's displayed in the developer options screen
         isFinished = false,
     ),
+    HideThreadedEvents(
+        key = "feature.hide_threaded_events",
+        title = "Hide threaded events in the timeline",
+        description = "Hide threaded events in the timeline, only showing the thread summary.",
+        defaultValue = { false },
+        isFinished = false,
+    )
 }
