@@ -18,6 +18,8 @@ import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -56,7 +58,7 @@ class CrashDetectionPresenterTest {
     fun `present - initial state crash is ignored if the feature is not available`() = runTest {
         val presenter = createPresenter(
             FakeCrashDataStore(appHasCrashed = true),
-            isFeatureAvailable = false,
+            isFeatureAvailableFlow = flowOf(false),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -98,13 +100,42 @@ class CrashDetectionPresenterTest {
         }
     }
 
+    @Test
+    fun `present - crashDetected is false if the feature is not available`() = runTest {
+        val isFeatureAvailableFlow = MutableStateFlow(false)
+        val crashDataStore = FakeCrashDataStore(appHasCrashed = false)
+        val presenter = createPresenter(
+            crashDataStore = crashDataStore,
+            isFeatureAvailableFlow = isFeatureAvailableFlow,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.crashDetected).isFalse()
+            crashDataStore.setCrashData("Some crash data")
+            // No new state
+            crashDataStore.resetAppHasCrashed()
+            // No new state
+            isFeatureAvailableFlow.value = true
+            crashDataStore.setCrashData("Some crash data")
+            assertThat(awaitItem().crashDetected).isTrue()
+            crashDataStore.resetAppHasCrashed()
+            assertThat(awaitItem().crashDetected).isFalse()
+            crashDataStore.setCrashData("Some crash data")
+            assertThat(awaitItem().crashDetected).isTrue()
+            isFeatureAvailableFlow.value = false
+            assertThat(awaitItem().crashDetected).isFalse()
+        }
+    }
+
     private fun createPresenter(
         crashDataStore: FakeCrashDataStore = FakeCrashDataStore(),
         buildMeta: BuildMeta = aBuildMeta(),
-        isFeatureAvailable: Boolean = true,
+        isFeatureAvailableFlow: Flow<Boolean> = flowOf(true),
     ) = DefaultCrashDetectionPresenter(
         buildMeta = buildMeta,
         crashDataStore = crashDataStore,
-        rageshakeFeatureAvailability = { flowOf(isFeatureAvailable) },
+        rageshakeFeatureAvailability = { isFeatureAvailableFlow },
     )
 }
