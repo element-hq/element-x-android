@@ -79,7 +79,7 @@ class KonsistLicenseTest {
                 it.nameWithExtension != "KonsistLicenseTest.kt" &&
                     it.name.startsWith("Template ").not()
             }
-            .assertTrue { it ->
+            .assertTrue {
                 it.text.count("New Vector") == 1
             }
     }

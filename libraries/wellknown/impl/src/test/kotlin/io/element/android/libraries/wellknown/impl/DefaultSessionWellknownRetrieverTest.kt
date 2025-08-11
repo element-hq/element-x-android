@@ -22,7 +22,7 @@ import org.junit.Test
 class DefaultSessionWellknownRetrieverTest {
     @Test
     fun `get empty wellknown`() = runTest {
-        val getUrlLambda = lambdaRecorder<String, Result<ByteArray>>() {
+        val getUrlLambda = lambdaRecorder<String, Result<ByteArray>> {
             Result.success("{}".toByteArray())
         }
         val sut = createDefaultSessionWellknownRetriever(
@@ -150,7 +150,7 @@ class DefaultSessionWellknownRetrieverTest {
 
     @Test
     fun `get empty element wellknown`() = runTest {
-        val getUrlLambda = lambdaRecorder<String, Result<ByteArray>>() {
+        val getUrlLambda = lambdaRecorder<String, Result<ByteArray>> {
             Result.success("{}".toByteArray())
         }
         val sut = createDefaultSessionWellknownRetriever(
