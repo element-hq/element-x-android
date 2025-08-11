@@ -231,6 +231,8 @@
   <string name="common_poll_undisclosed_text">"نتیجه‌ها پس از پایان نظرسنجی نشان داده خواهند شد"</string>
   <string name="common_preparing">"آماده سازی…"</string>
   <string name="common_privacy_policy">"سیاست محرمانگی"</string>
+  <string name="common_private_room">"اتاق خصوصی"</string>
+  <string name="common_public_room">"اتاق عمومی"</string>
   <string name="common_reaction">"واکنش"</string>
   <string name="common_reactions">"واکنش‌ها"</string>
   <string name="common_reason">"دلیل"</string>

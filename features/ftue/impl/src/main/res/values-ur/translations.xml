@@ -13,10 +13,4 @@
   <string name="screen_notification_optin_subtitle">"آپ بعد میں اپنی ترتیبات تبدیل کر سکتے ہیں۔"</string>
   <string name="screen_notification_optin_title">"اطلاعات کی اجازت دیں اور کبھی بھی کسی پیغام سے محروم نہ ہوں۔"</string>
   <string name="screen_session_verification_enter_recovery_key">"بازیابی کلید درج کریں"</string>
-  <string name="screen_welcome_bullet_1">"مکالمات، رائے شماری، تلاش اور مزید بعد میں اس سال شامل کیا جائے گا۔"</string>
-  <string name="screen_welcome_bullet_2">"مرموز کردہ کمروں کیلئے سرگزشتِ پیغام ابھی دستیاب نہیں ہے"</string>
-  <string name="screen_welcome_bullet_3">"ہم آپ سے سننا پسند کریں گے، ترتیبات کے صفحہ کے ذریعے ہمیں بتائیں کہ آپ کیا سوچتے ہیں۔"</string>
-  <string name="screen_welcome_button">"چلیں!"</string>
-  <string name="screen_welcome_subtitle">"یہ ہے جو آپ کو جاننے کی ضرورت ہے:"</string>
-  <string name="screen_welcome_title">"%1$s میں خوش آمدید!"</string>
 </resources>

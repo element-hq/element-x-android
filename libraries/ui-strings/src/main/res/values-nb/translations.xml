@@ -30,10 +30,13 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Trykk for å vise alle"</string>
   <string name="a11y_remove_reaction">"Fjern reaksjonen med %1$s"</string>
   <string name="a11y_remove_reaction_with">"Fjern reaksjonen med %1$s"</string>
+  <string name="a11y_room_avatar">"Romavatar"</string>
   <string name="a11y_send_files">"Sende filer"</string>
   <string name="a11y_show_password">"Vis passord"</string>
   <string name="a11y_start_call">"Start en samtale"</string>
+  <string name="a11y_user_avatar">"Brukeravatar"</string>
   <string name="a11y_user_menu">"Brukermeny"</string>
+  <string name="a11y_view_avatar">"Vis avatar"</string>
   <string name="a11y_view_details">"Vis detaljer"</string>
   <string name="a11y_voice_message">"Talemelding, lengde: %1$s"</string>
   <string name="a11y_voice_message_record">"Ta opp talemelding."</string>
@@ -136,6 +139,7 @@
   <string name="action_tap_for_options">"Trykk for alternativer"</string>
   <string name="action_try_again">"Prøv igjen"</string>
   <string name="action_unpin">"Løsne"</string>
+  <string name="action_view">"Vis"</string>
   <string name="action_view_in_timeline">"Vis i tidslinjen"</string>
   <string name="action_view_source">"Vis kilde"</string>
   <string name="action_yes">"Ja"</string>
@@ -238,6 +242,8 @@
     <item quantity="other">"%d stemmer"</item>
   </plurals>
   <string name="common_privacy_policy">"Retningslinjer for personvern"</string>
+  <string name="common_private_room">"Privat rom"</string>
+  <string name="common_public_room">"Offentlig rom"</string>
   <string name="common_reaction">"Reaksjon"</string>
   <string name="common_reactions">"Reaksjoner"</string>
   <string name="common_reason">"Årsak"</string>

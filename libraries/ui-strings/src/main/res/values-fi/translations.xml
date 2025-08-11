@@ -224,8 +224,8 @@ Syy: %1$s."</string>
     <item quantity="other">"%d muuta"</item>
   </plurals>
   <plurals name="common_member_count">
-    <item quantity="one">"%1$d jäsen"</item>
-    <item quantity="other">"%1$d jäsentä"</item>
+    <item quantity="one">"%1$d Jäsen"</item>
+    <item quantity="other">"%1$d Jäsentä"</item>
   </plurals>
   <string name="common_message">"Viesti"</string>
   <string name="common_message_actions">"Viestitoiminnot"</string>
@@ -257,6 +257,10 @@ Syy: %1$s."</string>
   </plurals>
   <string name="common_preparing">"Valmistellaan…"</string>
   <string name="common_privacy_policy">"Tietosuojakäytäntö"</string>
+  <string name="common_private_room">"Yksityinen huone"</string>
+  <string name="common_private_space">"Yksityinen tila"</string>
+  <string name="common_public_room">"Julkinen huone"</string>
+  <string name="common_public_space">"Julkinen tila"</string>
   <string name="common_reaction">"Reaktio"</string>
   <string name="common_reactions">"Reaktiot"</string>
   <string name="common_reason">"Syy"</string>
@@ -274,6 +278,10 @@ Syy: %1$s."</string>
   <string name="common_room">"Huone"</string>
   <string name="common_room_name">"Huoneen nimi"</string>
   <string name="common_room_name_placeholder">"esim. projektisi nimi"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d Huone"</item>
+    <item quantity="other">"%1$d Huonetta"</item>
+  </plurals>
   <string name="common_saved_changes">"Muutokset tallennettu"</string>
   <string name="common_saving">"Tallennetaan"</string>
   <string name="common_screen_lock">"Näyttölukko"</string>
@@ -293,6 +301,10 @@ Syy: %1$s."</string>
   <string name="common_signing_out">"Kirjaudutaan ulos"</string>
   <string name="common_something_went_wrong">"Jokin meni pieleen"</string>
   <string name="common_something_went_wrong_message">"Kohtasimme ongelman. Yritä uudelleen."</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d Tila"</item>
+    <item quantity="other">"%1$d Tilaa"</item>
+  </plurals>
   <string name="common_starting_chat">"Aloitetaan keskustelua…"</string>
   <string name="common_sticker">"Tarra"</string>
   <string name="common_success">"Onnistui"</string>
@@ -401,6 +413,7 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Viestiäsi ei lähetetty, koska %1$s ei ole vahvistanut kaikkia laitteitaan."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Yksi tai useampi laitteistasi on vahvistamaton. Voit lähettää viestin silti tai peruuttaa sen toistaiseksi ja yrittää uudelleen myöhemmin, kun olet vahvistanut kaikki laitteesi."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Viestiäsi ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi."</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Muokkaa ylläpitäjiä tai omistajia"</string>
   <string name="screen_room_error_failed_processing_media">"Median käsittely epäonnistui, yritä uudelleen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Käyttäjän tietojen hakeminen epäonnistui"</string>
   <string name="screen_room_event_pill">"Viesti huoneessa %1$s"</string>
@@ -418,6 +431,9 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_share_open_google_maps">"Avaa Google Mapsissa"</string>
   <string name="screen_share_open_osm_maps">"Avaa OpenStreetMapissa"</string>
   <string name="screen_share_this_location_action">"Jaa tämä sijainti"</string>
+  <string name="screen_space_list_description">"Luomasi tai liittymäsi tilat."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Tilat"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Viestiä ei lähetetty, koska käyttäjän %1$s vahvistettu identiteetti nollattiin."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Viestiä ei lähetetty, koska %1$s ei ole vahvistanut kaikkia laitteitaan."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Viestiä ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi."</string>

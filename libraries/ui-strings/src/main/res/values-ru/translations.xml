@@ -240,6 +240,8 @@
     <item quantity="many">"%d голосов"</item>
   </plurals>
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
+  <string name="common_private_room">"Частная комната"</string>
+  <string name="common_public_room">"Общедоступная комната"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
   <string name="common_reason">"Причина"</string>

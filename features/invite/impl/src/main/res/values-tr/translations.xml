@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_title">"Kullanıcıyı engelle"</string>
   <string name="screen_invites_decline_chat_message">"%1$s katılma davetini reddetmek istediğinizden emin misiniz?"</string>
   <string name="screen_invites_decline_chat_title">"Daveti reddet"</string>
   <string name="screen_invites_decline_direct_chat_message">"%1$s ile bu özel sohbeti reddetmek istediğinizden emin misiniz?"</string>

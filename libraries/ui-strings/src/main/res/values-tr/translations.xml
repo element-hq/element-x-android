@@ -220,6 +220,8 @@ Neden: %1$s."</string>
     <item quantity="other">"%d oy"</item>
   </plurals>
   <string name="common_privacy_policy">"Gizlilik Politikası"</string>
+  <string name="common_private_room">"Özel oda"</string>
+  <string name="common_public_room">"Herkese açık oda"</string>
   <string name="common_reaction">"Tepki"</string>
   <string name="common_reactions">"Tepkiler"</string>
   <string name="common_recovery_key">"Kurtarma anahtarı"</string>

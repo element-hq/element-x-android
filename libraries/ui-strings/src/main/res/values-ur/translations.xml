@@ -190,6 +190,8 @@
     <item quantity="other">"%d آراء"</item>
   </plurals>
   <string name="common_privacy_policy">"سیاستِ نجیت"</string>
+  <string name="common_private_room">"نجی کمرہ"</string>
+  <string name="common_public_room">"عوامی کمرہ"</string>
   <string name="common_reaction">"ردعمل"</string>
   <string name="common_reactions">"ردود عمل"</string>
   <string name="common_recovery_key">"بازیابی کی کلید"</string>

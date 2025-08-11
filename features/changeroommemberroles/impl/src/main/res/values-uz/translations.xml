@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_change_permissions_everyone">"Har kim"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$dodam"</item>
+    <item quantity="other">"%1$dodamlar"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_header_title">"Kutilmoqda"</string>
+  <string name="screen_room_member_list_room_members_header_title">"Xona a\'zolari"</string>
+</resources>

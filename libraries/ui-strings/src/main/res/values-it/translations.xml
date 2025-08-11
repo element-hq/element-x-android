@@ -207,8 +207,8 @@ Motivo:. %1$s"</string>
     <item quantity="other">"altri %d"</item>
   </plurals>
   <plurals name="common_member_count">
-    <item quantity="one">"%1$d membro"</item>
-    <item quantity="other">"%1$d membri"</item>
+    <item quantity="one">"%1$d Membro"</item>
+    <item quantity="other">"%1$d Membri"</item>
   </plurals>
   <string name="common_message">"Messaggio"</string>
   <string name="common_message_actions">"Azioni messaggio"</string>
@@ -239,6 +239,8 @@ Motivo:. %1$s"</string>
     <item quantity="other">"%d voti"</item>
   </plurals>
   <string name="common_privacy_policy">"Informativa sulla privacy"</string>
+  <string name="common_private_room">"Stanza privata"</string>
+  <string name="common_public_room">"Stanza pubblica"</string>
   <string name="common_reaction">"Reazione"</string>
   <string name="common_reactions">"Reazioni"</string>
   <string name="common_reason">"Motivo"</string>

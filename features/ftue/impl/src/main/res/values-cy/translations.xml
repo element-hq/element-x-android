@@ -13,10 +13,4 @@
   <string name="screen_notification_optin_subtitle">"Gallwch newid eich gosodiadau yn nes ymlaen."</string>
   <string name="screen_notification_optin_title">"Caniatáu hysbysiadau a pheidio byth â cholli neges"</string>
   <string name="screen_session_verification_enter_recovery_key">"Rhowch eich allwedd adfer"</string>
-  <string name="screen_welcome_bullet_1">"Bydd galwadau, pleidleisiau, chwilio a mwy yn cael eu hychwanegu yn ddiweddarach eleni."</string>
-  <string name="screen_welcome_bullet_2">"Nid yw hanes negeseuon ar gyfer ystafelloedd sydd wedi\'u hamgryptio ar gael eto."</string>
-  <string name="screen_welcome_bullet_3">"Byddem wrth ein bodd yn clywed gennych, gadewch i ni wybod beth yw eich barn drwy\'r dudalen gosodiadau."</string>
-  <string name="screen_welcome_button">"Ymlaen!"</string>
-  <string name="screen_welcome_subtitle">"Dyma beth sydd angen i chi ei wybod:"</string>
-  <string name="screen_welcome_title">"Croeso i %1$s!"</string>
 </resources>

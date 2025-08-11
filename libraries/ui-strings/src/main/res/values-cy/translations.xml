@@ -273,6 +273,8 @@ Rheswm: %1$s."</string>
     <item quantity="other">"%d pleidlais"</item>
   </plurals>
   <string name="common_privacy_policy">"Polisi preifatrwydd"</string>
+  <string name="common_private_room">"Ystafell breifat"</string>
+  <string name="common_public_room">"Ystafell gyhoeddus"</string>
   <string name="common_reaction">"Adwaith"</string>
   <string name="common_reactions">"Adweithiau"</string>
   <string name="common_reason">"Rheswm"</string>

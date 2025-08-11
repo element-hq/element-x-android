@@ -257,6 +257,8 @@ Raison : %1$s."</string>
   </plurals>
   <string name="common_preparing">"Préparation…"</string>
   <string name="common_privacy_policy">"Politique de confidentialité"</string>
+  <string name="common_private_room">"Salon privé"</string>
+  <string name="common_public_room">"Salon public"</string>
   <string name="common_reaction">"Réaction"</string>
   <string name="common_reactions">"Réactions"</string>
   <string name="common_reason">"Raison"</string>

@@ -13,6 +13,9 @@
   <string name="screen_change_account_provider_other">"Outro"</string>
   <string name="screen_change_account_provider_subtitle">"Utiliza um operador de conta diferente, como o teu próprio servidor privado ou uma conta de trabalho."</string>
   <string name="screen_change_account_provider_title">"Alterar operador de conta"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"%1$s requer a Element Pro. Por favor, descarrega-a da app store."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Element Pro necessária"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Não foi possível comunicar com este servidor. Por favor, verifica se introduziste o seu URL corretamente. Se sim, contacta o administrador para obteres mais ajuda."</string>
   <string name="screen_change_server_error_invalid_well_known">"O servidor não está disponível devido a um problema no ficheiro \".well-known\":
 %1$s"</string>

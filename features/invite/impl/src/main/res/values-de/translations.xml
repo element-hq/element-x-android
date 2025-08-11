@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_decline_and_block_block_user_option_description">"Sie werden keine Nachrichten oder Chateinladungen von diesem Nutzer sehen."</string>
-  <string name="screen_decline_and_block_block_user_option_title">"Benutzer blockieren"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Nutzer blockieren"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Melden Sie diesen Raum Ihrem Kontoanbieter."</string>
   <string name="screen_decline_and_block_report_user_reason_placeholder">"Nennen Sie den Grund für die Meldung…"</string>
   <string name="screen_decline_and_block_title">"Ablehnen und blockieren"</string>

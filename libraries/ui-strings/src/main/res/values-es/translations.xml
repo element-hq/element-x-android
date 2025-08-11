@@ -235,6 +235,8 @@ Motivo: %1$s."</string>
     <item quantity="other">"%d votos"</item>
   </plurals>
   <string name="common_privacy_policy">"Política de privacidad"</string>
+  <string name="common_private_room">"Sala privada"</string>
+  <string name="common_public_room">"Sala pública"</string>
   <string name="common_reaction">"Reacción"</string>
   <string name="common_reactions">"Reacciones"</string>
   <string name="common_reason">"Motivo"</string>

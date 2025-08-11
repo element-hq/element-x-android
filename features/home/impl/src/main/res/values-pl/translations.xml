@@ -12,8 +12,7 @@
   <string name="confirm_recovery_key_banner_title">"Magazyn kluczy nie jest zsynchronizowany"</string>
   <string name="full_screen_intent_banner_message">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
   <string name="full_screen_intent_banner_title">"Popraw jakość swoich rozmów"</string>
-  <string name="screen_home_tab_chats">"Czaty"</string>
-  <string name="screen_home_tab_spaces">"Przestrzenie"</string>
+  <string name="screen_home_tab_chats">"Wszystkie czaty"</string>
   <string name="screen_invites_decline_chat_message">"Czy na pewno chcesz odrzucić zaproszenie dołączenia do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odrzuć zaproszenie"</string>
   <string name="screen_invites_decline_direct_chat_message">"Czy na pewno chcesz odrzucić rozmowę prywatną z %1$s?"</string>

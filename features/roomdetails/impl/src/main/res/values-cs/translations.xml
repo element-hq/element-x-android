@@ -82,6 +82,7 @@
   <string name="screen_room_member_list_pending_header_title">"Nevyřízeno"</string>
   <string name="screen_room_member_list_role_administrator">"Správce"</string>
   <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
+  <string name="screen_room_member_list_role_owner">"Vlastník"</string>
   <string name="screen_room_member_list_room_members_header_title">"Členové místnosti"</string>
   <string name="screen_room_member_list_unbanning_user">"Rušení vykázání %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Povolit vlastní nastavení"</string>

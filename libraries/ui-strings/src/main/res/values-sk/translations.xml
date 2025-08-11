@@ -262,6 +262,10 @@ Dôvod: %1$s."</string>
   </plurals>
   <string name="common_preparing">"Pripravuje sa…"</string>
   <string name="common_privacy_policy">"Zásady ochrany osobných údajov"</string>
+  <string name="common_private_room">"Súkromná miestnosť"</string>
+  <string name="common_private_space">"Súkromný priestor"</string>
+  <string name="common_public_room">"Verejná miestnosť"</string>
+  <string name="common_public_space">"Verejný priestor"</string>
   <string name="common_reaction">"Reakcia"</string>
   <string name="common_reactions">"Reakcie"</string>
   <string name="common_reason">"Dôvod"</string>
@@ -280,6 +284,11 @@ Dôvod: %1$s."</string>
   <string name="common_room">"Miestnosť"</string>
   <string name="common_room_name">"Názov miestnosti"</string>
   <string name="common_room_name_placeholder">"napr. názov vášho projektu"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d miestnosť"</item>
+    <item quantity="few">"%1$d miestnosti"</item>
+    <item quantity="other">"%1$d miestností"</item>
+  </plurals>
   <string name="common_saved_changes">"Uložené zmeny"</string>
   <string name="common_saving">"Ukladá sa"</string>
   <string name="common_screen_lock">"Zámok obrazovky"</string>
@@ -299,6 +308,11 @@ Dôvod: %1$s."</string>
   <string name="common_signing_out">"Odhlasovanie"</string>
   <string name="common_something_went_wrong">"Niečo sa pokazilo"</string>
   <string name="common_something_went_wrong_message">"Vyskytol sa problém. Skúste to prosím znova."</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d priestor"</item>
+    <item quantity="few">"%1$d priestory"</item>
+    <item quantity="other">"%1$d priestorov"</item>
+  </plurals>
   <string name="common_starting_chat">"Spustenie konverzácie…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspech"</string>
@@ -329,6 +343,12 @@ Dôvod: %1$s."</string>
   <string name="common_verify_identity">"Overiť totožnosť"</string>
   <string name="common_verify_user">"Overiť používateľa"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Vysoká kvalita"</string>
+  <string name="common_video_quality_high_description">"Najlepšia kvalita, ale väčšia veľkosť súboru"</string>
+  <string name="common_video_quality_low">"Nízka kvalita"</string>
+  <string name="common_video_quality_low_description">"Najrýchlejšia rýchlosť nahrávania a najmenšia veľkosť súboru"</string>
+  <string name="common_video_quality_standard">"Štandardná kvalita"</string>
+  <string name="common_video_quality_standard_description">"Vyvážená kvalita a rýchlosť nahrávania"</string>
   <string name="common_voice_message">"Hlasová správa"</string>
   <string name="common_waiting">"Čaká sa…"</string>
   <string name="common_waiting_for_decryption_key">"Čaká sa na dešifrovací kľúč"</string>
@@ -343,6 +363,10 @@ Dôvod: %1$s."</string>
 
 Naozaj chcete pokračovať?"</string>
   <string name="dialog_confirm_link_title">"Dôkladne skontrolujte tento odkaz"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Vyberte predvolenú kvalitu nahrávaných videí."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kvalita nahrávania videa"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Maximálna povolená veľkosť súboru je: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Súbor je príliš veľký na nahratie"</string>
   <string name="dialog_room_reported">"Miestnosť nahlásená"</string>
   <string name="dialog_room_reported_and_left">"Nahlásili ste a opustili ste miestnosť"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
@@ -351,6 +375,9 @@ Naozaj chcete pokračovať?"</string>
   <string name="dialog_title_warning">"Upozornenie"</string>
   <string name="dialog_unsaved_changes_description_android">"Vaše zmeny neboli uložené. Naozaj sa chcete vrátiť?"</string>
   <string name="dialog_unsaved_changes_title">"Uložiť zmeny?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Maximálna povolená veľkosť súboru je: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vyberte kvalitu videa, ktoré chcete nahrať."</string>
+  <string name="dialog_video_quality_selector_title">"Vyberte kvalitu nahrávania videa"</string>
   <string name="error_account_creation_not_possible">"Váš domovský server musí byť aktualizovaný tak, aby podporoval Matrix Authentication Service a vytvorenie účtu."</string>
   <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>
   <string name="error_failed_loading_map">"%1$s nedokázal načítať mapu. Skúste to prosím neskôr."</string>
@@ -385,11 +412,14 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_create_poll_settings_section_title">"Nastavenia"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie."</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"Ťuknutím zmeníte kvalitu nahratého videa"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Súbor sa nepodarilo nahrať."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"Maximálna povolená veľkosť súboru je %1$s."</string>
   <string name="screen_media_upload_preview_error_too_large_title">"Súbor je príliš veľký na nahratie"</string>
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimalizovať kvalitu obrázku"</string>
+  <string name="screen_media_upload_preview_processing">"Prebieha spracovanie…"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Stlačte správu a vyberte možnosť „%1$s“, ktorú chcete zahrnúť sem."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pripnite dôležité správy, aby sa dali ľahko nájsť"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -408,6 +438,7 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Vaša správa nebola odoslaná, pretože %1$s neoveril/a všetky zariadenia."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno alebo viac vašich zariadení nie je overených. Správu môžete odoslať aj tak, alebo môžete zatiaľ zrušiť a skúsiť to znova neskôr po overení všetkých svojich zariadení."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaša správa nebola odoslaná, pretože ste neoverili jedno alebo viac svojich zariadení"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Upraviť správcov alebo vlastníkov"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>
   <string name="screen_room_event_pill">"Správa v %1$s"</string>
@@ -425,6 +456,9 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_share_open_google_maps">"Otvoriť v Mapách Google"</string>
   <string name="screen_share_open_osm_maps">"Otvoriť v OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Zdieľajte túto polohu"</string>
+  <string name="screen_space_list_description">"Priestory, ktoré ste vytvorili alebo ku ktorým ste sa pripojili."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Priestory"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$s."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Správa nebola odoslaná, pretože %1$s neoveril/a všetky zariadenia."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Správa nebola odoslaná, pretože ste neoverili jedno alebo viac svojich zariadení."</string>
