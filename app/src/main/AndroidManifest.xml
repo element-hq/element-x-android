@@ -13,6 +13,7 @@
     <application
         android:name=".ElementXApplication"
         android:allowBackup="false"
+        android:appCategory="social"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
