@@ -37,7 +37,7 @@ jobs:
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version: 3.13
       - name: Search for invalid screenshot files
         run: ./tools/test/checkInvalidScreenshots.py
 
@@ -58,7 +58,7 @@ jobs:
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version: 3.13
       - name: Search for invalid dependencies
         run: ./tools/dependencies/checkDependencies.py
 
