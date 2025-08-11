@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 
@@ -23,7 +24,7 @@ data class MessageContent(
     val body: String,
     val inReplyTo: InReplyTo?,
     val isEdited: Boolean,
-    val isThreaded: Boolean,
+    val threadInfo: EventThreadInfo,
     val type: MessageType
 ) : EventContent
 

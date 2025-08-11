@@ -49,7 +49,7 @@ sealed interface MessageComposerMode {
         get() = this is Reply &&
             replyToDetails is InReplyToDetails.Ready &&
             replyToDetails.eventContent is MessageContent &&
-            (replyToDetails.eventContent as MessageContent).isThreaded
+            (replyToDetails.eventContent as MessageContent).threadInfo.threadRootId != null
 }
 
 fun MessageComposerMode.showCaptionCompatibilityWarning(): Boolean {

@@ -65,6 +65,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -82,6 +83,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
@@ -241,6 +243,13 @@ fun TimelineItemEventRow(
                 eventContentView = eventContentView,
             )
         }
+
+        event.threadInfo.threadSummary?.let { threadSummary ->
+            Button("Thread with ${threadSummary.numberOfReplies} replies", onClick = {
+
+            })
+        }
+
         // Read receipts / Send state
         TimelineItemReadReceiptView(
             state = ReadReceiptViewState(
@@ -658,7 +667,7 @@ private fun MessageEventBubbleContent(
         else -> ContentPadding.Textual
     }
     CommonLayout(
-        showThreadDecoration = event.isThreaded,
+        showThreadDecoration = event.threadInfo.threadRootId != null,
         timestampPosition = timestampPosition,
         paddingBehaviour = paddingBehaviour,
         inReplyToDetails = event.inReplyTo,
