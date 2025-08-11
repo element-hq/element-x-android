@@ -411,15 +411,6 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Odstrániť %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Nastavenia"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie."</string>
-  <string name="screen_media_upload_preview_change_video_quality_prompt">"Ťuknutím zmeníte kvalitu nahratého videa"</string>
-  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Súbor sa nepodarilo nahrať."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
-  <string name="screen_media_upload_preview_error_too_large_message">"Maximálna povolená veľkosť súboru je %1$s."</string>
-  <string name="screen_media_upload_preview_error_too_large_title">"Súbor je príliš veľký na nahratie"</string>
-  <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimalizovať kvalitu obrázku"</string>
-  <string name="screen_media_upload_preview_processing">"Prebieha spracovanie…"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Stlačte správu a vyberte možnosť „%1$s“, ktorú chcete zahrnúť sem."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pripnite dôležité správy, aby sa dali ľahko nájsť"</string>
   <plurals name="screen_pinned_timeline_screen_title">

@@ -361,9 +361,6 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Rimuovi %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Impostazioni"</string>
   <string name="screen_media_picker_error_failed_selection">"Selezione del file multimediale fallita, riprova."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Le didascalie potrebbero non essere visibili agli utenti di app meno recenti."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Caricamento del file multimediale fallito, riprova."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Premi su un messaggio e scegli “%1$s” per includerlo qui."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fissa i messaggi importanti così che possano essere trovati facilmente"</string>
   <plurals name="screen_pinned_timeline_screen_title">

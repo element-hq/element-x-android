@@ -8,6 +8,8 @@
   <string name="emoji_picker_category_people">"شکلک‌ها و افراد"</string>
   <string name="emoji_picker_category_places">"سفر و مکان‌ها"</string>
   <string name="emoji_picker_category_symbols">"نمادها"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"پردازش رسانه برای بارگذاری شکست خورد. لطفاً دوباره تلاش کنید."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"بارگذاری رسانه شکست خورد. لطفاً دوباره تلاش کنید."</string>
   <string name="screen_report_content_block_user">"انسداد کاربر"</string>
   <string name="screen_report_content_block_user_hint">"اگر می‌خواهید همه پیام‌های فعلی و آینده را از این کاربر را پنهان کنید، علامت بزنید"</string>
   <string name="screen_report_content_explanation">"این پیام به مدیر کارساز خانگی شما گزارش خواهد شد. آنها قادر به خواندن پیام های رمزگذاری شده نخواهند بود."</string>

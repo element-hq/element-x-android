@@ -10,6 +10,7 @@ package io.element.android.features.preferences.impl.advanced
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 
 open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSettingsState> {
     override val values: Sequence<AdvancedSettingsState>
@@ -17,18 +18,22 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(),
             aAdvancedSettingsState(isDeveloperModeEnabled = true),
             aAdvancedSettingsState(isSharePresenceEnabled = true),
-            aAdvancedSettingsState(doesCompressMedia = true),
+            aAdvancedSettingsState(mediaOptimizationState = MediaOptimizationState.AllMedia(isEnabled = true)),
             aAdvancedSettingsState(hideInviteAvatars = true),
             aAdvancedSettingsState(timelineMediaPreviewValue = MediaPreviewValue.Off),
             aAdvancedSettingsState(setHideInviteAvatarsAction = AsyncAction.Loading),
             aAdvancedSettingsState(setTimelineMediaPreviewAction = AsyncAction.Loading),
+            aAdvancedSettingsState(mediaOptimizationState = MediaOptimizationState.Split(
+                compressImages = true,
+                videoPreset = VideoCompressionPreset.HIGH,
+            )),
         )
 }
 
 fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSharePresenceEnabled: Boolean = false,
-    doesCompressMedia: Boolean = false,
+    mediaOptimizationState: MediaOptimizationState = MediaOptimizationState.AllMedia(isEnabled = false),
     theme: ThemeOption = ThemeOption.System,
     hideInviteAvatars: Boolean = false,
     timelineMediaPreviewValue: MediaPreviewValue = MediaPreviewValue.On,
@@ -38,7 +43,7 @@ fun aAdvancedSettingsState(
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
     isSharePresenceEnabled = isSharePresenceEnabled,
-    doesCompressMedia = doesCompressMedia,
+    mediaOptimizationState = mediaOptimizationState,
     theme = theme,
     mediaPreviewConfigState = MediaPreviewConfigState(
         hideInviteAvatars = hideInviteAvatars,

@@ -27,6 +27,7 @@ fun aTimelineItemFileContent(
     caption: String? = null,
 ) = TimelineItemFileContent(
     filename = fileName,
+    fileSize = 100 * 1024L,
     caption = caption,
     formattedCaption = null,
     isEdited = false,

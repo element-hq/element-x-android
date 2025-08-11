@@ -351,9 +351,6 @@
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Подпись может быть не видна пользователям старых приложений."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Нажмите на сообщение и выберите “%1$s”, чтобы добавить его сюда."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закрепите важные сообщения, чтобы их можно было легко найти"</string>
   <plurals name="screen_pinned_timeline_screen_title">

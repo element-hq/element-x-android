@@ -12,7 +12,10 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
@@ -34,12 +37,18 @@ class AdvancedSettingsPresenterTest {
             with(awaitItem()) {
                 assertThat(isDeveloperModeEnabled).isFalse()
                 assertThat(isSharePresenceEnabled).isTrue()
-                assertThat(doesCompressMedia).isTrue()
+                assertThat(mediaOptimizationState).isNull()
                 assertThat(theme).isEqualTo(ThemeOption.System)
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
                 assertThat(mediaPreviewConfigState.setHideInviteAvatarsAction).isEqualTo(AsyncAction.Uninitialized)
                 assertThat(mediaPreviewConfigState.setTimelineMediaPreviewAction).isEqualTo(AsyncAction.Uninitialized)
+            }
+
+            // After the initial state, we expect the media optimization state to be set
+            with(awaitItem()) {
+                assertThat(mediaOptimizationState).isInstanceOf(MediaOptimizationState.AllMedia::class.java)
+                assertThat((mediaOptimizationState as MediaOptimizationState.AllMedia).isEnabled).isTrue()
             }
         }
     }
@@ -50,6 +59,9 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
             with(awaitItem()) {
                 assertThat(isDeveloperModeEnabled).isFalse()
                 eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(true))
@@ -70,6 +82,9 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
             with(awaitItem()) {
                 assertThat(isSharePresenceEnabled).isTrue()
                 eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(false))
@@ -90,16 +105,73 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
             with(awaitItem()) {
-                assertThat(doesCompressMedia).isTrue()
+                assertThat((mediaOptimizationState as MediaOptimizationState.AllMedia).isEnabled).isTrue()
                 eventSink(AdvancedSettingsEvents.SetCompressMedia(false))
             }
             with(awaitItem()) {
-                assertThat(doesCompressMedia).isFalse()
+                assertThat((mediaOptimizationState as MediaOptimizationState.AllMedia).isEnabled).isFalse()
                 eventSink(AdvancedSettingsEvents.SetCompressMedia(true))
             }
             with(awaitItem()) {
-                assertThat(doesCompressMedia).isTrue()
+                assertThat((mediaOptimizationState as MediaOptimizationState.AllMedia).isEnabled).isTrue()
+            }
+        }
+    }
+
+    @Test
+    fun `present - compress images off on`() = runTest {
+        val presenter = createAdvancedSettingsPresenter(
+            featureFlagService = FakeFeatureFlagService().apply {
+                setFeatureEnabled(FeatureFlags.SelectableMediaQuality, true)
+            }
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat((mediaOptimizationState as MediaOptimizationState.Split).compressImages).isTrue()
+                eventSink(AdvancedSettingsEvents.SetCompressImages(false))
+            }
+            with(awaitItem()) {
+                assertThat((mediaOptimizationState as MediaOptimizationState.Split).compressImages).isFalse()
+                eventSink(AdvancedSettingsEvents.SetCompressImages(true))
+            }
+            with(awaitItem()) {
+                assertThat((mediaOptimizationState as MediaOptimizationState.Split).compressImages).isTrue()
+            }
+        }
+    }
+
+    @Test
+    fun `present - video upload quality selector`() = runTest {
+        val presenter = createAdvancedSettingsPresenter(
+            featureFlagService = FakeFeatureFlagService().apply {
+                setFeatureEnabled(FeatureFlags.SelectableMediaQuality, true)
+            }
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat((mediaOptimizationState as MediaOptimizationState.Split).videoPreset).isEqualTo(VideoCompressionPreset.STANDARD)
+                eventSink(AdvancedSettingsEvents.SetVideoUploadQuality(VideoCompressionPreset.LOW))
+            }
+            with(awaitItem()) {
+                assertThat((mediaOptimizationState as MediaOptimizationState.Split).videoPreset).isEqualTo(VideoCompressionPreset.LOW)
+                eventSink(AdvancedSettingsEvents.SetVideoUploadQuality(VideoCompressionPreset.HIGH))
+            }
+            with(awaitItem()) {
+                assertThat((mediaOptimizationState as MediaOptimizationState.Split).videoPreset).isEqualTo(VideoCompressionPreset.HIGH)
             }
         }
     }
@@ -110,6 +182,9 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
             with(awaitItem()) {
                 assertThat(theme).isEqualTo(ThemeOption.System)
                 eventSink(AdvancedSettingsEvents.SetTheme(ThemeOption.Dark))
@@ -135,6 +210,9 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
                 eventSink(AdvancedSettingsEvents.SetHideInviteAvatars(true))
@@ -157,6 +235,9 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
                 eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
@@ -184,6 +265,9 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isTrue()
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.Private)
@@ -201,6 +285,9 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.setHideInviteAvatarsAction).isEqualTo(AsyncAction.Loading)
                 assertThat(mediaPreviewConfigState.setTimelineMediaPreviewAction).isEqualTo(AsyncAction.Success(Unit))
@@ -212,10 +299,12 @@ class AdvancedSettingsPresenterTest {
         appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreviewConfigStateStore: MediaPreviewConfigStateStore = FakeMediaPreviewConfigStateStore(),
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
     ) = AdvancedSettingsPresenter(
         appPreferencesStore = appPreferencesStore,
         sessionPreferencesStore = sessionPreferencesStore,
         mediaPreviewConfigStateStore = mediaPreviewConfigStateStore,
+        featureFlagService = featureFlagService,
         sessionCoroutineScope = this,
     )
 }

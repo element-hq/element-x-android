@@ -362,9 +362,6 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Fjern %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Innstillinger"</string>
   <string name="screen_media_picker_error_failed_selection">"Kunne ikke velge medium, prøv igjen."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Teksting er kanskje ikke synlig for personer som bruker eldre apper."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Kunne ikke behandle medier for opplasting, vennligst prøv igjen."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Opplasting av medier mislyktes, vennligst prøv igjen."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Trykk på en melding og velg “%1$s” for å inkludere her."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fest viktige meldinger slik at de lett kan ses"</string>
   <plurals name="screen_pinned_timeline_screen_title">

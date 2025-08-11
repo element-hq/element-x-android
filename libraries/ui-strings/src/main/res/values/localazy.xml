@@ -403,15 +403,6 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
-  <string name="screen_media_upload_preview_change_video_quality_prompt">"Tap to change the video upload quality"</string>
-  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"The file could not be uploaded."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
-  <string name="screen_media_upload_preview_error_too_large_message">"The maximum file size allowed is %1$s."</string>
-  <string name="screen_media_upload_preview_error_too_large_title">"The file is too large to upload"</string>
-  <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimise image quality"</string>
-  <string name="screen_media_upload_preview_processing">"Processing…"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>
   <plurals name="screen_pinned_timeline_screen_title">

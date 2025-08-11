@@ -8,6 +8,9 @@
   <string name="emoji_picker_category_people">"表情和人物"</string>
   <string name="emoji_picker_category_places">"旅行和地点"</string>
   <string name="emoji_picker_category_symbols">"符号"</string>
+  <string name="screen_media_upload_preview_caption_warning">"使用旧版应用程序的用户可能无法看到字幕。"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"处理要上传的媒体失败，请重试。"</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"上传媒体失败，请重试。"</string>
   <string name="screen_report_content_block_user">"封禁用户"</string>
   <string name="screen_report_content_block_user_hint">"请确认是否要隐藏该用户当前和未来的所有信息"</string>
   <string name="screen_report_content_explanation">"此消息将举报给您的服务器管理员。他们无法读取任何加密消息。"</string>

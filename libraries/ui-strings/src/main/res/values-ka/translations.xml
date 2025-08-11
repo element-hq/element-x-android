@@ -253,8 +253,6 @@
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"შეცდომის შესატყობინებლად ტელეფონის შენჯღრევა"</string>
   <string name="screen_media_picker_error_failed_selection">"მედიის შერჩევა ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"მედიის ატვირთვა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"მედიის ატვირთვა ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_room_error_failed_processing_media">"მედიის ატვირთვა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"მომხმარებლის მონაცემების მოძიება ვერ მოხერხდა"</string>
   <string name="screen_share_location_title">"მდებარეობის გაზიარება"</string>

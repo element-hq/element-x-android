@@ -8,6 +8,7 @@
 package io.element.android.libraries.preferences.test
 
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -19,6 +20,7 @@ class InMemorySessionPreferencesStore(
     isRenderTypingNotificationsEnabled: Boolean = true,
     isSessionVerificationSkipped: Boolean = false,
     doesCompressMedia: Boolean = true,
+    videoCompressionPreset: VideoCompressionPreset = VideoCompressionPreset.STANDARD,
 ) : SessionPreferencesStore {
     private val isSharePresenceEnabled = MutableStateFlow(isSharePresenceEnabled)
     private val isSendPublicReadReceiptsEnabled = MutableStateFlow(isSendPublicReadReceiptsEnabled)
@@ -27,6 +29,7 @@ class InMemorySessionPreferencesStore(
     private val isRenderTypingNotificationsEnabled = MutableStateFlow(isRenderTypingNotificationsEnabled)
     private val isSessionVerificationSkipped = MutableStateFlow(isSessionVerificationSkipped)
     private val doesCompressMedia = MutableStateFlow(doesCompressMedia)
+    private val videoCompressionPreset = MutableStateFlow(videoCompressionPreset)
     var clearCallCount = 0
         private set
 
@@ -68,9 +71,17 @@ class InMemorySessionPreferencesStore(
         return isSessionVerificationSkipped
     }
 
-    override suspend fun setCompressMedia(compress: Boolean) = doesCompressMedia.emit(compress)
+    override suspend fun setOptimizeImages(compress: Boolean) = doesCompressMedia.emit(compress)
 
-    override fun doesCompressMedia(): Flow<Boolean> = doesCompressMedia
+    override fun doesOptimizeImages(): Flow<Boolean> = doesCompressMedia
+
+    override suspend fun setVideoCompressionPreset(preset: VideoCompressionPreset) {
+        videoCompressionPreset.value = preset
+    }
+
+    override fun getVideoCompressionPreset(): Flow<VideoCompressionPreset> {
+        return videoCompressionPreset
+    }
 
     override suspend fun clear() {
         clearCallCount++

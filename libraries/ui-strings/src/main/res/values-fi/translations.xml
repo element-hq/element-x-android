@@ -390,12 +390,6 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Poista %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Asetukset"</string>
   <string name="screen_media_picker_error_failed_selection">"Median valinta epäonnistui, yritä uudelleen."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia."</string>
-  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Tiedostoa ei voitu lähettää."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Median käsittely epäonnistui, yritä uudelleen."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Median lähettäminen epäonnistui, yritä uudelleen."</string>
-  <string name="screen_media_upload_preview_error_too_large_message">"Suurin sallittu tiedostokoko on %1$s."</string>
-  <string name="screen_media_upload_preview_error_too_large_title">"Tiedosto on liian suuri lähetettäväksi"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Paina viestiä ja valitse “%1$s” lisätäksesi sen tänne."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Kiinnitä tärkeät viestit, jotta ne löytyvät helposti."</string>
   <plurals name="screen_pinned_timeline_screen_title">

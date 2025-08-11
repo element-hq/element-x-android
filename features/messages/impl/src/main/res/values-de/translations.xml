@@ -8,6 +8,9 @@
   <string name="emoji_picker_category_people">"Smileys &amp; Menschen"</string>
   <string name="emoji_picker_category_places">"Reisen &amp; Orte"</string>
   <string name="emoji_picker_category_symbols">"Symbole"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Bildunterschriften sind für Nutzer älterer Apps möglicherweise nicht sichtbar."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut."</string>
   <string name="screen_report_content_block_user">"Nutzer blockieren"</string>
   <string name="screen_report_content_block_user_hint">"Prüfen Sie, ob Sie alle aktuellen und zukünftigen Nachrichten dieses Nutzers ausblenden wollen"</string>
   <string name="screen_report_content_explanation">"Diese Nachricht wird dem Administrator ihres Homeservers gemeldet. Dieser kann allerdings keine verschlüsselten Nachrichten lesen."</string>

@@ -8,6 +8,9 @@
   <string name="emoji_picker_category_people">"Faccine &amp; Persone"</string>
   <string name="emoji_picker_category_places">"Viaggi &amp; Luoghi"</string>
   <string name="emoji_picker_category_symbols">"Simboli"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Le didascalie potrebbero non essere visibili agli utenti di app meno recenti."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Caricamento del file multimediale fallito, riprova."</string>
   <string name="screen_report_content_block_user">"Blocca utente"</string>
   <string name="screen_report_content_block_user_hint">"Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente"</string>
   <string name="screen_report_content_explanation">"Questo messaggio verrà segnalato all\'amministratore dell\'homeserver. Questi non sarà in grado di leggere i messaggi cifrati."</string>
