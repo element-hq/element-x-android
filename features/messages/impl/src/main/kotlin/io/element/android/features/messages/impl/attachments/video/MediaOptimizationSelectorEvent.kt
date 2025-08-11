@@ -5,11 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.api.attachments.video
+package io.element.android.features.messages.impl.attachments.video
 
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 
 sealed interface MediaOptimizationSelectorEvent {
     data class SelectImageOptimization(val enabled: Boolean) : MediaOptimizationSelectorEvent
     data class SelectVideoPreset(val preset: VideoCompressionPreset) : MediaOptimizationSelectorEvent
+    data object OpenVideoPresetSelectorDialog : MediaOptimizationSelectorEvent
+    data object DismissVideoPresetSelectorDialog : MediaOptimizationSelectorEvent
 }

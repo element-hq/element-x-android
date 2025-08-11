@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.api.attachments.video
+package io.element.android.features.messages.impl.attachments.video
 
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia

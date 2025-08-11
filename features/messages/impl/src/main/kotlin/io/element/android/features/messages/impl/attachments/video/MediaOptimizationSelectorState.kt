@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.api.attachments.video
+package io.element.android.features.messages.impl.attachments.video
 
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
@@ -17,6 +17,7 @@ data class MediaOptimizationSelectorState(
     val isImageOptimizationEnabled: Boolean?,
     val selectedVideoPreset: VideoCompressionPreset?,
     val displayMediaSelectorViews: Boolean?,
+    val displayVideoPresetSelectorDialog: Boolean,
     val eventSink: (MediaOptimizationSelectorEvent) -> Unit
 )
 

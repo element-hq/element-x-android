@@ -7,8 +7,8 @@
 
 package io.element.android.features.messages.test.attachments.video
 
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorPresenter
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorPresenter
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 
@@ -20,6 +20,7 @@ class FakeMediaOptimizationSelectorPresenterFactory(
             isImageOptimizationEnabled = null,
             selectedVideoPreset = null,
             displayMediaSelectorViews = null,
+            displayVideoPresetSelectorDialog = false,
             eventSink = {},
         )
     }

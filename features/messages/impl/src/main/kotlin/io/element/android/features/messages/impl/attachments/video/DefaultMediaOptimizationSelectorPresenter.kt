@@ -7,8 +7,6 @@
 
 package io.element.android.features.messages.impl.attachments.video
 
-import android.media.MediaMetadataRetriever
-import android.util.Size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,16 +14,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorEvent
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorPresenter
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorState
-import io.element.android.features.messages.api.attachments.video.VideoUploadEstimation
-import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.SessionScope
@@ -47,6 +39,7 @@ class DefaultMediaOptimizationSelectorPresenter @AssistedInject constructor(
     private val maxUploadSizeProvider: MaxUploadSizeProvider,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val featureFlagService: FeatureFlagService,
+    mediaExtractorFactory: VideoMetadataExtractor.Factory,
 ) : MediaOptimizationSelectorPresenter {
     @ContributesBinding(SessionScope::class)
     @AssistedFactory
@@ -56,13 +49,15 @@ class DefaultMediaOptimizationSelectorPresenter @AssistedInject constructor(
         ): DefaultMediaOptimizationSelectorPresenter
     }
 
+    private val mediaExtractor = mediaExtractorFactory.create(localMedia.uri)
+
     @Composable
     override fun present(): MediaOptimizationSelectorState {
-        val context = LocalContext.current
-
         val displayMediaSelectorViews by produceState<Boolean?>(null) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.SelectableMediaQuality)
         }
+
+        var displayVideoPresetSelectorDialog by remember { mutableStateOf(false) }
 
         val maxUploadSize by produceState(AsyncData.Loading()) {
             maxUploadSizeProvider.getMaxUploadSize().fold(
@@ -89,21 +84,19 @@ class DefaultMediaOptimizationSelectorPresenter @AssistedInject constructor(
                 return@produceState
             }
 
-            val (videoDimensions, duration) = MediaMetadataRetriever().runAndRelease {
-                setDataSource(context, localMedia.uri)
+            val (videoDimensions, duration) = mediaExtractor.use {
+                val size = it.getSize()
+                    .getOrElse { exception ->
+                        value = AsyncData.Failure(exception)
+                        return@produceState
+                    }
 
-                val width = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toIntOrNull() ?: -1
-                val height = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toIntOrNull() ?: -1
-                if (width == -1 || height == -1) {
-                    value = AsyncData.Failure(IllegalStateException("Failed to retrieve video dimensions for ${localMedia.uri}"))
-                    return@produceState
-                }
-                val duration = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: -1L
-                if (duration <= 0) {
-                    value = AsyncData.Failure(IllegalArgumentException("Could not get video duration for ${localMedia.uri}"))
-                    return@produceState
-                }
-                Size(width, height) to duration
+                val duration = it.getDuration()
+                    .getOrElse { exception ->
+                        value = AsyncData.Failure(exception)
+                        return@produceState
+                    }
+                size to duration
             }
 
             val sizeEstimations = VideoCompressionPreset.entries
@@ -159,6 +152,13 @@ class DefaultMediaOptimizationSelectorPresenter @AssistedInject constructor(
                         return
                     }
                     selectedVideoOptimizationPreset = AsyncData.Success(event.preset)
+                    displayVideoPresetSelectorDialog = false
+                }
+                is MediaOptimizationSelectorEvent.OpenVideoPresetSelectorDialog -> {
+                    displayVideoPresetSelectorDialog = true
+                }
+                is MediaOptimizationSelectorEvent.DismissVideoPresetSelectorDialog -> {
+                    displayVideoPresetSelectorDialog = false
                 }
             }
         }
@@ -169,7 +169,8 @@ class DefaultMediaOptimizationSelectorPresenter @AssistedInject constructor(
             isImageOptimizationEnabled = selectedImageOptimization.dataOrNull(),
             selectedVideoPreset = selectedVideoOptimizationPreset.dataOrNull(),
             displayMediaSelectorViews = displayMediaSelectorViews,
-            eventSink = ::handleEvent,
+            displayVideoPresetSelectorDialog = displayVideoPresetSelectorDialog,
+            eventSink = { handleEvent(it) },
         )
     }
 

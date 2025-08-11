@@ -231,6 +231,7 @@ Compose:
       - LocalAnalyticsService
       - LocalBuildMeta
       - LocalUiTestMode
+      - LocalSdkIntVersionProvider
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

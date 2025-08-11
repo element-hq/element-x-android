@@ -9,9 +9,9 @@ package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.net.toUri
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorState
-import io.element.android.features.messages.api.attachments.video.VideoUploadEstimation
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -48,20 +48,14 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
                 mediaInfo = aVideoMediaInfo(),
                 mediaOptimizationSelectorState = aMediaOptimisationSelectorState(
                     selectedVideoPreset = VideoCompressionPreset.STANDARD,
-                    videoSizeEstimations = AsyncData.Success(
-                        persistentListOf(
-                            VideoUploadEstimation(
-                                preset = VideoCompressionPreset.HIGH,
-                                sizeInBytes = 8_200_000L,
-                                canUpload = false,
-                            ),
-                            VideoUploadEstimation(
-                                preset = VideoCompressionPreset.STANDARD,
-                                sizeInBytes = 4_200_000L,
-                                canUpload = true,
-                            ),
-                        )
-                    )
+                    videoSizeEstimations = aVideoSizeEstimationList(),
+                )
+            ),
+            anAttachmentsPreviewState(
+                mediaInfo = aVideoMediaInfo(),
+                mediaOptimizationSelectorState = aMediaOptimisationSelectorState(
+                    videoSizeEstimations = aVideoSizeEstimationList(),
+                    displayVideoPresetSelectorDialog = true,
                 )
             ),
         )
@@ -111,11 +105,28 @@ fun aMediaOptimisationSelectorState(
     isImageOptimizationEnabled: Boolean = true,
     selectedVideoPreset: VideoCompressionPreset = VideoCompressionPreset.STANDARD,
     displayMediaSelectorViews: Boolean = true,
+    displayVideoPresetSelectorDialog: Boolean = false,
 ) = MediaOptimizationSelectorState(
     maxUploadSize = AsyncData.Success(maxUploadSize),
     videoSizeEstimations = videoSizeEstimations,
     isImageOptimizationEnabled = isImageOptimizationEnabled,
     selectedVideoPreset = selectedVideoPreset,
     displayMediaSelectorViews = displayMediaSelectorViews,
+    displayVideoPresetSelectorDialog = displayVideoPresetSelectorDialog,
     eventSink = {},
+)
+
+internal fun aVideoSizeEstimationList(): AsyncData<ImmutableList<VideoUploadEstimation>> = AsyncData.Success(
+    persistentListOf(
+        VideoUploadEstimation(
+            preset = VideoCompressionPreset.HIGH,
+            sizeInBytes = 8_200_000L,
+            canUpload = false,
+        ),
+        VideoUploadEstimation(
+            preset = VideoCompressionPreset.STANDARD,
+            sizeInBytes = 4_200_000L,
+            canUpload = true,
+        ),
+    )
 )

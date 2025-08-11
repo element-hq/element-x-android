@@ -8,8 +8,8 @@
 package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Immutable
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorState
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.textcomposer.model.TextEditorState
 

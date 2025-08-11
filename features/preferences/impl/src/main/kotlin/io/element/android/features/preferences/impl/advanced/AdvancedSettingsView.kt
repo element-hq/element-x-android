@@ -102,12 +102,7 @@ fun AdvancedSettingsView(
             ),
             onClick = { state.eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
         )
-        val compressImages = state.mediaOptimizationState?.let {
-            when (it) {
-                is MediaOptimizationState.AllMedia -> it.isEnabled
-                is MediaOptimizationState.Split -> it.compressImages
-            }
-        }
+        val compressImages = state.mediaOptimizationState?.shouldCompressImages
 
         when (state.mediaOptimizationState) {
             null -> Unit

@@ -29,6 +29,11 @@ sealed interface MediaOptimizationState {
         val compressImages: Boolean,
         val videoPreset: VideoCompressionPreset,
     ) : MediaOptimizationState
+
+    val shouldCompressImages: Boolean get() = when (this) {
+        is AllMedia -> isEnabled
+        is Split -> compressImages
+    }
 }
 
 enum class ThemeOption : DropdownOption {

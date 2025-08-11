@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,13 +35,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorEvent
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorState
-import io.element.android.features.messages.api.attachments.video.VideoUploadEstimation
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
-import io.element.android.libraries.androidutils.filesize.AndroidFileSizeFormatter
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorEvent
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
@@ -70,14 +68,10 @@ import io.element.android.libraries.textcomposer.TextComposer
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
+import io.element.android.libraries.ui.utils.formatter.rememberFileSizeFormatter
 import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-
-private val sdkIntProvider = object : BuildVersionSdkIntProvider {
-    override fun get(): Int = android.os.Build.VERSION.SDK_INT
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -141,7 +135,7 @@ private fun AttachmentSendStateView(
             if (sendActionState.displayProgress) {
                 ProgressDialog(
                     type = ProgressDialogType.Indeterminate,
-                    text = "Processing...",
+                    text = stringResource(CommonStrings.common_preparing),
                     showCancelButton = true,
                     onDismissRequest = onDismissClick,
                 )
@@ -196,8 +190,7 @@ private fun AttachmentPreviewContent(
             VideoPresetSelector(state = state.mediaOptimizationSelectorState)
         }
 
-        val context = LocalContext.current
-        val sizeFormatter = remember { AndroidFileSizeFormatter(context, sdkIntProvider) }
+        val sizeFormatter = rememberFileSizeFormatter()
         if (state.displayFileTooLargeError) {
             val maxFileUploadSize = state.mediaOptimizationSelectorState.maxUploadSize.dataOrNull()
             if (maxFileUploadSize != null) {
@@ -255,21 +248,20 @@ private fun VideoPresetSelector(
     val videoPresets = state.videoSizeEstimations.dataOrNull()
     var selectedPreset by remember(state.selectedVideoPreset) { mutableStateOf(state.selectedVideoPreset) }
 
-    var displayDialog by remember { mutableStateOf(false) }
+    val displayDialog = state.displayVideoPresetSelectorDialog
 
-    val context = LocalContext.current
-    val sizeFormatter = remember { AndroidFileSizeFormatter(context, sdkIntProvider) }
+    val sizeFormatter = rememberFileSizeFormatter()
 
     if (state.displayMediaSelectorViews == true && videoPresets != null && state.selectedVideoPreset != null) {
         Column(
             modifier = Modifier.fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 16.dp)
-                .niceClickable { displayDialog = true }
+                .niceClickable { state.eventSink(MediaOptimizationSelectorEvent.OpenVideoPresetSelectorDialog) }
         ) {
             val estimation = videoPresets.find { it.preset == selectedPreset }
             val estimationMb = estimation?.sizeInBytes?.let { sizeFormatter.format(it, true) }
             val title = buildString {
-                append(state.selectedVideoPreset!!.title())
+                append(state.selectedVideoPreset.title())
                 if (estimationMb != null) {
                     append(" ($estimationMb)")
                 }
@@ -291,9 +283,8 @@ private fun VideoPresetSelector(
             onSubmit = { preset ->
                 selectedPreset = preset
                 state.eventSink(MediaOptimizationSelectorEvent.SelectVideoPreset(preset))
-                displayDialog = false
             },
-            onDismiss = { displayDialog = false }
+            onDismiss = { state.eventSink(MediaOptimizationSelectorEvent.DismissVideoPresetSelectorDialog) }
         )
     }
 }
@@ -306,8 +297,7 @@ private fun VideoQualitySelectorDialog(
     onSubmit: (VideoCompressionPreset) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val sizeFormatter = remember { AndroidFileSizeFormatter(context, sdkIntProvider) }
+    val sizeFormatter = rememberFileSizeFormatter()
 
     var localSelectedPreset by remember(selectedPreset) { mutableStateOf(selectedPreset) }
     val subtitlePartNoFileSize = stringResource(CommonStrings.dialog_video_quality_selector_subtitle_no_file_size)
@@ -329,7 +319,7 @@ private fun VideoQualitySelectorDialog(
     ) {
         for (videoEstimation in videoSizeEstimations) {
             val preset = videoEstimation.preset
-            val isSelected = preset == selectedPreset
+            val isSelected = preset == localSelectedPreset
             item(
                 key = preset,
                 contentType = preset,

@@ -14,12 +14,12 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.api.attachments.video.MediaOptimizationSelectorState
-import io.element.android.features.messages.api.attachments.video.VideoUploadEstimation
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewEvents
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
 import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.features.messages.test.attachments.video.FakeMediaOptimizationSelectorPresenterFactory
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
@@ -584,6 +584,7 @@ class AttachmentsPreviewPresenterTest {
                     isImageOptimizationEnabled = null,
                     selectedVideoPreset = null,
                     displayMediaSelectorViews = false,
+                    displayVideoPresetSelectorDialog = false,
                     eventSink = {},
                 )
             }
@@ -644,6 +645,7 @@ class AttachmentsPreviewPresenterTest {
                     isImageOptimizationEnabled = null,
                     selectedVideoPreset = null,
                     displayMediaSelectorViews = false,
+                    displayVideoPresetSelectorDialog = false,
                     eventSink = {},
                 )
             }
@@ -682,6 +684,7 @@ class AttachmentsPreviewPresenterTest {
                     isImageOptimizationEnabled = null,
                     selectedVideoPreset = null,
                     displayMediaSelectorViews = displayMediaQualitySelectorViews,
+                    displayVideoPresetSelectorDialog = false,
                     eventSink = {},
                 )
             }

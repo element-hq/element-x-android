@@ -13,6 +13,9 @@ android {
     namespace = "io.element.android.libraries.ui.utils"
 
     dependencies {
+        implementation(projects.libraries.androidutils)
+        implementation(projects.services.toolbox.impl)
+
         testImplementation(libs.test.junit)
         testImplementation(libs.test.truth)
         testImplementation(libs.coroutines.test)
