@@ -10,11 +10,12 @@ package io.element.android.features.securebackup.impl.enter
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.aFormattedRecoveryKey
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -79,6 +80,19 @@ class SecureBackupEnterRecoveryKeyViewTest {
         recorder.assertSingle(
             SecureBackupEnterRecoveryKeyEvents.OnRecoveryKeyChange("X$keyValue")
         )
+    }
+
+    @Test
+    fun `toggling the visibility of the textfield changes it`() {
+        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
+        val keyValue = aFormattedRecoveryKey()
+        rule.setSecureBackupEnterRecoveryKeyView(aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder))
+
+        // Initially, the text field should be visible
+        rule.onNodeWithText(keyValue).assertExists()
+
+        rule.onNodeWithContentDescription("Hide password").performClick()
+        recorder.assertSingle(SecureBackupEnterRecoveryKeyEvents.ChangeRecoveryKeyFieldContentsVisibility(false))
     }
 
     @Test

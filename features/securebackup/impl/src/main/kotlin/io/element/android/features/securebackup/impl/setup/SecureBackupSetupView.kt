@@ -138,6 +138,7 @@ private fun Content(
         onClick = clickLambda,
         onChange = null,
         onSubmit = null,
+        toggleRecoveryKeyVisibility = {},
     )
 }
 

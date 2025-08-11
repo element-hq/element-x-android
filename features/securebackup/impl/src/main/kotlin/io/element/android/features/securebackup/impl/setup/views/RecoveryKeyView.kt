@@ -22,7 +22,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,7 +35,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -63,6 +61,7 @@ internal fun RecoveryKeyView(
     onClick: (() -> Unit)?,
     onChange: ((String) -> Unit)?,
     onSubmit: (() -> Unit)?,
+    toggleRecoveryKeyVisibility: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -73,7 +72,7 @@ internal fun RecoveryKeyView(
             text = stringResource(id = CommonStrings.common_recovery_key),
             style = ElementTheme.typography.fontBodyMdRegular,
         )
-        RecoveryKeyContent(state, onClick, onChange, onSubmit)
+        RecoveryKeyContent(state, onClick, onChange, onSubmit, toggleRecoveryKeyVisibility)
         RecoveryKeyFooter(state)
     }
 }
@@ -84,11 +83,17 @@ private fun RecoveryKeyContent(
     onClick: (() -> Unit)?,
     onChange: ((String) -> Unit)?,
     onSubmit: (() -> Unit)?,
+    toggleRecoveryKeyVisibility: (Boolean) -> Unit,
 ) {
     when (state.recoveryKeyUserStory) {
         RecoveryKeyUserStory.Setup,
         RecoveryKeyUserStory.Change -> RecoveryKeyStaticContent(state, onClick)
-        RecoveryKeyUserStory.Enter -> RecoveryKeyFormContent(state, onChange, onSubmit)
+        RecoveryKeyUserStory.Enter -> RecoveryKeyFormContent(
+            state = state,
+            toggleRecoveryKeyVisibility = toggleRecoveryKeyVisibility,
+            onChange = onChange,
+            onSubmit = onSubmit,
+        )
     }
 }
 
@@ -177,23 +182,23 @@ private fun RecoveryKeyWithCopy(
 @Composable
 private fun RecoveryKeyFormContent(
     state: RecoveryKeyViewState,
+    toggleRecoveryKeyVisibility: (Boolean) -> Unit,
     onChange: ((String) -> Unit)?,
     onSubmit: (() -> Unit)?,
 ) {
     onChange ?: error("onChange should not be null")
     onSubmit ?: error("onSubmit should not be null")
-    var passwordVisible by remember { mutableStateOf(false) }
     if (state.inProgress) {
         // Ensure recovery key is hidden when user submits the form
-        passwordVisible = false
+        toggleRecoveryKeyVisibility(false)
     }
     val keyHasSpace = state.formattedRecoveryKey.orEmpty().contains(" ")
-    val recoveryKeyVisualTransformation = remember(keyHasSpace, passwordVisible) {
-        if (passwordVisible) {
+    val recoveryKeyVisualTransformation = remember(keyHasSpace, state.displayTextFieldContents) {
+        if (state.displayTextFieldContents) {
             // Do not apply a visual transformation if the key has spaces, to let user enter passphrase
             if (keyHasSpace) VisualTransformation.None else RecoveryKeyVisualTransformation()
         } else {
-            if (keyHasSpace) PasswordVisualTransformation() else RecoveryKeyHiddenVisualTransformation()
+            RecoveryKeyHiddenVisualTransformation()
         }
     }
     TextField(
@@ -218,10 +223,10 @@ private fun RecoveryKeyFormContent(
         placeholder = stringResource(id = R.string.screen_recovery_key_confirm_key_placeholder),
         trailingIcon = {
             val image =
-                if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
+                if (state.displayTextFieldContents) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
             val description =
-                if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-            Box(Modifier.clickable { passwordVisible = !passwordVisible }) {
+                if (state.displayTextFieldContents) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
+            Box(Modifier.clickable { toggleRecoveryKeyVisibility(!state.displayTextFieldContents) }) {
                 Icon(
                     imageVector = image,
                     contentDescription = description,
@@ -276,5 +281,6 @@ internal fun RecoveryKeyViewPreview(
         onClick = {},
         onChange = {},
         onSubmit = {},
+        toggleRecoveryKeyVisibility = {},
     )
 }

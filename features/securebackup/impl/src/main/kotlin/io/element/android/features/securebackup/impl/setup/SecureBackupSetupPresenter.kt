@@ -71,6 +71,7 @@ class SecureBackupSetupPresenter @AssistedInject constructor(
         val recoveryKeyViewState = RecoveryKeyViewState(
             recoveryKeyUserStory = if (isChangeRecoveryKeyUserStory) RecoveryKeyUserStory.Change else RecoveryKeyUserStory.Setup,
             formattedRecoveryKey = setupState.recoveryKey(),
+            displayTextFieldContents = true,
             inProgress = setupState is SetupState.Creating,
         )
 

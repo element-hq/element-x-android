@@ -102,6 +102,9 @@ private fun Content(
         onSubmit = {
             state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvents.Submit)
         },
+        toggleRecoveryKeyVisibility = {
+            state.eventSink(SecureBackupEnterRecoveryKeyEvents.ChangeRecoveryKeyFieldContentsVisibility(it))
+        }
     )
 }
 
