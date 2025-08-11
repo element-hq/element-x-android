@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Lägg till bilaga"</string>
   <string name="rich_text_editor_bullet_list">"Växla punktlista"</string>
-  <string name="rich_text_editor_close_formatting_options">"Stäng formateringsalternativ"</string>
+  <string name="rich_text_editor_close_formatting_options">"Avbryt och stäng textformatering"</string>
   <string name="rich_text_editor_code_block">"Växla kodblock"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Lägg till en bildtext"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Krypterat meddelande …"</string>
@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Okrypterat meddelande …"</string>
   <string name="rich_text_editor_create_link">"Skapa en länk"</string>
   <string name="rich_text_editor_edit_link">"Redigera länk"</string>
+  <string name="rich_text_editor_format_action">"%1$s, läge: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Använd fetstil"</string>
   <string name="rich_text_editor_format_italic">"Använd kursiv stil"</string>
+  <string name="rich_text_editor_format_state_disabled">"inaktiverad"</string>
+  <string name="rich_text_editor_format_state_off">"av"</string>
+  <string name="rich_text_editor_format_state_on">"på"</string>
   <string name="rich_text_editor_format_strikethrough">"Använda genomstryken stil"</string>
   <string name="rich_text_editor_format_underline">"Använd understruken stil"</string>
   <string name="rich_text_editor_full_screen_toggle">"Växla helskärmsläge"</string>

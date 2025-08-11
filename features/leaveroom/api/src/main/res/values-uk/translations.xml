@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Ви впевнені, що хочете залишити цю розмову? Ця розмова не загальнодоступна, і ви не зможете знову приєднатися без запрошення."</string>
   <string name="leave_room_alert_empty_subtitle">"Ви впевнені, що хочете вийти з цієї кімнати? Ви тут єдина людина. Якщо ви вийдете, ніхто в майбутньому не зможе приєднатися, у тому числі й ви."</string>
   <string name="leave_room_alert_private_subtitle">"Ви впевнені, що хочете вийти з цієї кімнати? Ця кімната не загальнодоступна, і ви не зможете повернутися до неї без запрошення."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Оберіть власників"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Ви є єдиним власником цієї кімнати. Перед тим як вийти з кімнати, вам потрібно передати право власності іншій особі."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Передати право власності"</string>
   <string name="leave_room_alert_subtitle">"Ви впевнені, що хочете вийти з кімнати?"</string>
 </resources>

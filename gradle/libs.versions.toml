@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.11.1"
+android_gradle_plugin = "8.12.0"
 kotlin = "2.2.0"
 kotlinpoet = "2.2.0"
 ksp = "2.2.0-2.0.2"
@@ -42,7 +42,7 @@ coil = "3.3.0"
 showkase = "1.0.4"
 appyx = "1.7.1"
 sqldelight = "2.1.0"
-wysiwyg = "2.38.5"
+wysiwyg = "2.39.0"
 telephoto = "0.16.0"
 haze = "1.6.9"
 
@@ -156,7 +156,7 @@ test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
 test_robolectric = "org.robolectric:robolectric:4.15.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
-test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.6.1"
+test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.7.0"
 test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
 test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 

@@ -13,10 +13,4 @@
   <string name="screen_notification_optin_subtitle">"You can change your settings later."</string>
   <string name="screen_notification_optin_title">"Allow notifications and never miss a message"</string>
   <string name="screen_session_verification_enter_recovery_key">"Enter recovery key"</string>
-  <string name="screen_welcome_bullet_1">"Calls, polls, search and more will be added later this year."</string>
-  <string name="screen_welcome_bullet_2">"Message history for encrypted rooms isn’t available yet."</string>
-  <string name="screen_welcome_bullet_3">"We’d love to hear from you, let us know what you think via the settings page."</string>
-  <string name="screen_welcome_button">"Let\'s go!"</string>
-  <string name="screen_welcome_subtitle">"Here’s what you need to know:"</string>
-  <string name="screen_welcome_title">"Welcome to %1$s!"</string>
 </resources>

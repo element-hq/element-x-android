@@ -8,6 +8,8 @@
   <string name="emoji_picker_category_people">"Усмешкі &amp; Удзельнікі"</string>
   <string name="emoji_picker_category_places">"Падарожжы &amp; Месцы"</string>
   <string name="emoji_picker_category_symbols">"Сімвалы"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
   <string name="screen_report_content_block_user">"Заблакіраваць карыстальніка"</string>
   <string name="screen_report_content_block_user_hint">"Адзначце, ці хочаце вы схаваць усе бягучыя і будучыя паведамленні ад гэтага карыстальніка"</string>
   <string name="screen_report_content_explanation">"Гэтае паведамленне будзе перададзена адміністратару вашага хатняга сервера. Яны не змогуць прачытаць зашыфраваныя паведамленні."</string>

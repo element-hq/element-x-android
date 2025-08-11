@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Tens a certeza que queres sair desta conversa? Não é pública, logo não poderás voltar a participar sem um convite."</string>
   <string name="leave_room_alert_empty_subtitle">"Tens a certeza que queres sair desta sala? És o único participante. Se saíres, ninguém mais poderá entrar, incluindo tu."</string>
   <string name="leave_room_alert_private_subtitle">"Tens a certeza que queres sair desta sala? Atenta que não é pública e portanto não poderás voltar a entrar sem um novo convite."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Escolher donos"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"És o único dono/dona desta sala. Se quiseres sair, terás que a transferir para alguém primeiro."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Transferir posse"</string>
   <string name="leave_room_alert_subtitle">"Tens a certeza que queres sair da sala?"</string>
 </resources>

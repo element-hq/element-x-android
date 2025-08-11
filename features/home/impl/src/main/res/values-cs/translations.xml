@@ -12,6 +12,7 @@
   <string name="confirm_recovery_key_banner_title">"Vaše úložiště klíčů není synchronizováno"</string>
   <string name="full_screen_intent_banner_message">"Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen."</string>
   <string name="full_screen_intent_banner_title">"Vylepšete si zážitek z volání"</string>
+  <string name="screen_home_tab_chats">"Všechny chaty"</string>
   <string name="screen_invites_decline_chat_message">"Opravdu chcete odmítnout pozvánku do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odmítnout pozvání"</string>
   <string name="screen_invites_decline_direct_chat_message">"Opravdu chcete odmítnout tuto soukromou konverzaci s %1$s?"</string>
@@ -21,6 +22,7 @@
   <string name="screen_migration_message">"Jedná se o jednorázový proces, prosíme o strpení."</string>
   <string name="screen_migration_title">"Nastavení vašeho účtu"</string>
   <string name="screen_roomlist_a11y_create_message">"Vytvořte novou konverzaci nebo místnost"</string>
+  <string name="screen_roomlist_clear_filters">"Vymazat filtry"</string>
   <string name="screen_roomlist_empty_message">"Začněte tím, že někomu pošnete zprávu."</string>
   <string name="screen_roomlist_empty_title">"Zatím žádné konverzace."</string>
   <string name="screen_roomlist_filter_favourites">"Oblíbené"</string>

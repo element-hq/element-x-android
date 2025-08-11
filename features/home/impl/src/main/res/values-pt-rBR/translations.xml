@@ -12,6 +12,7 @@
   <string name="confirm_recovery_key_banner_title">"Seu armazenamento de chaves está fora de sincronia"</string>
   <string name="full_screen_intent_banner_message">"Para garantir que você nunca perca uma chamada importante, por favor altere as suas configurações para permitir notificações em tela cheia enquanto o seu celular estiver bloqueado."</string>
   <string name="full_screen_intent_banner_title">"Melhore a sua experiência de chamadas"</string>
+  <string name="screen_home_tab_chats">"Conversas"</string>
   <string name="screen_invites_decline_chat_message">"Tem certeza de que deseja recusar o convite para ingressar em %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Recusar convite"</string>
   <string name="screen_invites_decline_direct_chat_message">"Tem certeza de que deseja recusar esse chat privado com %1$s?"</string>

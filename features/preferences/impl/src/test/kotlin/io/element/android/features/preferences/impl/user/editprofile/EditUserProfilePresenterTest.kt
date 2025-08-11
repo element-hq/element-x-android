@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
@@ -78,6 +79,7 @@ class EditUserProfilePresenterTest {
         matrixUser: MatrixUser = aMatrixUser(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
+        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ): EditUserProfilePresenter {
         return EditUserProfilePresenter(
             matrixClient = matrixClient,
@@ -86,6 +88,7 @@ class EditUserProfilePresenterTest {
             mediaPreProcessor = fakeMediaPreProcessor,
             temporaryUriDeleter = temporaryUriDeleter,
             permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
+            mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         )
     }
 

@@ -13,6 +13,7 @@
   <string name="screen_change_account_provider_other">"Muu"</string>
   <string name="screen_change_account_provider_subtitle">"Käytä toista palveluntarjoajaa, kuten omaa yksityistä palvelintasi tai työpaikkaasi."</string>
   <string name="screen_change_account_provider_title">"Vaihda palveluntarjoajaa"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Element Pro -sovellus on pakollinen %1$s -palvelimella. Lataa se sovelluskaupasta."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro vaaditaan"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään."</string>

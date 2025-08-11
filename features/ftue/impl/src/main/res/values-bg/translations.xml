@@ -10,6 +10,4 @@
   <string name="screen_notification_optin_subtitle">"Можете да промените настройките си по-късно."</string>
   <string name="screen_notification_optin_title">"Разрешете известията и никога не пропускайте съобщение"</string>
   <string name="screen_session_verification_enter_recovery_key">"Въвеждане на ключ за възстановяване"</string>
-  <string name="screen_welcome_bullet_2">"Хронологията на съобщенията за шифровани стаи все още не е налична."</string>
-  <string name="screen_welcome_title">"Добре дошли в %1$s!"</string>
 </resources>

@@ -53,7 +53,9 @@ class RustNotificationService(
                             is BatchNotificationResult.Ok -> {
                                 when (val status = result.status) {
                                     is NotificationStatus.Event -> {
-                                        put(eventId, Result.success(notificationMapper.map(sessionId, eventId, roomId, status.item)))
+                                        val result = notificationMapper.map(sessionId, eventId, roomId, status.item)
+                                        result.onFailure { Timber.e(it, "Could not map notification event $eventId") }
+                                        put(eventId, result)
                                     }
                                     is NotificationStatus.EventNotFound -> {
                                         Timber.e("Could not retrieve event for notification with $eventId - event not found")

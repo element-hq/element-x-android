@@ -12,6 +12,8 @@
   <string name="confirm_recovery_key_banner_title">"Avainten säilytys ei ole synkronoitu"</string>
   <string name="full_screen_intent_banner_message">"Salli koko näytön ilmoitukset, kun laite on lukittu, jos et halua koskaan missata tärkeää puhelua."</string>
   <string name="full_screen_intent_banner_title">"Paranna puhelukokemustasi"</string>
+  <string name="screen_home_tab_chats">"Keskustelut"</string>
+  <string name="screen_home_tab_spaces">"Tilat"</string>
   <string name="screen_invites_decline_chat_message">"Haluatko varmasti hylätä kutsun liittyä %1$s -huoneeseen?"</string>
   <string name="screen_invites_decline_chat_title">"Hylkää kutsu"</string>
   <string name="screen_invites_decline_direct_chat_message">"Haluatko varmasti hylätä kutsun yksityiseen keskusteluun käyttäjän %1$s kanssa?"</string>

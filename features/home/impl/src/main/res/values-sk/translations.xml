@@ -12,7 +12,7 @@
   <string name="confirm_recovery_key_banner_title">"Vaše úložisko kľúčov nie je synchronizované"</string>
   <string name="full_screen_intent_banner_message">"Aby ste už nikdy nezmeškali dôležitý hovor, zmeňte svoje nastavenia a povoľte upozornenia na celú obrazovku, keď je váš telefón uzamknutý."</string>
   <string name="full_screen_intent_banner_title">"Vylepšite svoj zážitok z hovoru"</string>
-  <string name="screen_home_tab_chats">"Konverzácie"</string>
+  <string name="screen_home_tab_chats">"Všetky konverzácie"</string>
   <string name="screen_home_tab_spaces">"Priestory"</string>
   <string name="screen_invites_decline_chat_message">"Naozaj chcete odmietnuť pozvánku na pripojenie do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odmietnuť pozvanie"</string>

@@ -11,15 +11,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +33,7 @@ class AdvancedSettingsPresenter @Inject constructor(
     private val mediaPreviewConfigStateStore: MediaPreviewConfigStateStore,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<AdvancedSettingsState> {
     @Composable
     override fun present(): AdvancedSettingsState {
@@ -37,9 +42,6 @@ class AdvancedSettingsPresenter @Inject constructor(
         }.collectAsState(initial = false)
         val isSharePresenceEnabled by remember {
             sessionPreferencesStore.isSharePresenceEnabled()
-        }.collectAsState(initial = true)
-        val doesCompressMedia by remember {
-            sessionPreferencesStore.doesCompressMedia()
         }.collectAsState(initial = true)
         val theme = remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
@@ -57,6 +59,28 @@ class AdvancedSettingsPresenter @Inject constructor(
             }
         }
 
+        val hasSplitMediaQualityOptions by produceState<Boolean?>(null) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.SelectableMediaQuality)
+        }
+
+        val mediaOptimizationState by produceState<MediaOptimizationState?>(null) {
+            val hasSplitMediaQualityOptionsFlow = featureFlagService.isFeatureEnabledFlow(FeatureFlags.SelectableMediaQuality)
+            combine(
+                hasSplitMediaQualityOptionsFlow,
+                sessionPreferencesStore.doesOptimizeImages(),
+                sessionPreferencesStore.getVideoCompressionPreset()
+            ) { hasSplitOptions, compressImages, videoPreset ->
+                if (hasSplitMediaQualityOptions == true) {
+                    value = MediaOptimizationState.Split(
+                        compressImages = compressImages,
+                        videoPreset = videoPreset,
+                    )
+                } else if (hasSplitMediaQualityOptions == false) {
+                    value = MediaOptimizationState.AllMedia(isEnabled = compressImages)
+                }
+            }.collect()
+        }
+
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> sessionCoroutineScope.launch {
@@ -66,7 +90,7 @@ class AdvancedSettingsPresenter @Inject constructor(
                     sessionPreferencesStore.setSharePresence(event.enabled)
                 }
                 is AdvancedSettingsEvents.SetCompressMedia -> sessionCoroutineScope.launch {
-                    sessionPreferencesStore.setCompressMedia(event.compress)
+                    sessionPreferencesStore.setOptimizeImages(event.compress)
                 }
                 is AdvancedSettingsEvents.SetTheme -> sessionCoroutineScope.launch {
                     when (event.theme) {
@@ -77,13 +101,19 @@ class AdvancedSettingsPresenter @Inject constructor(
                 }
                 is AdvancedSettingsEvents.SetHideInviteAvatars -> mediaPreviewConfigStateStore.setHideInviteAvatars(event.value)
                 is AdvancedSettingsEvents.SetTimelineMediaPreviewValue -> mediaPreviewConfigStateStore.setTimelineMediaPreviewValue(event.value)
+                is AdvancedSettingsEvents.SetCompressImages -> sessionCoroutineScope.launch {
+                    sessionPreferencesStore.setOptimizeImages(event.compress)
+                }
+                is AdvancedSettingsEvents.SetVideoUploadQuality -> sessionCoroutineScope.launch {
+                    sessionPreferencesStore.setVideoCompressionPreset(event.videoPreset)
+                }
             }
         }
 
         return AdvancedSettingsState(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
-            doesCompressMedia = doesCompressMedia,
+            mediaOptimizationState = mediaOptimizationState,
             theme = themeOption,
             mediaPreviewConfigState = mediaPreviewConfigState,
             eventSink = ::handleEvents,

@@ -10,6 +10,7 @@
   <string name="screen_bug_report_error_description_too_short">"Beskrivningen är för kort, vänligen ge mer information om vad som hände. Tack!"</string>
   <string name="screen_bug_report_include_crash_logs">"Skicka kraschloggar"</string>
   <string name="screen_bug_report_include_logs">"Tillåt loggar"</string>
+  <string name="screen_bug_report_include_logs_error">"Dina loggar är alltför stora och kan därför inte inkluderas i den här rapporten. Vänligen skicka dem till oss på annat sätt."</string>
   <string name="screen_bug_report_include_screenshot">"Skicka skärmdump"</string>
   <string name="screen_bug_report_logs_description">"Loggar kommer att inkluderas i ditt meddelande för att se till att allt fungerar korrekt. Om du vill skicka ditt meddelande utan loggar stänger du av den här inställningen."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s kraschade senast den användes. Vill du dela en kraschrapport med oss?"</string>
