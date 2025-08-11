@@ -8,11 +8,19 @@
     <item quantity="few">"zadány %1$d číslice"</item>
     <item quantity="other">"zadáno %1$d číslic"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Upravit avatar"</string>
+  <string name="a11y_edit_room_address_hint">"Úplná adresa bude %1$s"</string>
+  <string name="a11y_encryption_details">"Podrobnosti o šifrování"</string>
   <string name="a11y_hide_password">"Skrýt heslo"</string>
   <string name="a11y_join_call">"Připojit se k hovoru"</string>
   <string name="a11y_jump_to_bottom">"Přejít dolů"</string>
+  <string name="a11y_move_the_map_to_my_location">"Přesunout mapu na mou polohu"</string>
   <string name="a11y_notifications_mentions_only">"Pouze zmínky"</string>
   <string name="a11y_notifications_muted">"Ztišeno"</string>
+  <string name="a11y_notifications_new_mentions">"Nové zmínky"</string>
+  <string name="a11y_notifications_new_messages">"Nové zprávy"</string>
+  <string name="a11y_notifications_ongoing_call">"Probíhající hovor"</string>
+  <string name="a11y_other_user_avatar">"Avatar jiného uživatele"</string>
   <string name="a11y_page_n">"Strana %1$d"</string>
   <string name="a11y_pause">"Pozastavit"</string>
   <string name="a11y_paused_voice_message">"Hlasová zpráva, délka: %1$s, aktuální pozice: %2$s"</string>
@@ -32,14 +40,20 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Klepnutím zobrazíte vše"</string>
   <string name="a11y_remove_reaction">"Odstraňit reakci s %1$s"</string>
   <string name="a11y_remove_reaction_with">"Odstranit reakci pomocí %1$s"</string>
+  <string name="a11y_room_avatar">"Avatar místnosti"</string>
   <string name="a11y_send_files">"Odeslat soubory"</string>
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_start_call">"Zahájit hovor"</string>
+  <string name="a11y_time_limited_action_required">"Vyžaduje se časově omezená akce"</string>
+  <string name="a11y_tombstoned_room">"Místnost s náhrobkem"</string>
+  <string name="a11y_user_avatar">"Avatar uživatele"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>
+  <string name="a11y_view_avatar">"Zobrazit avatar"</string>
   <string name="a11y_view_details">"Zobrazit podrobnosti"</string>
   <string name="a11y_voice_message">"Hlasová zpráva, délka: %1$s"</string>
   <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastavit nahrávání"</string>
+  <string name="a11y_your_avatar">"Váš avatar"</string>
   <string name="action_accept">"Přijmout"</string>
   <string name="action_add_caption">"Přidat titulek"</string>
   <string name="action_add_to_timeline">"Přidat na časovou osu"</string>
@@ -98,6 +112,7 @@
   <string name="action_no">"Ne"</string>
   <string name="action_not_now">"Teď ne"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Otevřít kontextovou nabídku"</string>
   <string name="action_open_settings">"Otevřít nastavení"</string>
   <string name="action_open_with">"Otevřít v aplikaci"</string>
   <string name="action_pin">"Pin"</string>
@@ -122,7 +137,9 @@
   <string name="action_save">"Uložit"</string>
   <string name="action_search">"Hledat"</string>
   <string name="action_send">"Odeslat"</string>
+  <string name="action_send_edited_message">"Odeslat upravenou zprávu"</string>
   <string name="action_send_message">"Odeslat zprávu"</string>
+  <string name="action_send_voice_message">"Odeslat hlasovou zprávu"</string>
   <string name="action_share">"Sdílet"</string>
   <string name="action_share_link">"Sdílet odkaz"</string>
   <string name="action_show">"Zobrazit"</string>
@@ -138,6 +155,7 @@
   <string name="action_tap_for_options">"Klepnutím zobrazíte možnosti"</string>
   <string name="action_try_again">"Zkusit znovu"</string>
   <string name="action_unpin">"Odepnout"</string>
+  <string name="action_view">"Zobrazit"</string>
   <string name="action_view_in_timeline">"Zobrazit na časové ose"</string>
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
@@ -243,6 +261,8 @@ Důvod: %1$s."</string>
     <item quantity="other">"%d hlasů"</item>
   </plurals>
   <string name="common_privacy_policy">"Zásady ochrany osobních údajů"</string>
+  <string name="common_private_room">"Soukromá místnost"</string>
+  <string name="common_public_room">"Veřejná místnost"</string>
   <string name="common_reaction">"Reakce"</string>
   <string name="common_reactions">"Reakce"</string>
   <string name="common_reason">"Důvod"</string>
@@ -336,6 +356,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="error_failed_loading_messages">"Načítání zpráv se nezdařilo"</string>
   <string name="error_failed_locating_user">"%1$s nemá přístup k vaší poloze. Zkuste to prosím později."</string>
   <string name="error_failed_uploading_voice_message">"Nepodařilo se nahrát hlasovou zprávu."</string>
+  <string name="error_invalid_invite">"Místnost již neexistuje nebo pozvánka již není platná."</string>
   <string name="error_message_not_found">"Zpráva nebyla nalezena"</string>
   <string name="error_missing_location_auth_android">"%1$s nemá oprávnění k přístupu k vaší poloze. Přístup můžete povolit v Nastavení."</string>
   <string name="error_missing_location_rationale_android">"%1$s nemá oprávnění k přístupu k vaší poloze. Povolit přístup níže."</string>
@@ -356,14 +377,18 @@ Opravdu chcete pokračovat?"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Snímek obrazovky"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Možnosti"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Odstranit %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Nastavení"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusí být viditelné pro lidi, kteří používají starší aplikace."</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Soubor nelze nahrát."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
+  <string name="screen_media_upload_preview_error_too_large_message">"Maximální povolená velikost souboru je %1$s."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"Soubor je pro nahrání příliš velký."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Přidržte zprávu a vyberte „%1$s“, kterou chcete zahrnout sem."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Připněte důležité zprávy, aby je bylo možné snadno najít"</string>
   <plurals name="screen_pinned_timeline_screen_title">

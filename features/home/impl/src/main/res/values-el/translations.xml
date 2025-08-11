@@ -12,6 +12,7 @@
   <string name="confirm_recovery_key_banner_title">"Ο χώρος αποθήκευσης κλειδιών σου δεν είναι συγχρονισμένος"</string>
   <string name="full_screen_intent_banner_message">"Για να διασφαλίσετε ότι δεν θα χάσετε ποτέ μια σημαντική κλήση, αλλάξτε τις ρυθμίσεις σας ώστε να επιτρέπονται οι ειδοποιήσεις πλήρους οθόνης όταν το τηλέφωνό σας είναι κλειδωμένο."</string>
   <string name="full_screen_intent_banner_title">"Βελτίωσε την εμπειρία κλήσεων"</string>
+  <string name="screen_home_tab_chats">"Συνομιλίες"</string>
   <string name="screen_invites_decline_chat_message">"Σίγουρα θες να απορρίψεις την πρόσκληση συμμετοχής στο %1$s;"</string>
   <string name="screen_invites_decline_chat_title">"Απόρριψη πρόσκλησης"</string>
   <string name="screen_invites_decline_direct_chat_message">"Σίγουρα θες να απορρίψεις την ιδιωτική συνομιλία με τον χρήστη %1$s;"</string>

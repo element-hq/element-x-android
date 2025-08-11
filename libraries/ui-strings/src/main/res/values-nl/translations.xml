@@ -220,6 +220,8 @@ Reden: %1$s."</string>
     <item quantity="other">"%d stemmen"</item>
   </plurals>
   <string name="common_privacy_policy">"Privacybeleid"</string>
+  <string name="common_private_room">"Privé kamer"</string>
+  <string name="common_public_room">"Openbare kamer"</string>
   <string name="common_reaction">"Reactie"</string>
   <string name="common_reactions">"Reacties"</string>
   <string name="common_recovery_key">"Herstelsleutel"</string>

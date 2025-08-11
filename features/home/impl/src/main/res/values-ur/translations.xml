@@ -5,6 +5,7 @@
   <string name="confirm_recovery_key_banner_title">"آپ کا کلید کا ذخیرہ غیر ہم وقت ساز ہے۔"</string>
   <string name="full_screen_intent_banner_message">"اس بات کو یقینی بنانے کے لیے کہ آپ کبھی بھی اہم مکالمہ سے محروم نہ ہوں، براہ کرم اپنی ترتیبات تبدیل کریں تاکہ آپ کا ہاتف مقفل ہونے پر مکمل پردۂ نمائش اطلاعات کی اجازت دی جا سکے۔"</string>
   <string name="full_screen_intent_banner_title">"اپنے مکالمتی تجربے کو احسن کریں"</string>
+  <string name="screen_home_tab_chats">"گفتگوئیں"</string>
   <string name="screen_invites_decline_chat_message">"کیا آپکو یقین ہے کہ آپ %1$s میں شامل ہونے کی درخواست مسترد کرنا چاہتے ہیں؟"</string>
   <string name="screen_invites_decline_chat_title">"دعوت مسترد کریں"</string>
   <string name="screen_invites_decline_direct_chat_message">"کیا آپکو یقین ہے کہ آپ %1$s کیساتھ نجی گفتگو مسترد کرنا چاہتے ہیں؟"</string>

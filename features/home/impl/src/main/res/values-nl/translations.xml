@@ -8,6 +8,7 @@
   <string name="confirm_recovery_key_banner_title">"Je sleutelopslag is niet gesynchroniseerd"</string>
   <string name="full_screen_intent_banner_message">"Pas je instellingen aan om meldingen op het volledige scherm toe te staan wanneer de telefoon is vergrendeld. Zo mis je nooit een belangrijk gesprek."</string>
   <string name="full_screen_intent_banner_title">"Verbeter je gesprekservaring"</string>
+  <string name="screen_home_tab_chats">"Chats"</string>
   <string name="screen_invites_decline_chat_message">"Weet je zeker dat je de uitnodiging om toe te treden tot %1$s wilt weigeren?"</string>
   <string name="screen_invites_decline_chat_title">"Uitnodiging weigeren"</string>
   <string name="screen_invites_decline_direct_chat_message">"Weet je zeker dat je deze privéchat met %1$s wilt weigeren?"</string>

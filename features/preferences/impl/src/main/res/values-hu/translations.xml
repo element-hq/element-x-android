@@ -13,6 +13,13 @@
   <string name="screen_advanced_settings_media_compression_description">"Töltse fel gyorsabban a fényképeket és videókat, valamint csökkentse az adatforgalmat"</string>
   <string name="screen_advanced_settings_media_compression_title">"Média minőségének optimalizálása"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderálás és biztonság"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Képek automatikus optimalizációja a gyorsabb feltöltések és kisebb fájlméretek érdekében."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Képfeltöltési minőség optimalizációja"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Koppintson a megváltoztatáshoz."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Magas (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Alacsony (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Szokásos (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Feltöltött videó minősége"</string>
   <string name="screen_advanced_settings_push_provider_android">"Leküldéses értesítések szolgáltatója"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"A formázott szöveges szerkesztő letiltása, hogy kézzel írhasson Markdownt."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Olvasási visszaigazolások"</string>

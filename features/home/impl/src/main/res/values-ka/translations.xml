@@ -3,6 +3,7 @@
   <string name="banner_set_up_recovery_submit">"აღდგენის დაყენება"</string>
   <string name="confirm_recovery_key_banner_message">"დაადასტურეთ თქვენი აღდგენის გასაღები რათა გქონდეთ წვდომა გასაღებების დამგროვებელთან და შეტყობინებების ისტორიასთან."</string>
   <string name="confirm_recovery_key_banner_title">"თქვენი გასაღების დამგროვებელი არაა სინქრონიზებული"</string>
+  <string name="screen_home_tab_chats">"ჩატები"</string>
   <string name="screen_invites_decline_chat_message">"დარწმუნებული ხართ, რომ გსურთ, უარი თქვათ მოწვევაზე %1$s-ში?"</string>
   <string name="screen_invites_decline_chat_title">"მოწვევაზე უარის თქმა"</string>
   <string name="screen_invites_decline_direct_chat_message">"დარწმუნებული ხართ, რომ გსურთ, უარი თქვათ ჩატზე %1$s-თან?"</string>

@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Haluatko varmasti poistua keskustelusta? Tämä keskustelu ei ole julkinen ja et voi liittyä takaisin ilman kutsua."</string>
   <string name="leave_room_alert_empty_subtitle">"Haluatko varmasti poistua huoneesta? Olet huoneen ainoa jäsen. Jos poistut, kukaan ei voi liittyä takaisin, et edes sinä."</string>
   <string name="leave_room_alert_private_subtitle">"Haluatko varmasti poistua huoneesta? Tämä huone ei ole julkinen ja et voi liittyä takaisin ilman kutsua."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Valitse omistajat"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Olet tämän huoneen ainoa omistaja. Sinun on siirrettävä omistajuus jollekulle toiselle ennen kuin poistut huoneesta."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Siirrä omistajuus"</string>
   <string name="leave_room_alert_subtitle">"Haluatko varmasti poistua huoneesta?"</string>
 </resources>

@@ -257,6 +257,10 @@ Põhjus: %1$s."</string>
   </plurals>
   <string name="common_preparing">"Ettevalmistamisel…"</string>
   <string name="common_privacy_policy">"Privaatsuspoliitika"</string>
+  <string name="common_private_room">"Privaatne jututuba"</string>
+  <string name="common_private_space">"Privaatne kogukond"</string>
+  <string name="common_public_room">"Avalik jututuba"</string>
+  <string name="common_public_space">"Avalik kogukond"</string>
   <string name="common_reaction">"Reaktsioon"</string>
   <string name="common_reactions">"Reaktsioonid"</string>
   <string name="common_reason">"Põhjus"</string>
@@ -274,6 +278,10 @@ Põhjus: %1$s."</string>
   <string name="common_room">"Jututuba"</string>
   <string name="common_room_name">"Jututoa nimi"</string>
   <string name="common_room_name_placeholder">"näiteks sinu projekti või seltsingu nimi"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d jututuba"</item>
+    <item quantity="other">"%1$d jututuba"</item>
+  </plurals>
   <string name="common_saved_changes">"Muudatused on salvestatud"</string>
   <string name="common_saving">"Salvestame"</string>
   <string name="common_screen_lock">"Ekraanilukk"</string>
@@ -293,6 +301,10 @@ Põhjus: %1$s."</string>
   <string name="common_signing_out">"Logime välja"</string>
   <string name="common_something_went_wrong">"Midagi läks valesti"</string>
   <string name="common_something_went_wrong_message">"Tekkis viga. Palun proovi uuesti."</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d kogukond"</item>
+    <item quantity="other">"%1$d kogukonda"</item>
+  </plurals>
   <string name="common_starting_chat">"Alustame vestlust…"</string>
   <string name="common_sticker">"Kleeps"</string>
   <string name="common_success">"Õnnestus"</string>
@@ -418,6 +430,9 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_share_open_google_maps">"Ava Google Mapsis"</string>
   <string name="screen_share_open_osm_maps">"Ava OpenStreetMapis"</string>
   <string name="screen_share_this_location_action">"Jaga seda asukohta"</string>
+  <string name="screen_space_list_description">"Sinu loodud kogukonnad ning need, millega oled liitunud."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Kogukonnad"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on lähtestatud."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>

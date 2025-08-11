@@ -13,10 +13,4 @@
   <string name="screen_notification_optin_subtitle">"Du kan ændre dine indstillinger senere."</string>
   <string name="screen_notification_optin_title">"Tillad notifikationer, og gå aldrig glip af en besked"</string>
   <string name="screen_session_verification_enter_recovery_key">"Indtast gendannelsesnøgle"</string>
-  <string name="screen_welcome_bullet_1">"Opkald, afstemninger, søgninger og mere vil blive tilføjet senere på året."</string>
-  <string name="screen_welcome_bullet_2">"Beskedhistorik for krypterede rum er ikke tilgængelig endnu."</string>
-  <string name="screen_welcome_bullet_3">"Vi vil meget gerne høre fra dig. Fortæl os din mening via indstillingssiden."</string>
-  <string name="screen_welcome_button">"Lad os komme i gang!"</string>
-  <string name="screen_welcome_subtitle">"Her er, hvad du har brug for at vide:"</string>
-  <string name="screen_welcome_title">"Velkommen til %1$s!"</string>
 </resources>

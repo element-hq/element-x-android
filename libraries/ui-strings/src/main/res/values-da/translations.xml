@@ -257,6 +257,8 @@
   </plurals>
   <string name="common_preparing">"Forbereder…"</string>
   <string name="common_privacy_policy">"Privatlivspolitik"</string>
+  <string name="common_private_room">"Privat rum"</string>
+  <string name="common_public_room">"Offentligt rum"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktioner"</string>
   <string name="common_reason">"Årsag"</string>

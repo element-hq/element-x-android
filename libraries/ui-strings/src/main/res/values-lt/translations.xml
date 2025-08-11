@@ -99,6 +99,7 @@
   <string name="common_password">"Slaptažodis"</string>
   <string name="common_people">"Žmonės"</string>
   <string name="common_permalink">"Nuolatinė nuoroda"</string>
+  <string name="common_private_room">"Privatus kambarys"</string>
   <string name="common_reactions">"Reakcijos"</string>
   <string name="common_replying_to">"Atsakant %1$s"</string>
   <string name="common_report_a_bug">"Pranešti apie klaidą"</string>

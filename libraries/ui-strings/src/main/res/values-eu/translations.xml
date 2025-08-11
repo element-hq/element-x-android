@@ -228,6 +228,8 @@ Arrazoia: %1$s."</string>
     <item quantity="other">"%d boto"</item>
   </plurals>
   <string name="common_privacy_policy">"Pribatutasun-politika"</string>
+  <string name="common_private_room">"Gela pribatua"</string>
+  <string name="common_public_room">"Gela publikoa"</string>
   <string name="common_reaction">"Erreakzioa"</string>
   <string name="common_reactions">"Erreakzioak"</string>
   <string name="common_reason">"Arrazoia"</string>

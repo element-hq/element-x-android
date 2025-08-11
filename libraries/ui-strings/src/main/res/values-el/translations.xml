@@ -238,6 +238,8 @@
     <item quantity="other">"%d ψήφοι"</item>
   </plurals>
   <string name="common_privacy_policy">"Πολιτική απορρήτου"</string>
+  <string name="common_private_room">"Ιδιωτική αίθουσα"</string>
+  <string name="common_public_room">"Δημόσια αίθουσα"</string>
   <string name="common_reaction">"Αντίδραση"</string>
   <string name="common_reactions">"Αντιδράσεις"</string>
   <string name="common_reason">"Αιτιολογία"</string>

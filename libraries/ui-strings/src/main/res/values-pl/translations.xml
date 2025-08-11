@@ -262,6 +262,8 @@ Powód: %1$s."</string>
   </plurals>
   <string name="common_preparing">"Przygotowuję…"</string>
   <string name="common_privacy_policy">"Polityka prywatności"</string>
+  <string name="common_private_room">"Pokój prywatny"</string>
+  <string name="common_public_room">"Pokój publiczny"</string>
   <string name="common_reaction">"Reakcja"</string>
   <string name="common_reactions">"Reakcje"</string>
   <string name="common_reason">"Powód"</string>

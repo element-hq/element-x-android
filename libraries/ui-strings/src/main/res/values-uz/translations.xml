@@ -23,7 +23,7 @@
   <string name="action_complete_verification">"To\'liq tekshirish"</string>
   <string name="action_confirm">"Tasdiqlash"</string>
   <string name="action_continue">"Davom etish"</string>
-  <string name="action_copy">"nusxa"</string>
+  <string name="action_copy">"Nusxa"</string>
   <string name="action_copy_link">"Havolani nusxalash"</string>
   <string name="action_copy_link_to_message">"Havolani xabaraga nusxalash"</string>
   <string name="action_create">"Yaratmoq"</string>
@@ -102,6 +102,7 @@
   <string name="common_file">"Fayl"</string>
   <string name="common_file_saved_on_disk_android">"Fayl “Yuklashlar”ga saqlandi"</string>
   <string name="common_forward_message">"Xabarni yo\'naltirish"</string>
+  <string name="common_gif">"GIF"</string>
   <string name="common_image">"Surat"</string>
   <string name="common_in_reply_to">"%1$sga Javob bering"</string>
   <string name="common_install_apk_android">"APK-ni o\'rnating"</string>
@@ -133,6 +134,7 @@
     <item quantity="other">"%dovozlar"</item>
   </plurals>
   <string name="common_privacy_policy">"Maxfiylik siyosati"</string>
+  <string name="common_private_room">"Shaxsiy xona (faqat taklif)"</string>
   <string name="common_reaction">"Reaktsiya"</string>
   <string name="common_reactions">"reaksiyalar"</string>
   <string name="common_recovery_key">"Qayta tiklash kaliti"</string>

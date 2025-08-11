@@ -34,6 +34,7 @@
   <string name="screen_login_subtitle">"Matrix är ett öppet nätverk för säker, decentraliserad kommunikation."</string>
   <string name="screen_login_title">"Välkommen tillbaka!"</string>
   <string name="screen_login_title_with_homeserver">"Logga in på %1$s"</string>
+  <string name="screen_onboarding_app_version">"Version %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Logga in manuellt"</string>
   <string name="screen_onboarding_sign_in_to">"Logga in på %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Logga in med QR-kod"</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_title">"صارف کو مسدود کریں"</string>
   <string name="screen_invites_decline_chat_message">"کیا آپکو یقین ہے کہ آپ %1$s میں شامل ہونے کی درخواست مسترد کرنا چاہتے ہیں؟"</string>
   <string name="screen_invites_decline_chat_title">"دعوت مسترد کریں"</string>
   <string name="screen_invites_decline_direct_chat_message">"کیا آپکو یقین ہے کہ آپ %1$s کیساتھ نجی گفتگو مسترد کرنا چاہتے ہیں؟"</string>

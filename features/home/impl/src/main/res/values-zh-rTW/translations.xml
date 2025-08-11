@@ -9,6 +9,7 @@
   <string name="confirm_recovery_key_banner_title">"您的金鑰儲存空間並未同步"</string>
   <string name="full_screen_intent_banner_message">"為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。"</string>
   <string name="full_screen_intent_banner_title">"提升您的通話體驗"</string>
+  <string name="screen_home_tab_chats">"所有聊天室"</string>
   <string name="screen_invites_decline_chat_message">"您確定您想要拒絕加入 %1$s 的邀請嗎？"</string>
   <string name="screen_invites_decline_chat_title">"拒絕邀請"</string>
   <string name="screen_invites_decline_direct_chat_message">"您確定您要拒絕此與 %1$s 的私人聊天嗎？"</string>

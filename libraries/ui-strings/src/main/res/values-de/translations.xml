@@ -253,6 +253,8 @@ Grund: %1$s."</string>
     <item quantity="other">"%d Stimmen"</item>
   </plurals>
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
+  <string name="common_private_room">"Privater Chatroom"</string>
+  <string name="common_public_room">"Öffentlicher Raum"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
   <string name="common_reason">"Grund"</string>

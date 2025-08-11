@@ -208,6 +208,8 @@ Motiv:%1$s."</string>
     <item quantity="other">"%d voturi"</item>
   </plurals>
   <string name="common_privacy_policy">"Politica de confidențialitate"</string>
+  <string name="common_private_room">"Cameră privată"</string>
+  <string name="common_public_room">"Cameră publică"</string>
   <string name="common_reaction">"Reacţie"</string>
   <string name="common_reactions">"Reacții"</string>
   <string name="common_recovery_key">"Cheie de recuperare"</string>

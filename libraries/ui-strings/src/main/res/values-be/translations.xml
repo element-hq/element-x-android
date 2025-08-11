@@ -209,6 +209,8 @@
     <item quantity="many">"%d галасоў"</item>
   </plurals>
   <string name="common_privacy_policy">"Палітыка прыватнасці"</string>
+  <string name="common_private_room">"Прыватны пакой"</string>
+  <string name="common_public_room">"Публічны пакой"</string>
   <string name="common_reaction">"Рэакцыя"</string>
   <string name="common_reactions">"Рэакцыі"</string>
   <string name="common_recovery_key">"Ключ аднаўлення"</string>

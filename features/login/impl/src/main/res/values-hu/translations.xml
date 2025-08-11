@@ -13,6 +13,7 @@
   <string name="screen_change_account_provider_other">"Egyéb"</string>
   <string name="screen_change_account_provider_subtitle">"Másik fiókszolgáltató, például a saját privát kiszolgáló vagy egy munkahelyi fiók használata."</string>
   <string name="screen_change_account_provider_title">"Fiókszolgáltató módosítása"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Az Element Pro alkalmazás szükséges a következőn: %1$s. Töltse le az áruházból."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro szükséges"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nem sikerült elérni ezt a Matrix-kiszolgálót. Ellenőrizze, hogy helyesen adta-e meg a Matrix-kiszolgáló webcímét. Ha a webcím helyes, akkor további segítségért lépjen kapcsolatba a Matrix-kiszolgáló adminisztrátorával."</string>

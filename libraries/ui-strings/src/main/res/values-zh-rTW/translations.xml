@@ -230,6 +230,8 @@
     <item quantity="other">"%d 票"</item>
   </plurals>
   <string name="common_privacy_policy">"隱私權政策"</string>
+  <string name="common_private_room">"私密聊天室"</string>
+  <string name="common_public_room">"公開的聊天室"</string>
   <string name="common_reaction">"回應"</string>
   <string name="common_reactions">"回應"</string>
   <string name="common_reason">"理由"</string>

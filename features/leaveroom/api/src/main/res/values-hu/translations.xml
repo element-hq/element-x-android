@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Biztos, hogy elhagyja ezt a beszélgetést? Ez a beszélgetés nem nyilvános, és meghívás nélkül nem fog tudni visszacsatlakozni."</string>
   <string name="leave_room_alert_empty_subtitle">"Biztos, hogy elhagyja ezt a szobát? Ön az egyedüli ember itt. Ha kilép, akkor senki sem fog tudni csatlakozni a jövőben, Önt is beleértve."</string>
   <string name="leave_room_alert_private_subtitle">"Biztos, hogy elhagyja ezt a szobát? Ez a szoba nem nyilvános, és meghívó nélkül nem fog tudni újra belépni."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Tulajdonosok kiválasztása"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Ön az egyetlen tulajdonosa ennek a szobának. Mielőtt elhagyja a szobát, át kell adnia a tulajdonjogot valaki másnak."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Tulajdonjog átruházása"</string>
   <string name="leave_room_alert_subtitle">"Biztos, hogy elhagyja a szobát?"</string>
 </resources>

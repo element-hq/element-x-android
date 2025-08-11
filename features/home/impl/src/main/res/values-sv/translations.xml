@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Inaktivera batterioptimering för den här appen för att säkerställa att alla aviseringar tas emot."</string>
+  <string name="banner_battery_optimization_submit_android">"Inaktivera optimering"</string>
+  <string name="banner_battery_optimization_title_android">"Aviseringar kommer inte fram?"</string>
   <string name="banner_set_up_recovery_content">"Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter."</string>
   <string name="banner_set_up_recovery_submit">"Ställ in återställning"</string>
   <string name="banner_set_up_recovery_title">"Ställ in återställning"</string>
@@ -9,6 +12,7 @@
   <string name="confirm_recovery_key_banner_title">"Din nyckellagring är inte synkroniserad"</string>
   <string name="full_screen_intent_banner_message">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>
   <string name="full_screen_intent_banner_title">"Förbättra din samtalsupplevelse"</string>
+  <string name="screen_home_tab_chats">"Alla chattar"</string>
   <string name="screen_invites_decline_chat_message">"Är du säker på att du vill tacka nej till inbjudan att gå med%1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Avböj inbjudan"</string>
   <string name="screen_invites_decline_direct_chat_message">"Är du säker på att du vill avböja denna privata chatt med %1$s?"</string>
@@ -18,6 +22,7 @@
   <string name="screen_migration_message">"Detta är en engångsprocess, tack för att du väntar."</string>
   <string name="screen_migration_title">"Konfigurerar ditt konto"</string>
   <string name="screen_roomlist_a11y_create_message">"Skapa en ny konversation eller ett nytt rum"</string>
+  <string name="screen_roomlist_clear_filters">"Rensa filter"</string>
   <string name="screen_roomlist_empty_message">"Kom igång genom att skicka meddelanden till någon."</string>
   <string name="screen_roomlist_empty_title">"Inga chattar än."</string>
   <string name="screen_roomlist_filter_favourites">"Favoriter"</string>

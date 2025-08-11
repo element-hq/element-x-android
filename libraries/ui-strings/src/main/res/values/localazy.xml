@@ -224,8 +224,8 @@ Reason: %1$s."</string>
     <item quantity="other">"%d others"</item>
   </plurals>
   <plurals name="common_member_count">
-    <item quantity="one">"%1$d member"</item>
-    <item quantity="other">"%1$d members"</item>
+    <item quantity="one">"%1$d Member"</item>
+    <item quantity="other">"%1$d Members"</item>
   </plurals>
   <string name="common_message">"Message"</string>
   <string name="common_message_actions">"Message actions"</string>
@@ -257,6 +257,10 @@ Reason: %1$s."</string>
   </plurals>
   <string name="common_preparing">"Preparing…"</string>
   <string name="common_privacy_policy">"Privacy policy"</string>
+  <string name="common_private_room">"Private room"</string>
+  <string name="common_private_space">"Private space"</string>
+  <string name="common_public_room">"Public room"</string>
+  <string name="common_public_space">"Public space"</string>
   <string name="common_reaction">"Reaction"</string>
   <string name="common_reactions">"Reactions"</string>
   <string name="common_reason">"Reason"</string>
@@ -274,6 +278,10 @@ Reason: %1$s."</string>
   <string name="common_room">"Room"</string>
   <string name="common_room_name">"Room name"</string>
   <string name="common_room_name_placeholder">"e.g. your project name"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d Room"</item>
+    <item quantity="other">"%1$d Rooms"</item>
+  </plurals>
   <string name="common_saved_changes">"Saved changes"</string>
   <string name="common_saving">"Saving"</string>
   <string name="common_screen_lock">"Screen lock"</string>
@@ -293,6 +301,10 @@ Reason: %1$s."</string>
   <string name="common_signing_out">"Signing out"</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d Space"</item>
+    <item quantity="other">"%1$d Spaces"</item>
+  </plurals>
   <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>
@@ -323,6 +335,12 @@ Reason: %1$s."</string>
   <string name="common_verify_identity">"Verify identity"</string>
   <string name="common_verify_user">"Verify user"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"High quality"</string>
+  <string name="common_video_quality_high_description">"Best quality but larger file size"</string>
+  <string name="common_video_quality_low">"Low quality"</string>
+  <string name="common_video_quality_low_description">"Fastest upload speed and smallest file size"</string>
+  <string name="common_video_quality_standard">"Standard quality"</string>
+  <string name="common_video_quality_standard_description">"Balance of quality and upload speed"</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="common_waiting_for_decryption_key">"Waiting for this message"</string>
@@ -337,6 +355,10 @@ Reason: %1$s."</string>
 
 Are you sure you want to continue?"</string>
   <string name="dialog_confirm_link_title">"Double-check this link"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Select the default quality of videos you upload."</string>
+  <string name="dialog_default_video_quality_selector_title">"Video upload quality"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"The max file size allowed is: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"The file size is too large to upload"</string>
   <string name="dialog_room_reported">"Room reported"</string>
   <string name="dialog_room_reported_and_left">"Reported and left room"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
@@ -345,6 +367,9 @@ Are you sure you want to continue?"</string>
   <string name="dialog_title_warning">"Warning"</string>
   <string name="dialog_unsaved_changes_description_android">"Your changes have not been saved. Are you sure you want to go back?"</string>
   <string name="dialog_unsaved_changes_title">"Save changes?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"The max file size allowed is: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Select the quality of the video you want to upload."</string>
+  <string name="dialog_video_quality_selector_title">"Select video upload quality"</string>
   <string name="error_account_creation_not_possible">"Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation."</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
@@ -379,11 +404,14 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"Tap to change the video upload quality"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"The file could not be uploaded."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"The maximum file size allowed is %1$s."</string>
   <string name="screen_media_upload_preview_error_too_large_title">"The file is too large to upload"</string>
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimise image quality"</string>
+  <string name="screen_media_upload_preview_processing">"Processing…"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -401,6 +429,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Your message was not sent because %1$s has not verified all devices"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"One or more of your devices are unverified. You can send the message anyway, or you can cancel for now and try again later after you have verified all of your devices."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Your message was not sent because you have not verified one or more of your devices"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Edit Admins or Owners"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_event_pill">"Message in %1$s"</string>
@@ -418,6 +447,9 @@ Are you sure you want to continue?"</string>
   <string name="screen_share_open_google_maps">"Open in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Open in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Share this location"</string>
+  <string name="screen_space_list_description">"Spaces you have created or joined."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not verified one or more of your devices."</string>
