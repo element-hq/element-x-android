@@ -21,8 +21,8 @@ import javax.inject.Inject
 @ContributesBinding(SessionScope::class)
 class DefaultSessionWellknownRetriever @Inject constructor(
     private val matrixClient: MatrixClient,
+    private val parser: Json,
 ) : SessionWellknownRetriever {
-    private val parser by lazy { Json { ignoreUnknownKeys = true } }
     private val domain by lazy { matrixClient.userIdServerName() }
 
     override suspend fun getWellKnown(): WellKnown? {
