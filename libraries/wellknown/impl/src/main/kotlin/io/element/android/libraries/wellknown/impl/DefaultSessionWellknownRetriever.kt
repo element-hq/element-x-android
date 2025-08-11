@@ -29,8 +29,10 @@ class DefaultSessionWellknownRetriever @Inject constructor(
         val url = "https://$domain/.well-known/matrix/client"
         return matrixClient
             .getUrl(url)
-            .mapCatchingExceptions { String(it) }
-            .mapCatchingExceptions { parser.decodeFromString(InternalWellKnown.serializer(), it) }
+            .mapCatchingExceptions {
+                val data = String(it)
+                parser.decodeFromString(InternalWellKnown.serializer(), data)
+            }
             .onFailure { Timber.e(it, "Failed to retrieve .well-known from $domain") }
             .map { it.map() }
             .getOrNull()
@@ -40,8 +42,10 @@ class DefaultSessionWellknownRetriever @Inject constructor(
         val url = "https://$domain/.well-known/element/element.json"
         return matrixClient
             .getUrl(url)
-            .mapCatchingExceptions { String(it) }
-            .mapCatchingExceptions { parser.decodeFromString(InternalElementWellKnown.serializer(), it) }
+            .mapCatchingExceptions {
+                val data = String(it)
+                parser.decodeFromString(InternalElementWellKnown.serializer(), data)
+            }
             .onFailure { Timber.e(it, "Failed to retrieve Element .well-known from $domain") }
             .map { it.map() }
             .getOrNull()
