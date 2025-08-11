@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Use JDK 21
         uses: actions/setup-java@v4
         with:

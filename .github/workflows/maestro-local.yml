@@ -23,7 +23,7 @@ jobs:
       group: ${{ format('maestro-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -62,7 +62,7 @@ jobs:
       group: ${{ format('maestro-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
