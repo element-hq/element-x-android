@@ -30,4 +30,13 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.network)
+
+    testImplementation(projects.tests.testutils)
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.robolectric)
+    testImplementation(libs.coroutines.core)
+    testImplementation(libs.coroutines.test)
+    testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.services.toolbox.test)
 }
