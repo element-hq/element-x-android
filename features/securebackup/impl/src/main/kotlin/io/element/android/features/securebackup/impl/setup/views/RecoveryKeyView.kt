@@ -35,6 +35,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -42,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
-import io.element.android.features.securebackup.impl.tools.RecoveryKeyHiddenVisualTransformation
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyVisualTransformation
 import io.element.android.libraries.designsystem.modifiers.clickableIfNotNull
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -198,7 +198,7 @@ private fun RecoveryKeyFormContent(
             // Do not apply a visual transformation if the key has spaces, to let user enter passphrase
             if (keyHasSpace) VisualTransformation.None else RecoveryKeyVisualTransformation()
         } else {
-            RecoveryKeyHiddenVisualTransformation()
+            PasswordVisualTransformation()
         }
     }
     TextField(
