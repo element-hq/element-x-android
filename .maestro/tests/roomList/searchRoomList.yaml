@@ -10,6 +10,9 @@ appId: ${MAESTRO_APP_ID}
 - extendedWaitUntil:
     visible: ${MAESTRO_ROOM_NAME.substring(0, 3)}
     timeout: 10000
-# Back to home
+# Back to close the keyboard
+- back
+- waitForAnimationToEnd
+# Back to close the home screen
 - back
 - runFlow: ../assertions/assertHomeDisplayed.yaml
