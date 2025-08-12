@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.featureflag.api
 
-import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 
@@ -33,13 +32,6 @@ enum class FeatureFlags(
         title = "Show blocked users details",
         description = "Show the name and avatar of blocked users in the blocked users list",
         defaultValue = { false },
-        isFinished = false,
-    ),
-    QrCodeLogin(
-        key = "feature.qrCodeLogin",
-        title = "Enable login using QR code",
-        description = "Allow the user to login using the QR code flow",
-        defaultValue = { OnBoardingConfig.CAN_LOGIN_WITH_QR_CODE },
         isFinished = false,
     ),
     PinnedEvents(

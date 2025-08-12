@@ -19,9 +19,6 @@ import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationR
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
@@ -70,13 +67,8 @@ class OnBoardingPresenterTest {
             productionApplicationName = "B",
             desktopApplicationName = "C",
         )
-        val featureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(FeatureFlags.QrCodeLogin.key to true),
-            buildMeta = buildMeta,
-        )
         val presenter = createPresenter(
             buildMeta = buildMeta,
-            featureFlagService = featureFlagService,
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, EnterpriseService.ANY_ACCOUNT_PROVIDER) },
             ),
@@ -131,9 +123,6 @@ class OnBoardingPresenterTest {
                 accountProvider = ACCOUNT_PROVIDER_FROM_LINK,
                 loginHint = null,
             ),
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.QrCodeLogin.key to true),
-            ),
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, EnterpriseService.ANY_ACCOUNT_PROVIDER) },
                 isAllowedToConnectToHomeserverResult = { true },
@@ -156,9 +145,6 @@ class OnBoardingPresenterTest {
                 accountProvider = ACCOUNT_PROVIDER_FROM_LINK,
                 loginHint = null,
             ),
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.QrCodeLogin.key to true),
-            ),
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
                 isAllowedToConnectToHomeserverResult = { false },
@@ -180,9 +166,6 @@ class OnBoardingPresenterTest {
             params = OnBoardingNode.Params(
                 accountProvider = ACCOUNT_PROVIDER_FROM_LINK,
                 loginHint = null,
-            ),
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.QrCodeLogin.key to true),
             ),
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG) },
@@ -237,7 +220,6 @@ class OnBoardingPresenterTest {
 private fun createPresenter(
     params: OnBoardingNode.Params = OnBoardingNode.Params(null, null),
     buildMeta: BuildMeta = aBuildMeta(),
-    featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
     rageshakeFeatureAvailability: () -> Flow<Boolean> = { flowOf(true) },
@@ -245,7 +227,6 @@ private fun createPresenter(
 ) = OnBoardingPresenter(
     params = params,
     buildMeta = buildMeta,
-    featureFlagService = featureFlagService,
     enterpriseService = enterpriseService,
     defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
         enterpriseService = enterpriseService,
