@@ -21,13 +21,6 @@ enum class FeatureFlags(
     override val defaultValue: (BuildMeta) -> Boolean,
     override val isFinished: Boolean,
 ) : Feature {
-    MarkAsUnread(
-        key = "feature.markAsUnread",
-        title = "Mark as unread",
-        description = "Allow user to mark a room as unread",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     RoomDirectorySearch(
         key = "feature.roomdirectorysearch",
         title = "Room directory search",
