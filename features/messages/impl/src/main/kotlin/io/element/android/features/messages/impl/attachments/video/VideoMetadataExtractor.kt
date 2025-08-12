@@ -29,7 +29,7 @@ interface VideoMetadataExtractor : AutoCloseable {
 
 @ContributesBinding(AppScope::class)
 class DefaultVideoMetadataExtractor @AssistedInject constructor(
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
     @Assisted private val uri: Uri,
 ) : VideoMetadataExtractor {
     @ContributesBinding(AppScope::class)
@@ -38,15 +38,16 @@ class DefaultVideoMetadataExtractor @AssistedInject constructor(
         override fun create(uri: Uri): DefaultVideoMetadataExtractor
     }
 
-    private val mediaMetadataRetriever = MediaMetadataRetriever()
-
-    init {
-        mediaMetadataRetriever.setDataSource(context, uri)
+    // Don't use `by lazy` so we can catch any exceptions thrown during initialization
+    private val mediaMetadataRetriever = lazy {
+        MediaMetadataRetriever().apply {
+            setDataSource(context, uri)
+        }
     }
 
     override fun getSize(): Result<Size> = runCatchingExceptions {
-        val width = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt()
-        val height = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
+        val width = mediaMetadataRetriever.value.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt()
+        val height = mediaMetadataRetriever.value.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
 
         @Suppress("ComplexCondition")
         if (width != null && width > 0 && height != null && height > 0) {
@@ -57,12 +58,14 @@ class DefaultVideoMetadataExtractor @AssistedInject constructor(
     }
 
     override fun getDuration(): Result<Long> = runCatchingExceptions {
-        mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
+        mediaMetadataRetriever.value.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
             ?.takeIf { it > 0L }
             ?: error("Could not retrieve video duration from metadata")
     }
 
     override fun close() {
-        mediaMetadataRetriever.release()
+        if (mediaMetadataRetriever.isInitialized()) {
+            mediaMetadataRetriever.value.release()
+        }
     }
 }
