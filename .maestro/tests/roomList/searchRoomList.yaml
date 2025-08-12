@@ -5,6 +5,8 @@ appId: ${MAESTRO_APP_ID}
 - inputText: ${MAESTRO_ROOM_NAME.substring(0, 3)}
 - takeScreenshot: build/maestro/400-SearchRoom
 - tapOn: ${MAESTRO_ROOM_NAME}
-# Back from timeline
+# Back from timeline to search
+- back
+# Back to home
 - back
 - runFlow: ../assertions/assertHomeDisplayed.yaml
