@@ -7,6 +7,9 @@ appId: ${MAESTRO_APP_ID}
 - tapOn: ${MAESTRO_ROOM_NAME}
 # Back from timeline to search
 - back
+- extendedWaitUntil:
+    visible: ${MAESTRO_ROOM_NAME.substring(0, 3)}
+    timeout: 10000
 # Back to home
 - back
 - runFlow: ../assertions/assertHomeDisplayed.yaml
