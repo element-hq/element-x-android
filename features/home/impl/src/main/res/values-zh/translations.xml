@@ -11,6 +11,7 @@
   <string name="confirm_recovery_key_banner_title">"你的密钥存储已不同步"</string>
   <string name="full_screen_intent_banner_message">"为确保您不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>
   <string name="full_screen_intent_banner_title">"提升通话体验"</string>
+  <string name="screen_home_tab_chats">"全部聊天"</string>
   <string name="screen_invites_decline_chat_message">"您确定要拒绝加入 %1$s 的邀请吗？"</string>
   <string name="screen_invites_decline_chat_title">"拒绝邀请"</string>
   <string name="screen_invites_decline_direct_chat_message">"您确定要拒绝与 %1$s 开始私聊吗？"</string>

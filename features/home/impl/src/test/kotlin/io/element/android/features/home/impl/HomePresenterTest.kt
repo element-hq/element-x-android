@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -49,7 +50,7 @@ class HomePresenterTest {
         matrixClient.givenGetProfileResult(matrixClient.sessionId, Result.success(MatrixUser(matrixClient.sessionId, A_USER_NAME, AN_AVATAR_URL)))
         val presenter = createHomePresenter(
             client = matrixClient,
-            rageshakeFeatureAvailability = { false },
+            rageshakeFeatureAvailability = { flowOf(false) },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -63,6 +64,21 @@ class HomePresenterTest {
             assertThat(withUserState.matrixUser.avatarUrl).isEqualTo(AN_AVATAR_URL)
             assertThat(withUserState.showAvatarIndicator).isFalse()
             assertThat(withUserState.isSpaceFeatureEnabled).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - can report bug`() = runTest {
+        val presenter = createHomePresenter(
+            rageshakeFeatureAvailability = { flowOf(true) },
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.canReportBug).isFalse()
+            val finalState = awaitItem()
+            assertThat(finalState.canReportBug).isTrue()
         }
     }
 
@@ -132,7 +148,7 @@ class HomePresenterTest {
         client: MatrixClient = FakeMatrixClient(),
         syncService: SyncService = FakeSyncService(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
-        rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { true },
+        rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { flowOf(false) },
         indicatorService: IndicatorService = FakeIndicatorService(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService()
     ) = HomePresenter(

@@ -175,6 +175,8 @@
     <item quantity="other">"%d гласа"</item>
   </plurals>
   <string name="common_privacy_policy">"Политика за поверителност"</string>
+  <string name="common_private_room">"Частна стая"</string>
+  <string name="common_public_room">"Общодостъпна стая"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
   <string name="common_reason">"Причина"</string>

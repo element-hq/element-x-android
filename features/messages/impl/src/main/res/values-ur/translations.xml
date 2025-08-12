@@ -8,6 +8,8 @@
   <string name="emoji_picker_category_people">"مسکراہٹیں و لوگ"</string>
   <string name="emoji_picker_category_places">"سفر و مقامات"</string>
   <string name="emoji_picker_category_symbols">"علامتیں"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"وسائط کا معالجہ برائے ترفیع ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"وسائط رفع کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_report_content_block_user">"صارف کو مسدود کریں"</string>
   <string name="screen_report_content_block_user_hint">"پڑتال کریں کہ کیا آپ اس صارف سے تمام موجودہ اور مستقبلی پیغامات چھپانا چاہتے ہیں۔"</string>
   <string name="screen_report_content_explanation">"اس پیغام کی اطلاع آپکے منزلی خادم کے منتظم کو دی جائیگی۔ وہ کوئی مرموزکردہ پیغامات نہیں پڑھ سکیں گے۔"</string>

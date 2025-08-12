@@ -7,11 +7,19 @@
     <item quantity="one">"%1$d dígito inserido"</item>
     <item quantity="other">"%1$d dígitos inseridos"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Editar avatar"</string>
+  <string name="a11y_edit_room_address_hint">"O endereço completo será %1$s"</string>
+  <string name="a11y_encryption_details">"Detalhes de cifragem"</string>
   <string name="a11y_hide_password">"Ocultar palavra-passe"</string>
   <string name="a11y_join_call">"Juntar-se à chamada"</string>
   <string name="a11y_jump_to_bottom">"Saltar para o fundo"</string>
+  <string name="a11y_move_the_map_to_my_location">"Mover o mapa para a minha localização"</string>
   <string name="a11y_notifications_mentions_only">"Apenas menções"</string>
   <string name="a11y_notifications_muted">"Silenciado"</string>
+  <string name="a11y_notifications_new_mentions">"Novas menções"</string>
+  <string name="a11y_notifications_new_messages">"Novas mensagens"</string>
+  <string name="a11y_notifications_ongoing_call">"Chamada em curso"</string>
+  <string name="a11y_other_user_avatar">"O avatar do outro utilizador"</string>
   <string name="a11y_page_n">"Página %1$d"</string>
   <string name="a11y_pause">"Pausar"</string>
   <string name="a11y_paused_voice_message">"Mensagem de voz, duração: %1$s, posição atual: %2$s"</string>
@@ -30,15 +38,20 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Toca para mostrar tudo"</string>
   <string name="a11y_remove_reaction">"Remover reação com %1$s"</string>
   <string name="a11y_remove_reaction_with">"Remover reação com %1$s"</string>
+  <string name="a11y_room_avatar">"Ícone da sala"</string>
   <string name="a11y_send_files">"Enviar ficheiros"</string>
   <string name="a11y_show_password">"Mostrar palavra-passe"</string>
   <string name="a11y_start_call">"Iniciar chamada"</string>
+  <string name="a11y_time_limited_action_required">"Necessária ação em tempo limitado"</string>
+  <string name="a11y_tombstoned_room">"Sala antiga"</string>
+  <string name="a11y_user_avatar">"Avatar do utilizador"</string>
   <string name="a11y_user_menu">"Menu de utilizador"</string>
   <string name="a11y_view_avatar">"Ver avatar"</string>
   <string name="a11y_view_details">"Ver detalhes"</string>
   <string name="a11y_voice_message">"Mensagem de voz, duração: %1$s"</string>
   <string name="a11y_voice_message_record">"Gravar mensagem de voz."</string>
   <string name="a11y_voice_message_stop_recording">"Parar gravação"</string>
+  <string name="a11y_your_avatar">"O teu avatar"</string>
   <string name="action_accept">"Aceitar"</string>
   <string name="action_add_caption">"Adicionar legenda"</string>
   <string name="action_add_to_timeline">"Adicionar à cronologia"</string>
@@ -97,6 +110,7 @@
   <string name="action_no">"Não"</string>
   <string name="action_not_now">"Agora não"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Abrir menu de contexto"</string>
   <string name="action_open_settings">"Definições"</string>
   <string name="action_open_with">"Abrir com"</string>
   <string name="action_pin">"Afixar"</string>
@@ -121,7 +135,9 @@
   <string name="action_save">"Guardar"</string>
   <string name="action_search">"Pesquisar"</string>
   <string name="action_send">"Enviar"</string>
+  <string name="action_send_edited_message">"Enviar mensagem editada"</string>
   <string name="action_send_message">"Enviar mensagem"</string>
+  <string name="action_send_voice_message">"Enviar mensagem de voz"</string>
   <string name="action_share">"Partilhar"</string>
   <string name="action_share_link">"Partilhar ligação"</string>
   <string name="action_show">"Mostrar"</string>
@@ -137,6 +153,7 @@
   <string name="action_tap_for_options">"Toca para ver as opções"</string>
   <string name="action_try_again">"Tentar novamente"</string>
   <string name="action_unpin">"Desafixar"</string>
+  <string name="action_view">"Ver"</string>
   <string name="action_view_in_timeline">"Ver na cronologia"</string>
   <string name="action_view_source">"Ver fonte"</string>
   <string name="action_yes">"Sim"</string>
@@ -238,7 +255,12 @@ Razão: %1$s."</string>
     <item quantity="one">"%d voto"</item>
     <item quantity="other">"%d votos"</item>
   </plurals>
+  <string name="common_preparing">"A preparar…"</string>
   <string name="common_privacy_policy">"Política de privacidade"</string>
+  <string name="common_private_room">"Sala privada"</string>
+  <string name="common_private_space">"Espaço privado"</string>
+  <string name="common_public_room">"Sala pública"</string>
+  <string name="common_public_space">"Espaço público"</string>
   <string name="common_reaction">"Reação"</string>
   <string name="common_reactions">"Reações"</string>
   <string name="common_reason">"Motivo"</string>
@@ -256,6 +278,10 @@ Razão: %1$s."</string>
   <string name="common_room">"Sala"</string>
   <string name="common_room_name">"Nome da sala"</string>
   <string name="common_room_name_placeholder">"p.ex. o nome do teu projeto"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d sala"</item>
+    <item quantity="other">"%1$d salas"</item>
+  </plurals>
   <string name="common_saved_changes">"Alterações guardadas"</string>
   <string name="common_saving">"A guardar"</string>
   <string name="common_screen_lock">"Bloqueio do ecrã"</string>
@@ -275,6 +301,10 @@ Razão: %1$s."</string>
   <string name="common_signing_out">"A terminar sessão"</string>
   <string name="common_something_went_wrong">"Algo correu mal"</string>
   <string name="common_something_went_wrong_message">"Encontrámos um erro. Por favor, tenta novamente."</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d espaço"</item>
+    <item quantity="other">"%1$d espaços"</item>
+  </plurals>
   <string name="common_starting_chat">"A iniciar conversa…"</string>
   <string name="common_sticker">"Autocolante"</string>
   <string name="common_success">"Sucesso"</string>
@@ -354,14 +384,12 @@ Tens a certeza de que queres continuar?"</string>
   <string name="invite_friends_text">"Alô! Fala comigo na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Agita o dispositivo em fúria para comunicar um problema"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Captura de ecrã"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Opções"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remover %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Configurações"</string>
   <string name="screen_media_picker_error_failed_selection">"Falha ao selecionar multimédia, por favor tente novamente."</string>
-  <string name="screen_media_upload_preview_caption_warning">"As legendas poderão não ser visíveis em versões mais antigas da aplicação."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Falha ao processar multimédia para carregamento, por favor tente novamente."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Falhar ao carregar multimédia, por favor tente novamente."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Pressione uma mensagem e escolha \"%1$s\" para incluir aqui."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fixa mensagens importantes para que possam ser facilmente descobertas"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -396,6 +424,9 @@ Tens a certeza de que queres continuar?"</string>
   <string name="screen_share_open_google_maps">"Abrir no Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Abrir no OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partilhar este local"</string>
+  <string name="screen_space_list_description">"Espaços que criaste ou nos quais entraste."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Espaços"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mensagem não enviada porque a identidade verificada de %1$s foi reposta."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Mensagem não enviada porque %1$s não verificou todos os dispositivos."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Mensagem não enviada porque não verificou um ou mais dos seus dispositivos."</string>

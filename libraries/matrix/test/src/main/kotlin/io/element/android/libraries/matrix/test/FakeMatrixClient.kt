@@ -94,6 +94,7 @@ class FakeMatrixClient(
     private val canReportRoomLambda: () -> Boolean = { false },
     private val isLivekitRtcSupportedLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
+    private val getMaxUploadSizeResult: () -> Result<Long> = { lambdaError() },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -342,5 +343,9 @@ class FakeMatrixClient(
 
     override suspend fun isLivekitRtcSupported(): Boolean {
         return isLivekitRtcSupportedLambda()
+    }
+
+    override suspend fun getMaxFileUploadSize(): Result<Long> {
+        return getMaxUploadSizeResult()
     }
 }

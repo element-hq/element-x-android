@@ -13,10 +13,4 @@
   <string name="screen_notification_optin_subtitle">"Ayarlarınızı daha sonra değiştirebilirsiniz."</string>
   <string name="screen_notification_optin_title">"Bildirimlere izin verin ve hiçbir mesajı kaçırmayın"</string>
   <string name="screen_session_verification_enter_recovery_key">"Kurtarma anahtarını girin"</string>
-  <string name="screen_welcome_bullet_1">"Çağrılar, anketler, arama ve daha fazlası bu yıl içinde eklenecek."</string>
-  <string name="screen_welcome_bullet_2">"Şifrelenmiş odalar için mesaj geçmişi henüz mevcut değil."</string>
-  <string name="screen_welcome_bullet_3">"Düşüncelerinizi bizimle paylaşmanızı çok isteriz. Ayarlar sayfasından düşüncelerinizi bize iletin."</string>
-  <string name="screen_welcome_button">"Hadi başlayalım!"</string>
-  <string name="screen_welcome_subtitle">"İşte bilmeniz gerekenler:"</string>
-  <string name="screen_welcome_title">"%1$s hoş geldiniz!"</string>
 </resources>

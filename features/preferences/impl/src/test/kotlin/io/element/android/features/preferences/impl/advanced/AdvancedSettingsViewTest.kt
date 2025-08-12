@@ -115,7 +115,7 @@ class AdvancedSettingsViewTest {
         val analyticsService = FakeAnalyticsService()
         rule.setAdvancedSettingsView(
             state = aAdvancedSettingsState(
-                doesCompressMedia = true,
+                mediaOptimizationState = MediaOptimizationState.AllMedia(isEnabled = true),
                 eventSink = eventsRecorder,
             ),
             analyticsService = analyticsService

@@ -8,6 +8,9 @@
   <string name="emoji_picker_category_people">"表情與人物"</string>
   <string name="emoji_picker_category_places">"旅行與景點"</string>
   <string name="emoji_picker_category_symbols">"標誌"</string>
+  <string name="screen_media_upload_preview_caption_warning">"使用舊應用程式的使用者可能看不到標題。"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"無法處理要上傳的媒體，請再試一次。"</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>
   <string name="screen_report_content_block_user_hint">"檢查您是否要隱藏所有來自此使用者的目前及未來的訊息"</string>
   <string name="screen_report_content_explanation">"此訊息將會回報給您的家伺服器管理員。他們將無法讀取任何已加密的訊息。"</string>

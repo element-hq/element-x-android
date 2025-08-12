@@ -7,6 +7,7 @@
   <string name="confirm_recovery_key_banner_title">"Ваша сховішча ключоў не сінхранізавана"</string>
   <string name="full_screen_intent_banner_message">"Каб не прапусціць важны званок, зменіце налады, каб дазволіць поўнаэкранныя апавяшчэнні, калі тэлефон заблакіраваны."</string>
   <string name="full_screen_intent_banner_title">"Палепшыце якасць званкоў"</string>
+  <string name="screen_home_tab_chats">"Усе чаты"</string>
   <string name="screen_invites_decline_chat_message">"Вы ўпэўненыя, што хочаце адхіліць запрашэнне ў %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Адхіліць запрашэнне"</string>
   <string name="screen_invites_decline_direct_chat_message">"Вы ўпэўненыя, што хочаце адмовіцца ад прыватных зносін з %1$s?"</string>

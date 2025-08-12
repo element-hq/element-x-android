@@ -60,6 +60,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTran
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
@@ -120,6 +121,7 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
     private val suggestionsProcessor: SuggestionsProcessor,
+    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
@@ -519,6 +521,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             uri = uri,
             mimeType = mimeType,
             progressCallback = null,
+            mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
         ).getOrThrow()
     }
         .onFailure { cause ->

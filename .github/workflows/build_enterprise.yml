@@ -27,7 +27,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-enterprise-{0}-{1}', matrix.variant, github.sha) || format('build-enterprise-{0}-{1}', matrix.variant, github.ref)  }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881

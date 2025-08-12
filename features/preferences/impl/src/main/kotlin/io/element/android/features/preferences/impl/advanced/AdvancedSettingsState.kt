@@ -11,16 +11,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.preferences.DropdownOption
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
 
 data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
     val isSharePresenceEnabled: Boolean,
-    val doesCompressMedia: Boolean,
+    val mediaOptimizationState: MediaOptimizationState?,
     val theme: ThemeOption,
     val mediaPreviewConfigState: MediaPreviewConfigState,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )
+
+sealed interface MediaOptimizationState {
+    data class AllMedia(val isEnabled: Boolean) : MediaOptimizationState
+    data class Split(
+        val compressImages: Boolean,
+        val videoPreset: VideoCompressionPreset,
+    ) : MediaOptimizationState
+
+    val shouldCompressImages: Boolean get() = when (this) {
+        is AllMedia -> isEnabled
+        is Split -> compressImages
+    }
+}
 
 enum class ThemeOption : DropdownOption {
     System {

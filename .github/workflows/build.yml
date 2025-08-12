@@ -25,7 +25,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}-{1}', matrix.variant, github.sha) || format('build-{0}-{1}', matrix.variant, github.ref)  }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -69,7 +69,7 @@ jobs:
           retention-days: 5
           overwrite: true
           if-no-files-found: error
-      - uses: rnkdsh/action-upload-diawi@993c2e9f871486114a171cf7fb40554716dac3c5 # v1.5.10
+      - uses: rnkdsh/action-upload-diawi@26292a7b424bdc9f4ab4ccea6202fc513f571370 # v1.5.11
         id: diawi
         # Do not fail the whole build if Diawi upload fails
         continue-on-error: true

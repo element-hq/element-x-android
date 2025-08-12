@@ -11,9 +11,11 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.compound.tokens.generated.compoundColorsDark
 import io.element.android.compound.tokens.generated.compoundColorsLight
+import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.SessionId
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -31,4 +33,6 @@ class DefaultEnterpriseService @Inject constructor() : EnterpriseService {
 
     override fun firebasePushGateway(): String? = null
     override fun unifiedPushDefaultPushGateway(): String? = null
+
+    override val bugReportUrlFlow = flowOf(BugReportUrl.UseDefault)
 }

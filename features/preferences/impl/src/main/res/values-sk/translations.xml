@@ -13,6 +13,13 @@
   <string name="screen_advanced_settings_media_compression_description">"Nahrávajte fotografie a videá rýchlejšie a znížte spotrebu dát"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimalizovať kvalitu médií"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderovanie a bezpečnosť"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Automaticky optimalizovať obrázky pre rýchlejšie nahrávanie a menšie veľkosti súborov."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimalizovať kvalitu nahrávaných obrázkov"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Ťuknite sem, ak ju chcete zmeniť."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Vysoká (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Nízka (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Štandardná (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Kvalita nahrávania videa"</string>
   <string name="screen_advanced_settings_push_provider_android">"Poskytovateľ oznámení Push"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Vypnite rozšírený textový editor na ručné písanie Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Potvrdenia o prečítaní"</string>

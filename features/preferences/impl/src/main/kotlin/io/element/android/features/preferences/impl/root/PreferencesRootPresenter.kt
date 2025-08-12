@@ -83,7 +83,7 @@ class PreferencesRootPresenter @Inject constructor(
         var canDeactivateAccount by remember {
             mutableStateOf(false)
         }
-        val canReportBug = remember { rageshakeFeatureAvailability.isAvailable() }
+        val canReportBug by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
         LaunchedEffect(Unit) {
             canDeactivateAccount = matrixClient.canDeactivateAccount()
         }

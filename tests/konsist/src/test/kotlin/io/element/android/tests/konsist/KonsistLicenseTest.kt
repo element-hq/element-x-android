@@ -68,4 +68,30 @@ class KonsistLicenseTest {
                 enterpriseLicense.containsMatchIn(it.text)
             }
     }
+
+    @Test
+    fun `assert that files do not have double license header`() {
+        Konsist
+            .scopeFromProject()
+            .files
+            .filter {
+                it.nameWithExtension != "locales.kt" &&
+                it.nameWithExtension != "KonsistLicenseTest.kt" &&
+                    it.name.startsWith("Template ").not()
+            }
+            .assertTrue {
+                it.text.count("New Vector") == 1
+            }
+    }
+}
+
+private fun String.count(subString: String): Int {
+    var count = 0
+    var index = 0
+    while (true) {
+        index = indexOf(subString, index)
+        if (index == -1) return count
+        count++
+        index += subString.length
+    }
 }

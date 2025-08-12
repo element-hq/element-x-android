@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.ui.room.avatarUrl
 import io.element.android.libraries.matrix.ui.room.rawName
 import io.element.android.libraries.matrix.ui.room.topic
 import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -49,6 +50,7 @@ class RoomDetailsEditPresenter @Inject constructor(
     private val mediaPreProcessor: MediaPreProcessor,
     private val temporaryUriDeleter: TemporaryUriDeleter,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
+    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<RoomDetailsEditState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
@@ -223,7 +225,7 @@ class RoomDetailsEditPresenter @Inject constructor(
                     uri = avatarUri,
                     mimeType = MimeTypes.Jpeg,
                     deleteOriginal = false,
-                    compressIfPossible = false,
+                    mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
                 ).getOrThrow()
                 room.updateAvatar(MimeTypes.Jpeg, preprocessed.file.readBytes()).getOrThrow()
             } else {
