@@ -126,7 +126,7 @@ class RustTimeline(
     )
 
     init {
-        if (mode != Timeline.Mode.PINNED_EVENTS) {
+        if (mode !in listOf(Timeline.Mode.PINNED_EVENTS, Timeline.Mode.THREADED, Timeline.Mode.MEDIA)) {
             coroutineScope.fetchMembers()
         }
 

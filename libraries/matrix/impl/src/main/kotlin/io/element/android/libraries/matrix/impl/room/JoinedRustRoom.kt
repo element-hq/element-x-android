@@ -173,6 +173,9 @@ class JoinedRustRoom(
                 numContextEvents = 50u,
                 hideThreadedEvents = hideThreadedEvents,
             )
+            is CreateTimelineParams.Threaded -> TimelineFocus.Thread(
+                rootEventId = createTimelineParams.threadRootEventId.value,
+            )
         }
 
         val filter = when (createTimelineParams) {
@@ -186,7 +189,8 @@ class JoinedRustRoom(
                 )
             )
             is CreateTimelineParams.Focused,
-            CreateTimelineParams.PinnedOnly -> TimelineFilter.All
+            CreateTimelineParams.PinnedOnly,
+            is CreateTimelineParams.Threaded -> TimelineFilter.All
         }
 
         val internalIdPrefix = when (createTimelineParams) {
@@ -194,6 +198,7 @@ class JoinedRustRoom(
             is CreateTimelineParams.Focused -> "focus_${createTimelineParams.focusedEventId}"
             is CreateTimelineParams.MediaOnly -> "MediaGallery_"
             is CreateTimelineParams.MediaOnlyFocused -> "MediaGallery_${createTimelineParams.focusedEventId}"
+            is CreateTimelineParams.Threaded -> "Thread_${createTimelineParams.threadRootEventId}"
         }
 
         // Note that for TimelineFilter.MediaOnlyFocused, the date separator will be filtered out,
@@ -202,7 +207,8 @@ class JoinedRustRoom(
             is CreateTimelineParams.MediaOnly,
             is CreateTimelineParams.MediaOnlyFocused -> DateDividerMode.MONTHLY
             is CreateTimelineParams.Focused,
-            CreateTimelineParams.PinnedOnly -> DateDividerMode.DAILY
+            CreateTimelineParams.PinnedOnly,
+            is CreateTimelineParams.Threaded -> DateDividerMode.DAILY
         }
 
         // Track read receipts only for focused timeline for performance optimization
@@ -224,13 +230,15 @@ class JoinedRustRoom(
                     is CreateTimelineParams.MediaOnly -> Timeline.Mode.MEDIA
                     is CreateTimelineParams.MediaOnlyFocused -> Timeline.Mode.FOCUSED_ON_EVENT
                     CreateTimelineParams.PinnedOnly -> Timeline.Mode.PINNED_EVENTS
+                    is CreateTimelineParams.Threaded -> Timeline.Mode.THREADED
                 }
                 innerTimeline.map(mode = mode)
             }
         }.mapFailure {
             when (createTimelineParams) {
                 is CreateTimelineParams.Focused,
-                is CreateTimelineParams.MediaOnlyFocused -> it.toFocusEventException()
+                is CreateTimelineParams.MediaOnlyFocused,
+                is CreateTimelineParams.Threaded -> it.toFocusEventException()
                 CreateTimelineParams.MediaOnly,
                 CreateTimelineParams.PinnedOnly -> it
             }
