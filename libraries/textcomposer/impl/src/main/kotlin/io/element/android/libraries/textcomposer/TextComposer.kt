@@ -794,7 +794,7 @@ internal fun TextComposerReplyNotEncryptedPreview(@PreviewParameter(InReplyToDet
 internal fun TextComposerCaptionPreview() = ElementPreview {
     val list = aTextEditorStateMarkdownList()
     PreviewColumn(
-        items = (list + aTextEditorStateMarkdown(initialText = "NO_CAPTION", initialFocus = true)).toPersistentList()
+        items = list,
     ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
