@@ -132,17 +132,15 @@ private fun AttachmentSourcePickerMenu(
                 style = ListItemStyle.Primary,
             )
         }
-        if (state.canCreatePoll) {
-            ListItem(
-                modifier = Modifier.clickable {
-                    state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
-                    onCreatePollClick()
-                },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
-                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
-                style = ListItemStyle.Primary,
-            )
-        }
+        ListItem(
+            modifier = Modifier.clickable {
+                state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
+                onCreatePollClick()
+            },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
+            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
+            style = ListItemStyle.Primary,
+        )
         if (enableTextFormatting) {
             ListItem(
                 modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = true)) },

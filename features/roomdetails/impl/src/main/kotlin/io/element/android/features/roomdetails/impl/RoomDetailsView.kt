@@ -185,7 +185,7 @@ fun RoomDetailsView(
             }
 
             PreferenceCategory {
-                if (state.canShowNotificationSettings && state.roomNotificationSettings != null) {
+                if (state.roomNotificationSettings != null) {
                     NotificationItem(
                         isDefaultMode = state.roomNotificationSettings.isDefault,
                         openRoomNotificationSettings = openRoomNotificationSettings
@@ -237,20 +237,16 @@ fun RoomDetailsView(
             }
 
             PreferenceCategory {
-                if (state.canShowPinnedMessages) {
-                    PinnedMessagesItem(
-                        pinnedMessagesCount = state.pinnedMessagesCount,
-                        onPinnedMessagesClick = onPinnedMessagesClick
-                    )
-                }
+                PinnedMessagesItem(
+                    pinnedMessagesCount = state.pinnedMessagesCount,
+                    onPinnedMessagesClick = onPinnedMessagesClick
+                )
                 PollsItem(
                     openPollHistory = openPollHistory
                 )
-                if (state.canShowMediaGallery) {
-                    MediaGalleryItem(
-                        onClick = openMediaGallery
-                    )
-                }
+                MediaGalleryItem(
+                    onClick = openMediaGallery
+                )
             }
 
             if (state.roomType is RoomDetailsType.Dm && state.roomMemberDetailsState != null) {
@@ -337,8 +333,7 @@ private fun MainActionsSection(
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        val roomNotificationSettings = state.roomNotificationSettings
-        if (state.canShowNotificationSettings && roomNotificationSettings != null) {
+        state.roomNotificationSettings?.let { roomNotificationSettings ->
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_unmute),

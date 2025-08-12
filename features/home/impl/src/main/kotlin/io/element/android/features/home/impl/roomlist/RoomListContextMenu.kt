@@ -101,36 +101,34 @@ private fun RoomListModalBottomSheetContent(
                 )
             }
         )
-        if (contextMenu.markAsUnreadFeatureFlagEnabled) {
-            if (contextMenu.hasNewContent) {
-                ListItem(
-                    headlineContent = {
-                        Text(
-                            text = stringResource(id = R.string.screen_roomlist_mark_as_read),
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                    },
-                    onClick = onRoomMarkReadClick,
-                    leadingContent = ListItemContent.Icon(
-                        iconSource = IconSource.Vector(CompoundIcons.MarkAsRead())
-                    ),
-                    style = ListItemStyle.Primary,
-                )
-            } else {
-                ListItem(
-                    headlineContent = {
-                        Text(
-                            text = stringResource(id = R.string.screen_roomlist_mark_as_unread),
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                    },
-                    onClick = onRoomMarkUnreadClick,
-                    leadingContent = ListItemContent.Icon(
-                        iconSource = IconSource.Vector(CompoundIcons.MarkAsUnread())
-                    ),
-                    style = ListItemStyle.Primary,
-                )
-            }
+        if (contextMenu.hasNewContent) {
+            ListItem(
+                headlineContent = {
+                    Text(
+                        text = stringResource(id = R.string.screen_roomlist_mark_as_read),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                },
+                onClick = onRoomMarkReadClick,
+                leadingContent = ListItemContent.Icon(
+                    iconSource = IconSource.Vector(CompoundIcons.MarkAsRead())
+                ),
+                style = ListItemStyle.Primary,
+            )
+        } else {
+            ListItem(
+                headlineContent = {
+                    Text(
+                        text = stringResource(id = R.string.screen_roomlist_mark_as_unread),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                },
+                onClick = onRoomMarkUnreadClick,
+                leadingContent = ListItemContent.Icon(
+                    iconSource = IconSource.Vector(CompoundIcons.MarkAsUnread())
+                ),
+                style = ListItemStyle.Primary,
+            )
         }
         ListItem(
             headlineContent = {

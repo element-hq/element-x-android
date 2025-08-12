@@ -16,7 +16,6 @@ import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsP
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.indicator.test.FakeIndicatorService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
@@ -77,8 +76,6 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.devicesManagementUrl).isNull()
             assertThat(loadedState.showAnalyticsSettings).isFalse()
             assertThat(loadedState.showDeveloperSettings).isTrue()
-            assertThat(loadedState.showLockScreenSettings).isTrue()
-            assertThat(loadedState.showNotificationSettings).isTrue()
             assertThat(loadedState.canDeactivateAccount).isTrue()
             assertThat(loadedState.canReportBug).isTrue()
             assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState())
@@ -194,7 +191,6 @@ class PreferencesRootPresenterTest {
         analyticsService = FakeAnalyticsService(),
         versionFormatter = FakeVersionFormatter(),
         snackbarDispatcher = SnackbarDispatcher(),
-        featureFlagService = FakeFeatureFlagService(),
         indicatorService = indicatorService,
         directLogoutPresenter = { aDirectLogoutState() },
         showDeveloperSettingsProvider = showDeveloperSettingsProvider,

@@ -12,14 +12,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.securityAndPrivacyPermissionsAsState
@@ -69,7 +67,6 @@ class RoomDetailsPresenter @Inject constructor(
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
-    private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val clipboardHelper: ClipboardHelper,
     private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<RoomDetailsState> {
@@ -77,7 +74,6 @@ class RoomDetailsPresenter @Inject constructor(
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
-        val canShowNotificationSettings = remember { mutableStateOf(false) }
         val roomInfo by room.roomInfoFlow.collectAsState()
         val isUserAdmin = room.isOwnUserAdmin()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
@@ -88,19 +84,11 @@ class RoomDetailsPresenter @Inject constructor(
         val isFavorite by remember { derivedStateOf { roomInfo.isFavorite } }
         val joinRule by remember { derivedStateOf { roomInfo.joinRule } }
 
-        val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
         val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
 
-        val canShowMediaGallery by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaGallery)
-        }.collectAsState(false)
-
         LaunchedEffect(Unit) {
-            canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
-            if (canShowNotificationSettings.value) {
-                room.updateRoomNotificationSettings()
-                observeNotificationSettings()
-            }
+            room.updateRoomNotificationSettings()
+            observeNotificationSettings()
         }
 
         val membersState by room.membersStateFlow.collectAsState()
@@ -197,7 +185,6 @@ class RoomDetailsPresenter @Inject constructor(
             isEncrypted = isEncrypted,
             canInvite = canInvite,
             canEdit = (canEditAvatar || canEditName || canEditTopic) && roomType == RoomDetailsType.Room,
-            canShowNotificationSettings = canShowNotificationSettings.value,
             roomCallState = roomCallState,
             roomType = roomType,
             roomMemberDetailsState = roomMemberDetailsState,
@@ -207,8 +194,6 @@ class RoomDetailsPresenter @Inject constructor(
             displayRolesAndPermissionsSettings = !isDm && isUserAdmin,
             isPublic = joinRule == JoinRule.Public,
             heroes = roomInfo.heroes.toPersistentList(),
-            canShowPinnedMessages = canShowPinnedMessages,
-            canShowMediaGallery = canShowMediaGallery,
             pinnedMessagesCount = pinnedMessagesCount,
             snackbarMessage = snackbarMessage,
             canShowKnockRequests = canShowKnockRequests,

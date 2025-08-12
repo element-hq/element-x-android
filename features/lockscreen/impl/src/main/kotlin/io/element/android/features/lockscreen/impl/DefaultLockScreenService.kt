@@ -18,8 +18,6 @@ import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.services.appnavstate.api.AppForegroundStateService
@@ -29,7 +27,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -40,7 +37,6 @@ import kotlin.time.Duration
 @ContributesBinding(AppScope::class)
 class DefaultLockScreenService @Inject constructor(
     private val lockScreenConfig: LockScreenConfig,
-    private val featureFlagService: FeatureFlagService,
     private val lockScreenStore: LockScreenStore,
     private val pinCodeManager: PinCodeManager,
     @AppCoroutineScope
@@ -108,12 +104,7 @@ class DefaultLockScreenService @Inject constructor(
     }
 
     override fun isPinSetup(): Flow<Boolean> {
-        return combine(
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.PinUnlock),
-            pinCodeManager.hasPinCode()
-        ) { isEnabled, hasPinCode ->
-            isEnabled && hasPinCode
-        }
+        return pinCodeManager.hasPinCode()
     }
 
     override fun isSetupRequired(): Flow<Boolean> {

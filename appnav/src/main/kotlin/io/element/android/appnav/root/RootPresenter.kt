@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import im.vector.app.features.analytics.plan.SuperProperties
 import io.element.android.features.rageshake.api.crash.CrashDetectionState
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionState
-import io.element.android.features.share.api.ShareService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.SdkMetadata
 import io.element.android.services.analytics.api.AnalyticsService
@@ -26,7 +25,6 @@ class RootPresenter @Inject constructor(
     private val rageshakeDetectionPresenter: Presenter<RageshakeDetectionState>,
     private val appErrorStateService: AppErrorStateService,
     private val analyticsService: AnalyticsService,
-    private val shareService: ShareService,
     private val sdkMetadata: SdkMetadata,
 ) : Presenter<RootState> {
     @Composable
@@ -43,10 +41,6 @@ class RootPresenter @Inject constructor(
                     cryptoSDKVersion = sdkMetadata.sdkGitSha,
                 )
             )
-        }
-
-        LaunchedEffect(Unit) {
-            shareService.observeFeatureFlag(this)
         }
 
         return RootState(

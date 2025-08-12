@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.attachments.preview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,8 +31,6 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -58,7 +55,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     private val mediaSender: MediaSender,
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
-    private val featureFlagService: FeatureFlagService,
     private val mediaOptimizationSelectorPresenterFactory: MediaOptimizationSelectorPresenter.Factory,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
@@ -86,14 +82,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
-        val allowCaption by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionCreation)
-        }.collectAsState(initial = false)
-        val showCaptionCompatibilityWarning by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionWarning)
-        }.collectAsState(initial = false)
-
-        var useSendQueue by remember { mutableStateOf(false) }
         var preprocessMediaJob by remember { mutableStateOf<Job?>(null) }
 
         val mediaAttachment = attachment as Attachment.Media
@@ -105,10 +93,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         val observableSendState = snapshotFlow { sendActionState.value }
 
         var displayFileTooLargeError by remember { mutableStateOf(false) }
-
-        LaunchedEffect(Unit) {
-            useSendQueue = featureFlagService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
-        }
 
         LaunchedEffect(mediaOptimizationSelectorState.displayMediaSelectorViews) {
             // If the media optimization selector is not displayed, we can pre-process the media
@@ -182,18 +166,17 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                             .takeIf { it.isNotEmpty() }
 
                         // If we're supposed to send the media as a background job, we can dismiss this screen already
-                        if (useSendQueue && coroutineContext.isActive) {
+                        if (coroutineContext.isActive) {
                             onDoneListener()
                         }
 
-                        // If using the send queue, send it using the session coroutine scope so it doesn't matter if this screen or the chat one are closed
-                        val sendMediaCoroutineScope = if (useSendQueue) sessionCoroutineScope else coroutineScope
-                        sendMediaCoroutineScope.launch(dispatchers.io) {
+                        // Send the media using the session coroutine scope so it doesn't matter if this screen or the chat one are closed
+                        sessionCoroutineScope.launch(dispatchers.io) {
                             sendPreProcessedMedia(
                                 mediaUploadInfo = mediaUploadInfo,
                                 caption = caption,
                                 sendActionState = sendActionState,
-                                dismissAfterSend = !useSendQueue,
+                                dismissAfterSend = false,
                                 inReplyToEventId = null,
                             )
 
@@ -238,8 +221,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             attachment = attachment,
             sendActionState = sendActionState.value,
             textEditorState = textEditorState,
-            allowCaption = allowCaption,
-            showCaptionCompatibilityWarning = showCaptionCompatibilityWarning,
             mediaOptimizationSelectorState = mediaOptimizationSelectorState,
             displayFileTooLargeError = displayFileTooLargeError,
             eventSink = ::handleEvents

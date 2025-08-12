@@ -17,8 +17,6 @@ data class AttachmentsPreviewState(
     val attachment: Attachment,
     val sendActionState: SendActionState,
     val textEditorState: TextEditorState,
-    val allowCaption: Boolean,
-    val showCaptionCompatibilityWarning: Boolean,
     val mediaOptimizationSelectorState: MediaOptimizationSelectorState,
     val displayFileTooLargeError: Boolean,
     val eventSink: (AttachmentsPreviewEvents) -> Unit

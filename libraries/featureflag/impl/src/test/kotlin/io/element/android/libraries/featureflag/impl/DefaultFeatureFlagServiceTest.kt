@@ -19,8 +19,8 @@ class DefaultFeatureFlagServiceTest {
     fun `given service without provider when feature is checked then it returns the default value`() = runTest {
         val buildMeta = aBuildMeta()
         val featureFlagService = DefaultFeatureFlagService(emptySet(), buildMeta)
-        featureFlagService.isFeatureEnabledFlow(FeatureFlags.LocationSharing).test {
-            assertThat(awaitItem()).isEqualTo(FeatureFlags.LocationSharing.defaultValue(buildMeta))
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.Space).test {
+            assertThat(awaitItem()).isEqualTo(FeatureFlags.Space.defaultValue(buildMeta))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -28,7 +28,7 @@ class DefaultFeatureFlagServiceTest {
     @Test
     fun `given service without provider when set enabled feature is called then it returns false`() = runTest {
         val featureFlagService = DefaultFeatureFlagService(emptySet(), aBuildMeta())
-        val result = featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, true)
+        val result = featureFlagService.setFeatureEnabled(FeatureFlags.Space, true)
         assertThat(result).isFalse()
     }
 
@@ -37,7 +37,7 @@ class DefaultFeatureFlagServiceTest {
         val buildMeta = aBuildMeta()
         val featureFlagProvider = FakeMutableFeatureFlagProvider(0, buildMeta)
         val featureFlagService = DefaultFeatureFlagService(setOf(featureFlagProvider), buildMeta)
-        val result = featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, true)
+        val result = featureFlagService.setFeatureEnabled(FeatureFlags.Space, true)
         assertThat(result).isTrue()
     }
 
@@ -46,10 +46,10 @@ class DefaultFeatureFlagServiceTest {
         val buildMeta = aBuildMeta()
         val featureFlagProvider = FakeMutableFeatureFlagProvider(0, buildMeta)
         val featureFlagService = DefaultFeatureFlagService(setOf(featureFlagProvider), buildMeta)
-        featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, true)
-        featureFlagService.isFeatureEnabledFlow(FeatureFlags.LocationSharing).test {
+        featureFlagService.setFeatureEnabled(FeatureFlags.Space, true)
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.Space).test {
             assertThat(awaitItem()).isTrue()
-            featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, false)
+            featureFlagService.setFeatureEnabled(FeatureFlags.Space, false)
             assertThat(awaitItem()).isFalse()
         }
     }
@@ -60,9 +60,9 @@ class DefaultFeatureFlagServiceTest {
         val lowPriorityFeatureFlagProvider = FakeMutableFeatureFlagProvider(LOW_PRIORITY, buildMeta)
         val highPriorityFeatureFlagProvider = FakeMutableFeatureFlagProvider(HIGH_PRIORITY, buildMeta)
         val featureFlagService = DefaultFeatureFlagService(setOf(lowPriorityFeatureFlagProvider, highPriorityFeatureFlagProvider), buildMeta)
-        lowPriorityFeatureFlagProvider.setFeatureEnabled(FeatureFlags.LocationSharing, false)
-        highPriorityFeatureFlagProvider.setFeatureEnabled(FeatureFlags.LocationSharing, true)
-        featureFlagService.isFeatureEnabledFlow(FeatureFlags.LocationSharing).test {
+        lowPriorityFeatureFlagProvider.setFeatureEnabled(FeatureFlags.Space, false)
+        highPriorityFeatureFlagProvider.setFeatureEnabled(FeatureFlags.Space, true)
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.Space).test {
             assertThat(awaitItem()).isTrue()
         }
     }
