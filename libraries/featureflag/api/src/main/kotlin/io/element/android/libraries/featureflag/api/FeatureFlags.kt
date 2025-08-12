@@ -96,13 +96,6 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    MediaGallery(
-        key = "feature.media_gallery",
-        title = "Allow user to open the media gallery",
-        description = null,
-        defaultValue = { true },
-        isFinished = false,
-    ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
         title = "Print logs to logcat",

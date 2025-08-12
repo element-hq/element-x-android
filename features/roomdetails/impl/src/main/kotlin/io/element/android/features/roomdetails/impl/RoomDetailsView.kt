@@ -244,11 +244,9 @@ fun RoomDetailsView(
                 PollsItem(
                     openPollHistory = openPollHistory
                 )
-                if (state.canShowMediaGallery) {
-                    MediaGalleryItem(
-                        onClick = openMediaGallery
-                    )
-                }
+                MediaGalleryItem(
+                    onClick = openMediaGallery
+                )
             }
 
             if (state.roomType is RoomDetailsType.Dm && state.roomMemberDetailsState != null) {

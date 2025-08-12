@@ -39,7 +39,6 @@ data class RoomDetailsState(
     val displayRolesAndPermissionsSettings: Boolean,
     val isPublic: Boolean,
     val heroes: ImmutableList<MatrixUser>,
-    val canShowMediaGallery: Boolean,
     val pinnedMessagesCount: Int?,
     val snackbarMessage: SnackbarMessage?,
     val canShowKnockRequests: Boolean,

@@ -86,10 +86,6 @@ class RoomDetailsPresenter @Inject constructor(
 
         val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
 
-        val canShowMediaGallery by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaGallery)
-        }.collectAsState(false)
-
         LaunchedEffect(Unit) {
             room.updateRoomNotificationSettings()
             observeNotificationSettings()
@@ -198,7 +194,6 @@ class RoomDetailsPresenter @Inject constructor(
             displayRolesAndPermissionsSettings = !isDm && isUserAdmin,
             isPublic = joinRule == JoinRule.Public,
             heroes = roomInfo.heroes.toPersistentList(),
-            canShowMediaGallery = canShowMediaGallery,
             pinnedMessagesCount = pinnedMessagesCount,
             snackbarMessage = snackbarMessage,
             canShowKnockRequests = canShowKnockRequests,
