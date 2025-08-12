@@ -185,7 +185,7 @@ fun RoomDetailsView(
             }
 
             PreferenceCategory {
-                if (state.canShowNotificationSettings && state.roomNotificationSettings != null) {
+                if (state.roomNotificationSettings != null) {
                     NotificationItem(
                         isDefaultMode = state.roomNotificationSettings.isDefault,
                         openRoomNotificationSettings = openRoomNotificationSettings
@@ -337,8 +337,7 @@ private fun MainActionsSection(
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        val roomNotificationSettings = state.roomNotificationSettings
-        if (state.canShowNotificationSettings && roomNotificationSettings != null) {
+        state.roomNotificationSettings?.let { roomNotificationSettings ->
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_unmute),

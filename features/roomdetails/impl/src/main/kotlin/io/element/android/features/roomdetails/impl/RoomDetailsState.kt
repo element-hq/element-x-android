@@ -32,7 +32,6 @@ data class RoomDetailsState(
     val roomMemberDetailsState: UserProfileState?,
     val canEdit: Boolean,
     val canInvite: Boolean,
-    val canShowNotificationSettings: Boolean,
     val roomCallState: RoomCallState,
     val leaveRoomState: LeaveRoomState,
     val roomNotificationSettings: RoomNotificationSettings?,

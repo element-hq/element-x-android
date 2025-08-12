@@ -79,7 +79,6 @@ class RoomDetailsPresenterTest {
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(
             mapOf(
-                FeatureFlags.NotificationSettings.key to true,
                 FeatureFlags.Knock.key to false,
             )
         ),

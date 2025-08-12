@@ -21,23 +21,10 @@ enum class FeatureFlags(
     override val defaultValue: (BuildMeta) -> Boolean,
     override val isFinished: Boolean,
 ) : Feature {
-    NotificationSettings(
-        key = "feature.notificationsettings",
-        title = "Show notification settings",
-        defaultValue = { true },
-        isFinished = true,
-    ),
     VoiceMessages(
         key = "feature.voicemessages",
         title = "Voice messages",
         description = "Send and receive voice messages",
-        defaultValue = { true },
-        isFinished = true,
-    ),
-    PinUnlock(
-        key = "feature.pinunlock",
-        title = "Pin unlock",
-        description = "Allow user to lock/unlock the app with a pin code or biometrics",
         defaultValue = { true },
         isFinished = true,
     ),

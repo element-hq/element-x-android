@@ -12,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -77,7 +76,6 @@ class RoomDetailsPresenter @Inject constructor(
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
-        val canShowNotificationSettings = remember { mutableStateOf(false) }
         val roomInfo by room.roomInfoFlow.collectAsState()
         val isUserAdmin = room.isOwnUserAdmin()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
@@ -96,11 +94,8 @@ class RoomDetailsPresenter @Inject constructor(
         }.collectAsState(false)
 
         LaunchedEffect(Unit) {
-            canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
-            if (canShowNotificationSettings.value) {
-                room.updateRoomNotificationSettings()
-                observeNotificationSettings()
-            }
+            room.updateRoomNotificationSettings()
+            observeNotificationSettings()
         }
 
         val membersState by room.membersStateFlow.collectAsState()
@@ -197,7 +192,6 @@ class RoomDetailsPresenter @Inject constructor(
             isEncrypted = isEncrypted,
             canInvite = canInvite,
             canEdit = (canEditAvatar || canEditName || canEditTopic) && roomType == RoomDetailsType.Room,
-            canShowNotificationSettings = canShowNotificationSettings.value,
             roomCallState = roomCallState,
             roomType = roomType,
             roomMemberDetailsState = roomMemberDetailsState,
