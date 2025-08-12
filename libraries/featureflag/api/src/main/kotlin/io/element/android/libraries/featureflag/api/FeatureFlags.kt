@@ -34,6 +34,13 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    SyncOnPush(
+        key = "feature.syncOnPush",
+        title = "Sync on push",
+        description = "Subscribe to room sync when a push is received",
+        defaultValue = { true },
+        isFinished = false,
+    ),
     OnlySignedDeviceIsolationMode(
         key = "feature.onlySignedDeviceIsolationMode",
         title = "Exclude insecure devices when sending/receiving messages",

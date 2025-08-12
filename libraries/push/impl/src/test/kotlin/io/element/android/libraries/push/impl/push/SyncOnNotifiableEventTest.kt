@@ -9,6 +9,8 @@ package io.element.android.libraries.push.impl.push
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -21,6 +23,7 @@ import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
+import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -57,13 +60,24 @@ class SyncOnNotifiableEventTest {
     private val notifiableEvent = aNotifiableMessageEvent()
     private val incomingCallNotifiableEvent = aNotifiableCallEvent()
 
+    @Test
+    fun `when feature flag is disabled, nothing happens`() = runTest {
+        val sut = createSyncOnNotifiableEvent(client = client, isSyncOnPushEnabled = false)
+
+        sut(listOf(notifiableEvent))
+
+        assert(startSyncLambda).isNeverCalled()
+        assert(stopSyncLambda).isNeverCalled()
+        assert(subscribeToSyncLambda).isNeverCalled()
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when feature flag is enabled, a ringing call waits until the room is in 'in-call' state`() = runTest {
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = false,
         )
-        val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService)
+        val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService, isSyncOnPushEnabled = true)
 
         val unlocked = AtomicBoolean(false)
         launch {
@@ -83,7 +97,7 @@ class SyncOnNotifiableEventTest {
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = false,
         )
-        val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService)
+        val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService, isSyncOnPushEnabled = true)
 
         val unlocked = AtomicBoolean(false)
         launch {
@@ -102,7 +116,7 @@ class SyncOnNotifiableEventTest {
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = false,
         )
-        val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService)
+        val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService, isSyncOnPushEnabled = true)
 
         appForegroundStateService.isSyncingNotificationEvent.test {
             syncService.emitSyncState(SyncState.Running)
@@ -124,7 +138,7 @@ class SyncOnNotifiableEventTest {
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = false,
         )
-        val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService)
+        val sut = createSyncOnNotifiableEvent(client = client, appForegroundStateService = appForegroundStateService, isSyncOnPushEnabled = true)
 
         appForegroundStateService.isSyncingNotificationEvent.test {
             launch { sut(listOf(notifiableEvent)) }
@@ -143,13 +157,20 @@ class SyncOnNotifiableEventTest {
 
     private fun TestScope.createSyncOnNotifiableEvent(
         client: MatrixClient = FakeMatrixClient(),
+        isSyncOnPushEnabled: Boolean = true,
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = true,
         ),
     ): SyncOnNotifiableEvent {
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(
+                FeatureFlags.SyncOnPush.key to isSyncOnPushEnabled
+            )
+        )
         val matrixClientProvider = FakeMatrixClientProvider { Result.success(client) }
         return SyncOnNotifiableEvent(
             matrixClientProvider = matrixClientProvider,
+            featureFlagService = featureFlagService,
             appForegroundStateService = appForegroundStateService,
             dispatchers = testCoroutineDispatchers(),
         )
