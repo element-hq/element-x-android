@@ -163,8 +163,7 @@ class RoomFlowNode @AssistedInject constructor(
                 else -> {
                     if (membership == CurrentUserMembership.LEFT && previousMembership == CurrentUserMembership.JOINED) {
                         // The user left the room in this device, remove the room from the backstack
-                        val lastLocalMembershipUpdate = membershipUpdateFlow.first()
-                        if (lastLocalMembershipUpdate.roomId == roomId && !lastLocalMembershipUpdate.isUserInRoom) {
+                        if (!membershipUpdateFlow.first().isUserInRoom) {
                             navigateUp()
                         }
                     } else {
