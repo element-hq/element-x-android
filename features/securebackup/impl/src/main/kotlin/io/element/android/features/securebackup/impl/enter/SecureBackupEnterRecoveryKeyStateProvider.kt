@@ -20,18 +20,21 @@ open class SecureBackupEnterRecoveryKeyStateProvider : PreviewParameterProvider<
             aSecureBackupEnterRecoveryKeyState(),
             aSecureBackupEnterRecoveryKeyState(submitAction = AsyncAction.Loading),
             aSecureBackupEnterRecoveryKeyState(submitAction = AsyncAction.Failure(Exception("A Failure"))),
+            aSecureBackupEnterRecoveryKeyState(displayTextFieldContents = false),
         )
 }
 
 fun aSecureBackupEnterRecoveryKeyState(
     recoveryKey: String = aFormattedRecoveryKey(),
     isSubmitEnabled: Boolean = recoveryKey.isNotEmpty(),
+    displayTextFieldContents: Boolean = true,
     submitAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (SecureBackupEnterRecoveryKeyEvents) -> Unit = {},
 ) = SecureBackupEnterRecoveryKeyState(
     recoveryKeyViewState = RecoveryKeyViewState(
         recoveryKeyUserStory = RecoveryKeyUserStory.Enter,
         formattedRecoveryKey = recoveryKey,
+        displayTextFieldContents = displayTextFieldContents,
         inProgress = submitAction.isLoading(),
     ),
     isSubmitEnabled = isSubmitEnabled,

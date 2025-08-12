@@ -10,6 +10,7 @@ package io.element.android.features.securebackup.impl.setup.views
 data class RecoveryKeyViewState(
     val recoveryKeyUserStory: RecoveryKeyUserStory,
     val formattedRecoveryKey: String?,
+    val displayTextFieldContents: Boolean,
     val inProgress: Boolean,
 )
 

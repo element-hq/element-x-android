@@ -33,6 +33,9 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
     @Composable
     override fun present(): SecureBackupEnterRecoveryKeyState {
         val coroutineScope = rememberCoroutineScope()
+        var displayRecoveryKeyFieldContents by rememberSaveable {
+            mutableStateOf(false)
+        }
         var recoveryKey by rememberSaveable {
             mutableStateOf("")
         }
@@ -59,6 +62,9 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
                     // No need to remove the spaces, the SDK will do it.
                     coroutineScope.submitRecoveryKey(recoveryKey, submitAction)
                 }
+                is SecureBackupEnterRecoveryKeyEvents.ChangeRecoveryKeyFieldContentsVisibility -> {
+                    displayRecoveryKeyFieldContents = event.visible
+                }
             }
         }
 
@@ -66,6 +72,7 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
             recoveryKeyViewState = RecoveryKeyViewState(
                 recoveryKeyUserStory = RecoveryKeyUserStory.Enter,
                 formattedRecoveryKey = recoveryKey,
+                displayTextFieldContents = displayRecoveryKeyFieldContents,
                 inProgress = submitAction.value.isLoading(),
             ),
             isSubmitEnabled = recoveryKey.isNotEmpty() && submitAction.value.isUninitialized(),
