@@ -67,6 +67,7 @@ internal class AndroidLocationActionsTest {
             accuracy = 0f
         )
         // Set a locale with comma as decimal separator
+        @Suppress("DEPRECATION")
         Locale.setDefault(Locale.Category.FORMAT, Locale("pt", "BR"))
 
         val actual = buildUrl(location, "(weird/stuff here)", ::urlEncoder)
