@@ -283,7 +283,7 @@ class RustMatrixClient(
     }
 
     override suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom? = withContext(sessionDispatcher) {
-        (roomFactory.getJoinedRoomOrPreview(roomId) as? GetRoomResult.Joined)?.joinedRoom
+        (roomFactory.getJoinedRoomOrPreview(roomId, emptyList()) as? GetRoomResult.Joined)?.joinedRoom
     }
 
     /**
@@ -481,7 +481,7 @@ class RustMatrixClient(
                 is RoomIdOrAlias.Alias -> {
                     val roomId = innerClient.resolveRoomAlias(roomIdOrAlias.roomAlias.value)?.roomId?.let { RoomId(it) }
 
-                    var room = (roomId?.let { roomFactory.getJoinedRoomOrPreview(it) } as? GetRoomResult.NotJoined)?.notJoinedRoom
+                    var room = (roomId?.let { roomFactory.getJoinedRoomOrPreview(it, serverNames) } as? GetRoomResult.NotJoined)?.notJoinedRoom
                     if (room == null) {
                         val preview = innerClient.getRoomPreviewFromRoomAlias(roomIdOrAlias.roomAlias.value)
                         room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()))
@@ -489,7 +489,7 @@ class RustMatrixClient(
                     room
                 }
                 is RoomIdOrAlias.Id -> {
-                    var room = (roomFactory.getJoinedRoomOrPreview(roomIdOrAlias.roomId) as? GetRoomResult.NotJoined)?.notJoinedRoom
+                    var room = (roomFactory.getJoinedRoomOrPreview(roomIdOrAlias.roomId, serverNames) as? GetRoomResult.NotJoined)?.notJoinedRoom
 
                     if (room == null) {
                         val preview = innerClient.getRoomPreviewFromRoomId(roomIdOrAlias.roomId.value, serverNames)

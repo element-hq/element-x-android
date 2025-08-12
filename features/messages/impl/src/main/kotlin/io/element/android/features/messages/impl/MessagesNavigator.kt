@@ -20,5 +20,5 @@ interface MessagesNavigator {
     fun onReportContentClick(eventId: EventId, senderId: UserId)
     fun onEditPollClick(eventId: EventId)
     fun onPreviewAttachment(attachments: ImmutableList<Attachment>)
-    fun onNavigateToRoom(roomId: RoomId)
+    fun onNavigateToRoom(roomId: RoomId, serverNames: List<String>)
 }

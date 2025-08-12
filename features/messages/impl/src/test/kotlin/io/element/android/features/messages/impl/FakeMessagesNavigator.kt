@@ -21,7 +21,7 @@ class FakeMessagesNavigator(
     private val onReportContentClickLambda: (eventId: EventId, senderId: UserId) -> Unit = { _, _ -> lambdaError() },
     private val onEditPollClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
     private val onPreviewAttachmentLambda: (attachments: ImmutableList<Attachment>) -> Unit = { _ -> lambdaError() },
-    private val onNavigateToRoomLambda: (roomId: RoomId) -> Unit = { _ -> lambdaError() }
+    private val onNavigateToRoomLambda: (roomId: RoomId, serverNames: List<String>) -> Unit = { _, _ -> lambdaError() }
 ) : MessagesNavigator {
     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
         onShowEventDebugInfoClickLambda(eventId, debugInfo)
@@ -43,7 +43,7 @@ class FakeMessagesNavigator(
         onPreviewAttachmentLambda(attachments)
     }
 
-    override fun onNavigateToRoom(roomId: RoomId) {
-        onNavigateToRoomLambda(roomId)
+    override fun onNavigateToRoom(roomId: RoomId, serverNames: List<String>) {
+        onNavigateToRoomLambda(roomId, serverNames)
     }
 }

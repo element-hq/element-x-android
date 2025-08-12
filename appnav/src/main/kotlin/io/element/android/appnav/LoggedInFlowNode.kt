@@ -335,8 +335,8 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             is NavTarget.Room -> {
                 val callback = object : JoinedRoomLoadedFlowNode.Callback {
-                    override fun onOpenRoom(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                    override fun onOpenRoom(roomId: RoomId, serverNames: List<String>) {
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), serverNames))
                     }
 
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
