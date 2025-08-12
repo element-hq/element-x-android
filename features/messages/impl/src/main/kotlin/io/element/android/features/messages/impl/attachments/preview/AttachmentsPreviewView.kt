@@ -363,10 +363,7 @@ private fun AttachmentsPreviewBottomActions(
         modifier = modifier,
         state = state.textEditorState,
         voiceMessageState = VoiceMessageState.Idle,
-        composerMode = MessageComposerMode.Attachment(
-            allowCaption = state.allowCaption,
-            showCaptionCompatibilityWarning = state.showCaptionCompatibilityWarning,
-        ),
+        composerMode = MessageComposerMode.Attachment,
         onRequestFocus = {},
         onSendMessage = onSendClick,
         showTextFormatting = false,

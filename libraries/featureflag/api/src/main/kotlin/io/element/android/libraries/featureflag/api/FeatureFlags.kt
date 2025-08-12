@@ -82,20 +82,6 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = true,
     ),
-    MediaCaptionCreation(
-        key = "feature.media_caption_creation",
-        title = "Allow creation of media captions",
-        description = null,
-        defaultValue = { true },
-        isFinished = false,
-    ),
-    MediaCaptionWarning(
-        key = "feature.media_caption_creation_warning",
-        title = "Show a compatibility warning on media captions creation",
-        description = null,
-        defaultValue = { true },
-        isFinished = false,
-    ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
         title = "Print logs to logcat",

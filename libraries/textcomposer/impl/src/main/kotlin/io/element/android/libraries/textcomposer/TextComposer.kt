@@ -140,8 +140,8 @@ fun TextComposer(
     }
 
     val layoutModifier = modifier
-        .fillMaxSize()
-        .height(IntrinsicSize.Min)
+            .fillMaxSize()
+            .height(IntrinsicSize.Min)
 
     val composerOptionsButton: @Composable () -> Unit = remember(composerMode) {
         @Composable {
@@ -170,22 +170,17 @@ fun TextComposer(
     } else {
         stringResource(id = R.string.rich_text_editor_composer_placeholder)
     }
-    val textInput: @Composable () -> Unit = if ((composerMode as? MessageComposerMode.Attachment)?.allowCaption == false) {
-        {
-            // No text input when in attachment mode and caption not allowed.
-        }
-    } else {
-        when (state) {
-            is TextEditorState.Rich -> {
-                val coroutineScope = rememberCoroutineScope()
-                val view = LocalView.current
-                remember(state.richTextEditorState, composerMode, onResetComposerMode, onError) {
-                    @Composable {
-                        TextInputBox(
-                            modifier = Modifier
+    val textInput: @Composable () -> Unit = when (state) {
+        is TextEditorState.Rich -> {
+            val coroutineScope = rememberCoroutineScope()
+            val view = LocalView.current
+            remember(state.richTextEditorState, composerMode, onResetComposerMode, onError) {
+                @Composable {
+                    TextInputBox(
+                        modifier = Modifier
                                 .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null,
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = null,
                                 ) {
                                     coroutineScope.launch {
                                         state.requestFocus()
@@ -195,46 +190,45 @@ fun TextComposer(
                                 .semantics {
                                     hideFromAccessibility()
                                 },
-                            composerMode = composerMode,
-                            onResetComposerMode = onResetComposerMode,
-                            isTextEmpty = state.richTextEditorState.messageHtml.isEmpty(),
-                        ) {
-                            RichTextEditor(
-                                state = state.richTextEditorState,
-                                placeholder = placeholder,
-                                registerStateUpdates = true,
-                                modifier = Modifier
+                        composerMode = composerMode,
+                        onResetComposerMode = onResetComposerMode,
+                        isTextEmpty = state.richTextEditorState.messageHtml.isEmpty(),
+                    ) {
+                        RichTextEditor(
+                            state = state.richTextEditorState,
+                            placeholder = placeholder,
+                            registerStateUpdates = true,
+                            modifier = Modifier
                                     .padding(top = 6.dp, bottom = 6.dp)
                                     .fillMaxWidth(),
-                                style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.richTextEditorState.hasFocus),
-                                resolveMentionDisplay = resolveMentionDisplay,
-                                resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
-                                onError = onError,
-                                onRichContentSelected = onSelectRichContent,
-                                onTyping = onTyping,
-                            )
-                        }
+                            style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.richTextEditorState.hasFocus),
+                            resolveMentionDisplay = resolveMentionDisplay,
+                            resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
+                            onError = onError,
+                            onRichContentSelected = onSelectRichContent,
+                            onTyping = onTyping,
+                        )
                     }
                 }
             }
-            is TextEditorState.Markdown -> {
-                @Composable {
-                    val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus())
-                    TextInputBox(
-                        composerMode = composerMode,
-                        onResetComposerMode = onResetComposerMode,
-                        isTextEmpty = state.state.text.value().isEmpty(),
-                    ) {
-                        MarkdownTextInput(
-                            state = state.state,
-                            placeholder = placeholder,
-                            placeholderColor = ElementTheme.colors.textSecondary,
-                            onTyping = onTyping,
-                            onReceiveSuggestion = onReceiveSuggestion,
-                            richTextEditorStyle = style,
-                            onSelectRichContent = onSelectRichContent,
-                        )
-                    }
+        }
+        is TextEditorState.Markdown -> {
+            @Composable {
+                val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus())
+                TextInputBox(
+                    composerMode = composerMode,
+                    onResetComposerMode = onResetComposerMode,
+                    isTextEmpty = state.state.text.value().isEmpty(),
+                ) {
+                    MarkdownTextInput(
+                        state = state.state,
+                        placeholder = placeholder,
+                        placeholderColor = ElementTheme.colors.textSecondary,
+                        onTyping = onTyping,
+                        onReceiveSuggestion = onReceiveSuggestion,
+                        richTextEditorStyle = style,
+                        onSelectRichContent = onSelectRichContent,
+                    )
                 }
             }
         }
@@ -426,8 +420,8 @@ private fun StandardLayout(
                 if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
                     Box(
                         modifier = Modifier
-                            .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
-                            .size(48.dp),
+                                .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
+                                .size(48.dp),
                         contentAlignment = Alignment.Center,
                     ) {
                         voiceDeleteButton()
@@ -437,8 +431,8 @@ private fun StandardLayout(
                 }
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 8.dp, top = 8.dp)
-                        .weight(1f)
+                            .padding(bottom = 8.dp, top = 8.dp)
+                            .weight(1f)
                 ) {
                     voiceRecording()
                 }
@@ -451,17 +445,17 @@ private fun StandardLayout(
                 }
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 8.dp, top = 8.dp)
-                        .weight(1f)
+                            .padding(bottom = 8.dp, top = 8.dp)
+                            .weight(1f)
                 ) {
                     textInput()
                 }
             }
             Box(
                 Modifier
-                    .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                    .size(48.dp)
-                    .clearAndSetSemantics(endButtonA11y),
+                        .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                        .size(48.dp)
+                        .clearAndSetSemantics(endButtonA11y),
                 contentAlignment = Alignment.Center,
             ) {
                 endButton()
@@ -512,8 +506,8 @@ private fun TextFormattingLayout(
         }
         Box(
             modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 12.dp)
+                    .weight(1f)
+                    .padding(horizontal = 12.dp)
         ) {
             textInput()
         }
@@ -532,11 +526,11 @@ private fun TextFormattingLayout(
             }
             Box(
                 modifier = Modifier
-                    .padding(
-                        start = 14.dp,
-                        end = 6.dp,
-                    )
-                    .clearAndSetSemantics(endButtonA11y)
+                        .padding(
+                                start = 14.dp,
+                                end = 6.dp,
+                        )
+                        .clearAndSetSemantics(endButtonA11y)
             ) {
                 sendButton()
             }
@@ -558,12 +552,12 @@ private fun TextInputBox(
 
     Column(
         modifier = Modifier
-            .clip(roundedCorners)
-            .border(0.5.dp, borderColor, roundedCorners)
-            .background(color = bgColor)
-            .requiredHeightIn(min = 42.dp)
-            .fillMaxSize()
-            .then(modifier),
+                .clip(roundedCorners)
+                .border(0.5.dp, borderColor, roundedCorners)
+                .background(color = bgColor)
+                .requiredHeightIn(min = 42.dp)
+                .fillMaxSize()
+                .then(modifier),
     ) {
         if (composerMode is MessageComposerMode.Special) {
             ComposerModeView(
@@ -573,8 +567,8 @@ private fun TextInputBox(
         }
         Box(
             modifier = Modifier
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                .then(Modifier.testTag(TestTags.textEditor)),
+                    .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
+                    .then(Modifier.testTag(TestTags.textEditor)),
             contentAlignment = Alignment.CenterStart,
         ) {
             textInput()
@@ -582,9 +576,9 @@ private fun TextInputBox(
                 var showBottomSheet by remember { mutableStateOf(false) }
                 Icon(
                     modifier = Modifier
-                        .clickable { showBottomSheet = true }
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                        .align(Alignment.CenterEnd),
+                            .clickable { showBottomSheet = true }
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                            .align(Alignment.CenterEnd),
                     imageVector = CompoundIcons.InfoSolid(),
                     tint = ElementTheme.colors.iconCriticalPrimary,
                     contentDescription = null,
@@ -626,7 +620,7 @@ private fun aTextEditorStateRichList(isRoomEncrypted: Boolean? = null) = persist
 internal fun TextComposerSimplePreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateMarkdownList()
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -640,7 +634,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
 internal fun TextComposerSimpleNotEncryptedPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateMarkdownList(isRoomEncrypted = false),
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -654,7 +648,7 @@ internal fun TextComposerSimpleNotEncryptedPreview() = ElementPreview {
 internal fun TextComposerFormattingPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList()
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -669,7 +663,7 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
 internal fun TextComposerFormattingNotEncryptedPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList(isRoomEncrypted = false)
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -684,7 +678,7 @@ internal fun TextComposerFormattingNotEncryptedPreview() = ElementPreview {
 internal fun TextComposerEditPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList()
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -698,7 +692,7 @@ internal fun TextComposerEditPreview() = ElementPreview {
 internal fun TextComposerEditNotEncryptedPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList(isRoomEncrypted = false)
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -712,7 +706,7 @@ internal fun TextComposerEditNotEncryptedPreview() = ElementPreview {
 internal fun TextComposerEditCaptionPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList()
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -729,14 +723,13 @@ internal fun TextComposerEditCaptionPreview() = ElementPreview {
 internal fun TextComposerAddCaptionPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList()
-    ) { index, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEditCaption(
                 // No caption so that the UI will be in add caption mode
                 content = "",
-                showCompatibilityWarning = index == 0,
             ),
         )
     }
@@ -747,7 +740,7 @@ internal fun TextComposerAddCaptionPreview() = ElementPreview {
 internal fun MarkdownTextComposerEditPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateMarkdownList()
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -761,7 +754,7 @@ internal fun MarkdownTextComposerEditPreview() = ElementPreview {
 internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList()
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -785,7 +778,7 @@ internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider
 internal fun TextComposerReplyNotEncryptedPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList(isRoomEncrypted = false)
-    ) { _, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
@@ -802,14 +795,11 @@ internal fun TextComposerCaptionPreview() = ElementPreview {
     val list = aTextEditorStateMarkdownList()
     PreviewColumn(
         items = (list + aTextEditorStateMarkdown(initialText = "NO_CAPTION", initialFocus = true)).toPersistentList()
-    ) { index, textEditorState ->
+    ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Attachment(
-                allowCaption = index < list.size,
-                showCaptionCompatibilityWarning = index == 0,
-            ),
+            composerMode = MessageComposerMode.Attachment,
         )
     }
 }
@@ -845,7 +835,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 playbackProgress = 0.0f
             ),
         )
-    ) { _, voiceMessageState ->
+    ) { voiceMessageState ->
         ATextComposer(
             state = aTextEditorStateRich(initialFocus = true),
             voiceMessageState = voiceMessageState,
@@ -885,7 +875,7 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
                 playbackProgress = 0.0f
             ),
         )
-    ) { _, voiceMessageState ->
+    ) { voiceMessageState ->
         ATextComposer(
             state = aTextEditorStateRich(initialFocus = true, isRoomEncrypted = false),
             voiceMessageState = voiceMessageState,
@@ -897,15 +887,15 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
 @Composable
 private fun <T> PreviewColumn(
     items: ImmutableList<T>,
-    view: @Composable (Int, T) -> Unit,
+    view: @Composable (T) -> Unit,
 ) {
     Column {
-        items.forEachIndexed { index, item ->
+        items.forEach { item ->
             HorizontalDivider()
             Box(
                 modifier = Modifier.height(IntrinsicSize.Min)
             ) {
-                view(index, item)
+                view(item)
             }
         }
     }
@@ -952,11 +942,9 @@ fun aMessageComposerModeEdit(
 fun aMessageComposerModeEditCaption(
     eventOrTransactionId: EventOrTransactionId = EventId("$1234").toEventOrTransactionId(),
     content: String,
-    showCompatibilityWarning: Boolean = false,
 ) = MessageComposerMode.EditCaption(
     eventOrTransactionId = eventOrTransactionId,
     content = content,
-    showCaptionCompatibilityWarning = showCompatibilityWarning,
 )
 
 fun aMessageComposerModeReply(

@@ -27,8 +27,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -591,57 +589,6 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.AddCaption,
-                        TimelineItemAction.CopyLink,
-                        TimelineItemAction.Pin,
-                        TimelineItemAction.ViewSource,
-                        TimelineItemAction.Redact,
-                    )
-                )
-            )
-            initialState.eventSink.invoke(ActionListEvents.Clear)
-            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
-        }
-    }
-
-    @Test
-    fun `present - compute for a media item - caption disabled`() = runTest {
-        val presenter = createActionListPresenter(
-            isDeveloperModeEnabled = true,
-            allowCaption = false,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            val messageEvent = aMessageEvent(
-                isMine = true,
-                isEditable = true,
-                content = aTimelineItemImageContent(),
-            )
-            initialState.eventSink.invoke(
-                ActionListEvents.ComputeForMessage(
-                    event = messageEvent,
-                    userEventPermissions = aUserEventPermissions(
-                        canRedactOwn = true,
-                        canRedactOther = false,
-                        canSendMessage = true,
-                        canSendReaction = true,
-                        canPinUnpin = true,
-                    ),
-                )
-            )
-            val successState = awaitItem()
-            assertThat(successState.target).isEqualTo(
-                ActionListState.Target.Success(
-                    event = messageEvent,
-                    sentTimeFull = "0 Full true",
-                    displayEmojiReactions = true,
-                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
-                    actions = persistentListOf(
-                        TimelineItemAction.Reply,
-                        TimelineItemAction.Forward,
-                        // Not here
-                        // TimelineItemAction.AddCaption,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.ViewSource,
@@ -1298,7 +1245,6 @@ class ActionListPresenterTest {
 private fun createActionListPresenter(
     isDeveloperModeEnabled: Boolean,
     room: BaseRoom = FakeBaseRoom(),
-    allowCaption: Boolean = true,
 ): ActionListPresenter {
     val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
     return DefaultActionListPresenter(
@@ -1306,11 +1252,6 @@ private fun createActionListPresenter(
         appPreferencesStore = preferencesStore,
         room = room,
         userSendFailureFactory = VerifiedUserSendFailureFactory(room),
-        featureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(
-                FeatureFlags.MediaCaptionCreation.key to allowCaption,
-            ),
-        ),
         dateFormatter = FakeDateFormatter(),
     )
 }

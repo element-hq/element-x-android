@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.attachments.preview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,13 +84,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         )
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
-
-        val allowCaption by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionCreation)
-        }.collectAsState(initial = false)
-        val showCaptionCompatibilityWarning by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionWarning)
-        }.collectAsState(initial = false)
 
         var useSendQueue by remember { mutableStateOf(false) }
         var preprocessMediaJob by remember { mutableStateOf<Job?>(null) }
@@ -238,8 +230,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             attachment = attachment,
             sendActionState = sendActionState.value,
             textEditorState = textEditorState,
-            allowCaption = allowCaption,
-            showCaptionCompatibilityWarning = showCaptionCompatibilityWarning,
             mediaOptimizationSelectorState = mediaOptimizationSelectorState,
             displayFileTooLargeError = displayFileTooLargeError,
             eventSink = ::handleEvents

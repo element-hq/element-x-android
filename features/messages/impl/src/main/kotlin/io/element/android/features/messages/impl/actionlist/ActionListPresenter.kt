@@ -39,8 +39,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -63,7 +61,6 @@ class DefaultActionListPresenter @AssistedInject constructor(
     private val appPreferencesStore: AppPreferencesStore,
     private val room: BaseRoom,
     private val userSendFailureFactory: VerifiedUserSendFailureFactory,
-    private val featureFlagService: FeatureFlagService,
     private val dateFormatter: DateFormatter,
 ) : ActionListPresenter {
     @AssistedFactory
@@ -166,9 +163,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
                 if (timelineItem.content is TimelineItemEventContentWithAttachment) {
                     // Caption
                     if (timelineItem.content.caption == null) {
-                        if (featureFlagService.isFeatureEnabled(FeatureFlags.MediaCaptionCreation)) {
-                            add(TimelineItemAction.AddCaption)
-                        }
+                        add(TimelineItemAction.AddCaption)
                     } else {
                         add(TimelineItemAction.EditCaption)
                         add(TimelineItemAction.RemoveCaption)
