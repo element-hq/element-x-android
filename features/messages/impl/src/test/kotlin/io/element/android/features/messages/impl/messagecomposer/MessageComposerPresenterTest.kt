@@ -32,9 +32,6 @@ import io.element.android.features.messages.impl.utils.FakeTextPillificationHelp
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -125,9 +122,6 @@ class MessageComposerPresenterTest {
     private val pickerProvider = FakePickerProvider().apply {
         givenResult(mockk()) // Uri is not available in JVM, so the only way to have a non-null Uri is using Mockk
     }
-    private val featureFlagService = FakeFeatureFlagService(
-        mapOf(FeatureFlags.LocationSharing.key to true)
-    )
     private val mediaPreProcessor = FakeMediaPreProcessor()
     private val snackbarDispatcher = SnackbarDispatcher()
     private val mockMediaUrl: Uri = mockk("localMediaUri")
@@ -1529,7 +1523,6 @@ class MessageComposerPresenterTest {
         ),
         navigator: MessagesNavigator = FakeMessagesNavigator(),
         pickerProvider: PickerProvider = this@MessageComposerPresenterTest.pickerProvider,
-        featureFlagService: FeatureFlagService = this@MessageComposerPresenterTest.featureFlagService,
         locationService: LocationService = FakeLocationService(true),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreProcessor: MediaPreProcessor = this@MessageComposerPresenterTest.mediaPreProcessor,
@@ -1551,7 +1544,6 @@ class MessageComposerPresenterTest {
         sessionCoroutineScope = this,
         room = room,
         mediaPickerProvider = pickerProvider,
-        featureFlagService = featureFlagService,
         sessionPreferencesStore = sessionPreferencesStore,
         localMediaFactory = localMediaFactory,
         mediaSender = MediaSender(

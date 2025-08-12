@@ -21,19 +21,6 @@ enum class FeatureFlags(
     override val defaultValue: (BuildMeta) -> Boolean,
     override val isFinished: Boolean,
 ) : Feature {
-    LocationSharing(
-        key = "feature.locationsharing",
-        title = "Allow user to share location",
-        defaultValue = { true },
-        isFinished = true,
-    ),
-    Polls(
-        key = "feature.polls",
-        title = "Polls",
-        description = "Create poll and render poll events in the timeline",
-        defaultValue = { true },
-        isFinished = true,
-    ),
     NotificationSettings(
         key = "feature.notificationsettings",
         title = "Show notification settings",

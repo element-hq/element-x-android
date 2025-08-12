@@ -70,7 +70,7 @@ internal fun TestScope.aTimelineItemsFactory(
                             fileSizeFormatter = FakeFileSizeFormatter(),
                             fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
                         ),
-                        pollFactory = TimelineItemContentPollFactory(FakeFeatureFlagService(), FakePollContentStateFactory()),
+                        pollFactory = TimelineItemContentPollFactory(FakePollContentStateFactory()),
                         utdFactory = TimelineItemContentUTDFactory(),
                         roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
                         profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
