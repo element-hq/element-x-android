@@ -147,14 +147,6 @@
                 <data android:host="user" />
                 <data android:host="room" />
             </intent-filter>
-        </activity>
-
-        <!-- Using an activity-alias for incoming share intent, in order
-        to be able to disable the feature programmatically -->
-        <activity-alias
-            android:name=".ShareActivity"
-            android:exported="true"
-            android:targetActivity=".MainActivity">
             <!-- Incoming share simple -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -171,7 +163,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.OPENABLE" />
             </intent-filter>
-        </activity-alias>
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

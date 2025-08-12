@@ -82,13 +82,6 @@ enum class FeatureFlags(
         defaultValue = { OnBoardingConfig.CAN_LOGIN_WITH_QR_CODE },
         isFinished = false,
     ),
-    IncomingShare(
-        key = "feature.incomingShare",
-        title = "Incoming Share support",
-        description = "Allow the application to receive data from other applications",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     PinnedEvents(
         key = "feature.pinnedEvents",
         title = "Pinned Events",
