@@ -98,7 +98,7 @@ class RustRoomFactory(
         )
     }
 
-    suspend fun getJoinedRoomOrPreview(roomId: RoomId): GetRoomResult? = withContext(dispatcher) {
+    suspend fun getJoinedRoomOrPreview(roomId: RoomId, serverNames: List<String>): GetRoomResult? = withContext(dispatcher) {
         mutex.withLock {
             if (isDestroyed.get()) {
                 Timber.d("Room factory is destroyed, returning null for $roomId")
@@ -132,7 +132,7 @@ class RustRoomFactory(
                 )
             } else {
                 val preview = try {
-                    sdkRoom.previewRoom(via = emptyList())
+                    sdkRoom.previewRoom(via = serverNames)
                 } catch (e: Exception) {
                     Timber.e(e, "Failed to get room preview for $roomId")
                     return@withContext null

@@ -753,7 +753,7 @@ class TimelinePresenterTest {
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
             ),
         )
-        val onNavigateToRoomLambda = lambdaRecorder<RoomId, Unit> {}
+        val onNavigateToRoomLambda = lambdaRecorder<RoomId, List<String>, Unit> { _, _ -> }
         val navigator = FakeMessagesNavigator(
             onNavigateToRoomLambda = onNavigateToRoomLambda
         )
@@ -764,7 +764,8 @@ class TimelinePresenterTest {
             assert(onNavigateToRoomLambda)
                 .isCalledOnce()
                 .with(
-                    value(A_ROOM_ID)
+                    value(A_ROOM_ID),
+                    value(emptyList<String>())
                 )
         }
     }

@@ -38,6 +38,7 @@ import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.takeAtMost
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
@@ -179,7 +180,14 @@ class TimelinePresenter @AssistedInject constructor(
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvents.ComputeForMessage(event.event))
                 }
                 is TimelineEvents.NavigateToRoom -> {
-                    navigator.onNavigateToRoom(event.roomId)
+                    // Workaround for not having the server names available, get possible server names from the user ids of the room members
+                    val serverNames = room.membersStateFlow.value.roomMembers()
+                        .orEmpty()
+                        .takeAtMost(1_000)
+                        .mapNotNull { it.userId.domainName }
+                        .distinct()
+
+                    navigator.onNavigateToRoom(event.roomId, serverNames)
                 }
             }
         }

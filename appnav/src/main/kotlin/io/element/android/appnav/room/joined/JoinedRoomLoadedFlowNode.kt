@@ -69,7 +69,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     plugins = plugins,
 ), DaggerComponentOwner {
     interface Callback : Plugin {
-        fun onOpenRoom(roomId: RoomId)
+        fun onOpenRoom(roomId: RoomId, serverNames: List<String>)
         fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun onForwardedToSingleRoom(roomId: RoomId)
         fun onOpenGlobalNotificationSettings()
@@ -121,8 +121,8 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
                 callbacks.forEach { it.onOpenGlobalNotificationSettings() }
             }
 
-            override fun onOpenRoom(roomId: RoomId) {
-                callbacks.forEach { it.onOpenRoom(roomId) }
+            override fun onOpenRoom(roomId: RoomId, serverNames: List<String>) {
+                callbacks.forEach { it.onOpenRoom(roomId, serverNames) }
             }
 
             override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {

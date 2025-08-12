@@ -270,7 +270,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     }
 
                     override fun onStartDM(roomId: RoomId) {
-                        plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
+                        plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId, emptyList()) }
                     }
 
                     override fun onStartCall(dmRoomId: RoomId) {

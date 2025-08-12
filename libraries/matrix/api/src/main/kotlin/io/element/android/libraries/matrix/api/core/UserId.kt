@@ -29,4 +29,7 @@ value class UserId(val value: String) : Serializable {
         get() = value
             .removePrefix("@")
             .substringBefore(":")
+
+    val domainName: String?
+        get() = value.substringAfter(":")
 }
