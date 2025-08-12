@@ -32,6 +32,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -102,7 +103,7 @@ class PreferencesRootPresenterTest {
         )
         createPresenter(
             matrixClient = matrixClient,
-            rageshakeFeatureAvailability = { false },
+            rageshakeFeatureAvailability = { flowOf(false) },
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.canReportBug).isFalse()
@@ -119,7 +120,7 @@ class PreferencesRootPresenterTest {
         val indicatorService = FakeIndicatorService()
         createPresenter(
             matrixClient = matrixClient,
-            rageshakeFeatureAvailability = { false },
+            rageshakeFeatureAvailability = { flowOf(false) },
             indicatorService = indicatorService,
         ).test {
             skipItems(1)
@@ -185,7 +186,7 @@ class PreferencesRootPresenterTest {
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
         showDeveloperSettingsProvider: ShowDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.DEBUG)),
-        rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { true },
+        rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { flowOf(true) },
         indicatorService: IndicatorService = FakeIndicatorService(),
     ) = PreferencesRootPresenter(
         matrixClient = matrixClient,

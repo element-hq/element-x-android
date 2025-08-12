@@ -5,9 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.login.impl.resolver.network
+package io.element.android.libraries.wellknown.impl
 
-import io.element.android.libraries.core.bool.orFalse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -26,13 +25,9 @@ import kotlinx.serialization.Serializable
  * .
  */
 @Serializable
-data class WellKnown(
+data class InternalWellKnown(
     @SerialName("m.homeserver")
-    val homeServer: WellKnownBaseConfig? = null,
+    val homeServer: InternalWellKnownBaseConfig? = null,
     @SerialName("m.identity_server")
-    val identityServer: WellKnownBaseConfig? = null,
-) {
-    fun isValid(): Boolean {
-        return homeServer?.baseURL?.isNotBlank().orFalse()
-    }
-}
+    val identityServer: InternalWellKnownBaseConfig? = null,
+)
