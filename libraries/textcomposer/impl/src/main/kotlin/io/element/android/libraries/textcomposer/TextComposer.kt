@@ -101,7 +101,6 @@ fun TextComposer(
     state: TextEditorState,
     voiceMessageState: VoiceMessageState,
     composerMode: MessageComposerMode,
-    enableVoiceMessages: Boolean,
     onRequestFocus: () -> Unit,
     onSendMessage: () -> Unit,
     onResetComposerMode: () -> Unit,
@@ -273,7 +272,7 @@ fun TextComposer(
     }
 
     val sendOrRecordButton = when {
-        enableVoiceMessages && !canSendMessage ->
+        !canSendMessage ->
             when (voiceMessageState) {
                 VoiceMessageState.Idle,
                 is VoiceMessageState.Recording -> recordVoiceButton
@@ -288,7 +287,6 @@ fun TextComposer(
     val endButtonA11y = endButtonA11y(
         composerMode = composerMode,
         voiceMessageState = voiceMessageState,
-        enableVoiceMessages = enableVoiceMessages,
         canSendMessage = canSendMessage,
     )
 
@@ -341,7 +339,6 @@ fun TextComposer(
     } else {
         StandardLayout(
             voiceMessageState = voiceMessageState,
-            enableVoiceMessages = enableVoiceMessages,
             isRoomEncrypted = state.isRoomEncrypted,
             modifier = layoutModifier,
             composerOptionsButton = composerOptionsButton,
@@ -378,12 +375,11 @@ fun TextComposer(
 private fun endButtonA11y(
     composerMode: MessageComposerMode,
     voiceMessageState: VoiceMessageState,
-    enableVoiceMessages: Boolean,
     canSendMessage: Boolean,
 ): (SemanticsPropertyReceiver) -> Unit {
     val a11ySendButtonDescription = stringResource(
         id = when {
-            enableVoiceMessages && !canSendMessage ->
+            !canSendMessage ->
                 when (voiceMessageState) {
                     VoiceMessageState.Idle,
                     is VoiceMessageState.Recording -> if (voiceMessageState is VoiceMessageState.Recording) {
@@ -410,7 +406,6 @@ private fun endButtonA11y(
 @Composable
 private fun StandardLayout(
     voiceMessageState: VoiceMessageState,
-    enableVoiceMessages: Boolean,
     isRoomEncrypted: Boolean?,
     textInput: @Composable () -> Unit,
     composerOptionsButton: @Composable () -> Unit,
@@ -427,7 +422,7 @@ private fun StandardLayout(
             Spacer(Modifier.height(4.dp))
         }
         Row(verticalAlignment = Alignment.Bottom) {
-            if (enableVoiceMessages && voiceMessageState !is VoiceMessageState.Idle) {
+            if (voiceMessageState !is VoiceMessageState.Idle) {
                 if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
                     Box(
                         modifier = Modifier
@@ -636,7 +631,6 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = MessageComposerMode.Normal,
-            enableVoiceMessages = true,
         )
     }
 }
@@ -651,7 +645,6 @@ internal fun TextComposerSimpleNotEncryptedPreview() = ElementPreview {
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = MessageComposerMode.Normal,
-            enableVoiceMessages = true,
         )
     }
 }
@@ -667,7 +660,6 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             voiceMessageState = VoiceMessageState.Idle,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
-            enableVoiceMessages = true,
         )
     }
 }
@@ -683,7 +675,6 @@ internal fun TextComposerFormattingNotEncryptedPreview() = ElementPreview {
             voiceMessageState = VoiceMessageState.Idle,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
-            enableVoiceMessages = true,
         )
     }
 }
@@ -698,7 +689,6 @@ internal fun TextComposerEditPreview() = ElementPreview {
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEdit(),
-            enableVoiceMessages = true,
         )
     }
 }
@@ -713,7 +703,6 @@ internal fun TextComposerEditNotEncryptedPreview() = ElementPreview {
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEdit(),
-            enableVoiceMessages = true,
         )
     }
 }
@@ -731,7 +720,6 @@ internal fun TextComposerEditCaptionPreview() = ElementPreview {
                 // Set an existing caption so that the UI will be in edit caption mode
                 content = "An existing caption",
             ),
-            enableVoiceMessages = false,
         )
     }
 }
@@ -750,7 +738,6 @@ internal fun TextComposerAddCaptionPreview() = ElementPreview {
                 content = "",
                 showCompatibilityWarning = index == 0,
             ),
-            enableVoiceMessages = false,
         )
     }
 }
@@ -765,7 +752,6 @@ internal fun MarkdownTextComposerEditPreview() = ElementPreview {
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEdit(),
-            enableVoiceMessages = true,
         )
     }
 }
@@ -782,7 +768,6 @@ internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider
             composerMode = aMessageComposerModeReply(
                 replyToDetails = inReplyToDetails,
             ),
-            enableVoiceMessages = true,
         )
     }
 }
@@ -807,7 +792,6 @@ internal fun TextComposerReplyNotEncryptedPreview(@PreviewParameter(InReplyToDet
             composerMode = aMessageComposerModeReply(
                 replyToDetails = inReplyToDetails,
             ),
-            enableVoiceMessages = true,
         )
     }
 }
@@ -826,7 +810,6 @@ internal fun TextComposerCaptionPreview() = ElementPreview {
                 allowCaption = index < list.size,
                 showCaptionCompatibilityWarning = index == 0,
             ),
-            enableVoiceMessages = false,
         )
     }
 }
@@ -867,7 +850,6 @@ internal fun TextComposerVoicePreview() = ElementPreview {
             state = aTextEditorStateRich(initialFocus = true),
             voiceMessageState = voiceMessageState,
             composerMode = MessageComposerMode.Normal,
-            enableVoiceMessages = true,
         )
     }
 }
@@ -908,7 +890,6 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
             state = aTextEditorStateRich(initialFocus = true, isRoomEncrypted = false),
             voiceMessageState = voiceMessageState,
             composerMode = MessageComposerMode.Normal,
-            enableVoiceMessages = true,
         )
     }
 }
@@ -935,7 +916,6 @@ private fun ATextComposer(
     state: TextEditorState,
     voiceMessageState: VoiceMessageState,
     composerMode: MessageComposerMode,
-    enableVoiceMessages: Boolean,
     showTextFormatting: Boolean = false,
 ) {
     TextComposer(
@@ -943,7 +923,6 @@ private fun ATextComposer(
         showTextFormatting = showTextFormatting,
         voiceMessageState = voiceMessageState,
         composerMode = composerMode,
-        enableVoiceMessages = enableVoiceMessages,
         onRequestFocus = {},
         onSendMessage = {},
         onResetComposerMode = {},

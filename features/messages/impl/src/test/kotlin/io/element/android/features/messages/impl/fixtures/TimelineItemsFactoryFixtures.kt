@@ -30,7 +30,6 @@ import io.element.android.features.poll.test.pollcontent.FakePollContentStateFac
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -60,7 +59,6 @@ internal fun TestScope.aTimelineItemsFactory(
                         messageFactory = TimelineItemContentMessageFactory(
                             fileSizeFormatter = FakeFileSizeFormatter(),
                             fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-                            featureFlagService = FakeFeatureFlagService(),
                             htmlConverterProvider = FakeHtmlConverterProvider(),
                             permalinkParser = FakePermalinkParser(),
                             textPillificationHelper = FakeTextPillificationHelper(),

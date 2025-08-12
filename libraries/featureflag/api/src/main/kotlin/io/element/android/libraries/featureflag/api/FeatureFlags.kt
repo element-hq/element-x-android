@@ -21,13 +21,6 @@ enum class FeatureFlags(
     override val defaultValue: (BuildMeta) -> Boolean,
     override val isFinished: Boolean,
 ) : Feature {
-    VoiceMessages(
-        key = "feature.voicemessages",
-        title = "Voice messages",
-        description = "Send and receive voice messages",
-        defaultValue = { true },
-        isFinished = true,
-    ),
     MarkAsUnread(
         key = "feature.markAsUnread",
         title = "Mark as unread",

@@ -187,11 +187,6 @@ class MessagesPresenter @AssistedInject constructor(
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
-        var enableVoiceMessages by remember { mutableStateOf(false) }
-        LaunchedEffect(featureFlagsService) {
-            enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
-        }
-
         var dmUserVerificationState by remember { mutableStateOf<IdentityState?>(null) }
 
         val membersState by room.membersStateFlow.collectAsState()
@@ -261,7 +256,6 @@ class MessagesPresenter @AssistedInject constructor(
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
             enableTextFormatting = MessageComposerConfig.ENABLE_RICH_TEXT_EDITING,
-            enableVoiceMessages = enableVoiceMessages,
             appName = buildMeta.applicationName,
             roomCallState = roomCallState,
             pinnedMessagesBannerState = pinnedMessagesBannerState,
