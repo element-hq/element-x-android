@@ -8,8 +8,6 @@
 package io.element.android.libraries.push.impl.push
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.services.appnavstate.api.AppForegroundStateService
@@ -21,15 +19,10 @@ import kotlin.time.Duration.Companion.seconds
 
 class SyncOnNotifiableEvent @Inject constructor(
     private val matrixClientProvider: MatrixClientProvider,
-    private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
 ) {
     suspend operator fun invoke(notifiableEvents: List<NotifiableEvent>) = withContext(dispatchers.io) {
-        if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
-            return@withContext
-        }
-
         try {
             val eventsBySession = notifiableEvents.groupBy { it.sessionId }
 
