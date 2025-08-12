@@ -8,8 +8,6 @@
 package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -89,7 +87,6 @@ class RustTimeline(
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val roomContentForwarder: RoomContentForwarder,
-    private val featureFlagsService: FeatureFlagService,
     onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val _timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
@@ -342,7 +339,6 @@ class RustTimeline(
         progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
-        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendImage(
                 params = UploadParameters(
@@ -351,7 +347,7 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = useSendQueue,
+                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
@@ -371,7 +367,6 @@ class RustTimeline(
         progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
-        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendVideo(
                 params = UploadParameters(
@@ -380,7 +375,7 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = useSendQueue,
+                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
@@ -399,7 +394,6 @@ class RustTimeline(
         progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
-        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
             inner.sendAudio(
                 params = UploadParameters(
@@ -408,7 +402,7 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = useSendQueue,
+                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
@@ -426,7 +420,6 @@ class RustTimeline(
         progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
-        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
             inner.sendFile(
                 params = UploadParameters(
@@ -435,7 +428,7 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = useSendQueue,
+                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
@@ -489,7 +482,6 @@ class RustTimeline(
         progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
-        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
             inner.sendVoiceMessage(
                 params = UploadParameters(
@@ -497,7 +489,7 @@ class RustTimeline(
                     // Maybe allow a caption in the future?
                     caption = null,
                     formattedCaption = null,
-                    useSendQueue = useSendQueue,
+                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),

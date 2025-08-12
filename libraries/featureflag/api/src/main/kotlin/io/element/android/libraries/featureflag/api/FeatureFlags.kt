@@ -75,13 +75,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    MediaUploadOnSendQueue(
-        key = "feature.media_upload_through_send_queue",
-        title = "Media upload through send queue",
-        description = "Support for treating media uploads as regular events, with an improved retry and cancellation implementation.",
-        defaultValue = { true },
-        isFinished = true,
-    ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
         title = "Print logs to logcat",
