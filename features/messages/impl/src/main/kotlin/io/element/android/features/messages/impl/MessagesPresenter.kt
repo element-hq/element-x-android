@@ -145,9 +145,8 @@ class MessagesPresenter @AssistedInject constructor(
         val pinnedMessagesBannerState = pinnedMessagesBannerPresenter.present()
         val roomCallState = roomCallStatePresenter.present()
         val roomMemberModerationState = roomMemberModerationPresenter.present()
-        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
-        val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
+        val userEventPermissions by userEventPermissions(roomInfo)
 
         val roomAvatar by remember {
             derivedStateOf { roomInfo.avatarData() }
@@ -264,8 +263,13 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun userEventPermissions(updateKey: Long): State<UserEventPermissions> {
-        return produceState(UserEventPermissions.DEFAULT, key1 = updateKey) {
+    private fun userEventPermissions(roomInfo: RoomInfo): State<UserEventPermissions> {
+        val key = if (roomInfo.privilegedCreatorRole && roomInfo.creators.contains(room.sessionId)) {
+            Long.MAX_VALUE
+        } else {
+            roomInfo.roomPowerLevels?.hashCode() ?: 0L
+        }
+        return produceState(UserEventPermissions.DEFAULT, key1 = key) {
             value = UserEventPermissions(
                 canSendMessage = room.canSendMessage(type = MessageEventType.ROOM_MESSAGE).getOrElse { true },
                 canSendReaction = room.canSendMessage(type = MessageEventType.REACTION).getOrElse { true },

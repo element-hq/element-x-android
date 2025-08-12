@@ -44,6 +44,7 @@ interface Timeline : AutoCloseable {
         FOCUSED_ON_EVENT,
         PINNED_EVENTS,
         MEDIA,
+        THREADED,
     }
 
     val membershipChangeEventReceived: Flow<Unit>

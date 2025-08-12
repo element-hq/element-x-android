@@ -83,7 +83,8 @@ class MediaViewerNode @AssistedInject constructor(
             when (timelineMode) {
                 null -> timelineMediaGalleryDataSource
                 Timeline.Mode.LIVE,
-                Timeline.Mode.FOCUSED_ON_EVENT -> {
+                Timeline.Mode.FOCUSED_ON_EVENT,
+                Timeline.Mode.THREADED -> {
                     // Does timelineMediaGalleryDataSource knows the eventId?
                     val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
                     val isEventKnown = lastData?.hasEvent(eventId) == true
