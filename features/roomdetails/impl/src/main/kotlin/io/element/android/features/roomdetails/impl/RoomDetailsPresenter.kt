@@ -18,7 +18,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.securityAndPrivacyPermissionsAsState
@@ -68,7 +67,6 @@ class RoomDetailsPresenter @Inject constructor(
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
-    private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val clipboardHelper: ClipboardHelper,
     private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<RoomDetailsState> {
@@ -86,7 +84,6 @@ class RoomDetailsPresenter @Inject constructor(
         val isFavorite by remember { derivedStateOf { roomInfo.isFavorite } }
         val joinRule by remember { derivedStateOf { roomInfo.joinRule } }
 
-        val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
         val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
 
         val canShowMediaGallery by remember {
@@ -201,7 +198,6 @@ class RoomDetailsPresenter @Inject constructor(
             displayRolesAndPermissionsSettings = !isDm && isUserAdmin,
             isPublic = joinRule == JoinRule.Public,
             heroes = roomInfo.heroes.toPersistentList(),
-            canShowPinnedMessages = canShowPinnedMessages,
             canShowMediaGallery = canShowMediaGallery,
             pinnedMessagesCount = pinnedMessagesCount,
             snackbarMessage = snackbarMessage,

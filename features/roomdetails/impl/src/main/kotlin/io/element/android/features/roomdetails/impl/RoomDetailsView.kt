@@ -237,12 +237,10 @@ fun RoomDetailsView(
             }
 
             PreferenceCategory {
-                if (state.canShowPinnedMessages) {
-                    PinnedMessagesItem(
-                        pinnedMessagesCount = state.pinnedMessagesCount,
-                        onPinnedMessagesClick = onPinnedMessagesClick
-                    )
-                }
+                PinnedMessagesItem(
+                    pinnedMessagesCount = state.pinnedMessagesCount,
+                    onPinnedMessagesClick = onPinnedMessagesClick
+                )
                 PollsItem(
                     openPollHistory = openPollHistory
                 )

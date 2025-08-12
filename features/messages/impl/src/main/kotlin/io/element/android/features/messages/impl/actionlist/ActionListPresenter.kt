@@ -18,7 +18,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionComparator
@@ -62,7 +61,6 @@ class DefaultActionListPresenter @AssistedInject constructor(
     @Assisted
     private val postProcessor: TimelineItemActionPostProcessor,
     private val appPreferencesStore: AppPreferencesStore,
-    private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val room: BaseRoom,
     private val userSendFailureFactory: VerifiedUserSendFailureFactory,
     private val featureFlagService: FeatureFlagService,
@@ -87,7 +85,6 @@ class DefaultActionListPresenter @AssistedInject constructor(
         val isDeveloperModeEnabled by remember {
             appPreferencesStore.isDeveloperModeEnabledFlow()
         }.collectAsState(initial = false)
-        val isPinnedEventsEnabled = isPinnedMessagesFeatureEnabled()
         val pinnedEventIds by remember {
             room.roomInfoFlow.map { it.pinnedEventIds }
         }.collectAsState(initial = persistentListOf())
@@ -99,7 +96,6 @@ class DefaultActionListPresenter @AssistedInject constructor(
                     timelineItem = event.event,
                     usersEventPermissions = event.userEventPermissions,
                     isDeveloperModeEnabled = isDeveloperModeEnabled,
-                    isPinnedEventsEnabled = isPinnedEventsEnabled,
                     pinnedEventIds = pinnedEventIds,
                     target = target,
                 )
@@ -116,7 +112,6 @@ class DefaultActionListPresenter @AssistedInject constructor(
         timelineItem: TimelineItem.Event,
         usersEventPermissions: UserEventPermissions,
         isDeveloperModeEnabled: Boolean,
-        isPinnedEventsEnabled: Boolean,
         pinnedEventIds: ImmutableList<EventId>,
         target: MutableState<ActionListState.Target>
     ) = launch {
@@ -126,7 +121,6 @@ class DefaultActionListPresenter @AssistedInject constructor(
             timelineItem = timelineItem,
             usersEventPermissions = usersEventPermissions,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
-            isPinnedEventsEnabled = isPinnedEventsEnabled,
             isEventPinned = pinnedEventIds.contains(timelineItem.eventId),
         )
 
@@ -154,7 +148,6 @@ class DefaultActionListPresenter @AssistedInject constructor(
         timelineItem: TimelineItem.Event,
         usersEventPermissions: UserEventPermissions,
         isDeveloperModeEnabled: Boolean,
-        isPinnedEventsEnabled: Boolean,
         isEventPinned: Boolean,
     ): List<TimelineItemAction> {
         val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
@@ -189,7 +182,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
             if (canRedact && timelineItem.content is TimelineItemPollContent && !timelineItem.content.isEnded) {
                 add(TimelineItemAction.EndPoll)
             }
-            val canPinUnpin = isPinnedEventsEnabled && usersEventPermissions.canPinUnpin && timelineItem.isRemote
+            val canPinUnpin = usersEventPermissions.canPinUnpin && timelineItem.isRemote
             if (canPinUnpin) {
                 if (isEventPinned) {
                     add(TimelineItemAction.Unpin)

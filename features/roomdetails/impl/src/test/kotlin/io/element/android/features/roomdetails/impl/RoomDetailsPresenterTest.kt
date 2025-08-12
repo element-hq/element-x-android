@@ -82,7 +82,6 @@ class RoomDetailsPresenterTest {
                 FeatureFlags.Knock.key to false,
             )
         ),
-        isPinnedMessagesFeatureEnabled: Boolean = true,
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore()
@@ -110,7 +109,6 @@ class RoomDetailsPresenterTest {
             leaveRoomPresenter = { leaveRoomState },
             roomCallStatePresenter = { aStandByCallState() },
             dispatchers = dispatchers,
-            isPinnedMessagesFeatureEnabled = { isPinnedMessagesFeatureEnabled },
             analyticsService = analyticsService,
             clipboardHelper = clipboardHelper,
             appPreferencesStore = appPreferencesStore,
@@ -132,7 +130,6 @@ class RoomDetailsPresenterTest {
             assertThat(initialState.roomAvatarUrl).isEqualTo(room.info().avatarUrl)
             assertThat(initialState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.info().topic!!))
             assertThat(initialState.memberCount).isEqualTo(room.info().joinedMembersCount)
-            assertThat(initialState.canShowPinnedMessages).isTrue()
             assertThat(initialState.pinnedMessagesCount).isEqualTo(0)
             assertThat(initialState.canShowSecurityAndPrivacy).isFalse()
             assertThat(initialState.showDebugInfo).isFalse()
