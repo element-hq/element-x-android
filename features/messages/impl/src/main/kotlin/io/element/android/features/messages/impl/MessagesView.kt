@@ -278,7 +278,7 @@ fun MessagesView(
                 state = state,
                 onLinkClick = { url, customTab -> onLinkClick(url, customTab) },
                 onRoomSuccessorClick = { roomId ->
-                    state.timelineState.eventSink(TimelineEvents.NavigateToRoom(roomId = roomId))
+                    state.timelineState.eventSink(TimelineEvents.NavigateToPredecessorOrSuccessorRoom(roomId = roomId))
                 },
             )
         },

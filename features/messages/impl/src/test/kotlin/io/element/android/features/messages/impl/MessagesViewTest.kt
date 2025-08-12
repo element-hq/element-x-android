@@ -579,7 +579,7 @@ class MessagesViewTest {
         val text = rule.activity.getString(R.string.screen_room_timeline_tombstoned_room_action)
         // The bottomsheet subcompose seems to make the node to appear twice
         rule.onAllNodesWithText(text).onFirst().performClick()
-        eventsRecorder.assertSingle(TimelineEvents.NavigateToRoom(successorRoomId))
+        eventsRecorder.assertSingle(TimelineEvents.NavigateToPredecessorOrSuccessorRoom(successorRoomId))
     }
 
     @Test

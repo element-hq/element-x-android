@@ -760,7 +760,7 @@ class TimelinePresenterTest {
         val presenter = createTimelinePresenter(room = room, messagesNavigator = navigator)
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(TimelineEvents.NavigateToRoom(A_ROOM_ID))
+            initialState.eventSink(TimelineEvents.NavigateToPredecessorOrSuccessorRoom(A_ROOM_ID))
             assert(onNavigateToRoomLambda)
                 .isCalledOnce()
                 .with(

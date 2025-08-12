@@ -31,7 +31,11 @@ sealed interface TimelineEvents {
     data class ComputeVerifiedUserSendFailure(val event: TimelineItem.Event) : EventFromTimelineItem
     data class ShowShieldDialog(val messageShield: MessageShield) : EventFromTimelineItem
     data class LoadMore(val direction: Timeline.PaginationDirection) : EventFromTimelineItem
-    data class NavigateToRoom(val roomId: RoomId) : EventFromTimelineItem
+
+    /**
+     * Navigate to the predecessor or successor room of the current room.
+     */
+    data class NavigateToPredecessorOrSuccessorRoom(val roomId: RoomId) : EventFromTimelineItem
 
     /**
      * Events coming from a poll item.

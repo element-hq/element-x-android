@@ -31,5 +31,5 @@ value class UserId(val value: String) : Serializable {
             .substringBefore(":")
 
     val domainName: String?
-        get() = value.substringAfter(":")
+        get() = value.substringAfter(":").takeIf { it.isNotEmpty() }
 }

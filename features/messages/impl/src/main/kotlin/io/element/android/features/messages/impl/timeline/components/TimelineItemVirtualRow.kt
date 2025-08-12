@@ -47,7 +47,7 @@ fun TimelineItemVirtualRow(
                     roomName = timelineRoomInfo.name,
                     isDm = timelineRoomInfo.isDm,
                     onPredecessorRoomClick = { roomId ->
-                        eventSink(TimelineEvents.NavigateToRoom(roomId))
+                        eventSink(TimelineEvents.NavigateToPredecessorOrSuccessorRoom(roomId))
                     },
                 )
             }
