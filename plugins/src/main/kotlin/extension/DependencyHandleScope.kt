@@ -54,10 +54,6 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    // Workaround to fix error "No matching variant of com.airbnb.android:showkase:1.0.5 was found":
-    // Replace `implementation` by `debugImplementation` and `releaseImplementation`
-    debugImplementation(libs.showkase)
-    releaseImplementation(libs.showkase)
     implementation(libs.kotlinx.collections.immutable)
 }
 
