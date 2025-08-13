@@ -391,7 +391,60 @@ class MessagesFlowNode @AssistedInject constructor(
                     threadRootEventId = navTarget.threadRootId,
                     focusedEventId = navTarget.focusedEventId,
                 )
-                createNode<ThreadedMessagesNode>(buildContext, listOf(inputs))
+                val callback = object : ThreadedMessagesNode.Callback {
+                    override fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean {
+                        return processEventClick(
+                            timelineMode = if (isLive) Timeline.Mode.LIVE else Timeline.Mode.FOCUSED_ON_EVENT,
+                            event = event,
+                        )
+                    }
+
+                    override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
+                        backstack.push(NavTarget.AttachmentPreview(attachments.first()))
+                    }
+
+                    override fun onUserDataClick(userId: UserId) {
+                        callbacks.forEach { it.onUserDataClick(userId) }
+                    }
+
+                    override fun onPermalinkClick(data: PermalinkData) {
+                        callbacks.forEach { it.onPermalinkClick(data, pushToBackstack = true) }
+                    }
+
+                    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+                        backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
+                    }
+
+                    override fun onForwardEventClick(eventId: EventId) {
+                        backstack.push(NavTarget.ForwardEvent(eventId, fromPinnedEvents = false))
+                    }
+
+                    override fun onReportMessage(eventId: EventId, senderId: UserId) {
+                        backstack.push(NavTarget.ReportMessage(eventId, senderId))
+                    }
+
+                    override fun onSendLocationClick() {
+                        backstack.push(NavTarget.SendLocation)
+                    }
+
+                    override fun onCreatePollClick() {
+                        backstack.push(NavTarget.CreatePoll)
+                    }
+
+                    override fun onEditPollClick(eventId: EventId) {
+                        backstack.push(NavTarget.EditPoll(eventId))
+                    }
+
+                    override fun onJoinCallClick(roomId: RoomId) {
+                        val callType = CallType.RoomCall(
+                            sessionId = matrixClient.sessionId,
+                            roomId = roomId,
+                        )
+                        analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
+                        elementCallEntryPoint.startCall(callType)
+                    }
+                }
+                createNode<ThreadedMessagesNode>(buildContext, listOf(inputs, callback))
             }
         }
     }
