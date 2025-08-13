@@ -38,6 +38,7 @@ import io.element.android.features.messages.impl.forward.ForwardMessagesNode
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
+import io.element.android.features.messages.impl.threads.ThreadedMessagesNode
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -65,6 +66,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -167,6 +169,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object KnockRequestsList : NavTarget
+
+        @Parcelize
+        data class OpenThread(val threadRootId: ThreadId, val focusedEventId: EventId?) : NavTarget
     }
 
     private val callbacks = plugins<MessagesEntryPoint.Callback>()
@@ -269,6 +274,10 @@ class MessagesFlowNode @AssistedInject constructor(
 
                     override fun onViewKnockRequests() {
                         backstack.push(NavTarget.KnockRequestsList)
+                    }
+
+                    override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
+                        backstack.push(NavTarget.OpenThread(threadRootId, focusedEventId))
                     }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
@@ -376,6 +385,13 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             NavTarget.KnockRequestsList -> {
                 knockRequestsListEntryPoint.createNode(this, buildContext)
+            }
+            is NavTarget.OpenThread -> {
+                val inputs = ThreadedMessagesNode.Inputs(
+                    threadRootEventId = navTarget.threadRootId,
+                    focusedEventId = navTarget.focusedEventId,
+                )
+                createNode<ThreadedMessagesNode>(buildContext, plugins + listOf(inputs))
             }
         }
     }

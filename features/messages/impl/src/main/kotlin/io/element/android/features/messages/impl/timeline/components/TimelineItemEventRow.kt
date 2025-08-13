@@ -84,10 +84,12 @@ import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
@@ -245,9 +247,14 @@ fun TimelineItemEventRow(
         }
 
         event.threadInfo.threadSummary?.let { threadSummary ->
-            Button("Thread with ${threadSummary.numberOfReplies} replies", onClick = {
-
-            })
+            Button(
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 2.dp),
+                text = "Thread with ${threadSummary.numberOfReplies} replies",
+                size = ButtonSize.Small,
+                onClick = {
+                    eventSink(TimelineEvents.OpenThread(event.eventId!!.toThreadId(), null))
+                }
+            )
         }
 
         // Read receipts / Send state

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl
+package io.element.android.features.messages.impl.threads
 
 import android.app.Activity
 import android.content.Context
@@ -28,7 +28,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.knockrequests.api.banner.KnockRequestsBannerRenderer
+import io.element.android.features.messages.impl.MessagesNavigator
+import io.element.android.features.messages.impl.MessagesPresenter
+import io.element.android.features.messages.impl.MessagesView
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -40,9 +42,6 @@ import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.roommembermoderation.api.ModerationAction
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.androidutils.system.toast
@@ -58,9 +57,11 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -68,12 +69,12 @@ import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @ContributesNode(RoomScope::class)
-class MessagesNode @AssistedInject constructor(
+class ThreadedMessagesNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     @ApplicationContext private val context: Context,
@@ -87,22 +88,26 @@ class MessagesNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
-    private val knockRequestsBannerRenderer: KnockRequestsBannerRenderer,
-    private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
-    private val timelineController = TimelineController(room, room.liveTimeline)
+    private val callbacks = plugins<Callback>()
+
+    data class Inputs(
+        val threadRootEventId: ThreadId,
+        val focusedEventId: EventId?,
+    ) : NodeInputs
+
+    private val inputs = inputs<Inputs>()
+
+    private val threadedTimeline = runBlocking { room.createTimeline(CreateTimelineParams.Threaded(threadRootEventId = inputs.threadRootEventId)).getOrThrow() }
+    private val timelineController = TimelineController(room, threadedTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
         composerPresenter = messageComposerPresenterFactory.create(this),
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
+        // TODO: add special processor for threaded timeline
         actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default),
         timelineController = timelineController,
     )
-    private val callbacks = plugins<Callback>()
-
-    data class Inputs(val focusedEventId: EventId?) : NodeInputs
-
-    private val inputs = inputs<Inputs>()
 
     interface Callback : Plugin {
         fun onRoomDetailsClick()
@@ -119,7 +124,6 @@ class MessagesNode @AssistedInject constructor(
         fun onJoinCallClick(roomId: RoomId)
         fun onViewAllPinnedEvents()
         fun onViewKnockRequests()
-        fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?)
     }
 
     override fun onBuilt() {
@@ -218,17 +222,13 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onPreviewAttachments(attachments) }
     }
 
-    override fun onNavigateToRoom(roomId: RoomId, serverNames: List<String>) {
+    override fun onNavigateToRoom(roomId: RoomId) {
         if (roomId == room.roomId) {
             displaySameRoomToast()
         } else {
-            val permalinkData = PermalinkData.RoomLink(roomId.toRoomIdOrAlias(), viaParameters = serverNames.toImmutableList())
+            val permalinkData = PermalinkData.RoomLink(roomId.toRoomIdOrAlias())
             callbacks.forEach { it.onPermalinkClick(permalinkData) }
         }
-    }
-
-    override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
-        callbacks.forEach { it.onOpenThread(threadRootId, focusedEventId) }
     }
 
     private fun onViewAllPinnedMessagesClick() {
@@ -247,12 +247,12 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onJoinCallClick(room.roomId) }
     }
 
-    private fun onViewKnockRequestsClick() {
-        callbacks.forEach { it.onViewKnockRequests() }
-    }
-
     private fun displaySameRoomToast() {
         context.toast(CommonStrings.screen_room_permalink_same_room_android)
+    }
+
+    override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
+
     }
 
     @Composable
@@ -275,28 +275,21 @@ class MessagesNode @AssistedInject constructor(
                 onRoomDetailsClick = this::onRoomDetailsClick,
                 onEventContentClick = this::onEventClick,
                 onUserDataClick = this::onUserDataClick,
-                onLinkClick = { url, customTab -> onLinkClick(activity, isDark, url, state.timelineState.eventSink, customTab) },
+                onLinkClick = { url, customTab ->
+                    onLinkClick(
+                        activity,
+                        isDark,
+                        url,
+                        state.timelineState.eventSink,
+                        customTab
+                    )
+                },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,
                 onViewAllPinnedMessagesClick = this::onViewAllPinnedMessagesClick,
                 modifier = modifier,
-                knockRequestsBannerView = {
-                    knockRequestsBannerRenderer.View(
-                        modifier = Modifier,
-                        onViewRequestsClick = this::onViewKnockRequestsClick
-                    )
-                },
-            )
-            roomMemberModerationRenderer.Render(
-                state = state.roomMemberModerationState,
-                onSelectAction = { action, target ->
-                    when (action) {
-                        is ModerationAction.DisplayProfile -> onUserDataClick(target.userId)
-                        else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
-                    }
-                },
-                modifier = Modifier,
+                knockRequestsBannerView = {},
             )
 
             var focusedEventId by rememberSaveable {

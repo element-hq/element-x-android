@@ -186,6 +186,12 @@ class TimelinePresenter @AssistedInject constructor(
                     val serverNames = calculateServerNamesForRoom(room)
                     navigator.onNavigateToRoom(event.roomId, serverNames)
                 }
+                is TimelineEvents.OpenThread -> {
+                    navigator.onOpenThread(
+                        threadRootId = event.threadRootEventId,
+                        focusedEventId = event.focusedEvent,
+                    )
+                }
             }
         }
 
