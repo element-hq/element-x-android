@@ -16,5 +16,4 @@ interface AppErrorStateService {
     fun showError(title: String, body: String)
 
     fun showError(@StringRes titleRes: Int, @StringRes bodyRes: Int)
-
 }

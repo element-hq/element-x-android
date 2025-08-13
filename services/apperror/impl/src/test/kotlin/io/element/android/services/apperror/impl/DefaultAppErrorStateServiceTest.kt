@@ -10,14 +10,14 @@ package io.element.android.services.apperror.impl
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.services.apperror.api.AppErrorState
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 internal class DefaultAppErrorStateServiceTest {
     @Test
     fun `initial value is no error`() = runTest {
-        val service = DefaultAppErrorStateService()
-
+        val service = createDefaultAppErrorStateService()
         service.appErrorStateFlow.test {
             val state = awaitItem()
             assertThat(state).isInstanceOf(AppErrorState.NoError::class.java)
@@ -26,8 +26,7 @@ internal class DefaultAppErrorStateServiceTest {
 
     @Test
     fun `showError - emits value`() = runTest {
-        val service = DefaultAppErrorStateService()
-
+        val service = createDefaultAppErrorStateService()
         service.appErrorStateFlow.test {
             skipItems(1)
 
@@ -42,9 +41,22 @@ internal class DefaultAppErrorStateServiceTest {
     }
 
     @Test
-    fun `dismiss - clears value`() = runTest {
-        val service = DefaultAppErrorStateService()
+    fun `showError - emits value from ids`() = runTest {
+        val service = createDefaultAppErrorStateService()
+        service.appErrorStateFlow.test {
+            skipItems(1)
+            service.showError(1, 2)
+            val state = awaitItem()
+            assertThat(state).isInstanceOf(AppErrorState.Error::class.java)
+            val errorState = state as AppErrorState.Error
+            assertThat(errorState.title).isEqualTo("A string")
+            assertThat(errorState.body).isEqualTo("A string")
+        }
+    }
 
+    @Test
+    fun `dismiss - clears value`() = runTest {
+        val service = createDefaultAppErrorStateService()
         service.appErrorStateFlow.test {
             skipItems(1)
 
@@ -58,4 +70,8 @@ internal class DefaultAppErrorStateServiceTest {
             assertThat(awaitItem()).isInstanceOf(AppErrorState.NoError::class.java)
         }
     }
+
+    private fun createDefaultAppErrorStateService() = DefaultAppErrorStateService(
+        stringProvider = FakeStringProvider(),
+    )
 }
