@@ -66,4 +66,3 @@ interface MessagesBindsModule {
     @Binds
     fun bindIdentityChangeStatePresenter(presenter: IdentityChangeStatePresenter): Presenter<IdentityChangeState>
 }
-

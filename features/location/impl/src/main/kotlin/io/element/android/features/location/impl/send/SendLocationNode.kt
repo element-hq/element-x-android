@@ -30,7 +30,6 @@ class SendLocationNode @AssistedInject constructor(
     presenterFactory: SendLocationPresenter.Factory,
     analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(
         val timelineMode: Timeline.Mode,
     ) : NodeInputs

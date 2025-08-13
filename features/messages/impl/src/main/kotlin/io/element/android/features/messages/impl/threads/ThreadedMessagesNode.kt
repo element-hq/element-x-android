@@ -234,7 +234,6 @@ class ThreadedMessagesNode @AssistedInject constructor(
     }
 
     override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
-
     }
 
     @Composable

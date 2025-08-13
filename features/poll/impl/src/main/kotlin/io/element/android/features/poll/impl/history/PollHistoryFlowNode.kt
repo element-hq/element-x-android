@@ -53,9 +53,11 @@ class PollHistoryFlowNode @AssistedInject constructor(
         return when (navTarget) {
             is NavTarget.EditPoll -> {
                 createPollEntryPoint.nodeBuilder(this, buildContext)
-                    .params(CreatePollEntryPoint.Params(
+                    .params(
+                        CreatePollEntryPoint.Params(
                         timelineMode = Timeline.Mode.Live,
-                        mode = CreatePollMode.EditPoll(eventId = navTarget.pollStartEventId))
+                        mode = CreatePollMode.EditPoll(eventId = navTarget.pollStartEventId)
+                        )
                     )
                     .build()
             }

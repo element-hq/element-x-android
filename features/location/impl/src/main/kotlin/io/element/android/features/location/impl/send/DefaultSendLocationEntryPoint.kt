@@ -22,7 +22,7 @@ class DefaultSendLocationEntryPoint @Inject constructor() : SendLocationEntryPoi
         return Builder(timelineMode)
     }
 
-    class Builder(private val timelineMode: Timeline.Mode): SendLocationEntryPoint.Builder {
+    class Builder(private val timelineMode: Timeline.Mode) : SendLocationEntryPoint.Builder {
         override fun build(parentNode: Node, buildContext: BuildContext): Node {
             return parentNode.createNode<SendLocationNode>(
                 buildContext = buildContext,

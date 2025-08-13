@@ -18,11 +18,9 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineSendMode
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
 
 class MediaSender @AssistedInject constructor(
     private val preProcessor: MediaPreProcessor,
