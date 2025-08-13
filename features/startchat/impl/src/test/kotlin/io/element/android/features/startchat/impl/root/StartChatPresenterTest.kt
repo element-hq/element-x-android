@@ -36,7 +36,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class CreateBaseRoomRootPresenterTest {
+class StartChatPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -47,7 +47,7 @@ class CreateBaseRoomRootPresenterTest {
             actionState.value = startDMFailureResult
         }
         val startDMAction = FakeStartDMAction(executeResult = executeResult)
-        val presenter = createCreateRoomRootPresenter(startDMAction)
+        val presenter = createStartChatPresenter(startDMAction)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -81,7 +81,7 @@ class CreateBaseRoomRootPresenterTest {
             actionState.value = startDMSuccessResult
         }
         val startDMAction = FakeStartDMAction(executeResult = executeResult)
-        val presenter = createCreateRoomRootPresenter(startDMAction)
+        val presenter = createStartChatPresenter(startDMAction)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -112,7 +112,7 @@ class CreateBaseRoomRootPresenterTest {
             actionState.value = startDMConfirmationResult
         }
         val startDMAction = FakeStartDMAction(executeResult = executeResult)
-        val presenter = createCreateRoomRootPresenter(startDMAction)
+        val presenter = createStartChatPresenter(startDMAction)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -142,7 +142,7 @@ class CreateBaseRoomRootPresenterTest {
             actionState.value = startDMConfirmationResult
         }
         val startDMAction = FakeStartDMAction(executeResult = executeResult)
-        val presenter = createCreateRoomRootPresenter(startDMAction)
+        val presenter = createStartChatPresenter(startDMAction)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -167,7 +167,7 @@ class CreateBaseRoomRootPresenterTest {
 
     @Test
     fun `present - room directory search`() = runTest {
-        val presenter = createCreateRoomRootPresenter(isRoomDirectorySearchEnabled = true)
+        val presenter = createStartChatPresenter(isRoomDirectorySearchEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -178,7 +178,7 @@ class CreateBaseRoomRootPresenterTest {
         }
     }
 
-    private fun createCreateRoomRootPresenter(
+    private fun createStartChatPresenter(
         startDMAction: StartDMAction = FakeStartDMAction(),
         isRoomDirectorySearchEnabled: Boolean = false,
     ): StartChatPresenter {
