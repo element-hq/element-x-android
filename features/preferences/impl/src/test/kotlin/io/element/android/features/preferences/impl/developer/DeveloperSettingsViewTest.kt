@@ -54,6 +54,21 @@ class DeveloperSettingsViewTest {
 
     @Config(qualifiers = "h1500dp")
     @Test
+    fun `clicking on push history notification invokes the expected callback`() {
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
+        ensureCalledOnce {
+            rule.setDeveloperSettingsView(
+                state = aDeveloperSettingsState(
+                    eventSink = eventsRecorder
+                ),
+                onPushHistoryClick = it
+            )
+            rule.clickOn(R.string.troubleshoot_notifications_entry_point_push_history_title)
+        }
+    }
+
+    @Config(qualifiers = "h1500dp")
+    @Test
     fun `clicking on element call url open the dialogs and submit emits the expected event`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
         rule.setDeveloperSettingsView(
@@ -114,12 +129,14 @@ class DeveloperSettingsViewTest {
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setDeveloperSettingsView(
     state: DeveloperSettingsState,
     onOpenShowkase: () -> Unit = EnsureNeverCalled(),
+    onPushHistoryClick: () -> Unit = EnsureNeverCalled(),
     onBackClick: () -> Unit = EnsureNeverCalled()
 ) {
     setContent {
         DeveloperSettingsView(
             state = state,
             onOpenShowkase = onOpenShowkase,
+            onPushHistoryClick = onPushHistoryClick,
             onBackClick = onBackClick,
         )
     }
