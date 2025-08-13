@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.createroom.impl.R
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.features.invitepeople.api.InvitePeopleStateProvider
@@ -63,7 +64,7 @@ private fun AddPeopleTopBar(
     onSkipClick: () -> Unit,
 ) {
     TopAppBar(
-        titleStr = "Invite people",
+        titleStr = stringResource(R.string.screen_create_room_add_people_title),
         actions = {
             TextButton(
                 text = stringResource(CommonStrings.action_skip),
