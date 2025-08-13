@@ -13,9 +13,9 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.invitepeople.impl.R
-import io.element.android.features.invitepeople.impl.userlist.aRecentDirectRoomList
-import io.element.android.features.invitepeople.impl.userlist.aUserListState
+import io.element.android.features.startchat.impl.R
+import io.element.android.features.startchat.impl.userlist.aRecentDirectRoomList
+import io.element.android.features.startchat.impl.userlist.aUserListState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -31,7 +31,6 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import kotlin.collections.get
 
 @RunWith(AndroidJUnit4::class)
 class StartChatViewTest {

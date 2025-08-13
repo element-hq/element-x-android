@@ -8,7 +8,7 @@
 package io.element.android.features.startchat.impl.joinbyaddress
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.invitepeople.StartChatNavigator
+import io.element.android.features.startchat.StartChatNavigator
 import io.element.android.features.startchat.impl.FakeStartChatNavigator
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
