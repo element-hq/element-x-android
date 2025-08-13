@@ -13,17 +13,20 @@ import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
+import io.element.android.libraries.matrix.api.timeline.Timeline
 
 // For previews
 @Composable
 internal fun ATimelineItemEventRow(
     event: TimelineItem.Event,
+    timelineMode: Timeline.Mode = Timeline.Mode.LIVE,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     renderReadReceipts: Boolean = false,
     isLastOutgoingMessage: Boolean = false,
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
 ) = TimelineItemEventRow(
     event = event,
+    timelineMode = timelineMode,
     timelineRoomInfo = timelineRoomInfo,
     renderReadReceipts = renderReadReceipts,
     timelineProtectionState = timelineProtectionState,

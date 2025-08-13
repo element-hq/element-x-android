@@ -44,7 +44,7 @@ import javax.inject.Inject
 @ContributesBinding(RoomScope::class, boundType = TimelineProvider::class)
 class TimelineController @Inject constructor(
     private val room: JoinedRoom,
-    @LiveTimeline liveTimeline: Timeline,
+    @LiveTimeline private val liveTimeline: Timeline,
 ) : Closeable, TimelineProvider {
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -59,6 +59,8 @@ class TimelineController @Inject constructor(
     fun isLive(): Flow<Boolean> {
         return detachedTimelineFlow.map { !it.isPresent }
     }
+
+    fun mainTimelineMode(): Timeline.Mode = liveTimeline.mode
 
     suspend fun invokeOnCurrentTimeline(block: suspend (Timeline.() -> Unit)) {
         currentTimelineFlow.value.run {

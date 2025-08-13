@@ -105,6 +105,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -196,17 +197,21 @@ fun MessagesView(
                 topBar = {
                     Column {
                         ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                        MessagesViewTopBar(
-                            roomName = state.roomName,
-                            roomAvatar = state.roomAvatar,
-                            isTombstoned = state.isTombstoned,
-                            heroes = state.heroes,
-                            roomCallState = state.roomCallState,
-                            dmUserIdentityState = state.dmUserVerificationState,
-                            onBackClick = { hidingKeyboard { onBackClick() } },
-                            onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
-                            onJoinCallClick = onJoinCallClick,
-                        )
+                        if (state.timelineState.timelineMode == Timeline.Mode.THREADED) {
+                            ThreadTopBar(onBackClick = onBackClick)
+                        } else {
+                            MessagesViewTopBar(
+                                roomName = state.roomName,
+                                roomAvatar = state.roomAvatar,
+                                isTombstoned = state.isTombstoned,
+                                heroes = state.heroes,
+                                roomCallState = state.roomCallState,
+                                dmUserIdentityState = state.dmUserVerificationState,
+                                onBackClick = { hidingKeyboard { onBackClick() } },
+                                onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
+                                onJoinCallClick = onJoinCallClick,
+                            )
+                        }
                     }
                 },
                 content = { padding ->
@@ -414,23 +419,26 @@ private fun MessagesViewContent(
                 onJoinCallClick = onJoinCallClick,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
             )
-            AnimatedVisibility(
-                visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
-                enter = expandVertically(),
-                exit = shrinkVertically(),
-            ) {
-                fun focusOnPinnedEvent(eventId: EventId) {
-                    state.timelineState.eventSink(
-                        TimelineEvents.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
+
+            if (state.timelineState.timelineMode != Timeline.Mode.THREADED) {
+                AnimatedVisibility(
+                    visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
+                    enter = expandVertically(),
+                    exit = shrinkVertically(),
+                ) {
+                    fun focusOnPinnedEvent(eventId: EventId) {
+                        state.timelineState.eventSink(
+                            TimelineEvents.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
+                        )
+                    }
+                    PinnedMessagesBannerView(
+                        state = state.pinnedMessagesBannerState,
+                        onClick = ::focusOnPinnedEvent,
+                        onViewAllClick = onViewAllPinnedMessagesClick,
                     )
                 }
-                PinnedMessagesBannerView(
-                    state = state.pinnedMessagesBannerState,
-                    onClick = ::focusOnPinnedEvent,
-                    onViewAllClick = onViewAllPinnedMessagesClick,
-                )
+                knockRequestsBannerView()
             }
-            knockRequestsBannerView()
         }
     }
 }
@@ -537,6 +545,21 @@ private fun MessagesViewTopBar(
             Spacer(Modifier.width(8.dp))
         },
         windowInsets = WindowInsets(0.dp)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ThreadTopBar(
+    onBackClick: () -> Unit,
+) {
+    TopAppBar(
+        navigationIcon = {
+            BackButton(onClick = onBackClick)
+        },
+        title = {
+            Text("Thread")
+        }
     )
 }
 

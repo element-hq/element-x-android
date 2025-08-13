@@ -53,6 +53,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -96,9 +97,9 @@ import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 class MessageComposerPresenter @AssistedInject constructor(
+    @Assisted private val timeline: Timeline,
     @Assisted private val navigator: MessagesNavigator,
-    @SessionCoroutineScope
-    private val sessionCoroutineScope: CoroutineScope,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val sessionPreferencesStore: SessionPreferencesStore,
@@ -122,7 +123,7 @@ class MessageComposerPresenter @AssistedInject constructor(
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
-        fun create(navigator: MessagesNavigator): MessageComposerPresenter
+        fun create(timeline: Timeline, navigator: MessagesNavigator): MessageComposerPresenter
     }
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
@@ -423,7 +424,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
             is MessageComposerMode.Attachment,
-            is MessageComposerMode.Normal -> room.liveTimeline.sendMessage(
+            is MessageComposerMode.Normal -> timeline.sendMessage(
                 body = message.markdown,
                 htmlBody = message.html,
                 intentionalMentions = message.intentionalMentions
