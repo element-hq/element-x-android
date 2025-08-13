@@ -46,6 +46,7 @@ interface Timeline : AutoCloseable {
         THREADED,
     }
 
+    val mode: Mode
     val membershipChangeEventReceived: Flow<Unit>
     suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
     suspend fun paginate(direction: PaginationDirection): Result<Boolean>

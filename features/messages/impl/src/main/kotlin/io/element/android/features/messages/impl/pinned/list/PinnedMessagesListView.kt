@@ -46,6 +46,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
@@ -210,6 +211,7 @@ private fun PinnedMessagesListLoaded(
         ) { timelineItem ->
             TimelineItemRow(
                 timelineItem = timelineItem,
+                timelineMode = Timeline.Mode.PINNED_EVENTS,
                 timelineRoomInfo = state.timelineRoomInfo,
                 renderReadReceipts = false,
                 timelineProtectionState = state.timelineProtectionState,

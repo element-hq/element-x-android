@@ -391,7 +391,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     threadRootEventId = navTarget.threadRootId,
                     focusedEventId = navTarget.focusedEventId,
                 )
-                createNode<ThreadedMessagesNode>(buildContext, plugins + listOf(inputs))
+                createNode<ThreadedMessagesNode>(buildContext, listOf(inputs))
             }
         }
     }

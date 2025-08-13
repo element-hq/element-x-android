@@ -93,7 +93,7 @@ class MessagesNode @AssistedInject constructor(
     private val timelineController = TimelineController(room, room.liveTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
-        composerPresenter = messageComposerPresenterFactory.create(this),
+        composerPresenter = messageComposerPresenterFactory.create(room.liveTimeline, this),
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
         actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default),
         timelineController = timelineController,

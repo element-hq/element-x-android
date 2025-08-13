@@ -171,7 +171,8 @@ class JoinedRustRoom(
             is CreateTimelineParams.MediaOnlyFocused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
-                hideThreadedEvents = hideThreadedEvents,
+                // Never hide threaded events in media focused timeline
+                hideThreadedEvents = false,
             )
             is CreateTimelineParams.Threaded -> TimelineFocus.Thread(
                 rootEventId = createTimelineParams.threadRootEventId.value,

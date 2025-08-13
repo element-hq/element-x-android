@@ -100,6 +100,9 @@ class TimelinePresenter @AssistedInject constructor(
     @Composable
     override fun present(): TimelineState {
         val localScope = rememberCoroutineScope()
+
+        val timelineMode = remember { timelineController.mainTimelineMode() }
+
         var focusRequestState: FocusRequestState by remember { mutableStateOf(FocusRequestState.None) }
 
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
@@ -279,6 +282,7 @@ class TimelinePresenter @AssistedInject constructor(
         }
         return TimelineState(
             timelineItems = timelineItems,
+            timelineMode = timelineMode,
             timelineRoomInfo = timelineRoomInfo,
             renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,

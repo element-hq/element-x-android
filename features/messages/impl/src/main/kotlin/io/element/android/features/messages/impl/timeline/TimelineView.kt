@@ -163,6 +163,7 @@ fun TimelineView(
                 ) { timelineItem ->
                     TimelineItemRow(
                         timelineItem = timelineItem,
+                        timelineMode = state.timelineMode,
                         timelineRoomInfo = state.timelineRoomInfo,
                         timelineProtectionState = timelineProtectionState,
                         renderReadReceipts = state.renderReadReceipts,

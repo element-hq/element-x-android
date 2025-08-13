@@ -38,10 +38,6 @@ data class EventTimelineItem(
         return (content as? MessageContent)?.inReplyTo
     }
 
-    fun isThreaded(): Boolean {
-        return (content as? MessageContent)?.threadInfo?.threadRootId != null
-    }
-
     fun threadInfo(): EventThreadInfo? = (content as? MessageContent)?.threadInfo
 
     fun hasNotLoadedInReplyTo(): Boolean {

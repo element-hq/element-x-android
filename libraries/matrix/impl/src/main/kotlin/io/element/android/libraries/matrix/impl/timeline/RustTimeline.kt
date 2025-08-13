@@ -79,7 +79,7 @@ private const val PAGINATION_SIZE = 50
 
 class RustTimeline(
     private val inner: InnerTimeline,
-    mode: Timeline.Mode,
+    override val mode: Timeline.Mode,
     systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
