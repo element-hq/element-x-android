@@ -62,6 +62,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -109,7 +110,7 @@ class ThreadedMessagesNode @AssistedInject constructor(
     )
 
     interface Callback : Plugin {
-        fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean
+        fun onEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClick(userId: UserId)
         fun onPermalinkClick(data: PermalinkData)
@@ -134,12 +135,12 @@ class ThreadedMessagesNode @AssistedInject constructor(
         )
     }
 
-    private fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean {
+    private fun onEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
         // Note: cannot use `callbacks.all { it.onEventClick(event) }` because:
         // - if callbacks is empty, it will return true and we want to return false.
         // - if a callback returns false, the other callback will not be invoked.
         return callbacks.takeIf { it.isNotEmpty() }
-            ?.map { it.onEventClick(isLive, event) }
+            ?.map { it.onEventClick(timelineMode, event) }
             ?.all { it }
             .orFalse()
     }
@@ -254,7 +255,18 @@ class ThreadedMessagesNode @AssistedInject constructor(
                 state = state,
                 onBackClick = this::navigateUp,
                 onRoomDetailsClick = {},
-                onEventContentClick = this::onEventClick,
+                onEventContentClick = { isLive, event ->
+                    if (isLive) {
+                        onEventClick(timelineController.mainTimelineMode(), event)
+                    } else {
+                        val detachedTimelineMode = timelineController.detachedTimelineMode()
+                        if (detachedTimelineMode != null) {
+                            onEventClick(detachedTimelineMode, event)
+                        } else {
+                            false
+                        }
+                    }
+                },
                 onUserDataClick = this::onUserDataClick,
                 onLinkClick = { url, customTab ->
                     onLinkClick(

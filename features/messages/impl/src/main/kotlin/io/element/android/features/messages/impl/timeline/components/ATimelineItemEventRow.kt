@@ -19,7 +19,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 @Composable
 internal fun ATimelineItemEventRow(
     event: TimelineItem.Event,
-    timelineMode: Timeline.Mode = Timeline.Mode.LIVE,
+    timelineMode: Timeline.Mode = Timeline.Mode.Live,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     renderReadReceipts: Boolean = false,
     isLastOutgoingMessage: Boolean = false,

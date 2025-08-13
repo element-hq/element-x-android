@@ -18,8 +18,9 @@ class LoadingIndicatorsPostProcessor(private val systemClock: SystemClock) {
         items: List<MatrixTimelineItem>,
         hasMoreToLoadBackward: Boolean,
         hasMoreToLoadForward: Boolean,
+        timelineMode: Timeline.Mode,
     ): List<MatrixTimelineItem> {
-        val shouldAddForwardLoadingIndicator = hasMoreToLoadForward && items.isNotEmpty()
+        val shouldAddForwardLoadingIndicator = timelineMode is Timeline.Mode.Live && hasMoreToLoadForward && items.isNotEmpty()
         val currentTimestamp = systemClock.epochMillis()
         return buildList {
             if (hasMoreToLoadBackward) {

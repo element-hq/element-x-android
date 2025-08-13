@@ -135,7 +135,7 @@ class JoinedRustRoom(
 
     override val roomNotificationSettingsStateFlow = MutableStateFlow<RoomNotificationSettingsState>(RoomNotificationSettingsState.Unknown)
 
-    override val liveTimeline = liveInnerTimeline.map(mode = Timeline.Mode.LIVE) {
+    override val liveTimeline = liveInnerTimeline.map(mode = Timeline.Mode.Live) {
         syncUpdateFlow.value = systemClock.epochMillis()
     }
 
@@ -227,11 +227,11 @@ class JoinedRustRoom(
                 )
             ).let { innerTimeline ->
                 val mode = when (createTimelineParams) {
-                    is CreateTimelineParams.Focused -> Timeline.Mode.FOCUSED_ON_EVENT
-                    is CreateTimelineParams.MediaOnly -> Timeline.Mode.MEDIA
-                    is CreateTimelineParams.MediaOnlyFocused -> Timeline.Mode.FOCUSED_ON_EVENT
-                    CreateTimelineParams.PinnedOnly -> Timeline.Mode.PINNED_EVENTS
-                    is CreateTimelineParams.Threaded -> Timeline.Mode.THREADED
+                    is CreateTimelineParams.Focused -> Timeline.Mode.FocusedOnEvent(createTimelineParams.focusedEventId)
+                    is CreateTimelineParams.MediaOnly -> Timeline.Mode.Media
+                    is CreateTimelineParams.MediaOnlyFocused -> Timeline.Mode.FocusedOnEvent(createTimelineParams.focusedEventId)
+                    CreateTimelineParams.PinnedOnly -> Timeline.Mode.PinnedEvents
+                    is CreateTimelineParams.Threaded -> Timeline.Mode.Thread(createTimelineParams.threadRootEventId)
                 }
                 innerTimeline.map(mode = mode)
             }

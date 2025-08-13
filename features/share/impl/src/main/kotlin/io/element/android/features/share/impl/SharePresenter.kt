@@ -22,6 +22,8 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineSendMode
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -88,6 +90,7 @@ class SharePresenter @AssistedInject constructor(
                                 val mediaSender = MediaSender(
                                     preProcessor = mediaPreProcessor,
                                     room = room,
+                                    timelineMode = Timeline.Mode.Live,
                                     mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
                                 )
                                 filesToShare

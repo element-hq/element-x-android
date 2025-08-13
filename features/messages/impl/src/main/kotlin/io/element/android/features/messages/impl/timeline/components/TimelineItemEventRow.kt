@@ -65,7 +65,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -250,7 +249,7 @@ fun TimelineItemEventRow(
             )
         }
 
-        if (timelineMode != Timeline.Mode.THREADED) {
+        if (timelineMode !is Timeline.Mode.Thread) {
             event.threadInfo.threadSummary?.let { threadSummary ->
                 Button(
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 2.dp),
@@ -683,7 +682,7 @@ private fun MessageEventBubbleContent(
         else -> ContentPadding.Textual
     }
     CommonLayout(
-        showThreadDecoration = timelineMode != Timeline.Mode.THREADED && event.threadInfo.threadRootId != null,
+        showThreadDecoration = timelineMode !is Timeline.Mode.Thread && event.threadInfo.threadRootId != null,
         timestampPosition = timestampPosition,
         paddingBehaviour = paddingBehaviour,
         inReplyToDetails = event.inReplyTo,

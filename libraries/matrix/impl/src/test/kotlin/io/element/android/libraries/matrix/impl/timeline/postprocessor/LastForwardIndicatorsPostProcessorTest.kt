@@ -17,14 +17,14 @@ import org.junit.Test
 class LastForwardIndicatorsPostProcessorTest {
     @Test
     fun `LastForwardIndicatorsPostProcessor does not alter the items with mode not FOCUSED_ON_EVENT`() {
-        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.LIVE)
+        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.Live)
         val result = sut.process(listOf(messageEvent))
         assertThat(result).containsExactly(messageEvent)
     }
 
     @Test
     fun `LastForwardIndicatorsPostProcessor add virtual items`() {
-        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FOCUSED_ON_EVENT)
+        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FocusedOnEvent)
         val result = sut.process(listOf(messageEvent))
         assertThat(result).containsExactly(
             messageEvent,
@@ -37,7 +37,7 @@ class LastForwardIndicatorsPostProcessorTest {
 
     @Test
     fun `LastForwardIndicatorsPostProcessor add virtual items on empty list`() {
-        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FOCUSED_ON_EVENT)
+        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FocusedOnEvent)
         val result = sut.process(listOf())
         assertThat(result).containsExactly(
             MatrixTimelineItem.Virtual(
@@ -49,7 +49,7 @@ class LastForwardIndicatorsPostProcessorTest {
 
     @Test
     fun `LastForwardIndicatorsPostProcessor add virtual items but does not alter the list if called a second time`() {
-        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FOCUSED_ON_EVENT)
+        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FocusedOnEvent)
         // Process a first time
         sut.process(listOf(messageEvent))
         // Process a second time with the same Event
@@ -65,7 +65,7 @@ class LastForwardIndicatorsPostProcessorTest {
 
     @Test
     fun `LastForwardIndicatorsPostProcessor add virtual items each time it is called with new Events`() {
-        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FOCUSED_ON_EVENT)
+        val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FocusedOnEvent)
         // Process a first time
         sut.process(listOf(dayEvent, messageEvent))
         // Process a second time with the same Event

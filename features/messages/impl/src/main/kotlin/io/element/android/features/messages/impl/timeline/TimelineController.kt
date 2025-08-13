@@ -62,6 +62,10 @@ class TimelineController @Inject constructor(
 
     fun mainTimelineMode(): Timeline.Mode = liveTimeline.mode
 
+    fun detachedTimelineMode(): Timeline.Mode? {
+        return detachedTimelineFlow.value.orElse(null)?.mode
+    }
+
     suspend fun invokeOnCurrentTimeline(block: suspend (Timeline.() -> Unit)) {
         currentTimelineFlow.value.run {
             block(this)
