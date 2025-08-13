@@ -10,6 +10,9 @@ package io.element.android.libraries.matrix.impl.timeline.item.event
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
+import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
@@ -27,9 +30,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
-import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
-import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import org.matrix.rustcomponents.sdk.EmbeddedEventDetails

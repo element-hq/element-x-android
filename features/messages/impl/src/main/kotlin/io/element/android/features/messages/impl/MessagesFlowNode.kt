@@ -75,7 +75,6 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineSendMode
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
@@ -358,9 +357,11 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is NavTarget.EditPoll -> {
                 createPollEntryPoint.nodeBuilder(this, buildContext)
-                    .params(CreatePollEntryPoint.Params(
+                    .params(
+                        CreatePollEntryPoint.Params(
                         timelineMode = navTarget.timelineMode,
-                        mode = CreatePollMode.EditPoll(eventId = navTarget.eventId))
+                        mode = CreatePollMode.EditPoll(eventId = navTarget.eventId)
+                        )
                     )
                     .build()
             }

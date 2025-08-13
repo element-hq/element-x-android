@@ -21,7 +21,6 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineSendMode
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
 
 @ContributesNode(RoomScope::class)
