@@ -83,7 +83,7 @@ class DeveloperSettingsViewTest {
         eventsRecorder.assertSingle(DeveloperSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.dev"))
     }
 
-    @Config(qualifiers = "h1200dp")
+    @Config(qualifiers = "h2000dp")
     @Test
     fun `clicking on open showkase invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
@@ -112,7 +112,7 @@ class DeveloperSettingsViewTest {
         eventsRecorder.assertSingle(DeveloperSettingsEvents.SetTracingLogLevel(LogLevelItem.DEBUG))
     }
 
-    @Config(qualifiers = "h1700dp")
+    @Config(qualifiers = "h2000dp")
     @Test
     fun `clicking on clear cache emits the expected event`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
