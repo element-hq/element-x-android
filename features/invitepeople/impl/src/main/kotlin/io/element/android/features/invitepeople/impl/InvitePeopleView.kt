@@ -7,7 +7,6 @@
 
 package io.element.android.features.invitepeople.impl
 
-import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,19 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.bumble.appyx.core.plugin.BackPressHandler
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.CheckableUserRowData
@@ -176,7 +171,7 @@ private fun InvitePeopleSearchBar(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomInviteMembersViewPreview(@PreviewParameter(DefaultInvitePeopleStateProvider::class) state: DefaultInvitePeopleState) =
+internal fun InvitePeopleViewPreview(@PreviewParameter(DefaultInvitePeopleStateProvider::class) state: DefaultInvitePeopleState) =
     ElementPreview {
         InvitePeopleView(state = state)
     }
