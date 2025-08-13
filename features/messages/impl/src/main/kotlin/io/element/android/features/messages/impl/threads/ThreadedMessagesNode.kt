@@ -57,8 +57,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.core.asEventId
-import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
@@ -111,7 +109,6 @@ class ThreadedMessagesNode @AssistedInject constructor(
     )
 
     interface Callback : Plugin {
-        fun onRoomDetailsClick()
         fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClick(userId: UserId)
@@ -123,7 +120,6 @@ class ThreadedMessagesNode @AssistedInject constructor(
         fun onCreatePollClick()
         fun onEditPollClick(eventId: EventId)
         fun onJoinCallClick(roomId: RoomId)
-        fun onViewAllPinnedEvents()
     }
 
     override fun onBuilt() {
@@ -136,10 +132,6 @@ class ThreadedMessagesNode @AssistedInject constructor(
                 mediaPlayer.close()
             }
         )
-    }
-
-    private fun onRoomDetailsClick() {
-        callbacks.forEach { it.onRoomDetailsClick() }
     }
 
     private fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean {
@@ -222,18 +214,7 @@ class ThreadedMessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onPreviewAttachments(attachments) }
     }
 
-    override fun onNavigateToRoom(roomId: RoomId) {
-        if (roomId == room.roomId) {
-            displaySameRoomToast()
-        } else {
-            val permalinkData = PermalinkData.RoomLink(roomId.toRoomIdOrAlias())
-            callbacks.forEach { it.onPermalinkClick(permalinkData) }
-        }
-    }
-
-    private fun onViewAllPinnedMessagesClick() {
-        callbacks.forEach { it.onViewAllPinnedEvents() }
-    }
+    override fun onNavigateToRoom(roomId: RoomId, serverNames: List<String>) = Unit
 
     private fun onSendLocationClick() {
         callbacks.forEach { it.onSendLocationClick() }
@@ -272,7 +253,7 @@ class ThreadedMessagesNode @AssistedInject constructor(
             MessagesView(
                 state = state,
                 onBackClick = this::navigateUp,
-                onRoomDetailsClick = this::onRoomDetailsClick,
+                onRoomDetailsClick = {},
                 onEventContentClick = this::onEventClick,
                 onUserDataClick = this::onUserDataClick,
                 onLinkClick = { url, customTab ->
@@ -287,7 +268,7 @@ class ThreadedMessagesNode @AssistedInject constructor(
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,
-                onViewAllPinnedMessagesClick = this::onViewAllPinnedMessagesClick,
+                onViewAllPinnedMessagesClick = {},
                 modifier = modifier,
                 knockRequestsBannerView = {},
             )

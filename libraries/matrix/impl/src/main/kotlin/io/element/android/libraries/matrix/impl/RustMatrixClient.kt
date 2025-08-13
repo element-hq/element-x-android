@@ -14,6 +14,7 @@ import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -133,6 +134,7 @@ class RustMatrixClient(
     baseCacheDirectory: File,
     clock: SystemClock,
     timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
+    private val featureFlagService: FeatureFlagService,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
@@ -203,6 +205,7 @@ class RustMatrixClient(
         timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
         roomMembershipObserver = roomMembershipObserver,
         roomInfoMapper = roomInfoMapper,
+        featureFlagService = featureFlagService,
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
