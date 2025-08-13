@@ -19,7 +19,7 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.persistentListOf
 
-open class CreateRoomRootStateProvider : PreviewParameterProvider<StartChatState> {
+open class StartChatStateProvider : PreviewParameterProvider<StartChatState> {
     override val values: Sequence<StartChatState>
         get() = sequenceOf(
             aCreateRoomRootState(),
