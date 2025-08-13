@@ -43,7 +43,7 @@ appyx = "1.7.1"
 sqldelight = "2.1.0"
 wysiwyg = "2.39.0"
 telephoto = "0.16.0"
-haze = "1.6.9"
+haze = "1.6.10"
 
 # Dependency analysis
 dependencyAnalysis = "2.19.0"
