@@ -94,7 +94,7 @@ androidx_camera_view = { module = "androidx.camera:camera-view", version.ref = "
 androidx_camera_camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera" }
 
 androidx_recyclerview = "androidx.recyclerview:recyclerview:1.4.0"
-androidx_browser = "androidx.browser:browser:1.8.0"
+androidx_browser = "androidx.browser:browser:1.9.0"
 androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 androidx_splash = "androidx.core:core-splashscreen:1.0.1"
