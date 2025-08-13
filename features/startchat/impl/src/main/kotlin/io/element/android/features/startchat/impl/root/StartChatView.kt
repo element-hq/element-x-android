@@ -48,7 +48,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun CreateRoomRootView(
+fun StartChatView(
     state: StartChatState,
     onCloseClick: () -> Unit,
     onNewRoomClick: () -> Unit,
@@ -239,9 +239,9 @@ private fun CreateRoomActionButton(
 
 @PreviewsDayNight
 @Composable
-internal fun CreateRoomRootViewPreview(@PreviewParameter(StartChatStateProvider::class) state: StartChatState) =
+internal fun StartChatViewPreview(@PreviewParameter(StartChatStateProvider::class) state: StartChatState) =
     ElementPreview {
-        CreateRoomRootView(
+        StartChatView(
             state = state,
             onCloseClick = {},
             onNewRoomClick = {},

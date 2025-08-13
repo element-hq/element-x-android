@@ -46,7 +46,7 @@ class StartChatNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         val activity = requireNotNull(LocalActivity.current)
-        CreateRoomRootView(
+        StartChatView(
             state = state,
             modifier = modifier,
             onCloseClick = this::navigateUp,

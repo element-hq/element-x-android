@@ -34,7 +34,7 @@ import org.robolectric.annotation.Config
 import kotlin.collections.get
 
 @RunWith(AndroidJUnit4::class)
-class CreateBaseRoomRootViewTest {
+class StartChatViewTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 
@@ -42,7 +42,7 @@ class CreateBaseRoomRootViewTest {
     fun `clicking on back invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setCreateRoomRootView(
+            rule.setStartChatView(
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                 ),
@@ -56,7 +56,7 @@ class CreateBaseRoomRootViewTest {
     fun `clicking on New room invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setCreateRoomRootView(
+            rule.setStartChatView(
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                 ),
@@ -71,7 +71,7 @@ class CreateBaseRoomRootViewTest {
     fun `clicking on Invite people invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setCreateRoomRootView(
+            rule.setStartChatView(
                 aCreateRoomRootState(
                     applicationName = "test",
                     eventSink = eventsRecorder,
@@ -90,7 +90,7 @@ class CreateBaseRoomRootViewTest {
         val firstRoom = recentDirectRoomList[0]
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnceWithParam(firstRoom.roomId) {
-            rule.setCreateRoomRootView(
+            rule.setStartChatView(
                 aCreateRoomRootState(
                     userListState = aUserListState(
                         recentDirectRooms = recentDirectRoomList
@@ -108,7 +108,7 @@ class CreateBaseRoomRootViewTest {
     fun `clicking on Join room by address invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setCreateRoomRootView(
+            rule.setStartChatView(
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                 ),
@@ -122,7 +122,7 @@ class CreateBaseRoomRootViewTest {
     fun `clicking on room directory invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setCreateRoomRootView(
+            rule.setStartChatView(
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                     isRoomDirectorySearchEnabled = true
@@ -134,7 +134,7 @@ class CreateBaseRoomRootViewTest {
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCreateRoomRootView(
+private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setStartChatView(
     state: StartChatState,
     onCloseClick: () -> Unit = EnsureNeverCalled(),
     onNewRoomClick: () -> Unit = EnsureNeverCalled(),
@@ -144,7 +144,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCreat
     onRoomDirectorySearchClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
-        CreateRoomRootView(
+        StartChatView(
             state = state,
             onCloseClick = onCloseClick,
             onNewRoomClick = onNewRoomClick,
