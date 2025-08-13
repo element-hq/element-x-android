@@ -137,7 +137,7 @@ class MediaViewerDataSourceTest {
     fun `test dataFlow with data galleryMode image`() = runTest {
         val galleryDataSource = FakeMediaGalleryDataSource()
         val sut = createMediaViewerDataSource(
-            mode = MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.MEDIA),
+            mode = MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.Media),
             galleryDataSource = galleryDataSource,
         )
         sut.dataFlow().test {
@@ -159,7 +159,7 @@ class MediaViewerDataSourceTest {
     fun `test dataFlow with data galleryMode files`() = runTest {
         val galleryDataSource = FakeMediaGalleryDataSource()
         val sut = createMediaViewerDataSource(
-            mode = MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.MEDIA),
+            mode = MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.Media),
             galleryDataSource = galleryDataSource,
         )
         sut.dataFlow().test {
@@ -265,7 +265,7 @@ class MediaViewerDataSourceTest {
     }
 
     private fun TestScope.createMediaViewerDataSource(
-        mode: MediaViewerMode = MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.MEDIA),
+        mode: MediaViewerMode = MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.Media),
         galleryDataSource: MediaGalleryDataSource = FakeMediaGalleryDataSource(),
         mediaLoader: MatrixMediaLoader = FakeMatrixMediaLoader(),
         localMediaFactory: LocalMediaFactory = FakeLocalMediaFactory(mockMediaUrl),

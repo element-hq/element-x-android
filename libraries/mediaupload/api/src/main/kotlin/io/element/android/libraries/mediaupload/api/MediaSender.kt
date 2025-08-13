@@ -8,21 +8,35 @@
 package io.element.android.libraries.mediaupload.api
 
 import android.net.Uri
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.flatMapCatching
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineSendMode
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
-class MediaSender @Inject constructor(
+class MediaSender @AssistedInject constructor(
     private val preProcessor: MediaPreProcessor,
     private val room: JoinedRoom,
+    @Assisted private val timelineMode: Timeline.Mode,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            timelineMode: Timeline.Mode,
+        ): MediaSender
+    }
+
     private val ongoingUploadJobs = ConcurrentHashMap<Job.Key, MediaUploadHandler>()
     val hasOngoingMediaUploads get() = ongoingUploadJobs.isNotEmpty()
 
@@ -46,12 +60,14 @@ class MediaSender @Inject constructor(
         formattedCaption: String?,
         inReplyToEventId: EventId?,
     ): Result<Unit> {
-        return room.liveTimeline.sendMedia(
-            uploadInfo = mediaUploadInfo,
-            caption = caption,
-            formattedCaption = formattedCaption,
-            inReplyToEventId = inReplyToEventId,
-        )
+        return getTimeline().flatMap {
+            it.sendMedia(
+                uploadInfo = mediaUploadInfo,
+                caption = caption,
+                formattedCaption = formattedCaption,
+                inReplyToEventId = inReplyToEventId,
+            )
+        }
             .handleSendResult()
     }
 
@@ -71,7 +87,7 @@ class MediaSender @Inject constructor(
                 mediaOptimizationConfig = mediaOptimizationConfig,
             )
             .flatMapCatching { info ->
-                room.liveTimeline.sendMedia(
+                getTimeline().getOrThrow().sendMedia(
                     uploadInfo = info,
                     caption = caption,
                     formattedCaption = formattedCaption,
@@ -101,7 +117,7 @@ class MediaSender @Inject constructor(
                     audioInfo = audioInfo,
                     waveform = waveForm,
                 )
-                room.liveTimeline.sendMedia(
+                getTimeline().getOrThrow().sendMedia(
                     uploadInfo = newInfo,
                     caption = null,
                     formattedCaption = null,
@@ -184,6 +200,15 @@ class MediaSender @Inject constructor(
                 ongoingUploadJobs[Job] = uploadHandler
                 uploadHandler.await()
             }
+    }
+
+    private suspend fun getTimeline(): Result<Timeline> {
+        return when (timelineMode) {
+            is Timeline.Mode.Thread -> {
+                room.createTimeline(CreateTimelineParams.Threaded(threadRootEventId = timelineMode.threadRootId))
+            }
+            else -> Result.success(room.liveTimeline)
+        }
     }
 
     /**

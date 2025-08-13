@@ -197,7 +197,7 @@ fun MessagesView(
                 topBar = {
                     Column {
                         ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                        if (state.timelineState.timelineMode == Timeline.Mode.THREADED) {
+                        if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
                             ThreadTopBar(onBackClick = onBackClick)
                         } else {
                             MessagesViewTopBar(
@@ -420,7 +420,7 @@ private fun MessagesViewContent(
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
             )
 
-            if (state.timelineState.timelineMode != Timeline.Mode.THREADED) {
+            if (state.timelineState.timelineMode !is Timeline.Mode.Thread) {
                 AnimatedVisibility(
                     visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
                     enter = expandVertically(),

@@ -23,6 +23,8 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineSendMode
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -49,12 +51,15 @@ class VoiceMessageComposerPresenter @Inject constructor(
     private val sessionCoroutineScope: CoroutineScope,
     private val voiceRecorder: VoiceRecorder,
     private val analyticsService: AnalyticsService,
-    private val mediaSender: MediaSender,
+    private val mediaSenderFactory: MediaSender.Factory,
     private val player: VoiceMessageComposerPlayer,
     private val messageComposerContext: MessageComposerContext,
     permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<VoiceMessageComposerState> {
     private val permissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.RECORD_AUDIO)
+
+    // TODO: use the actual timeline send mode from the composer context
+    private val mediaSender = mediaSenderFactory.create(Timeline.Mode.Live)
 
     @Composable
     override fun present(): VoiceMessageComposerState {

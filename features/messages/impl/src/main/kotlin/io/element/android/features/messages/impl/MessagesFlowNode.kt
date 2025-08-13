@@ -75,6 +75,7 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineSendMode
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
@@ -141,7 +142,7 @@ class MessagesFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
-        data class AttachmentPreview(val attachment: Attachment) : NavTarget
+        data class AttachmentPreview(val timelineMode: Timeline.Mode, val attachment: Attachment) : NavTarget
 
         @Parcelize
         data class LocationViewer(val location: Location, val description: String?) : NavTarget
@@ -156,7 +157,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
 
         @Parcelize
-        data object SendLocation : NavTarget
+        data class SendLocation(val timelineMode: Timeline.Mode) : NavTarget
 
         @Parcelize
         data object CreatePoll : NavTarget
@@ -216,15 +217,18 @@ class MessagesFlowNode @AssistedInject constructor(
                         callbacks.forEach { it.onRoomDetailsClick() }
                     }
 
-                    override fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean {
+                    override fun onEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
                         return processEventClick(
-                            timelineMode = if (isLive) Timeline.Mode.LIVE else Timeline.Mode.FOCUSED_ON_EVENT,
+                            timelineMode = timelineMode,
                             event = event,
                         )
                     }
 
                     override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
-                        backstack.push(NavTarget.AttachmentPreview(attachments.first()))
+                        backstack.push(NavTarget.AttachmentPreview(
+                            attachment = attachments.first(),
+                            timelineMode = Timeline.Mode.Live,
+                        ))
                     }
 
                     override fun onUserDataClick(userId: UserId) {
@@ -248,7 +252,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onSendLocationClick() {
-                        backstack.push(NavTarget.SendLocation)
+                        backstack.push(NavTarget.SendLocation(Timeline.Mode.Live))
                     }
 
                     override fun onCreatePollClick() {
@@ -307,7 +311,10 @@ class MessagesFlowNode @AssistedInject constructor(
                     .build()
             }
             is NavTarget.AttachmentPreview -> {
-                val inputs = AttachmentsPreviewNode.Inputs(navTarget.attachment)
+                val inputs = AttachmentsPreviewNode.Inputs(
+                    attachment = navTarget.attachment,
+                    timelineMode = navTarget.timelineMode,
+                )
                 createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
             is NavTarget.LocationViewer -> {
@@ -336,8 +343,10 @@ class MessagesFlowNode @AssistedInject constructor(
                 val inputs = ReportMessageNode.Inputs(navTarget.eventId, navTarget.senderId)
                 createNode<ReportMessageNode>(buildContext, listOf(inputs))
             }
-            NavTarget.SendLocation -> {
-                sendLocationEntryPoint.createNode(this, buildContext)
+            is NavTarget.SendLocation -> {
+                sendLocationEntryPoint
+                    .builder(navTarget.timelineMode)
+                    .build(this, buildContext)
             }
             NavTarget.CreatePoll -> {
                 createPollEntryPoint.nodeBuilder(this, buildContext)
@@ -353,7 +362,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 val callback = object : PinnedMessagesListNode.Callback {
                     override fun onEventClick(event: TimelineItem.Event) {
                         processEventClick(
-                            timelineMode = Timeline.Mode.PINNED_EVENTS,
+                            timelineMode = Timeline.Mode.PinnedEvents,
                             event = event,
                         )
                     }
@@ -392,15 +401,18 @@ class MessagesFlowNode @AssistedInject constructor(
                     focusedEventId = navTarget.focusedEventId,
                 )
                 val callback = object : ThreadedMessagesNode.Callback {
-                    override fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean {
+                    override fun onEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
                         return processEventClick(
-                            timelineMode = if (isLive) Timeline.Mode.LIVE else Timeline.Mode.FOCUSED_ON_EVENT,
+                            timelineMode = timelineMode,
                             event = event,
                         )
                     }
 
                     override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
-                        backstack.push(NavTarget.AttachmentPreview(attachments.first()))
+                        backstack.push(NavTarget.AttachmentPreview(
+                            attachment = attachments.first(),
+                            timelineMode = Timeline.Mode.Thread(navTarget.threadRootId)
+                        ))
                     }
 
                     override fun onUserDataClick(userId: UserId) {
@@ -424,7 +436,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onSendLocationClick() {
-                        backstack.push(NavTarget.SendLocation)
+                        backstack.push(NavTarget.SendLocation(Timeline.Mode.Thread(navTarget.threadRootId)))
                     }
 
                     override fun onCreatePollClick() {

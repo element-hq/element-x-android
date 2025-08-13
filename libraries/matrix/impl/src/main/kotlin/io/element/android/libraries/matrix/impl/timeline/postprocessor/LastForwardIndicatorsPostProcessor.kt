@@ -24,7 +24,7 @@ class LastForwardIndicatorsPostProcessor(
         items: List<MatrixTimelineItem>,
     ): List<MatrixTimelineItem> {
         // We don't need to add the last forward indicator if we are not in the FOCUSED_ON_EVENT mode
-        if (mode != Timeline.Mode.FOCUSED_ON_EVENT) {
+        if (mode !is Timeline.Mode.FocusedOnEvent) {
             return items
         } else {
             return buildList {
