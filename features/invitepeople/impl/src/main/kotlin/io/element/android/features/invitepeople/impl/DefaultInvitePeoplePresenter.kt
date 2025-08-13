@@ -81,6 +81,31 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
             )
         }
 
+        fun handleEvents(event: InvitePeopleEvents) {
+            when (event) {
+                is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
+                    searchActive = event.active
+                    searchQuery = ""
+                }
+
+                is DefaultInvitePeopleEvents.UpdateSearchQuery -> {
+                    searchQuery = event.query
+                }
+
+                is DefaultInvitePeopleEvents.ToggleUser -> {
+                    selectedUsers.toggleUser(event.user)
+                    searchResults.toggleUser(event.user)
+                }
+                is InvitePeopleEvents.SendInvites -> {
+                    coroutineScope.sendInvites(selectedUsers.value)
+                }
+                is InvitePeopleEvents.CloseSearch -> {
+                    searchActive = false
+                    searchQuery = ""
+                }
+            }
+        }
+
         return DefaultInvitePeopleState(
             canInvite = selectedUsers.value.isNotEmpty(),
             selectedUsers = selectedUsers.value,
@@ -88,30 +113,7 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
             isSearchActive = searchActive,
             searchResults = searchResults.value,
             showSearchLoader = showSearchLoader.value,
-            eventSink = {
-                when (it) {
-                    is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
-                        searchActive = it.active
-                        searchQuery = ""
-                    }
-
-                    is DefaultInvitePeopleEvents.UpdateSearchQuery -> {
-                        searchQuery = it.query
-                    }
-
-                    is DefaultInvitePeopleEvents.ToggleUser -> {
-                        selectedUsers.toggleUser(it.user)
-                        searchResults.toggleUser(it.user)
-                    }
-                    is InvitePeopleEvents.SendInvites -> {
-                        coroutineScope.sendInvites(selectedUsers.value)
-                    }
-                    is InvitePeopleEvents.CloseSearch -> {
-                        searchActive = false
-                        searchQuery = ""
-                    }
-                }
-            }
+            eventSink = ::handleEvents,
         )
     }
 
