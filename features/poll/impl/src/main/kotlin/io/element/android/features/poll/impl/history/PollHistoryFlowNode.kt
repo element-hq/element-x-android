@@ -25,6 +25,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -52,7 +53,10 @@ class PollHistoryFlowNode @AssistedInject constructor(
         return when (navTarget) {
             is NavTarget.EditPoll -> {
                 createPollEntryPoint.nodeBuilder(this, buildContext)
-                    .params(CreatePollEntryPoint.Params(mode = CreatePollMode.EditPoll(eventId = navTarget.pollStartEventId)))
+                    .params(CreatePollEntryPoint.Params(
+                        timelineMode = Timeline.Mode.Live,
+                        mode = CreatePollMode.EditPoll(eventId = navTarget.pollStartEventId))
+                    )
                     .build()
             }
             NavTarget.Root -> {

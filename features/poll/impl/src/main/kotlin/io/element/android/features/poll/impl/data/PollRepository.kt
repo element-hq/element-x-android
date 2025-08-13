@@ -7,24 +7,40 @@
 
 package io.element.android.features.poll.impl.data
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.getActiveTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
 
-class PollRepository @Inject constructor(
+class PollRepository @AssistedInject constructor(
     private val room: JoinedRoom,
-    private val timelineProvider: TimelineProvider,
+    private val defaultTimelineProvider: TimelineProvider,
+    @Assisted private val timelineMode: Timeline.Mode,
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            timelineMode: Timeline.Mode,
+        ): PollRepository
+    }
+
     suspend fun getPoll(eventId: EventId): Result<PollContent> = runCatchingExceptions {
-        timelineProvider
+        getTimelineProvider()
+            .getOrThrow()
             .getActiveTimeline()
             .timelineItems
             .first()
@@ -42,30 +58,51 @@ class PollRepository @Inject constructor(
         pollKind: PollKind,
         maxSelections: Int,
     ): Result<Unit> = when (existingPollId) {
-        null -> room.liveTimeline.createPoll(
-            question = question,
-            answers = answers,
-            maxSelections = maxSelections,
-            pollKind = pollKind,
-        )
-        else -> timelineProvider
-            .getActiveTimeline()
-            .editPoll(
-                pollStartId = existingPollId,
-                question = question,
-                answers = answers,
-                maxSelections = maxSelections,
-                pollKind = pollKind,
-            )
+        null -> getTimelineProvider().flatMap { timelineProvider ->
+            timelineProvider
+                .getActiveTimeline()
+                .createPoll(
+                    question = question,
+                    answers = answers,
+                    maxSelections = maxSelections,
+                    pollKind = pollKind,
+                )
+        }
+        else -> getTimelineProvider().flatMap { timelineProvider ->
+            timelineProvider.getActiveTimeline()
+                .editPoll(
+                    pollStartId = existingPollId,
+                    question = question,
+                    answers = answers,
+                    maxSelections = maxSelections,
+                    pollKind = pollKind,
+                )
+        }
     }
 
     suspend fun deletePoll(
         pollStartId: EventId,
     ): Result<Unit> =
-        timelineProvider
-            .getActiveTimeline()
-            .redactEvent(
-                eventOrTransactionId = pollStartId.toEventOrTransactionId(),
-                reason = null,
-            )
+        getTimelineProvider().flatMap { timelineProvider ->
+            timelineProvider.getActiveTimeline()
+                .redactEvent(
+                    eventOrTransactionId = pollStartId.toEventOrTransactionId(),
+                    reason = null,
+                )
+        }
+
+    private suspend fun getTimelineProvider(): Result<TimelineProvider> {
+        return when (timelineMode) {
+            is Timeline.Mode.Thread -> {
+                val threadedTimelineResult = room.createTimeline(CreateTimelineParams.Threaded(timelineMode.threadRootId))
+                threadedTimelineResult.map { threadedTimeline ->
+                    object : TimelineProvider {
+                        private val flow = MutableStateFlow<Timeline?>(threadedTimeline)
+                        override fun activeTimelineFlow(): StateFlow<Timeline?> = flow
+                    }
+                }
+            }
+            else -> Result.success(defaultTimelineProvider)
+        }
+    }
 }
