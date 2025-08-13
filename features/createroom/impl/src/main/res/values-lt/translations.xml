@@ -10,5 +10,4 @@ Tai galite bet kada pakeisti kambario nustatymuose."</string>
   <string name="screen_create_room_room_name_label">"Kambario pavadinimas"</string>
   <string name="screen_create_room_title">"Kurti kambarį"</string>
   <string name="screen_create_room_topic_label">"Tema (nebūtina)"</string>
-  <string name="screen_start_chat_error_starting_chat">"Bandant pradėti pokalbį įvyko klaida"</string>
 </resources>
