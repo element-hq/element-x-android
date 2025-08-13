@@ -44,7 +44,6 @@ class CreateRoomFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     private fun onRoomCreated(roomId: RoomId) {
         plugins<CreateRoomEntryPoint.Callback>().forEach { it.onRoomCreated(roomId) }
     }

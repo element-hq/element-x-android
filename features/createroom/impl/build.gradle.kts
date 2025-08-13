@@ -1,4 +1,3 @@
-import extension.ComponentMergingStrategy
 import extension.setupAnvil
 
 /*

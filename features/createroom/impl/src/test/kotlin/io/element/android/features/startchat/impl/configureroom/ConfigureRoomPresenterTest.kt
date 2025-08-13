@@ -139,8 +139,6 @@ class ConfigureRoomPresenterTest {
             val initialState = initialState()
             var expectedConfig = CreateRoomConfig()
             assertThat(initialState.config).isEqualTo(expectedConfig)
-
-
             // Room name
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
             var newState = awaitItem()
@@ -250,7 +248,7 @@ class ConfigureRoomPresenterTest {
         val matrixClient = createMatrixClient()
         val analyticsService = FakeAnalyticsService()
         val mediaPreProcessor = FakeMediaPreProcessor()
-        val dataStore = CreateRoomConfigStore( FakeRoomAliasHelper())
+        val dataStore = CreateRoomConfigStore(FakeRoomAliasHelper())
         val presenter = createConfigureRoomPresenter(
             dataStore = dataStore,
             mediaPreProcessor = mediaPreProcessor,

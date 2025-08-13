@@ -30,9 +30,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun AddPeopleView(
     state: InvitePeopleState,
-    invitePeopleView: @Composable () -> Unit,
     onFinish: () -> Unit,
     modifier: Modifier = Modifier,
+    invitePeopleView: @Composable () -> Unit,
 ) {
     HeaderFooterPage(
         modifier = modifier,

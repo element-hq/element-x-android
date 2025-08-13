@@ -7,7 +7,6 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 
 sealed interface ConfigureRoomEvents {

@@ -52,7 +52,6 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
     @AppCoroutineScope private val coroutineScope: CoroutineScope,
     private val appErrorStateService: AppErrorStateService,
 ) : InvitePeoplePresenter {
-
     @AssistedFactory
     @ContributesBinding(SessionScope::class)
     interface Factory : InvitePeoplePresenter.Factory {

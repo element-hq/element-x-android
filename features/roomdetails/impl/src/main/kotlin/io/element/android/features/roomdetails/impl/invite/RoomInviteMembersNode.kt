@@ -19,7 +19,6 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.invitepeople.api.InvitePeoplePresenter
 import io.element.android.features.invitepeople.api.InvitePeopleRenderer
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.services.analytics.api.AnalyticsService
@@ -28,12 +27,11 @@ import io.element.android.services.analytics.api.AnalyticsService
 class RoomInviteMembersNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val room: JoinedRoom,
     private val analyticsService: AnalyticsService,
     private val invitePeopleRenderer: InvitePeopleRenderer,
-    private val invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,
+    room: JoinedRoom,
+    invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     init {
         lifecycle.subscribe(
             onResume = {
@@ -50,9 +48,10 @@ class RoomInviteMembersNode @AssistedInject constructor(
         RoomInviteMembersView(
             state = state,
             modifier = modifier,
-            invitePeopleView = { invitePeopleRenderer.Render(state, Modifier) },
             onBackClick = { navigateUp() },
-            onSubmitClick = { navigateUp() }
-        )
+            onDone = { navigateUp() }
+        ) {
+            invitePeopleRenderer.Render(state, Modifier)
+        }
     }
 }

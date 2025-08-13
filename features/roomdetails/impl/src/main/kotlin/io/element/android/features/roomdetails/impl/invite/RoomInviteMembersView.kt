@@ -7,9 +7,7 @@
 
 package io.element.android.features.roomdetails.impl.invite
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.features.invitepeople.api.InvitePeopleStateProvider
@@ -34,10 +31,10 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomInviteMembersView(
     state: InvitePeopleState,
-    invitePeopleView: @Composable () -> Unit,
     onBackClick: () -> Unit,
-    onSubmitClick: () -> Unit,
+    onDone: () -> Unit,
     modifier: Modifier = Modifier,
+    invitePeopleView: @Composable () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -52,7 +49,7 @@ fun RoomInviteMembersView(
                 },
                 onSubmitClick = {
                     state.eventSink(InvitePeopleEvents.SendInvites)
-                    onSubmitClick()
+                    onDone()
                 },
                 canSend = state.canInvite,
             )
@@ -60,13 +57,12 @@ fun RoomInviteMembersView(
     ) { padding ->
         Box(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(padding)
-                    .consumeWindowInsets(padding),
+                .fillMaxWidth()
+                .padding(padding)
+                .consumeWindowInsets(padding),
         ) {
             invitePeopleView()
         }
-
     }
 }
 
@@ -97,6 +93,6 @@ internal fun RoomInviteMembersViewPreview(@PreviewParameter(InvitePeopleStatePro
         state = state,
         invitePeopleView = {},
         onBackClick = {},
-        onSubmitClick = {},
+        onDone = {},
     )
 }

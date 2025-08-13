@@ -18,9 +18,7 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class DefaultCreateRoomEntryPoint @Inject constructor() : CreateRoomEntryPoint {
-
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): CreateRoomEntryPoint.NodeBuilder {
-
         val plugins = ArrayList<Plugin>()
 
         return object : CreateRoomEntryPoint.NodeBuilder {

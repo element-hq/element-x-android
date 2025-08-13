@@ -13,10 +13,10 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
+import io.element.android.features.invitepeople.test.FakeStartDMAction
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.startchat.api.StartDMAction
-import io.element.android.features.invitepeople.test.FakeStartDMAction
-import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState

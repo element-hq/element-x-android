@@ -30,7 +30,6 @@ class AddPeopleNode @AssistedInject constructor(
     invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,
     private val invitePeopleRenderer: InvitePeopleRenderer,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(
         val joinedRoom: JoinedRoom
     ) : NodeInputs
@@ -51,8 +50,9 @@ class AddPeopleNode @AssistedInject constructor(
         val state = invitePeoplePresenter.present()
         AddPeopleView(
             state = state,
-            invitePeopleView = { invitePeopleRenderer.Render(state, Modifier) },
-            onFinish = ::onFinish
-        )
+            onFinish = ::onFinish,
+        ) {
+            invitePeopleRenderer.Render(state, Modifier)
+        }
     }
 }

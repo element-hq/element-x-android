@@ -43,7 +43,6 @@ fun InvitePeopleView(
     state: DefaultInvitePeopleState,
     modifier: Modifier = Modifier,
 ) {
-
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),

@@ -18,7 +18,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
@@ -30,8 +29,7 @@ class ConfigureRoomNode @AssistedInject constructor(
     private val presenter: ConfigureRoomPresenter,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
-    interface Callback: Plugin {
+    interface Callback : Plugin {
         fun onCreateRoomSuccess(roomId: RoomId)
     }
 
@@ -43,7 +41,7 @@ class ConfigureRoomNode @AssistedInject constructor(
         )
     }
 
-    private fun onCreateRoomSuccess(roomId: RoomId){
+    private fun onCreateRoomSuccess(roomId: RoomId) {
         plugins<Callback>().forEach { it.onCreateRoomSuccess(roomId) }
     }
 

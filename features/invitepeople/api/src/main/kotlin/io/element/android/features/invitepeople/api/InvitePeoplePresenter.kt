@@ -11,9 +11,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 interface InvitePeoplePresenter : Presenter<InvitePeopleState> {
-
     interface Factory {
         fun create(room: JoinedRoom): InvitePeoplePresenter
     }
-
 }

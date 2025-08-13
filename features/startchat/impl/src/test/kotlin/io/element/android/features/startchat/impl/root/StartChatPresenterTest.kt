@@ -12,11 +12,11 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.invitepeople.test.FakeStartDMAction
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.startchat.api.StartDMAction
 import io.element.android.features.startchat.impl.userlist.FakeUserListPresenter
 import io.element.android.features.startchat.impl.userlist.FakeUserListPresenterFactory
-import io.element.android.features.invitepeople.test.FakeStartDMAction
 import io.element.android.features.startchat.impl.userlist.UserListDataStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
