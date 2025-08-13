@@ -74,7 +74,7 @@ class TimelinePresenter @AssistedInject constructor(
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
     private val sessionPreferencesStore: SessionPreferencesStore,
-    private val timelineController: TimelineController,
+    @Assisted private val timelineController: TimelineController,
     private val timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
     private val resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState>,
     private val typingNotificationPresenter: Presenter<TypingNotificationState>,
@@ -83,7 +83,10 @@ class TimelinePresenter @AssistedInject constructor(
 ) : Presenter<TimelineState> {
     @AssistedFactory
     interface Factory {
-        fun create(navigator: MessagesNavigator): TimelinePresenter
+        fun create(
+            timelineController: TimelineController,
+            navigator: MessagesNavigator
+        ): TimelinePresenter
     }
 
     private val timelineItemsFactory: TimelineItemsFactory = timelineItemsFactoryCreator.create(

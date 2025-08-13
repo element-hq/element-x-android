@@ -35,7 +35,7 @@ import io.element.android.libraries.di.RoomScope
 
 @ContributesTo(RoomScope::class)
 @Module
-interface MessagesModule {
+interface MessagesBindsModule {
     @Binds
     fun bindPinnedMessagesBannerPresenter(presenter: PinnedMessagesBannerPresenter): Presenter<PinnedMessagesBannerState>
 
@@ -66,3 +66,4 @@ interface MessagesModule {
     @Binds
     fun bindIdentityChangeStatePresenter(presenter: IdentityChangeStatePresenter): Presenter<IdentityChangeState>
 }
+

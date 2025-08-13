@@ -111,7 +111,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val clipboardHelper: ClipboardHelper,
     private val htmlConverterProvider: HtmlConverterProvider,
     private val buildMeta: BuildMeta,
-    private val timelineController: TimelineController,
+    @Assisted private val timelineController: TimelineController,
     private val permalinkParser: PermalinkParser,
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
@@ -123,6 +123,7 @@ class MessagesPresenter @AssistedInject constructor(
             composerPresenter: Presenter<MessageComposerState>,
             timelinePresenter: Presenter<TimelineState>,
             actionListPresenter: Presenter<ActionListState>,
+            timelineController: TimelineController,
         ): MessagesPresenter
     }
 
