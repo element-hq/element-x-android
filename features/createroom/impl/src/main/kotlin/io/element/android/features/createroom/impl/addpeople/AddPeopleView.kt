@@ -42,7 +42,7 @@ fun AddPeopleView(
         },
         footer = {
             Button(
-                text = "Finish",
+                text = stringResource(CommonStrings.action_finish),
                 onClick = {
                     state.eventSink(InvitePeopleEvents.SendInvites)
                     onFinish()
