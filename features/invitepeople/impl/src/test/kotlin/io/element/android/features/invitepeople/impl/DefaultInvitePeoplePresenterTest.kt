@@ -7,16 +7,16 @@
 
 package io.element.android.features.invitepeople.impl
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomMemberList
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.usersearch.api.UserRepository
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.api.UserSearchResultState
@@ -31,9 +32,14 @@ import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.services.apperror.api.AppErrorStateService
 import io.element.android.services.apperror.test.FakeAppErrorStateService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -46,10 +52,7 @@ internal class DefaultInvitePeoplePresenterTest {
     @Test
     fun `present - initial state has no results and no search`() = runTest {
         val presenter = createDefaultInvitePeoplePresenter()
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItemAsDefault()
 
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
@@ -64,10 +67,7 @@ internal class DefaultInvitePeoplePresenterTest {
     @Test
     fun `present - updates search active state`() = runTest {
         val presenter = createDefaultInvitePeoplePresenter()
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             skipItems(1)
 
@@ -75,6 +75,14 @@ internal class DefaultInvitePeoplePresenterTest {
 
             val resultState = awaitItem()
             assertThat(resultState.isSearchActive).isTrue()
+            resultState.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery("some query"))
+            assertThat(awaitItemAsDefault().searchQuery).isEqualTo("some query")
+            resultState.eventSink(InvitePeopleEvents.CloseSearch)
+            skipItems(1)
+            awaitItemAsDefault().also {
+                assertThat(it.isSearchActive).isFalse()
+                assertThat(it.searchQuery).isEmpty()
+            }
         }
     }
 
@@ -85,9 +93,7 @@ internal class DefaultInvitePeoplePresenterTest {
             userRepository = repository,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery("some query"))
             assertThat(repository.providedQuery).isEqualTo("some query")
@@ -112,9 +118,7 @@ internal class DefaultInvitePeoplePresenterTest {
             userRepository = repository,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             skipItems(1)
 
@@ -167,9 +171,7 @@ internal class DefaultInvitePeoplePresenterTest {
             ),
             coroutineDispatchers = coroutineDispatchers,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             skipItems(1)
 
@@ -229,9 +231,7 @@ internal class DefaultInvitePeoplePresenterTest {
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             skipItems(1)
 
@@ -270,10 +270,7 @@ internal class DefaultInvitePeoplePresenterTest {
             userRepository = repository,
             coroutineDispatchers = testCoroutineDispatchers()
         )
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             skipItems(1)
 
@@ -301,9 +298,7 @@ internal class DefaultInvitePeoplePresenterTest {
             userRepository = repository,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             skipItems(1)
 
@@ -341,9 +336,7 @@ internal class DefaultInvitePeoplePresenterTest {
             userRepository = repository,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             skipItems(1)
 
@@ -385,6 +378,80 @@ internal class DefaultInvitePeoplePresenterTest {
         }
     }
 
+    @Test
+    fun `present - toggling a user and send invite success`() = runTest {
+        val repository = FakeUserRepository()
+        val inviteUserResult = lambdaRecorder<UserId, Result<Unit>> { userId: UserId ->
+            Result.success(Unit)
+        }
+        val presenter = createDefaultInvitePeoplePresenter(
+            userRepository = repository,
+            inviteUserResult = inviteUserResult,
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            skipItems(1)
+            val selectedUser = aMatrixUser()
+            repository.emitStateWithUsers(users = aMatrixUserList() + selectedUser)
+            skipItems(1)
+            // And then a user is toggled
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
+            skipItems(1)
+            val resultState = awaitItemAsDefault()
+            // The results are updated...
+            assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
+            // Send invites
+            initialState.eventSink(InvitePeopleEvents.SendInvites)
+            delay(1_000)
+            inviteUserResult.assertions().isCalledOnce().with(
+                value(selectedUser.userId)
+            )
+        }
+    }
+
+    @Test
+    fun `present - toggling a user and send invite error`() = runTest {
+        val repository = FakeUserRepository()
+        val inviteUserResult = lambdaRecorder<UserId, Result<Unit>> { _: UserId ->
+            Result.failure(AN_EXCEPTION)
+        }
+        val showErrorResResult = lambdaRecorder<Int, Int, Unit> { _, _ -> }
+        val presenter = createDefaultInvitePeoplePresenter(
+            userRepository = repository,
+            inviteUserResult = inviteUserResult,
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            appErrorStateService = FakeAppErrorStateService(
+                showErrorResResult = showErrorResResult,
+            )
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            skipItems(1)
+            val selectedUser = aMatrixUser()
+            repository.emitStateWithUsers(users = aMatrixUserList() + selectedUser)
+            skipItems(1)
+            // And then a user is toggled
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
+            skipItems(1)
+            val resultState = awaitItemAsDefault()
+            // The results are updated...
+            assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
+            // Send invites
+            initialState.eventSink(InvitePeopleEvents.SendInvites)
+            delay(1_000)
+            inviteUserResult.assertions().isCalledOnce().with(
+                value(selectedUser.userId)
+            )
+            showErrorResResult.assertions()
+                .isCalledOnce()
+                .with(
+                    value(CommonStrings.common_unable_to_invite_title),
+                    value(CommonStrings.common_unable_to_invite_message)
+                )
+        }
+    }
+
     private suspend fun FakeUserRepository.emitStateWithUsers(
         users: List<MatrixUser>,
         isSearching: Boolean = false
@@ -416,12 +483,15 @@ private suspend fun <T> ReceiveTurbine<T>.awaitItemAsDefault(): DefaultInvitePeo
 
 fun TestScope.createDefaultInvitePeoplePresenter(
     roomMembersState: RoomMembersState = RoomMembersState.Ready(aRoomMemberList()),
+    inviteUserResult: (UserId) -> Result<Unit> = { lambdaError() },
     userRepository: UserRepository = FakeUserRepository(),
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
     appErrorStateService: AppErrorStateService = FakeAppErrorStateService(),
 ): DefaultInvitePeoplePresenter {
     return DefaultInvitePeoplePresenter(
-        room = FakeJoinedRoom().apply {
+        room = FakeJoinedRoom(
+            inviteUserResult = inviteUserResult,
+        ).apply {
             givenRoomMembersState(roomMembersState)
         },
         userRepository = userRepository,
