@@ -20,8 +20,7 @@ media3 = "1.8.0"
 camera = "1.4.2"
 
 # Compose
-compose_bom = "2025.06.01"
-composecompiler = "1.5.15"
+compose_bom = "2025.07.00"
 
 # Coroutines
 coroutines = "1.10.2"
@@ -222,10 +221,6 @@ google_autoservice = { module = "com.google.auto.service:auto-service", version.
 google_autoservice_annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoservice" }
 
 # Miscellaneous
-# Add unused dependency to androidx.compose.compiler:compiler to let Renovate create PR to change the
-# value of `composecompiler` (which is used to set composeOptions.kotlinCompilerExtensionVersion.
-# See https://github.com/renovatebot/renovate/issues/18354
-android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 
 [bundles]
