@@ -12,14 +12,24 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 class InvitePeopleStateProvider : PreviewParameterProvider<InvitePeopleState> {
     override val values: Sequence<InvitePeopleState>
         get() = sequenceOf(
-            PreviewInvitePeopleState(),
-            PreviewInvitePeopleState(canInvite = true),
-            PreviewInvitePeopleState(isSearchActive = true)
+            aPreviewInvitePeopleState(),
+            aPreviewInvitePeopleState(canInvite = true),
+            aPreviewInvitePeopleState(isSearchActive = true)
         )
 }
 
 private data class PreviewInvitePeopleState(
-    override val canInvite: Boolean = false,
-    override val isSearchActive: Boolean = false,
-    override val eventSink: (InvitePeopleEvents) -> Unit = {}
+    override val canInvite: Boolean,
+    override val isSearchActive: Boolean,
+    override val eventSink: (InvitePeopleEvents) -> Unit,
 ) : InvitePeopleState
+
+private fun aPreviewInvitePeopleState(
+    canInvite: Boolean = false,
+    isSearchActive: Boolean = false,
+    eventSink: (InvitePeopleEvents) -> Unit = {},
+) = PreviewInvitePeopleState(
+    canInvite = canInvite,
+    isSearchActive = isSearchActive,
+    eventSink = eventSink
+)
