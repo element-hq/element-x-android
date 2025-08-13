@@ -160,10 +160,10 @@ class MessagesFlowNode @AssistedInject constructor(
         data class SendLocation(val timelineMode: Timeline.Mode) : NavTarget
 
         @Parcelize
-        data object CreatePoll : NavTarget
+        data class CreatePoll(val timelineMode: Timeline.Mode) : NavTarget
 
         @Parcelize
-        data class EditPoll(val eventId: EventId) : NavTarget
+        data class EditPoll(val timelineMode: Timeline.Mode, val eventId: EventId) : NavTarget
 
         @Parcelize
         data object PinnedMessagesList : NavTarget
@@ -256,11 +256,11 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onCreatePollClick() {
-                        backstack.push(NavTarget.CreatePoll)
+                        backstack.push(NavTarget.CreatePoll(Timeline.Mode.Live))
                     }
 
                     override fun onEditPollClick(eventId: EventId) {
-                        backstack.push(NavTarget.EditPoll(eventId))
+                        backstack.push(NavTarget.EditPoll(Timeline.Mode.Live, eventId))
                     }
 
                     override fun onJoinCallClick(roomId: RoomId) {
@@ -348,14 +348,20 @@ class MessagesFlowNode @AssistedInject constructor(
                     .builder(navTarget.timelineMode)
                     .build(this, buildContext)
             }
-            NavTarget.CreatePoll -> {
+            is NavTarget.CreatePoll -> {
                 createPollEntryPoint.nodeBuilder(this, buildContext)
-                    .params(CreatePollEntryPoint.Params(mode = CreatePollMode.NewPoll))
+                    .params(CreatePollEntryPoint.Params(
+                        timelineMode = navTarget.timelineMode,
+                        mode = CreatePollMode.NewPoll
+                    ))
                     .build()
             }
             is NavTarget.EditPoll -> {
                 createPollEntryPoint.nodeBuilder(this, buildContext)
-                    .params(CreatePollEntryPoint.Params(mode = CreatePollMode.EditPoll(eventId = navTarget.eventId)))
+                    .params(CreatePollEntryPoint.Params(
+                        timelineMode = navTarget.timelineMode,
+                        mode = CreatePollMode.EditPoll(eventId = navTarget.eventId))
+                    )
                     .build()
             }
             NavTarget.PinnedMessagesList -> {
@@ -440,11 +446,11 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onCreatePollClick() {
-                        backstack.push(NavTarget.CreatePoll)
+                        backstack.push(NavTarget.CreatePoll(Timeline.Mode.Thread(navTarget.threadRootId)))
                     }
 
                     override fun onEditPollClick(eventId: EventId) {
-                        backstack.push(NavTarget.EditPoll(eventId))
+                        backstack.push(NavTarget.EditPoll(Timeline.Mode.Thread(navTarget.threadRootId), eventId))
                     }
 
                     override fun onJoinCallClick(roomId: RoomId) {
