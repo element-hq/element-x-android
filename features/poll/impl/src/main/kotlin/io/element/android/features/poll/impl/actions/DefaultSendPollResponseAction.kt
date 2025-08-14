@@ -12,7 +12,6 @@ import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.services.analytics.api.AnalyticsService
 import javax.inject.Inject
