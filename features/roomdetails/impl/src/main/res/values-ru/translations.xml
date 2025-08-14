@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"У вас есть несохраненные изменения."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Сохранить изменения?"</string>
   <string name="screen_room_details_add_topic_title">"Добавить тему"</string>
-  <string name="screen_room_details_already_a_member">"Уже зарегистрирован"</string>
-  <string name="screen_room_details_already_invited">"Уже приглашены"</string>
   <string name="screen_room_details_badge_encrypted">"Зашифровано"</string>
   <string name="screen_room_details_badge_not_encrypted">"Шифрования нет"</string>
   <string name="screen_room_details_badge_public">"Общедоступная комната"</string>

@@ -59,10 +59,16 @@
       "name" : ":features:createroom:impl",
       "includeRegex" : [
         "screen_create_room_.*",
-        "screen\\.create_room\\..*",
+        "screen\\.create_room\\..*"
+      ]
+    },
+    {
+      "name" : ":features:startchat:impl",
+      "includeRegex" : [
         "screen_start_chat_.*",
         "screen\\.start_chat\\..*",
-        "screen_room_directory_search_title*"
+        "screen_room_directory_search_title",
+        "screen_create_room_action_create_room"
       ]
     },
     {
@@ -199,6 +205,12 @@
         "screen_start_chat_error_starting_chat",
         "screen_dm_details_.*",
         "screen_room_member_details_.*"
+      ]
+    },
+    {
+      "name" : ":features:invitepeople:impl",
+      "includeRegex" : [
+        "screen\\.invite_users\\..*"
       ]
     },
     {

@@ -12,7 +12,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -58,7 +57,6 @@ import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
-import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressField
 import io.element.android.libraries.permissions.api.PermissionsView
@@ -112,16 +110,6 @@ fun ConfigureRoomView(
                 topic = state.config.topic.orEmpty(),
                 onTopicChange = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
-            if (state.config.invites.isNotEmpty()) {
-                SelectedUsersRowList(
-                    contentPadding = PaddingValues(horizontal = 24.dp),
-                    selectedUsers = state.config.invites,
-                    onUserRemove = {
-                        focusManager.clearFocus()
-                        state.eventSink(ConfigureRoomEvents.RemoveUserFromSelection(it))
-                    },
-                )
-            }
             RoomVisibilityOptions(
                 selected = when (state.config.roomVisibility) {
                     is RoomVisibilityState.Private -> RoomVisibilityItem.Private

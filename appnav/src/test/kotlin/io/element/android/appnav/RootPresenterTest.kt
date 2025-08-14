@@ -19,6 +19,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.apperror.api.AppErrorState
 import io.element.android.services.apperror.api.AppErrorStateService
 import io.element.android.services.apperror.impl.DefaultAppErrorStateService
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -42,7 +43,9 @@ class RootPresenterTest {
     @Test
     fun `present - passes app error state`() = runTest {
         val presenter = createRootPresenter(
-            appErrorService = DefaultAppErrorStateService().apply {
+            appErrorService = DefaultAppErrorStateService(
+                stringProvider = FakeStringProvider(),
+            ).apply {
                 showError("Bad news", "Something bad happened")
             }
         )
@@ -61,7 +64,9 @@ class RootPresenterTest {
     }
 
     private fun createRootPresenter(
-        appErrorService: AppErrorStateService = DefaultAppErrorStateService(),
+        appErrorService: AppErrorStateService = DefaultAppErrorStateService(
+            stringProvider = FakeStringProvider(),
+        ),
     ): RootPresenter {
         return RootPresenter(
             crashDetectionPresenter = { aCrashDetectionState() },

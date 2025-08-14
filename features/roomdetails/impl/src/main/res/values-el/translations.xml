@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Έχεις μη αποθηκευμένες αλλαγές."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Αποθήκευση αλλαγών;"</string>
   <string name="screen_room_details_add_topic_title">"Προσθήκη θέματος"</string>
-  <string name="screen_room_details_already_a_member">"Ήδη μέλος"</string>
-  <string name="screen_room_details_already_invited">"Ήδη προσκεκλημένος"</string>
   <string name="screen_room_details_badge_encrypted">"Κρυπτογραφημένο"</string>
   <string name="screen_room_details_badge_not_encrypted">"Μη κρυπτογραφημένο"</string>
   <string name="screen_room_details_badge_public">"Δημόσια αίθουσα"</string>

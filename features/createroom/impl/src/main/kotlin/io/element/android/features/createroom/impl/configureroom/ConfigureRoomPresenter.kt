@@ -18,8 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import im.vector.app.features.analytics.plan.CreatedRoom
-import io.element.android.features.createroom.impl.CreateRoomConfig
-import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -50,7 +48,7 @@ import javax.inject.Inject
 import kotlin.jvm.optionals.getOrDefault
 
 class ConfigureRoomPresenter @Inject constructor(
-    private val dataStore: CreateRoomDataStore,
+    private val dataStore: CreateRoomConfigStore,
     private val matrixClient: MatrixClient,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
@@ -66,7 +64,7 @@ class ConfigureRoomPresenter @Inject constructor(
     @Composable
     override fun present(): ConfigureRoomState {
         val cameraPermissionState = cameraPermissionPresenter.present()
-        val createRoomConfig by dataStore.createRoomConfigWithInvites.collectAsState(CreateRoomConfig())
+        val createRoomConfig by dataStore.getCreateRoomConfigFlow().collectAsState(CreateRoomConfig())
         val homeserverName = remember { matrixClient.userIdServerName() }
         val isKnockFeatureEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
@@ -121,7 +119,6 @@ class ConfigureRoomPresenter @Inject constructor(
                 is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
                 is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
                 is ConfigureRoomEvents.RoomVisibilityChanged -> dataStore.setRoomVisibility(event.visibilityItem)
-                is ConfigureRoomEvents.RemoveUserFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
                 is ConfigureRoomEvents.RoomAccessChanged -> dataStore.setRoomAccess(event.roomAccess)
                 is ConfigureRoomEvents.RoomAddressChanged -> dataStore.setRoomAddress(event.roomAddress)
                 is ConfigureRoomEvents.CreateRoom -> createRoom(createRoomConfig)

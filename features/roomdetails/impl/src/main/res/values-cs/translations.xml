@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Máte neuložené změny."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Uložit změny?"</string>
   <string name="screen_room_details_add_topic_title">"Přidat téma"</string>
-  <string name="screen_room_details_already_a_member">"Již členem"</string>
-  <string name="screen_room_details_already_invited">"Již pozván(a)"</string>
   <string name="screen_room_details_badge_encrypted">"Šifrováno"</string>
   <string name="screen_room_details_badge_not_encrypted">"Není šifrováno"</string>
   <string name="screen_room_details_badge_public">"Veřejná místnost"</string>

@@ -33,6 +33,7 @@ For now, you can deselect filters in order to see your other chats"</string>
   <string name="screen_roomlist_filter_invites">"Invites"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"You don\'t have any pending invites."</string>
   <string name="screen_roomlist_filter_low_priority">"Low Priority"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"You don’t have any low priority chats yet"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"You can deselect filters in order to see your other chats"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"You don’t have chats for this selection"</string>
   <string name="screen_roomlist_filter_people">"People"</string>

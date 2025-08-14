@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
@@ -16,30 +16,46 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.createroom.impl.di.CreateRoomScope
+import io.element.android.features.invitepeople.api.InvitePeoplePresenter
+import io.element.android.features.invitepeople.api.InvitePeopleRenderer
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 
-@ContributesNode(CreateRoomScope::class)
+@ContributesNode(SessionScope::class)
 class AddPeopleNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: AddPeoplePresenter,
+    invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,
+    private val invitePeopleRenderer: InvitePeopleRenderer,
 ) : Node(buildContext, plugins = plugins) {
+    data class Inputs(
+        val roomId: RoomId,
+    ) : NodeInputs
+
     interface Callback : Plugin {
-        fun onContinue()
+        fun onFinish()
     }
 
-    private fun onContinue() {
-        plugins<Callback>().forEach { it.onContinue() }
+    private fun onFinish() {
+        plugins<Callback>().forEach { it.onFinish() }
     }
+
+    private val roomId = inputs<Inputs>().roomId
+    private val invitePeoplePresenter = invitePeoplePresenterFactory.create(
+        joinedRoom = null,
+        roomId = roomId,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
+        val state = invitePeoplePresenter.present()
         AddPeopleView(
             state = state,
-            modifier = modifier,
-            onBackClick = this::navigateUp,
-            onNextClick = this::onContinue,
-        )
+            onFinish = ::onFinish,
+        ) {
+            invitePeopleRenderer.Render(state, Modifier)
+        }
     }
 }

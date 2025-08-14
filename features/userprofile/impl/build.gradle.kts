@@ -38,7 +38,7 @@ dependencies {
     api(projects.features.userprofile.api)
     api(projects.features.userprofile.shared)
     implementation(libs.coil.compose)
-    implementation(projects.features.createroom.api)
+    implementation(projects.features.startchat.api)
     implementation(projects.services.analytics.api)
 
     testImplementation(libs.test.junit)
@@ -49,7 +49,7 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.createroom.test)
+    testImplementation(projects.features.startchat.test)
     testImplementation(projects.features.enterprise.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.androidx.compose.ui.test.junit)

@@ -39,8 +39,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Masz niezapisane zmiany."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Zapisać zmiany?"</string>
   <string name="screen_room_details_add_topic_title">"Dodaj temat"</string>
-  <string name="screen_room_details_already_a_member">"Jest już członkiem"</string>
-  <string name="screen_room_details_already_invited">"Już zaproszony"</string>
   <string name="screen_room_details_badge_encrypted">"Szyfrowany"</string>
   <string name="screen_room_details_badge_not_encrypted">"Nieszyfrowany"</string>
   <string name="screen_room_details_badge_public">"Pokój publiczny"</string>

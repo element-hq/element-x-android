@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"您有未保存的更改。"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"保存更改？"</string>
   <string name="screen_room_details_add_topic_title">"添加主题"</string>
-  <string name="screen_room_details_already_a_member">"已经是成员"</string>
-  <string name="screen_room_details_already_invited">"已邀请"</string>
   <string name="screen_room_details_badge_encrypted">"加密的"</string>
   <string name="screen_room_details_badge_not_encrypted">"未加密的"</string>
   <string name="screen_room_details_badge_public">"公共聊天室"</string>

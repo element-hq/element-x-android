@@ -33,8 +33,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"آپکے پاس غیر محفوظ تبدیلیاں ہیں"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"تبدیلیاں محفوظ کریں؟"</string>
   <string name="screen_room_details_add_topic_title">"موضوع شامل کریں"</string>
-  <string name="screen_room_details_already_a_member">"پہلے سے ہی رکن"</string>
-  <string name="screen_room_details_already_invited">"پہلے سے مدعو شدہ"</string>
   <string name="screen_room_details_badge_encrypted">"مرموز کردہ"</string>
   <string name="screen_room_details_badge_not_encrypted">"رموز کردہ نہیں"</string>
   <string name="screen_room_details_badge_public">"عوامی کمرہ"</string>

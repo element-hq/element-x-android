@@ -88,6 +88,7 @@
   <string name="action_enable">"Enable"</string>
   <string name="action_end_poll">"End poll"</string>
   <string name="action_enter_pin">"Enter PIN"</string>
+  <string name="action_finish">"Finish"</string>
   <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_forward">"Forward"</string>
   <string name="action_go_back">"Go back"</string>
@@ -301,6 +302,7 @@ Reason: %1$s."</string>
   <string name="common_signing_out">"Signing out"</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>
+  <string name="common_space">"Space"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Space"</item>
     <item quantity="other">"%1$d Spaces"</item>

@@ -11,6 +11,4 @@
   <string name="screen_create_room_room_name_label">"کمرے کا نام"</string>
   <string name="screen_create_room_title">"ایک کمرہ بنائیں"</string>
   <string name="screen_create_room_topic_label">"موضوع (اختیاری)"</string>
-  <string name="screen_room_directory_search_title">"کمرے کا راہنامچہ"</string>
-  <string name="screen_start_chat_error_starting_chat">"گفتگو شروع کرنے کی کوشش کرتے وقت ایک خرابی واقع ہوگئی"</string>
 </resources>

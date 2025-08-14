@@ -39,8 +39,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Du har ændringer, der ikke er gemt."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Gem ændringer?"</string>
   <string name="screen_room_details_add_topic_title">"Tilføj emne"</string>
-  <string name="screen_room_details_already_a_member">"Allerede medlem"</string>
-  <string name="screen_room_details_already_invited">"Allerede inviteret"</string>
   <string name="screen_room_details_badge_encrypted">"Krypteret"</string>
   <string name="screen_room_details_badge_not_encrypted">"Ikke krypteret"</string>
   <string name="screen_room_details_badge_public">"Offentligt rum"</string>

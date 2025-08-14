@@ -19,12 +19,4 @@ Du kan ændre dette når som helst i rummets indstillinger."</string>
   <string name="screen_create_room_room_visibility_section_title">"Rummets synlighed"</string>
   <string name="screen_create_room_title">"Opret et rum"</string>
   <string name="screen_create_room_topic_label">"Emne (valgfrit)"</string>
-  <string name="screen_room_directory_search_title">"Register over rum"</string>
-  <string name="screen_start_chat_error_starting_chat">"Der opstod en fejl under forsøget på at starte en samtale"</string>
-  <string name="screen_start_chat_join_room_by_address_action">"Tilslut dig rummet med adressen"</string>
-  <string name="screen_start_chat_join_room_by_address_invalid_address">"Ikke en gyldig adresse"</string>
-  <string name="screen_start_chat_join_room_by_address_placeholder">"Indtast…"</string>
-  <string name="screen_start_chat_join_room_by_address_room_found">"Matchende rum fundet"</string>
-  <string name="screen_start_chat_join_room_by_address_room_not_found">"Rum ikke fundet"</string>
-  <string name="screen_start_chat_join_room_by_address_supporting_text">"f.eks. #rummets-navn:matrix.org"</string>
 </resources>

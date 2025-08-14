@@ -19,12 +19,4 @@ Você pode mudar isso a qualquer momento nas configurações da sala."</string>
   <string name="screen_create_room_room_visibility_section_title">"Visibilidade da sala"</string>
   <string name="screen_create_room_title">"Criar uma sala"</string>
   <string name="screen_create_room_topic_label">"Tópico (opcional)"</string>
-  <string name="screen_room_directory_search_title">"Diretório de salas"</string>
-  <string name="screen_start_chat_error_starting_chat">"Ocorreu um erro ao tentar iniciar um chat"</string>
-  <string name="screen_start_chat_join_room_by_address_action">"Entrar na sala pelo endereço"</string>
-  <string name="screen_start_chat_join_room_by_address_invalid_address">"Não é um endereço válido"</string>
-  <string name="screen_start_chat_join_room_by_address_placeholder">"Entrar…"</string>
-  <string name="screen_start_chat_join_room_by_address_room_found">"Foi encontrada uma sala correspondente"</string>
-  <string name="screen_start_chat_join_room_by_address_room_not_found">"Sala não encontrada"</string>
-  <string name="screen_start_chat_join_room_by_address_supporting_text">"Por exemplo, #nome-da-sala:matrix.org"</string>
 </resources>

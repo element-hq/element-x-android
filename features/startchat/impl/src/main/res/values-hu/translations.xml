@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Új szoba"</string>
+  <string name="screen_room_directory_search_title">"Szobakatalógus"</string>
+  <string name="screen_start_chat_error_starting_chat">"Hiba történt a csevegés indításakor"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Csatlakozás a szobához cím szerint"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Nem érvényes cím"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Írja be…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Megfelelő szoba található"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Szoba nem található"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"pl. #szoba-neve:matrix.org"</string>
+</resources>

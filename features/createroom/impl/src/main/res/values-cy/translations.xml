@@ -19,12 +19,4 @@ Gallwch newid hyn unrhyw bryd yng ngosodiadau ystafell."</string>
   <string name="screen_create_room_room_visibility_section_title">"Gwelededd yr ystafell"</string>
   <string name="screen_create_room_title">"Creu ystafell"</string>
   <string name="screen_create_room_topic_label">"Pwnc (dewisol)"</string>
-  <string name="screen_room_directory_search_title">"Cyfeiriadur ystafelloedd"</string>
-  <string name="screen_start_chat_error_starting_chat">"Digwyddodd gwall wrth geisio cychwyn sgwrs"</string>
-  <string name="screen_start_chat_join_room_by_address_action">"Ymuno â\'r ystafell yn ôl cyfeiriad"</string>
-  <string name="screen_start_chat_join_room_by_address_invalid_address">"Ddim yn gyfeiriad dilys"</string>
-  <string name="screen_start_chat_join_room_by_address_placeholder">"Ewch i mewn…"</string>
-  <string name="screen_start_chat_join_room_by_address_room_found">"Cafwyd hyd i ystafell gyfatebol"</string>
-  <string name="screen_start_chat_join_room_by_address_room_not_found">"Heb ganfod yr ystafell"</string>
-  <string name="screen_start_chat_join_room_by_address_supporting_text">"e.e. #enw-ystafell:matrix.org"</string>
 </resources>

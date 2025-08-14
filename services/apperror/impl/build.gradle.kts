@@ -23,6 +23,7 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.services.toolbox.api)
     implementation(projects.anvilannotations)
 
     implementation(libs.coroutines.core)
@@ -34,4 +35,5 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.truth)
+    testImplementation(projects.services.toolbox.test)
 }

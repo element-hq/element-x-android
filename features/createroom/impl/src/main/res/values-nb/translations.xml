@@ -19,12 +19,4 @@ Du kan endre dette når som helst i rominnstillingene."</string>
   <string name="screen_create_room_room_visibility_section_title">"Romsynlighet"</string>
   <string name="screen_create_room_title">"Opprett et rom"</string>
   <string name="screen_create_room_topic_label">"Emne (valgfritt)"</string>
-  <string name="screen_room_directory_search_title">"Romkatalog"</string>
-  <string name="screen_start_chat_error_starting_chat">"Det oppstod en feil når du prøvde å starte en chat"</string>
-  <string name="screen_start_chat_join_room_by_address_action">"Bli med i rommet med adresse"</string>
-  <string name="screen_start_chat_join_room_by_address_invalid_address">"Ikke en gyldig adresse"</string>
-  <string name="screen_start_chat_join_room_by_address_placeholder">"Gå inn…"</string>
-  <string name="screen_start_chat_join_room_by_address_room_found">"Matchende rom funnet"</string>
-  <string name="screen_start_chat_join_room_by_address_room_not_found">"Rom ikke funnet"</string>
-  <string name="screen_start_chat_join_room_by_address_supporting_text">"f.eks. #rom-navn:matrix.org"</string>
 </resources>
