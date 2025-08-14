@@ -51,7 +51,7 @@ class RoomInviteMembersNode @AssistedInject constructor(
             onBackClick = { navigateUp() },
             onDone = { navigateUp() }
         ) {
-            invitePeopleRenderer.Render(state, Modifier)
+            invitePeopleRenderer.Render(state)
         }
     }
 }

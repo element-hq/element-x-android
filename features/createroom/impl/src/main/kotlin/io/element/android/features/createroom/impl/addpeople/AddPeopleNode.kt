@@ -51,8 +51,9 @@ class AddPeopleNode @AssistedInject constructor(
         AddPeopleView(
             state = state,
             onFinish = ::onFinish,
+            modifier = modifier,
         ) {
-            invitePeopleRenderer.Render(state, Modifier)
+            invitePeopleRenderer.Render(state)
         }
     }
 }
