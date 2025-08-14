@@ -127,10 +127,9 @@ private fun InvitePeopleSearchBar(
 
             LazyColumn {
                 itemsIndexed(results) { index, invitableUser ->
-                    val notInvitedOrJoined =
-                        !(invitableUser.isAlreadyInvited || invitableUser.isAlreadyJoined)
-                    val isUnresolved = invitableUser.isUnresolved && notInvitedOrJoined
-                    val enabled = isUnresolved || notInvitedOrJoined
+                    val invitedOrJoined = invitableUser.isAlreadyInvited || invitableUser.isAlreadyJoined
+                    val isUnresolved = invitableUser.isUnresolved && !invitedOrJoined
+                    val enabled = isUnresolved || !invitedOrJoined
                     val data = if (isUnresolved) {
                         CheckableUserRowData.Unresolved(
                             avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.UserListItem),
@@ -152,7 +151,7 @@ private fun InvitePeopleSearchBar(
                         )
                     }
                     CheckableUserRow(
-                        checked = invitableUser.isSelected,
+                        checked = invitableUser.isSelected || invitedOrJoined,
                         enabled = enabled,
                         data = data,
                         onCheckedChange = { onToggleUser(invitableUser.matrixUser) },

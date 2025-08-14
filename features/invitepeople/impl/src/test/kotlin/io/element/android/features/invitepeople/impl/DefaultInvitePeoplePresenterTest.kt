@@ -142,7 +142,7 @@ internal class DefaultInvitePeoplePresenterTest {
                 } else {
                     assertThat(users[index].isAlreadyJoined).isTrue()
                 }
-                assertThat(users[index].isSelected).isTrue()
+                assertThat(users[index].isSelected).isFalse()
             }
         }
     }
@@ -323,9 +323,9 @@ internal class DefaultInvitePeoplePresenterTest {
             assertThat(shouldBeSelectedUser).isNotNull()
             assertThat(shouldBeSelectedUser?.isSelected).isTrue()
 
-            // All the others are selected since their membership is joined or invited
+            // And no others are
             val allOtherUsers = users.minus(shouldBeSelectedUser!!)
-            assertThat(allOtherUsers.all { it.isSelected }).isTrue()
+            assertThat(allOtherUsers.none { it.isSelected }).isTrue()
         }
     }
 
@@ -372,9 +372,9 @@ internal class DefaultInvitePeoplePresenterTest {
             assertThat(shouldBeSelectedUser).isNotNull()
             assertThat(shouldBeSelectedUser?.isSelected).isTrue()
 
-            // All the others are selected since their membership is joined or invited
+            // And no others are
             val allOtherUsers = users.minus(shouldBeSelectedUser!!)
-            assertThat(allOtherUsers.all { it.isSelected }).isTrue()
+            assertThat(allOtherUsers.none { it.isSelected }).isTrue()
         }
     }
 

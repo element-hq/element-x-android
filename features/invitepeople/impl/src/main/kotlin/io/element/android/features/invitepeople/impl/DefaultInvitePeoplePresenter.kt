@@ -176,7 +176,7 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
                     val isInvited = existingMembership == RoomMembershipState.INVITE
                     InvitableUser(
                         matrixUser = result.matrixUser,
-                        isSelected = selectedUsers.value.contains(result.matrixUser) || isJoined || isInvited,
+                        isSelected = selectedUsers.value.contains(result.matrixUser),
                         isAlreadyJoined = isJoined,
                         isAlreadyInvited = isInvited,
                         isUnresolved = result.isUnresolved,
