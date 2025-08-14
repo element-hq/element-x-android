@@ -11,8 +11,8 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class InvitableUser(
     val matrixUser: MatrixUser,
-    val isSelected: Boolean = false,
-    val isAlreadyJoined: Boolean = false,
-    val isAlreadyInvited: Boolean = false,
-    val isUnresolved: Boolean = false,
+    val isSelected: Boolean,
+    val isAlreadyJoined: Boolean,
+    val isAlreadyInvited: Boolean,
+    val isUnresolved: Boolean,
 )

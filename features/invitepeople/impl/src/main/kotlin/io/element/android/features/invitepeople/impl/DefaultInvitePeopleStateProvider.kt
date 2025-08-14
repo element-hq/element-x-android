@@ -33,11 +33,11 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 ),
                 searchResults = SearchBarResultState.Results(
                     persistentListOf(
-                        InvitableUser(aMatrixUser("@alice:server.org")),
-                        InvitableUser(aMatrixUser("@bob:server.org", "Bob")),
-                        InvitableUser(aMatrixUser("@carol:server.org", "Carol"), isSelected = true),
-                        InvitableUser(aMatrixUser("@eve:server.org", "Eve"), isSelected = true, isAlreadyJoined = true),
-                        InvitableUser(aMatrixUser("@justin:server.org", "Justin"), isSelected = true, isAlreadyInvited = true),
+                        anInvitableUser(aMatrixUser("@alice:server.org")),
+                        anInvitableUser(aMatrixUser("@bob:server.org", "Bob")),
+                        anInvitableUser(aMatrixUser("@carol:server.org", "Carol"), isSelected = true),
+                        anInvitableUser(aMatrixUser("@eve:server.org", "Eve"), isSelected = true, isAlreadyJoined = true),
+                        anInvitableUser(aMatrixUser("@justin:server.org", "Justin"), isSelected = true, isAlreadyInvited = true),
                     )
                 )
             ),
@@ -50,8 +50,8 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 ),
                 searchResults = SearchBarResultState.Results(
                     persistentListOf(
-                        InvitableUser(aMatrixUser("@alice:server.org"), isUnresolved = true),
-                        InvitableUser(aMatrixUser("@bob:server.org", "Bob")),
+                        anInvitableUser(aMatrixUser("@alice:server.org"), isUnresolved = true),
+                        anInvitableUser(aMatrixUser("@bob:server.org", "Bob")),
                     )
                 )
             ),
@@ -61,13 +61,27 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 searchQuery = "@alice:server.org",
                 searchResults = SearchBarResultState.Results(
                     persistentListOf(
-                        InvitableUser(aMatrixUser("@alice:server.org"), isUnresolved = true),
+                        anInvitableUser(aMatrixUser("@alice:server.org"), isUnresolved = true),
                     )
                 ),
                 showSearchLoader = true,
             ),
         )
 }
+
+private fun anInvitableUser(
+    matrixUser: MatrixUser,
+    isSelected: Boolean = false,
+    isAlreadyJoined: Boolean = false,
+    isAlreadyInvited: Boolean = false,
+    isUnresolved: Boolean = false,
+) = InvitableUser(
+    matrixUser = matrixUser,
+    isSelected = isSelected,
+    isAlreadyJoined = isAlreadyJoined,
+    isAlreadyInvited = isAlreadyInvited,
+    isUnresolved = isUnresolved,
+)
 
 private fun aDefaultInvitePeopleState(
     canInvite: Boolean = false,
