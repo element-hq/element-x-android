@@ -17,10 +17,13 @@ import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aReplyMode
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.AudioInfo
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -75,6 +78,7 @@ class VoiceMessageComposerPresenterTest {
     private val mediaSender = MediaSender(
         preProcessor = mediaPreProcessor,
         room = joinedRoom,
+        timelineMode = Timeline.Mode.Live,
         mediaOptimizationConfigProvider = { MediaOptimizationConfig(compressImages = true, videoCompressionPreset = VideoCompressionPreset.STANDARD) },
     )
     private val messageComposerContext = FakeMessageComposerContext()
@@ -658,15 +662,20 @@ class VoiceMessageComposerPresenterTest {
 
     private fun TestScope.createVoiceMessageComposerPresenter(
         permissionsPresenter: PermissionsPresenter = createFakePermissionsPresenter(),
-    ): VoiceMessageComposerPresenter {
-        return VoiceMessageComposerPresenter(
-            backgroundScope,
-            voiceRecorder,
-            analyticsService,
-            mediaSender,
+    ): DefaultVoiceMessageComposerPresenter {
+        return DefaultVoiceMessageComposerPresenter(
+            sessionCoroutineScope = backgroundScope,
+            timelineMode = Timeline.Mode.Live,
+            voiceRecorder = voiceRecorder,
+            analyticsService = analyticsService,
+            mediaSenderFactory = object : MediaSender.Factory {
+                override fun create(timelineMode: Timeline.Mode): MediaSender {
+                    return mediaSender
+                }
+            },
             player = VoiceMessageComposerPlayer(FakeMediaPlayer(), this),
             messageComposerContext = messageComposerContext,
-            FakePermissionsPresenterFactory(permissionsPresenter),
+            permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
         )
     }
 

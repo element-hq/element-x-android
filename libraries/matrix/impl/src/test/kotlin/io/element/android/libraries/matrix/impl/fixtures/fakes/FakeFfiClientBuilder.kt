@@ -39,6 +39,7 @@ class FakeFfiClientBuilder : ClientBuilder(NoPointer) {
     override fun userAgent(userAgent: String) = this
     override fun username(username: String) = this
     override fun enableShareHistoryOnInvite(enableShareHistoryOnInvite: Boolean): ClientBuilder = this
+    override fun threadsEnabled(enabled: Boolean): ClientBuilder = this
 
     override suspend fun build(): Client {
         return FakeFfiClient(withUtdHook = {})

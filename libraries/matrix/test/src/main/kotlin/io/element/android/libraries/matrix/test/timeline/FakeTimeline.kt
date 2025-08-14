@@ -48,6 +48,7 @@ class FakeTimeline(
     ),
     override val membershipChangeEventReceived: Flow<Unit> = MutableSharedFlow(),
     private val cancelSendResult: (TransactionId) -> Result<Unit> = { lambdaError() },
+    override val mode: Timeline.Mode = Timeline.Mode.Live,
 ) : Timeline {
     var sendMessageLambda: (
         body: String,
