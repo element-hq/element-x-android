@@ -1,3 +1,25 @@
+Changes in Element X v25.08.2
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v25.08.2 -->
+
+## What's Changed
+### 🐛 Bugfixes
+* When mapping an invalid notification event, only drop that one by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5137
+### Dependency upgrades
+* Update dependency io.nlopez.compose.rules:detekt to v0.4.27 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5123
+* Update actions/download-artifact action to v5 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5122
+* Update dependency net.zetetic:sqlcipher-android to v4.10.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5121
+* Update dependency com.posthog:posthog-android to v3.20.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5133
+* Update dependency com.google.firebase:firebase-bom to v34.1.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5136
+### Others
+* [a11y] Open context menu with the keyboard by @bmarty in https://github.com/element-hq/element-x-android/pull/5120
+* Let enterprise build store the logs in a dedicated subfolder by @bmarty in https://github.com/element-hq/element-x-android/pull/5132
+* Redirect FOSS user to Element Pro according to element .well-known file by @bmarty in https://github.com/element-hq/element-x-android/pull/5126
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.08.1...v25.08.2
+
 Changes in Element X v25.08.1
 =============================
 

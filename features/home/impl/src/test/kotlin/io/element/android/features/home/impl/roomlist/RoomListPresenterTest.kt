@@ -32,8 +32,6 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -217,7 +215,6 @@ class RoomListPresenterTest {
                             roomName = summary.name,
                             isDm = false,
                             isFavorite = false,
-                            markAsUnreadFeatureFlagEnabled = true,
                             hasNewContent = false,
                             displayClearRoomCacheAction = false,
                         )
@@ -235,7 +232,6 @@ class RoomListPresenterTest {
                             roomName = summary.name,
                             isDm = false,
                             isFavorite = true,
-                            markAsUnreadFeatureFlagEnabled = true,
                             hasNewContent = false,
                             displayClearRoomCacheAction = false,
                         )
@@ -263,7 +259,6 @@ class RoomListPresenterTest {
                             roomName = summary.name,
                             isDm = false,
                             isFavorite = false,
-                            markAsUnreadFeatureFlagEnabled = true,
                             // true here.
                             hasNewContent = false,
                             displayClearRoomCacheAction = true,
@@ -295,7 +290,6 @@ class RoomListPresenterTest {
                         roomName = summary.name,
                         isDm = false,
                         isFavorite = false,
-                        markAsUnreadFeatureFlagEnabled = true,
                         hasNewContent = false,
                         displayClearRoomCacheAction = false,
                     )
@@ -604,7 +598,6 @@ class RoomListPresenterTest {
         dateFormatter: DateFormatter = FakeDateFormatter(),
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         filtersPresenter: Presenter<RoomListFiltersState> = Presenter { aRoomListFiltersState() },
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
@@ -626,7 +619,6 @@ class RoomListPresenterTest {
             sessionCoroutineScope = backgroundScope,
             dateTimeObserver = FakeDateTimeObserver(),
         ),
-        featureFlagService = featureFlagService,
         searchPresenter = searchPresenter,
         sessionPreferencesStore = sessionPreferencesStore,
         filtersPresenter = filtersPresenter,

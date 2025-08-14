@@ -13,10 +13,4 @@
   <string name="screen_notification_optin_subtitle">"Sie können Ihre Einstellungen später ändern."</string>
   <string name="screen_notification_optin_title">"Erlaube Benachrichtigungen und verpasse keine Nachricht"</string>
   <string name="screen_session_verification_enter_recovery_key">"Wiederherstellungsschlüssel eingeben"</string>
-  <string name="screen_welcome_bullet_1">"Anrufe, Umfragen, Suchfunktionen und mehr werden im Laufe des Jahres hinzugefügt."</string>
-  <string name="screen_welcome_bullet_2">"Der Nachrichtenverlauf für verschlüsselte Räume wird in diesem Update nicht verfügbar sein."</string>
-  <string name="screen_welcome_bullet_3">"Wir würden uns freuen, von dir zu hören. Teile uns deine Meinung über die Einstellungsseite mit."</string>
-  <string name="screen_welcome_button">"Los geht\'s!"</string>
-  <string name="screen_welcome_subtitle">"Folgendes sollten Sie wissen:"</string>
-  <string name="screen_welcome_title">"Willkommen bei %1$s!"</string>
 </resources>

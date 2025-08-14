@@ -47,6 +47,7 @@ captures/
 .idea/compiler.xml
 .idea/deploymentTargetDropDown.xml
 .idea/deploymentTargetSelector.xml
+.idea/deviceManager.xml
 .idea/gradle.xml
 .idea/jarRepositories.xml
 .idea/misc.xml

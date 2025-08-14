@@ -18,10 +18,7 @@ import io.element.android.libraries.matrix.ui.messages.reply.eventId
 sealed interface MessageComposerMode {
     data object Normal : MessageComposerMode
 
-    data class Attachment(
-        val allowCaption: Boolean,
-        val showCaptionCompatibilityWarning: Boolean,
-    ) : MessageComposerMode
+    data object Attachment : MessageComposerMode
 
     sealed interface Special : MessageComposerMode
 
@@ -33,7 +30,6 @@ sealed interface MessageComposerMode {
     data class EditCaption(
         val eventOrTransactionId: EventOrTransactionId,
         val content: String,
-        val showCaptionCompatibilityWarning: Boolean,
     ) : Special
 
     data class Reply(
@@ -58,8 +54,8 @@ sealed interface MessageComposerMode {
 
 fun MessageComposerMode.showCaptionCompatibilityWarning(): Boolean {
     return when (this) {
-        is MessageComposerMode.Attachment -> showCaptionCompatibilityWarning
-        is MessageComposerMode.EditCaption -> showCaptionCompatibilityWarning && content.isEmpty()
+        is MessageComposerMode.Attachment -> true
+        is MessageComposerMode.EditCaption -> content.isEmpty()
         else -> false
     }
 }

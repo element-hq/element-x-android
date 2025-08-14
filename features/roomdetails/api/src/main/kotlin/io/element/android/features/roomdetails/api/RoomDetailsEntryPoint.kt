@@ -34,7 +34,7 @@ interface RoomDetailsEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onOpenGlobalNotificationSettings()
-        fun onOpenRoom(roomId: RoomId)
+        fun onOpenRoom(roomId: RoomId, serverNames: List<String>)
         fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun onForwardedToSingleRoom(roomId: RoomId)
     }

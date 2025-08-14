@@ -5,10 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.features.rageshake.impl.crash
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.squareup.anvil.annotations.ContributesBinding
@@ -19,6 +22,8 @@ import io.element.android.features.rageshake.api.crash.CrashDetectionState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,12 +37,15 @@ class DefaultCrashDetectionPresenter @Inject constructor(
     @Composable
     override fun present(): CrashDetectionState {
         val localCoroutineScope = rememberCoroutineScope()
-        val crashDetected = remember {
-            if (rageshakeFeatureAvailability.isAvailable()) {
-                crashDataStore.appHasCrashed()
-            } else {
-                flowOf(false)
-            }
+        val crashDetected by remember {
+            rageshakeFeatureAvailability.isAvailable()
+                .flatMapLatest { isAvailable ->
+                    if (isAvailable) {
+                        crashDataStore.appHasCrashed()
+                    } else {
+                        flowOf(false)
+                    }
+                }
         }.collectAsState(false)
 
         fun handleEvents(event: CrashDetectionEvents) {
@@ -49,7 +57,7 @@ class DefaultCrashDetectionPresenter @Inject constructor(
 
         return CrashDetectionState(
             appName = buildMeta.applicationName,
-            crashDetected = crashDetected.value,
+            crashDetected = crashDetected,
             eventSink = ::handleEvents
         )
     }

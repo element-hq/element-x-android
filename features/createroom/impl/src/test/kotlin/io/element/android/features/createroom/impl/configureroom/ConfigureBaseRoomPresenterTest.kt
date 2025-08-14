@@ -35,6 +35,7 @@ import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
@@ -411,6 +412,7 @@ class ConfigureBaseRoomPresenterTest {
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         isKnockFeatureEnabled: Boolean = true,
+        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ) = ConfigureRoomPresenter(
         dataStore = createRoomDataStore,
         matrixClient = matrixClient,
@@ -421,6 +423,7 @@ class ConfigureBaseRoomPresenterTest {
         roomAliasHelper = roomAliasHelper,
         featureFlagService = FakeFeatureFlagService(
             mapOf(FeatureFlags.Knock.key to isKnockFeatureEnabled)
-        )
+        ),
+        mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
     )
 }

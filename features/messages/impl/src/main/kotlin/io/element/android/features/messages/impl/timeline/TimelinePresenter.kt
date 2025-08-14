@@ -178,8 +178,10 @@ class TimelinePresenter @AssistedInject constructor(
                 is TimelineEvents.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvents.ComputeForMessage(event.event))
                 }
-                is TimelineEvents.NavigateToRoom -> {
-                    navigator.onNavigateToRoom(event.roomId)
+                is TimelineEvents.NavigateToPredecessorOrSuccessorRoom -> {
+                    // Navigate to the predecessor or successor room
+                    val serverNames = calculateServerNamesForRoom(room)
+                    navigator.onNavigateToRoom(event.roomId, serverNames)
                 }
             }
         }
@@ -352,4 +354,20 @@ private fun FocusRequestState.onFocusEventRender(): FocusRequestState {
         is FocusRequestState.Success -> copy(rendered = true)
         else -> this
     }
+}
+
+// Workaround for not having the server names available, get possible server names from the user ids of the room members
+private fun calculateServerNamesForRoom(room: JoinedRoom): List<String> {
+    // If we have no room members, return right ahead
+    val serverNames = room.membersStateFlow.value.roomMembers() ?: return emptyList()
+
+    // Otherwise get the three most common server names from the user ids of the room members
+    return serverNames
+        .mapNotNull { it.userId.domainName }
+        .groupingBy { it }
+        .eachCount()
+        .let { map ->
+            map.keys.sortedByDescending { map[it] }
+        }
+        .take(3)
 }

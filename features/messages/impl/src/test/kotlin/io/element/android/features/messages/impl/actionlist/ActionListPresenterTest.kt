@@ -27,8 +27,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -52,7 +50,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -63,7 +61,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for message from me redacted`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -100,7 +98,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for message from others redacted`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -141,7 +139,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -188,7 +186,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message in a thread`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         presenter.test {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
@@ -234,7 +232,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message cannot sent message`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -280,7 +278,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message and can redact`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -328,7 +326,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message and cannot send reaction`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -376,7 +374,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for my message`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -423,7 +421,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for my message in a thread`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         presenter.test {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
@@ -469,7 +467,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for my message cannot redact`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -515,7 +513,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for my message no permission`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -558,7 +556,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a media item`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -604,60 +602,8 @@ class ActionListPresenterTest {
     }
 
     @Test
-    fun `present - compute for a media item - caption disabled`() = runTest {
-        val presenter = createActionListPresenter(
-            isDeveloperModeEnabled = true,
-            isPinFeatureEnabled = true,
-            allowCaption = false,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            val messageEvent = aMessageEvent(
-                isMine = true,
-                isEditable = true,
-                content = aTimelineItemImageContent(),
-            )
-            initialState.eventSink.invoke(
-                ActionListEvents.ComputeForMessage(
-                    event = messageEvent,
-                    userEventPermissions = aUserEventPermissions(
-                        canRedactOwn = true,
-                        canRedactOther = false,
-                        canSendMessage = true,
-                        canSendReaction = true,
-                        canPinUnpin = true,
-                    ),
-                )
-            )
-            val successState = awaitItem()
-            assertThat(successState.target).isEqualTo(
-                ActionListState.Target.Success(
-                    event = messageEvent,
-                    sentTimeFull = "0 Full true",
-                    displayEmojiReactions = true,
-                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
-                    actions = persistentListOf(
-                        TimelineItemAction.Reply,
-                        TimelineItemAction.Forward,
-                        // Not here
-                        // TimelineItemAction.AddCaption,
-                        TimelineItemAction.CopyLink,
-                        TimelineItemAction.Pin,
-                        TimelineItemAction.ViewSource,
-                        TimelineItemAction.Redact,
-                    )
-                )
-            )
-            initialState.eventSink.invoke(ActionListEvents.Clear)
-            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
-        }
-    }
-
-    @Test
     fun `present - compute for a media with caption item`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -708,7 +654,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a media with caption item - other user event`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -757,7 +703,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a state item in debug build`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -797,7 +743,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a state item in non-debuggable build`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -824,7 +770,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute message in non-debuggable build`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -870,7 +816,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute message when user can't pin`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -921,7 +867,6 @@ class ActionListPresenterTest {
         }
         val presenter = createActionListPresenter(
             isDeveloperModeEnabled = true,
-            isPinFeatureEnabled = true,
             room = room
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -970,7 +915,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute message with no actions`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1017,7 +962,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute not sent message`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1061,7 +1006,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for editable poll message`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1105,7 +1050,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for non-editable poll message`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1148,7 +1093,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for ended poll message`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1190,7 +1135,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for voice message`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1235,7 +1180,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for call notify`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1275,7 +1220,7 @@ class ActionListPresenterTest {
         val room = FakeBaseRoom(
             userDisplayNameResult = { Result.success("Alice") }
         )
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = false, room = room)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1299,22 +1244,14 @@ class ActionListPresenterTest {
 
 private fun createActionListPresenter(
     isDeveloperModeEnabled: Boolean,
-    isPinFeatureEnabled: Boolean,
     room: BaseRoom = FakeBaseRoom(),
-    allowCaption: Boolean = true,
 ): ActionListPresenter {
     val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
     return DefaultActionListPresenter(
         postProcessor = TimelineItemActionPostProcessor.Default,
         appPreferencesStore = preferencesStore,
-        isPinnedMessagesFeatureEnabled = { isPinFeatureEnabled },
         room = room,
         userSendFailureFactory = VerifiedUserSendFailureFactory(room),
-        featureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(
-                FeatureFlags.MediaCaptionCreation.key to allowCaption,
-            ),
-        ),
         dateFormatter = FakeDateFormatter(),
     )
 }

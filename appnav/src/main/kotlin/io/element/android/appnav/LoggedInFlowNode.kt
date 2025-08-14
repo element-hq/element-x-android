@@ -47,11 +47,14 @@ import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
+import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.logout.api.LogoutEntryPoint
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
@@ -125,6 +128,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val logoutEntryPoint: LogoutEntryPoint,
     private val incomingVerificationEntryPoint: IncomingVerificationEntryPoint,
     private val mediaPreviewConfigMigration: MediaPreviewConfigMigration,
+    private val sessionEnterpriseService: SessionEnterpriseService,
+    private val networkMonitor: NetworkMonitor,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -182,7 +187,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun onBuilt() {
         super.onBuilt()
-
+        lifecycleScope.launch {
+            sessionEnterpriseService.init()
+        }
         lifecycle.subscribe(
             onCreate = {
                 appNavigationStateService.onNavigateToSession(id, matrixClient.sessionId)
@@ -191,6 +198,12 @@ class LoggedInFlowNode @AssistedInject constructor(
                 loggedInFlowProcessor.observeEvents(sessionCoroutineScope)
                 matrixClient.sessionVerificationService().setListener(verificationListener)
                 mediaPreviewConfigMigration()
+
+                sessionCoroutineScope.launch {
+                    // Wait for the network to be connected before pre-fetching the max file upload size
+                    networkMonitor.connectivity.first { networkStatus -> networkStatus == NetworkStatus.Connected }
+                    matrixClient.getMaxFileUploadSize()
+                }
 
                 ftueService.state
                     .onEach { ftueState ->
@@ -322,8 +335,8 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             is NavTarget.Room -> {
                 val callback = object : JoinedRoomLoadedFlowNode.Callback {
-                    override fun onOpenRoom(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                    override fun onOpenRoom(roomId: RoomId, serverNames: List<String>) {
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), serverNames))
                     }
 
                     override fun onForwardedToSingleRoom(roomId: RoomId) {

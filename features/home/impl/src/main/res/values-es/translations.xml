@@ -9,6 +9,7 @@
   <string name="confirm_recovery_key_banner_title">"Tu almacén de claves no está sincronizado"</string>
   <string name="full_screen_intent_banner_message">"Para asegurarte de que nunca te pierdas una llamada importante, modifica tus ajustes para permitir notificaciones a pantalla completa cuando el teléfono esté bloqueado."</string>
   <string name="full_screen_intent_banner_title">"Mejora tu experiencia de llamada"</string>
+  <string name="screen_home_tab_chats">"Chats"</string>
   <string name="screen_invites_decline_chat_message">"¿Estás seguro de que quieres rechazar la invitación a unirte a %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Rechazar la invitación"</string>
   <string name="screen_invites_decline_direct_chat_message">"¿Estás seguro de que quieres rechazar este chat privado con %1$s?"</string>

@@ -753,18 +753,19 @@ class TimelinePresenterTest {
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
             ),
         )
-        val onNavigateToRoomLambda = lambdaRecorder<RoomId, Unit> {}
+        val onNavigateToRoomLambda = lambdaRecorder<RoomId, List<String>, Unit> { _, _ -> }
         val navigator = FakeMessagesNavigator(
             onNavigateToRoomLambda = onNavigateToRoomLambda
         )
         val presenter = createTimelinePresenter(room = room, messagesNavigator = navigator)
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(TimelineEvents.NavigateToRoom(A_ROOM_ID))
+            initialState.eventSink(TimelineEvents.NavigateToPredecessorOrSuccessorRoom(A_ROOM_ID))
             assert(onNavigateToRoomLambda)
                 .isCalledOnce()
                 .with(
-                    value(A_ROOM_ID)
+                    value(A_ROOM_ID),
+                    value(emptyList<String>())
                 )
         }
     }

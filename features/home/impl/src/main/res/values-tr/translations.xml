@@ -9,6 +9,7 @@
   <string name="confirm_recovery_key_banner_title">"Anahtar depolama alanınız senkronize değil"</string>
   <string name="full_screen_intent_banner_message">"Önemli bir aramayı asla kaçırmamak için, telefonunuz kilitliyken tam ekran bildirimlere izin vermek üzere ayarlarınızı değiştirin."</string>
   <string name="full_screen_intent_banner_title">"Arama deneyiminizi geliştirin"</string>
+  <string name="screen_home_tab_chats">"Sohbetler"</string>
   <string name="screen_invites_decline_chat_message">"%1$s katılma davetini reddetmek istediğinizden emin misiniz?"</string>
   <string name="screen_invites_decline_chat_title">"Daveti reddet"</string>
   <string name="screen_invites_decline_direct_chat_message">"%1$s ile bu özel sohbeti reddetmek istediğinizden emin misiniz?"</string>

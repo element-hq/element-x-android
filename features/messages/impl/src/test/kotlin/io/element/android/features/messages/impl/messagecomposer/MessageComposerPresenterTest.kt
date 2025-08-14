@@ -32,9 +32,6 @@ import io.element.android.features.messages.impl.utils.FakeTextPillificationHelp
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -74,15 +71,18 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
@@ -122,9 +122,6 @@ class MessageComposerPresenterTest {
     private val pickerProvider = FakePickerProvider().apply {
         givenResult(mockk()) // Uri is not available in JVM, so the only way to have a non-null Uri is using Mockk
     }
-    private val featureFlagService = FakeFeatureFlagService(
-        mapOf(FeatureFlags.LocationSharing.key to true)
-    )
     private val mediaPreProcessor = FakeMediaPreProcessor()
     private val snackbarDispatcher = SnackbarDispatcher()
     private val mockMediaUrl: Uri = mockk("localMediaUri")
@@ -1526,7 +1523,6 @@ class MessageComposerPresenterTest {
         ),
         navigator: MessagesNavigator = FakeMessagesNavigator(),
         pickerProvider: PickerProvider = this@MessageComposerPresenterTest.pickerProvider,
-        featureFlagService: FeatureFlagService = this@MessageComposerPresenterTest.featureFlagService,
         locationService: LocationService = FakeLocationService(true),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreProcessor: MediaPreProcessor = this@MessageComposerPresenterTest.mediaPreProcessor,
@@ -1542,15 +1538,19 @@ class MessageComposerPresenterTest {
         textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
+        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
         room = room,
         mediaPickerProvider = pickerProvider,
-        featureFlagService = featureFlagService,
         sessionPreferencesStore = sessionPreferencesStore,
         localMediaFactory = localMediaFactory,
-        mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
+        mediaSender = MediaSender(
+            preProcessor = mediaPreProcessor,
+            room = room,
+            mediaOptimizationConfigProvider = { MediaOptimizationConfig(compressImages = true, videoCompressionPreset = VideoCompressionPreset.STANDARD) }
+        ),
         snackbarDispatcher = snackbarDispatcher,
         analyticsService = analyticsService,
         locationService = locationService,
@@ -1565,6 +1565,7 @@ class MessageComposerPresenterTest {
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
         suggestionsProcessor = SuggestionsProcessor(),
+        mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled
@@ -1584,11 +1585,9 @@ fun anEditMode(
 fun anEditCaptionMode(
     eventOrTransactionId: EventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
     caption: String = A_CAPTION,
-    showCaptionCompatibilityWarning: Boolean = false,
 ) = MessageComposerMode.EditCaption(
     eventOrTransactionId = eventOrTransactionId,
     content = caption,
-    showCaptionCompatibilityWarning = showCaptionCompatibilityWarning,
 )
 
 fun aReplyMode() = MessageComposerMode.Reply(

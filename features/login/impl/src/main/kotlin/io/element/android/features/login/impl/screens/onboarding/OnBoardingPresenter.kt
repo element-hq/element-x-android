@@ -8,6 +8,7 @@
 package io.element.android.features.login.impl.screens.onboarding
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -26,14 +27,11 @@ import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.ui.utils.MultipleTapToUnlock
 
 class OnBoardingPresenter @AssistedInject constructor(
     @Assisted private val params: OnBoardingNode.Params,
     private val buildMeta: BuildMeta,
-    private val featureFlagService: FeatureFlagService,
     private val enterpriseService: EnterpriseService,
     private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
@@ -79,10 +77,9 @@ class OnBoardingPresenter @AssistedInject constructor(
             forcedAccountProvider ?: linkAccountProvider
         }
         val canLoginWithQrCode by produceState(initialValue = false, linkAccountProvider) {
-            value = linkAccountProvider == null &&
-                featureFlagService.isFeatureEnabled(FeatureFlags.QrCodeLogin)
+            value = linkAccountProvider == null
         }
-        val canReportBug = remember { rageshakeFeatureAvailability.isAvailable() }
+        val canReportBug by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
         var showReportBug by rememberSaveable { mutableStateOf(false) }
 
         val loginMode by loginHelper.collectLoginMode()

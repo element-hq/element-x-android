@@ -43,6 +43,7 @@ private fun SetupState.toRecoveryKeyViewState(): RecoveryKeyViewState {
     return RecoveryKeyViewState(
         recoveryKeyUserStory = RecoveryKeyUserStory.Setup,
         formattedRecoveryKey = recoveryKey(),
+        displayTextFieldContents = true,
         inProgress = this is SetupState.Creating,
     )
 }

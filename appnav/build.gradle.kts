@@ -63,7 +63,6 @@ dependencies {
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.rageshake.test)
-    testImplementation(projects.features.share.test)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(libs.test.appyx.junit)

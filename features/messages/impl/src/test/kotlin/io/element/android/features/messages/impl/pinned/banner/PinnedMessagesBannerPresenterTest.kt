@@ -10,8 +10,6 @@ package io.element.android.features.messages.impl.pinned.banner
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.libraries.eventformatter.test.FakePinnedMessagesBannerFormatter
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -35,20 +33,11 @@ import org.junit.Test
 class PinnedMessagesBannerPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createPinnedMessagesBannerPresenter(isFeatureEnabled = true)
+        val presenter = createPinnedMessagesBannerPresenter()
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState).isEqualTo(PinnedMessagesBannerState.Hidden)
             cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - feature disabled`() = runTest {
-        val presenter = createPinnedMessagesBannerPresenter(isFeatureEnabled = false)
-        presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState).isEqualTo(PinnedMessagesBannerState.Hidden)
         }
     }
 
@@ -188,14 +177,10 @@ class PinnedMessagesBannerPresenterTest {
             )
         ),
         syncService: SyncService = FakeSyncService(),
-        isFeatureEnabled: Boolean = true,
     ): PinnedMessagesBannerPresenter {
         val timelineProvider = PinnedEventsTimelineProvider(
             room = room,
             syncService = syncService,
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.PinnedEvents.key to isFeatureEnabled)
-            ),
             dispatchers = testCoroutineDispatchers(),
         )
         timelineProvider.launchIn(backgroundScope)

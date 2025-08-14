@@ -11,17 +11,18 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
-import io.element.android.features.login.impl.accesscontrol.ElementWellknownRetriever
-import io.element.android.features.login.impl.accesscontrol.FakeElementWellknownRetriever
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.features.login.impl.resolver.network.ElementWellKnown
+import io.element.android.features.wellknown.test.FakeWellknownRetriever
+import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
+import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -113,14 +114,14 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server element pro required error`() = runTest {
-        val retrieveResult = lambdaRecorder<String, ElementWellKnown> {
-            ElementWellKnown(
+        val getElementWellKnownResult = lambdaRecorder<String, ElementWellKnown> {
+            anElementWellKnown(
                 enforceElementPro = true,
             )
         }
         createPresenter(
-            elementWellknownRetriever = FakeElementWellknownRetriever(
-                retrieveResult = retrieveResult,
+            wellknownRetriever = FakeWellknownRetriever(
+                getElementWellKnownResult = getElementWellKnownResult,
             ),
         ).test {
             val initialState = awaitItem()
@@ -136,7 +137,7 @@ class ChangeServerPresenterTest {
             assertThat(
                 (failureState.changeServerAction.errorOrNull() as ChangeServerError.NeedElementPro).applicationId
             ).isEqualTo("io.element.enterprise")
-            retrieveResult.assertions()
+            getElementWellKnownResult.assertions()
                 .isCalledOnce()
                 .with(value(A_HOMESERVER_URL.ensureProtocol()))
         }
@@ -146,13 +147,13 @@ class ChangeServerPresenterTest {
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
-        elementWellknownRetriever: ElementWellknownRetriever = FakeElementWellknownRetriever(),
+        wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
     ) = ChangeServerPresenter(
         authenticationService = authenticationService,
         accountProviderDataSource = accountProviderDataSource,
         defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
             enterpriseService = enterpriseService,
-            elementWellknownRetriever = elementWellknownRetriever,
+            wellknownRetriever = wellknownRetriever,
         ),
     )
 }

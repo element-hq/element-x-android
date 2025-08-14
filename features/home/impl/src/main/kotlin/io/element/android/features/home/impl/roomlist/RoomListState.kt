@@ -41,7 +41,6 @@ data class RoomListState(
             val roomName: String?,
             val isDm: Boolean,
             val isFavorite: Boolean,
-            val markAsUnreadFeatureFlagEnabled: Boolean,
             val hasNewContent: Boolean,
             val displayClearRoomCacheAction: Boolean,
         ) : ContextMenu

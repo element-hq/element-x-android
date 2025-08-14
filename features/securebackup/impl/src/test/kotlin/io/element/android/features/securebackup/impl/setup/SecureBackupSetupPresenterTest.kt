@@ -40,6 +40,7 @@ class SecureBackupSetupPresenterTest {
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Setup,
                     formattedRecoveryKey = null,
+                    displayTextFieldContents = true,
                     inProgress = false,
                 )
             )
@@ -63,6 +64,7 @@ class SecureBackupSetupPresenterTest {
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Setup,
                     formattedRecoveryKey = null,
+                    displayTextFieldContents = true,
                     inProgress = true,
                 )
             )
@@ -73,6 +75,7 @@ class SecureBackupSetupPresenterTest {
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Setup,
                     formattedRecoveryKey = A_RECOVERY_KEY,
+                    displayTextFieldContents = true,
                     inProgress = false,
                 )
             )
@@ -103,6 +106,7 @@ class SecureBackupSetupPresenterTest {
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Change,
                     formattedRecoveryKey = null,
+                    displayTextFieldContents = true,
                     inProgress = false,
                 )
             )
@@ -155,6 +159,7 @@ class SecureBackupSetupPresenterTest {
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Change,
                     formattedRecoveryKey = null,
+                    displayTextFieldContents = true,
                     inProgress = true,
                 )
             )
@@ -164,6 +169,7 @@ class SecureBackupSetupPresenterTest {
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Change,
                     formattedRecoveryKey = FakeEncryptionService.FAKE_RECOVERY_KEY,
+                    displayTextFieldContents = true,
                     inProgress = false,
                 )
             )

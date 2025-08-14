@@ -66,6 +66,7 @@ import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -213,11 +214,11 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onPreviewAttachments(attachments) }
     }
 
-    override fun onNavigateToRoom(roomId: RoomId) {
+    override fun onNavigateToRoom(roomId: RoomId, serverNames: List<String>) {
         if (roomId == room.roomId) {
             displaySameRoomToast()
         } else {
-            val permalinkData = PermalinkData.RoomLink(roomId.toRoomIdOrAlias())
+            val permalinkData = PermalinkData.RoomLink(roomId.toRoomIdOrAlias(), viaParameters = serverNames.toImmutableList())
             callbacks.forEach { it.onPermalinkClick(permalinkData) }
         }
     }

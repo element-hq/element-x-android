@@ -13,12 +13,13 @@ import io.element.android.features.login.api.accesscontrol.AccountProviderAccess
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.wellknown.api.WellknownRetriever
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultAccountProviderAccessControl @Inject constructor(
     private val enterpriseService: EnterpriseService,
-    private val elementWellknownRetriever: ElementWellknownRetriever,
+    private val wellknownRetriever: WellknownRetriever,
 ) : AccountProviderAccessControl {
     override suspend fun isAllowedToConnectToAccountProvider(accountProviderUrl: String) = try {
         assertIsAllowedToConnectToAccountProvider(
@@ -37,8 +38,8 @@ class DefaultAccountProviderAccessControl @Inject constructor(
     ) {
         if (enterpriseService.isEnterpriseBuild.not()) {
             // Ensure that Element Pro is not required for this account provider
-            val wellKnown = elementWellknownRetriever.retrieve(
-                accountProviderUrl = accountProviderUrl.ensureProtocol(),
+            val wellKnown = wellknownRetriever.getElementWellKnown(
+                baseUrl = accountProviderUrl.ensureProtocol(),
             )
             if (wellKnown?.enforceElementPro == true) {
                 throw AccountProviderAccessException.NeedElementProException(

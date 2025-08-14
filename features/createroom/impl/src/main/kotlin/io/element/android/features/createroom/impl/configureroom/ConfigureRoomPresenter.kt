@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidityEffect
 import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -57,6 +58,7 @@ class ConfigureRoomPresenter @Inject constructor(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val featureFlagService: FeatureFlagService,
     private val roomAliasHelper: RoomAliasHelper,
+    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<ConfigureRoomState> {
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
@@ -201,7 +203,7 @@ class ConfigureRoomPresenter @Inject constructor(
             uri = avatarUri,
             mimeType = MimeTypes.Jpeg,
             deleteOriginal = false,
-            compressIfPossible = false,
+            mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
         ).getOrThrow()
         val byteArray = preprocessed.file.readBytes()
         return matrixClient.uploadMedia(MimeTypes.Jpeg, byteArray, null).getOrThrow()

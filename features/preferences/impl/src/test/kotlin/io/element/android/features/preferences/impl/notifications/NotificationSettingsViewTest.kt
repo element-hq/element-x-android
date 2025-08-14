@@ -68,22 +68,6 @@ class NotificationSettingsViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on push history notification invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
-        ensureCalledOnce {
-            rule.setNotificationSettingsView(
-                state = aValidNotificationSettingsState(
-                    eventSink = eventsRecorder
-                ),
-                onPushHistoryClick = it
-            )
-            rule.clickOn(R.string.troubleshoot_notifications_entry_point_push_history_title)
-        }
-        eventsRecorder.assertSingle(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
     fun `clicking on group chats invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         ensureCalledOnceWithParam(false) {
@@ -300,7 +284,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setNotif
     state: NotificationSettingsState,
     onOpenEditDefault: (isOneToOne: Boolean) -> Unit = EnsureNeverCalledWithParam(),
     onTroubleshootNotificationsClick: () -> Unit = EnsureNeverCalled(),
-    onPushHistoryClick: () -> Unit = EnsureNeverCalled(),
     onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
@@ -308,7 +291,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setNotif
             state = state,
             onOpenEditDefault = onOpenEditDefault,
             onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
-            onPushHistoryClick = onPushHistoryClick,
             onBackClick = onBackClick,
         )
     }

@@ -22,6 +22,8 @@
   <string name="screen_room_change_role_administrators_title">"Muokkaa ylläpitäjiä"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Et voi peruuttaa tätä toimenpidettä. Ylennät käyttäjän samalle oikeustasolle kuin sinä."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Lisää ylläpitäjä?"</string>
+  <string name="screen_room_change_role_confirm_change_owners_description">"Et voi kumota tätä toimintoa. Olet siirtämässä omistajuuden valituille käyttäjille. Kun poistut, muutos on pysyvä."</string>
+  <string name="screen_room_change_role_confirm_change_owners_title">"Siirretäänkö omistajuus?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Alenna"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Et voi perua tätä muutosta, koska olet alentamassa itseäsi. Jos olet viimeinen oikeutettu henkilö tässä huoneessa, oikeuksia ei voi enää saada takaisin."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Alenna itsesi?"</string>
@@ -30,6 +32,7 @@
   <string name="screen_room_change_role_moderators_admin_section_footer">"Ylläpitäjillä on automaattisesti valvojan oikeudet"</string>
   <string name="screen_room_change_role_moderators_owner_section_footer">"Omistajilla on automaattisesti ylläpitäjän oikeudet."</string>
   <string name="screen_room_change_role_moderators_title">"Muokkaa valvojia"</string>
+  <string name="screen_room_change_role_owners_title">"Valitse Omistajat"</string>
   <string name="screen_room_change_role_section_administrators">"Ylläpitäjät"</string>
   <string name="screen_room_change_role_section_moderators">"Valvojat"</string>
   <string name="screen_room_change_role_section_users">"Jäsenet"</string>

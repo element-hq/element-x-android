@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Lägg till reaktion: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Radera"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d siffra angiven"</item>
     <item quantity="other">"%1$d siffror angivna"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Redigera avatar"</string>
   <string name="a11y_hide_password">"Dölj lösenord"</string>
   <string name="a11y_join_call">"Anslut till samtal"</string>
   <string name="a11y_jump_to_bottom">"Hoppa till botten"</string>
   <string name="a11y_notifications_mentions_only">"Endast omnämningar"</string>
   <string name="a11y_notifications_muted">"Tystad"</string>
+  <string name="a11y_notifications_new_mentions">"Nya omnämnanden"</string>
+  <string name="a11y_notifications_new_messages">"Nya meddelanden"</string>
+  <string name="a11y_notifications_ongoing_call">"Pågående samtal"</string>
+  <string name="a11y_other_user_avatar">"Annan användares avatar"</string>
   <string name="a11y_page_n">"Sida %1$d"</string>
   <string name="a11y_pause">"Pausa"</string>
   <string name="a11y_paused_voice_message">"Röstmeddelande, varaktighet:%1$s, nuvarande position: %2$s"</string>
@@ -28,14 +34,19 @@
   <string name="a11y_read_receipts_single">"Läst av %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tryck för att visa alla"</string>
   <string name="a11y_remove_reaction">"Ta bort reaktionen med %1$s"</string>
+  <string name="a11y_remove_reaction_with">"Ta bort reaktion med %1$s"</string>
+  <string name="a11y_room_avatar">"Rumsavatar"</string>
   <string name="a11y_send_files">"Skicka filer"</string>
   <string name="a11y_show_password">"Visa lösenord"</string>
   <string name="a11y_start_call">"Starta ett samtal"</string>
+  <string name="a11y_user_avatar">"Användaravatar"</string>
   <string name="a11y_user_menu">"Användarmeny"</string>
+  <string name="a11y_view_avatar">"Visa avatar"</string>
   <string name="a11y_view_details">"Visa detaljer"</string>
   <string name="a11y_voice_message">"Röstmeddelande, varaktighet: %1$s"</string>
   <string name="a11y_voice_message_record">"Spela in röstmeddelande."</string>
   <string name="a11y_voice_message_stop_recording">"Stoppa inspelning"</string>
+  <string name="a11y_your_avatar">"Din avatar"</string>
   <string name="action_accept">"Godkänn"</string>
   <string name="action_add_caption">"Lägg till bildtext"</string>
   <string name="action_add_to_timeline">"Lägg till i tidslinjen"</string>
@@ -94,6 +105,7 @@
   <string name="action_no">"Nej"</string>
   <string name="action_not_now">"Inte nu"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Öppna kontextmenyn"</string>
   <string name="action_open_settings">"Inställningar"</string>
   <string name="action_open_with">"Öppna med"</string>
   <string name="action_pin">"Fäst"</string>
@@ -118,7 +130,9 @@
   <string name="action_save">"Spara"</string>
   <string name="action_search">"Sök"</string>
   <string name="action_send">"Skicka"</string>
+  <string name="action_send_edited_message">"Skicka redigerat message"</string>
   <string name="action_send_message">"Skicka meddelande"</string>
+  <string name="action_send_voice_message">"Skicka röstmeddelande"</string>
   <string name="action_share">"Dela"</string>
   <string name="action_share_link">"Dela länk"</string>
   <string name="action_show">"Visa"</string>
@@ -134,6 +148,7 @@
   <string name="action_tap_for_options">"Tryck för alternativ"</string>
   <string name="action_try_again">"Försök igen"</string>
   <string name="action_unpin">"Frigör"</string>
+  <string name="action_view">"Visa"</string>
   <string name="action_view_in_timeline">"Visa i tidslinjen"</string>
   <string name="action_view_source">"Visa källkod"</string>
   <string name="action_yes">"Ja"</string>
@@ -144,6 +159,7 @@
   <string name="common_acceptable_use_policy">"Policy för godtagbar användning"</string>
   <string name="common_adding_caption">"Lägga till bildtext"</string>
   <string name="common_advanced_settings">"Avancerade inställningar"</string>
+  <string name="common_an_image">"en bild"</string>
   <string name="common_analytics">"Analysdata"</string>
   <string name="common_appearance">"Utseende"</string>
   <string name="common_audio">"Ljud"</string>
@@ -235,11 +251,17 @@ Anledning:%1$s."</string>
     <item quantity="other">"%d röster"</item>
   </plurals>
   <string name="common_privacy_policy">"Integritetspolicy"</string>
+  <string name="common_private_room">"Privat rum"</string>
+  <string name="common_public_room">"Offentligt rum"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktioner"</string>
   <string name="common_reason">"Orsak"</string>
   <string name="common_recovery_key">"Återställningsnyckel"</string>
   <string name="common_refreshing">"Uppdaterar …"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d svar"</item>
+    <item quantity="other">"%1$d svar"</item>
+  </plurals>
   <string name="common_replying_to">"Svarar till %1$s"</string>
   <string name="common_report_a_bug">"Rapportera en bugg"</string>
   <string name="common_report_a_problem">"Rapportera ett problem"</string>
@@ -259,6 +281,7 @@ Anledning:%1$s."</string>
   <string name="common_sending">"Skickar …"</string>
   <string name="common_sending_failed">"Misslyckades att skicka"</string>
   <string name="common_sent">"Skickat"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Servern stöds inte"</string>
   <string name="common_server_url">"Server-URL"</string>
   <string name="common_settings">"Inställningar"</string>
@@ -324,6 +347,7 @@ Anledning:%1$s."</string>
   <string name="error_failed_loading_messages">"Misslyckades att ladda meddelanden"</string>
   <string name="error_failed_locating_user">"%1$s kunde inte komma åt din plats. Vänligen försök igen senare."</string>
   <string name="error_failed_uploading_voice_message">"Misslyckades med att ladda upp ditt röstmeddelande."</string>
+  <string name="error_invalid_invite">"Rummet finns inte längre eller så är inbjudan inte längre giltig."</string>
   <string name="error_message_not_found">"Meddelandet hittades inte"</string>
   <string name="error_missing_location_auth_android">"%1$s är inte behörig att komma åt din plats. Du kan aktivera åtkomst i Inställningar."</string>
   <string name="error_missing_location_rationale_android">"%1$s är inte behörig att komma åt din plats. Aktivera åtkomst nedan."</string>
@@ -333,6 +357,7 @@ Anledning:%1$s."</string>
   <string name="error_room_address_invalid_symbols">"Vissa tecken är inte tillåtna. Endast bokstäver, siffror och följande symboler stöds ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Vissa meddelanden har inte skickats"</string>
   <string name="error_unknown">"Tyvärr, ett fel uppstod"</string>
+  <string name="event_shield_mismatched_sender">"Avsändaren av händelsen matchar inte ägaren av den enhet som skickade den."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten."</string>
   <string name="event_shield_reason_previously_verified">"Krypterat av en tidigare verifierad användare."</string>
   <string name="event_shield_reason_sent_in_clear">"Inte krypterad."</string>
@@ -343,10 +368,11 @@ Anledning:%1$s."</string>
   <string name="invite_friends_text">"Hallå, prata med mig på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Raseriskaka för att rapportera bugg"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Alternativ"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Ta bort %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Inställningar"</string>
   <string name="screen_media_picker_error_failed_selection">"Misslyckades att välja media, vänligen pröva igen."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Bildtexter kanske inte är synliga för personer som använder äldre appar."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Misslyckades att ladda upp media, vänligen pröva igen."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Tryck på ett meddelande och välj ”%1$s” för att inkludera det här."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fäst viktiga meddelanden så att de lätt kan upptäckas"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -367,6 +393,9 @@ Anledning:%1$s."</string>
   <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>
   <string name="screen_room_event_pill">"Meddelande i %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Expandera"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Reducera"</string>
+  <string name="screen_room_permalink_same_room_android">"Visar redan det här rummet!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s av %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Fästa meddelanden"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laddar meddelande …"</string>

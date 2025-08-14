@@ -31,6 +31,7 @@ import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionSt
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import okhttp3.MultipartReader
@@ -464,7 +465,7 @@ class DefaultBugReporterTest {
             userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
             sessionStore = sessionStore,
             buildMeta = buildMeta,
-            bugReporterUrlProvider = { server.url("/") },
+            bugReporterUrlProvider = { flowOf(server.url("/")) },
             sdkMetadata = FakeSdkMetadata("123456789"),
             matrixClientProvider = matrixClientProvider,
             tracingService = tracingService,

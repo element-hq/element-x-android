@@ -261,6 +261,8 @@
   </plurals>
   <string name="common_preparing">"Приготування…"</string>
   <string name="common_privacy_policy">"Політика конфіденційності"</string>
+  <string name="common_private_room">"Приватна кімната (тільки за запрошенням)"</string>
+  <string name="common_public_room">"Загальнодоступна кімната"</string>
   <string name="common_reaction">"Реакція"</string>
   <string name="common_reactions">"Реакції"</string>
   <string name="common_reason">"Причина"</string>
@@ -383,11 +385,6 @@
   <string name="screen_create_poll_remove_accessibility_label">"Вилучити %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Налаштування"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
-  <string name="screen_media_upload_preview_caption_warning">"Користувачі старих застосунків можуть не бачити підписи."</string>
-  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Файл не може бути вивантажено."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Не вдалося завантажити медіафайл, спробуйте ще раз."</string>
-  <string name="screen_media_upload_preview_error_too_large_title">"Файл завеликий для вивантаження"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Натисніть на повідомлення і виберіть \"%1$s\", щоб додати його сюди."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закріпіть важливі повідомлення, щоб їх можна було легко знайти"</string>
   <plurals name="screen_pinned_timeline_screen_title">

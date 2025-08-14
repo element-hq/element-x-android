@@ -9,4 +9,6 @@ package io.element.android.features.enterprise.api
 
 interface SessionEnterpriseService {
     suspend fun isElementCallAvailable(): Boolean
+
+    suspend fun init()
 }

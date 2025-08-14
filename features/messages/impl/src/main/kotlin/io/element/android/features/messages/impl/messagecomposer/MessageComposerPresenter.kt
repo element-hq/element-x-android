@@ -45,8 +45,6 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -60,6 +58,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTran
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
@@ -102,7 +101,6 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
-    private val featureFlagService: FeatureFlagService,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaSender: MediaSender,
@@ -120,6 +118,7 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
     private val suggestionsProcessor: SuggestionsProcessor,
+    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
@@ -154,13 +153,7 @@ class MessageComposerPresenter @AssistedInject constructor(
 
         val canShareLocation = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing) &&
-                locationService.isServiceAvailable()
-        }
-
-        val canCreatePoll = remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            canCreatePoll.value = featureFlagService.isFeatureEnabled(FeatureFlags.Polls)
+            canShareLocation.value = locationService.isServiceAvailable()
         }
 
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
@@ -374,7 +367,6 @@ class MessageComposerPresenter @AssistedInject constructor(
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation.value,
-            canCreatePoll = canCreatePoll.value,
             suggestions = suggestions.toPersistentList(),
             resolveMentionDisplay = resolveMentionDisplay,
             resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,
@@ -519,6 +511,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             uri = uri,
             mimeType = mimeType,
             progressCallback = null,
+            mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
         ).getOrThrow()
     }
         .onFailure { cause ->

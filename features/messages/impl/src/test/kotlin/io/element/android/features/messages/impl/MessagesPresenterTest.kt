@@ -46,9 +46,6 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -325,6 +322,7 @@ class MessagesPresenterTest {
             val mediaMessage = aMessageEvent(
                 content = TimelineItemImageContent(
                     filename = "image.jpg",
+                    fileSize = 4 * 1024 * 1024L,
                     caption = null,
                     formattedCaption = null,
                     isEdited = false,
@@ -365,6 +363,7 @@ class MessagesPresenterTest {
             val mediaMessage = aMessageEvent(
                 content = TimelineItemVideoContent(
                     filename = "video.mp4",
+                    fileSize = 50 * 1024 * 1024L,
                     caption = null,
                     formattedCaption = null,
                     isEdited = false,
@@ -406,6 +405,7 @@ class MessagesPresenterTest {
             val mediaMessage = aMessageEvent(
                 content = TimelineItemFileContent(
                     filename = "file.pdf",
+                    fileSize = 10 * 1024 * 1024L,
                     caption = null,
                     isEdited = false,
                     formattedCaption = null,
@@ -991,37 +991,6 @@ class MessagesPresenterTest {
                     composerMode = MessageComposerMode.EditCaption(
                         eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
                         content = A_CAPTION,
-                        showCaptionCompatibilityWarning = true,
-                    )
-                )
-            )
-        }
-    }
-
-    @Test
-    fun `present - handle action edit caption without warning`() = runTest {
-        val messageEvent = aMessageEvent(
-            content = aTimelineItemImageContent(
-                caption = A_CAPTION,
-            )
-        )
-        val composerRecorder = EventsRecorder<MessageComposerEvents>()
-        val presenter = createMessagesPresenter(
-            messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.MediaCaptionWarning.key to false)
-            )
-        )
-        presenter.testWithLifecycleOwner {
-            val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditCaption, messageEvent))
-            awaitItem()
-            composerRecorder.assertSingle(
-                MessageComposerEvents.SetMode(
-                    composerMode = MessageComposerMode.EditCaption(
-                        eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
-                        content = A_CAPTION,
-                        showCaptionCompatibilityWarning = false,
                     )
                 )
             )
@@ -1048,37 +1017,6 @@ class MessagesPresenterTest {
                     composerMode = MessageComposerMode.EditCaption(
                         eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
                         content = "",
-                        showCaptionCompatibilityWarning = true,
-                    )
-                )
-            )
-        }
-    }
-
-    @Test
-    fun `present - handle action add caption without warning`() = runTest {
-        val composerRecorder = EventsRecorder<MessageComposerEvents>()
-        val presenter = createMessagesPresenter(
-            messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.MediaCaptionWarning.key to false)
-            )
-        )
-        val messageEvent = aMessageEvent(
-            content = aTimelineItemImageContent(
-                caption = null,
-            )
-        )
-        presenter.testWithLifecycleOwner {
-            val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.AddCaption, messageEvent))
-            awaitItem()
-            composerRecorder.assertSingle(
-                MessageComposerEvents.SetMode(
-                    composerMode = MessageComposerMode.EditCaption(
-                        eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
-                        content = "",
-                        showCaptionCompatibilityWarning = false,
                     )
                 )
             )
@@ -1231,7 +1169,6 @@ class MessagesPresenterTest {
             typingNoticeResult = { Result.success(Unit) },
         ),
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         timelineEventSink: (TimelineEvents) -> Unit = {},
@@ -1267,7 +1204,6 @@ class MessagesPresenterTest {
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            featureFlagsService = featureFlagService,
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
             htmlConverterProvider = FakeHtmlConverterProvider(),

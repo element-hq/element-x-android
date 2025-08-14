@@ -22,6 +22,8 @@
   <string name="screen_room_change_role_administrators_title">"Керувати адмінами"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Ви не зможете скасувати цю дію. Ви просуваєте користувача, щоб він мав такий же рівень прав, як і ви."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Додати адміністратора?"</string>
+  <string name="screen_room_change_role_confirm_change_owners_description">"Ви не зможете скасувати цю дію. Ви передаєте право власності вибраним користувачам. Після вашого виходу це буде остаточно."</string>
+  <string name="screen_room_change_role_confirm_change_owners_title">"Передати право власності?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Понизити"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Ви не зможете скасувати цю зміну, оскільки ви понижуєте себе, якщо ви останній привілейований користувач у кімнаті, відновити повноваження буде неможливо."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Понизити себе?"</string>
@@ -30,6 +32,7 @@
   <string name="screen_room_change_role_moderators_admin_section_footer">"Адміністратори автоматично мають повноваження модератора"</string>
   <string name="screen_room_change_role_moderators_owner_section_footer">"Власники автоматично отримують права адміністратора."</string>
   <string name="screen_room_change_role_moderators_title">"Керувати модераторами"</string>
+  <string name="screen_room_change_role_owners_title">"Оберіть власників"</string>
   <string name="screen_room_change_role_section_administrators">"Адміністратори"</string>
   <string name="screen_room_change_role_section_moderators">"Модератори"</string>
   <string name="screen_room_change_role_section_users">"Учасники"</string>

@@ -8,6 +8,9 @@
   <string name="emoji_picker_category_people">"Emojis y personas"</string>
   <string name="emoji_picker_category_places">"Viajes y lugares"</string>
   <string name="emoji_picker_category_symbols">"Símbolos"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Es posible que las leyendas no sean visibles para las personas que usan aplicaciones más antiguas."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Error al procesar el contenido multimedia, por favor inténtalo de nuevo."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Error al subir el contenido multimedia, por favor inténtalo de nuevo."</string>
   <string name="screen_report_content_block_user">"Bloquear usuario"</string>
   <string name="screen_report_content_block_user_hint">"Marca esta casilla si quieres ocultar todos los mensajes actuales y futuros de este usuario"</string>
   <string name="screen_report_content_explanation">"Se denunciará este mensaje al administrador de tu servidor base. No será capaz de leer ningún mensaje cifrado."</string>

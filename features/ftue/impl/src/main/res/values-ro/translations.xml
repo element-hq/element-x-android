@@ -13,10 +13,4 @@
   <string name="screen_notification_optin_subtitle">"Puteți modifica setările mai târziu."</string>
   <string name="screen_notification_optin_title">"Permiteți notificările și nu pierdeți niciodată un mesaj"</string>
   <string name="screen_session_verification_enter_recovery_key">"Introduceți cheia de recuperare"</string>
-  <string name="screen_welcome_bullet_1">"Apelurile, sondajele, căutare și multe altele vor fi adăugate în cursul acestui an."</string>
-  <string name="screen_welcome_bullet_2">"Istoricul mesajelor pentru camerele criptate nu va fi disponibil în această actualizare."</string>
-  <string name="screen_welcome_bullet_3">"Ne-ar plăcea să auzim de la dumneavoastră, spuneți-ne ce părere aveți prin intermediul paginii de setări."</string>
-  <string name="screen_welcome_button">"Să începem!"</string>
-  <string name="screen_welcome_subtitle">"Iată ce trebuie să știți:"</string>
-  <string name="screen_welcome_title">"Bun venit la%1$s!"</string>
 </resources>

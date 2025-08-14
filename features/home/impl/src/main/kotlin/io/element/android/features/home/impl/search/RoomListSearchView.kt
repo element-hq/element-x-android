@@ -23,13 +23,15 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -39,7 +41,7 @@ import io.element.android.features.home.impl.contentType
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.roomlist.RoomListEvents
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.modifiers.applyIf
+import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FilledTextField
@@ -68,24 +70,13 @@ internal fun RoomListSearchView(
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
-        Column(
-            modifier = modifier
-                .applyIf(
-                    condition = state.isSearchActive,
-                    ifTrue = {
-                        // Disable input interaction to underlying views
-                        pointerInput(Unit) {}
-                    }
-                )
-        ) {
-            if (state.isSearchActive) {
-                RoomListSearchContent(
-                    state = state,
-                    hideInvitesAvatars = hideInvitesAvatars,
-                    onRoomClick = onRoomClick,
-                    eventSink = eventSink,
-                )
-            }
+        Column(modifier = modifier) {
+            RoomListSearchContent(
+                state = state,
+                hideInvitesAvatars = hideInvitesAvatars,
+                onRoomClick = onRoomClick,
+                eventSink = eventSink,
+            )
         }
     }
 }
@@ -120,15 +111,19 @@ private fun RoomListSearchContent(
                 },
                 navigationIcon = { BackButton(onClick = ::onBackButtonClick) },
                 title = {
-                    val filter = state.query
-                    val focusRequester = FocusRequester()
+                    var filter by textFieldState(state.query)
+
+                    val focusRequester = remember { FocusRequester() }
                     FilledTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .focusRequester(focusRequester),
                         value = filter,
                         singleLine = true,
-                        onValueChange = { state.eventSink(RoomListSearchEvents.QueryChanged(it)) },
+                        onValueChange = {
+                            filter = it
+                            state.eventSink(RoomListSearchEvents.QueryChanged(it))
+                        },
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
@@ -152,10 +147,8 @@ private fun RoomListSearchContent(
                         }
                     )
 
-                    LaunchedEffect(state.isSearchActive) {
-                        if (state.isSearchActive) {
-                            focusRequester.requestFocus()
-                        }
+                    LaunchedEffect(Unit) {
+                        focusRequester.requestFocus()
                     }
                 },
                 windowInsets = TopAppBarDefaults.windowInsets.copy(top = 0)

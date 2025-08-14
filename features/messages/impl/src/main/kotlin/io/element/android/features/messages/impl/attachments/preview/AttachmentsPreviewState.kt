@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.textcomposer.model.TextEditorState
 
@@ -16,8 +17,8 @@ data class AttachmentsPreviewState(
     val attachment: Attachment,
     val sendActionState: SendActionState,
     val textEditorState: TextEditorState,
-    val allowCaption: Boolean,
-    val showCaptionCompatibilityWarning: Boolean,
+    val mediaOptimizationSelectorState: MediaOptimizationSelectorState,
+    val displayFileTooLargeError: Boolean,
     val eventSink: (AttachmentsPreviewEvents) -> Unit
 )
 

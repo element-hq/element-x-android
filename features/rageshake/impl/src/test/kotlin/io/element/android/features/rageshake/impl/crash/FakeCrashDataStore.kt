@@ -21,6 +21,7 @@ class FakeCrashDataStore(
 
     override fun setCrashData(crashData: String) {
         crashDataFlow.value = crashData
+        appHasCrashedFlow.value = true
     }
 
     override suspend fun resetAppHasCrashed() {

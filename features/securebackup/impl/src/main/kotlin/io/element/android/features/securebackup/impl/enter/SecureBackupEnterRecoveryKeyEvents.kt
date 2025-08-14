@@ -9,6 +9,7 @@ package io.element.android.features.securebackup.impl.enter
 
 sealed interface SecureBackupEnterRecoveryKeyEvents {
     data class OnRecoveryKeyChange(val recoveryKey: String) : SecureBackupEnterRecoveryKeyEvents
+    data class ChangeRecoveryKeyFieldContentsVisibility(val visible: Boolean) : SecureBackupEnterRecoveryKeyEvents
     data object Submit : SecureBackupEnterRecoveryKeyEvents
     data object ClearDialog : SecureBackupEnterRecoveryKeyEvents
 }

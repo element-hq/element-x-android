@@ -10,7 +10,6 @@
   <string name="confirm_recovery_key_banner_title">"ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده"</string>
   <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
   <string name="screen_home_tab_chats">"گپ‌ها"</string>
-  <string name="screen_home_tab_spaces">"فضاها"</string>
   <string name="screen_invites_decline_chat_message">"مطمئنید که می‌خواهید دعوت پیوستن به %1$s را رد کنید؟"</string>
   <string name="screen_invites_decline_chat_title">"رد دعوت"</string>
   <string name="screen_invites_decline_direct_chat_message">"مطمئنید که می‌خواهید این گپ خصوصی با %1$s را رد کنید؟"</string>

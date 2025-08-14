@@ -230,6 +230,8 @@
     <item quantity="other">"%d 票"</item>
   </plurals>
   <string name="common_privacy_policy">"隐私政策"</string>
+  <string name="common_private_room">"私有聊天室"</string>
+  <string name="common_public_room">"公共聊天室"</string>
   <string name="common_reaction">"回应"</string>
   <string name="common_reactions">"回应"</string>
   <string name="common_reason">"理由"</string>
@@ -342,9 +344,6 @@
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"摇一摇以报错"</string>
   <string name="screen_media_picker_error_failed_selection">"选择媒体失败，请重试。"</string>
-  <string name="screen_media_upload_preview_caption_warning">"使用旧版应用程序的用户可能无法看到字幕。"</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"处理要上传的媒体失败，请重试。"</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"上传媒体失败，请重试。"</string>
   <string name="screen_pinned_timeline_empty_state_description">"按下消息并选择 “%1$s” 将其包含在此处。"</string>
   <string name="screen_pinned_timeline_empty_state_headline">"固定重要消息，以便轻松发现它们"</string>
   <plurals name="screen_pinned_timeline_screen_title">

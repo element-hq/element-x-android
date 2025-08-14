@@ -7,15 +7,15 @@
 
 package io.element.android.features.messages.impl.attachments.preview.error
 
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.ui.strings.CommonStrings
 
 fun sendAttachmentError(
     throwable: Throwable
 ): Int {
     return if (throwable is MediaPreProcessor.Failure) {
-        CommonStrings.screen_media_upload_preview_error_failed_processing
+        R.string.screen_media_upload_preview_error_failed_processing
     } else {
-        CommonStrings.screen_media_upload_preview_error_failed_sending
+        R.string.screen_media_upload_preview_error_failed_sending
     }
 }

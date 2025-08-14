@@ -8,6 +8,9 @@
   <string name="emoji_picker_category_people">"Wynebau Hapus a Phobl"</string>
   <string name="emoji_picker_category_places">"Teithio a Llefydd"</string>
   <string name="emoji_picker_category_symbols">"Symbolau"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Efallai na fydd capsiynau yn weladwy i bobl sy\'n defnyddio apiau hŷn."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Wedi methu â phrosesu cyfryngau i\'w llwytho, ceisiwch eto."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Wedi methu llwytho cyfryngau, ceisiwch eto."</string>
   <string name="screen_report_content_block_user">"Rhwystro defnyddiwr"</string>
   <string name="screen_report_content_block_user_hint">"Gwiriwch a ydych am guddio\'r holl negeseuon presennol ac yn y dyfodol gan y defnyddiwr hwn"</string>
   <string name="screen_report_content_explanation">"Bydd y neges hon yn cael ei hadrodd i weinyddwr eich gweinyddwr cartref. Fyddan nhw ddim yn gallu darllen unrhyw negeseuon wedi\'u hamgryptio."</string>
