@@ -14,6 +14,6 @@ interface InvitePeopleRenderer {
     @Composable
     fun Render(
         state: InvitePeopleState,
-        modifier: Modifier = Modifier,
+        modifier: Modifier,
     )
 }
