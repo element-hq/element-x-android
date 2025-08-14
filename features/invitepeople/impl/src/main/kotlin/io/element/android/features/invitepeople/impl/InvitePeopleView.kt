@@ -141,8 +141,8 @@ private fun InvitePeopleSearchBar(
                             name = invitableUser.matrixUser.getBestName(),
                             subtext = when {
                                 // If they're already invited or joined we show that information
-                                invitableUser.isAlreadyJoined -> "Already a member"
-                                invitableUser.isAlreadyInvited -> "Already invited"
+                                invitableUser.isAlreadyJoined -> stringResource(R.string.screen_invite_users_already_a_member)
+                                invitableUser.isAlreadyInvited -> stringResource(R.string.screen_invite_users_already_invited)
                                 // Otherwise show the ID, unless that's already used for their name
                                 invitableUser.matrixUser.displayName.isNullOrEmpty()
                                     .not() -> invitableUser.matrixUser.userId.value

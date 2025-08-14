@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Anda memiliki perubahan yang belum disimpan."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Simpan perubahan?"</string>
   <string name="screen_room_details_add_topic_title">"Tambahkan topik"</string>
-  <string name="screen_room_details_already_a_member">"Sudah menjadi anggota"</string>
-  <string name="screen_room_details_already_invited">"Sudah diundang"</string>
   <string name="screen_room_details_badge_encrypted">"Terenkripsi"</string>
   <string name="screen_room_details_badge_not_encrypted">"Tidak terenkripsi"</string>
   <string name="screen_room_details_badge_public">"Ruangan publik"</string>

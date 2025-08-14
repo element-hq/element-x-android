@@ -39,8 +39,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Sul on salvestamata muudatusi"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Kas salvestame muudatused?"</string>
   <string name="screen_room_details_add_topic_title">"Lisa teema"</string>
-  <string name="screen_room_details_already_a_member">"Sa juba oled jututoa liige"</string>
-  <string name="screen_room_details_already_invited">"Sa juba oled kutse saanud"</string>
   <string name="screen_room_details_badge_encrypted">"Krüptitud jututuba"</string>
   <string name="screen_room_details_badge_not_encrypted">"Krüptimata jututuba"</string>
   <string name="screen_room_details_badge_public">"Avalik jututuba"</string>

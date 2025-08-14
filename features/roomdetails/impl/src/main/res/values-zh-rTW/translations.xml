@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"您有尚未儲存的變更"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"是否儲存變更？"</string>
   <string name="screen_room_details_add_topic_title">"新增主題"</string>
-  <string name="screen_room_details_already_a_member">"已是成員"</string>
-  <string name="screen_room_details_already_invited">"已邀請"</string>
   <string name="screen_room_details_badge_encrypted">"已加密"</string>
   <string name="screen_room_details_badge_not_encrypted">"未加密"</string>
   <string name="screen_room_details_badge_public">"公開的聊天室"</string>

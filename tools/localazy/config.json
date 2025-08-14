@@ -208,6 +208,12 @@
       ]
     },
     {
+      "name" : ":features:invitepeople:impl",
+      "includeRegex" : [
+        "screen\\.invite_users\\..*"
+      ]
+    },
+    {
       "name" : ":features:messages:impl",
       "includeRegex" : [
         "emoji_picker_category_.*",

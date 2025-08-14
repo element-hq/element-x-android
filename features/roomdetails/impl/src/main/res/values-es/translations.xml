@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Tienes cambios sin guardar."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"¿Guardar cambios?"</string>
   <string name="screen_room_details_add_topic_title">"Añadir tema"</string>
-  <string name="screen_room_details_already_a_member">"Ya eres miembro"</string>
-  <string name="screen_room_details_already_invited">"Ya estás invitado"</string>
   <string name="screen_room_details_badge_encrypted">"Cifrada"</string>
   <string name="screen_room_details_badge_not_encrypted">"No cifrada"</string>
   <string name="screen_room_details_badge_public">"Sala pública"</string>
