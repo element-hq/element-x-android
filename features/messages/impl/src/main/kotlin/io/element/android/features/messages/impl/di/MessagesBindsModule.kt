@@ -28,8 +28,6 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
 import io.element.android.features.messages.impl.typing.TypingNotificationState
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 
