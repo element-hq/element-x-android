@@ -38,6 +38,8 @@ object Versions {
     const val VERSION_CODE = (2000 + versionYear) * 10_000 + versionMonth * 100 + versionReleaseNumber
     val VERSION_NAME = "$versionYear.${versionMonth.toString().padStart(2, '0')}.$versionReleaseNumber"
 
+    // When updating COMPILE_SDK, please do not forget to update the value for `buildToolsVersion`
+    // in the file `tools/release/release.sh`
     const val COMPILE_SDK = 36
     const val TARGET_SDK = 36
 
