@@ -14,6 +14,7 @@ import com.airbnb.android.showkase.models.Showkase
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -26,6 +27,16 @@ class DeveloperSettingsNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: DeveloperSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
+    interface Callback : Plugin {
+        fun onPushHistoryClick()
+    }
+
+    private val callbacks = plugins<Callback>()
+
+    private fun onPushHistoryClick() {
+        callbacks.forEach { it.onPushHistoryClick() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val activity = requireNotNull(LocalActivity.current)
@@ -39,6 +50,7 @@ class DeveloperSettingsNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onOpenShowkase = ::openShowkase,
+            onPushHistoryClick = ::onPushHistoryClick,
             onBackClick = ::navigateUp
         )
     }

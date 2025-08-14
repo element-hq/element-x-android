@@ -167,7 +167,12 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.DeveloperSettings -> {
-                createNode<DeveloperSettingsNode>(buildContext)
+                val developerSettingsCallback = object : DeveloperSettingsNode.Callback {
+                    override fun onPushHistoryClick() {
+                        backstack.push(NavTarget.PushHistory)
+                    }
+                }
+                createNode<DeveloperSettingsNode>(buildContext, listOf(developerSettingsCallback))
             }
             NavTarget.About -> {
                 val callback = object : AboutNode.Callback {
@@ -188,10 +193,6 @@ class PreferencesFlowNode @AssistedInject constructor(
 
                     override fun onTroubleshootNotificationsClick() {
                         backstack.push(NavTarget.TroubleshootNotifications)
-                    }
-
-                    override fun onPushHistoryClick() {
-                        backstack.push(NavTarget.PushHistory)
                     }
                 }
                 createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
