@@ -9,6 +9,7 @@ package io.element.android.features.poll.test.actions
 
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.Timeline
 
 class FakeSendPollResponseAction : SendPollResponseAction {
     private var executionCount = 0
@@ -17,7 +18,7 @@ class FakeSendPollResponseAction : SendPollResponseAction {
         assert(executionCount == count)
     }
 
-    override suspend fun execute(pollStartId: EventId, answerId: String): Result<Unit> {
+    override suspend fun execute(timeline: Timeline, pollStartId: EventId, answerId: String): Result<Unit> {
         executionCount++
         return Result.success(Unit)
     }

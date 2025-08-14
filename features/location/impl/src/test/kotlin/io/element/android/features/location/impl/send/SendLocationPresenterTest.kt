@@ -23,6 +23,7 @@ import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -55,6 +56,7 @@ class SendLocationPresenterTest {
             override fun create(permissions: List<String>): PermissionsPresenter = fakePermissionsPresenter
         },
         room = joinedRoom,
+        timelineMode = Timeline.Mode.Live,
         analyticsService = fakeAnalyticsService,
         messageComposerContext = fakeMessageComposerContext,
         locationActions = fakeLocationActions,

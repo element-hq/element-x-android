@@ -24,6 +24,7 @@ class LoadingIndicatorsPostProcessorTest {
             items = listOf(messageEvent, messageEvent2),
             hasMoreToLoadBackward = true,
             hasMoreToLoadForward = false,
+            timelineMode = Timeline.Mode.Live,
         )
         assertThat(result).containsExactly(
             MatrixTimelineItem.Virtual(
@@ -46,6 +47,7 @@ class LoadingIndicatorsPostProcessorTest {
             items = listOf(messageEvent, messageEvent2),
             hasMoreToLoadBackward = false,
             hasMoreToLoadForward = true,
+            timelineMode = Timeline.Mode.Live,
         )
         assertThat(result).containsExactly(
             messageEvent,
@@ -68,6 +70,7 @@ class LoadingIndicatorsPostProcessorTest {
             items = listOf(messageEvent, messageEvent2),
             hasMoreToLoadBackward = true,
             hasMoreToLoadForward = true,
+            timelineMode = Timeline.Mode.Live,
         )
         assertThat(result).containsExactly(
             MatrixTimelineItem.Virtual(
@@ -97,6 +100,7 @@ class LoadingIndicatorsPostProcessorTest {
             items = listOf(),
             hasMoreToLoadBackward = true,
             hasMoreToLoadForward = true,
+            timelineMode = Timeline.Mode.Live,
         )
         assertThat(result).containsExactly(
             MatrixTimelineItem.Virtual(

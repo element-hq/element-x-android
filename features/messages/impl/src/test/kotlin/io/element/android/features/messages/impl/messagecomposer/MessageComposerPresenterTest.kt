@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
@@ -1521,6 +1522,7 @@ class MessageComposerPresenterTest {
         room: JoinedRoom = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         ),
+        timeline: Timeline = room.liveTimeline,
         navigator: MessagesNavigator = FakeMessagesNavigator(),
         pickerProvider: PickerProvider = this@MessageComposerPresenterTest.pickerProvider,
         locationService: LocationService = FakeLocationService(true),
@@ -1546,11 +1548,21 @@ class MessageComposerPresenterTest {
         mediaPickerProvider = pickerProvider,
         sessionPreferencesStore = sessionPreferencesStore,
         localMediaFactory = localMediaFactory,
-        mediaSender = MediaSender(
-            preProcessor = mediaPreProcessor,
-            room = room,
-            mediaOptimizationConfigProvider = { MediaOptimizationConfig(compressImages = true, videoCompressionPreset = VideoCompressionPreset.STANDARD) }
-        ),
+        mediaSenderFactory = object : MediaSender.Factory {
+            override fun create(timelineMode: Timeline.Mode): MediaSender {
+                return MediaSender(
+                    preProcessor = mediaPreProcessor,
+                    room = room,
+                    timelineMode = timelineMode,
+                    mediaOptimizationConfigProvider = {
+                        MediaOptimizationConfig(
+                        compressImages = true,
+                        videoCompressionPreset = VideoCompressionPreset.STANDARD
+                    )
+                    }
+                )
+            }
+        },
         snackbarDispatcher = snackbarDispatcher,
         analyticsService = analyticsService,
         locationService = locationService,
@@ -1560,12 +1572,13 @@ class MessageComposerPresenterTest {
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
-        timelineController = TimelineController(room),
+        timelineController = TimelineController(room, timeline),
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
         suggestionsProcessor = SuggestionsProcessor(),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
+        timeline = timeline,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

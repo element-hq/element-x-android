@@ -19,12 +19,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.api.MessageComposerContext
-import io.element.android.libraries.architecture.Presenter
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerPresenter
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -47,7 +51,7 @@ import java.io.File
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-class VoiceMessageComposerPresenter @AssistedInject constructor(
+class DefaultVoiceMessageComposerPresenter @AssistedInject constructor(
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     @Assisted private val timelineMode: Timeline.Mode,
     private val voiceRecorder: VoiceRecorder,
@@ -56,10 +60,11 @@ class VoiceMessageComposerPresenter @AssistedInject constructor(
     private val player: VoiceMessageComposerPlayer,
     private val messageComposerContext: MessageComposerContext,
     permissionsPresenterFactory: PermissionsPresenter.Factory
-) : Presenter<VoiceMessageComposerState> {
+) : VoiceMessageComposerPresenter {
+    @ContributesBinding(RoomScope::class)
     @AssistedFactory
-    interface Factory {
-        fun create(timelineMode: Timeline.Mode): VoiceMessageComposerPresenter
+    interface Factory : VoiceMessageComposerPresenter.Factory {
+        override fun create(timelineMode: Timeline.Mode): DefaultVoiceMessageComposerPresenter
     }
 
     private val permissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.RECORD_AUDIO)

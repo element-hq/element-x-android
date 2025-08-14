@@ -48,7 +48,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
+import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
@@ -93,7 +93,7 @@ class MessagesPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val room: JoinedRoom,
     @Assisted private val composerPresenter: Presenter<MessageComposerState>,
-    voiceMessageComposerPresenterFactory: VoiceMessageComposerPresenter.Factory,
+    voiceMessageComposerPresenterFactory: DefaultVoiceMessageComposerPresenter.Factory,
     @Assisted private val timelinePresenter: Presenter<TimelineState>,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,

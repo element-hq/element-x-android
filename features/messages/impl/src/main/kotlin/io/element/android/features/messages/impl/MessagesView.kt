@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -73,7 +74,6 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheet
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
@@ -550,7 +550,7 @@ private fun MessagesViewTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ThreadTopBar(
+private fun ThreadTopBar(
     onBackClick: () -> Unit,
 ) {
     TopAppBar(

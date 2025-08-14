@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
@@ -577,6 +578,7 @@ class AttachmentsPreviewPresenterTest {
             uri = mockMediaUrl,
         ),
         room: JoinedRoom = FakeJoinedRoom(),
+        timelineMode: Timeline.Mode = Timeline.Mode.Live,
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
         temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
@@ -599,14 +601,24 @@ class AttachmentsPreviewPresenterTest {
         return AttachmentsPreviewPresenter(
             attachment = aMediaAttachment(localMedia),
             onDoneListener = onDoneListener,
-            mediaSender = MediaSender(mediaPreProcessor, room, {
-                MediaOptimizationConfig(compressImages = true, videoCompressionPreset = VideoCompressionPreset.STANDARD)
-            }),
+            mediaSenderFactory = object : MediaSender.Factory {
+                override fun create(timelineMode: Timeline.Mode): MediaSender {
+                    return MediaSender(
+                        preProcessor = mediaPreProcessor,
+                        room = room,
+                        timelineMode = timelineMode,
+                        mediaOptimizationConfigProvider = {
+                            MediaOptimizationConfig(compressImages = true, videoCompressionPreset = VideoCompressionPreset.STANDARD)
+                        }
+                    )
+                }
+            },
             permalinkBuilder = permalinkBuilder,
             temporaryUriDeleter = temporaryUriDeleter,
             sessionCoroutineScope = this,
             dispatchers = testCoroutineDispatchers(),
             mediaOptimizationSelectorPresenterFactory = mediaOptimizationSelectorPresenterFactory,
+            timelineMode = timelineMode,
         )
     }
 

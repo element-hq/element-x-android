@@ -97,14 +97,14 @@ class ThreadedMessagesNode @AssistedInject constructor(
 
     private val inputs = inputs<Inputs>()
 
-    // TODO: use a loading state node to preload this instead of using `runBlocking`
+    // TODO use a loading state node to preload this instead of using `runBlocking`
     private val threadedTimeline = runBlocking { room.createTimeline(CreateTimelineParams.Threaded(threadRootEventId = inputs.threadRootEventId)).getOrThrow() }
     private val timelineController = TimelineController(room, threadedTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
         composerPresenter = messageComposerPresenterFactory.create(threadedTimeline, this),
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
-        // TODO: add special processor for threaded timeline
+        // TODO add special processor for threaded timeline
         actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default),
         timelineController = timelineController,
     )
