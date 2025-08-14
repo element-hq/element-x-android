@@ -21,7 +21,7 @@ import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.CoroutineScope
 
-class FakeVoiceMessageComposerPresenterFactory(
+class FakeDefaultVoiceMessageComposerPresenterFactory(
     private val sessionCoroutineScope: CoroutineScope,
     private val mediaSender: MediaSender = MediaSender(
         preProcessor = FakeMediaPreProcessor(),

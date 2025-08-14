@@ -35,7 +35,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
-import io.element.android.features.messages.test.timeline.voicemessages.composer.FakeVoiceMessageComposerPresenterFactory
+import io.element.android.features.messages.test.timeline.voicemessages.composer.FakeDefaultVoiceMessageComposerPresenterFactory
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
@@ -1194,7 +1194,7 @@ class MessagesPresenterTest {
         return MessagesPresenter(
             room = joinedRoom,
             composerPresenter = messageComposerPresenter,
-            voiceMessageComposerPresenterFactory = FakeVoiceMessageComposerPresenterFactory(backgroundScope),
+            voiceMessageComposerPresenterFactory = FakeDefaultVoiceMessageComposerPresenterFactory(backgroundScope),
             timelinePresenter = { aTimelineState(eventSink = timelineEventSink) },
             timelineProtectionPresenter = { aTimelineProtectionState() },
             actionListPresenter = { anActionListState(eventSink = actionListEventSink) },
