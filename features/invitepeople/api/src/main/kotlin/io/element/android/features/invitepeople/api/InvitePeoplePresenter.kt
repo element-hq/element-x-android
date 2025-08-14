@@ -8,10 +8,14 @@
 package io.element.android.features.invitepeople.api
 
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 interface InvitePeoplePresenter : Presenter<InvitePeopleState> {
     interface Factory {
-        fun create(room: JoinedRoom): InvitePeoplePresenter
+        fun create(
+            joinedRoom: JoinedRoom?,
+            roomId: RoomId,
+        ): InvitePeoplePresenter
     }
 }

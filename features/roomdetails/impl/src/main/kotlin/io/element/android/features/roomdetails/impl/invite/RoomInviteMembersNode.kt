@@ -40,7 +40,10 @@ class RoomInviteMembersNode @AssistedInject constructor(
         )
     }
 
-    private val invitePeoplePresenter = invitePeoplePresenterFactory.create(room)
+    private val invitePeoplePresenter = invitePeoplePresenterFactory.create(
+        joinedRoom = room,
+        roomId = room.roomId,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {

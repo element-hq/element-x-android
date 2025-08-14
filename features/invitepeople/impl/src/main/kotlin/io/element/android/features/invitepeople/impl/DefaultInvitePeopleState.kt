@@ -9,11 +9,13 @@ package io.element.android.features.invitepeople.impl
 
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.features.invitepeople.api.InvitePeopleState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class DefaultInvitePeopleState(
+    val room: AsyncData<Unit>,
     override val canInvite: Boolean,
     val searchQuery: String,
     val showSearchLoader: Boolean,

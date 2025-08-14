@@ -21,7 +21,7 @@ import io.element.android.features.invitepeople.api.InvitePeopleRenderer
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
 class AddPeopleNode @AssistedInject constructor(
@@ -31,7 +31,7 @@ class AddPeopleNode @AssistedInject constructor(
     private val invitePeopleRenderer: InvitePeopleRenderer,
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(
-        val joinedRoom: JoinedRoom
+        val roomId: RoomId,
     ) : NodeInputs
 
     interface Callback : Plugin {
@@ -42,8 +42,11 @@ class AddPeopleNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onFinish() }
     }
 
-    private val joinedRoom = inputs<Inputs>().joinedRoom
-    private val invitePeoplePresenter = invitePeoplePresenterFactory.create(joinedRoom)
+    private val roomId = inputs<Inputs>().roomId
+    private val invitePeoplePresenter = invitePeoplePresenterFactory.create(
+        joinedRoom = null,
+        roomId = roomId,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {

@@ -8,19 +8,24 @@
 package io.element.android.features.invitepeople.impl
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -43,8 +48,38 @@ fun InvitePeopleView(
     state: DefaultInvitePeopleState,
     modifier: Modifier = Modifier,
 ) {
+    when (state.room) {
+        is AsyncData.Failure -> InvitePeopleViewError(state.room.error, modifier)
+        AsyncData.Uninitialized,
+        is AsyncData.Loading,
+        is AsyncData.Success -> InvitePeopleContentView(state, modifier)
+    }
+}
+
+@Composable
+private fun InvitePeopleViewError(
+    error: Throwable,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        AsyncFailure(
+            throwable = error,
+            onRetry = null,
+            modifier = Modifier.padding(horizontal = 16.dp),
+        )
+    }
+}
+
+@Composable
+private fun InvitePeopleContentView(
+    state: DefaultInvitePeopleState,
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         InvitePeopleSearchBar(

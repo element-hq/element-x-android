@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -23,11 +24,14 @@ import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.features.invitepeople.api.InvitePeoplePresenter
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.map
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -46,16 +50,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DefaultInvitePeoplePresenter @AssistedInject constructor(
-    @Assisted private val room: JoinedRoom,
+    @Assisted private val joinedRoom: JoinedRoom?,
+    @Assisted private val roomId: RoomId,
     private val userRepository: UserRepository,
     private val coroutineDispatchers: CoroutineDispatchers,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val appErrorStateService: AppErrorStateService,
+    private val matrixClient: MatrixClient,
 ) : InvitePeoplePresenter {
     @AssistedFactory
     @ContributesBinding(SessionScope::class)
     interface Factory : InvitePeoplePresenter.Factory {
-        override fun create(room: JoinedRoom): DefaultInvitePeoplePresenter
+        override fun create(joinedRoom: JoinedRoom?, roomId: RoomId): DefaultInvitePeoplePresenter
     }
 
     @Composable
@@ -66,9 +72,21 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchActive by rememberSaveable { mutableStateOf(false) }
         val showSearchLoader = rememberSaveable { mutableStateOf(false) }
+        val room by produceState(if (joinedRoom != null) AsyncData.Success(joinedRoom) else AsyncData.Loading()) {
+            if (joinedRoom == null) {
+                val result = matrixClient.getJoinedRoom(roomId)
+                value = if (result == null) {
+                    AsyncData.Failure(Exception("Room not found"))
+                } else {
+                    AsyncData.Success(result)
+                }
+            }
+        }
 
-        LaunchedEffect(Unit) {
-            fetchMembers(roomMembers)
+        LaunchedEffect(room.isSuccess()) {
+            room.dataOrNull()?.let {
+                fetchMembers(it, roomMembers)
+            }
         }
         LaunchedEffect(searchQuery, roomMembers) {
             performSearch(
@@ -96,7 +114,9 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
                     searchResults.toggleUser(event.user)
                 }
                 is InvitePeopleEvents.SendInvites -> {
-                    sessionCoroutineScope.sendInvites(selectedUsers.value)
+                    room.dataOrNull()?.let {
+                        sessionCoroutineScope.sendInvites(it, selectedUsers.value)
+                    }
                 }
                 is InvitePeopleEvents.CloseSearch -> {
                     searchActive = false
@@ -106,6 +126,7 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
         }
 
         return DefaultInvitePeopleState(
+            room = room.map { },
             canInvite = selectedUsers.value.isNotEmpty(),
             selectedUsers = selectedUsers.value,
             searchQuery = searchQuery,
@@ -116,7 +137,10 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.sendInvites(selectedUsers: List<MatrixUser>) = launch {
+    private fun CoroutineScope.sendInvites(
+        room: JoinedRoom,
+        selectedUsers: List<MatrixUser>,
+    ) = launch {
         val anyInviteFailed = selectedUsers
             .map { room.inviteUserById(it.userId) }
             .any { it.isFailure }
@@ -186,7 +210,10 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
         }.launchIn(this)
     }
 
-    private suspend fun fetchMembers(roomMembers: MutableState<AsyncData<ImmutableList<RoomMember>>>) {
+    private suspend fun fetchMembers(
+        room: JoinedRoom,
+        roomMembers: MutableState<AsyncData<ImmutableList<RoomMember>>>
+    ) {
         suspend {
             room.filterMembers("", coroutineDispatchers.io).toImmutableList()
         }.runCatchingUpdatingState(roomMembers)

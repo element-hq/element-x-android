@@ -8,6 +8,7 @@
 package io.element.android.features.invitepeople.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -66,6 +67,7 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 ),
                 showSearchLoader = true,
             ),
+            aDefaultInvitePeopleState(room = AsyncData.Failure(Exception("Room not found"))),
         )
 }
 
@@ -84,6 +86,7 @@ private fun anInvitableUser(
 )
 
 private fun aDefaultInvitePeopleState(
+    room: AsyncData<Unit> = AsyncData.Success(Unit),
     canInvite: Boolean = false,
     searchQuery: String = "",
     searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Initial(),
@@ -92,6 +95,7 @@ private fun aDefaultInvitePeopleState(
     showSearchLoader: Boolean = false,
 ): DefaultInvitePeopleState {
     return DefaultInvitePeopleState(
+        room = room,
         canInvite = canInvite,
         searchQuery = searchQuery,
         searchResults = searchResults,

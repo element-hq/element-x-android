@@ -10,15 +10,21 @@ package io.element.android.features.invitepeople.impl
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomMemberList
@@ -54,7 +60,7 @@ internal class DefaultInvitePeoplePresenterTest {
         val presenter = createDefaultInvitePeoplePresenter()
         presenter.test {
             val initialState = awaitItemAsDefault()
-
+            assertThat(initialState.room).isEqualTo(AsyncData.Success(Unit))
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.canInvite).isFalse()
@@ -452,6 +458,40 @@ internal class DefaultInvitePeoplePresenterTest {
         }
     }
 
+    @Test
+    fun `present - when joinedRoom is not provided, it is retrieved on the MatrixClient`() = runTest {
+        val matrixClient = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, FakeJoinedRoom())
+        }
+        val presenter = createDefaultInvitePeoplePresenter(
+            joinedRoom = null,
+            roomId = A_ROOM_ID,
+            matrixClient = matrixClient,
+        )
+        presenter.test {
+            val initialState = awaitItemAsDefault()
+            assertThat(initialState.room.isLoading()).isTrue()
+            val finalState = awaitItemAsDefault()
+            assertThat(finalState.room).isEqualTo(AsyncData.Success(Unit))
+        }
+    }
+
+    @Test
+    fun `present - when joinedRoom is not provided, it is retrieved on the MatrixClient - error case`() = runTest {
+        val matrixClient = FakeMatrixClient()
+        val presenter = createDefaultInvitePeoplePresenter(
+            joinedRoom = null,
+            roomId = A_ROOM_ID,
+            matrixClient = matrixClient,
+        )
+        presenter.test {
+            val initialState = awaitItemAsDefault()
+            assertThat(initialState.room.isLoading()).isTrue()
+            val finalState = awaitItemAsDefault()
+            assertThat(finalState.room.errorOrNull()?.message).isEqualTo("Room not found")
+        }
+    }
+
     private suspend fun FakeUserRepository.emitStateWithUsers(
         users: List<MatrixUser>,
         isSearching: Boolean = false
@@ -484,19 +524,24 @@ private suspend fun <T> ReceiveTurbine<T>.awaitItemAsDefault(): DefaultInvitePeo
 fun TestScope.createDefaultInvitePeoplePresenter(
     roomMembersState: RoomMembersState = RoomMembersState.Ready(aRoomMemberList()),
     inviteUserResult: (UserId) -> Result<Unit> = { lambdaError() },
+    joinedRoom: JoinedRoom? = FakeJoinedRoom(
+        inviteUserResult = inviteUserResult,
+    ).apply {
+        givenRoomMembersState(roomMembersState)
+    },
+    roomId: RoomId = A_ROOM_ID,
     userRepository: UserRepository = FakeUserRepository(),
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
     appErrorStateService: AppErrorStateService = FakeAppErrorStateService(),
+    matrixClient: MatrixClient = FakeMatrixClient(),
 ): DefaultInvitePeoplePresenter {
     return DefaultInvitePeoplePresenter(
-        room = FakeJoinedRoom(
-            inviteUserResult = inviteUserResult,
-        ).apply {
-            givenRoomMembersState(roomMembersState)
-        },
+        joinedRoom = joinedRoom,
+        roomId = roomId,
         userRepository = userRepository,
         coroutineDispatchers = coroutineDispatchers,
-        coroutineScope = backgroundScope,
+        sessionCoroutineScope = backgroundScope,
         appErrorStateService = appErrorStateService,
+        matrixClient = matrixClient,
     )
 }
