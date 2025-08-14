@@ -13,12 +13,21 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultSendLocationEntryPoint @Inject constructor() : SendLocationEntryPoint {
-    override fun createNode(
-        parentNode: Node,
-        buildContext: BuildContext
-    ): SendLocationNode = parentNode.createNode(buildContext)
+    override fun builder(timelineMode: Timeline.Mode): SendLocationEntryPoint.Builder {
+        return Builder(timelineMode)
+    }
+
+    class Builder(private val timelineMode: Timeline.Mode) : SendLocationEntryPoint.Builder {
+        override fun build(parentNode: Node, buildContext: BuildContext): Node {
+            return parentNode.createNode<SendLocationNode>(
+                buildContext = buildContext,
+                plugins = listOf(SendLocationNode.Inputs(timelineMode))
+            )
+        }
+    }
 }

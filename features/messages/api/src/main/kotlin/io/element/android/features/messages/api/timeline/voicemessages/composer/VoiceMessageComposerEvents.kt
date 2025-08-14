@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.voicemessages.composer
+package io.element.android.features.messages.api.timeline.voicemessages.composer
 
 import androidx.lifecycle.Lifecycle
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent

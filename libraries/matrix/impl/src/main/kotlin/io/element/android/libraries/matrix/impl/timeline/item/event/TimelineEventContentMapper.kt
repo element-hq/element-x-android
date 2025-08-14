@@ -7,7 +7,12 @@
 
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
+import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
+import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
@@ -27,6 +32,7 @@ import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import org.matrix.rustcomponents.sdk.EmbeddedEventDetails
 import org.matrix.rustcomponents.sdk.MsgLikeKind
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import org.matrix.rustcomponents.sdk.use
@@ -59,8 +65,35 @@ class TimelineEventContentMapper(
                     when (val kind = it.content.kind) {
                         is MsgLikeKind.Message -> {
                             val inReplyTo = it.content.inReplyTo
-                            val isThreaded = it.content.threadRoot != null
-                            eventMessageMapper.map(kind, inReplyTo, isThreaded)
+                            val threadSummary = it.content.threadSummary?.use { summary ->
+                                val numberOfReplies = summary.numReplies().toLong()
+                                val latestEvent = summary.latestEvent()
+                                val details = when (latestEvent) {
+                                    is EmbeddedEventDetails.Unavailable -> AsyncData.Uninitialized
+                                    is EmbeddedEventDetails.Pending -> AsyncData.Loading()
+                                    is EmbeddedEventDetails.Error -> AsyncData.Failure(IllegalStateException(latestEvent.message))
+                                    is EmbeddedEventDetails.Ready -> {
+                                        AsyncData.Success(
+                                            EmbeddedEventInfo(
+                                                eventOrTransactionId = latestEvent.eventOrTransactionId.map(),
+                                                content = map(latestEvent.content),
+                                                senderId = UserId(latestEvent.sender),
+                                                senderProfile = latestEvent.senderProfile.map(),
+                                                timestamp = latestEvent.timestamp.toLong()
+                                            )
+                                        )
+                                    }
+                                }
+                                ThreadSummary(
+                                    latestEvent = details,
+                                    numberOfReplies = numberOfReplies,
+                                )
+                            }
+                            val threadInfo = EventThreadInfo(
+                                threadRootId = it.content.threadRoot?.let(::ThreadId),
+                                threadSummary = threadSummary,
+                            )
+                            eventMessageMapper.map(kind, inReplyTo, threadInfo)
                         }
                         is MsgLikeKind.Redacted -> {
                             RedactedContent

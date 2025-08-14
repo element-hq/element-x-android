@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -162,6 +163,7 @@ class MediaSenderTest {
     ) = MediaSender(
         preProcessor = preProcessor,
         room = room,
+        timelineMode = Timeline.Mode.Live,
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
     )
 }

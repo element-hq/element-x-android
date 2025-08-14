@@ -11,6 +11,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import kotlinx.collections.immutable.ImmutableList
 
@@ -37,9 +38,7 @@ data class EventTimelineItem(
         return (content as? MessageContent)?.inReplyTo
     }
 
-    fun isThreaded(): Boolean {
-        return (content as? MessageContent)?.isThreaded ?: false
-    }
+    fun threadInfo(): EventThreadInfo? = (content as? MessageContent)?.threadInfo
 
     fun hasNotLoadedInReplyTo(): Boolean {
         val details = inReplyTo()

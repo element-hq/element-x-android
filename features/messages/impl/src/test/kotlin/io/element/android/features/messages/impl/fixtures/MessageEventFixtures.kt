@@ -19,6 +19,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
@@ -40,7 +41,7 @@ internal fun aMessageEvent(
     canBeRepliedTo: Boolean = true,
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, formattedBody = A_MESSAGE, isEdited = false),
     inReplyTo: InReplyToDetails? = null,
-    isThreaded: Boolean = false,
+    threadInfo: EventThreadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
     sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),
     debugInfoProvider: TimelineItemDebugInfoProvider = TimelineItemDebugInfoProvider { aTimelineItemDebugInfo() },
     messageShieldProvider: MessageShieldProvider = MessageShieldProvider { null },
@@ -61,7 +62,7 @@ internal fun aMessageEvent(
     readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
     localSendState = sendState,
     inReplyTo = inReplyTo,
-    isThreaded = isThreaded,
+    threadInfo = threadInfo,
     origin = null,
     timelineItemDebugInfoProvider = debugInfoProvider,
     messageShieldProvider = messageShieldProvider,

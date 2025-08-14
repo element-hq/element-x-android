@@ -31,6 +31,8 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -45,6 +47,7 @@ import kotlin.random.Random
 
 fun aTimelineState(
     timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
+    timelineMode: Timeline.Mode = Timeline.Mode.Live,
     renderReadReceipts: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     focusedEventIndex: Int = -1,
@@ -61,6 +64,7 @@ fun aTimelineState(
     }
     return TimelineState(
         timelineItems = timelineItems,
+        timelineMode = timelineMode,
         timelineRoomInfo = timelineRoomInfo,
         renderReadReceipts = renderReadReceipts,
         newEventState = NewEventState.None,
@@ -140,7 +144,7 @@ internal fun aTimelineItemEvent(
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: LocalEventSendState? = null,
     inReplyTo: InReplyToDetails? = null,
-    isThreaded: Boolean = false,
+    threadInfo: EventThreadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
     readReceiptState: TimelineItemReadReceipts = aTimelineItemReadReceipts(),
@@ -166,7 +170,7 @@ internal fun aTimelineItemEvent(
         groupPosition = groupPosition,
         localSendState = sendState,
         inReplyTo = inReplyTo,
-        isThreaded = isThreaded,
+        threadInfo = threadInfo,
         origin = null,
         timelineItemDebugInfoProvider = { debugInfo },
         messageShieldProvider = { messageShield },

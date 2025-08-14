@@ -34,8 +34,8 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
-import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
+import io.element.android.features.messages.test.timeline.voicemessages.composer.FakeDefaultVoiceMessageComposerPresenterFactory
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
@@ -56,6 +56,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
@@ -908,7 +909,10 @@ class MessagesPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(joinedRoom = room, analyticsService = analyticsService)
+        val presenter = createMessagesPresenter(
+            joinedRoom = room,
+            analyticsService = analyticsService,
+        )
         presenter.testWithLifecycleOwner {
             val messageEvent = aMessageEvent(
                 content = aTimelineItemTextContent()
@@ -1047,6 +1051,7 @@ class MessagesPresenterTest {
         )
         val presenter = createMessagesPresenter(
             joinedRoom = room,
+            timeline = timeline,
         )
         presenter.testWithLifecycleOwner {
             skipItems(1)
@@ -1168,6 +1173,7 @@ class MessagesPresenterTest {
             liveTimeline = FakeTimeline(),
             typingNoticeResult = { Result.success(Unit) },
         ),
+        timeline: Timeline = joinedRoom.liveTimeline,
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
@@ -1188,7 +1194,7 @@ class MessagesPresenterTest {
         return MessagesPresenter(
             room = joinedRoom,
             composerPresenter = messageComposerPresenter,
-            voiceMessageComposerPresenter = { aVoiceMessageComposerState() },
+            voiceMessageComposerPresenterFactory = FakeDefaultVoiceMessageComposerPresenterFactory(backgroundScope),
             timelinePresenter = { aTimelineState(eventSink = timelineEventSink) },
             timelineProtectionPresenter = { aTimelineProtectionState() },
             actionListPresenter = { anActionListState(eventSink = actionListEventSink) },
@@ -1207,7 +1213,7 @@ class MessagesPresenterTest {
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
             htmlConverterProvider = FakeHtmlConverterProvider(),
-            timelineController = TimelineController(joinedRoom),
+            timelineController = TimelineController(joinedRoom, timeline),
             permalinkParser = permalinkParser,
             encryptionService = encryptionService,
             analyticsService = analyticsService,

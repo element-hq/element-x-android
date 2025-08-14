@@ -29,6 +29,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.poll.isDisclosed
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -37,16 +38,23 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class CreatePollPresenter @AssistedInject constructor(
-    private val repository: PollRepository,
+    repositoryFactory: PollRepository.Factory,
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContext,
     @Assisted private val navigateUp: () -> Unit,
     @Assisted private val mode: CreatePollMode,
+    @Assisted private val timelineMode: Timeline.Mode,
 ) : Presenter<CreatePollState> {
     @AssistedFactory
     interface Factory {
-        fun create(backNavigator: () -> Unit, mode: CreatePollMode): CreatePollPresenter
+        fun create(
+            timelineMode: Timeline.Mode,
+            backNavigator: () -> Unit,
+            mode: CreatePollMode
+        ): CreatePollPresenter
     }
+
+    private val repository = repositoryFactory.create(timelineMode)
 
     @Composable
     override fun present(): CreatePollState {

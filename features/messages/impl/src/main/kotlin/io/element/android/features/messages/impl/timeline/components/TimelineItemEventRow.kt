@@ -82,10 +82,14 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toThreadId
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
@@ -116,6 +120,7 @@ private val BUBBLE_INCOMING_OFFSET = 16.dp
 @Composable
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
+    timelineMode: Timeline.Mode,
     timelineRoomInfo: TimelineRoomInfo,
     timelineProtectionState: TimelineProtectionState,
     renderReadReceipts: Boolean,
@@ -194,6 +199,7 @@ fun TimelineItemEventRow(
                     }
                     TimelineItemEventRowContent(
                         event = event,
+                        timelineMode = timelineMode,
                         timelineProtectionState = timelineProtectionState,
                         timelineRoomInfo = timelineRoomInfo,
                         interactionSource = interactionSource,
@@ -227,6 +233,7 @@ fun TimelineItemEventRow(
         } else {
             TimelineItemEventRowContent(
                 event = event,
+                timelineMode = timelineMode,
                 timelineProtectionState = timelineProtectionState,
                 timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
@@ -241,6 +248,20 @@ fun TimelineItemEventRow(
                 eventContentView = eventContentView,
             )
         }
+
+        if (timelineMode !is Timeline.Mode.Thread) {
+            event.threadInfo.threadSummary?.let { threadSummary ->
+                Button(
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 2.dp),
+                    text = "Thread with ${threadSummary.numberOfReplies} replies",
+                    size = ButtonSize.Small,
+                    onClick = {
+                        eventSink(TimelineEvents.OpenThread(event.eventId!!.toThreadId(), null))
+                    }
+                )
+            }
+        }
+
         // Read receipts / Send state
         TimelineItemReadReceiptView(
             state = ReadReceiptViewState(
@@ -281,6 +302,7 @@ private fun SwipeSensitivity(
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
+    timelineMode: Timeline.Mode,
     timelineProtectionState: TimelineProtectionState,
     timelineRoomInfo: TimelineRoomInfo,
     interactionSource: MutableInteractionSource,
@@ -360,6 +382,7 @@ private fun TimelineItemEventRowContent(
         ) {
             MessageEventBubbleContent(
                 event = event,
+                timelineMode = timelineMode,
                 timelineProtectionState = timelineProtectionState,
                 onMessageLongClick = onLongClick,
                 inReplyToClick = inReplyToClick,
@@ -461,6 +484,7 @@ private fun MessageSenderInformation(
 @Composable
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
+    timelineMode: Timeline.Mode,
     timelineProtectionState: TimelineProtectionState,
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
@@ -658,7 +682,7 @@ private fun MessageEventBubbleContent(
         else -> ContentPadding.Textual
     }
     CommonLayout(
-        showThreadDecoration = event.isThreaded,
+        showThreadDecoration = timelineMode !is Timeline.Mode.Thread && event.threadInfo.threadRootId != null,
         timestampPosition = timestampPosition,
         paddingBehaviour = paddingBehaviour,
         inReplyToDetails = event.inReplyTo,

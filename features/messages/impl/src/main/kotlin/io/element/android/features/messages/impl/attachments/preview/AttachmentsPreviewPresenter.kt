@@ -34,6 +34,7 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
@@ -52,7 +53,8 @@ import kotlin.coroutines.coroutineContext
 class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
     @Assisted private val onDoneListener: OnDoneListener,
-    private val mediaSender: MediaSender,
+    @Assisted private val timelineMode: Timeline.Mode,
+    mediaSenderFactory: MediaSender.Factory,
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
     private val mediaOptimizationSelectorPresenterFactory: MediaOptimizationSelectorPresenter.Factory,
@@ -63,9 +65,12 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     interface Factory {
         fun create(
             attachment: Attachment,
+            timelineMode: Timeline.Mode,
             onDoneListener: OnDoneListener,
         ): AttachmentsPreviewPresenter
     }
+
+    private val mediaSender = mediaSenderFactory.create(timelineMode)
 
     @Composable
     override fun present(): AttachmentsPreviewState {

@@ -46,6 +46,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
@@ -74,7 +75,7 @@ class TimelinePresenter @AssistedInject constructor(
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
     private val sessionPreferencesStore: SessionPreferencesStore,
-    private val timelineController: TimelineController,
+    @Assisted private val timelineController: TimelineController,
     private val timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
     private val resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState>,
     private val typingNotificationPresenter: Presenter<TypingNotificationState>,
@@ -83,7 +84,10 @@ class TimelinePresenter @AssistedInject constructor(
 ) : Presenter<TimelineState> {
     @AssistedFactory
     interface Factory {
-        fun create(navigator: MessagesNavigator): TimelinePresenter
+        fun create(
+            timelineController: TimelineController,
+            navigator: MessagesNavigator
+        ): TimelinePresenter
     }
 
     private val timelineItemsFactory: TimelineItemsFactory = timelineItemsFactoryCreator.create(
@@ -97,6 +101,9 @@ class TimelinePresenter @AssistedInject constructor(
     @Composable
     override fun present(): TimelineState {
         val localScope = rememberCoroutineScope()
+
+        val timelineMode = remember { timelineController.mainTimelineMode() }
+
         var focusRequestState: FocusRequestState by remember { mutableStateOf(FocusRequestState.None) }
 
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
@@ -127,6 +134,10 @@ class TimelinePresenter @AssistedInject constructor(
         fun handleEvents(event: TimelineEvents) {
             when (event) {
                 is TimelineEvents.LoadMore -> {
+                    if (event.direction == Timeline.PaginationDirection.FORWARDS && timelineMode is Timeline.Mode.Thread) {
+                        // Do not paginate forwards in thread mode, as it's not supported
+                        return
+                    }
                     localScope.launch {
                         timelineController.paginate(direction = event.direction)
                     }
@@ -148,15 +159,21 @@ class TimelinePresenter @AssistedInject constructor(
                     }
                 }
                 is TimelineEvents.SelectPollAnswer -> sessionCoroutineScope.launch {
-                    sendPollResponseAction.execute(
-                        pollStartId = event.pollStartId,
-                        answerId = event.answerId
-                    )
+                    timelineController.invokeOnCurrentTimeline {
+                        sendPollResponseAction.execute(
+                            timeline = this,
+                            pollStartId = event.pollStartId,
+                            answerId = event.answerId
+                        )
+                    }
                 }
                 is TimelineEvents.EndPoll -> sessionCoroutineScope.launch {
-                    endPollAction.execute(
-                        pollStartId = event.pollStartId,
-                    )
+                    timelineController.invokeOnCurrentTimeline {
+                        endPollAction.execute(
+                            timeline = this,
+                            pollStartId = event.pollStartId,
+                        )
+                    }
                 }
                 is TimelineEvents.EditPoll -> {
                     navigator.onEditPollClick(event.pollStartId)
@@ -182,6 +199,12 @@ class TimelinePresenter @AssistedInject constructor(
                     // Navigate to the predecessor or successor room
                     val serverNames = calculateServerNamesForRoom(room)
                     navigator.onNavigateToRoom(event.roomId, serverNames)
+                }
+                is TimelineEvents.OpenThread -> {
+                    navigator.onOpenThread(
+                        threadRootId = event.threadRootEventId,
+                        focusedEventId = event.focusedEvent,
+                    )
                 }
             }
         }
@@ -270,6 +293,7 @@ class TimelinePresenter @AssistedInject constructor(
         }
         return TimelineState(
             timelineItems = timelineItems,
+            timelineMode = timelineMode,
             timelineRoomInfo = timelineRoomInfo,
             renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,

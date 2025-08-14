@@ -7,11 +7,19 @@
 
 package io.element.android.features.location.api
 
-import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.matrix.api.timeline.Timeline
 
 /**
  * The "Send location" screen.
  *
  * Allows a user to share a location message within a room.
  */
-interface SendLocationEntryPoint : SimpleFeatureEntryPoint
+interface SendLocationEntryPoint : FeatureEntryPoint {
+    fun builder(timelineMode: Timeline.Mode): Builder
+    interface Builder {
+        fun build(parentNode: Node, buildContext: BuildContext): Node
+    }
+}

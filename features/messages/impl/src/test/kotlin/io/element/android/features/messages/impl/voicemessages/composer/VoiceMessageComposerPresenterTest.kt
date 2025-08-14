@@ -17,11 +17,14 @@ import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aReplyMode
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.AudioInfo
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -76,6 +79,7 @@ class VoiceMessageComposerPresenterTest {
     private val mediaSender = MediaSender(
         preProcessor = mediaPreProcessor,
         room = joinedRoom,
+        timelineMode = Timeline.Mode.Live,
         mediaOptimizationConfigProvider = { MediaOptimizationConfig(compressImages = true, videoCompressionPreset = VideoCompressionPreset.STANDARD) },
     )
     private val messageComposerContext = FakeMessageComposerContext()
@@ -87,7 +91,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -101,7 +105,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - recording state`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -117,7 +121,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - recording keeps screen on`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -141,7 +145,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - abort recording`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -156,7 +160,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - finish recording`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -173,7 +177,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - play recording before it is ready`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -192,7 +196,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - play recording`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -210,7 +214,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - pause recording`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -229,7 +233,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - seek recording`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -256,7 +260,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - delete recording`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -274,7 +278,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - delete while playing`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -296,7 +300,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - send recording`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -315,7 +319,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - sending is tracked`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -344,7 +348,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - send while playing`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -366,7 +370,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - send recording before previous completed, waits`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -391,7 +395,7 @@ class VoiceMessageComposerPresenterTest {
     fun `present - send failures aren't tracked`() = runTest {
         // Let sending fail due to media preprocessing error
         mediaPreProcessor.givenResult(Result.failure(Exception()))
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -415,7 +419,7 @@ class VoiceMessageComposerPresenterTest {
     @Test
     fun `present - send failures can be retried`() = runTest {
         // Let sending fail due to media preprocessing error
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -444,7 +448,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - send failures are displayed as an error dialog`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -479,7 +483,7 @@ class VoiceMessageComposerPresenterTest {
 
     @Test
     fun `present - send error - missing recording is tracked`() = runTest {
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -500,7 +504,7 @@ class VoiceMessageComposerPresenterTest {
     fun `present - record error - security exceptions are tracked`() = runTest {
         val exception = SecurityException("")
         voiceRecorder.givenThrowsSecurityException(exception)
-        val presenter = createVoiceMessageComposerPresenter()
+        val presenter = createDefaultVoiceMessageComposerPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -522,7 +526,7 @@ class VoiceMessageComposerPresenterTest {
         val permissionsPresenter = createFakePermissionsPresenter(
             recordPermissionGranted = false,
         )
-        val presenter = createVoiceMessageComposerPresenter(
+        val presenter = createDefaultVoiceMessageComposerPresenter(
             permissionsPresenter = permissionsPresenter,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -551,7 +555,7 @@ class VoiceMessageComposerPresenterTest {
         val permissionsPresenter = createFakePermissionsPresenter(
             recordPermissionGranted = false,
         )
-        val presenter = createVoiceMessageComposerPresenter(
+        val presenter = createDefaultVoiceMessageComposerPresenter(
             permissionsPresenter = permissionsPresenter,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -585,7 +589,7 @@ class VoiceMessageComposerPresenterTest {
         val permissionsPresenter = createFakePermissionsPresenter(
             recordPermissionGranted = false,
         )
-        val presenter = createVoiceMessageComposerPresenter(
+        val presenter = createDefaultVoiceMessageComposerPresenter(
             permissionsPresenter = permissionsPresenter,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -657,17 +661,22 @@ class VoiceMessageComposerPresenterTest {
         }
     }
 
-    private fun TestScope.createVoiceMessageComposerPresenter(
+    private fun TestScope.createDefaultVoiceMessageComposerPresenter(
         permissionsPresenter: PermissionsPresenter = createFakePermissionsPresenter(),
-    ): VoiceMessageComposerPresenter {
-        return VoiceMessageComposerPresenter(
-            backgroundScope,
-            voiceRecorder,
-            analyticsService,
-            mediaSender,
+    ): DefaultVoiceMessageComposerPresenter {
+        return DefaultVoiceMessageComposerPresenter(
+            sessionCoroutineScope = backgroundScope,
+            timelineMode = Timeline.Mode.Live,
+            voiceRecorder = voiceRecorder,
+            analyticsService = analyticsService,
+            mediaSenderFactory = object : MediaSender.Factory {
+                override fun create(timelineMode: Timeline.Mode): MediaSender {
+                    return mediaSender
+                }
+            },
             player = VoiceMessageComposerPlayer(FakeMediaPlayer(), this),
             messageComposerContext = messageComposerContext,
-            FakePermissionsPresenterFactory(permissionsPresenter),
+            permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
         )
     }
 

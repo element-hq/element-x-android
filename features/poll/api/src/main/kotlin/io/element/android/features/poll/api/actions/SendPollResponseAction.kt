@@ -8,7 +8,12 @@
 package io.element.android.features.poll.api.actions
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.Timeline
 
 interface SendPollResponseAction {
-    suspend fun execute(pollStartId: EventId, answerId: String): Result<Unit>
+    suspend fun execute(
+        timeline: Timeline,
+        pollStartId: EventId,
+        answerId: String
+    ): Result<Unit>
 }
