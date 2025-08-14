@@ -1,3 +1,41 @@
+Changes in Element X v25.08.3
+=============================
+
+## What's Changed
+### ✨ Features
+* Add media file limit size warning and media quality selection by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5131
+### 🐛 Bugfixes
+* Fix cursor position in room list search by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5138
+* Fix leaving the room not always dismissing the room screen by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5089
+* Do not automatically initialize `DefaultVideoMetadataExtractor`'s data source by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5157
+* Provide calculated server names when opening a room from another by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5155
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/5146
+### 🧱 Build
+* Compile and target sdk36 by @bmarty in https://github.com/element-hq/element-x-android/pull/5150
+* Fix Maestro regression when coming back from room to the search screen by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5156
+### Dependency upgrades
+* Update android.gradle.plugin to v8.12.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5106
+* Update wysiwyg to v2.39.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5080
+* Update dependency python to 3.13 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5144
+* Update rnkdsh/action-upload-diawi action to v1.5.11 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5141
+* Update dependency io.github.sergio-sastre.ComposablePreviewScanner:android to v0.7.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5143
+* Update actions/checkout action to v5 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5148
+* Update dependency io.sentry:sentry-android to v8.19.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5149
+* Update dependency io.sentry:sentry-android to v8.19.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5158
+* Update dependency androidx.browser:browser to v1.9.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5096
+* Update Compose bom to 2025.07.00 by @bmarty in https://github.com/element-hq/element-x-android/pull/5164
+* Update showkase to v1.0.5 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5117
+* Update haze to v1.6.10 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5167
+### Others
+* Let enterprise build be able to override (or disable) the bug report URL. by @bmarty in https://github.com/element-hq/element-x-android/pull/5139
+* Hide the recovery key while we are entering it by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5147
+* Remove old feature flags by @bmarty in https://github.com/element-hq/element-x-android/pull/5160
+* Move push history entry point from notification settings to developer settings by @bmarty in https://github.com/element-hq/element-x-android/pull/5161
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.08.2...v25.08.3
+
 Changes in Element X v25.08.2
 =============================
 
