@@ -27,7 +27,7 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -49,7 +49,7 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
     @Assisted private val room: JoinedRoom,
     private val userRepository: UserRepository,
     private val coroutineDispatchers: CoroutineDispatchers,
-    @AppCoroutineScope private val coroutineScope: CoroutineScope,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val appErrorStateService: AppErrorStateService,
 ) : InvitePeoplePresenter {
     @AssistedFactory
@@ -96,7 +96,7 @@ class DefaultInvitePeoplePresenter @AssistedInject constructor(
                     searchResults.toggleUser(event.user)
                 }
                 is InvitePeopleEvents.SendInvites -> {
-                    coroutineScope.sendInvites(selectedUsers.value)
+                    sessionCoroutineScope.sendInvites(selectedUsers.value)
                 }
                 is InvitePeopleEvents.CloseSearch -> {
                     searchActive = false
