@@ -52,9 +52,6 @@ interface MessagesBindsModule {
     fun bindLinkPresenter(presenter: LinkPresenter): Presenter<LinkState>
 
     @Binds
-    fun bindVoiceMessageComposerPresenter(presenter: VoiceMessageComposerPresenter): Presenter<VoiceMessageComposerState>
-
-    @Binds
     fun bindCustomReactionPresenter(presenter: CustomReactionPresenter): Presenter<CustomReactionState>
 
     @Binds

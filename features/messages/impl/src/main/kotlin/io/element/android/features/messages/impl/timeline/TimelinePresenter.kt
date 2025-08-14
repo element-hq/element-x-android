@@ -159,15 +159,21 @@ class TimelinePresenter @AssistedInject constructor(
                     }
                 }
                 is TimelineEvents.SelectPollAnswer -> sessionCoroutineScope.launch {
-                    sendPollResponseAction.execute(
-                        pollStartId = event.pollStartId,
-                        answerId = event.answerId
-                    )
+                    timelineController.invokeOnCurrentTimeline {
+                        sendPollResponseAction.execute(
+                            timeline = this,
+                            pollStartId = event.pollStartId,
+                            answerId = event.answerId
+                        )
+                    }
                 }
                 is TimelineEvents.EndPoll -> sessionCoroutineScope.launch {
-                    endPollAction.execute(
-                        pollStartId = event.pollStartId,
-                    )
+                    timelineController.invokeOnCurrentTimeline {
+                        endPollAction.execute(
+                            timeline = this,
+                            pollStartId = event.pollStartId,
+                        )
+                    }
                 }
                 is TimelineEvents.EditPoll -> {
                     navigator.onEditPollClick(event.pollStartId)

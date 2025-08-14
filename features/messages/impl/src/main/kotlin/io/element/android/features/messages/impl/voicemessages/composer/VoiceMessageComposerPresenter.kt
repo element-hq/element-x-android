@@ -19,6 +19,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
@@ -45,20 +48,24 @@ import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-class VoiceMessageComposerPresenter @Inject constructor(
-    @SessionCoroutineScope
-    private val sessionCoroutineScope: CoroutineScope,
+class VoiceMessageComposerPresenter @AssistedInject constructor(
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
+    @Assisted private val timelineMode: Timeline.Mode,
     private val voiceRecorder: VoiceRecorder,
     private val analyticsService: AnalyticsService,
-    private val mediaSenderFactory: MediaSender.Factory,
+    mediaSenderFactory: MediaSender.Factory,
     private val player: VoiceMessageComposerPlayer,
     private val messageComposerContext: MessageComposerContext,
     permissionsPresenterFactory: PermissionsPresenter.Factory
 ) : Presenter<VoiceMessageComposerState> {
+    @AssistedFactory
+    interface Factory {
+        fun create(timelineMode: Timeline.Mode): VoiceMessageComposerPresenter
+    }
+
     private val permissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.RECORD_AUDIO)
 
-    // TODO: use the actual timeline send mode from the composer context
-    private val mediaSender = mediaSenderFactory.create(Timeline.Mode.Live)
+    private val mediaSender = mediaSenderFactory.create(timelineMode)
 
     @Composable
     override fun present(): VoiceMessageComposerState {

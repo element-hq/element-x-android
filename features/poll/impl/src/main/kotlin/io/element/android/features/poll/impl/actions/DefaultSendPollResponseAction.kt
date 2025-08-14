@@ -13,16 +13,16 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.services.analytics.api.AnalyticsService
 import javax.inject.Inject
 
 @ContributesBinding(RoomScope::class)
 class DefaultSendPollResponseAction @Inject constructor(
-    private val room: JoinedRoom,
     private val analyticsService: AnalyticsService,
 ) : SendPollResponseAction {
-    override suspend fun execute(pollStartId: EventId, answerId: String): Result<Unit> {
-        return room.liveTimeline.sendPollResponse(
+    override suspend fun execute(timeline: Timeline, pollStartId: EventId, answerId: String): Result<Unit> {
+        return timeline.sendPollResponse(
             pollStartId = pollStartId,
             answers = listOf(answerId),
         ).onSuccess {
