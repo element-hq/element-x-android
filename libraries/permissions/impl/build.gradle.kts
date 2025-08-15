@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.libraries.troubleshoot.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.services.toolbox.api)
     api(projects.libraries.permissions.api)
 

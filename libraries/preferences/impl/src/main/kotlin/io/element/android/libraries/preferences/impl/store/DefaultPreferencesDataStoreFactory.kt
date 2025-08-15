@@ -12,6 +12,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidutils.preferences.DefaultPreferencesCorruptionHandlerFactory
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
@@ -22,7 +23,10 @@ class DefaultPreferencesDataStoreFactory @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : PreferenceDataStoreFactory {
     private class DataStoreHolder(name: String) {
-        val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = name)
+        val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+            name = name,
+            corruptionHandler = DefaultPreferencesCorruptionHandlerFactory.replaceWithEmpty(),
+        )
     }
     override fun create(name: String): DataStore<Preferences> {
         return with(DataStoreHolder(name)) {
