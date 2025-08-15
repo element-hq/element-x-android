@@ -33,6 +33,7 @@ data class TimelineState(
     // If not null, info will be rendered in a dialog
     val messageShield: MessageShield?,
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
+    val displayThreadSummaries: Boolean,
     val eventSink: (TimelineEvents) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event

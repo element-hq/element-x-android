@@ -125,6 +125,7 @@ fun TimelineItemEventRow(
     timelineProtectionState: TimelineProtectionState,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
+    displayThreadSummaries: Boolean,
     onEventClick: () -> Unit,
     onLongClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
@@ -249,7 +250,7 @@ fun TimelineItemEventRow(
             )
         }
 
-        if (timelineMode !is Timeline.Mode.Thread) {
+        if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread) {
             event.threadInfo.threadSummary?.let { threadSummary ->
                 Button(
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 2.dp),

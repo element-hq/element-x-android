@@ -54,6 +54,7 @@ fun aTimelineState(
     isLive: Boolean = true,
     messageShield: MessageShield? = null,
     resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
+    displayThreadSummaries: Boolean = false,
     eventSink: (TimelineEvents) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -72,6 +73,7 @@ fun aTimelineState(
         focusRequestState = focusRequestState,
         messageShield = messageShield,
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
+        displayThreadSummaries = displayThreadSummaries,
         eventSink = eventSink,
     )
 }

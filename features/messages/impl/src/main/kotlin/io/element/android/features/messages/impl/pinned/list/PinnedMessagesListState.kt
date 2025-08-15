@@ -33,6 +33,7 @@ sealed interface PinnedMessagesListState {
         val timelineItems: ImmutableList<TimelineItem>,
         val actionListState: ActionListState,
         val linkState: LinkState,
+        val displayThreadSummaries: Boolean,
         val eventSink: (PinnedMessagesListEvents) -> Unit,
     ) : PinnedMessagesListState {
         val loadedPinnedMessagesCount = timelineItems.count { timelineItem -> timelineItem is TimelineItem.Event }

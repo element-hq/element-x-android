@@ -24,6 +24,7 @@ internal fun ATimelineItemEventRow(
     renderReadReceipts: Boolean = false,
     isLastOutgoingMessage: Boolean = false,
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
+    displayThreadSummaries: Boolean = false,
 ) = TimelineItemEventRow(
     event = event,
     timelineMode = timelineMode,
@@ -31,6 +32,7 @@ internal fun ATimelineItemEventRow(
     renderReadReceipts = renderReadReceipts,
     timelineProtectionState = timelineProtectionState,
     isLastOutgoingMessage = isLastOutgoingMessage,
+    displayThreadSummaries = displayThreadSummaries,
     onEventClick = {},
     onLongClick = {},
     onLinkClick = {},

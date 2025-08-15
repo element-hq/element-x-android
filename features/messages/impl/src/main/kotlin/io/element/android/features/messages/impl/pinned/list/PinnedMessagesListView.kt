@@ -127,6 +127,7 @@ private fun PinnedMessagesListContent(
             PinnedMessagesListState.Empty -> PinnedMessagesListEmpty()
             is PinnedMessagesListState.Filled -> PinnedMessagesListLoaded(
                 state = state,
+                displayThreadSummaries = state.displayThreadSummaries,
                 onEventClick = onEventClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
@@ -164,6 +165,7 @@ private fun PinnedMessagesListEmpty(
 @Composable
 private fun PinnedMessagesListLoaded(
     state: PinnedMessagesListState.Filled,
+    displayThreadSummaries: Boolean,
     onEventClick: (event: TimelineItem.Event) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
@@ -224,6 +226,7 @@ private fun PinnedMessagesListLoaded(
                 onLinkLongClick = onLinkLongClick,
                 onContentClick = onEventClick,
                 onLongClick = ::onMessageLongClick,
+                displayThreadSummaries = displayThreadSummaries,
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
