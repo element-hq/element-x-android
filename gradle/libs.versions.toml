@@ -4,9 +4,9 @@
 [versions]
 # Project
 android_gradle_plugin = "8.12.0"
-kotlin = "2.2.0"
+kotlin = "2.2.10"
 kotlinpoet = "2.2.0"
-ksp = "2.2.0-2.0.2"
+ksp = "2.2.10-2.0.2"
 firebaseAppDistribution = "5.1.1"
 
 # AndroidX
@@ -32,7 +32,7 @@ accompanist = "0.37.3"
 test_core = "1.7.0"
 
 # Jetbrain
-datetime = "0.7.1"
+datetime = "0.7.1-0.6.x-compat"
 serialization_json = "1.9.0"
 
 #other
