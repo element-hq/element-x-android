@@ -18,13 +18,25 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -33,6 +45,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -47,14 +60,51 @@ fun SelectedRoom(
     onRemoveRoom: (SelectRoomInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val actionRemove = stringResource(id = CommonStrings.action_remove)
     Box(
         modifier = modifier
-            .width(56.dp)
+            .width(AvatarSize.SelectedRoom.dp)
+            .clearAndSetSemantics {
+                contentDescription = roomInfo.name ?: "#"
+                // Note: this does not set the click effect to the whole Box
+                // when talkback is not enabled
+                onClick(
+                    label = actionRemove,
+                    action = {
+                        onRemoveRoom(roomInfo)
+                        true
+                    }
+                )
+            }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+            val closeRadius = 12.dp.toPx()
+            val closeOffset = 10.dp.toPx()
             Avatar(
+                modifier = Modifier
+                    .graphicsLayer {
+                        compositingStrategy = CompositingStrategy.Offscreen
+                    }
+                    .drawWithContent {
+                        drawContent()
+                        val xOffset = if (isRtl) {
+                            closeOffset
+                        } else {
+                            size.width - closeOffset
+                        }
+                        drawCircle(
+                            color = Color.Black,
+                            center = Offset(
+                                x = xOffset,
+                                y = closeOffset,
+                            ),
+                            radius = closeRadius,
+                            blendMode = BlendMode.Clear,
+                        )
+                    },
                 avatarData = roomInfo.getAvatarData(AvatarSize.SelectedRoom),
                 avatarType = AvatarType.Room(
                     heroes = roomInfo.heroes.map { it.getAvatarData(AvatarSize.SelectedRoom) }.toImmutableList(),
@@ -66,11 +116,12 @@ fun SelectedRoom(
                 text = roomInfo.name ?: "#",
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
+                color = ElementTheme.colors.textSecondary,
             )
         }
         Surface(
-            color = ElementTheme.colors.iconPrimary,
+            color = ElementTheme.colors.bgActionPrimaryRest,
             modifier = Modifier
                 .clip(CircleShape)
                 .size(20.dp)
@@ -100,4 +151,19 @@ internal fun SelectedRoomPreview(
         roomInfo = roomInfo,
         onRemoveRoom = {},
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun SelectedRoomRtlPreview(
+    @PreviewParameter(SelectRoomInfoProvider::class) roomInfo: SelectRoomInfo
+) = CompositionLocalProvider(
+    LocalLayoutDirection provides LayoutDirection.Rtl,
+) {
+    ElementPreview {
+        SelectedRoom(
+            roomInfo = roomInfo,
+            onRemoveRoom = {},
+        )
+    }
 }
