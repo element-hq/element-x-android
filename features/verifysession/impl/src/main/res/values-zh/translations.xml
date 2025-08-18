@@ -39,9 +39,13 @@
   <string name="screen_session_verification_they_match">"匹配"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"从此处开始验证之前，请确保您已在其他设备上打开了该应用程序。"</string>
   <string name="screen_session_verification_use_another_device_title">"在另一台验证的设备上打开应用"</string>
+  <string name="screen_session_verification_user_initiator_subtitle">"为了提高安全性，请通过比较设备上的一组表情符号来验证此用户。通过使用安全方式来做到这一点，如面对面。"</string>
+  <string name="screen_session_verification_user_initiator_title">"验证此用户？"</string>
+  <string name="screen_session_verification_user_responder_subtitle">"为了提高安全性，另一位用户想要验证您的身份。您将看到一组表情符号供您比较。"</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"您应该会在另一台设备上看到一个弹出窗口。现在从那里开始验证。"</string>
   <string name="screen_session_verification_waiting_another_device_title">"在另一台设备上开始验证"</string>
   <string name="screen_session_verification_waiting_other_device_title">"正在等待其他设备"</string>
+  <string name="screen_session_verification_waiting_other_user_title">"等待其他用户"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"请在其他会话中接受验证请求。"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"等待接受请求"</string>
   <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>

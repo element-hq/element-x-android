@@ -234,6 +234,8 @@
   <string name="invite_friends_rich_title">"🔐️ Присъединете се към мен в %1$s"</string>
   <string name="invite_friends_text">"Хей, говорете с мен в %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <string name="screen_invite_users_already_a_member">"Вече е член"</string>
+  <string name="screen_invite_users_already_invited">"Вече е бил поканен"</string>
   <string name="screen_pinned_timeline_screen_title_empty">"Закачени съобщения"</string>
   <string name="screen_share_location_title">"Споделяне на местоположение"</string>
   <string name="screen_share_my_location_action">"Споделяне на моето местоположение"</string>

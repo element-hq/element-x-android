@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Reactie toevoegen: %1$s"</string>
   <string name="a11y_avatar">"Afbeelding"</string>
   <string name="a11y_delete">"Verwijderen"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d cijfer ingevoerd"</item>
     <item quantity="other">"%1$d cijfers ingevoerd"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Afbeelding bewerken"</string>
+  <string name="a11y_edit_room_address_hint">"Het volledige adres wordt %1$s"</string>
   <string name="a11y_hide_password">"Wachtwoord verbergen"</string>
   <string name="a11y_join_call">"Deelnemen aan gesprek"</string>
   <string name="a11y_jump_to_bottom">"Spring naar einde"</string>
+  <string name="a11y_move_the_map_to_my_location">"Ga naar mijn locatie op de kaart"</string>
   <string name="a11y_notifications_mentions_only">"Alleen vermeldingen"</string>
   <string name="a11y_notifications_muted">"Gedempt"</string>
+  <string name="a11y_notifications_new_mentions">"Nieuwe vermeldingen"</string>
+  <string name="a11y_notifications_new_messages">"Nieuwe berichten"</string>
+  <string name="a11y_notifications_ongoing_call">"Actieve oproep"</string>
+  <string name="a11y_other_user_avatar">"Afbeelding van andere gebruiker"</string>
   <string name="a11y_page_n">"Pagina %1$d"</string>
   <string name="a11y_pause">"Pauzeren"</string>
   <string name="a11y_paused_voice_message">"Spraakbericht, duur: %1$s, huidige positie: %2$s"</string>
@@ -28,14 +36,19 @@
   <string name="a11y_read_receipts_single">"Gelezen door %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tik om alles weer te geven"</string>
   <string name="a11y_remove_reaction">"Verwijder reactie met %1$s"</string>
+  <string name="a11y_remove_reaction_with">"Reactie met %1$s verwijderen"</string>
+  <string name="a11y_room_avatar">"Kamerafbeelding"</string>
   <string name="a11y_send_files">"Bestanden verzenden"</string>
   <string name="a11y_show_password">"Wachtwoord weergeven"</string>
   <string name="a11y_start_call">"Begin een oproep"</string>
+  <string name="a11y_user_avatar">"Gebruikersafbeelding"</string>
   <string name="a11y_user_menu">"Gebruikersmenu"</string>
+  <string name="a11y_view_avatar">"Bekijk afbeelding"</string>
   <string name="a11y_view_details">"Details bekijken"</string>
   <string name="a11y_voice_message">"Spraakbericht, duur: %1$s"</string>
   <string name="a11y_voice_message_record">"Spraakbericht opnemen."</string>
   <string name="a11y_voice_message_stop_recording">"Opnemen stoppen"</string>
+  <string name="a11y_your_avatar">"Jouw afbeelding"</string>
   <string name="action_accept">"Accepteren"</string>
   <string name="action_add_caption">"Beschrijving toevoegen"</string>
   <string name="action_add_to_timeline">"Toevoegen aan tijdlijn"</string>
@@ -133,6 +146,7 @@
   <string name="action_tap_for_options">"Tik voor opties"</string>
   <string name="action_try_again">"Probeer het opnieuw"</string>
   <string name="action_unpin">"Losmaken"</string>
+  <string name="action_view">"Bekijken"</string>
   <string name="action_view_in_timeline">"Bekijk in tijdlijn"</string>
   <string name="action_view_source">"Bron weergeven"</string>
   <string name="action_yes">"Ja"</string>
@@ -310,6 +324,8 @@ Reden: %1$s."</string>
   <string name="invite_friends_text">"Hé, praat met me op %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Schudden om een bug te melden"</string>
+  <string name="screen_invite_users_already_a_member">"Reeds lid"</string>
+  <string name="screen_invite_users_already_invited">"Reeds uitgenodigd"</string>
   <string name="screen_media_picker_error_failed_selection">"Het selecteren van media is mislukt. Probeer het opnieuw."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Druk op een bericht en kies „%1$s” om het hier toe te voegen."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Zet belangrijke berichten vast zodat ze gemakkelijk te vinden zijn"</string>

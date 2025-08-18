@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Supprimer le lien"</string>
   <string name="rich_text_editor_unindent">"Décaler vers la gauche"</string>
   <string name="rich_text_editor_url_placeholder">"Lien"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Les légendes peuvent ne pas être visibles pour les utilisateurs d’anciennes applications."</string>
   <string name="screen_room_voice_message_tooltip">"Maintenir pour enregistrer"</string>
 </resources>

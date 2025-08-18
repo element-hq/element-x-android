@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Fjern link"</string>
   <string name="rich_text_editor_unindent">"Fjern indrykning"</string>
   <string name="rich_text_editor_url_placeholder">"Link"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Billedtekster er muligvis ikke synlige for personer, der bruger ældre apps."</string>
   <string name="screen_room_voice_message_tooltip">"Hold nede for at optage"</string>
 </resources>

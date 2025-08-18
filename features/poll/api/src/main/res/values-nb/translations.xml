@@ -4,5 +4,6 @@
     <item quantity="one">"%1$d prosent av totalt antall stemmer"</item>
     <item quantity="other">"%1$d prosent av totalt antall stemmer"</item>
   </plurals>
+  <string name="a11y_polls_will_remove_selection">"Vil fjerne forrige valg"</string>
   <string name="a11y_polls_winning_answer">"Dette er vinnersvaret"</string>
 </resources>

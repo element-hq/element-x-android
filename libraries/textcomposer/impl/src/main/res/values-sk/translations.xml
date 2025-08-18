@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Odstrániť odkaz"</string>
   <string name="rich_text_editor_unindent">"Zrušiť odsadenie"</string>
   <string name="rich_text_editor_url_placeholder">"Odkaz"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie."</string>
   <string name="screen_room_voice_message_tooltip">"Podržaním nahrajte"</string>
 </resources>

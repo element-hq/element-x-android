@@ -382,6 +382,8 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_create_poll_options_section_title">"Možnosti"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Odstranit %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Nastavení"</string>
+  <string name="screen_invite_users_already_a_member">"Již členem"</string>
+  <string name="screen_invite_users_already_invited">"Již pozván(a)"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Přidržte zprávu a vyberte „%1$s“, kterou chcete zahrnout sem."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Připněte důležité zprávy, aby je bylo možné snadno najít"</string>

@@ -44,6 +44,7 @@
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="other">"%1$d 个聊天室变化"</item>
   </plurals>
+  <string name="screen_room_timeline_upgraded_room_message">"该聊天室是其他聊天室的延续"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="other">"%1$s，%2$s 和其他 %3$d 个人"</item>
   </plurals>

@@ -3,8 +3,6 @@
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Bildirishnoma sozlamalarini yangilashda xatolik yuz berdi."</string>
   <string name="screen_room_change_permissions_everyone">"Har kim"</string>
   <string name="screen_room_details_add_topic_title">"Mavzu qo\'shish"</string>
-  <string name="screen_room_details_already_a_member">"Allaqachon a\'zo"</string>
-  <string name="screen_room_details_already_invited">"Allaqachon taklif qilingan"</string>
   <string name="screen_room_details_edit_room_title">"Xonani tahrirlash"</string>
   <string name="screen_room_details_edition_error">"Nomaʼlum xatolik yuz berdi va maʼlumotni oʻzgartirib boʻlmadi."</string>
   <string name="screen_room_details_edition_error_title">"Xonani yangilab bo‘lmadi"</string>
@@ -14,6 +12,7 @@
   <string name="screen_room_details_error_muting">"Bu xona ovozini o‘chirib bo‘lmadi, qayta urinib ko‘ring."</string>
   <string name="screen_room_details_error_unmuting">"Bu xonaning ovozi yoqilmadi, qayta urinib ko‘ring."</string>
   <string name="screen_room_details_invite_people_title">"Odamlarni taklif qiling"</string>
+  <string name="screen_room_details_leave_conversation_title">"Suhbatni tark etish"</string>
   <string name="screen_room_details_leave_room_title">"Xonani tark etish"</string>
   <string name="screen_room_details_notification_mode_custom">"Maxsus"</string>
   <string name="screen_room_details_notification_mode_default">"Standart"</string>
@@ -42,4 +41,5 @@
   <string name="screen_room_notification_settings_mode_all_messages">"Barcha xabarlar"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Faqat eslatmalar va kalit so\'zlar"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Bu xonada menga xabar bering"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Shifrlash"</string>
 </resources>

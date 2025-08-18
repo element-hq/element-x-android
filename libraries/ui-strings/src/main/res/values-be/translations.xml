@@ -296,6 +296,8 @@
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Паведаміць аб памылцы з дапамогай Rageshake"</string>
+  <string name="screen_invite_users_already_a_member">"Ужо ўдзельнік"</string>
+  <string name="screen_invite_users_already_invited">"Ужо запрасілі"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Націсніце на паведамленне і абярыце «%1$s », каб уключыць сюды."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Замацуеце важныя паведамленні, каб іх можна было лёгка знайсці"</string>

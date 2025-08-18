@@ -13,6 +13,7 @@
   <string name="rich_text_editor_format_action">"%1$s, tila: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Käytä lihavoitua muotoa"</string>
   <string name="rich_text_editor_format_italic">"Käytä kursiivimuotoa"</string>
+  <string name="rich_text_editor_format_state_disabled">"poissa käytöstä"</string>
   <string name="rich_text_editor_format_state_off">"pois päältä"</string>
   <string name="rich_text_editor_format_state_on">"päällä"</string>
   <string name="rich_text_editor_format_strikethrough">"Käytä yliviivausmuotoa"</string>
@@ -27,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Poista linkki"</string>
   <string name="rich_text_editor_unindent">"Poista sisennys"</string>
   <string name="rich_text_editor_url_placeholder">"Linkki"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia."</string>
   <string name="screen_room_voice_message_tooltip">"Pidä pohjassa nauhoittaaksesi"</string>
 </resources>

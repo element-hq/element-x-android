@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Remover link"</string>
   <string name="rich_text_editor_unindent">"Desidentar"</string>
   <string name="rich_text_editor_url_placeholder">"Link"</string>
+  <string name="screen_media_upload_preview_caption_warning">"As legendas podem não ser visíveis para pessoas que usam aplicativos mais antigos."</string>
   <string name="screen_room_voice_message_tooltip">"Segure para gravar"</string>
 </resources>

@@ -89,6 +89,7 @@
   <string name="action_enable">"Увімкнути"</string>
   <string name="action_end_poll">"Завершити опитування"</string>
   <string name="action_enter_pin">"Введіть PIN-код"</string>
+  <string name="action_finish">"Завершити"</string>
   <string name="action_forgot_password">"Забули пароль?"</string>
   <string name="action_forward">"Переслати"</string>
   <string name="action_go_back">"Повернутися"</string>
@@ -262,7 +263,9 @@
   <string name="common_preparing">"Приготування…"</string>
   <string name="common_privacy_policy">"Політика конфіденційності"</string>
   <string name="common_private_room">"Приватна кімната (тільки за запрошенням)"</string>
+  <string name="common_private_space">"Приватний простір"</string>
   <string name="common_public_room">"Загальнодоступна кімната"</string>
+  <string name="common_public_space">"Загальнодоступний простір"</string>
   <string name="common_reaction">"Реакція"</string>
   <string name="common_reactions">"Реакції"</string>
   <string name="common_reason">"Причина"</string>
@@ -281,6 +284,11 @@
   <string name="common_room">"Кімната"</string>
   <string name="common_room_name">"Назва кімнати"</string>
   <string name="common_room_name_placeholder">"напр., назва вашого проєкту"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d кімната"</item>
+    <item quantity="few">"%1$d кімнати"</item>
+    <item quantity="many">"%1$d кімнат"</item>
+  </plurals>
   <string name="common_saved_changes">"Збережені зміни"</string>
   <string name="common_saving">"Збереження"</string>
   <string name="common_screen_lock">"Блокування екрану"</string>
@@ -300,6 +308,12 @@
   <string name="common_signing_out">"Вихід"</string>
   <string name="common_something_went_wrong">"Щось пішло не так"</string>
   <string name="common_something_went_wrong_message">"Ми зіткнулися з проблемою. Будь ласка, повторіть спробу."</string>
+  <string name="common_space">"Простір"</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d простір"</item>
+    <item quantity="few">"%1$d простори"</item>
+    <item quantity="many">"%1$d просторів"</item>
+  </plurals>
   <string name="common_starting_chat">"Початок бесіди…"</string>
   <string name="common_sticker">"Наліпка"</string>
   <string name="common_success">"Успіх"</string>
@@ -330,6 +344,12 @@
   <string name="common_verify_identity">"Підтвердити особу"</string>
   <string name="common_verify_user">"Верифікувати користувача"</string>
   <string name="common_video">"Відео"</string>
+  <string name="common_video_quality_high">"Висока якість"</string>
+  <string name="common_video_quality_high_description">"Найкраща якість, але більший розмір файлу"</string>
+  <string name="common_video_quality_low">"Низька якість"</string>
+  <string name="common_video_quality_low_description">"Найшвидша швидкість вивантаження та найменший розмір файлу"</string>
+  <string name="common_video_quality_standard">"Стандартна якість"</string>
+  <string name="common_video_quality_standard_description">"Баланс якості та швидкості вивантаження"</string>
   <string name="common_voice_message">"Голосове повідомлення"</string>
   <string name="common_waiting">"Очікування…"</string>
   <string name="common_waiting_for_decryption_key">"Чекаємо на це повідомлення"</string>
@@ -344,6 +364,7 @@
 
 Ви впевнені, що хочете продовжити?"</string>
   <string name="dialog_confirm_link_title">"Уважно перевірте це посилання"</string>
+  <string name="dialog_default_video_quality_selector_title">"Якість вивантаження відео"</string>
   <string name="dialog_room_reported">"Скаргу на кімнату надіслано"</string>
   <string name="dialog_room_reported_and_left">"Поскаржитися та вийти з кімнати"</string>
   <string name="dialog_title_confirmation">"Підтвердження"</string>
@@ -384,6 +405,8 @@
   <string name="screen_create_poll_options_section_title">"Варіанти"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Вилучити %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Налаштування"</string>
+  <string name="screen_invite_users_already_a_member">"Уже учасник"</string>
+  <string name="screen_invite_users_already_invited">"Уже запрошені"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Натисніть на повідомлення і виберіть \"%1$s\", щоб додати його сюди."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закріпіть важливі повідомлення, щоб їх можна було легко знайти"</string>
@@ -403,6 +426,7 @@
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше повідомлення не було надіслано, тому що %1$s не перевірив усі пристрої"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Один або кілька ваших пристроїв не підтверджено. Ви можете відправити повідомлення в будь-якому випадку, або ж скасувати відправку і спробувати пізніше, коли перевірите всі свої пристрої."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше повідомлення не було надіслано, оскільки ви не підтвердили один або декілька своїх пристроїв"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Змінити адміністраторів або власників"</string>
   <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
   <string name="screen_room_event_pill">"Повідомлення в %1$s"</string>
@@ -420,6 +444,9 @@
   <string name="screen_share_open_google_maps">"Відкрити в Картах Google"</string>
   <string name="screen_share_open_osm_maps">"Відкрити в OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Поділитися цим місцем перебування"</string>
+  <string name="screen_space_list_description">"Простори, які ви створили або до яких приєдналися."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Простори"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки підтверджену особистість %1$s скинуто."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв."</string>

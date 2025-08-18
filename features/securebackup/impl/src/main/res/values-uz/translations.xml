@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_chat_backup_key_backup_action_disable">"Zaxiralashni o\'chirib qo\'ying"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Zaxiralashni yoqing"</string>
-  <string name="screen_chat_backup_key_backup_description">"Zaxiralash xabarlar tarixini yo\'qotmaslikni ta\'minlaydi.%1$s."</string>
+  <string name="screen_chat_backup_key_backup_description">"Kryptografik shaxsiyatingizni va xabar kalitlaringizni serverda xavfsiz saqlang. Bu sizga har qanday yangi qurilmalarda xabar tarixingizni ko\'rish imkonini beradi. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Zaxira"</string>
   <string name="screen_chat_backup_recovery_action_change">"Qayta tiklash kalitini o\'zgartiring"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Sizning chat zaxirangiz hozirda sinxronlashtirilmagan."</string>
@@ -17,13 +17,15 @@
   <string name="screen_key_backup_disable_title">"Haqiqatan ham zaxiralashni o‘chirib qo‘ymoqchimisiz?"</string>
   <string name="screen_recovery_key_change_description">"Mavjud kalitingizni yo\'qotgan bo\'lsangiz, yangi tiklash kalitini oling. Qayta tiklash kalitini almashtirganingizdan so\'ng, eski kalitingiz ishlamaydi."</string>
   <string name="screen_recovery_key_change_generate_key">"Yangi tiklash kalitini yarating"</string>
-  <string name="screen_recovery_key_change_generate_key_description">"Qayta tiklash kalitingizni xavfsiz joyda saqlashingiz mumkinligiga ishonch hosil qiling"</string>
+  <string name="screen_recovery_key_change_generate_key_description">"Buni hech kimga ulashmang!"</string>
   <string name="screen_recovery_key_change_success">"Qayta tiklash kaliti oʻzgartirildi"</string>
   <string name="screen_recovery_key_change_title">"Qayta tiklash kaliti almashtirilsinmi?"</string>
   <string name="screen_recovery_key_confirm_description">"Hech kim bu ekranni kora olmasligiga ishonch hosil qiling!"</string>
   <string name="screen_recovery_key_confirm_key_description">"Agar sizda xavfsizlik kaliti yoki xavfsizlik iborasi bolsa, bu ham ishlaydi."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Kirish…"</string>
   <string name="screen_recovery_key_confirm_success">"Qayta tiklash kaliti tasdiqlandi"</string>
+  <string name="screen_recovery_key_copied_to_clipboard">"Qayta tiklash kaliti nusxalandi"</string>
+  <string name="screen_recovery_key_generating_key">"Yaratilmoqda…"</string>
   <string name="screen_recovery_key_save_action">"Qayta tiklash kalitini saqlang"</string>
   <string name="screen_recovery_key_save_description">"Qayta tiklash kalitingizni xavfsiz joyga yozing yoki parol menejerida saqlang."</string>
   <string name="screen_recovery_key_save_key_description">"Qayta tiklash kalitidan nusxa olish uchun bosing"</string>
@@ -32,7 +34,7 @@
   <string name="screen_recovery_key_setup_confirmation_title">"Zaxira kalitingizni saqladingizmi?"</string>
   <string name="screen_recovery_key_setup_description">"Suhbatingiz zaxira nusxasi tiklash kaliti bilan himoyalangan. Agar sozlashdan keyin sizga yangi tiklash kaliti kerak boʻlsa, “Qayta tiklash kalitini oʻzgartirish”ni tanlash orqali qayta yaratishingiz mumkin."</string>
   <string name="screen_recovery_key_setup_generate_key">"Qayta tiklash kalitini yarating"</string>
-  <string name="screen_recovery_key_setup_generate_key_description">"Qayta tiklash kalitingizni xavfsiz joyda saqlashingiz mumkinligiga ishonch hosil qiling"</string>
+  <string name="screen_recovery_key_setup_generate_key_description">"Buni hech kimga ulashmang!"</string>
   <string name="screen_recovery_key_setup_success">"Qayta tiklash muvaffaqiyatli sozlandi"</string>
   <string name="screen_recovery_key_setup_title">"Qayta tiklashni sozlang"</string>
   <string name="screen_reset_encryption_password_placeholder">"Kirish…"</string>

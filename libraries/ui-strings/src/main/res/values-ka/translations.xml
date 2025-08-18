@@ -252,6 +252,8 @@
   <string name="invite_friends_text">"გაგიმარჯოს! მესაუბრე %1$s-ზე: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"შეცდომის შესატყობინებლად ტელეფონის შენჯღრევა"</string>
+  <string name="screen_invite_users_already_a_member">"უკვე წევრია"</string>
+  <string name="screen_invite_users_already_invited">"უკვე მოწვეულია"</string>
   <string name="screen_media_picker_error_failed_selection">"მედიის შერჩევა ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_room_error_failed_processing_media">"მედიის ატვირთვა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"მომხმარებლის მონაცემების მოძიება ვერ მოხერხდა"</string>

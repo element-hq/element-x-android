@@ -13,10 +13,16 @@
   <string name="screen_change_account_provider_other">"其他"</string>
   <string name="screen_change_account_provider_subtitle">"使用不同的帳戶提供者，例如您自己的伺服器或工作帳號。"</string>
   <string name="screen_change_account_provider_title">"更改帳號提供者"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"%1$s 需要 Element Pro 應用程式。請從商店下載。"</string>
+  <string name="screen_change_server_error_element_pro_required_title">"需要 Element Pro"</string>
   <string name="screen_change_server_error_invalid_homeserver">"我們無法連線至此家伺服器。請檢查您是否已正確輸入家伺服器 URL。若 URL 正確，請聯絡您家伺服器的管理員以取得進一步協助。"</string>
   <string name="screen_change_server_error_invalid_well_known">"因為 well-known 檔案的問題，伺服器不可用：
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"選定的帳號提供者不支援 sliding sync。必須升級伺服器才能使用 %1$s。"</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"不允許 %1$s 連線至 %2$s。"</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"應用程式已設定為允許：%1$s。"</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"不允許帳號提供者 %1$s。"</string>
   <string name="screen_change_server_form_header">"家伺服器 URL"</string>
   <string name="screen_change_server_form_notice">"輸入網域位址。"</string>
   <string name="screen_change_server_subtitle">"您的伺服器地址？"</string>
@@ -31,7 +37,9 @@
   <string name="screen_login_subtitle">"Matrix 是一個開放網路，為了安全且去中心化的通訊而生。"</string>
   <string name="screen_login_title">"歡迎回來！"</string>
   <string name="screen_login_title_with_homeserver">"登入 %1$s"</string>
+  <string name="screen_onboarding_app_version">"版本 %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"手動登入"</string>
+  <string name="screen_onboarding_sign_in_to">"登入至 %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"使用 QR code 登入"</string>
   <string name="screen_onboarding_sign_up">"建立帳號"</string>
   <string name="screen_onboarding_welcome_message">"歡迎使用有史以來最快的 %1$s。速度超快，操作簡便。"</string>
@@ -85,5 +93,6 @@
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix 是一個開放網路，為了安全且去中心化的通訊而生。"</string>
   <string name="screen_server_confirmation_message_register">"您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。"</string>
   <string name="screen_server_confirmation_title_login">"您即將登入 %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"選擇帳號提供者"</string>
   <string name="screen_server_confirmation_title_register">"您即將在 %1$s 建立帳號"</string>
 </resources>

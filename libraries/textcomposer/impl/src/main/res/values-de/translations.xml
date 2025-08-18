@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Link entfernen"</string>
   <string name="rich_text_editor_unindent">"Ohne Einrückung"</string>
   <string name="rich_text_editor_url_placeholder">"Link"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Bildunterschriften sind für Nutzer älterer Apps möglicherweise nicht sichtbar."</string>
   <string name="screen_room_voice_message_tooltip">"Zum Aufnehmen gedrückt halten"</string>
 </resources>

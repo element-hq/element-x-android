@@ -359,6 +359,8 @@
   <string name="screen_create_poll_options_section_title">"Επιλογές"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Αφαίρεση %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Ρυθμίσεις"</string>
+  <string name="screen_invite_users_already_a_member">"Ήδη μέλος"</string>
+  <string name="screen_invite_users_already_invited">"Ήδη προσκεκλημένος"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Πάτα σε ένα μήνυμα και επέλεξε «%1$s» για να συμπεριληφθεί εδώ."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Καρφίτσωσε σημαντικά μηνύματα, ώστε να μπορούν να εντοπιστούν εύκολα"</string>

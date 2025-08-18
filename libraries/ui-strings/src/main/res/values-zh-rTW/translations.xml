@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"新增反應：%1$s"</string>
   <string name="a11y_avatar">"大頭貼"</string>
   <string name="a11y_delete">"刪除"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"已輸入 %1$d 個位數"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"編輯大頭照"</string>
+  <string name="a11y_edit_room_address_hint">"完整地址為 %1$s"</string>
+  <string name="a11y_encryption_details">"加密詳細資訊"</string>
   <string name="a11y_hide_password">"隱藏密碼"</string>
   <string name="a11y_join_call">"加入通話"</string>
   <string name="a11y_jump_to_bottom">"跳至底部"</string>
+  <string name="a11y_move_the_map_to_my_location">"將地圖移動到我的位置"</string>
   <string name="a11y_notifications_mentions_only">"僅限提及"</string>
   <string name="a11y_notifications_muted">"已關閉通知"</string>
+  <string name="a11y_notifications_new_mentions">"新提及"</string>
+  <string name="a11y_notifications_new_messages">"新訊息"</string>
+  <string name="a11y_notifications_ongoing_call">"進行中的通話"</string>
+  <string name="a11y_other_user_avatar">"其他使用者的大頭照"</string>
   <string name="a11y_page_n">"第 %1$d 頁"</string>
   <string name="a11y_pause">"暫停"</string>
   <string name="a11y_paused_voice_message">"語音訊息，時長：%1$s，目前位置：%2$s"</string>
@@ -26,14 +35,21 @@
   <string name="a11y_read_receipts_single">"%1$s 已讀"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"點擊以顯示全部"</string>
   <string name="a11y_remove_reaction">"移除 %1$s 的反應"</string>
+  <string name="a11y_remove_reaction_with">"移除反應 %1$s"</string>
+  <string name="a11y_room_avatar">"聊天室大頭照"</string>
   <string name="a11y_send_files">"傳送檔案"</string>
   <string name="a11y_show_password">"顯示密碼"</string>
   <string name="a11y_start_call">"開始通話"</string>
+  <string name="a11y_time_limited_action_required">"需要限時動作"</string>
+  <string name="a11y_tombstoned_room">"墓碑聊天室"</string>
+  <string name="a11y_user_avatar">"使用者大頭照"</string>
   <string name="a11y_user_menu">"使用者選單"</string>
+  <string name="a11y_view_avatar">"檢視大頭照"</string>
   <string name="a11y_view_details">"檢視詳細資訊"</string>
   <string name="a11y_voice_message">"語音訊息，時長：%1$s"</string>
   <string name="a11y_voice_message_record">"錄製語音訊息。"</string>
   <string name="a11y_voice_message_stop_recording">"停止錄音"</string>
+  <string name="a11y_your_avatar">"您的大頭照"</string>
   <string name="action_accept">"接受"</string>
   <string name="action_add_caption">"新增標題"</string>
   <string name="action_add_to_timeline">"新增至時間軸"</string>
@@ -92,6 +108,7 @@
   <string name="action_no">"否"</string>
   <string name="action_not_now">"以後再說"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"開啟情境選單"</string>
   <string name="action_open_settings">"開啟設定"</string>
   <string name="action_open_with">"用其他方式開啟"</string>
   <string name="action_pin">"釘選"</string>
@@ -116,7 +133,9 @@
   <string name="action_save">"儲存"</string>
   <string name="action_search">"搜尋"</string>
   <string name="action_send">"傳送"</string>
+  <string name="action_send_edited_message">"傳送已編輯的訊息"</string>
   <string name="action_send_message">"傳送訊息"</string>
+  <string name="action_send_voice_message">"傳送語音訊息"</string>
   <string name="action_share">"分享"</string>
   <string name="action_share_link">"分享連結"</string>
   <string name="action_show">"顯示"</string>
@@ -132,6 +151,7 @@
   <string name="action_tap_for_options">"點擊以查看選項"</string>
   <string name="action_try_again">"再試一次"</string>
   <string name="action_unpin">"取消釘選"</string>
+  <string name="action_view">"檢視"</string>
   <string name="action_view_in_timeline">"在時間軸中檢視"</string>
   <string name="action_view_source">"檢視來源"</string>
   <string name="action_yes">"是"</string>
@@ -142,6 +162,7 @@
   <string name="common_acceptable_use_policy">"可接受使用政策"</string>
   <string name="common_adding_caption">"新增標題"</string>
   <string name="common_advanced_settings">"進階設定"</string>
+  <string name="common_an_image">"影像"</string>
   <string name="common_analytics">"分析"</string>
   <string name="common_appearance">"外觀"</string>
   <string name="common_audio">"音訊"</string>
@@ -229,14 +250,20 @@
   <plurals name="common_poll_votes_count">
     <item quantity="other">"%d 票"</item>
   </plurals>
+  <string name="common_preparing">"正在準備……"</string>
   <string name="common_privacy_policy">"隱私權政策"</string>
   <string name="common_private_room">"私密聊天室"</string>
+  <string name="common_private_space">"私人空間"</string>
   <string name="common_public_room">"公開的聊天室"</string>
+  <string name="common_public_space">"公開空間"</string>
   <string name="common_reaction">"回應"</string>
   <string name="common_reactions">"回應"</string>
   <string name="common_reason">"理由"</string>
   <string name="common_recovery_key">"復原金鑰"</string>
   <string name="common_refreshing">"重新整理中…"</string>
+  <plurals name="common_replies">
+    <item quantity="other">"%1$d 個回覆"</item>
+  </plurals>
   <string name="common_replying_to">"正在回覆%1$s"</string>
   <string name="common_report_a_bug">"回報程式錯誤"</string>
   <string name="common_report_a_problem">"回報問題"</string>
@@ -245,6 +272,9 @@
   <string name="common_room">"聊天室"</string>
   <string name="common_room_name">"聊天室名稱"</string>
   <string name="common_room_name_placeholder">"範例：您的計畫名稱"</string>
+  <plurals name="common_rooms">
+    <item quantity="other">"%1$d 個聊天室"</item>
+  </plurals>
   <string name="common_saved_changes">"變更已儲存"</string>
   <string name="common_saving">"儲存中"</string>
   <string name="common_screen_lock">"螢幕鎖定"</string>
@@ -256,6 +286,7 @@
   <string name="common_sending">"傳送中…"</string>
   <string name="common_sending_failed">"傳送失敗"</string>
   <string name="common_sent">"已傳送"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"伺服器不支援"</string>
   <string name="common_server_url">"伺服器 URL"</string>
   <string name="common_settings">"設定"</string>
@@ -263,6 +294,9 @@
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"有錯誤發生"</string>
   <string name="common_something_went_wrong_message">"我們了遇到了問題。請再試一次。"</string>
+  <plurals name="common_spaces">
+    <item quantity="other">"%1$d 個空間"</item>
+  </plurals>
   <string name="common_starting_chat">"開始聊天…"</string>
   <string name="common_sticker">"貼圖"</string>
   <string name="common_success">"成功"</string>
@@ -321,6 +355,7 @@
   <string name="error_failed_loading_messages">"無法載入訊息"</string>
   <string name="error_failed_locating_user">"%1$s 無法取得您的位置。請稍後再試。"</string>
   <string name="error_failed_uploading_voice_message">"無法上傳語音訊息。"</string>
+  <string name="error_invalid_invite">"此聊天室不再存在或邀請不再有效。"</string>
   <string name="error_message_not_found">"找不到訊息"</string>
   <string name="error_missing_location_auth_android">"%1$s 沒有權限存取您的位置。您可以到設定中開啟權限。"</string>
   <string name="error_missing_location_rationale_android">"%1$s 沒有權限存取您的位置。請在下方開啟權限。"</string>
@@ -330,6 +365,7 @@
   <string name="error_room_address_invalid_symbols">"不允許使用部份字元。僅支援字母、數字與以下符號 ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"有些訊息尚未傳送"</string>
   <string name="error_unknown">"抱歉，發生錯誤"</string>
+  <string name="event_shield_mismatched_sender">"事件的傳送者與傳送該事件的裝置擁有者不相符。"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"無法在此裝置上保證此加密訊息的真實性。"</string>
   <string name="event_shield_reason_previously_verified">"由先前驗證的使用者加密。"</string>
   <string name="event_shield_reason_sent_in_clear">"未加密。"</string>
@@ -340,6 +376,13 @@
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"憤怒搖晃以回報臭蟲"</string>
+  <string name="screen_bug_report_a11y_screenshot">"螢幕截圖"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s：%2$s"</string>
+  <string name="screen_create_poll_options_section_title">"選項"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"移除 %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"設定"</string>
+  <string name="screen_invite_users_already_a_member">"已是成員"</string>
+  <string name="screen_invite_users_already_invited">"已邀請"</string>
   <string name="screen_media_picker_error_failed_selection">"選取媒體失敗，請再試一次。"</string>
   <string name="screen_pinned_timeline_empty_state_description">"按一下訊息，然後選擇「%1$s」以加入至此。"</string>
   <string name="screen_pinned_timeline_empty_state_headline">"釘選重要訊息，如此才能輕鬆發現"</string>
@@ -360,6 +403,9 @@
   <string name="screen_room_error_failed_processing_media">"無法處理要上傳的媒體，請再試一次。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"無法擷取使用者詳細資訊"</string>
   <string name="screen_room_event_pill">"%1$s 中的訊息"</string>
+  <string name="screen_room_grouped_state_events_expand">"展開"</string>
+  <string name="screen_room_grouped_state_events_reduce">"減少"</string>
+  <string name="screen_room_permalink_same_room_android">"已檢視此聊天室！"</string>
   <string name="screen_room_pinned_banner_indicator">"第 %1$s 個，共 %2$s 個"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s 個釘選訊息"</string>
   <string name="screen_room_pinned_banner_loading_description">"正在載入訊息……"</string>
@@ -371,6 +417,9 @@
   <string name="screen_share_open_google_maps">"在 Google Maps 中開啟"</string>
   <string name="screen_share_open_osm_maps">"在開放街圖（OpenStreetMap） 中開啟"</string>
   <string name="screen_share_this_location_action">"分享這個位置"</string>
+  <string name="screen_space_list_description">"您建立或加入的空間"</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"空間"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"因為 %1$s 的驗證身份已重設，因此未傳送訊息。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"訊息未傳送，因為 %1$s 尚未驗證所有裝置。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"因為您尚未驗證一個或多個裝置，因此未傳送訊息"</string>

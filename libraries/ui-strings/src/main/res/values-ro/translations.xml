@@ -301,6 +301,8 @@ Motiv:%1$s."</string>
   <string name="invite_friends_text">"Hei, vorbește cu mine pe %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pentru a raporta erori"</string>
+  <string name="screen_invite_users_already_a_member">"Deja membru"</string>
+  <string name="screen_invite_users_already_invited">"Deja invitat"</string>
   <string name="screen_media_picker_error_failed_selection">"Selectarea fișierelor media a eșuat, încercați din nou."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Apăsați pe un mesaj și alegeți \"%1$s\" pentru a-l include aici."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fixați mesajele importante, astfel încât să poată fi descoperite cu ușurință"</string>

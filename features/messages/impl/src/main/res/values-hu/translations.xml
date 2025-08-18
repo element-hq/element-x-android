@@ -9,11 +9,14 @@
   <string name="emoji_picker_category_places">"Utazás és helyek"</string>
   <string name="emoji_picker_category_symbols">"Szimbólumok"</string>
   <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"Koppintson a feltöltött videók minőségének módosításához"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"A fájl nem tölthető fel."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nem sikerült a média feltöltése, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"A maximálisan megengedett fájlméret: %1$s ."</string>
   <string name="screen_media_upload_preview_error_too_large_title">"A fájl túl nagy a feltöltéshez"</string>
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"Képminőség optimalizációja"</string>
+  <string name="screen_media_upload_preview_processing">"Feldolgozás…"</string>
   <string name="screen_report_content_block_user">"Felhasználó letiltása"</string>
   <string name="screen_report_content_block_user_hint">"Jelölje be, ha el akarja rejteni az összes jelenlegi és jövőbeli üzenetet ettől a felhasználótól"</string>
   <string name="screen_report_content_explanation">"Ez az üzenet jelentve lesz a Matrix-kiszolgáló adminisztrátorának. Nem fogja tudni elolvasni a titkosított üzeneteket."</string>

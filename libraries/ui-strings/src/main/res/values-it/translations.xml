@@ -360,6 +360,8 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_create_poll_options_section_title">"Risposte"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Rimuovi %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Impostazioni"</string>
+  <string name="screen_invite_users_already_a_member">"Già membro"</string>
+  <string name="screen_invite_users_already_invited">"Già invitato"</string>
   <string name="screen_media_picker_error_failed_selection">"Selezione del file multimediale fallita, riprova."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Premi su un messaggio e scegli “%1$s” per includerlo qui."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fissa i messaggi importanti così che possano essere trovati facilmente"</string>

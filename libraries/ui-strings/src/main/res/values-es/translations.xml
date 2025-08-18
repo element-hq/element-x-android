@@ -345,6 +345,8 @@ Motivo: %1$s."</string>
   <string name="invite_friends_text">"Hola, puedes hablar conmigo en %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Agitar con fuerza para informar de un error"</string>
+  <string name="screen_invite_users_already_a_member">"Ya eres miembro"</string>
+  <string name="screen_invite_users_already_invited">"Ya estás invitado"</string>
   <string name="screen_media_picker_error_failed_selection">"Error al seleccionar archivos multimedia, por favor inténtalo de nuevo."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Presiona sobre un mensaje y selecciona «%1$s» para incluirlo aquí."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fija los mensajes importantes para que se puedan descubrir fácilmente"</string>

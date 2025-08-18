@@ -374,6 +374,8 @@ Möchten Sie wirklich fortfahren?"</string>
   <string name="screen_create_poll_options_section_title">"Optionen"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Entferne %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Einstellungen"</string>
+  <string name="screen_invite_users_already_a_member">"Bereits Mitglied"</string>
+  <string name="screen_invite_users_already_invited">"Bereits eingeladen"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Drücke auf eine Nachricht und wähle “%1$s”, um sie hier einzufügen."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fixiere wichtige Nachrichten, so dass sie leicht gefunden werden können"</string>

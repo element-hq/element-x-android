@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Usuń link"</string>
   <string name="rich_text_editor_unindent">"Bez wcięcia"</string>
   <string name="rich_text_editor_url_placeholder">"Link"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Opis może być niedostępny dla osób korzystających ze starszej wersji aplikacji."</string>
   <string name="screen_room_voice_message_tooltip">"Przytrzymaj, aby nagrywać"</string>
 </resources>

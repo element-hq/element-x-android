@@ -5,11 +5,16 @@
   <plurals name="a11y_digits_entered">
     <item quantity="other">"已输入 %1$d 个数字"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"编辑头像"</string>
+  <string name="a11y_encryption_details">"加密详情"</string>
   <string name="a11y_hide_password">"隐藏密码"</string>
   <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
+  <string name="a11y_move_the_map_to_my_location">"将地图移动到我的位置"</string>
   <string name="a11y_notifications_mentions_only">"仅提及"</string>
   <string name="a11y_notifications_muted">"通知已关闭"</string>
+  <string name="a11y_notifications_ongoing_call">"正在进行的通话"</string>
+  <string name="a11y_other_user_avatar">"其他用户的头像"</string>
   <string name="a11y_page_n">"第 %1$d 页"</string>
   <string name="a11y_pause">"暂停"</string>
   <string name="a11y_paused_voice_message">"语音消息，时长：%1$s，当前位置：%2$s"</string>
@@ -26,14 +31,18 @@
   <string name="a11y_read_receipts_single">"%1$s 已读"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"点击以显示全部"</string>
   <string name="a11y_remove_reaction">"撤回反应 %1$s"</string>
+  <string name="a11y_room_avatar">"房间头像"</string>
   <string name="a11y_send_files">"发送文件"</string>
   <string name="a11y_show_password">"显示密码"</string>
   <string name="a11y_start_call">"开始通话"</string>
+  <string name="a11y_user_avatar">"用户头像"</string>
   <string name="a11y_user_menu">"用户菜单"</string>
+  <string name="a11y_view_avatar">"查看头像"</string>
   <string name="a11y_view_details">"查看详情"</string>
   <string name="a11y_voice_message">"语音消息，时长：%1$s"</string>
   <string name="a11y_voice_message_record">"录制语音消息"</string>
   <string name="a11y_voice_message_stop_recording">"停止录制"</string>
+  <string name="a11y_your_avatar">"您的头像"</string>
   <string name="action_accept">"接受"</string>
   <string name="action_add_caption">"添加标题"</string>
   <string name="action_add_to_timeline">"添加到时间线"</string>
@@ -132,6 +141,7 @@
   <string name="action_tap_for_options">"点按查看选项"</string>
   <string name="action_try_again">"再试一次"</string>
   <string name="action_unpin">"取消置顶"</string>
+  <string name="action_view">"查看"</string>
   <string name="action_view_in_timeline">"在时间轴中查看"</string>
   <string name="action_view_source">"查看源码"</string>
   <string name="action_yes">"是"</string>
@@ -324,6 +334,7 @@
   <string name="error_failed_loading_messages">"加载消息失败"</string>
   <string name="error_failed_locating_user">"%1$s 无法访问您的位置，请稍后再试。"</string>
   <string name="error_failed_uploading_voice_message">"无法上传语音消息。"</string>
+  <string name="error_invalid_invite">"该房间已不存在或邀请已失效。"</string>
   <string name="error_message_not_found">"找不到消息"</string>
   <string name="error_missing_location_auth_android">"%1$s 没有权限访问您的位置。您可以在设置中启用位置权限。"</string>
   <string name="error_missing_location_rationale_android">"%1$s 没有权限访问您的位置。在下方启用位置权限。"</string>
@@ -343,6 +354,9 @@
   <string name="invite_friends_text">"嗨！请通过 %1$s 与我联系：%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"摇一摇以报错"</string>
+  <string name="screen_create_poll_settings_section_title">"设置"</string>
+  <string name="screen_invite_users_already_a_member">"已经是成员"</string>
+  <string name="screen_invite_users_already_invited">"已邀请"</string>
   <string name="screen_media_picker_error_failed_selection">"选择媒体失败，请重试。"</string>
   <string name="screen_pinned_timeline_empty_state_description">"按下消息并选择 “%1$s” 将其包含在此处。"</string>
   <string name="screen_pinned_timeline_empty_state_headline">"固定重要消息，以便轻松发现它们"</string>

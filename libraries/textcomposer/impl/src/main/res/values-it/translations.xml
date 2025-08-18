@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Rimuovi collegamento"</string>
   <string name="rich_text_editor_unindent">"Rientro a sinistra"</string>
   <string name="rich_text_editor_url_placeholder">"Collegamento"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Le didascalie potrebbero non essere visibili agli utenti di app meno recenti."</string>
   <string name="screen_room_voice_message_tooltip">"Tieni premuto per registrare"</string>
 </resources>

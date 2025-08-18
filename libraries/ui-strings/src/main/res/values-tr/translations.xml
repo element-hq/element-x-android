@@ -322,6 +322,8 @@ Neden: %1$s."</string>
   <string name="invite_friends_text">"Hey, benimle konuş %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Hata bildirmek için Rageshake"</string>
+  <string name="screen_invite_users_already_a_member">"Zaten üye"</string>
+  <string name="screen_invite_users_already_invited">"Zaten davet edildi"</string>
   <string name="screen_media_picker_error_failed_selection">"Medya seçilemedi, lütfen tekrar deneyin."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Bir mesaja basın ve buraya eklemek için “%1$s” yi seçin."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Önemli mesajları kolayca keşfedilebilmeleri için sabitleyin"</string>

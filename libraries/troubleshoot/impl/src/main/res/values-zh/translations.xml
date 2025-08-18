@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"推送历史记录"</string>
   <string name="troubleshoot_notifications_screen_action">"运行测试"</string>
   <string name="troubleshoot_notifications_screen_action_again">"再次运行测试"</string>
   <string name="troubleshoot_notifications_screen_failure">"一些测试失败了。请查看详情。"</string>

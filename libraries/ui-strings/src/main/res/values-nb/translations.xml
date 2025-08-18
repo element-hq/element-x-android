@@ -7,11 +7,17 @@
     <item quantity="one">"%1$d siffer angitt"</item>
     <item quantity="other">"%1$d sifre angitt"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Rediger avatar"</string>
+  <string name="a11y_encryption_details">"Krypteringsdetaljer"</string>
   <string name="a11y_hide_password">"Skjul passord"</string>
   <string name="a11y_join_call">"Bli med i samtale"</string>
   <string name="a11y_jump_to_bottom">"Hopp til bunnen"</string>
   <string name="a11y_notifications_mentions_only">"Bare omtaler"</string>
   <string name="a11y_notifications_muted">"Dempet"</string>
+  <string name="a11y_notifications_new_mentions">"Nye omtaler"</string>
+  <string name="a11y_notifications_new_messages">"Nye meldinger"</string>
+  <string name="a11y_notifications_ongoing_call">"Pågående samtale"</string>
+  <string name="a11y_other_user_avatar">"En annen brukers avatar"</string>
   <string name="a11y_page_n">"Side %1$d"</string>
   <string name="a11y_pause">"Setter på pause"</string>
   <string name="a11y_paused_voice_message">"Talemelding, lengde: %1$s, nåværende posisjon: %2$s"</string>
@@ -34,6 +40,7 @@
   <string name="a11y_send_files">"Sende filer"</string>
   <string name="a11y_show_password">"Vis passord"</string>
   <string name="a11y_start_call">"Start en samtale"</string>
+  <string name="a11y_time_limited_action_required">"Tidsbegrenset handling kreves"</string>
   <string name="a11y_user_avatar">"Brukeravatar"</string>
   <string name="a11y_user_menu">"Brukermeny"</string>
   <string name="a11y_view_avatar">"Vis avatar"</string>
@@ -41,6 +48,7 @@
   <string name="a11y_voice_message">"Talemelding, lengde: %1$s"</string>
   <string name="a11y_voice_message_record">"Ta opp talemelding."</string>
   <string name="a11y_voice_message_stop_recording">"Stopp opptaket"</string>
+  <string name="a11y_your_avatar">"Din avatar"</string>
   <string name="action_accept">"Godta"</string>
   <string name="action_add_caption">"Legg til bildetekst"</string>
   <string name="action_add_to_timeline">"Legg til i tidslinjen"</string>
@@ -99,6 +107,7 @@
   <string name="action_no">"Nei"</string>
   <string name="action_not_now">"Ikke nå"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Åpne kontekstmenyen"</string>
   <string name="action_open_settings">"Innstillinger"</string>
   <string name="action_open_with">"Åpne med"</string>
   <string name="action_pin">"Fest"</string>
@@ -123,7 +132,9 @@
   <string name="action_save">"Lagre"</string>
   <string name="action_search">"Søke"</string>
   <string name="action_send">"Sende"</string>
+  <string name="action_send_edited_message">"Send redigert melding"</string>
   <string name="action_send_message">"Send melding"</string>
+  <string name="action_send_voice_message">"Send talemelding"</string>
   <string name="action_share">"Dele"</string>
   <string name="action_share_link">"Dele lenke"</string>
   <string name="action_show">"Vis"</string>
@@ -361,6 +372,8 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_create_poll_options_section_title">"Alternativer"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Fjern %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Innstillinger"</string>
+  <string name="screen_invite_users_already_a_member">"Allerede medlem"</string>
+  <string name="screen_invite_users_already_invited">"Allerede invitert"</string>
   <string name="screen_media_picker_error_failed_selection">"Kunne ikke velge medium, prøv igjen."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Trykk på en melding og velg “%1$s” for å inkludere her."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fest viktige meldinger slik at de lett kan ses"</string>

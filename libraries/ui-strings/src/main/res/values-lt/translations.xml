@@ -141,6 +141,8 @@
   <string name="invite_friends_text">"Ei, pasikalbėkime naudojant %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Papurtykite, kad praneštumėte apie klaidą"</string>
+  <string name="screen_invite_users_already_a_member">"Jau narys"</string>
+  <string name="screen_invite_users_already_invited">"Jau pakviestas"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepavyko pasirinkti laikmenos, pabandykite dar kartą."</string>
   <string name="screen_room_error_failed_processing_media">"Nepavyko apdoroti įkeliamos laikmenos, bandykite dar kartą."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepavyko gauti naudotojo išsamios informacijos."</string>

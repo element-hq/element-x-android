@@ -2,5 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="call_foreground_service_channel_title_android">"Davom etayotgan qo\'ng\'iroq"</string>
   <string name="call_foreground_service_message_android">"Qo\'ng\'iroqqa qaytish uchun bosing"</string>
-  <string name="call_foreground_service_title_android">"☎️ Qo‘ng‘iroq davom etmoqda"</string>
+  <string name="call_foreground_service_title_android">"☎️ Qoʻngʻiroq davom etmoqda"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Call ushbu Android versiyasida Bluetooth audio qurilmalaridan foydalanishni qoʻllab-quvvatlamaydi. Iltimos, boshqa audio qurilmani tanlang."</string>
 </resources>

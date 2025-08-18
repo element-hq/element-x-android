@@ -20,6 +20,7 @@
   <string name="screen_room_change_permissions_send_messages">"Bidali mezuak"</string>
   <string name="screen_room_change_role_administrators_title">"Editatu administratzaileak"</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Administratzailea gehitu?"</string>
+  <string name="screen_room_change_role_confirm_change_owners_title">"Jabetza eskualdatu?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Jaitsi mailaz"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Ezin izango duzu hau aldatu zure burua mailaz jaisten ari zarelako, zu bazara gelan baimenak dituen azken erabiltzailea ezin izango dira baimenak berreskuratu."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Zure burua mailaz jaitsi?"</string>
@@ -27,14 +28,13 @@
   <string name="screen_room_change_role_invited_member_name_android">"(Egiteke)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Administratzaileek automatikoki dute moderatzaile-pribilegioak"</string>
   <string name="screen_room_change_role_moderators_title">"Editatu moderatzaileak"</string>
+  <string name="screen_room_change_role_owners_title">"Aukeratu jabeak"</string>
   <string name="screen_room_change_role_section_administrators">"Administratzaileak"</string>
   <string name="screen_room_change_role_section_moderators">"Moderatzaileak"</string>
   <string name="screen_room_change_role_section_users">"Kideak"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Gorde gabeko aldaketak dituzu."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Aldaketak gorde?"</string>
   <string name="screen_room_details_add_topic_title">"Gehitu hizketagaia"</string>
-  <string name="screen_room_details_already_a_member">"Kidea da dagoeneko"</string>
-  <string name="screen_room_details_already_invited">"Lehendik ere gonbidatuta"</string>
   <string name="screen_room_details_badge_encrypted">"Zifratuta"</string>
   <string name="screen_room_details_badge_not_encrypted">"Zifratu gabe"</string>
   <string name="screen_room_details_badge_public">"Gela publikoa"</string>
@@ -76,6 +76,7 @@
   <string name="screen_room_member_list_pending_header_title">"Zain"</string>
   <string name="screen_room_member_list_role_administrator">"Kudeatzailea"</string>
   <string name="screen_room_member_list_role_moderator">"Moderatzailea"</string>
+  <string name="screen_room_member_list_role_owner">"Jabea"</string>
   <string name="screen_room_member_list_room_members_header_title">"Gelako kideak"</string>
   <string name="screen_room_member_list_unbanning_user">"%1$s(r)i debekua kentzen"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Aktibatuz gero, defektuzko ezarpena gainidatziko du"</string>
@@ -89,12 +90,14 @@
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Aipamenak eta hitz gakoak soilik"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Gela honetan, jakinarazi"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratzaileak"</string>
+  <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratzaileak eta jabeak"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Aldatu nire rola"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_member">"Jaitsi maila, kidera"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_moderator">"Jaitsi maila, moderatzailera"</string>
   <string name="screen_room_roles_and_permissions_member_moderation">"Kideen moderazioa"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mezuak eta edukiak"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatzaileak"</string>
+  <string name="screen_room_roles_and_permissions_owners">"Jabeak"</string>
   <string name="screen_room_roles_and_permissions_permissions_header">"Baimenak"</string>
   <string name="screen_room_roles_and_permissions_reset">"Berrezarri baimenak"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Baimenak berrezarritakoan, uneko ezarpenak galduko dituzu."</string>

@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Du har endringer som ikke er lagret."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Lagre endringer?"</string>
   <string name="screen_room_details_add_topic_title">"Legg til emne"</string>
-  <string name="screen_room_details_already_a_member">"Allerede medlem"</string>
-  <string name="screen_room_details_already_invited">"Allerede invitert"</string>
   <string name="screen_room_details_badge_encrypted">"Kryptert"</string>
   <string name="screen_room_details_badge_not_encrypted">"Ikke kryptert"</string>
   <string name="screen_room_details_badge_public">"Offentlig rom"</string>

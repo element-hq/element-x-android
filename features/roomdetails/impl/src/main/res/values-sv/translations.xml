@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Du har osparade ändringar."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Spara ändringar?"</string>
   <string name="screen_room_details_add_topic_title">"Lägg till ämne"</string>
-  <string name="screen_room_details_already_a_member">"Redan medlem"</string>
-  <string name="screen_room_details_already_invited">"Redan inbjuden"</string>
   <string name="screen_room_details_badge_encrypted">"Krypterat"</string>
   <string name="screen_room_details_badge_not_encrypted">"Inte krypterat"</string>
   <string name="screen_room_details_badge_public">"Offentligt rum"</string>

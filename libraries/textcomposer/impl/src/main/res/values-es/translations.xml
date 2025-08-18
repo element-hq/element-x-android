@@ -24,5 +24,6 @@
   <string name="rich_text_editor_remove_link">"Eliminar enlace"</string>
   <string name="rich_text_editor_unindent">"Quitar sangría"</string>
   <string name="rich_text_editor_url_placeholder">"Enlace"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Es posible que las leyendas no sean visibles para las personas que usan aplicaciones más antiguas."</string>
   <string name="screen_room_voice_message_tooltip">"Mantén pulsado para grabar"</string>
 </resources>

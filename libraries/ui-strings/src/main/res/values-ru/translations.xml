@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Добавить реакцию:%1$s"</string>
   <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_delete">"Удалить"</string>
   <plurals name="a11y_digits_entered">
@@ -7,11 +8,15 @@
     <item quantity="few">"Ведено %1$d цифры"</item>
     <item quantity="many">"Введено много цифр"</item>
   </plurals>
+  <string name="a11y_encryption_details">"Сведения о шифровании"</string>
   <string name="a11y_hide_password">"Скрыть пароль"</string>
   <string name="a11y_join_call">"Присоединиться к звонку"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
   <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
   <string name="a11y_notifications_muted">"Звук отключен"</string>
+  <string name="a11y_notifications_new_mentions">"Новые упоминания"</string>
+  <string name="a11y_notifications_new_messages">"Новые сообшения"</string>
+  <string name="a11y_notifications_ongoing_call">"Текущий вызов"</string>
   <string name="a11y_page_n">"Страница %1$d"</string>
   <string name="a11y_pause">"Приостановить"</string>
   <string name="a11y_paused_voice_message">"Голосовое сообщение, длительность: %1$s, текущая позиция: %2$s"</string>
@@ -325,6 +330,7 @@
   <string name="dialog_title_warning">"Предупреждение"</string>
   <string name="dialog_unsaved_changes_description_android">"Изменения не сохранены. Вы действительно хотите вернуться?"</string>
   <string name="dialog_unsaved_changes_title">"Сохранить изменения?"</string>
+  <string name="dialog_video_quality_selector_title">"Выберите качество загружаемого видео"</string>
   <string name="error_account_creation_not_possible">"Ваш домашний сервер необходимо обновить, чтобы он поддерживал Matrix Authentication Service и создание учётных записей."</string>
   <string name="error_failed_creating_the_permalink">"Не удалось создать постоянную ссылку"</string>
   <string name="error_failed_loading_map">"Не удалось загрузить карту %1$s. Пожалуйста, повторите попытку позже."</string>
@@ -350,6 +356,8 @@
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
+  <string name="screen_invite_users_already_a_member">"Уже зарегистрирован"</string>
+  <string name="screen_invite_users_already_invited">"Уже приглашены"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Нажмите на сообщение и выберите “%1$s”, чтобы добавить его сюда."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закрепите важные сообщения, чтобы их можно было легко найти"</string>
