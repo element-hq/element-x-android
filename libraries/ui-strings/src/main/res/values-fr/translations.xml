@@ -224,8 +224,8 @@ Raison : %1$s."</string>
     <item quantity="other">"%d autres"</item>
   </plurals>
   <plurals name="common_member_count">
-    <item quantity="one">"%1$d membre"</item>
-    <item quantity="other">"%1$d membres"</item>
+    <item quantity="one">"%1$d Membre"</item>
+    <item quantity="other">"%1$d Membres"</item>
   </plurals>
   <string name="common_message">"Message"</string>
   <string name="common_message_actions">"Actions sur le message"</string>
@@ -258,7 +258,9 @@ Raison : %1$s."</string>
   <string name="common_preparing">"Préparation…"</string>
   <string name="common_privacy_policy">"Politique de confidentialité"</string>
   <string name="common_private_room">"Salon privé"</string>
+  <string name="common_private_space">"Espace privé"</string>
   <string name="common_public_room">"Salon public"</string>
+  <string name="common_public_space">"Espace public"</string>
   <string name="common_reaction">"Réaction"</string>
   <string name="common_reactions">"Réactions"</string>
   <string name="common_reason">"Raison"</string>
@@ -276,6 +278,10 @@ Raison : %1$s."</string>
   <string name="common_room">"Salon"</string>
   <string name="common_room_name">"Nom du salon"</string>
   <string name="common_room_name_placeholder">"par exemple, le nom de votre projet"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d Salon"</item>
+    <item quantity="other">"%1$d Salons"</item>
+  </plurals>
   <string name="common_saved_changes">"Modifications enregistrées"</string>
   <string name="common_saving">"Enregistrement"</string>
   <string name="common_screen_lock">"Verrouillage d’écran"</string>
@@ -295,6 +301,10 @@ Raison : %1$s."</string>
   <string name="common_signing_out">"Déconnexion"</string>
   <string name="common_something_went_wrong">"Une erreur s’est produite"</string>
   <string name="common_something_went_wrong_message">"Nous avons rencontré un problème. Veuillez réessayer."</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d Espace"</item>
+    <item quantity="other">"%1$d Espaces"</item>
+  </plurals>
   <string name="common_starting_chat">"Création de la discussion…"</string>
   <string name="common_sticker">"Autocollant"</string>
   <string name="common_success">"Succès"</string>
@@ -325,6 +335,12 @@ Raison : %1$s."</string>
   <string name="common_verify_identity">"Vérifier l’identité"</string>
   <string name="common_verify_user">"Vérifier l’utilisateur"</string>
   <string name="common_video">"Vidéo"</string>
+  <string name="common_video_quality_high">"Haute qualité"</string>
+  <string name="common_video_quality_high_description">"Meilleure qualité mais plus gros fichier"</string>
+  <string name="common_video_quality_low">"Basse qualité"</string>
+  <string name="common_video_quality_low_description">"Fichier plus petit et vitesse de téléchargement plus rapide"</string>
+  <string name="common_video_quality_standard">"Qualité standard"</string>
+  <string name="common_video_quality_standard_description">"Équilibre entre qualité et vitesse de téléchargement"</string>
   <string name="common_voice_message">"Message vocal"</string>
   <string name="common_waiting">"En attente…"</string>
   <string name="common_waiting_for_decryption_key">"En attente de la clé de déchiffrement"</string>
@@ -339,6 +355,10 @@ Raison : %1$s."</string>
 
 Êtes-vous sûr de vouloir continuer ?"</string>
   <string name="dialog_confirm_link_title">"Veuillez vérifier ce lien"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Sélectionnez la qualité par défaut des vidéos que vous envoyez."</string>
+  <string name="dialog_default_video_quality_selector_title">"Qualité des vidéos envoyées"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"La taille maximale de fichier autorisée est: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Le fichier est trop gros pour être envoyé"</string>
   <string name="dialog_room_reported">"Salon signalé"</string>
   <string name="dialog_room_reported_and_left">"Salon quitté et signalé"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
@@ -347,6 +367,9 @@ Raison : %1$s."</string>
   <string name="dialog_title_warning">"Attention"</string>
   <string name="dialog_unsaved_changes_description_android">"Vos modifications n’ont pas été enregistrées. Êtes-vous certain de vouloir quitter ?"</string>
   <string name="dialog_unsaved_changes_title">"Enregistrer les changements ?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"La taille maximale de fichier autorisée est: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Sélectionnez la qualité des vidéos que vous souhaitez envoyer."</string>
+  <string name="dialog_video_quality_selector_title">"Sélectionnez la qualité d’envoi des vidéos"</string>
   <string name="error_account_creation_not_possible">"Votre serveur d’accueil doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
@@ -397,6 +420,7 @@ Raison : %1$s."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Votre message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Un ou plusieurs de vos appareils ne sont pas vérifiés. Vous pouvez quand même envoyer le message, ou vous pouvez annuler et réessayer plus tard après avoir vérifié tous vos appareils."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Votre message n’a pas été envoyé car vous n’avez pas vérifié tous vos appareils"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Modifier les administrateurs ou les propriétaires"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
   <string name="screen_room_event_pill">"Message dans %1$s"</string>
@@ -414,6 +438,9 @@ Raison : %1$s."</string>
   <string name="screen_share_open_google_maps">"Ouvrir dans Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Ouvrir dans OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partager cette position"</string>
+  <string name="screen_space_list_description">"Espaces que vous avez créés ou rejoints."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Espaces"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Le message n’a pas été envoyé car l’identité vérifiée de %1$s a été réinitialisée."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Le message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message non envoyé car vous n’avez pas vérifié tous vos appareils."</string>

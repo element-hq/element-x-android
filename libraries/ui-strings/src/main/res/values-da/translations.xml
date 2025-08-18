@@ -258,7 +258,9 @@
   <string name="common_preparing">"Forbereder…"</string>
   <string name="common_privacy_policy">"Privatlivspolitik"</string>
   <string name="common_private_room">"Privat rum"</string>
+  <string name="common_private_space">"Privat klynge"</string>
   <string name="common_public_room">"Offentligt rum"</string>
+  <string name="common_public_space">"Offentlig klynge"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktioner"</string>
   <string name="common_reason">"Årsag"</string>
@@ -275,6 +277,10 @@
   <string name="common_room">"Rum"</string>
   <string name="common_room_name">"Navn på rum"</string>
   <string name="common_room_name_placeholder">"f.eks. navnet på dit projekt"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d Rum"</item>
+    <item quantity="other">"%1$d Rum"</item>
+  </plurals>
   <string name="common_saved_changes">"Gemte ændringer"</string>
   <string name="common_saving">"Gemmer"</string>
   <string name="common_screen_lock">"Skærmlås"</string>
@@ -294,6 +300,10 @@
   <string name="common_signing_out">"Logger ud"</string>
   <string name="common_something_went_wrong">"Noget gik galt"</string>
   <string name="common_something_went_wrong_message">"Vi stødte på et problem. Prøv venligst igen."</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d Klynge"</item>
+    <item quantity="other">"%1$d Klynger"</item>
+  </plurals>
   <string name="common_starting_chat">"Starter samtale…"</string>
   <string name="common_sticker">"Klistermærke"</string>
   <string name="common_success">"Succes"</string>
@@ -324,6 +334,12 @@
   <string name="common_verify_identity">"Verificér identitet"</string>
   <string name="common_verify_user">"Verificér bruger"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Høj kvalitet"</string>
+  <string name="common_video_quality_high_description">"Bedste kvalitet, men større filstørrelse"</string>
+  <string name="common_video_quality_low">"Lav kvalitet"</string>
+  <string name="common_video_quality_low_description">"Hurtigste uploadhastighed og mindste filstørrelse"</string>
+  <string name="common_video_quality_standard">"Standardkvalitet"</string>
+  <string name="common_video_quality_standard_description">"Balance mellem kvalitet og uploadhastighed"</string>
   <string name="common_voice_message">"Talebesked"</string>
   <string name="common_waiting">"Venter…"</string>
   <string name="common_waiting_for_decryption_key">"Venter på denne besked"</string>
@@ -338,6 +354,10 @@
 
 Er du sikker på, at du vil fortsætte?"</string>
   <string name="dialog_confirm_link_title">"Dobbelttjek dette link"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Vælg standardkvaliteten for de videoer, du uploader."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kvalitet på overførte videoer"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Den maksimalt tilladte filstørrelse er: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Filen er for stor til at kunne uploades."</string>
   <string name="dialog_room_reported">"Rummet er anmeldt"</string>
   <string name="dialog_room_reported_and_left">"Anmeldte og forlod rummet"</string>
   <string name="dialog_title_confirmation">"Bekræftelse"</string>
@@ -346,6 +366,9 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="dialog_title_warning">"Advarsel"</string>
   <string name="dialog_unsaved_changes_description_android">"Dine ændringer er ikke blevet gemt. Er du sikker på, at du vil gå tilbage?"</string>
   <string name="dialog_unsaved_changes_title">"Gem ændringer?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Den maksimalt tilladte filstørrelse er: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vælg den kvalitet, du ønsker at uploade videoen i."</string>
+  <string name="dialog_video_quality_selector_title">"Vælg kvalitet for video-overførsel"</string>
   <string name="error_account_creation_not_possible">"Din hjemmeserver skal opgraderes for at understøtte Matrix Authentication Service og kontooprettelse."</string>
   <string name="error_failed_creating_the_permalink">"Oprettelse af permalink mislykkedes"</string>
   <string name="error_failed_loading_map">"%1$s kunne ikke indlæse kortet. Prøv igen senere."</string>
@@ -396,6 +419,7 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Din besked blev ikke sendt, fordi %1$s ikke har bekræftet alle enheder"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"En eller flere af dine enheder er ikke verificeret. Du kan sende beskeden alligevel, eller du kan annullere for nu og prøve igen senere, når du har verificeret alle dine enheder."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Din besked blev ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Rediger administratorer eller ejere"</string>
   <string name="screen_room_error_failed_processing_media">"Det lykkedes ikke at behandle medier til upload. Prøv venligst igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunne ikke hente brugeroplysninger"</string>
   <string name="screen_room_event_pill">"Besked i %1$s"</string>
@@ -413,6 +437,9 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_share_open_google_maps">"Åbn i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Åbn i OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Del denne lokation"</string>
+  <string name="screen_space_list_description">"Klynger, du har oprettet eller deltager i"</string>
+  <string name="screen_space_list_details">"%1$s•%2$s"</string>
+  <string name="screen_space_list_title">"Klynger"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Beskeden blev ikke sendt fordi %1$s s bekræftede identitet blev nulstillet."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meddelelsen er ikke sendt, fordi %1$s ikke har bekræftet alle enheder."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Beskeden er ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder."</string>

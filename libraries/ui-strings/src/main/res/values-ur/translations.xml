@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"ایک رد عمل کا اضافہ کریں: %1$s"</string>
+  <string name="a11y_avatar">"اوتار"</string>
   <string name="a11y_delete">"حذف کریں"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d ہندسہ درج"</item>
     <item quantity="other">"%1$d ہندسے درج"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"اووتار میں ترمیم کریں"</string>
+  <string name="a11y_edit_room_address_hint">"مکمل پتہ ہو گا %1$s"</string>
   <string name="a11y_hide_password">"لفظ عبور چھپائیں"</string>
   <string name="a11y_jump_to_bottom">"نیچے چھلانگ لگائیں"</string>
   <string name="a11y_notifications_mentions_only">"صرف تذکرے"</string>
@@ -36,17 +40,21 @@
   <string name="action_back">"واپس"</string>
   <string name="action_call">"مکالمہ کریں"</string>
   <string name="action_cancel">"منسوخ کریں"</string>
+  <string name="action_cancel_for_now">"ابھی کے لیے منسوخ کریں"</string>
   <string name="action_choose_photo">"تصویر چنیں"</string>
   <string name="action_clear">"صاف کریں"</string>
   <string name="action_close">"بند کریں"</string>
   <string name="action_complete_verification">"توثیق مکمل کریں"</string>
   <string name="action_confirm">"تصدیق کریں"</string>
+  <string name="action_confirm_password">"پاس ورڈ کی تصدیق"</string>
   <string name="action_continue">"جاری رکھیں"</string>
   <string name="action_copy">"نقل"</string>
   <string name="action_copy_link">"ربط نقل کریں"</string>
   <string name="action_copy_link_to_message">"پیغام کا ربط نقل کریں"</string>
   <string name="action_create">"تخلیق کریں"</string>
   <string name="action_create_a_room">"ایک کمرہ بنائیں"</string>
+  <string name="action_deactivate">"غیر فعال کریں"</string>
+  <string name="action_deactivate_account">"اکاؤنٹ کو غیر فعال کریں"</string>
   <string name="action_decline">"مسترد کریں"</string>
   <string name="action_delete_poll">"رائے شماری حذف کریں"</string>
   <string name="action_disable">"غیر فعال کریں"</string>
@@ -112,8 +120,11 @@
   <string name="action_tap_for_options">"اختیارات کے لیے تھپتھپائیں"</string>
   <string name="action_try_again">"دوبارہ کوشش کریں"</string>
   <string name="action_unpin">"غیر تثبیت کریں"</string>
+  <string name="action_view_in_timeline">"ٹائم لائن میں دیکھیں"</string>
   <string name="action_view_source">"ماخذ دیکھیں"</string>
   <string name="action_yes">"ہاں"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"آپ کا سرور اب ایک نئے، تیز تر پروٹوکول کو سپورٹ کرتا ہے۔ لاگ آؤٹ کریں اور ابھی اپ گریڈ کے لیے دوبارہ لاگ ان کریں۔ ابھی ایسا کرنے سے آپ کو زبردستی لاگ آؤٹ سے بچنے میں مدد ملے گی جب پرانا پروٹوکول بعد میں ہٹا دیا جائے گا۔"</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"اپ گریڈ دستیاب ہے۔"</string>
   <string name="common_about">"بمتعلق"</string>
   <string name="common_acceptable_use_policy">"قابل قبول استعمال کی سیاست"</string>
   <string name="common_advanced_settings">"اعلیٰ ترتیبات"</string>
@@ -124,6 +135,7 @@
   <string name="common_bubbles">"بلبلے"</string>
   <string name="common_call_started">"مکالمہ شروع"</string>
   <string name="common_chat_backup">"گفتگو کا پشتارہ"</string>
+  <string name="common_copied_to_clipboard">"کلپ بورڈ میں کاپى کیا گیا"</string>
   <string name="common_copyright">"حقوقِ طبع و نشر"</string>
   <string name="common_creating_room">"کمرہ تخلیق کررہاہے…"</string>
   <string name="common_current_user_left_room">"کمرہ چھوڑ لیا"</string>
@@ -180,6 +192,7 @@
   <string name="common_people">"لوگ"</string>
   <string name="common_permalink">"مستقل ربط"</string>
   <string name="common_permission">"اجازت"</string>
+  <string name="common_pinned">"پن کردہ"</string>
   <string name="common_please_wait">"براہ کرم انتظار کریں…"</string>
   <string name="common_poll_end_confirmation">"کیا آپ واقعی اس رائے شماری کو ختم کرنا چاہتے ہیں؟"</string>
   <string name="common_poll_summary">"رائے شماری: %1$s"</string>
@@ -247,12 +260,14 @@
   <string name="common_voice_message">"صوتی پیغام"</string>
   <string name="common_waiting">"منتظر…"</string>
   <string name="common_waiting_for_decryption_key">"اس پیغام کا منتظر"</string>
+  <string name="common_you">"آپ"</string>
   <string name="dialog_title_confirmation">"تصدیق"</string>
   <string name="dialog_title_error">"خرابی"</string>
   <string name="dialog_title_success">"کامیابی"</string>
   <string name="dialog_title_warning">"انتباہ"</string>
   <string name="dialog_unsaved_changes_description_android">"آپ کی تبدیلیاں محفوظ نہیں کی گئیں۔ کیا آپ کو یقین ہے کہ آپ واپس جانا چاہتے ہیں؟"</string>
   <string name="dialog_unsaved_changes_title">"تبدیلیاں محفوظ کریں؟"</string>
+  <string name="error_account_creation_not_possible">"‏Matrix Authentication Service اور اکاؤنٹ بنانے میں معاونت کے لیے آپ کے ہوم سرور کو اپ گریڈ کرنے کی ضرورت ہے۔"</string>
   <string name="error_failed_creating_the_permalink">"مستقل ربط تخلیق کرنا ناکام"</string>
   <string name="error_failed_loading_map">"%1$s نقشہ لاد نہیں سکا۔ برائے مہربانی بعد میں دوبارہ کوشش کریں۔"</string>
   <string name="error_failed_loading_messages">"پیغامات لادنا ناکام"</string>
@@ -265,6 +280,7 @@
   <string name="error_some_messages_have_not_been_sent">"کچھ پیغامات ارسال نہیں ہوئے"</string>
   <string name="error_unknown">"معذرت، ایک خرابی واقع ہوگئی"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"اس آلہ پر اس مرموز کردہ پیغام کی صداقت کی ضمانت نہیں دی جا سکتی۔"</string>
+  <string name="event_shield_reason_previously_verified">"پہلے سے تصدیق شدہ صارف کے ذریعہ خفیہ کردہ۔"</string>
   <string name="event_shield_reason_sent_in_clear">"مرموز کردہ نہیں۔"</string>
   <string name="event_shield_reason_unknown_device">"کسی نامعلوم یا حذف شدہ آلے کے ذریعے مرموز کردہ۔"</string>
   <string name="event_shield_reason_unsigned_device">"کسی ایسے آلے کے ذریعے مرموز کردہ جس کی توثیق اسکے مالک سے نہیں ہوئی۔"</string>
@@ -274,11 +290,23 @@
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"خطاء کی اطلاع دینے کیلئے غصے سے ہلائیں"</string>
   <string name="screen_media_picker_error_failed_selection">"وسائط منتخب کرنا ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"ایک پیغام پر دبائیں اور یہاں شامل کرنے کے لیے %1$s منتخب کریں۔"</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"اہم پیغامات کو پن کریں تاکہ انہیں آسانی سے دریافت کیا جا سکے۔"</string>
   <plurals name="screen_pinned_timeline_screen_title">
     <item quantity="one">"%1$d مثبوتہ پیغام"</item>
     <item quantity="other">"%1$d مثبوتہ پیغامات"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"مثبوتہ پیغامات"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"آپ اپنی شناخت کو دوبارہ ترتیب دینے کے لیے اپنی %1$s اکاؤنٹ میں جانے والے ہیں۔ اس عمل کے بعد آپ کو ایپ پر واپس لے جایا جائے گا۔"</string>
+  <string name="screen_reset_identity_confirmation_title">"تصدیق نہیں کر سکتے؟ اپنی شناخت کو دوبارہ ترتیب دینے کے لیے اپنے اکاؤنٹ پر جائیں۔"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"تصدیق واپس لیں اور پیغام بھیجیں"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"آپ اپنی ویریفیکیشن ختم کر سکتے ہیں اور یہ پیغام بہرحال بھیج سکتے ہیں، یا آپ ابھی کے لیے منسوخ کر سکتے ہیں اور %1$s کے دوبارہ ویریفیکیشن کے بعد پھر سے کوشش کر سکتے ہیں."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"آپ کا پیغام نہیں بھیجا گیا کیوں کہ %1$s کی تصدیق شدہ شناخت کو دوبارہ ترتیب دے دیا گیا ہے"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"بہرحال پیغام بھیجیں"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s ایک یا زائد غیر تصدیق شدہ آلات استعمال کر رہے ہیں۔ آپ پھر بھی پیغام بھیج سکتے ہیں، یا آپ ابھی کے لیے منسوخ کر سکتے ہیں اور بعد میں دوبارہ کوشش کر سکتے ہیں، جب %2$s اپنے تمام آلات کی تصدیق کر چکے ہوں۔"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"آپ کا پیغام نہیں بھیجا گیا کیونکہ%1$s نے تمام آلات کی تصدیق نہیں کی ہے"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"آپ کے ایک یا زائد آلات غیر تصدیق شدہ ہیں۔ آپ بہر حال پیغام بھیج سکتے ہیں، یا آپ ابھی کے لیے منسوخ کر سکتے ہیں اور اپنے تمام آلات کی تصدیق کرنے کے بعد دوبارہ کوشش کر سکتے ہیں۔"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"آپ کا پیغام نہیں بھیجا گیا کیوں کہ آپ نے اپنے ایک یا زیادہ آلات کی تصدیق نہیں کی ہے۔"</string>
   <string name="screen_room_error_failed_processing_media">"وسائط کا معالجہ برائے ترفیع ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"صارف کی تفصیلات بازیافت نہیں ہوسکیں"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s از %2$s"</string>
@@ -292,6 +320,9 @@
   <string name="screen_share_open_google_maps">"گوگل میپس میں کھولیں۔ل"</string>
   <string name="screen_share_open_osm_maps">"اوپن اسٹریٹ میپ میں کھولیں"</string>
   <string name="screen_share_this_location_action">"اس مقام کا اشتراک کریں"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"پیغام نہیں بھیجا گیا کیونکہ %1$s کی تصدیق شدہ شناخت کو دوبارہ ترتیب دے دیا گیا ہے۔"</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"پیغام نہیں بھیجا گیا کیونکہ%1$s نے تمام آلات کی تصدیق نہیں کی ہے۔"</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"پیغام نہیں بھیجا گیا کیونکہ آپ نے اپنے ایک یا زیادہ آلات کی تصدیق نہیں کی ہے۔"</string>
   <string name="screen_view_location_title">"مقام"</string>
   <string name="settings_version_number">"نسخہ %1$s (%2$s)"</string>
   <string name="test_language_identifier">"ur"</string>

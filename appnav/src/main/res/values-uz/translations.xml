@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Tizmdan chiqish va yangilash"</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"%1$s endi eski protokolni qoʻllab-quvvatlamaydi. Iltimos, ilovadan foydalanishni davom ettirish uchun tizimdan chiqing va qayta kiring."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Sizning uy serveringiz endi eski protokolni qoʻllab-quvvatlamaydi. Iltimos, ilovadan foydalanishni davom ettirish uchun tizimdan qayta chiqib-kiring."</string>
+</resources>

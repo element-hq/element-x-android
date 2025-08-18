@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"隱藏票數"</string>
   <string name="screen_create_poll_answer_hint">"選項 %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"變更尚未儲存，您確定要返回嗎？"</string>
+  <string name="screen_create_poll_delete_option_a11y">"刪除選項 %1$s"</string>
   <string name="screen_create_poll_question_desc">"問題或主題"</string>
   <string name="screen_create_poll_question_hint">"投什麼？"</string>
   <string name="screen_create_poll_title">"建立投票"</string>

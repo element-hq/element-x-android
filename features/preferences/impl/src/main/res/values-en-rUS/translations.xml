@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_advanced_settings_media_compression_title">"Optimize media quality"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Automatically optimize images for faster uploads and smaller file sizes."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimize image upload quality"</string>
 </resources>

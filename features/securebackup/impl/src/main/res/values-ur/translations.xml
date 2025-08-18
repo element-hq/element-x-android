@@ -16,6 +16,7 @@
   <string name="screen_create_new_recovery_key_list_item_4">"نئی بازیابی کلید بنانے کیلئے ہدایات پر عمل کریں"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"اپنی نئی بازیابی کلید کو لفظ عبور منتظم یا مرکوز کردہ ملحوظہ میں محفوظ کریں"</string>
   <string name="screen_create_new_recovery_key_title">"کسی دوسرے آلے کا استعمال کرتے ہوئے اپنے کھاتہ کیلئے مرموز کاری کو بحال کریں"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"ری سیٹ جاری رکھیں"</string>
   <string name="screen_encryption_reset_bullet_1">"آپ کے کھاتہ کی تفصیلات، رابطے، ترجیحات اور گفتگو کی فہرست رکھی جائے گی۔"</string>
   <string name="screen_encryption_reset_bullet_2">"آپ کسی بھی پیغام کی سرگزشت کو کھو دیں گے جو صرف خادم پر محفوظ ہے۔"</string>
   <string name="screen_encryption_reset_bullet_3">"آپ کو اپنے تمام موجودہ آلات اور رابطوں کی دوبارہ توثیق کرنی ہوگی۔"</string>
@@ -57,6 +58,7 @@
   <string name="screen_reset_encryption_confirmation_alert_action">"ہاں، اب بحال کر دیں"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"یہ عملیہ ناقابل تلافی ہے۔"</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"کیا آپ کو یقین ہے کہ آپ اپنی شناخت بحال کر دینا چاہتے ہیں؟"</string>
+  <string name="screen_reset_encryption_password_error">"ایک نامعلوم غلطی ہو گئی۔ براہ کرم چیک کریں کہ آپ کے اکاؤنٹ کا پاسورڈ درست ہے اور دوبارہ کوشش کریں۔"</string>
   <string name="screen_reset_encryption_password_placeholder">"درج کریں…"</string>
   <string name="screen_reset_encryption_password_subtitle">"تصدیق کریں کہ آپ اپنی شناخت بحال کر دینا چاہتے ہیں۔"</string>
   <string name="screen_reset_encryption_password_title">"جاری رکھنے کے لیے اپنے کھاتہ کا لفظ عبور درج کریں۔"</string>

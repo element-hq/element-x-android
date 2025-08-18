@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Remover ligação"</string>
   <string name="rich_text_editor_unindent">"Desindentar"</string>
   <string name="rich_text_editor_url_placeholder">"Ligação"</string>
+  <string name="screen_media_upload_preview_caption_warning">"As legendas poderão não ser visíveis em versões mais antigas da aplicação."</string>
   <string name="screen_room_voice_message_tooltip">"Segurar para gravar"</string>
 </resources>

@@ -12,8 +12,10 @@
     <item quantity="one">"%dbildirishnoma"</item>
     <item quantity="other">"%dbildirishnomalar"</item>
   </plurals>
+  <string name="notification_fallback_content">"Sizda yangi xabarlar bor."</string>
   <string name="notification_inline_reply_failed">"** Yuborilmadi - iltimos, xonani oching"</string>
   <string name="notification_invitation_action_join">"Qo\'shilish"</string>
+  <string name="notification_invitation_action_reject">"Rad etish"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%dtaklifnoma"</item>
     <item quantity="other">"%dtaklifnomalar"</item>

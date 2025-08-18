@@ -13,6 +13,7 @@
   <string name="screen_change_account_provider_other">"Autres"</string>
   <string name="screen_change_account_provider_subtitle">"Utilisez un autre fournisseur de compte, tel que votre propre serveur privé ou un serveur professionnel."</string>
   <string name="screen_change_account_provider_title">"Changer de fournisseur de compte"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"L’application Element Pro est requise sur %1$s. Veuillez la télécharger depuis le store."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro est requis"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nous n’avons pas pu atteindre ce serveur d’accueil. Vérifiez que vous avez correctement saisi l’URL du serveur d’accueil. Si l’URL est correcte, contactez l’administrateur de votre serveur d’accueil pour obtenir de l’aide."</string>

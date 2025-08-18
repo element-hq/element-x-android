@@ -23,6 +23,7 @@
   <string name="screen_room_attachment_source_poll">"So\'ro\'vnoma"</string>
   <string name="screen_room_attachment_text_formatting">"Matnni formatlash"</string>
   <string name="screen_room_encrypted_history_banner">"Xabarlar tarixi hozirda mavjud emas."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Xabar tarixi ushbu xonada mavjud emas. Xabar tarixini koʻrish uchun ushbu qurilmani tasdiqlang."</string>
   <string name="screen_room_invite_again_alert_message">"Ularni yana taklif qilmoqchimisiz?"</string>
   <string name="screen_room_invite_again_alert_title">"Siz bu chatda yolg\'izsiz"</string>
   <string name="screen_room_mentions_at_room_title">"Har kim"</string>
