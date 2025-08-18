@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -1242,11 +1243,59 @@ class ActionListPresenterTest {
             assertThat(target.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.ChangedIdentity(userDisplayName = "Alice"))
         }
     }
+
+    @Test
+    fun `present - compute for threaded timeline`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, timelineMode = Timeline.Mode.Thread(A_THREAD_ID))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                isEditable = false,
+                content = aTimelineItemVoiceContent(
+                    caption = null,
+                ),
+                threadInfo = EventThreadInfo(A_THREAD_ID, null)
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = true,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true
+                    )
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    sentTimeFull = "0 Full true",
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        // This is Reply, not ReplyInThread
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+        }
+    }
 }
 
 private fun createActionListPresenter(
     isDeveloperModeEnabled: Boolean,
     room: BaseRoom = FakeBaseRoom(),
+    timelineMode: Timeline.Mode = Timeline.Mode.Live,
 ): ActionListPresenter {
     val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
     return DefaultActionListPresenter(
@@ -1255,5 +1304,6 @@ private fun createActionListPresenter(
         room = room,
         userSendFailureFactory = VerifiedUserSendFailureFactory(room),
         dateFormatter = FakeDateFormatter(),
+        timelineMode = timelineMode,
     )
 }
