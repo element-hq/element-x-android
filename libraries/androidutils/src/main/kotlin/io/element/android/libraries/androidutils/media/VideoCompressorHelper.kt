@@ -38,7 +38,7 @@ class VideoCompressorHelper(
         val pixelsPerFrame = outputSize.width * outputSize.height
         // Apparently, 0.1 bits per pixel is a sweet spot for video compression
         val bitsPerPixel = 0.1f
-        return (pixelsPerFrame * bitsPerPixel * frameRate).toLong() / 1000
+        return (pixelsPerFrame * bitsPerPixel * frameRate).toLong()
     }
 }
 

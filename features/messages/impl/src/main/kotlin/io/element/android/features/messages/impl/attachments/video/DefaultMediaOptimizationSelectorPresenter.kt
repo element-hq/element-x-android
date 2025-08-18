@@ -84,25 +84,26 @@ class DefaultMediaOptimizationSelectorPresenter @AssistedInject constructor(
                 return@produceState
             }
 
-            val (videoDimensions, duration) = mediaExtractor.use {
+            val (videoDimensions, durationMs) = mediaExtractor.use {
                 val size = it.getSize()
                     .getOrElse { exception ->
                         value = AsyncData.Failure(exception)
                         return@produceState
                     }
 
-                val duration = it.getDuration()
+                val durationMs = it.getDuration()
                     .getOrElse { exception ->
                         value = AsyncData.Failure(exception)
                         return@produceState
                     }
-                size to duration
+                size to durationMs
             }
 
             val sizeEstimations = VideoCompressionPreset.entries
                 .map { preset ->
-                    val bitRate = preset.compressorHelper().calculateOptimalBitrate(videoDimensions, 30)
-                    val calculatedSize = (bitRate * duration / 8 * 1.1).roundToLong() // Adding 10% overhead for safety
+                    val bitRateAsBytes = preset.compressorHelper().calculateOptimalBitrate(videoDimensions, 30) / 8f
+                    val durationInSeconds = durationMs.toFloat() / 1_000
+                    val calculatedSize = (bitRateAsBytes * durationInSeconds * 1.1f).roundToLong() // Adding 10% overhead for safety
                     VideoUploadEstimation(
                         preset = preset,
                         sizeInBytes = calculatedSize,
