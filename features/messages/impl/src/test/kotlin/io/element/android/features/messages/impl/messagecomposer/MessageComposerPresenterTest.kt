@@ -1578,7 +1578,6 @@ class MessageComposerPresenterTest {
         pillificationHelper = textPillificationHelper,
         suggestionsProcessor = SuggestionsProcessor(),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
-        timeline = timeline,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled
