@@ -15,19 +15,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -36,6 +46,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -73,22 +84,49 @@ fun SelectedUser(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+            val closeRadius = 12.dp.toPx()
+            val closeOffset = 10.dp.toPx()
             Avatar(
                 avatarData = matrixUser.getAvatarData(size = AvatarSize.SelectedUser),
                 avatarType = AvatarType.User,
+                modifier = Modifier
+                    .graphicsLayer {
+                        compositingStrategy = CompositingStrategy.Offscreen
+                    }
+                    .drawWithContent {
+                        drawContent()
+                        if (canRemove) {
+                            val xOffset = if (isRtl) {
+                                closeOffset
+                            } else {
+                                size.width - closeOffset
+                            }
+                            drawCircle(
+                                color = Color.Black,
+                                center = Offset(
+                                    x = xOffset,
+                                    y = closeOffset,
+                                ),
+                                radius = closeRadius,
+                                blendMode = BlendMode.Clear,
+                            )
+                        }
+                    }
             )
             Text(
                 modifier = Modifier.clipToBounds(),
                 text = matrixUser.getBestName(),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 2,
-                style = ElementTheme.typography.fontBodyMdRegular,
+                style = MaterialTheme.typography.bodyMedium,
+                color = ElementTheme.colors.textSecondary,
                 textAlign = TextAlign.Center,
             )
         }
         if (canRemove) {
             Surface(
-                color = ElementTheme.colors.textPrimary,
+                color = ElementTheme.colors.bgActionPrimaryRest,
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(20.dp)
@@ -119,6 +157,20 @@ internal fun SelectedUserPreview() = ElementPreview {
         canRemove = true,
         onUserRemove = {},
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun SelectedUserRtlPreview() = CompositionLocalProvider(
+    LocalLayoutDirection provides LayoutDirection.Rtl,
+) {
+    ElementPreview {
+        SelectedUser(
+            aMatrixUser(displayName = "John Doe"),
+            canRemove = true,
+            onUserRemove = {},
+        )
+    }
 }
 
 @PreviewsDayNight
