@@ -38,5 +38,9 @@
   <string name="screen_room_timeline_reactions_show_less">"نمایش کم‌تر"</string>
   <string name="screen_room_timeline_reactions_show_more">"نمایش بیش‌تر"</string>
   <string name="screen_room_timeline_read_marker_title">"جدید"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$dتغییر اتاق"</item>
+    <item quantity="other">"%1$dتغییر اتاق"</item>
+  </plurals>
   <string name="screen_room_typing_two_members">"%1$s و %2$s"</string>
 </resources>

@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Hivatkozás eltávolítása"</string>
   <string name="rich_text_editor_unindent">"Behúzás nélkül"</string>
   <string name="rich_text_editor_url_placeholder">"Hivatkozás"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>
   <string name="screen_room_voice_message_tooltip">"Tartsa a rögzítéshez"</string>
 </resources>

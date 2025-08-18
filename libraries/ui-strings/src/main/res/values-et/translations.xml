@@ -335,6 +335,12 @@ Põhjus: %1$s."</string>
   <string name="common_verify_identity">"Verifitseeri võrguidentiteet"</string>
   <string name="common_verify_user">"Verifitseeri kasutaja"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Kõrge kvaliteet"</string>
+  <string name="common_video_quality_high_description">"Parim kvaliteet, aga suuremad failid"</string>
+  <string name="common_video_quality_low">"Madal kvaliteet"</string>
+  <string name="common_video_quality_low_description">"Parim üleslaadimiskiirus ja väikseim failisuurus"</string>
+  <string name="common_video_quality_standard">"Tavakvaliteet"</string>
+  <string name="common_video_quality_standard_description">"Kvaliteedi ja üleslaadimise kiiruse optimaalne proportsioon"</string>
   <string name="common_voice_message">"Häälsõnum"</string>
   <string name="common_waiting">"Ootame…"</string>
   <string name="common_waiting_for_decryption_key">"Ootame selle sõnumi dekrüptimisvõtit"</string>
@@ -349,6 +355,10 @@ Põhjus: %1$s."</string>
 
 Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="dialog_confirm_link_title">"Palun kontrolli seda linki mõttega"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Vali üleslaaditavate videote kvaliteeditase"</string>
+  <string name="dialog_default_video_quality_selector_title">"Videote kvaliteeditase"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Suurim lubatud failisuurus on: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"See fail on üleslaadimiseks liiga suur"</string>
   <string name="dialog_room_reported">"Teatasid jututoast"</string>
   <string name="dialog_room_reported_and_left">"Teatasid jututoast ja lahkusid sealt"</string>
   <string name="dialog_title_confirmation">"Kinnitus"</string>
@@ -357,6 +367,9 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="dialog_title_warning">"Hoiatus"</string>
   <string name="dialog_unsaved_changes_description_android">"Sinu tehtud muudatused pole veel salvestatud. Kas sa oled kindel, et soovid minna tagasi?"</string>
   <string name="dialog_unsaved_changes_title">"Kas salvestame muudatused?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Suurim lubatud failisuurus on: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vali üleslaaditava video kvaliteet."</string>
+  <string name="dialog_video_quality_selector_title">"Vali video kvaliteet."</string>
   <string name="error_account_creation_not_possible">"Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Service\'i tugi, vajab sinu koduserver uuendamist."</string>
   <string name="error_failed_creating_the_permalink">"Püsilingi loomine ei õnnestumud"</string>
   <string name="error_failed_loading_map">"%1$s kaardi laadimine ei õnnestunud. Palun proovi hiljem uuesti."</string>
@@ -407,6 +420,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Sinu sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Üks või enam sinu seadet on verifitseerimata. Sa võid sõnumi ikkagi ära saata või katkestad saatmise ning proovid uuesti, kui oled kõik oma seadmed verifitseerinud."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Kuna sul on üks või enam verifitseerimata seadet, siis sinu sõnum jäi saatmata"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Muuda peakasutajaid või omanikke"</string>
   <string name="screen_room_error_failed_processing_media">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kasutaja andmete laadimine ei õnnestunud"</string>
   <string name="screen_room_event_pill">"Sõnum jututoas %1$s"</string>

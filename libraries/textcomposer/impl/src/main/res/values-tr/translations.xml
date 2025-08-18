@@ -22,5 +22,6 @@
   <string name="rich_text_editor_remove_link">"Bağlantıyı kaldır"</string>
   <string name="rich_text_editor_unindent">"Girintiyi kaldır"</string>
   <string name="rich_text_editor_url_placeholder">"Bağlantı"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Açıklamalar, eski uygulamaları kullanan kişiler tarafından görülemeyebilir."</string>
   <string name="screen_room_voice_message_tooltip">"Kaydetmek için basılı tut"</string>
 </resources>

@@ -7,6 +7,10 @@
   <string name="screen_join_room_cancel_knock_alert_confirmation">"是的，取消"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"您确定要取消加入此房间的请求吗？"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"取消加入申请"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"是的，拒绝并屏蔽"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"您确定要拒绝加入此房间的邀请吗？这也将阻止%1$s 与您联系或邀请您加入房间。"</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"拒绝邀请并屏蔽"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"拒绝并屏蔽"</string>
   <string name="screen_join_room_fail_message">"加入房间失败。"</string>
   <string name="screen_join_room_fail_reason">"要么此房间仅限受邀者，要么可能在空间层级有加入限制。"</string>
   <string name="screen_join_room_forget_action">"忘记这个房间"</string>
@@ -17,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"消息（可选）"</string>
   <string name="screen_join_room_knock_sent_description">"如果您的请求被接受，您将收到加入房间的邀请。"</string>
   <string name="screen_join_room_knock_sent_title">"加入请求已发送"</string>
+  <string name="screen_join_room_loading_alert_message">"无法显示房间预览。这可能是由于网络或服务器问题造成的。"</string>
+  <string name="screen_join_room_loading_alert_title">"无法显示此房间预览"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s 尚不支持空间。您可以通过 Web 端访问空间"</string>
   <string name="screen_join_room_space_not_supported_title">"空间尚不支持"</string>
   <string name="screen_join_room_subtitle_knock">"点击下面的按钮，系统将通知聊天室管理员。获得批准后将能够加入对话。"</string>

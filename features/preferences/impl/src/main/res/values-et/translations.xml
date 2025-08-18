@@ -13,6 +13,13 @@
   <string name="screen_advanced_settings_media_compression_description">"Sellega laadid fotosid ja videoid kiiremini üles ning vähendad andmemahtu"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimeeri meedia kvaliteeti"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Modereerimine ja ohutus"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Kiirema üleslaadimise ja väiksemate failide nimel optimeeri pilte automaatselt."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimeeri üleslaaditavate piltide kvaliteeti."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Muutmiseks klõpsi siin."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Kõrge (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Madal (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Üleslaaditavate videote kvaliteet"</string>
   <string name="screen_advanced_settings_push_provider_android">"Tõuketeavituste pakkuja"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Kui soovid Markdown-vormingut käsitsi lisada, siis lülita vormindatud teksti toimeti välja."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Lugemisteatised"</string>

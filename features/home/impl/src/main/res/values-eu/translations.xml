@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"Desgaitu bateriaren optimizazioa aplikazio honentzat, ziurtatzeko jakinarazpen guztiak jasoko direla."</string>
+  <string name="banner_battery_optimization_submit_android">"Desgaitu optimizazioa"</string>
+  <string name="banner_battery_optimization_title_android">"Jakinarazpenak ez dira iristen?"</string>
   <string name="banner_set_up_recovery_submit">"Konfiguratu berreskurapena"</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Sartu zure berreskuratze-gakoa"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Berreskuratze-gakoa ahaztu al duzu?"</string>
@@ -15,6 +18,7 @@
   <string name="screen_migration_message">"Behin egin beharreko prozesua da; eskerrik asko itxaroteagatik."</string>
   <string name="screen_migration_title">"Zure kontua konfiguratzen."</string>
   <string name="screen_roomlist_a11y_create_message">"Sortu elkarrizketa edo gela berria"</string>
+  <string name="screen_roomlist_clear_filters">"Garbitu iragazkiak"</string>
   <string name="screen_roomlist_empty_message">"Hasi norbaiti mezuak bidaltzen."</string>
   <string name="screen_roomlist_empty_title">"Oraindik ez dago txatik."</string>
   <string name="screen_roomlist_filter_favourites">"Gogokoak"</string>

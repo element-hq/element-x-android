@@ -13,6 +13,7 @@
     <item quantity="one">"%d اطلاع"</item>
     <item quantity="other">"%d اطلاعات"</item>
   </plurals>
+  <string name="notification_fallback_content">"آپ کے لیے نئے پیغامات ہیں۔"</string>
   <string name="notification_incoming_call">"📹 آنے والا مکالمہ"</string>
   <string name="notification_inline_reply_failed">"** بھیجنے میں ناکام - براہ کرم کمرہ کھولیں"</string>
   <string name="notification_invitation_action_join">"شامل ہوں"</string>
@@ -22,6 +23,7 @@
     <item quantity="other">"%d دعوت نامے"</item>
   </plurals>
   <string name="notification_invite_body">"آپ کو گفتگو کیلئے مدعو کیا"</string>
+  <string name="notification_invite_body_with_sender">"%1$s نے آپ کو چیٹ کے لیے مدعو کیا"</string>
   <string name="notification_mentioned_you_body">"آپ کا تذکرہ کیا: %1$s"</string>
   <string name="notification_new_messages">"نئے پیغامات"</string>
   <plurals name="notification_new_messages_for_room">
@@ -32,7 +34,9 @@
   <string name="notification_room_action_mark_as_read">"بطور مقروءہ نشانزد کریں"</string>
   <string name="notification_room_action_quick_reply">"فوری جواب"</string>
   <string name="notification_room_invite_body">"آپ کو کمرے میں شامل ہونے کی دعوت دی"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s نے آپ کو روم میں شامل ہونے کی دعوت دی"</string>
   <string name="notification_sender_me">"میں"</string>
+  <string name="notification_sender_mention_reply">"%1$s نے ذکر کیا یا جواب دیا"</string>
   <string name="notification_test_push_notification_content">"آپ اطلاع دیکھ رہے ہیں! مجھے دبائیں!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

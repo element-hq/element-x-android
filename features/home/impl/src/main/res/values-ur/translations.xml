@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"اگر آپ اپنے تمام موجودہ آلات کھو چکے ہیں تو ایک recovery key کے ذریعہ اپنی کرپٹوگرافک شناخت اور پیغام کی سرگزشت کو دوبارہ حاصل کریں۔"</string>
   <string name="banner_set_up_recovery_submit">"بازیابی مرتب کریں"</string>
+  <string name="banner_set_up_recovery_title">"اپنے اکاؤنٹ کی حفاظت کے لیے ریکوری طے کریں"</string>
   <string name="confirm_recovery_key_banner_message">"اپنے کلید کے ذخیرہ اور پیغام کی سرگزشت تک رسائی کو برقرار رکھنے کیلئے اپنی بازیابی کلید کی تصدیق کریں۔"</string>
   <string name="confirm_recovery_key_banner_title">"آپ کا کلید کا ذخیرہ غیر ہم وقت ساز ہے۔"</string>
   <string name="full_screen_intent_banner_message">"اس بات کو یقینی بنانے کے لیے کہ آپ کبھی بھی اہم مکالمہ سے محروم نہ ہوں، براہ کرم اپنی ترتیبات تبدیل کریں تاکہ آپ کا ہاتف مقفل ہونے پر مکمل پردۂ نمائش اطلاعات کی اجازت دی جا سکے۔"</string>

@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"删除链接"</string>
   <string name="rich_text_editor_unindent">"取消缩进"</string>
   <string name="rich_text_editor_url_placeholder">"链接"</string>
+  <string name="screen_media_upload_preview_caption_warning">"使用旧版应用程序的用户可能无法看到字幕。"</string>
   <string name="screen_room_voice_message_tooltip">"按住录制"</string>
 </resources>

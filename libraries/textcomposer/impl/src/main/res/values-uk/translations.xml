@@ -26,5 +26,6 @@
   <string name="rich_text_editor_remove_link">"Видалити посилання"</string>
   <string name="rich_text_editor_unindent">"Без відступу"</string>
   <string name="rich_text_editor_url_placeholder">"Посилання"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Користувачі старих застосунків можуть не бачити підписи."</string>
   <string name="screen_room_voice_message_tooltip">"Затисніть, щоб записати"</string>
 </resources>

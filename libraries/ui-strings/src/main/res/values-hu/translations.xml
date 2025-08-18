@@ -88,6 +88,7 @@
   <string name="action_enable">"Engedélyezés"</string>
   <string name="action_end_poll">"Szavazás lezárása"</string>
   <string name="action_enter_pin">"Adja meg a PIN-kódot"</string>
+  <string name="action_finish">"Befejezés"</string>
   <string name="action_forgot_password">"Elfelejtette a jelszót?"</string>
   <string name="action_forward">"Tovább"</string>
   <string name="action_go_back">"Visszalépés"</string>
@@ -300,6 +301,7 @@ Ok: %1$s."</string>
   <string name="common_signing_out">"Kijelentkezés"</string>
   <string name="common_something_went_wrong">"Valamilyen hiba történt"</string>
   <string name="common_something_went_wrong_message">"Problémába ütköztünk. Próbálja újra."</string>
+  <string name="common_space">"Tér"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d tér"</item>
     <item quantity="other">"%1$d tér"</item>

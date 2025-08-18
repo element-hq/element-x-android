@@ -13,6 +13,7 @@
   <string name="screen_change_account_provider_other">"Anden"</string>
   <string name="screen_change_account_provider_subtitle">"Brug en anden kontoudbyder, f.eks. din egen private server eller en arbejdskonto."</string>
   <string name="screen_change_account_provider_title">"Skift kontoudbyder"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Element Pro-appen er påkrævet på %1$s Download den venligst fra din app store."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro kræves"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Vi kunne ikke nå denne hjemmeserver. Kontroller, at du har indtastet hjemmeserverens URL korrekt. Hvis URL-adressen er korrekt, skal du kontakte administratoren på din hjemmeserver for at få yderligere hjælp."</string>

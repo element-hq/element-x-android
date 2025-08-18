@@ -13,6 +13,10 @@
   <string name="screen_advanced_settings_media_compression_description">"Швидше завантажуйте фотографії та відео та зменшуйте використання даних"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимізуйте медіаякість"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерування й безпека"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Висока (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Низька (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Стандартна (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Якість вивантаження відео"</string>
   <string name="screen_advanced_settings_push_provider_android">"Постачальник push-сповіщень"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Вимкніть редактор розширеного тексту, щоб вводити Markdown вручну."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Читати журнали"</string>

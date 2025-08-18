@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_decline_and_block_block_user_option_title">"Blokeatu erabiltzailea"</string>
+  <string name="screen_decline_and_block_title">"Eman ezetza eta blokeatu"</string>
   <string name="screen_invites_decline_chat_message">"Ziur %1$s(e)ra batzeko gonbidapena baztertu nahi duzula?"</string>
   <string name="screen_invites_decline_chat_title">"Baztertu gonbidapena"</string>
   <string name="screen_invites_decline_direct_chat_message">"Ziur %1$s(r)en txat pribatua baztertu nahi duzula?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Baztertu txata"</string>
   <string name="screen_invites_empty_list">"Ez dago gonbidapenik"</string>
   <string name="screen_invites_invited_you">"%1$s(e)k (%2$s) gonbidatu zaitu"</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Eman gonbidapenari ezetza eta blokeatu"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Eman ezetza eta blokeatu"</string>
 </resources>

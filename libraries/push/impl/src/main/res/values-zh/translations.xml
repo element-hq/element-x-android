@@ -56,6 +56,7 @@
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
     <item quantity="other">"找到了 %1$d 个推送提供者：%2$s"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"该应用程序支持：%1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"检测推送提供者"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"检查应用程序是否可以显示通知。"</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"通知未被点击。"</string>
