@@ -33,8 +33,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Gorde gabeko aldaketak dituzu."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Aldaketak gorde?"</string>
   <string name="screen_room_details_add_topic_title">"Gehitu hizketagaia"</string>
-  <string name="screen_room_details_already_a_member">"Kidea da dagoeneko"</string>
-  <string name="screen_room_details_already_invited">"Lehendik ere gonbidatuta"</string>
   <string name="screen_room_details_badge_encrypted">"Zifratuta"</string>
   <string name="screen_room_details_badge_not_encrypted">"Zifratu gabe"</string>
   <string name="screen_room_details_badge_public">"Gela publikoa"</string>

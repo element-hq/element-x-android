@@ -15,9 +15,4 @@
   <string name="screen_create_room_room_visibility_section_title">"Видимост на стаята"</string>
   <string name="screen_create_room_title">"Създаване на стая"</string>
   <string name="screen_create_room_topic_label">"Тема за разговор (незадължително)"</string>
-  <string name="screen_start_chat_join_room_by_address_action">"Присъединяване към стая по адрес"</string>
-  <string name="screen_start_chat_join_room_by_address_invalid_address">"Не е валиден адрес"</string>
-  <string name="screen_start_chat_join_room_by_address_placeholder">"Въведете…"</string>
-  <string name="screen_start_chat_join_room_by_address_room_not_found">"Стаята не е намерена"</string>
-  <string name="screen_start_chat_join_room_by_address_supporting_text">"напр. #room-name:matrix.org"</string>
 </resources>

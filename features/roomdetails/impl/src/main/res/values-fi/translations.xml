@@ -39,8 +39,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Sinulla on tallentamattomia muutoksia"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Tallenna muutokset?"</string>
   <string name="screen_room_details_add_topic_title">"Lisää aihe"</string>
-  <string name="screen_room_details_already_a_member">"On jo jäsen"</string>
-  <string name="screen_room_details_already_invited">"On jo kutsuttu"</string>
   <string name="screen_room_details_badge_encrypted">"Salattu"</string>
   <string name="screen_room_details_badge_not_encrypted">"Ei salattu"</string>
   <string name="screen_room_details_badge_public">"Julkinen huone"</string>

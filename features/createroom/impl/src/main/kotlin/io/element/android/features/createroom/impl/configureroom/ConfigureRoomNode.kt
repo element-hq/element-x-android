@@ -18,19 +18,20 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.createroom.CreateRoomNavigator
-import io.element.android.features.createroom.impl.di.CreateRoomScope
-import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
 
-@ContributesNode(CreateRoomScope::class)
+@ContributesNode(SessionScope::class)
 class ConfigureRoomNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: ConfigureRoomPresenter,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-    private val navigator = plugins<CreateRoomNavigator>().first()
+    interface Callback : Plugin {
+        fun onCreateRoomSuccess(roomId: RoomId)
+    }
 
     init {
         lifecycle.subscribe(
@@ -40,6 +41,10 @@ class ConfigureRoomNode @AssistedInject constructor(
         )
     }
 
+    private fun onCreateRoomSuccess(roomId: RoomId) {
+        plugins<Callback>().forEach { it.onCreateRoomSuccess(roomId) }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -47,9 +52,7 @@ class ConfigureRoomNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onBackClick = this::navigateUp,
-            onCreateRoomSuccess = {
-                navigator.onOpenRoom(roomIdOrAlias = it.toRoomIdOrAlias(), serverNames = emptyList())
-            },
+            onCreateRoomSuccess = ::onCreateRoomSuccess,
         )
     }
 }

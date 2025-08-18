@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Gela berria"</string>
+  <string name="screen_room_directory_search_title">"Gelen direktorioa"</string>
+  <string name="screen_start_chat_error_starting_chat">"Errorea gertatu da txata hasten saiatzean"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Ez da baliozko helbidea"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Sartu…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Ez da gela aurkitu"</string>
+</resources>

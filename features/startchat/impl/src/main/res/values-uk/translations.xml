@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Нова кімната"</string>
+  <string name="screen_room_directory_search_title">"Каталог кімнат"</string>
+  <string name="screen_start_chat_error_starting_chat">"Під час спроби почати бесіду сталася помилка"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Приєднатися до кімнати за адресою"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Недійсна адреса"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Введіть…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Знайдено відповідну кімнату"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Кімната не знайдена"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"наприклад, #room-name:matrix.org"</string>
+</resources>
