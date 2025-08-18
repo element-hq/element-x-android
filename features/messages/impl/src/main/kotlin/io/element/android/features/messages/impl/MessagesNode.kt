@@ -94,9 +94,12 @@ class MessagesNode @AssistedInject constructor(
     private val timelineController = TimelineController(room, room.liveTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
-        composerPresenter = messageComposerPresenterFactory.create(room.liveTimeline, this),
+        composerPresenter = messageComposerPresenterFactory.create(timelineController, this),
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
-        actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default),
+        actionListPresenter = actionListPresenterFactory.create(
+            postProcessor = TimelineItemActionPostProcessor.Default,
+            timelineMode = timelineController.mainTimelineMode()
+        ),
         timelineController = timelineController,
     )
     private val callbacks = plugins<Callback>()

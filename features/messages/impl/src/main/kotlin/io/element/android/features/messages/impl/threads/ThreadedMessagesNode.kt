@@ -102,10 +102,13 @@ class ThreadedMessagesNode @AssistedInject constructor(
     private val timelineController = TimelineController(room, threadedTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
-        composerPresenter = messageComposerPresenterFactory.create(threadedTimeline, this),
+        composerPresenter = messageComposerPresenterFactory.create(timelineController, this),
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
         // TODO add special processor for threaded timeline
-        actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default),
+        actionListPresenter = actionListPresenterFactory.create(
+            postProcessor = TimelineItemActionPostProcessor.Default,
+            timelineMode = timelineController.mainTimelineMode(),
+        ),
         timelineController = timelineController,
     )
 
