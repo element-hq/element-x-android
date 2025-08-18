@@ -94,9 +94,9 @@ enum class FeatureFlags(
         isFinished = false,
     ),
     HideThreadedEvents(
-        key = "feature.hide_threaded_events",
-        title = "Hide threaded events in the timeline",
-        description = "Hide threaded events in the timeline, only showing the thread summary.",
+        key = "feature.thread_timeline",
+        title = "Threads",
+        description = "Renders thread messages as a dedicated timeline. Restarting the app is required for this setting to fully take effect.",
         defaultValue = { false },
         isFinished = false,
     )
