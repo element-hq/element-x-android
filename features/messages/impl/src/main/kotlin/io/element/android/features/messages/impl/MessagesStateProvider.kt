@@ -43,8 +43,10 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import kotlinx.collections.immutable.persistentListOf
@@ -84,6 +86,10 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(roomName = "A DM with a very looong name", dmUserVerificationState = IdentityState.Verified),
             aMessagesState(roomName = "A DM with a very looong name", dmUserVerificationState = IdentityState.VerificationViolation),
             aMessagesState(successorRoom = SuccessorRoom(RoomId("!id:domain"), null)),
+            aMessagesState(timelineState = aTimelineState(
+                timelineMode = Timeline.Mode.Thread(threadRootId = ThreadId("\$a-thread-id")),
+                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+            )),
         )
 }
 
