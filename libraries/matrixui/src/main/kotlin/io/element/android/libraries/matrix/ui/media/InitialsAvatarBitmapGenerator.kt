@@ -30,19 +30,21 @@ import io.element.android.compound.tokens.generated.compoundColorsDark
 import io.element.android.compound.tokens.generated.compoundColorsLight
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
  * Generates a bitmap for an initials avatar based on the provided [AvatarData].
  */
 class InitialsAvatarBitmapGenerator(
-    isLightTheme: Boolean = true,
+    useDarkTheme: Boolean = false,
     private val fontSizePercentage: Float = 0.5f,
 ) {
-    private val compoundColors: SemanticColors = if (isLightTheme) {
-        compoundColorsLight
-    } else {
+    private val compoundColors: SemanticColors = if (useDarkTheme) {
         compoundColorsDark
+    } else {
+        compoundColorsLight
     }
 
     // List of predefined avatar colors to use for initials avatars, in light mode
@@ -113,16 +115,18 @@ class InitialsAvatarBitmapGenerator(
 }
 
 @Composable
-@Preview(showBackground = true)
+@PreviewsDayNight
 internal fun InitialsAvatarBitmapGeneratorPreview() {
-    val avatarData = remember { AvatarData(id = "test", name = "Avatar", size = AvatarSize.IncomingCall) }
-    val isLightTheme = ElementTheme.isLightTheme
-    val bitmap = remember(isLightTheme) {
-        val generator = InitialsAvatarBitmapGenerator(isLightTheme = isLightTheme)
-        generator.generateBitmap(512, avatarData)?.asImageBitmap()
-    }
+    ElementPreview {
+        val avatarData = remember { AvatarData(id = "test", name = "Avatar", size = AvatarSize.IncomingCall) }
+        val isLightTheme = ElementTheme.isLightTheme
+        val bitmap = remember(isLightTheme) {
+            val generator = InitialsAvatarBitmapGenerator(useDarkTheme = !isLightTheme)
+            generator.generateBitmap(512, avatarData)?.asImageBitmap()
+        }
 
-    bitmap?.let {
-        Image(bitmap = it, contentDescription = "Initials Avatar", modifier = Modifier.background(Color.Red).size(48.dp))
-    } ?: Text("No avatar generated")
+        bitmap?.let {
+            Image(bitmap = it, contentDescription = "Initials Avatar", modifier = Modifier.size(48.dp))
+        } ?: Text("No avatar generated")
+    }
 }

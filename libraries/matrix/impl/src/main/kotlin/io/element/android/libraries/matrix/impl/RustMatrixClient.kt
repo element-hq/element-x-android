@@ -106,6 +106,7 @@ import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
+import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.RoomInfoListener
@@ -274,6 +275,7 @@ class RustMatrixClient(
     }
 
     override suspend fun getRoom(roomId: RoomId): BaseRoom? = withContext(sessionDispatcher) {
+        innerClient.rooms()
         roomFactory.getBaseRoom(roomId)
     }
 
@@ -305,6 +307,15 @@ class RustMatrixClient(
     override suspend fun findDM(userId: UserId): Result<RoomId?> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.getDmRoom(userId.value)?.use { RoomId(it.id()) }
+        }
+    }
+
+    override suspend fun getJoinedRoomIds(): Result<Set<RoomId>> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.rooms()
+                .filter { it.membership() == Membership.JOINED }
+                .map { RoomId(it.id()) }
+                .toSet()
         }
     }
 

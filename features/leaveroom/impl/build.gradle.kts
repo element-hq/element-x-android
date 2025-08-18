@@ -24,6 +24,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.push.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -32,5 +33,6 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.push.test)
     testImplementation(projects.tests.testutils)
 }

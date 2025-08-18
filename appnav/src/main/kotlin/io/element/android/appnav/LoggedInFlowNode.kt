@@ -81,6 +81,7 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
+import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -121,6 +122,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val mediaPreviewConfigMigration: MediaPreviewConfigMigration,
     private val sessionEnterpriseService: SessionEnterpriseService,
     private val networkMonitor: NetworkMonitor,
+    private val notificationConversationService: NotificationConversationService,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -205,6 +207,12 @@ class LoggedInFlowNode @AssistedInject constructor(
                         }
                     }
                     .launchIn(lifecycleScope)
+            },
+            onResume = {
+                lifecycleScope.launch {
+                    val availableRoomIds = matrixClient.getJoinedRoomIds().getOrNull() ?: return@launch
+                    notificationConversationService.onAvailableRoomsChanged(sessionId = matrixClient.sessionId, roomIds = availableRoomIds)
+                }
             },
             onDestroy = {
                 appNavigationStateService.onLeavingSpace(id)

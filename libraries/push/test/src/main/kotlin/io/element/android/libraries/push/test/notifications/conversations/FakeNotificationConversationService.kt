@@ -21,4 +21,8 @@ class FakeNotificationConversationService : NotificationConversationService {
         roomAvatarUrl: String?,
         threadId: ThreadId?,
     ) = Unit
+
+    override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) = Unit
+
+    override suspend fun onAvailableRoomsChanged(sessionId: SessionId, roomIds: Set<RoomId>) = Unit
 }

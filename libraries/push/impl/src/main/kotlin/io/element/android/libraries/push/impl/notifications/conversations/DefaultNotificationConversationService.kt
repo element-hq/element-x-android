@@ -9,6 +9,7 @@ package io.element.android.libraries.push.impl.notifications.conversations
 
 import android.content.Context
 import android.content.pm.ShortcutInfo
+import android.content.res.Configuration
 import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -49,15 +50,17 @@ class DefaultNotificationConversationService @Inject constructor(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION else null
         )
 
-        val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return
         val imageLoader = imageLoaderHolder.get(client)
-        val icon = bitmapLoader.getRoomBitmap(roomAvatarUrl, imageLoader)?.let(IconCompat::createWithBitmap)
-            ?: InitialsAvatarBitmapGenerator()
-                .generateBitmap(512, AvatarData(id = roomId.value, name = roomName, size = AvatarSize.RoomHeader))?.let(
-                IconCompat::createWithAdaptiveBitmap
-            )
 
-        val shortcutInfo = ShortcutInfoCompat.Builder(context, roomId.value)
+        val defaultShortcutIconSize = ShortcutManagerCompat.getIconMaxWidth(context)
+        val useDarkTheme = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        val icon = bitmapLoader.getRoomBitmap(roomAvatarUrl, imageLoader)?.let(IconCompat::createWithBitmap)
+            ?: InitialsAvatarBitmapGenerator(useDarkTheme = useDarkTheme)
+                .generateBitmap(defaultShortcutIconSize, AvatarData(id = roomId.value, name = roomName, size = AvatarSize.RoomHeader))
+                ?.let(IconCompat::createWithAdaptiveBitmap)
+
+        val shortcutInfo = ShortcutInfoCompat.Builder(context, "$sessionId-$roomId")
             .setShortLabel(roomName)
             .setIcon(icon)
             .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null))
@@ -72,5 +75,28 @@ class DefaultNotificationConversationService @Inject constructor(
             .build()
 
         ShortcutManagerCompat.pushDynamicShortcut(context, shortcutInfo)
+    }
+
+    override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) {
+        ShortcutManagerCompat.removeDynamicShortcuts(context, listOf("$sessionId-$roomId"))
+    }
+
+    override suspend fun onAvailableRoomsChanged(sessionId: SessionId, roomIds: Set<RoomId>) {
+        val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return
+
+        val shortcutsToRemove = mutableListOf<String>()
+        val existingRoomIds = client.getJoinedRoomIds().getOrNull() ?: return
+        shortcuts.filter { it.id.startsWith(sessionId.value) }
+            .forEach { shortcut ->
+                val roomId = RoomId(shortcut.id.removePrefix("$sessionId-"))
+                if (!existingRoomIds.contains(roomId)) {
+                    shortcutsToRemove.add(shortcut.id)
+                }
+            }
+
+        if (shortcutsToRemove.isNotEmpty()) {
+            ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)
+        }
     }
 }
