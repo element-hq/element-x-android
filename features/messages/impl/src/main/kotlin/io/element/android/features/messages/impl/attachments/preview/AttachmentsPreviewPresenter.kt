@@ -32,7 +32,6 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -47,7 +46,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.coroutines.coroutineContext
 
 class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
@@ -304,20 +302,11 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         dismissAfterSend: Boolean,
         inReplyToEventId: EventId?,
     ) = runCatchingExceptions {
-        val context = coroutineContext
-        val progressCallback = object : ProgressCallback {
-            override fun onProgress(current: Long, total: Long) {
-                // Note will not happen if useSendQueue is true
-                if (context.isActive) {
-                    sendActionState.value = SendActionState.Sending.Uploading(current.toFloat() / total.toFloat(), mediaUploadInfo)
-                }
-            }
-        }
+        sendActionState.value = SendActionState.Sending.Uploading(mediaUploadInfo)
         mediaSender.sendPreProcessedMedia(
             mediaUploadInfo = mediaUploadInfo,
             caption = caption,
             formattedCaption = null,
-            progressCallback = progressCallback,
             inReplyToEventId = inReplyToEventId,
         ).getOrThrow()
     }.fold(

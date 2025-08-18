@@ -11,7 +11,6 @@ import android.net.Uri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -50,10 +49,9 @@ class MediaSenderTest {
                         FileInfo,
                         String?,
                         String?,
-                        ProgressCallback?,
                         EventId?,
                         Result<FakeMediaUploadHandler>,
-                        > { _, _, _, _, _, _ ->
+                        > { _, _, _, _, _ ->
                         Result.success(FakeMediaUploadHandler())
                     }
                 },
@@ -69,7 +67,7 @@ class MediaSenderTest {
     @Test
     fun `given an attachment when sending it the Room will call sendMedia`() = runTest {
         val sendImageResult =
-            lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: ProgressCallback?, _: EventId? ->
+            lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: EventId? ->
                 Result.success(FakeMediaUploadHandler())
             }
         val room = FakeJoinedRoom(
@@ -102,7 +100,7 @@ class MediaSenderTest {
             givenImageResult()
         }
         val sendImageResult =
-            lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: ProgressCallback?, _: EventId? ->
+            lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: EventId? ->
                 Result.failure<FakeMediaUploadHandler>(Exception())
             }
         val room = FakeJoinedRoom(
@@ -125,7 +123,7 @@ class MediaSenderTest {
     @Test
     fun `given a cancellation in the media upload when sending the job is cancelled`() = runTest(StandardTestDispatcher()) {
         val sendFileResult =
-            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder<File, FileInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
                 Result.success(FakeMediaUploadHandler())
             }
         val room = FakeJoinedRoom(

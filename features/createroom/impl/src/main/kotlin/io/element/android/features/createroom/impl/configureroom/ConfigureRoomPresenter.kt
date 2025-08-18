@@ -203,6 +203,6 @@ class ConfigureRoomPresenter @Inject constructor(
             mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
         ).getOrThrow()
         val byteArray = preprocessed.file.readBytes()
-        return matrixClient.uploadMedia(MimeTypes.Jpeg, byteArray, null).getOrThrow()
+        return matrixClient.uploadMedia(MimeTypes.Jpeg, byteArray).getOrThrow()
     }
 }

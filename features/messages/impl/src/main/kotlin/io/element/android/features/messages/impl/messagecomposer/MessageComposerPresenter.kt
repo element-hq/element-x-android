@@ -510,7 +510,6 @@ class MessageComposerPresenter @AssistedInject constructor(
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
-            progressCallback = null,
             mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
         ).getOrThrow()
     }

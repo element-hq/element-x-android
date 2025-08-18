@@ -26,7 +26,6 @@ import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -90,17 +89,11 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send media success scenario`() = runTest {
         val sendFileResult =
-            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder<File, FileInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
                 Result.success(FakeMediaUploadHandler())
             }
         val room = FakeJoinedRoom(
-            liveTimeline = FakeTimeline(
-                progressCallbackValues = listOf(
-                    Pair(0, 10),
-                    Pair(5, 10),
-                    Pair(10, 10)
-                ),
-            ).apply {
+            liveTimeline = FakeTimeline().apply {
                 sendFileLambda = sendFileResult
             },
         )
@@ -120,9 +113,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = true))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0f, mediaUploadInfo))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0.5f, mediaUploadInfo))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(1f, mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -133,7 +124,7 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send media after pre-processing success scenario`() = runTest {
         val sendFileResult =
-            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder<File, FileInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
                 Result.success(FakeMediaUploadHandler())
             }
         val room = FakeJoinedRoom(
@@ -160,6 +151,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -170,7 +162,7 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send media before pre-processing success scenario`() = runTest {
         val sendFileResult =
-            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder<File, FileInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
                 Result.success(FakeMediaUploadHandler())
             }
         val room = FakeJoinedRoom(
@@ -197,6 +189,7 @@ class AttachmentsPreviewPresenterTest {
             processLatch.complete(Unit)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = true))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -281,7 +274,7 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send image with caption success scenario`() = runTest {
         val sendImageResult =
-            lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: ProgressCallback?, _: EventId? ->
+            lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: EventId? ->
                 Result.success(FakeMediaUploadHandler())
             }
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
@@ -307,13 +300,13 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.ReadyToUpload::class.java)
+            assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.Uploading::class.java)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendImageResult.assertions().isCalledOnce().with(
                 any(),
                 any(),
                 any(),
                 value(A_CAPTION),
-                any(),
                 any(),
                 any(),
             )
@@ -324,7 +317,7 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send video with caption success scenario`() = runTest {
         val sendVideoResult =
-            lambdaRecorder { _: File, _: File?, _: VideoInfo, _: String?, _: String?, _: ProgressCallback?, _: EventId? ->
+            lambdaRecorder { _: File, _: File?, _: VideoInfo, _: String?, _: String?, _: EventId? ->
                 Result.success(FakeMediaUploadHandler())
             }
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
@@ -350,13 +343,13 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.ReadyToUpload::class.java)
+            assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.Uploading::class.java)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendVideoResult.assertions().isCalledOnce().with(
                 any(),
                 any(),
                 any(),
                 value(A_CAPTION),
-                any(),
                 any(),
                 any(),
             )
@@ -367,7 +360,7 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send audio with caption success scenario`() = runTest {
         val sendAudioResult =
-            lambdaRecorder<File, AudioInfo, String?, String?, ProgressCallback?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder<File, AudioInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
                 Result.success(FakeMediaUploadHandler())
             }
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
@@ -391,12 +384,12 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.ReadyToUpload::class.java)
+            assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.Uploading::class.java)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendAudioResult.assertions().isCalledOnce().with(
                 any(),
                 any(),
                 value(A_CAPTION),
-                any(),
                 any(),
                 any(),
             )
@@ -408,7 +401,7 @@ class AttachmentsPreviewPresenterTest {
     fun `present - send media failure scenario`() = runTest {
         val failure = MediaPreProcessor.Failure(null)
         val sendFileResult =
-            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder<File, FileInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
                 Result.failure(failure)
             }
         val onDoneListenerResult = lambdaRecorder<Unit> {}
@@ -426,6 +419,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
 
             // Check that the onDoneListener is called so the screen would be dismissed
             onDoneListenerResult.assertions().isCalledOnce()
@@ -445,7 +439,7 @@ class AttachmentsPreviewPresenterTest {
         val presenter = createAttachmentsPreviewPresenter(
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
-                    sendFileLambda = { _, _, _, _, _, _ ->
+                    sendFileLambda = { _, _, _, _, _ ->
                         Result.success(FakeMediaUploadHandler())
                     }
                 }
@@ -460,7 +454,9 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
             initialState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
             // The sending is cancelled and the state is kept at ReadyToUpload
             ensureAllEventsConsumed()
 
@@ -480,7 +476,7 @@ class AttachmentsPreviewPresenterTest {
             localMedia = localMedia,
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
-                    sendFileLambda = { _, _, _, _, _, _ ->
+                    sendFileLambda = { _, _, _, _, _ ->
                         Result.success(FakeMediaUploadHandler())
                     }
                 }
@@ -521,7 +517,7 @@ class AttachmentsPreviewPresenterTest {
             localMedia = localMedia,
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
-                    sendFileLambda = { _, _, _, _, _, _ ->
+                    sendFileLambda = { _, _, _, _, _ ->
                         Result.success(FakeMediaUploadHandler())
                     }
                 }

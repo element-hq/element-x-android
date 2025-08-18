@@ -17,10 +17,7 @@ class SendActionStateTest {
     @Test
     fun `mediaUploadInfo() should return the value from Uploading class`() {
         val mediaUploadInfo: MediaUploadInfo = aMediaUploadInfo()
-        val state: SendActionState = SendActionState.Sending.Uploading(
-            progress = 0.5f,
-            mediaUploadInfo = aMediaUploadInfo()
-        )
+        val state: SendActionState = SendActionState.Sending.Uploading(mediaUploadInfo = aMediaUploadInfo())
         assertThat(state.mediaUploadInfo()).isEqualTo(mediaUploadInfo)
     }
 }

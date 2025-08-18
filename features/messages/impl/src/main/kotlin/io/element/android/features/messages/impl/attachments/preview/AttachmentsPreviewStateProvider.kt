@@ -39,7 +39,7 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
             ),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Processing(displayProgress = true)),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(aMediaUploadInfo())),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(0.5f, aMediaUploadInfo())),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(aMediaUploadInfo())),
             anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"), aMediaUploadInfo())),
             anAttachmentsPreviewState(displayFileTooLargeError = true),
             anAttachmentsPreviewState(
