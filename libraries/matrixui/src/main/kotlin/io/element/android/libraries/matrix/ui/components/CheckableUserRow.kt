@@ -50,6 +50,7 @@ fun CheckableUserRow(
                     avatarData = data.avatarData,
                     name = data.name,
                     subtext = data.subtext,
+                    enabled = enabled,
                 )
             }
             is CheckableUserRowData.Unresolved -> {
@@ -57,11 +58,12 @@ fun CheckableUserRow(
                     modifier = rowModifier,
                     avatarData = data.avatarData,
                     id = data.id,
+                    enabled = enabled,
                 )
             }
         }
         SelectedIndicatorAtom(
-            modifier = modifier.padding(end = 24.dp),
+            modifier = Modifier.padding(end = 24.dp),
             checked = checked,
             enabled = enabled,
         )
