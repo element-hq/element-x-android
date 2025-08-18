@@ -31,9 +31,8 @@ import org.maplibre.android.maps.Projection
  */
 @Composable
 public inline fun rememberCameraPositionState(
-    key: String? = null,
     crossinline init: CameraPositionState.() -> Unit = {}
-): CameraPositionState = rememberSaveable(key = key, saver = CameraPositionState.Saver) {
+): CameraPositionState = rememberSaveable(saver = CameraPositionState.Saver) {
     CameraPositionState().apply(init)
 }
 
