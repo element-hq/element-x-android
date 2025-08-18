@@ -10,14 +10,16 @@ package io.element.android.features.messages.test.attachments.video
 import android.net.Uri
 import android.util.Size
 import io.element.android.features.messages.impl.attachments.video.VideoMetadataExtractor
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 class FakeVideoMetadataExtractor(
     private val sizeResult: Result<Size> = Result.success(Size(1, 1)),
-    private val duration: Result<Long> = Result.success(1L),
+    private val duration: Result<Duration> = Result.success(1.milliseconds),
 ) : VideoMetadataExtractor {
     override fun getSize(): Result<Size> = sizeResult
 
-    override fun getDuration(): Result<Long> = duration
+    override fun getDuration(): Result<Duration> = duration
 
     override fun close() = Unit
 }

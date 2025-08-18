@@ -34,6 +34,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.time.Duration.Companion.minutes
 
 @RunWith(AndroidJUnit4::class)
 class DefaultMediaOptimizationSelectorPresenterTest {
@@ -158,7 +159,7 @@ class DefaultMediaOptimizationSelectorPresenterTest {
             mediaExtractorFactory = FakeVideoMetadataExtractorFactory(
                 FakeVideoMetadataExtractor(
                     sizeResult = Result.success(Size(10_000, 10_000)),
-                    duration = Result.success(600L)
+                    duration = Result.success(10.minutes)
                 )
             ),
         )
