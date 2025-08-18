@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.DeviceId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -201,7 +200,6 @@ class FakeMatrixClient(
     override suspend fun uploadMedia(
         mimeType: String,
         data: ByteArray,
-        progressCallback: ProgressCallback?
     ): Result<String> {
         return uploadMediaResult
     }

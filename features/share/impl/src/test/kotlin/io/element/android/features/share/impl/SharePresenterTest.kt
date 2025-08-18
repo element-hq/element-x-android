@@ -17,7 +17,6 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -122,7 +121,7 @@ class SharePresenterTest {
     @Test
     fun `present - send media ok`() = runTest {
         val sendFileResult =
-            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder<File, FileInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val joinedRoom = FakeJoinedRoom(

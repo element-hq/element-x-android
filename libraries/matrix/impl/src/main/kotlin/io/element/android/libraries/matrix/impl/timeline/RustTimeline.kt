@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -27,7 +26,6 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
-import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.media.toMSC3246range
@@ -336,7 +334,6 @@ class RustTimeline(
         imageInfo: ImageInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
@@ -347,13 +344,11 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
-                thumbnailPath = thumbnailFile?.path,
+                thumbnailSource = thumbnailFile?.path?.let(UploadSource::File),
                 imageInfo = imageInfo.map(),
-                progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
@@ -364,7 +359,6 @@ class RustTimeline(
         videoInfo: VideoInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
@@ -375,13 +369,11 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
-                thumbnailPath = thumbnailFile?.path,
+                thumbnailSource = thumbnailFile?.path?.let(UploadSource::File),
                 videoInfo = videoInfo.map(),
-                progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
@@ -391,7 +383,6 @@ class RustTimeline(
         audioInfo: AudioInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file)) {
@@ -402,12 +393,10 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
                 audioInfo = audioInfo.map(),
-                progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
@@ -417,7 +406,6 @@ class RustTimeline(
         fileInfo: FileInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file)) {
@@ -428,12 +416,10 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
                 fileInfo = fileInfo.map(),
-                progressWatcher = progressCallback?.toProgressWatcher(),
             )
         }
     }
@@ -479,7 +465,6 @@ class RustTimeline(
         file: File,
         audioInfo: AudioInfo,
         waveform: List<Float>,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file)) {
@@ -489,13 +474,11 @@ class RustTimeline(
                     // Maybe allow a caption in the future?
                     caption = null,
                     formattedCaption = null,
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
                 audioInfo = audioInfo.map(),
                 waveform = waveform.toMSC3246range(),
-                progressWatcher = progressCallback?.toProgressWatcher(),
             )
         }
     }

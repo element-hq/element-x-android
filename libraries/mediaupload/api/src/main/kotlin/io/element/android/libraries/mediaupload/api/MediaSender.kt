@@ -10,7 +10,6 @@ package io.element.android.libraries.mediaupload.api
 import android.net.Uri
 import io.element.android.libraries.core.extensions.flatMapCatching
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -45,12 +44,10 @@ class MediaSender @Inject constructor(
         mediaUploadInfo: MediaUploadInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<Unit> {
         return room.liveTimeline.sendMedia(
             uploadInfo = mediaUploadInfo,
-            progressCallback = progressCallback,
             caption = caption,
             formattedCaption = formattedCaption,
             inReplyToEventId = inReplyToEventId,
@@ -63,7 +60,6 @@ class MediaSender @Inject constructor(
         mimeType: String,
         caption: String? = null,
         formattedCaption: String? = null,
-        progressCallback: ProgressCallback? = null,
         inReplyToEventId: EventId? = null,
         mediaOptimizationConfig: MediaOptimizationConfig,
     ): Result<Unit> {
@@ -77,7 +73,6 @@ class MediaSender @Inject constructor(
             .flatMapCatching { info ->
                 room.liveTimeline.sendMedia(
                     uploadInfo = info,
-                    progressCallback = progressCallback,
                     caption = caption,
                     formattedCaption = formattedCaption,
                     inReplyToEventId = inReplyToEventId,
@@ -90,7 +85,6 @@ class MediaSender @Inject constructor(
         uri: Uri,
         mimeType: String,
         waveForm: List<Float>,
-        progressCallback: ProgressCallback? = null,
         inReplyToEventId: EventId? = null,
     ): Result<Unit> {
         return preProcessor
@@ -109,7 +103,6 @@ class MediaSender @Inject constructor(
                 )
                 room.liveTimeline.sendMedia(
                     uploadInfo = newInfo,
-                    progressCallback = progressCallback,
                     caption = null,
                     formattedCaption = null,
                     inReplyToEventId = inReplyToEventId,
@@ -131,7 +124,6 @@ class MediaSender @Inject constructor(
 
     private suspend fun Timeline.sendMedia(
         uploadInfo: MediaUploadInfo,
-        progressCallback: ProgressCallback?,
         caption: String?,
         formattedCaption: String?,
         inReplyToEventId: EventId?,
@@ -144,7 +136,6 @@ class MediaSender @Inject constructor(
                     imageInfo = uploadInfo.imageInfo,
                     caption = caption,
                     formattedCaption = formattedCaption,
-                    progressCallback = progressCallback,
                     inReplyToEventId = inReplyToEventId,
                 )
             }
@@ -155,7 +146,6 @@ class MediaSender @Inject constructor(
                     videoInfo = uploadInfo.videoInfo,
                     caption = caption,
                     formattedCaption = formattedCaption,
-                    progressCallback = progressCallback,
                     inReplyToEventId = inReplyToEventId,
                 )
             }
@@ -165,7 +155,6 @@ class MediaSender @Inject constructor(
                     audioInfo = uploadInfo.audioInfo,
                     caption = caption,
                     formattedCaption = formattedCaption,
-                    progressCallback = progressCallback,
                     inReplyToEventId = inReplyToEventId,
                 )
             }
@@ -174,7 +163,6 @@ class MediaSender @Inject constructor(
                     file = uploadInfo.file,
                     audioInfo = uploadInfo.audioInfo,
                     waveform = uploadInfo.waveform,
-                    progressCallback = progressCallback,
                     inReplyToEventId = inReplyToEventId,
                 )
             }
@@ -184,7 +172,6 @@ class MediaSender @Inject constructor(
                     fileInfo = uploadInfo.fileInfo,
                     caption = caption,
                     formattedCaption = formattedCaption,
-                    progressCallback = progressCallback,
                     inReplyToEventId = inReplyToEventId,
                 )
             }

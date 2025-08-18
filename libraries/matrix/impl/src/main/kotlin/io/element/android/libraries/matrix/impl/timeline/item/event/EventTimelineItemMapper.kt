@@ -79,7 +79,18 @@ fun RustProfileDetails.map(): ProfileTimelineDetails {
 fun RustEventSendState?.map(): LocalEventSendState? {
     return when (this) {
         null -> null
-        RustEventSendState.NotSentYet -> LocalEventSendState.Sending
+        is RustEventSendState.NotSentYet -> {
+            val mediaUploadProgress = this.progress
+            if (mediaUploadProgress != null) {
+                LocalEventSendState.Sending.MediaWithProgress(
+                    index = mediaUploadProgress.index.toLong(),
+                    progress = mediaUploadProgress.progress.current.toLong(),
+                    total = mediaUploadProgress.progress.total.toLong(),
+                )
+            } else {
+                LocalEventSendState.Sending.Event
+            }
+        }
         is RustEventSendState.SendingFailed -> {
             when (val queueWedgeError = error) {
                 QueueWedgeError.CrossVerificationRequired -> {
@@ -98,7 +109,7 @@ fun RustEventSendState?.map(): LocalEventSendState? {
                 }
                 is QueueWedgeError.GenericApiError -> {
                     if (isRecoverable) {
-                        LocalEventSendState.Sending
+                        LocalEventSendState.Sending.Event
                     } else {
                         LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
                     }

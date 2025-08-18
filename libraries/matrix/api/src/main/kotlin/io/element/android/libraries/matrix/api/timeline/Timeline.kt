@@ -8,7 +8,6 @@
 package io.element.android.libraries.matrix.api.timeline
 
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.AudioInfo
@@ -88,7 +87,6 @@ interface Timeline : AutoCloseable {
         imageInfo: ImageInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
@@ -98,7 +96,6 @@ interface Timeline : AutoCloseable {
         videoInfo: VideoInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
@@ -107,7 +104,6 @@ interface Timeline : AutoCloseable {
         audioInfo: AudioInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
@@ -116,7 +112,6 @@ interface Timeline : AutoCloseable {
         fileInfo: FileInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
@@ -145,7 +140,6 @@ interface Timeline : AutoCloseable {
         file: File,
         audioInfo: AudioInfo,
         waveform: List<Float>,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 

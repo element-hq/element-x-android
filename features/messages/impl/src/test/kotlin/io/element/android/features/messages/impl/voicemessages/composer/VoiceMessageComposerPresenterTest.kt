@@ -20,7 +20,6 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.messagecomposer.aReplyMode
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
@@ -64,7 +63,7 @@ class VoiceMessageComposerPresenterTest {
     )
     private val analyticsService = FakeAnalyticsService()
     private val sendVoiceMessageResult =
-        lambdaRecorder<File, AudioInfo, List<Float>, ProgressCallback?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+        lambdaRecorder<File, AudioInfo, List<Float>, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
     private val joinedRoom = FakeJoinedRoom(

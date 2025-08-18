@@ -1181,7 +1181,7 @@ class MessageComposerPresenterTest {
             room = FakeJoinedRoom(
                 typingNoticeResult = { Result.success(Unit) },
                 liveTimeline = FakeTimeline().apply {
-                    sendFileLambda = { _, _, _, _, _, _ ->
+                    sendFileLambda = { _, _, _, _, _ ->
                         Result.success(FakeMediaUploadHandler())
                     }
                 }

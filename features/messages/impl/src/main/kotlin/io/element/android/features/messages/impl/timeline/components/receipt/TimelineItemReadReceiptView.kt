@@ -76,7 +76,7 @@ fun TimelineItemReadReceiptView(
         }
     } else {
         when (state.sendState) {
-            LocalEventSendState.Sending -> {
+            is LocalEventSendState.Sending -> {
                 ReadReceiptsRow(modifier) {
                     Icon(
                         modifier = Modifier.padding(2.dp),
