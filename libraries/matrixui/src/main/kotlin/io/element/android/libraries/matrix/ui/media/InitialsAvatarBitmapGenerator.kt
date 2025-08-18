@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.ui.media
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.Typeface
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -96,6 +97,7 @@ class InitialsAvatarBitmapGenerator(
                 textSize = size * fontSizePercentage // Adjust text size relative to the avatar size
                 isAntiAlias = true
                 textAlign = Paint.Align.CENTER
+                typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
             }
             val bounds = Rect()
             textPaint.getTextBounds(letter, 0, letter.length, bounds)
