@@ -558,7 +558,7 @@ private fun ThreadTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
-            Text("Thread")
+            Text(stringResource(CommonStrings.common_thread))
         }
     )
 }

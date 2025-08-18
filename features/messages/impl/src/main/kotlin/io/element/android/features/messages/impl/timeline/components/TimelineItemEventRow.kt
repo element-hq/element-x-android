@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -101,6 +102,7 @@ import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
@@ -252,9 +254,11 @@ fun TimelineItemEventRow(
 
         if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread) {
             event.threadInfo.threadSummary?.let { threadSummary ->
+                val threadPart = stringResource(CommonStrings.common_thread)
+                val numberOfReplies = pluralStringResource(CommonPlurals.common_replies, threadSummary.numberOfReplies.toInt())
                 Button(
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 2.dp),
-                    text = "Thread with ${threadSummary.numberOfReplies} replies",
+                    text = "$threadPart - $numberOfReplies",
                     size = ButtonSize.Small,
                     onClick = {
                         eventSink(TimelineEvents.OpenThread(event.eventId!!.toThreadId(), null))
