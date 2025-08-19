@@ -37,6 +37,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -151,9 +152,9 @@ fun SelectedUser(
 
 @PreviewsDayNight
 @Composable
-internal fun SelectedUserPreview() = ElementPreview {
+internal fun SelectedUserPreview(@PreviewParameter(MatrixUserWithAvatarProvider::class) user: MatrixUser) = ElementPreview {
     SelectedUser(
-        aMatrixUser(displayName = "John Doe"),
+        matrixUser = user,
         canRemove = true,
         onUserRemove = {},
     )
@@ -166,7 +167,7 @@ internal fun SelectedUserRtlPreview() = CompositionLocalProvider(
 ) {
     ElementPreview {
         SelectedUser(
-            aMatrixUser(displayName = "John Doe"),
+            matrixUser = aMatrixUser(displayName = "John Doe"),
             canRemove = true,
             onUserRemove = {},
         )
@@ -177,7 +178,7 @@ internal fun SelectedUserRtlPreview() = CompositionLocalProvider(
 @Composable
 internal fun SelectedUserCannotRemovePreview() = ElementPreview {
     SelectedUser(
-        aMatrixUser(),
+        matrixUser = aMatrixUser(),
         canRemove = false,
         onUserRemove = {},
     )
