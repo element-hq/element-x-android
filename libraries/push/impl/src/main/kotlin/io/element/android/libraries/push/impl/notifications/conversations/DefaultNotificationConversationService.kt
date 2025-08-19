@@ -92,7 +92,11 @@ class DefaultNotificationConversationService @Inject constructor(
 
         val defaultShortcutIconSize = ShortcutManagerCompat.getIconMaxWidth(context)
         val useDarkTheme = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-        val icon = bitmapLoader.getRoomBitmap(roomAvatarUrl, imageLoader)?.let(IconCompat::createWithBitmap)
+        val icon = bitmapLoader.getRoomBitmap(
+            path = roomAvatarUrl,
+            imageLoader = imageLoader,
+            targetSize = defaultShortcutIconSize.toLong()
+        )?.let(IconCompat::createWithBitmap)
             ?: InitialsAvatarBitmapGenerator(useDarkTheme = useDarkTheme)
                 .generateBitmap(defaultShortcutIconSize, AvatarData(id = roomId.value, name = roomName, size = AvatarSize.RoomHeader))
                 ?.let(IconCompat::createWithAdaptiveBitmap)

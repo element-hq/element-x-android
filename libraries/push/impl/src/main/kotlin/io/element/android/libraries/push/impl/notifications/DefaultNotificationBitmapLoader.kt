@@ -37,17 +37,17 @@ class DefaultNotificationBitmapLoader @Inject constructor(
      * @param path mxc url
      * @param imageLoader Coil image loader
      */
-    override suspend fun getRoomBitmap(path: String?, imageLoader: ImageLoader): Bitmap? {
+    override suspend fun getRoomBitmap(path: String?, imageLoader: ImageLoader, targetSize: Long): Bitmap? {
         if (path == null) {
             return null
         }
-        return loadRoomBitmap(path, imageLoader)
+        return loadRoomBitmap(path, imageLoader, targetSize)
     }
 
-    private suspend fun loadRoomBitmap(path: String, imageLoader: ImageLoader): Bitmap? {
+    private suspend fun loadRoomBitmap(path: String, imageLoader: ImageLoader, targetSize: Long): Bitmap? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
-                .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(AVATAR_THUMBNAIL_SIZE_IN_PIXEL)))
+                .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(targetSize)))
                 .transformations(CircleCropTransformation())
                 .build()
             val result = imageLoader.execute(imageRequest)
