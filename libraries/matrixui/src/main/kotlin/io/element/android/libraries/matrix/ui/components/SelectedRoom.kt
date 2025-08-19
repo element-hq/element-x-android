@@ -61,11 +61,14 @@ fun SelectedRoom(
     modifier: Modifier = Modifier,
 ) {
     val actionRemove = stringResource(id = CommonStrings.action_remove)
+    val a11yRoomName = stringResource(id = CommonStrings.common_room_name)
     Box(
         modifier = modifier
             .width(AvatarSize.SelectedRoom.dp)
             .clearAndSetSemantics {
-                contentDescription = roomInfo.name ?: "#"
+                contentDescription = roomInfo.name
+                    ?: roomInfo.canonicalAlias?.value
+                    ?: a11yRoomName
                 // Note: this does not set the click effect to the whole Box
                 // when talkback is not enabled
                 onClick(
