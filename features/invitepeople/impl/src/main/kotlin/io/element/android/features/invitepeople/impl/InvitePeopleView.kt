@@ -30,7 +30,6 @@ import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -192,10 +191,6 @@ private fun InvitePeopleSearchBar(
                         onCheckedChange = { onToggleUser(invitableUser.matrixUser) },
                         modifier = Modifier.fillMaxWidth()
                     )
-
-                    if (index < results.lastIndex) {
-                        HorizontalDivider()
-                    }
                 }
             }
         },

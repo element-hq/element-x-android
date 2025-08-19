@@ -166,10 +166,15 @@ class KonsistPreviewTest {
                 additionalMessage = "Functions for Preview should be named like this: <ViewUnderPreview>Preview. " +
                     "Exception can be added to the test, for multiple Previews of the same view",
             ) {
-                val testedView = it.name.removeSuffix("Preview")
-                it.text.contains("$testedView(") ||
-                    it.text.contains("$testedView {") ||
-                    it.text.contains("ContentToPreview(")
+                val testedView = if (it.name.endsWith("RtlPreview")) {
+                    it.name.removeSuffix("RtlPreview")
+                } else {
+                    it.name.removeSuffix("Preview")
+                }
+                it.name.endsWith("Preview") &&
+                    (it.text.contains("$testedView(") ||
+                        it.text.contains("$testedView {") ||
+                        it.text.contains("ContentToPreview("))
             }
     }
 
