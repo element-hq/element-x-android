@@ -9,6 +9,7 @@ package io.element.android.features.home.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.home.impl.roomlist.RoomListState
+import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -20,6 +21,7 @@ data class HomeState(
     val hasNetworkConnection: Boolean,
     val currentHomeNavigationBarItem: HomeNavigationBarItem,
     val roomListState: RoomListState,
+    val homeSpacesState: HomeSpacesState,
     val snackbarMessage: SnackbarMessage?,
     val canReportBug: Boolean,
     val directLogoutState: DirectLogoutState,

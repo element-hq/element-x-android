@@ -13,6 +13,8 @@ import io.element.android.features.home.impl.roomlist.RoomListStateProvider
 import io.element.android.features.home.impl.roomlist.aRoomListState
 import io.element.android.features.home.impl.roomlist.aRoomsContentState
 import io.element.android.features.home.impl.roomlist.generateRoomListRoomSummaryList
+import io.element.android.features.home.impl.spaces.HomeSpacesState
+import io.element.android.features.home.impl.spaces.aHomeSpacesState
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -51,6 +53,7 @@ internal fun aHomeState(
     snackbarMessage: SnackbarMessage? = null,
     currentHomeNavigationBarItem: HomeNavigationBarItem = HomeNavigationBarItem.Chats,
     roomListState: RoomListState = aRoomListState(),
+    homeSpacesState: HomeSpacesState = aHomeSpacesState(),
     canReportBug: Boolean = true,
     isSpaceFeatureEnabled: Boolean = false,
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
@@ -64,6 +67,7 @@ internal fun aHomeState(
     directLogoutState = directLogoutState,
     currentHomeNavigationBarItem = currentHomeNavigationBarItem,
     roomListState = roomListState,
+    homeSpacesState = homeSpacesState,
     isSpaceFeatureEnabled = isSpaceFeatureEnabled,
     eventSink = eventSink,
 )
