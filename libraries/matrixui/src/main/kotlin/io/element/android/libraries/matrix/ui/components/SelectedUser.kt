@@ -86,8 +86,8 @@ fun SelectedUser(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-            val closeRadius = 12.dp.toPx()
-            val closeOffset = 10.dp.toPx()
+            val closeIconRadius = 12.dp.toPx()
+            val closeIconOffset = 10.dp.toPx()
             Avatar(
                 avatarData = matrixUser.getAvatarData(size = AvatarSize.SelectedUser),
                 avatarType = AvatarType.User,
@@ -99,17 +99,17 @@ fun SelectedUser(
                         drawContent()
                         if (canRemove) {
                             val xOffset = if (isRtl) {
-                                closeOffset
+                                closeIconOffset
                             } else {
-                                size.width - closeOffset
+                                size.width - closeIconOffset
                             }
                             drawCircle(
                                 color = Color.Black,
                                 center = Offset(
                                     x = xOffset,
-                                    y = closeOffset,
+                                    y = closeIconOffset,
                                 ),
-                                radius = closeRadius,
+                                radius = closeIconRadius,
                                 blendMode = BlendMode.Clear,
                             )
                         }
