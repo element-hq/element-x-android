@@ -9,7 +9,6 @@ package io.element.android.libraries.push.test.notifications.conversations
 
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 
 class FakeNotificationConversationService : NotificationConversationService {
@@ -19,7 +18,6 @@ class FakeNotificationConversationService : NotificationConversationService {
         roomName: String,
         roomIsDirect: Boolean,
         roomAvatarUrl: String?,
-        threadId: ThreadId?,
     ) = Unit
 
     override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) = Unit

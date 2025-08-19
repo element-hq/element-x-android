@@ -478,7 +478,6 @@ class MessageComposerPresenter @AssistedInject constructor(
             roomName = roomInfo.name ?: roomInfo.id.value,
             roomIsDirect = roomInfo.isDm,
             roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers.getDirectRoomMember(roomInfo = roomInfo, sessionId = room.sessionId)?.avatarUrl,
-            threadId = null,
         )
 
         analyticsService.capture(

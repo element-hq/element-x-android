@@ -22,7 +22,6 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.matrix.ui.media.InitialsAvatarBitmapGenerator
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
@@ -44,7 +43,6 @@ class DefaultNotificationConversationService @Inject constructor(
         roomName: String,
         roomIsDirect: Boolean,
         roomAvatarUrl: String?,
-        threadId: ThreadId?,
     ) {
         val categories = setOfNotNull(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION else null

@@ -9,7 +9,6 @@ package io.element.android.libraries.push.api.notifications.conversations
 
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.ThreadId
 
 /**
  * Service to handle conversation-related notifications.
@@ -25,7 +24,6 @@ interface NotificationConversationService {
         roomName: String,
         roomIsDirect: Boolean,
         roomAvatarUrl: String?,
-        threadId: ThreadId?,
     )
 
     /**
