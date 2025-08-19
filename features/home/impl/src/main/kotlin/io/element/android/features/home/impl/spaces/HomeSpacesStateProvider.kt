@@ -1,0 +1,43 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.features.home.impl.spaces
+
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.core.SpaceId
+import io.element.android.libraries.matrix.api.spaces.SpaceRoom
+import kotlinx.collections.immutable.toImmutableSet
+
+open class HomeSpacesStateProvider : PreviewParameterProvider<HomeSpacesState> {
+    override val values: Sequence<HomeSpacesState>
+        get() = sequenceOf(
+            aHomeSpacesState(
+                spaceRooms = SpaceRoomProvider().values.toList(),
+                seenSpaceInvites = setOf(
+                    SpaceId("!spaceId3:example.com"),
+                ).toImmutableSet(),
+            )
+        )
+}
+
+internal fun aHomeSpacesState(
+    spaceRooms: List<SpaceRoom> = aListOfSpaceRooms(),
+    seenSpaceInvites: Set<SpaceId> = emptySet(),
+    eventSink: (HomeSpacesEvents) -> Unit = {},
+) = HomeSpacesState(
+    spaceRooms = spaceRooms,
+    seenSpaceInvites = seenSpaceInvites.toImmutableSet(),
+    eventSink = eventSink,
+)
+
+fun aListOfSpaceRooms(): List<SpaceRoom> {
+    return listOf(
+        aSpaceRooms(),
+        aSpaceRooms(),
+        aSpaceRooms(),
+    )
+}

@@ -45,15 +45,13 @@ import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.features.home.impl.roomlist.RoomListEvents
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
+import io.element.android.libraries.designsystem.atomic.molecules.InviteButtonsRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
@@ -101,7 +99,7 @@ internal fun RoomSummaryRow(
                         )
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    InviteButtonsRow(
+                    InviteButtonsRowMolecule(
                         onAcceptClick = {
                             eventSink(RoomListEvents.AcceptInvite(room))
                         },
@@ -343,31 +341,6 @@ private fun InviteNameAndIndicatorRow(
                 color = ElementTheme.colors.unreadIndicator
             )
         }
-    }
-}
-
-@Composable
-private fun InviteButtonsRow(
-    onAcceptClick: () -> Unit,
-    onDeclineClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = spacedBy(12.dp)
-    ) {
-        OutlinedButton(
-            text = stringResource(CommonStrings.action_decline),
-            onClick = onDeclineClick,
-            size = ButtonSize.MediumLowPadding,
-            modifier = Modifier.weight(1f),
-        )
-        Button(
-            text = stringResource(CommonStrings.action_accept),
-            onClick = onAcceptClick,
-            size = ButtonSize.MediumLowPadding,
-            modifier = Modifier.weight(1f),
-        )
     }
 }
 
