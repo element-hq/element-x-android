@@ -32,11 +32,6 @@ class DefaultNotificationBitmapLoader @Inject constructor(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) : NotificationBitmapLoader {
-    /**
-     * Get icon of a room.
-     * @param path mxc url
-     * @param imageLoader Coil image loader
-     */
     override suspend fun getRoomBitmap(path: String?, imageLoader: ImageLoader, targetSize: Long): Bitmap? {
         if (path == null) {
             return null
@@ -58,12 +53,6 @@ class DefaultNotificationBitmapLoader @Inject constructor(
         }
     }
 
-    /**
-     * Get icon of a user.
-     * Before Android P, this does nothing because the icon won't be used
-     * @param path mxc url
-     * @param imageLoader Coil image loader
-     */
     override suspend fun getUserIcon(path: String?, imageLoader: ImageLoader): IconCompat? {
         if (path == null || sdkIntProvider.get() < Build.VERSION_CODES.P) {
             return null
