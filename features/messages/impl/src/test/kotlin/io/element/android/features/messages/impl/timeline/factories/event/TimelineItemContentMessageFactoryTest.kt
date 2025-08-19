@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -749,14 +750,14 @@ class TimelineItemContentMessageFactoryTest {
         body: String = "Body",
         inReplyTo: InReplyTo? = null,
         isEdited: Boolean = false,
-        isThreaded: Boolean = false,
+        threadInfo: EventThreadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
         type: MessageType,
     ): MessageContent {
         return MessageContent(
             body = body,
             inReplyTo = inReplyTo,
             isEdited = isEdited,
-            isThreaded = isThreaded,
+            threadInfo = threadInfo,
             type = type,
         )
     }

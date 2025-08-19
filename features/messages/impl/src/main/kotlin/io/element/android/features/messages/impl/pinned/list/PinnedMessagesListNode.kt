@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -56,7 +57,10 @@ class PinnedMessagesListNode @AssistedInject constructor(
 
     private val presenter = presenterFactory.create(
         navigator = this,
-        actionListPresenter = actionListPresenterFactory.create(PinnedMessagesListTimelineActionPostProcessor())
+        actionListPresenter = actionListPresenterFactory.create(
+            postProcessor = PinnedMessagesListTimelineActionPostProcessor(),
+            timelineMode = Timeline.Mode.PinnedEvents,
+        )
     )
     private val callbacks = plugins<Callback>()
 

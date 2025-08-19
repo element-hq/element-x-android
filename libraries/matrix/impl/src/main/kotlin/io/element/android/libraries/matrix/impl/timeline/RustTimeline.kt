@@ -79,7 +79,7 @@ private const val PAGINATION_SIZE = 50
 
 class RustTimeline(
     private val inner: InnerTimeline,
-    mode: Timeline.Mode,
+    override val mode: Timeline.Mode,
     systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
@@ -118,19 +118,20 @@ class RustTimeline(
     private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
 
     override val backwardPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PINNED_EVENTS)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PinnedEvents)
     )
 
     override val forwardPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode == Timeline.Mode.FOCUSED_ON_EVENT)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode !is Timeline.Mode.FocusedOnEvent)
     )
 
     init {
-        if (mode != Timeline.Mode.PINNED_EVENTS) {
-            coroutineScope.fetchMembers()
+        when (mode) {
+            is Timeline.Mode.Live, is Timeline.Mode.FocusedOnEvent -> coroutineScope.fetchMembers()
+            else -> Unit
         }
 
-        if (mode == Timeline.Mode.LIVE) {
+        if (mode == Timeline.Mode.Live) {
             // When timeline is live, we need to listen to the back pagination status as
             // sdk can automatically paginate backwards.
             coroutineScope.registerBackPaginationStatusListener()
@@ -219,6 +220,7 @@ class RustTimeline(
                         items = items,
                         hasMoreToLoadBackward = backwardPaginationStatus.hasMoreToLoad,
                         hasMoreToLoadForward = forwardPaginationStatus.hasMoreToLoad,
+                        timelineMode = mode,
                     )
                 }
                 .let { items ->

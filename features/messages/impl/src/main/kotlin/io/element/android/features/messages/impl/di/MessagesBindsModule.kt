@@ -28,14 +28,12 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
 import io.element.android.features.messages.impl.typing.TypingNotificationState
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 
 @ContributesTo(RoomScope::class)
 @Module
-interface MessagesModule {
+interface MessagesBindsModule {
     @Binds
     fun bindPinnedMessagesBannerPresenter(presenter: PinnedMessagesBannerPresenter): Presenter<PinnedMessagesBannerState>
 
@@ -50,9 +48,6 @@ interface MessagesModule {
 
     @Binds
     fun bindLinkPresenter(presenter: LinkPresenter): Presenter<LinkState>
-
-    @Binds
-    fun bindVoiceMessageComposerPresenter(presenter: VoiceMessageComposerPresenter): Presenter<VoiceMessageComposerState>
 
     @Binds
     fun bindCustomReactionPresenter(presenter: CustomReactionPresenter): Presenter<CustomReactionState>

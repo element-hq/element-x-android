@@ -23,7 +23,7 @@ class DefaultCreatePollEntryPoint @Inject constructor() : CreatePollEntryPoint {
 
         return object : CreatePollEntryPoint.NodeBuilder {
             override fun params(params: CreatePollEntryPoint.Params): CreatePollEntryPoint.NodeBuilder {
-                plugins += CreatePollNode.Inputs(mode = params.mode)
+                plugins += CreatePollNode.Inputs(timelineMode = params.timelineMode, mode = params.mode)
                 return this
             }
 

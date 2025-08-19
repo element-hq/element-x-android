@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
@@ -133,11 +134,15 @@ class InReplyToDetailsOtherProvider : InReplyToDetailsProvider() {
 private fun aMessageContent(
     body: String,
     type: MessageType,
+    threadInfo: EventThreadInfo = EventThreadInfo(
+        threadRootId = null,
+        threadSummary = null,
+    ),
 ) = MessageContent(
     body = body,
     inReplyTo = null,
     isEdited = false,
-    isThreaded = false,
+    threadInfo = threadInfo,
     type = type,
 )
 

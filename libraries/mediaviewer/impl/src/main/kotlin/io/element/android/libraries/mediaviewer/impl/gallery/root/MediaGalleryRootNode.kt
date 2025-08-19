@@ -97,9 +97,9 @@ class MediaGalleryRootNode @AssistedInject constructor(
                         val mode = when (item) {
                             is MediaItem.Audio,
                             is MediaItem.Voice,
-                            is MediaItem.File -> MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(Timeline.Mode.MEDIA)
+                            is MediaItem.File -> MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(Timeline.Mode.Media)
                             is MediaItem.Image,
-                            is MediaItem.Video -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.MEDIA)
+                            is MediaItem.Video -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
                         }
                         overlay.show(
                             NavTarget.MediaViewer(

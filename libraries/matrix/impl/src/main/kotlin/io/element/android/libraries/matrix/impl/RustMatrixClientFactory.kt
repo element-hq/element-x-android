@@ -93,6 +93,7 @@ class RustMatrixClientFactory @Inject constructor(
             baseCacheDirectory = cacheDirectory,
             clock = clock,
             timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
+            featureFlagService = featureFlagService,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
@@ -131,6 +132,7 @@ class RustMatrixClientFactory @Inject constructor(
                 )
             )
             .enableShareHistoryOnInvite(featureFlagService.isFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite))
+            .threadsEnabled(featureFlagService.isFeatureEnabled(FeatureFlags.HideThreadedEvents), threadSubscriptions = false)
             .run {
                 // Apply sliding sync version settings
                 when (slidingSyncType) {

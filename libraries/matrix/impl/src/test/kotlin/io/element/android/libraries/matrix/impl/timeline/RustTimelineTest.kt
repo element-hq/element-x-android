@@ -90,7 +90,7 @@ class RustTimelineTest {
 
 private fun TestScope.createRustTimeline(
     inner: InnerTimeline,
-    mode: Timeline.Mode = Timeline.Mode.LIVE,
+    mode: Timeline.Mode = Timeline.Mode.Live,
     systemClock: SystemClock = FakeSystemClock(),
     joinedRoom: JoinedRoom = FakeJoinedRoom().apply { givenRoomInfo(aRoomInfo()) },
     coroutineScope: CoroutineScope = backgroundScope,

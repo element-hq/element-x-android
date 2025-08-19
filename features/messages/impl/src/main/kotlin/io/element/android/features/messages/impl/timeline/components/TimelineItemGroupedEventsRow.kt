@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
@@ -38,11 +39,13 @@ import io.element.android.wysiwyg.link.Link
 @Composable
 fun TimelineItemGroupedEventsRow(
     timelineItem: TimelineItem.GroupedEvents,
+    timelineMode: Timeline.Mode,
     timelineRoomInfo: TimelineRoomInfo,
     timelineProtectionState: TimelineProtectionState,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     focusedEventId: EventId?,
+    displayThreadSummaries: Boolean,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
@@ -81,11 +84,13 @@ fun TimelineItemGroupedEventsRow(
         isExpanded = isExpanded.value,
         onExpandGroupClick = ::onExpandGroupClick,
         timelineItem = timelineItem,
+        timelineMode = timelineMode,
         timelineRoomInfo = timelineRoomInfo,
         timelineProtectionState = timelineProtectionState,
         focusedEventId = focusedEventId,
         renderReadReceipts = renderReadReceipts,
         isLastOutgoingMessage = isLastOutgoingMessage,
+        displayThreadSummaries = displayThreadSummaries,
         onClick = onClick,
         onLongClick = onLongClick,
         inReplyToClick = inReplyToClick,
@@ -107,11 +112,13 @@ private fun TimelineItemGroupedEventsRowContent(
     isExpanded: Boolean,
     onExpandGroupClick: () -> Unit,
     timelineItem: TimelineItem.GroupedEvents,
+    timelineMode: Timeline.Mode,
     timelineRoomInfo: TimelineRoomInfo,
     timelineProtectionState: TimelineProtectionState,
     focusedEventId: EventId?,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
+    displayThreadSummaries: Boolean,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
@@ -161,12 +168,14 @@ private fun TimelineItemGroupedEventsRowContent(
                     }
                 }.forEach { subGroupEvent ->
                     TimelineItemRow(
+                        timelineMode = timelineMode,
                         timelineItem = subGroupEvent,
                         timelineRoomInfo = timelineRoomInfo,
                         timelineProtectionState = timelineProtectionState,
                         renderReadReceipts = renderReadReceipts,
                         isLastOutgoingMessage = isLastOutgoingMessage,
                         focusedEventId = focusedEventId,
+                        displayThreadSummaries = displayThreadSummaries,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
                         onLinkLongClick = onLinkLongClick,
@@ -206,11 +215,13 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
         isExpanded = true,
         onExpandGroupClick = {},
         timelineItem = events,
+        timelineMode = Timeline.Mode.Live,
         timelineRoomInfo = aTimelineRoomInfo(),
         timelineProtectionState = aTimelineProtectionState(),
         focusedEventId = events.events.first().eventId,
         renderReadReceipts = true,
         isLastOutgoingMessage = false,
+        displayThreadSummaries = false,
         onClick = {},
         onLongClick = {},
         onLinkLongClick = {},
@@ -232,11 +243,13 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         isExpanded = false,
         onExpandGroupClick = {},
         timelineItem = aGroupedEvents(withReadReceipts = true),
+        timelineMode = Timeline.Mode.Live,
         timelineRoomInfo = aTimelineRoomInfo(),
         timelineProtectionState = aTimelineProtectionState(),
         focusedEventId = null,
         renderReadReceipts = true,
         isLastOutgoingMessage = false,
+        displayThreadSummaries = false,
         onClick = {},
         onLongClick = {},
         onLinkLongClick = {},

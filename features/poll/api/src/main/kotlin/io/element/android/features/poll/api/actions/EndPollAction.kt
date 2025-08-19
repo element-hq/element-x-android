@@ -8,7 +8,8 @@
 package io.element.android.features.poll.api.actions
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.Timeline
 
 interface EndPollAction {
-    suspend fun execute(pollStartId: EventId): Result<Unit>
+    suspend fun execute(timeline: Timeline, pollStartId: EventId): Result<Unit>
 }

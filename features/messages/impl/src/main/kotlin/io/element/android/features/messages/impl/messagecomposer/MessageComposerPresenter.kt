@@ -97,13 +97,13 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 class MessageComposerPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
-    @SessionCoroutineScope
-    private val sessionCoroutineScope: CoroutineScope,
+    @Assisted private val timelineController: TimelineController,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val localMediaFactory: LocalMediaFactory,
-    private val mediaSender: MediaSender,
+    private val mediaSenderFactory: MediaSender.Factory,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val locationService: LocationService,
@@ -113,7 +113,6 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
-    private val timelineController: TimelineController,
     private val draftService: ComposerDraftService,
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
@@ -122,8 +121,10 @@ class MessageComposerPresenter @AssistedInject constructor(
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
-        fun create(navigator: MessagesNavigator): MessageComposerPresenter
+        fun create(timelineController: TimelineController, navigator: MessagesNavigator): MessageComposerPresenter
     }
+
+    private val mediaSender = mediaSenderFactory.create(timelineMode = timelineController.mainTimelineMode())
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
@@ -423,11 +424,13 @@ class MessageComposerPresenter @AssistedInject constructor(
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
             is MessageComposerMode.Attachment,
-            is MessageComposerMode.Normal -> room.liveTimeline.sendMessage(
-                body = message.markdown,
-                htmlBody = message.html,
-                intentionalMentions = message.intentionalMentions
-            )
+            is MessageComposerMode.Normal -> timelineController.invokeOnCurrentTimeline {
+                sendMessage(
+                    body = message.markdown,
+                    htmlBody = message.html,
+                    intentionalMentions = message.intentionalMentions
+                )
+            }
             is MessageComposerMode.Edit -> {
                 timelineController.invokeOnCurrentTimeline {
                     // First try to edit the message in the current timeline

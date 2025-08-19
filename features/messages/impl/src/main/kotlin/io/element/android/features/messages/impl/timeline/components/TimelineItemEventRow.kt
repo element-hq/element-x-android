@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -72,6 +73,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -82,10 +84,17 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toThreadId
+import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
+import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
@@ -97,6 +106,7 @@ import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
@@ -116,10 +126,12 @@ private val BUBBLE_INCOMING_OFFSET = 16.dp
 @Composable
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
+    timelineMode: Timeline.Mode,
     timelineRoomInfo: TimelineRoomInfo,
     timelineProtectionState: TimelineProtectionState,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
+    displayThreadSummaries: Boolean,
     onEventClick: () -> Unit,
     onLongClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
@@ -194,6 +206,7 @@ fun TimelineItemEventRow(
                     }
                     TimelineItemEventRowContent(
                         event = event,
+                        timelineMode = timelineMode,
                         timelineProtectionState = timelineProtectionState,
                         timelineRoomInfo = timelineRoomInfo,
                         interactionSource = interactionSource,
@@ -227,6 +240,7 @@ fun TimelineItemEventRow(
         } else {
             TimelineItemEventRowContent(
                 event = event,
+                timelineMode = timelineMode,
                 timelineProtectionState = timelineProtectionState,
                 timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
@@ -241,6 +255,25 @@ fun TimelineItemEventRow(
                 eventContentView = eventContentView,
             )
         }
+
+        if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread) {
+            event.threadInfo.threadSummary?.let { threadSummary ->
+                val threadPart = stringResource(CommonStrings.common_thread)
+                val numberOfReplies = threadSummary.numberOfReplies.toInt().let { replies ->
+                    pluralStringResource(CommonPlurals.common_replies, replies, replies)
+                }
+                Button(
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 2.dp)
+                        .align(if (event.isMine) Alignment.End else Alignment.Start),
+                    text = "$threadPart - $numberOfReplies",
+                    size = ButtonSize.Small,
+                    onClick = {
+                        eventSink(TimelineEvents.OpenThread(event.eventId!!.toThreadId(), null))
+                    },
+                )
+            }
+        }
+
         // Read receipts / Send state
         TimelineItemReadReceiptView(
             state = ReadReceiptViewState(
@@ -281,6 +314,7 @@ private fun SwipeSensitivity(
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
+    timelineMode: Timeline.Mode,
     timelineProtectionState: TimelineProtectionState,
     timelineRoomInfo: TimelineRoomInfo,
     interactionSource: MutableInteractionSource,
@@ -360,6 +394,7 @@ private fun TimelineItemEventRowContent(
         ) {
             MessageEventBubbleContent(
                 event = event,
+                timelineMode = timelineMode,
                 timelineProtectionState = timelineProtectionState,
                 onMessageLongClick = onLongClick,
                 inReplyToClick = inReplyToClick,
@@ -461,6 +496,7 @@ private fun MessageSenderInformation(
 @Composable
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
+    timelineMode: Timeline.Mode,
     timelineProtectionState: TimelineProtectionState,
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
@@ -658,7 +694,7 @@ private fun MessageEventBubbleContent(
         else -> ContentPadding.Textual
     }
     CommonLayout(
-        showThreadDecoration = event.isThreaded,
+        showThreadDecoration = timelineMode !is Timeline.Mode.Thread && event.threadInfo.threadRootId != null,
         timestampPosition = timestampPosition,
         paddingBehaviour = paddingBehaviour,
         inReplyToDetails = event.inReplyTo,
@@ -691,6 +727,31 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    senderDisplayName = "Sender with a super long name that should ellipsize",
+                    isMine = isMine,
+                    content = aTimelineItemTextContent(
+                        body = "A long text which will be displayed on several lines and" +
+                            " hopefully can be manually adjusted to test different behaviors."
+                    ),
+                    groupPosition = TimelineItemGroupPosition.First,
+                    threadInfo = EventThreadInfo(
+                        threadRootId = ThreadId("\$thread-root-id"),
+                        threadSummary = ThreadSummary(AsyncData.Uninitialized, numberOfReplies = 20L)
+                    )
+                ),
+                displayThreadSummaries = true,
             )
         }
     }

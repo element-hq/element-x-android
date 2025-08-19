@@ -7,8 +7,10 @@
 
 package io.element.android.libraries.matrix.api.timeline
 
+import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -23,6 +25,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.parcelize.Parcelize
 import java.io.File
 
 interface Timeline : AutoCloseable {
@@ -38,13 +41,16 @@ interface Timeline : AutoCloseable {
         FORWARDS
     }
 
-    enum class Mode {
-        LIVE,
-        FOCUSED_ON_EVENT,
-        PINNED_EVENTS,
-        MEDIA,
+    @Parcelize
+    sealed interface Mode : Parcelable {
+        data object Live : Mode
+        data class FocusedOnEvent(val eventId: EventId) : Mode
+        data object PinnedEvents : Mode
+        data object Media : Mode
+        data class Thread(val threadRootId: ThreadId) : Mode
     }
 
+    val mode: Mode
     val membershipChangeEventReceived: Flow<Unit>
     suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
     suspend fun paginate(direction: PaginationDirection): Result<Boolean>

@@ -13,7 +13,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.services.analytics.api)
+    api(projects.services.analytics.api)
     implementation(projects.libraries.core)
     implementation(projects.tests.testutils)
     implementation(libs.coroutines.core)

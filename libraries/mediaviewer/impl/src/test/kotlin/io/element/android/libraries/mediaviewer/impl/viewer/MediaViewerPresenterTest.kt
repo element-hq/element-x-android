@@ -528,7 +528,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - snackbar displayed when there is no more items forward images and videos`() {
         `present - snackbar displayed when there is no more items forward`(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.MEDIA),
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.Media),
             expectedSnackbarResId = R.string.screen_media_details_no_more_media_to_show,
         )
     }
@@ -536,7 +536,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - snackbar displayed when there is no more items forward files and audio`() {
         `present - snackbar displayed when there is no more items forward`(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.MEDIA),
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.Media),
             expectedSnackbarResId = R.string.screen_media_details_no_more_files_to_show,
         )
     }
@@ -599,7 +599,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - snackbar displayed when there is no more items backward images and videos`() {
         `present - snackbar displayed when there is no more items backward`(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.MEDIA),
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.Media),
             expectedSnackbarResId = R.string.screen_media_details_no_more_media_to_show,
         )
     }
@@ -607,7 +607,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - snackbar displayed when there is no more items backward files and audio`() {
         `present - snackbar displayed when there is no more items backward`(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.MEDIA),
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.Media),
             expectedSnackbarResId = R.string.screen_media_details_no_more_files_to_show,
         )
     }

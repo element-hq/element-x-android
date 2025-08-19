@@ -17,7 +17,7 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
  */
 class TypingNotificationPostProcessor(private val mode: Timeline.Mode) {
     fun process(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
-        return if (mode == Timeline.Mode.LIVE) {
+        return if (mode is Timeline.Mode.Live) {
             buildList {
                 addAll(items)
                 add(

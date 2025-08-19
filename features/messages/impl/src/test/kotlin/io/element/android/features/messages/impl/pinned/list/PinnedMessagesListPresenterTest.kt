@@ -17,6 +17,7 @@ import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProv
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -297,6 +298,7 @@ class PinnedMessagesListPresenterTest {
         room: JoinedRoom = FakeJoinedRoom(),
         syncService: SyncService = FakeSyncService(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
     ): PinnedMessagesListPresenter {
         val timelineProvider = PinnedEventsTimelineProvider(
             room = room,
@@ -314,6 +316,7 @@ class PinnedMessagesListPresenterTest {
             actionListPresenter = { anActionListState() },
             linkPresenter = { aLinkState() },
             analyticsService = analyticsService,
+            featureFlagService = featureFlagService,
             sessionCoroutineScope = this,
         )
     }
