@@ -17,6 +17,7 @@ import androidx.core.graphics.drawable.IconCompat
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.core.coroutine.withPreviousValue
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.di.AppScope
@@ -37,6 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -115,59 +117,79 @@ class DefaultNotificationConversationService @Inject constructor(
             }
             .build()
 
-        ShortcutManagerCompat.pushDynamicShortcut(context, shortcutInfo)
+        runCatchingExceptions { ShortcutManagerCompat.pushDynamicShortcut(context, shortcutInfo) }
+            .onFailure {
+                Timber.e(it, "Failed to create shortcut for room $roomId in session $sessionId")
+            }
     }
 
     override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) {
         val shortcutsToRemove = listOf("$sessionId-$roomId")
-        ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)
-        if (isRequestPinShortcutSupported) {
-            ShortcutManagerCompat.disableShortcuts(
-                context,
-                shortcutsToRemove,
-                context.getString(CommonStrings.common_android_shortcuts_remove_reason_left_room)
-            )
-        }
-    }
-
-    override suspend fun onAvailableRoomsChanged(sessionId: SessionId, roomIds: Set<RoomId>) {
-        val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
-
-        val shortcutsToRemove = mutableListOf<String>()
-        shortcuts.filter { it.id.startsWith(sessionId.value) }
-            .forEach { shortcut ->
-                val roomId = RoomId(shortcut.id.removePrefix("$sessionId-"))
-                if (!roomIds.contains(roomId)) {
-                    shortcutsToRemove.add(shortcut.id)
-                }
-            }
-
-        if (shortcutsToRemove.isNotEmpty()) {
+        runCatchingExceptions {
             ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)
             if (isRequestPinShortcutSupported) {
                 ShortcutManagerCompat.disableShortcuts(
                     context,
                     shortcutsToRemove,
-                    context.getString(CommonStrings.common_android_shortcuts_remove_reason_left_room))
+                    context.getString(CommonStrings.common_android_shortcuts_remove_reason_left_room)
+                )
             }
+        }.onFailure {
+            Timber.e(it, "Failed to remove shortcut for room $roomId in session $sessionId")
+        }
+    }
+
+    override suspend fun onAvailableRoomsChanged(sessionId: SessionId, roomIds: Set<RoomId>) {
+        runCatchingExceptions {
+            val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
+
+            val shortcutsToRemove = mutableListOf<String>()
+            shortcuts.filter { it.id.startsWith(sessionId.value) }
+                .forEach { shortcut ->
+                    val roomId = RoomId(shortcut.id.removePrefix("$sessionId-"))
+                    if (!roomIds.contains(roomId)) {
+                        shortcutsToRemove.add(shortcut.id)
+                    }
+                }
+
+            if (shortcutsToRemove.isNotEmpty()) {
+                ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)
+                if (isRequestPinShortcutSupported) {
+                    ShortcutManagerCompat.disableShortcuts(
+                        context,
+                        shortcutsToRemove,
+                        context.getString(CommonStrings.common_android_shortcuts_remove_reason_left_room)
+                    )
+                }
+            }
+        }.onFailure {
+            Timber.e(it, "Failed to remove shortcuts for session $sessionId")
         }
     }
 
     private fun clearShortcuts() {
-        ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+        runCatchingExceptions {
+            ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+        }.onFailure {
+            Timber.e(it, "Failed to clear all shortcuts")
+        }
     }
 
     private fun onSessionLogOut(sessionId: SessionId) {
-        val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
-        val shortcutIdsToRemove = shortcuts.filter { it.id.startsWith(sessionId.value) }.map { it.id }
-        ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutIdsToRemove)
+        runCatchingExceptions {
+            val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
+            val shortcutIdsToRemove = shortcuts.filter { it.id.startsWith(sessionId.value) }.map { it.id }
+            ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutIdsToRemove)
 
-        if (isRequestPinShortcutSupported) {
-            ShortcutManagerCompat.disableShortcuts(
-                context,
-                shortcutIdsToRemove,
-                context.getString(CommonStrings.common_android_shortcuts_remove_reason_session_logged_out)
-            )
+            if (isRequestPinShortcutSupported) {
+                ShortcutManagerCompat.disableShortcuts(
+                    context,
+                    shortcutIdsToRemove,
+                    context.getString(CommonStrings.common_android_shortcuts_remove_reason_session_logged_out)
+                )
+            }
+        }.onFailure {
+            Timber.e(it, "Failed to remove shortcuts for session $sessionId after logout")
         }
     }
 }
