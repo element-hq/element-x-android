@@ -23,20 +23,20 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import io.element.android.libraries.matrix.ui.media.DefaultImageLoaderHolder
+import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.matrix.ui.media.InitialsAvatarBitmapGenerator
+import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.intent.IntentProvider
-import io.element.android.libraries.push.impl.notifications.DefaultNotificationBitmapLoader
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultNotificationConversationService @Inject constructor(
     @ApplicationContext private val context: Context,
     private val intentProvider: IntentProvider,
-    private val bitmapLoader: DefaultNotificationBitmapLoader,
+    private val bitmapLoader: NotificationBitmapLoader,
     private val matrixClientProvider: MatrixClientProvider,
-    private val imageLoaderHolder: DefaultImageLoaderHolder,
+    private val imageLoaderHolder: ImageLoaderHolder,
 ) : NotificationConversationService {
     override suspend fun onSendMessage(
         sessionId: SessionId,
@@ -83,14 +83,12 @@ class DefaultNotificationConversationService @Inject constructor(
 
     override suspend fun onAvailableRoomsChanged(sessionId: SessionId, roomIds: Set<RoomId>) {
         val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
-        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return
 
         val shortcutsToRemove = mutableListOf<String>()
-        val existingRoomIds = client.getJoinedRoomIds().getOrNull() ?: return
         shortcuts.filter { it.id.startsWith(sessionId.value) }
             .forEach { shortcut ->
                 val roomId = RoomId(shortcut.id.removePrefix("$sessionId-"))
-                if (!existingRoomIds.contains(roomId)) {
+                if (!roomIds.contains(roomId)) {
                     shortcutsToRemove.add(shortcut.id)
                 }
             }
