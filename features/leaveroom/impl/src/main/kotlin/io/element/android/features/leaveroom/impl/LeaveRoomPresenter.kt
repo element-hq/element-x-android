@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
+import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -33,6 +34,7 @@ import javax.inject.Inject
 class LeaveRoomPresenter @Inject constructor(
     private val client: MatrixClient,
     private val dispatchers: CoroutineDispatchers,
+    private val notificationConversationService: NotificationConversationService,
 ) : Presenter<LeaveRoomState> {
     @Composable
     override fun present(): LeaveRoomState {
@@ -78,6 +80,7 @@ class LeaveRoomPresenter @Inject constructor(
             client.getRoom(roomId)!!.use { room ->
                 room
                     .leave()
+                    .onSuccess { notificationConversationService.onLeftRoom(client.sessionId, roomId) }
                     .onFailure { Timber.e(it, "Error while leaving room ${room.roomId}") }
                     .getOrThrow()
             }

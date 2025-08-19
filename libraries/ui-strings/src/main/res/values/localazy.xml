@@ -167,6 +167,8 @@
   <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_an_image">"an image"</string>
   <string name="common_analytics">"Analytics"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"You left the room"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"You were logged out of the session"</string>
   <string name="common_appearance">"Appearance"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Blocked users"</string>

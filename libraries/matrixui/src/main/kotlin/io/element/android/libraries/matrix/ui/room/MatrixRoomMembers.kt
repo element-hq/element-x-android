@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
+import io.element.android.libraries.matrix.api.room.getDirectRoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
 
 @Composable
@@ -39,14 +40,10 @@ fun getRoomMemberAsState(roomMembersState: RoomMembersState, userId: UserId): St
 
 @Composable
 fun BaseRoom.getDirectRoomMember(roomMembersState: RoomMembersState): State<RoomMember?> {
-    val roomMembers = roomMembersState.roomMembers()
     val roomInfo by roomInfoFlow.collectAsState()
-    return remember(roomMembersState, roomInfo.isDirect) {
+    return remember {
         derivedStateOf {
-            roomMembers
-                ?.filter { it.membership.isActive() }
-                ?.takeIf { it.size == 2 && roomInfo.isDirect == true }
-                ?.find { it.userId != sessionId }
+            roomMembersState.getDirectRoomMember(roomInfo, sessionId)
         }
     }
 }
