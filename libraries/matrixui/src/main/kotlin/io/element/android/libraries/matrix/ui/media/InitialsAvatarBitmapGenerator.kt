@@ -12,6 +12,8 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -115,17 +117,21 @@ class InitialsAvatarBitmapGenerator(
 
 @Composable
 @PreviewsDayNight
-internal fun InitialsAvatarBitmapGeneratorPreview() {
-    ElementPreview {
-        val avatarData = remember { AvatarData(id = "test", name = "Avatar", size = AvatarSize.IncomingCall) }
-        val isLightTheme = ElementTheme.isLightTheme
-        val bitmap = remember(isLightTheme) {
-            val generator = InitialsAvatarBitmapGenerator(useDarkTheme = !isLightTheme)
-            generator.generateBitmap(512, avatarData)?.asImageBitmap()
-        }
+internal fun InitialsAvatarBitmapGeneratorPreview() = ElementPreview {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        repeat(6) { index ->
+            val avatarData = remember { AvatarData(id = index.toString(), name = Char('0'.code + index).toString(), size = AvatarSize.IncomingCall) }
+            val isLightTheme = ElementTheme.isLightTheme
+            val bitmap = remember(isLightTheme) {
+                val generator = InitialsAvatarBitmapGenerator(useDarkTheme = !isLightTheme)
+                generator.generateBitmap(512, avatarData)?.asImageBitmap()
+            }
 
-        bitmap?.let {
-            Image(bitmap = it, contentDescription = "Initials Avatar", modifier = Modifier.size(48.dp))
-        } ?: Text("No avatar generated")
+            bitmap?.let {
+                Image(bitmap = it, contentDescription = null, modifier = Modifier.size(48.dp))
+            } ?: Text("No avatar generated")
+        }
     }
 }
