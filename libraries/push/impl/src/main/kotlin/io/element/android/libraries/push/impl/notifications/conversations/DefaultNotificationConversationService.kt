@@ -15,10 +15,13 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -27,6 +30,13 @@ import io.element.android.libraries.matrix.ui.media.InitialsAvatarBitmapGenerato
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.intent.IntentProvider
+import io.element.android.libraries.sessionstorage.api.observer.SessionListener
+import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -36,7 +46,31 @@ class DefaultNotificationConversationService @Inject constructor(
     private val bitmapLoader: NotificationBitmapLoader,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
+    private val lockScreenService: LockScreenService,
+    sessionObserver: SessionObserver,
+    @AppCoroutineScope private val coroutineScope: CoroutineScope,
 ) : NotificationConversationService {
+    private val isRequestPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(context)
+
+    init {
+        sessionObserver.addListener(object : SessionListener {
+            override suspend fun onSessionCreated(userId: String) = Unit
+
+            override suspend fun onSessionDeleted(userId: String) {
+                onSessionLogOut(SessionId(userId))
+            }
+        })
+
+        lockScreenService.isPinSetup()
+            .withPreviousValue()
+            .onEach { (hadPinCode, hasPinCode) ->
+                if (hadPinCode == false && hasPinCode) {
+                    clearShortcuts()
+                }
+            }
+            .launchIn(coroutineScope)
+    }
+
     override suspend fun onSendMessage(
         sessionId: SessionId,
         roomId: RoomId,
@@ -44,6 +78,11 @@ class DefaultNotificationConversationService @Inject constructor(
         roomIsDirect: Boolean,
         roomAvatarUrl: String?,
     ) {
+        if (lockScreenService.isPinSetup().first()) {
+            // We don't create shortcuts when a pin code is set for privacy reasons
+            return
+        }
+
         val categories = setOfNotNull(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION else null
         )
@@ -76,7 +115,15 @@ class DefaultNotificationConversationService @Inject constructor(
     }
 
     override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) {
-        ShortcutManagerCompat.removeDynamicShortcuts(context, listOf("$sessionId-$roomId"))
+        val shortcutsToRemove = listOf("$sessionId-$roomId")
+        ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)
+        if (isRequestPinShortcutSupported) {
+            ShortcutManagerCompat.disableShortcuts(
+                context,
+                shortcutsToRemove,
+                context.getString(CommonStrings.common_android_shortcuts_remove_reason_left_room)
+            )
+        }
     }
 
     override suspend fun onAvailableRoomsChanged(sessionId: SessionId, roomIds: Set<RoomId>) {
@@ -93,6 +140,30 @@ class DefaultNotificationConversationService @Inject constructor(
 
         if (shortcutsToRemove.isNotEmpty()) {
             ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)
+            if (isRequestPinShortcutSupported) {
+                ShortcutManagerCompat.disableShortcuts(
+                    context,
+                    shortcutsToRemove,
+                    context.getString(CommonStrings.common_android_shortcuts_remove_reason_left_room))
+            }
+        }
+    }
+
+    private fun clearShortcuts() {
+        ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+    }
+
+    private fun onSessionLogOut(sessionId: SessionId) {
+        val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
+        val shortcutIdsToRemove = shortcuts.filter { it.id.startsWith(sessionId.value) }.map { it.id }
+        ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutIdsToRemove)
+
+        if (isRequestPinShortcutSupported) {
+            ShortcutManagerCompat.disableShortcuts(
+                context,
+                shortcutIdsToRemove,
+                context.getString(CommonStrings.common_android_shortcuts_remove_reason_session_logged_out)
+            )
         }
     }
 }

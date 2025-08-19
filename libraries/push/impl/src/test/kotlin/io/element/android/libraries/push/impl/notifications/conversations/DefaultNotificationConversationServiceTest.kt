@@ -14,13 +14,19 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.push.impl.notifications.factories.FakeIntentProvider
 import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolder
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
+import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,7 +47,6 @@ class DefaultNotificationConversationServiceTest {
             roomName = "Room title",
             roomIsDirect = false,
             roomAvatarUrl = null,
-            threadId = null
         )
 
         val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
@@ -103,13 +108,83 @@ class DefaultNotificationConversationServiceTest {
         assertThat(shortcuts.first().id).isEqualTo("$A_SESSION_ID-$A_ROOM_ID")
     }
 
-    private fun createService(
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `on pin code enabled, all shortcuts are cleared`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val lockScreenService = FakeLockScreenService()
+        createService(context, lockScreenService = lockScreenService)
+
+        // Make sure the pin is disabled
+        lockScreenService.setIsPinSetup(false)
+        // Give the test some time to save the pin setup value
+        runCurrent()
+
+        // We add a couple of shortcuts from different sessions
+        val shortcutInfoA = ShortcutInfoCompat.Builder(context, "$A_SESSION_ID-$A_ROOM_ID")
+            .setShortLabel("Room title")
+            .setIntent(Intent(Intent.ACTION_VIEW))
+            .build()
+        val shortcutInfoB = ShortcutInfoCompat.Builder(context, "$A_SESSION_ID_2-$A_ROOM_ID_2")
+            .setShortLabel("Room title")
+            .setIntent(Intent(Intent.ACTION_VIEW))
+            .build()
+        ShortcutManagerCompat.setDynamicShortcuts(context, listOf(shortcutInfoA, shortcutInfoB))
+        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).hasSize(2)
+
+        // Enable the pin code
+        lockScreenService.setIsPinSetup(true)
+        // Give the test some time to save the new pin setup value
+        runCurrent()
+
+        // Then we check there are no shortcuts left from any session
+        val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
+        assertThat(shortcuts).isEmpty()
+    }
+
+    @Test
+    fun `on session logged out, all shortcuts for the session are cleared`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val sessionObserver = FakeSessionObserver()
+        createService(context, sessionObserver = sessionObserver)
+
+        // Set the initial session state
+        sessionObserver.onSessionCreated(A_SESSION_ID.value)
+        sessionObserver.onSessionCreated(A_SESSION_ID_2.value)
+
+        // We add a couple of shortcuts from different sessions
+        val shortcutInfoA = ShortcutInfoCompat.Builder(context, "$A_SESSION_ID-$A_ROOM_ID")
+            .setShortLabel("Room title")
+            .setIntent(Intent(Intent.ACTION_VIEW))
+            .build()
+        val shortcutInfoB = ShortcutInfoCompat.Builder(context, "$A_SESSION_ID_2-$A_ROOM_ID_2")
+            .setShortLabel("Room title")
+            .setIntent(Intent(Intent.ACTION_VIEW))
+            .build()
+        ShortcutManagerCompat.setDynamicShortcuts(context, listOf(shortcutInfoA, shortcutInfoB))
+        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).hasSize(2)
+
+        // A session is logged out
+        sessionObserver.onSessionDeleted(A_SESSION_ID.value)
+
+        // Then we check the shortcuts for the logged out session are removed, but the rest remain
+        val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
+        assertThat(shortcuts).hasSize(1)
+        assertThat(shortcuts.first().id).startsWith(A_SESSION_ID_2.value)
+    }
+
+    private fun TestScope.createService(
         context: Context = InstrumentationRegistry.getInstrumentation().context,
+        sessionObserver: FakeSessionObserver = FakeSessionObserver(),
+        lockScreenService: FakeLockScreenService = FakeLockScreenService(),
     ) = DefaultNotificationConversationService(
         context = context,
         intentProvider = FakeIntentProvider(),
         bitmapLoader = FakeNotificationBitmapLoader(),
         matrixClientProvider = FakeMatrixClientProvider(),
         imageLoaderHolder = FakeImageLoaderHolder(),
+        sessionObserver = sessionObserver,
+        lockScreenService = lockScreenService,
+        coroutineScope = backgroundScope,
     )
 }
