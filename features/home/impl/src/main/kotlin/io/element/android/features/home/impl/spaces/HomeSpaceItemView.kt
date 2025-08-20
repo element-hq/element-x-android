@@ -54,6 +54,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 internal fun HomeSpaceItemView(
     spaceRoom: SpaceRoom,
     showUnreadIndicator: Boolean,
+    hideAvatars: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -61,6 +62,7 @@ internal fun HomeSpaceItemView(
         modifier = modifier,
         spaceRoom = spaceRoom,
         onClick = onClick,
+        hideAvatars = hideAvatars,
         onLongClick = { },
     ) {
         NameAndIndicatorRow(
@@ -151,7 +153,7 @@ private fun SpaceScaffoldRow(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
-    hideAvatarImage: Boolean,
+    hideAvatars: Boolean,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val clickModifier = Modifier
@@ -173,7 +175,7 @@ private fun SpaceScaffoldRow(
         Avatar(
             avatarData = spaceRoom.getAvatarData(AvatarSize.SpaceListItem),
             avatarType = AvatarType.Space(),
-            hideImage = hideAvatarImage,
+            hideImage = hideAvatars,
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(
@@ -189,6 +191,7 @@ internal fun HomeSpaceItemViewPreview(@PreviewParameter(SpaceRoomProvider::class
     HomeSpaceItemView(
         spaceRoom = spaceRoom,
         showUnreadIndicator = false,
+        hideAvatars = true,
         onClick = {},
     )
 }

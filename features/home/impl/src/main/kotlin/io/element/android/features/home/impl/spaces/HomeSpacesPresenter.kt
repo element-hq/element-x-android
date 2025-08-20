@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.seenSpaceIds
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentSet
@@ -26,6 +27,12 @@ class HomeSpacesPresenter @Inject constructor(
 ) : Presenter<HomeSpacesState> {
     @Composable
     override fun present(): HomeSpacesState {
+        val hideInvitesAvatar by remember {
+            client
+                .mediaPreviewService()
+                .mediaPreviewConfigFlow
+                .mapState { config -> config.hideInviteAvatar }
+        }.collectAsState()
         val spaceRooms by client.spaceService.spaceRooms.collectAsState(emptyList())
         val seenSpaceInvites by remember {
             seenInvitesStore.seenSpaceIds().map { it.toPersistentSet() }
@@ -38,6 +45,7 @@ class HomeSpacesPresenter @Inject constructor(
         return HomeSpacesState(
             spaceRooms = spaceRooms,
             seenSpaceInvites = seenSpaceInvites,
+            hideInvitesAvatar = hideInvitesAvatar,
             eventSink = ::handleEvents,
         )
     }

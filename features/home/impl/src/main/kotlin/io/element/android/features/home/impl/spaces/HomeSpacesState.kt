@@ -14,5 +14,6 @@ import kotlinx.collections.immutable.ImmutableSet
 data class HomeSpacesState(
     val spaceRooms: List<SpaceRoom>,
     val seenSpaceInvites: ImmutableSet<SpaceId>,
+    val hideInvitesAvatar: Boolean,
     val eventSink: (HomeSpacesEvents) -> Unit,
 )
