@@ -25,9 +25,11 @@ fun HomeSpacesView(
     LazyColumn(modifier) {
         state.spaceRooms.forEach {
             item(it.spaceId) {
+                val isInvitation = it.state == CurrentUserMembership.INVITED
                 HomeSpaceItemView(
                     spaceRoom = it,
-                    showUnreadIndicator = it.state == CurrentUserMembership.INVITED && it.spaceId !in state.seenSpaceInvites,
+                    showUnreadIndicator = isInvitation && it.spaceId !in state.seenSpaceInvites,
+                    hideAvatars = isInvitation && state.hideInvitesAvatar,
                     onClick = {
                         onSpaceClick(it.spaceId)
                     }
