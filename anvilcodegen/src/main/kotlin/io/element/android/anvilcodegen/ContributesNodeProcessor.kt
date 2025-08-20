@@ -139,7 +139,7 @@ class ContributesNodeProcessor(
         val nodeClassName = ClassName.bestGuess(ksClass.qualifiedName!!.asString())
         val buildContextClassName = contextAssistedParam.type.toTypeName()
         val pluginsClassName = pluginsAssistedParam.type.toTypeName()
-        logger.warn("Generating assisted factory for ${ksClass.qualifiedName}")
+        logger.warn("Generating assisted factory for $nodeClassName")
         val content = FileSpec.builder(generatedPackage, assistedFactoryClassName)
             .addType(
                 TypeSpec.interfaceBuilder(assistedFactoryClassName)
