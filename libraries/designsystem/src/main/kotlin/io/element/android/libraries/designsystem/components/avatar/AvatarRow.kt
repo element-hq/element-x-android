@@ -38,6 +38,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param modifier Jetpack Compose modifier
  * @param overlapRatio the overlap ration. When 0f, avatars will render without overlap, when 1f
  * only the first avatar will be visible
+ * @param lastOnTop if true, the last visible avatar will be rendered on top.
  */
 @Composable
 fun AvatarRow(
@@ -45,6 +46,7 @@ fun AvatarRow(
     avatarType: AvatarType,
     modifier: Modifier = Modifier,
     overlapRatio: Float = 0.5f,
+    lastOnTop: Boolean = false,
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Box(
@@ -54,23 +56,35 @@ fun AvatarRow(
         val avatarSize = avatarDataList.firstOrNull()?.size?.dp ?: return
         val avatarSizePx = avatarSize.toPx()
         avatarDataList
-            .reversed()
+            .let {
+                if (lastOnTop) {
+                    it
+                } else {
+                    it.reversed()
+                }
+            }
             .forEachIndexed { index, avatarData ->
+                val startPadding = if (lastOnTop) {
+                    avatarSize * (1 - overlapRatio) * index
+                } else {
+                    avatarSize * (1 - overlapRatio) * (lastItemIndex - index)
+                }
                 Avatar(
                     modifier = Modifier
-                        .padding(start = avatarSize * (1 - overlapRatio) * (lastItemIndex - index))
+                        .padding(start = startPadding)
                         .graphicsLayer {
                             compositingStrategy = CompositingStrategy.Offscreen
                         }
                         .drawWithContent {
-                            // Draw content and clear the pixels for the avatar on the left (right in RTL).
+                            // Draw content and clear the pixels for the avatar on the left (right in RTL) or when lastOnTop is true on
+                            // the right (left in RTL).
                             drawContent()
-                            val xOffset = if (isRtl) {
-                                size.width - avatarSizePx * (overlapRatio - 0.5f)
-                            } else {
-                                0f + avatarSizePx * (overlapRatio - 0.5f)
-                            }
                             if (index < lastItemIndex) {
+                                val xOffset = if (isRtl == lastOnTop) {
+                                    avatarSizePx * (overlapRatio - 0.5f)
+                                } else {
+                                    size.width - avatarSizePx * (overlapRatio - 0.5f)
+                                }
                                 drawCircle(
                                     color = Color.Black,
                                     center = Offset(
@@ -103,6 +117,17 @@ internal fun AvatarRowPreview(@PreviewParameter(OverlapRatioProvider::class) ove
 
 @Composable
 @PreviewsDayNight
+internal fun AvatarRowLastOnTopPreview(@PreviewParameter(OverlapRatioProvider::class) overlapRatio: Float) {
+    ElementPreview {
+        ContentToPreview(
+            overlapRatio = overlapRatio,
+            lastOnTop = true,
+        )
+    }
+}
+
+@Composable
+@PreviewsDayNight
 internal fun AvatarRowRtlPreview(@PreviewParameter(OverlapRatioProvider::class) overlapRatio: Float) {
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Rtl,
@@ -114,7 +139,25 @@ internal fun AvatarRowRtlPreview(@PreviewParameter(OverlapRatioProvider::class) 
 }
 
 @Composable
-private fun ContentToPreview(overlapRatio: Float) {
+@PreviewsDayNight
+internal fun AvatarRowLastOnTopRtlPreview(@PreviewParameter(OverlapRatioProvider::class) overlapRatio: Float) {
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Rtl,
+    ) {
+        ElementPreview {
+            ContentToPreview(
+                overlapRatio = overlapRatio,
+                lastOnTop = true,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ContentToPreview(
+    overlapRatio: Float,
+    lastOnTop: Boolean = false,
+) {
     AvatarRow(
         avatarDataList = listOf("A", "B", "C").map {
             AvatarData(
@@ -125,5 +168,6 @@ private fun ContentToPreview(overlapRatio: Float) {
         }.toImmutableList(),
         avatarType = AvatarType.User,
         overlapRatio = overlapRatio,
+        lastOnTop = lastOnTop,
     )
 }
