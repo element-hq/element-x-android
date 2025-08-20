@@ -7,32 +7,25 @@
 
 package io.element.android.x.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import com.squareup.anvil.annotations.MergeSubcomponent
-import dagger.BindsInstance
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.RoomScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 @SingleIn(RoomScope::class)
-@MergeSubcomponent(RoomScope::class)
+@GraphExtension(RoomScope::class)
 interface RoomComponent : NodeFactoriesBindings {
-    @MergeSubcomponent.Builder
-    interface Builder {
-        @BindsInstance
-        fun joinedRoom(room: JoinedRoom): Builder
-
-        @BindsInstance
-        fun baseRoom(room: BaseRoom): Builder
-
-        fun build(): RoomComponent
-    }
-
     @ContributesTo(SessionScope::class)
-    interface ParentBindings {
-        fun roomComponentBuilder(): Builder
+    @GraphExtension.Factory
+    interface Factory {
+        fun create(
+            @Provides joinedRoom: JoinedRoom,
+            @Provides baseRoom: BaseRoom
+        ): RoomComponent
     }
 }

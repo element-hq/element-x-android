@@ -16,12 +16,13 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * This class is responsible for processing suggestions when `@`, `/` or `#` are type in the composer.
  */
-class SuggestionsProcessor @Inject constructor() {
+@Inject
+class SuggestionsProcessor() {
     /**
      *  Process the suggestion.
      *  @param suggestion The current suggestion input

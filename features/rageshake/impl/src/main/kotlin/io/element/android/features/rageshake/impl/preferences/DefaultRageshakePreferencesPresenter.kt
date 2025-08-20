@@ -15,7 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvents
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
@@ -25,10 +25,11 @@ import io.element.android.features.rageshake.impl.rageshake.RageshakeDataStore
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultRageshakePreferencesPresenter @Inject constructor(
+@Inject
+class DefaultRageshakePreferencesPresenter(
     private val rageshake: RageShake,
     private val rageshakeDataStore: RageshakeDataStore,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,

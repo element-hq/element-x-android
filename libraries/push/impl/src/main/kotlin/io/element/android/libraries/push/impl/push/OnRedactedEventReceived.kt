@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.annotations.AppCoroutineScope
@@ -27,14 +27,15 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface OnRedactedEventReceived {
     fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>)
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultOnRedactedEventReceived @Inject constructor(
+@Inject
+class DefaultOnRedactedEventReceived(
     private val activeNotificationsProvider: ActiveNotificationsProvider,
     private val notificationDisplayer: NotificationDisplayer,
     @AppCoroutineScope

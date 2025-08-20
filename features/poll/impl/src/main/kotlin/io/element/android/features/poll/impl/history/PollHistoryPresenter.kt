@@ -29,9 +29,10 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class PollHistoryPresenter @Inject constructor(
+@Inject
+class PollHistoryPresenter(
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
     private val sendPollResponseAction: SendPollResponseAction,

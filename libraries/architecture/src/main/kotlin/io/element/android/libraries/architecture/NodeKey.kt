@@ -8,7 +8,7 @@
 package io.element.android.libraries.architecture
 
 import com.bumble.appyx.core.node.Node
-import dagger.MapKey
+import dev.zacsweers.metro.MapKey
 import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)

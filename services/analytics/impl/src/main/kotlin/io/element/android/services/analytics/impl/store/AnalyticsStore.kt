@@ -14,14 +14,14 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Also accessed via reflection by the instrumentation tests @see [im.vector.app.ClearCurrentSessionRule].
@@ -45,7 +45,8 @@ interface AnalyticsStore {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultAnalyticsStore @Inject constructor(
+@Inject
+class DefaultAnalyticsStore(
     @ApplicationContext private val context: Context
 ) : AnalyticsStore {
     private val userConsent = booleanPreferencesKey("user_consent")

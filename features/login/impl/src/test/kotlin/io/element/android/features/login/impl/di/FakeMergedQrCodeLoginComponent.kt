@@ -22,8 +22,8 @@ internal class FakeMergedQrCodeLoginComponent(private val qrCodeLoginManager: Qr
     override fun qrCodeLoginManager(): QrCodeLoginManager = qrCodeLoginManager
 
     class Builder(private val qrCodeLoginManager: QrCodeLoginManager = FakeQrCodeLoginManager()) :
-        QrCodeLoginComponent.Builder {
-        override fun build(): QrCodeLoginComponent {
+        QrCodeLoginComponent.Factory {
+        override fun create(): QrCodeLoginComponent {
             return FakeMergedQrCodeLoginComponent(qrCodeLoginManager)
         }
     }

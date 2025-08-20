@@ -10,7 +10,7 @@ package io.element.android.libraries.mediaviewer.impl
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
@@ -19,10 +19,11 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerNode
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultMediaViewerEntryPoint @Inject constructor() : MediaViewerEntryPoint {
+@Inject
+class DefaultMediaViewerEntryPoint() : MediaViewerEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): MediaViewerEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

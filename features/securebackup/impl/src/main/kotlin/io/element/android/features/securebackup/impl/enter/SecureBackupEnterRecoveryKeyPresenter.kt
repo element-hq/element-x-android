@@ -24,9 +24,10 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
+@Inject
+class SecureBackupEnterRecoveryKeyPresenter(
     private val encryptionService: EncryptionService,
     private val recoveryKeyTools: RecoveryKeyTools,
 ) : Presenter<SecureBackupEnterRecoveryKeyState> {

@@ -8,9 +8,10 @@
 package io.element.android.libraries.pushproviders.firebase
 
 import io.element.android.libraries.pushproviders.api.PushData
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class FirebasePushParser @Inject constructor() {
+@Inject
+class FirebasePushParser() {
     fun parse(message: Map<String, String?>): PushData? {
         val pushDataFirebase = PushDataFirebase(
             eventId = message["event_id"],

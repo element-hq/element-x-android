@@ -13,18 +13,19 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "push_client_secret_store")
 
 @ContributesBinding(AppScope::class)
-class DataStorePushClientSecretStore @Inject constructor(
+@Inject
+class DataStorePushClientSecretStore(
     @ApplicationContext private val context: Context,
 ) : PushClientSecretStore {
     override suspend fun storeSecret(userId: SessionId, clientSecret: String) {

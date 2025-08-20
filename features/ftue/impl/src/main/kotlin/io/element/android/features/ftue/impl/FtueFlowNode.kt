@@ -21,8 +21,8 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.replace
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.ftue.impl.notifications.NotificationsOptInNode
@@ -45,7 +45,8 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-class FtueFlowNode @AssistedInject constructor(
+@Inject
+class FtueFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val ftueState: DefaultFtueService,
@@ -159,7 +160,8 @@ class FtueFlowNode @AssistedInject constructor(
     }
 
     @ContributesNode(AppScope::class)
-    class PlaceholderNode @AssistedInject constructor(
+    @Inject
+class PlaceholderNode(
         @Assisted buildContext: BuildContext,
         @Assisted plugins: List<Plugin>,
     ) : Node(buildContext, plugins = plugins) {

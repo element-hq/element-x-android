@@ -14,9 +14,10 @@ import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class FallbackNotificationFactory @Inject constructor(
+@Inject
+class FallbackNotificationFactory(
     private val clock: SystemClock,
     private val stringProvider: StringProvider,
 ) {

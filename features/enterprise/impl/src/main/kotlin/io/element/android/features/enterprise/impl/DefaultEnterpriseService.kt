@@ -7,7 +7,7 @@
 
 package io.element.android.features.enterprise.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.compound.tokens.generated.compoundColorsDark
 import io.element.android.compound.tokens.generated.compoundColorsLight
@@ -16,10 +16,11 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultEnterpriseService @Inject constructor() : EnterpriseService {
+@Inject
+class DefaultEnterpriseService() : EnterpriseService {
     override val isEnterpriseBuild = false
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false

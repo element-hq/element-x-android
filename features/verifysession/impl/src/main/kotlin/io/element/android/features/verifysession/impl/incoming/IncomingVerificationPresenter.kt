@@ -17,9 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationState.Step
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
@@ -38,7 +38,8 @@ import timber.log.Timber
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationStateMachine.Event as StateMachineEvent
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationStateMachine.State as StateMachineState
 
-class IncomingVerificationPresenter @AssistedInject constructor(
+@Inject
+class IncomingVerificationPresenter(
     @Assisted private val verificationRequest: VerificationRequest.Incoming,
     @Assisted private val navigator: IncomingVerificationNavigator,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,

@@ -7,9 +7,9 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
@@ -21,7 +21,7 @@ import io.element.android.libraries.mediaviewer.impl.model.hasEvent
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface MediaTimeline {
     suspend fun getTimeline(): Result<Timeline>
@@ -36,7 +36,8 @@ interface MediaTimeline {
  */
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-class LiveMediaTimeline @Inject constructor(
+@Inject
+class LiveMediaTimeline(
     private val room: JoinedRoom,
 ) : MediaTimeline {
     private var timeline: Timeline? = null

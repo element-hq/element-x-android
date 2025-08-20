@@ -15,8 +15,8 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.impl.settings.LockScreenSettingsFlowNode
@@ -29,7 +29,8 @@ import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-class LockScreenFlowNode @AssistedInject constructor(
+@Inject
+class LockScreenFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<LockScreenFlowNode.NavTarget>(

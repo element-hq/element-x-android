@@ -7,9 +7,9 @@
 
 package io.element.android.features.home.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.home.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.roomlist.RoomListPresenter
@@ -20,7 +20,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 
 @ContributesTo(SessionScope::class)
-@Module
+@BindingContainer
 interface RoomListModule {
     @Binds
     fun bindRoomListPresenter(presenter: RoomListPresenter): Presenter<RoomListState>

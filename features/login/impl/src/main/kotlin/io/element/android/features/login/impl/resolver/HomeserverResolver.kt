@@ -21,12 +21,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import java.util.Collections
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Resolve homeserver base on search terms.
  */
-class HomeserverResolver @Inject constructor(
+@Inject
+class HomeserverResolver(
     private val dispatchers: CoroutineDispatchers,
     private val wellknownRetriever: WellknownRetriever,
 ) {

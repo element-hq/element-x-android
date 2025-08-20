@@ -21,9 +21,10 @@ import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.store.PushDataStore
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class BatteryOptimizationPresenter @Inject constructor(
+@Inject
+class BatteryOptimizationPresenter(
     private val pushDataStore: PushDataStore,
     private val mutableBatteryOptimizationStore: MutableBatteryOptimizationStore,
     private val batteryOptimization: BatteryOptimization,

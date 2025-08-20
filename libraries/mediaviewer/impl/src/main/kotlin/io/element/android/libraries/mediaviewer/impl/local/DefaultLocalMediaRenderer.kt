@@ -10,7 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.local
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.di.AppScope
@@ -19,10 +19,11 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
 import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultLocalMediaRenderer @Inject constructor(
+@Inject
+class DefaultLocalMediaRenderer(
     private val textFileViewer: TextFileViewer,
     private val audioFocus: AudioFocus,
 ) : LocalMediaRenderer {

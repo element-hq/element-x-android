@@ -7,17 +7,18 @@
 
 package io.element.android.features.poll.impl.actions
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.services.analytics.api.AnalyticsService
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(RoomScope::class)
-class DefaultSendPollResponseAction @Inject constructor(
+@Inject
+class DefaultSendPollResponseAction(
     private val analyticsService: AnalyticsService,
 ) : SendPollResponseAction {
     override suspend fun execute(timeline: Timeline, pollStartId: EventId, answerId: String): Result<Unit> {

@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.GraphExtension
 import io.element.android.libraries.di.AppScope
 
-@ContributesTo(AppScope::class)
+@GraphExtension(AppScope::class)
 interface VectorUnifiedPushMessagingReceiverBindings {
     fun inject(receiver: VectorUnifiedPushMessagingReceiver)
 }

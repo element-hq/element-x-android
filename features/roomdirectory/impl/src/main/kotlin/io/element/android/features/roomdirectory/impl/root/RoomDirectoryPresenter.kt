@@ -26,11 +26,12 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private const val SEARCH_BATCH_SIZE = 20
 
-class RoomDirectoryPresenter @Inject constructor(
+@Inject
+class RoomDirectoryPresenter(
     private val dispatchers: CoroutineDispatchers,
     private val roomDirectoryService: RoomDirectoryService,
 ) : Presenter<RoomDirectoryState> {

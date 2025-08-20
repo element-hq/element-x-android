@@ -9,13 +9,14 @@ package io.element.android.features.knockrequests.impl.banner
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.knockrequests.api.banner.KnockRequestsBannerRenderer
 import io.element.android.libraries.di.RoomScope
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(RoomScope::class)
-class DefaultKnockRequestsBannerRenderer @Inject constructor(
+@Inject
+class DefaultKnockRequestsBannerRenderer(
     private val presenter: KnockRequestsBannerPresenter,
 ) : KnockRequestsBannerRenderer {
     @Composable

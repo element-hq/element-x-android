@@ -7,28 +7,19 @@
 
 package io.element.android.x.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import com.squareup.anvil.annotations.MergeSubcomponent
-import dagger.BindsInstance
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 
-@SingleIn(SessionScope::class)
-@MergeSubcomponent(SessionScope::class)
+@GraphExtension(SessionScope::class)
 interface SessionComponent : NodeFactoriesBindings {
-    @MergeSubcomponent.Builder
-    interface Builder {
-        @BindsInstance
-        fun client(matrixClient: MatrixClient): Builder
-
-        fun build(): SessionComponent
-    }
-
     @ContributesTo(AppScope::class)
-    interface ParentBindings {
-        fun sessionComponentBuilder(): Builder
+    @GraphExtension.Factory
+    interface Factory {
+        fun create(@Provides matrixClient: MatrixClient): SessionComponent
     }
 }

@@ -42,11 +42,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val pusherTag = LoggerTag("Pusher", LoggerTag.PushLoggerTag)
 
-class LoggedInPresenter @Inject constructor(
+@Inject
+class LoggedInPresenter(
     private val matrixClient: MatrixClient,
     private val syncService: SyncService,
     private val pushService: PushService,

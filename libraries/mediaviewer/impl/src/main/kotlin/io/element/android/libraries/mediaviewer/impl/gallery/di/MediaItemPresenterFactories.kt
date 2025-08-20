@@ -9,21 +9,21 @@ package io.element.android.libraries.mediaviewer.impl.gallery.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
 import dagger.multibindings.Multibinds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
-import javax.inject.Inject
 
 /**
  * Dagger module that declares the [MediaItemPresenterFactory] map multi binding.
  *
  * Its sole purpose is to support the case of an empty map multibinding.
  */
-@Module
+@BindingContainer
 @ContributesTo(RoomScope::class)
 interface MediaItemPresenterFactoriesModule {
     @Multibinds
@@ -38,7 +38,8 @@ interface MediaItemPresenterFactoriesModule {
  * goes out of the [LazyColumn] viewport.
  */
 @SingleIn(RoomScope::class)
-class MediaItemPresenterFactories @Inject constructor(
+@Inject
+class MediaItemPresenterFactories(
     private val factories: @JvmSuppressWildcards Map<Class<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>,
 ) {
     private val presenters: MutableMap<MediaItem.Event, Presenter<*>> = mutableMapOf()

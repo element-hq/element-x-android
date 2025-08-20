@@ -9,11 +9,12 @@ package io.element.android.libraries.dateformatter.impl
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toLocalDateTime
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Clock
 import kotlin.time.Instant
 
-class LocalDateTimeProvider @Inject constructor(
+@Inject
+class LocalDateTimeProvider(
     private val clock: Clock,
     private val timezoneProvider: TimezoneProvider,
 ) {

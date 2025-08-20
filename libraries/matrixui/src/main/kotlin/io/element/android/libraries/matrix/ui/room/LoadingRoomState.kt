@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @Immutable
 sealed interface LoadingRoomState {
@@ -36,7 +36,8 @@ open class LoadingRoomStateProvider : PreviewParameterProvider<LoadingRoomState>
         )
 }
 
-class LoadingRoomStateFlowFactory @Inject constructor(private val matrixClient: MatrixClient) {
+@Inject
+class LoadingRoomStateFlowFactory(private val matrixClient: MatrixClient) {
     fun create(lifecycleScope: CoroutineScope, roomId: RoomId): StateFlow<LoadingRoomState> =
         getJoinedRoomFlow(roomId)
             .map { room ->

@@ -11,9 +11,9 @@ import android.content.Context
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 
@@ -42,7 +42,7 @@ interface SimplePlayer {
 }
 
 @ContributesTo(RoomScope::class)
-@Module
+@BindingContainer
 object SimplePlayerModule {
     @Provides
     fun simplePlayerProvider(

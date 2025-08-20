@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
@@ -18,7 +18,7 @@ import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.toUserList
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val loggerTag = LoggerTag("FirebaseNewTokenHandler", LoggerTag.PushLoggerTag)
 
@@ -30,7 +30,8 @@ interface FirebaseNewTokenHandler {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFirebaseNewTokenHandler @Inject constructor(
+@Inject
+class DefaultFirebaseNewTokenHandler(
     private val pusherSubscriber: PusherSubscriber,
     private val sessionStore: SessionStore,
     private val userPushStoreFactory: UserPushStoreFactory,

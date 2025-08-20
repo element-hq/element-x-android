@@ -12,9 +12,10 @@ import android.net.Uri
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class DeeplinkParser @Inject constructor() {
+@Inject
+class DeeplinkParser() {
     fun getFromIntent(intent: Intent): DeeplinkData? {
         return intent
             .takeIf { it.action == Intent.ACTION_VIEW }

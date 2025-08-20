@@ -17,8 +17,8 @@ import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.securebackup.impl.disable.SecureBackupDisableNode
@@ -34,7 +34,8 @@ import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-class SecureBackupFlowNode @AssistedInject constructor(
+@Inject
+class SecureBackupFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<SecureBackupFlowNode.NavTarget>(

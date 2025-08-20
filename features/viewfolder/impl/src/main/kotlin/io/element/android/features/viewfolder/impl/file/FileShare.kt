@@ -11,7 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
@@ -21,7 +21,7 @@ import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface FileShare {
     suspend fun share(
@@ -30,7 +30,8 @@ interface FileShare {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFileShare @Inject constructor(
+@Inject
+class DefaultFileShare(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,

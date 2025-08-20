@@ -23,9 +23,10 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class SecureBackupDisablePresenter @Inject constructor(
+@Inject
+class SecureBackupDisablePresenter(
     private val encryptionService: EncryptionService,
     private val buildMeta: BuildMeta,
 ) : Presenter<SecureBackupDisableState> {

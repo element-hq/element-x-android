@@ -7,16 +7,17 @@
 
 package io.element.android.libraries.usersearch.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserListDataSource
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
-class MatrixUserListDataSource @Inject constructor(
+@Inject
+class MatrixUserListDataSource(
     private val client: MatrixClient
 ) : UserListDataSource {
     override suspend fun search(query: String, count: Long): List<MatrixUser> {

@@ -7,7 +7,8 @@
 
 package io.element.android.libraries.push.impl.troubleshoot
 
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
@@ -24,11 +25,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import timber.log.Timber
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-@ContributesMultibinding(AppScope::class)
-class PushLoopbackTest @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class PushLoopbackTest(
     private val pushService: PushService,
     private val diagnosticPushHandler: DiagnosticPushHandler,
     private val clock: SystemClock,

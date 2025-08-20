@@ -7,21 +7,22 @@
 
 package io.element.android.features.messages.impl.voicemessages.timeline
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface RedactedVoiceMessageManager {
     suspend fun onEachMatrixTimelineItem(timelineItems: List<MatrixTimelineItem>)
 }
 
 @ContributesBinding(RoomScope::class)
-class DefaultRedactedVoiceMessageManager @Inject constructor(
+@Inject
+class DefaultRedactedVoiceMessageManager(
     private val dispatchers: CoroutineDispatchers,
     private val mediaPlayer: MediaPlayer,
 ) : RedactedVoiceMessageManager {

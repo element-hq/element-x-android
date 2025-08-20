@@ -11,7 +11,7 @@ import android.content.Context
 import android.os.Build
 import android.os.PowerManager
 import androidx.core.content.getSystemService
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.EventId
@@ -20,10 +20,11 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.PushDatabase
 import io.element.android.libraries.push.impl.db.PushHistory
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultPushHistoryService @Inject constructor(
+@Inject
+class DefaultPushHistoryService(
     private val pushDatabase: PushDatabase,
     private val systemClock: SystemClock,
     @ApplicationContext context: Context,

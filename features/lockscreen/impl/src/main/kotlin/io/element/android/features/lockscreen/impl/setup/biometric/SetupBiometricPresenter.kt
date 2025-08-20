@@ -18,9 +18,10 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricAuthentica
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class SetupBiometricPresenter @Inject constructor(
+@Inject
+class SetupBiometricPresenter(
     private val lockScreenStore: LockScreenStore,
     private val biometricAuthenticatorManager: BiometricAuthenticatorManager,
 ) : Presenter<SetupBiometricState> {

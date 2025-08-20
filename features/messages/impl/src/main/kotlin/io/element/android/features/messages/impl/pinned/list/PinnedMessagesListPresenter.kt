@@ -17,9 +17,9 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.UserEventPermissions
@@ -61,7 +61,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class PinnedMessagesListPresenter @AssistedInject constructor(
+@Inject
+class PinnedMessagesListPresenter(
     @Assisted private val navigator: PinnedMessagesListNavigator,
     private val room: JoinedRoom,
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,

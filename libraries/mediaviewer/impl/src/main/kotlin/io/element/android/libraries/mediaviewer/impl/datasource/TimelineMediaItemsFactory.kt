@@ -21,9 +21,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TimelineMediaItemsFactory @Inject constructor(
+@Inject
+class TimelineMediaItemsFactory(
     private val dispatchers: CoroutineDispatchers,
     private val virtualItemFactory: VirtualItemFactory,
     private val eventItemFactory: EventItemFactory,

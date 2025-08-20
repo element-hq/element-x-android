@@ -15,7 +15,7 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.IntentCompat
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.compat.queryIntentActivitiesCompat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAny
@@ -28,7 +28,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface ShareIntentHandler {
     data class UriToShare(
@@ -49,7 +49,8 @@ interface ShareIntentHandler {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultShareIntentHandler @Inject constructor(
+@Inject
+class DefaultShareIntentHandler(
     @ApplicationContext private val context: Context,
 ) : ShareIntentHandler {
     override suspend fun handleIncomingShareIntent(

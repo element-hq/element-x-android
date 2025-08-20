@@ -10,14 +10,15 @@ package io.element.android.features.messages.impl
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultMessagesEntryPoint @Inject constructor() : MessagesEntryPoint {
+@Inject
+class DefaultMessagesEntryPoint() : MessagesEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): MessagesEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

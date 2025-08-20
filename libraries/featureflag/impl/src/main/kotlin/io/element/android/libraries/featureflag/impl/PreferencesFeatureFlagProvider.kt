@@ -19,14 +19,15 @@ import io.element.android.libraries.featureflag.api.Feature
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_featureflag")
 
 /**
  * Note: this will be used only in the nightly and in the debug build.
  */
-class PreferencesFeatureFlagProvider @Inject constructor(
+@Inject
+class PreferencesFeatureFlagProvider(
     @ApplicationContext context: Context,
     private val buildMeta: BuildMeta,
 ) : MutableFeatureFlagProvider {

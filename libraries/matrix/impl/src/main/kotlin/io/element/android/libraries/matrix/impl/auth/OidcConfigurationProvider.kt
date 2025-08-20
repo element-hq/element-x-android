@@ -11,9 +11,10 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.OidcConfig
 import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import org.matrix.rustcomponents.sdk.OidcConfiguration
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class OidcConfigurationProvider @Inject constructor(
+@Inject
+class OidcConfigurationProvider(
     private val buildMeta: BuildMeta,
     private val oidcRedirectUrlProvider: OidcRedirectUrlProvider,
 ) {

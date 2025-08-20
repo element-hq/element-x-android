@@ -16,9 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.persistentListOf
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class RoomListSearchPresenter @Inject constructor(
+@Inject
+class RoomListSearchPresenter(
     private val dataSource: RoomListSearchDataSource,
 ) : Presenter<RoomListSearchState> {
     @Composable

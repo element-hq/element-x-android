@@ -11,7 +11,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import io.element.android.libraries.architecture.bindings
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.).

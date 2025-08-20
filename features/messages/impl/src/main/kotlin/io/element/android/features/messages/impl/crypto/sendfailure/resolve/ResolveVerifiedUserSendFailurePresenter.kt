@@ -22,9 +22,10 @@ import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class ResolveVerifiedUserSendFailurePresenter @Inject constructor(
+@Inject
+class ResolveVerifiedUserSendFailurePresenter(
     private val room: JoinedRoom,
     private val verifiedUserSendFailureFactory: VerifiedUserSendFailureFactory,
 ) : Presenter<ResolveVerifiedUserSendFailureState> {

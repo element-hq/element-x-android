@@ -10,14 +10,15 @@ package io.element.android.libraries.androidutils.filesize
 import android.content.Context
 import android.os.Build
 import android.text.format.Formatter
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class AndroidFileSizeFormatter @Inject constructor(
+@Inject
+class AndroidFileSizeFormatter(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) : FileSizeFormatter {

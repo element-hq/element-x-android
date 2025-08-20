@@ -7,7 +7,8 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.pushproviders.unifiedpush.R
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
@@ -19,10 +20,10 @@ import io.element.android.libraries.troubleshoot.api.test.TestFilterData
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
-@ContributesMultibinding(AppScope::class)
-class UnifiedPushTest @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class UnifiedPushTest(
     private val unifiedPushDistributorProvider: UnifiedPushDistributorProvider,
     private val openDistributorWebPageAction: OpenDistributorWebPageAction,
     private val stringProvider: StringProvider,

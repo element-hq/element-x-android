@@ -7,16 +7,16 @@
 
 package io.element.android.features.logout.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.impl.direct.DirectLogoutPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 
 @ContributesTo(SessionScope::class)
-@Module
+@BindingContainer
 interface LogoutModule {
     @Binds
     fun bindDirectLogoutPresenter(presenter: DirectLogoutPresenter): Presenter<DirectLogoutState>

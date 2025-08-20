@@ -7,7 +7,7 @@
 
 package io.element.android.features.lockscreen.impl.unlock.di
 
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.lockscreen.impl.unlock.activity.PinUnlockActivity
 import io.element.android.libraries.di.AppScope
 

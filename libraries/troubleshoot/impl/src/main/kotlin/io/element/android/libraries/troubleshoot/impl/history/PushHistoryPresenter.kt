@@ -20,9 +20,10 @@ import io.element.android.libraries.push.api.PushService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class PushHistoryPresenter @Inject constructor(
+@Inject
+class PushHistoryPresenter(
     private val pushService: PushService,
 ) : Presenter<PushHistoryState> {
     @Composable

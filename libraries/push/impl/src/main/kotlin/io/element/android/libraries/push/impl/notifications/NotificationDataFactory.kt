@@ -13,7 +13,7 @@ import android.text.style.StyleSpan
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import coil3.ImageLoader
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -25,7 +25,7 @@ import io.element.android.libraries.push.impl.notifications.model.InviteNotifiab
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface NotificationDataFactory {
     suspend fun toNotifications(
@@ -54,7 +54,8 @@ interface NotificationDataFactory {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultNotificationDataFactory @Inject constructor(
+@Inject
+class DefaultNotificationDataFactory(
     private val notificationCreator: NotificationCreator,
     private val roomGroupMessageCreator: RoomGroupMessageCreator,
     private val summaryGroupMessageCreator: SummaryGroupMessageCreator,

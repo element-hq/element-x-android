@@ -30,7 +30,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.coroutines.resume
 
 /**
@@ -50,7 +50,8 @@ private const val THUMB_MAX_HEIGHT = 600
  */
 private const val VIDEO_THUMB_FRAME = 0L
 
-class ThumbnailFactory @Inject constructor(
+@Inject
+class ThumbnailFactory(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider
 ) {

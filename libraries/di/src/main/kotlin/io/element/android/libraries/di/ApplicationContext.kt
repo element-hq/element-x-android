@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.di
 
-import javax.inject.Qualifier
+import dev.zacsweers.metro.Qualifier
 
 /**
  * Qualifies a [Context] object that represents the application context.

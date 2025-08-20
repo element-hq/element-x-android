@@ -7,22 +7,23 @@
 
 package io.element.android.libraries.network
 
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provider
 import io.element.android.libraries.core.uri.ensureTrailingSlash
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import javax.inject.Inject
-import javax.inject.Provider
 
-class RetrofitFactory @Inject constructor(
+@Inject
+class RetrofitFactory(
     private val okHttpClient: Provider<OkHttpClient>,
     private val json: Provider<Json>,
 ) {
     fun create(baseUrl: String): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl.ensureTrailingSlash())
-        .addConverterFactory(json.get().asConverterFactory("application/json".toMediaType()))
-        .callFactory { request -> okHttpClient.get().newCall(request) }
+        .addConverterFactory(json().asConverterFactory("application/json".toMediaType()))
+        .callFactory { request -> okHttpClient().newCall(request) }
         .build()
 }

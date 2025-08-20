@@ -13,9 +13,10 @@ import io.element.android.libraries.ui.utils.MultipleTapToUnlock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class ShowDeveloperSettingsProvider @Inject constructor(
+@Inject
+class ShowDeveloperSettingsProvider(
     buildMeta: BuildMeta,
 ) {
     companion object {

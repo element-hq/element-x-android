@@ -30,9 +30,10 @@ import io.element.android.libraries.matrix.ui.model.roleOf
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class RolesAndPermissionsPresenter @Inject constructor(
+@Inject
+class RolesAndPermissionsPresenter(
     private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,

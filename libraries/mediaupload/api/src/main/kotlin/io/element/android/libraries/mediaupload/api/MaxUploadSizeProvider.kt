@@ -8,12 +8,13 @@
 package io.element.android.libraries.mediaupload.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Provides the maximum upload size allowed by the Matrix server.
  */
-class MaxUploadSizeProvider @Inject constructor(
+@Inject
+class MaxUploadSizeProvider(
     private val matrixClient: MatrixClient,
 ) {
     suspend fun getMaxUploadSize(): Result<Long> {

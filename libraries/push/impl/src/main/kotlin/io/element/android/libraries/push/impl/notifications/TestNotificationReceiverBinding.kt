@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.libraries.di.AppScope
 
 @ContributesTo(AppScope::class)

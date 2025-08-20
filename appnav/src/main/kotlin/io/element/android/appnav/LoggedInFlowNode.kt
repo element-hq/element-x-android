@@ -36,8 +36,8 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
@@ -100,7 +100,8 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
 
 @ContributesNode(SessionScope::class)
-class LoggedInFlowNode @AssistedInject constructor(
+@Inject
+class LoggedInFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val homeEntryPoint: HomeEntryPoint,
@@ -562,7 +563,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     }
 
     @ContributesNode(AppScope::class)
-    class PlaceholderNode @AssistedInject constructor(
+    @Inject
+class PlaceholderNode(
         @Assisted buildContext: BuildContext,
         @Assisted plugins: List<Plugin>,
     ) : Node(buildContext, plugins = plugins)

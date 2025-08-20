@@ -13,9 +13,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class StateContentFormatter @Inject constructor(
+@Inject
+class StateContentFormatter(
     private val sp: StringProvider,
 ) {
     fun format(

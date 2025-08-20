@@ -23,9 +23,10 @@ import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class SearchAccountProviderPresenter @Inject constructor(
+@Inject
+class SearchAccountProviderPresenter(
     private val homeserverResolver: HomeserverResolver,
     private val changeServerPresenter: Presenter<ChangeServerState>,
 ) : Presenter<SearchAccountProviderState> {

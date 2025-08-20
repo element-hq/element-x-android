@@ -21,8 +21,8 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.di.QrCodeLoginBindings
@@ -50,10 +50,11 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(AppScope::class)
-class QrCodeLoginFlowNode @AssistedInject constructor(
+@Inject
+class QrCodeLoginFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    qrCodeLoginComponentBuilder: QrCodeLoginComponent.Builder,
+    qrCodeLoginComponentBuilder: QrCodeLoginComponent.Factory,
     private val defaultLoginUserStory: DefaultLoginUserStory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : BaseFlowNode<QrCodeLoginFlowNode.NavTarget>(
@@ -66,7 +67,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
 ), DaggerComponentOwner {
     private var authenticationJob: Job? = null
 
-    override val daggerComponent = qrCodeLoginComponentBuilder.build()
+    override val daggerComponent = qrCodeLoginComponentBuilder.create()
     private val qrCodeLoginManager by lazy { bindings<QrCodeLoginBindings>().qrCodeLoginManager() }
 
     sealed interface NavTarget : Parcelable {

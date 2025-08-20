@@ -19,7 +19,7 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Broadcast receiver to decline the incoming call.

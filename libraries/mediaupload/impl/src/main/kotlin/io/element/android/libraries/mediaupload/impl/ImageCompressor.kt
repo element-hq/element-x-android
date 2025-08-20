@@ -21,9 +21,10 @@ import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class ImageCompressor @Inject constructor(
+@Inject
+class ImageCompressor(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
 ) {

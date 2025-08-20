@@ -12,7 +12,7 @@ import android.content.Context
 import android.content.Intent
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.push.impl.troubleshoot.NotificationClickHandler
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 class TestNotificationReceiver : BroadcastReceiver() {
     @Inject lateinit var notificationClickHandler: NotificationClickHandler

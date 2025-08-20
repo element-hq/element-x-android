@@ -7,12 +7,12 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface FocusedTimelineMediaGalleryDataSourceFactory {
     fun createFor(
@@ -23,7 +23,8 @@ interface FocusedTimelineMediaGalleryDataSourceFactory {
 }
 
 @ContributesBinding(RoomScope::class)
-class DefaultFocusedTimelineMediaGalleryDataSourceFactory @Inject constructor(
+@Inject
+class DefaultFocusedTimelineMediaGalleryDataSourceFactory(
     private val room: JoinedRoom,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
     private val mediaItemsPostProcessor: MediaItemsPostProcessor,

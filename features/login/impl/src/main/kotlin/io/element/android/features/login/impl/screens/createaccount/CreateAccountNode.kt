@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
@@ -24,7 +24,8 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class CreateAccountNode @AssistedInject constructor(
+@Inject
+class CreateAccountNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: CreateAccountPresenter.Factory,

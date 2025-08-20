@@ -10,12 +10,12 @@ package io.element.android.features.ftue.impl.state
 import android.Manifest
 import android.os.Build
 import androidx.annotation.VisibleForTesting
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -31,11 +31,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-class DefaultFtueService @Inject constructor(
+@Inject
+class DefaultFtueService(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,

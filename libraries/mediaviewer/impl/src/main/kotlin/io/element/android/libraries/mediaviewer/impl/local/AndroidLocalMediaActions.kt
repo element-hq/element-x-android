@@ -29,7 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import androidx.core.content.PermissionChecker
 import androidx.core.net.toFile
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.system.startInstallFromSourceIntent
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -44,10 +44,11 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class AndroidLocalMediaActions @Inject constructor(
+@Inject
+class AndroidLocalMediaActions(
     @ApplicationContext private val context: Context,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,

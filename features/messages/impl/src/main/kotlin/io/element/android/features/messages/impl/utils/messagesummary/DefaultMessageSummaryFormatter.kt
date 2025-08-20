@@ -8,7 +8,7 @@
 package io.element.android.features.messages.impl.utils.messagesummary
 
 import android.content.Context
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
@@ -30,10 +30,11 @@ import io.element.android.libraries.core.extensions.toSafeLength
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.strings.CommonStrings
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(RoomScope::class)
-class DefaultMessageSummaryFormatter @Inject constructor(
+@Inject
+class DefaultMessageSummaryFormatter(
     @ApplicationContext private val context: Context,
 ) : MessageSummaryFormatter {
     override fun format(event: TimelineItem.Event): String {

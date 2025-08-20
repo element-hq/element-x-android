@@ -10,9 +10,10 @@ package io.element.android.features.startchat.impl.userlist
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class UserListDataStore @Inject constructor() {
+@Inject
+class UserListDataStore() {
     private val _selectedUsers: MutableStateFlow<List<MatrixUser>> = MutableStateFlow(emptyList())
 
     fun selectUser(user: MatrixUser) {

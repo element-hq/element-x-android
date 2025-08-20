@@ -7,7 +7,7 @@
 
 package extension
 
-import com.squareup.anvil.plugin.AnvilExtension
+import dev.zacsweers.metro.gradle.MetroPluginExtension
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
@@ -28,28 +28,36 @@ fun Project.setupAnvil(
 ) {
     val libs = the<LibrariesForLibs>()
 
-    // Add dagger dependency, needed for generated code
-    dependencies.implementation(libs.dagger)
+//    // Add dagger dependency, needed for generated code
+//    dependencies.implementation(libs.dagger)
 
     // Apply Anvil plugin and configure it
-    applyPluginIfNeeded(libs.plugins.anvil)
+    applyPluginIfNeeded(libs.plugins.metro)
+    applyPluginIfNeeded(libs.plugins.ksp)
 
-    project.pluginManager.withPlugin(libs.plugins.anvil.get().pluginId) {
+//    project.pluginManager.withPlugin(libs.plugins.anvil.get().pluginId) {
+//        // Setup extension
+//        extensions.configure(AnvilExtension::class.java) {
+//            this.generateDaggerFactories.set(generateDaggerFactoriesUsingAnvil)
+//            this.disableComponentMerging.set(componentMergingStrategy == ComponentMergingStrategy.NONE)
+//
+//            useKsp(
+//                contributesAndFactoryGeneration = true,
+//                componentMerging = componentMergingStrategy == ComponentMergingStrategy.KSP,
+//            )
+//        }
+//    }
+
+//    if (generateDaggerCode) {
+//        // Needed at the top level since dagger code should be generated at a single point for performance reasons
+//        dependencies.add("ksp", libs.dagger.compiler)
+//    }
+
+    project.pluginManager.withPlugin(libs.plugins.metro.get().pluginId) {
         // Setup extension
-        extensions.configure(AnvilExtension::class.java) {
-            this.generateDaggerFactories.set(generateDaggerFactoriesUsingAnvil)
-            this.disableComponentMerging.set(componentMergingStrategy == ComponentMergingStrategy.NONE)
-
-            useKsp(
-                contributesAndFactoryGeneration = true,
-                componentMerging = componentMergingStrategy == ComponentMergingStrategy.KSP,
-            )
+        extensions.configure(MetroPluginExtension::class.java) {
+//            this.generateAssistedFactories.set(generateDaggerFactoriesUsingAnvil)
         }
-    }
-
-    if (generateDaggerCode) {
-        // Needed at the top level since dagger code should be generated at a single point for performance reasons
-        dependencies.add("ksp", libs.dagger.compiler)
     }
 
     // These dependencies are only needed for compose library or application modules
@@ -58,7 +66,7 @@ fun Project.setupAnvil(
         // Annotations to generate DI code for Appyx nodes
         dependencies.implementation(project.project(":anvilannotations"))
         // Code generator for the annotations above
-        dependencies.add("ksp", project.project(":anvilcodegen"))
+//        dependencies.add("ksp", project.project(":anvilcodegen"))
     }
 }
 

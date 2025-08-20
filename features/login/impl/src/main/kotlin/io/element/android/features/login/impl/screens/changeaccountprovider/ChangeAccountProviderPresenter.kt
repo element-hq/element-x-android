@@ -16,9 +16,10 @@ import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.uri.ensureProtocol
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class ChangeAccountProviderPresenter @Inject constructor(
+@Inject
+class ChangeAccountProviderPresenter(
     private val changeServerPresenter: Presenter<ChangeServerState>,
     private val enterpriseService: EnterpriseService,
 ) : Presenter<ChangeAccountProviderState> {

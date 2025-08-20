@@ -29,13 +29,14 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
 /**
  * Creates a notification for a ringing call.
  */
-class RingingCallNotificationCreator @Inject constructor(
+@Inject
+class RingingCallNotificationCreator(
     @ApplicationContext private val context: Context,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,

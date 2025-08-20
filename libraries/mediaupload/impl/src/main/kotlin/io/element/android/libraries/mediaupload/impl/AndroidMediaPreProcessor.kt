@@ -12,7 +12,7 @@ import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getFileName
@@ -44,12 +44,13 @@ import timber.log.Timber
 import java.io.File
 import java.io.InputStream
 import java.util.UUID
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesBinding(AppScope::class)
-class AndroidMediaPreProcessor @Inject constructor(
+@Inject
+class AndroidMediaPreProcessor(
     @ApplicationContext private val context: Context,
     private val thumbnailFactory: ThumbnailFactory,
     private val imageCompressor: ImageCompressor,

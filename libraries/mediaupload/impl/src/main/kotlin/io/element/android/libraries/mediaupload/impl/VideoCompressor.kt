@@ -42,9 +42,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class VideoCompressor @Inject constructor(
+@Inject
+class VideoCompressor(
     @ApplicationContext private val context: Context,
 ) {
     @OptIn(UnstableApi::class)

@@ -8,20 +8,18 @@
 package io.element.android.x.di
 
 import android.content.Context
-import com.squareup.anvil.annotations.MergeComponent
-import dagger.BindsInstance
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
 
-@SingleIn(AppScope::class)
-@MergeComponent(AppScope::class)
-interface AppComponent : NodeFactoriesBindings {
-    @MergeComponent.Factory
+@DependencyGraph(AppScope::class)
+interface AppComponent : NodeFactoriesBindings, SessionComponent.Factory, RoomComponent.Factory {
+    @DependencyGraph.Factory
     interface Factory {
         fun create(
-            @ApplicationContext @BindsInstance
+            @ApplicationContext @Provides
             context: Context
         ): AppComponent
     }

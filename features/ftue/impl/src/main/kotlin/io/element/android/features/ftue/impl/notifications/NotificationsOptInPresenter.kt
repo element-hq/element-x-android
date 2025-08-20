@@ -12,9 +12,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
@@ -25,7 +25,8 @@ import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class NotificationsOptInPresenter @AssistedInject constructor(
+@Inject
+class NotificationsOptInPresenter(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     @Assisted private val callback: NotificationsOptInNode.Callback,
     @AppCoroutineScope

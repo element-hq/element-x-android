@@ -9,12 +9,12 @@ package io.element.android.libraries.voicerecorder.impl
 
 import android.Manifest
 import androidx.annotation.RequiresPermission
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.VoiceMessageConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
@@ -37,13 +37,14 @@ import kotlinx.coroutines.yield
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TimeSource
 
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-class DefaultVoiceRecorder @Inject constructor(
+@Inject
+class DefaultVoiceRecorder(
     private val dispatchers: CoroutineDispatchers,
     private val timeSource: TimeSource,
     private val audioReaderFactory: AudioReader.Factory,

@@ -10,7 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.local
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.file.getFileName
 import io.element.android.libraries.androidutils.file.getFileSize
 import io.element.android.libraries.androidutils.file.getMimeType
@@ -25,10 +25,11 @@ import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class AndroidLocalMediaFactory @Inject constructor(
+@Inject
+class AndroidLocalMediaFactory(
     @ApplicationContext private val context: Context,
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,

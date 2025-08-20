@@ -8,7 +8,8 @@
 package io.element.android.services.analyticsproviders.sentry
 
 import android.content.Context
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.SuperProperties
@@ -24,12 +25,10 @@ import io.sentry.Sentry
 import io.sentry.SentryOptions
 import io.sentry.android.core.SentryAndroid
 import timber.log.Timber
-import javax.inject.Inject
-import kotlin.collections.component1
-import kotlin.collections.component2
 
-@ContributesMultibinding(AppScope::class)
-class SentryAnalyticsProvider @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class SentryAnalyticsProvider(
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
 ) : AnalyticsProvider {

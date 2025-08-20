@@ -10,9 +10,9 @@ package io.element.android.features.messages.impl.forward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -26,7 +26,8 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class ForwardMessagesPresenter @AssistedInject constructor(
+@Inject
+class ForwardMessagesPresenter(
     @Assisted eventId: String,
     @Assisted private val timelineProvider: TimelineProvider,
     @SessionCoroutineScope

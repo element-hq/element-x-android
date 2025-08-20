@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
  * Adds Node to the specified component graph.
  * Equivalent to the following declaration:
  *
- * @Module
+ * @BindingContainer
  * @ContributesTo(Scope::class)
  * abstract class YourNodeModule {
 

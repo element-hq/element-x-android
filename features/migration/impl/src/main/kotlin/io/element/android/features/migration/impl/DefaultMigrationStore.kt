@@ -13,18 +13,19 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_migration")
 private val applicationMigrationVersion = intPreferencesKey("applicationMigrationVersion")
 
 @ContributesBinding(AppScope::class)
-class DefaultMigrationStore @Inject constructor(
+@Inject
+class DefaultMigrationStore(
     @ApplicationContext context: Context,
 ) : MigrationStore {
     private val store = context.dataStore

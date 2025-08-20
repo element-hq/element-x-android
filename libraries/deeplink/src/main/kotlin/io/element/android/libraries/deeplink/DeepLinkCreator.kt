@@ -10,9 +10,10 @@ package io.element.android.libraries.deeplink
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class DeepLinkCreator @Inject constructor() {
+@Inject
+class DeepLinkCreator() {
     fun room(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): String {
         return buildString {
             append("$SCHEME://$HOST/")

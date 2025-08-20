@@ -10,7 +10,7 @@ package io.element.android.x.intent
 import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.deeplink.DeepLinkCreator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -19,10 +19,11 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.x.MainActivity
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultIntentProvider @Inject constructor(
+@Inject
+class DefaultIntentProvider(
     @ApplicationContext private val context: Context,
     private val deepLinkCreator: DeepLinkCreator,
 ) : IntentProvider {

@@ -10,9 +10,9 @@ package io.element.android.libraries.di
 import dev.zacsweers.metro.Qualifier
 
 /**
- * Qualifies a [File] object which represents the application cache directory.
+ * Qualifies a [File] object which represents the application base directory.
  */
-@Retention(AnnotationRetention.RUNTIME)
+//@Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 @Qualifier
 @Target(
@@ -24,4 +24,4 @@ import dev.zacsweers.metro.Qualifier
     AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.TYPE,
 )
-public annotation class CacheDirectory
+public annotation class BaseDirectory

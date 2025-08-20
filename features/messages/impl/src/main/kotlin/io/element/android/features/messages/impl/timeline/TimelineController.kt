@@ -7,10 +7,10 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.messages.impl.timeline.di.LiveTimeline
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -34,15 +34,17 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.io.Closeable
 import java.util.Optional
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 
 /**
  * This controller is responsible of using the right timeline to display messages and make associated actions.
  * It can be focused on the live timeline or on a detached timeline (focusing an unknown event).
  */
 @SingleIn(RoomScope::class)
-@ContributesBinding(RoomScope::class, boundType = TimelineProvider::class)
-class TimelineController @Inject constructor(
+@ContributesBinding(RoomScope::class, binding = binding<TimelineProvider>())
+@Inject
+class TimelineController(
     private val room: JoinedRoom,
     @LiveTimeline private val liveTimeline: Timeline,
 ) : Closeable, TimelineProvider {

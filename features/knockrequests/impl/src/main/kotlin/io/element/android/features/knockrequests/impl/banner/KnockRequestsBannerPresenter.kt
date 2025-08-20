@@ -23,11 +23,12 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private const val ACCEPT_ERROR_DISPLAY_DURATION = 1500L
 
-class KnockRequestsBannerPresenter @Inject constructor(
+@Inject
+class KnockRequestsBannerPresenter(
     private val knockRequestsService: KnockRequestsService,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,

@@ -16,9 +16,9 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -34,7 +34,8 @@ import timber.log.Timber
 import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationStateMachine.Event as StateMachineEvent
 import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationStateMachine.State as StateMachineState
 
-class OutgoingVerificationPresenter @AssistedInject constructor(
+@Inject
+class OutgoingVerificationPresenter(
     @Assisted private val showDeviceVerifiedScreen: Boolean,
     @Assisted private val verificationRequest: VerificationRequest.Outgoing,
     private val sessionVerificationService: SessionVerificationService,
