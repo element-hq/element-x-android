@@ -97,10 +97,10 @@ internal fun SpaceMembersViewPreview() = ElementPreview(
 ) {
     SpaceMembersView(
         heroes = persistentListOf(
-            aMatrixUser(id = "1", displayName = "Alice", avatarUrl = "aUrl"),
-            aMatrixUser(id = "2", displayName = "Bob"),
-            aMatrixUser(id = "3", displayName = "Charlie", avatarUrl = "aUrl"),
-            aMatrixUser(id = "4", displayName = "Dave"),
+            aMatrixUser(id = "@1:d", displayName = "Alice", avatarUrl = "aUrl"),
+            aMatrixUser(id = "@2:d", displayName = "Bob"),
+            aMatrixUser(id = "@3:d", displayName = "Charlie", avatarUrl = "aUrl"),
+            aMatrixUser(id = "@4:d", displayName = "Dave"),
         ),
         numberOfMembers = 123,
     )
