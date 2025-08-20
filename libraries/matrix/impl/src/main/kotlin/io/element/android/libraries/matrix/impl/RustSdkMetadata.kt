@@ -7,14 +7,15 @@
 
 package io.element.android.libraries.matrix.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.SdkMetadata
 import org.matrix.rustcomponents.sdk.sdkGitSha
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class RustSdkMetadata @Inject constructor() : SdkMetadata {
+@Inject
+class RustSdkMetadata() : SdkMetadata {
     override val sdkGitSha: String
         get() = sdkGitSha()
 }

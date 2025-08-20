@@ -7,16 +7,16 @@
 
 package io.element.android.features.roommembermoderation.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.features.roommembermoderation.impl.RoomMemberModerationPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 
 @ContributesTo(RoomScope::class)
-@Module
+@BindingContainer
 interface RoomMemberModerationModule {
     @Binds
     fun bindRoomMemberModerationPresenter(presenter: RoomMemberModerationPresenter): Presenter<RoomMemberModerationState>

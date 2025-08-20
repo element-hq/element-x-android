@@ -7,7 +7,7 @@
 
 package io.element.android.features.messages.impl.timeline.di
 
-import dagger.MapKey
+import dev.zacsweers.metro.MapKey
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import kotlin.reflect.KClass
 

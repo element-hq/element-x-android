@@ -12,10 +12,11 @@ import com.posthog.PostHogInterface
 import com.posthog.android.PostHogAndroid
 import com.posthog.android.PostHogAndroidConfig
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.ApplicationContext
-import javax.inject.Inject
+import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.Inject
 
-class PostHogFactory @Inject constructor(
+@Inject
+class PostHogFactory(
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
     private val posthogEndpointConfigProvider: PosthogEndpointConfigProvider,

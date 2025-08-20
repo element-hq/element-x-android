@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * A media player for the voice message composer.
@@ -29,7 +29,8 @@ import javax.inject.Inject
  * @param mediaPlayer The [MediaPlayer] to use.
  * @param sessionCoroutineScope
  */
-class VoiceMessageComposerPlayer @Inject constructor(
+@Inject
+class VoiceMessageComposerPlayer(
     private val mediaPlayer: MediaPlayer,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,

@@ -13,15 +13,16 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
 import androidx.core.content.getSystemService
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.audio.api.AudioFocusRequester
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 
 @ContributesBinding(AppScope::class)
-class DefaultAudioFocus @Inject constructor(
+@Inject
+class DefaultAudioFocus(
     @ApplicationContext private val context: Context,
 ) : AudioFocus {
     private val audioManager = requireNotNull(context.getSystemService<AudioManager>())

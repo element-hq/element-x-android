@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.di
 
-import javax.inject.Qualifier
+import dev.zacsweers.metro.Qualifier
 
 /**
  * Qualifies a [File] object which represents the application cache directory.
@@ -15,4 +15,13 @@ import javax.inject.Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 @Qualifier
-annotation class CacheDirectory
+@Target(
+    AnnotationTarget.CLASS,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.TYPE,
+)
+public annotation class CacheDirectory

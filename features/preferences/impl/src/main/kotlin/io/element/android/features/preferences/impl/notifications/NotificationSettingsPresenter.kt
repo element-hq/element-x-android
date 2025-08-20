@@ -39,10 +39,11 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
-class NotificationSettingsPresenter @Inject constructor(
+@Inject
+class NotificationSettingsPresenter(
     private val notificationSettingsService: NotificationSettingsService,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val matrixClient: MatrixClient,

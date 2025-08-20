@@ -8,9 +8,9 @@
 package io.element.android.libraries.matrix.impl.permalink
 
 import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.MatrixId
 import org.matrix.rustcomponents.sdk.parseMatrixEntityFrom
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * This class turns a uri to a [PermalinkData].
@@ -32,7 +32,8 @@ import javax.inject.Inject
  * or matrix: permalinks (e.g. matrix:u/chagai95:matrix.org)
  */
 @ContributesBinding(AppScope::class)
-class DefaultPermalinkParser @Inject constructor(
+@Inject
+class DefaultPermalinkParser(
     private val matrixToConverter: MatrixToConverter
 ) : PermalinkParser {
     /**

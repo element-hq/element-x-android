@@ -9,11 +9,11 @@ package io.element.android.libraries.androidutils.file
 
 import android.content.Context
 import android.net.Uri
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
-import javax.inject.Inject
 
 interface TemporaryUriDeleter {
     /**
@@ -23,7 +23,8 @@ interface TemporaryUriDeleter {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultTemporaryUriDeleter @Inject constructor(
+@Inject
+class DefaultTemporaryUriDeleter(
     @ApplicationContext private val context: Context,
 ) : TemporaryUriDeleter {
     private val baseCacheUri = "content://${context.packageName}.fileprovider/cache"

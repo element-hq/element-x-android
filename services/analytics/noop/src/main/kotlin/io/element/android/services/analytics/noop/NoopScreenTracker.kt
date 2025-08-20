@@ -8,14 +8,15 @@
 package io.element.android.services.analytics.noop
 
 import androidx.compose.runtime.Composable
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import im.vector.app.features.analytics.plan.MobileScreen
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.services.analytics.api.ScreenTracker
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class NoopScreenTracker @Inject constructor() : ScreenTracker {
+@Inject
+class NoopScreenTracker() : ScreenTracker {
     @Composable
     override fun TrackScreen(screen: MobileScreen.ScreenName) = Unit
 }

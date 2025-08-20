@@ -8,14 +8,15 @@
 package io.element.android.features.login.impl
 
 import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.login.api.LoginIntentResolver
 import io.element.android.features.login.api.LoginParams
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultLoginIntentResolver @Inject constructor() : LoginIntentResolver {
+@Inject
+class DefaultLoginIntentResolver() : LoginIntentResolver {
     override fun parse(uriString: String): LoginParams? {
         val uri = uriString.toUri()
         if (uri.host != "mobile.element.io") return null

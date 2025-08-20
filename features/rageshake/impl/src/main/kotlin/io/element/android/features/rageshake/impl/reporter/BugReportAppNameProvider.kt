@@ -7,16 +7,17 @@
 
 package io.element.android.features.rageshake.impl.reporter
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.RageshakeConfig
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 
 fun interface BugReportAppNameProvider {
     fun provide(): String
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultBugReportAppNameProvider @Inject constructor() : BugReportAppNameProvider {
+@Inject
+class DefaultBugReportAppNameProvider() : BugReportAppNameProvider {
     override fun provide(): String = RageshakeConfig.BUG_REPORT_APP_NAME
 }

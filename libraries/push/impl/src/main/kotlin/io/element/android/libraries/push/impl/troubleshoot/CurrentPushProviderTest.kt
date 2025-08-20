@@ -7,8 +7,9 @@
 
 package io.element.android.libraries.push.impl.troubleshoot
 
-import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.push.api.GetCurrentPushProvider
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
@@ -17,10 +18,10 @@ import io.element.android.libraries.troubleshoot.api.test.NotificationTroublesho
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
-@ContributesMultibinding(AppScope::class)
-class CurrentPushProviderTest @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class CurrentPushProviderTest(
     private val getCurrentPushProvider: GetCurrentPushProvider,
     private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {

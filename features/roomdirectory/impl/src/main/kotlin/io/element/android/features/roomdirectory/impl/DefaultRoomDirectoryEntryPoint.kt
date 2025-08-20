@@ -10,15 +10,16 @@ package io.element.android.features.roomdirectory.impl
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.roomdirectory.impl.root.RoomDirectoryNode
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultRoomDirectoryEntryPoint @Inject constructor() : RoomDirectoryEntryPoint {
+@Inject
+class DefaultRoomDirectoryEntryPoint() : RoomDirectoryEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDirectoryEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

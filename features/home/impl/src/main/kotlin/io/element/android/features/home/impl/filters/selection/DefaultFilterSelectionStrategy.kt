@@ -7,14 +7,15 @@
 
 package io.element.android.features.home.impl.filters.selection
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.home.impl.filters.RoomListFilter
 import io.element.android.libraries.di.SessionScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultFilterSelectionStrategy @Inject constructor() : FilterSelectionStrategy {
+@Inject
+class DefaultFilterSelectionStrategy() : FilterSelectionStrategy {
     private val selectedFilters = LinkedHashSet<RoomListFilter>()
 
     override val filterSelectionStates = MutableStateFlow(buildFilters())

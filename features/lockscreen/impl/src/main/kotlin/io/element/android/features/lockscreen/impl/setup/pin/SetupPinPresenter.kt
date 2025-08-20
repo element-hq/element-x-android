@@ -21,14 +21,15 @@ import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPin
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.coroutines.delay
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Some time for the ui to refresh before showing confirmation step.
  */
 private const val DELAY_BEFORE_CONFIRMATION_STEP_IN_MILLIS = 100L
 
-class SetupPinPresenter @Inject constructor(
+@Inject
+class SetupPinPresenter(
     private val lockScreenConfig: LockScreenConfig,
     private val pinValidator: PinValidator,
     private val buildMeta: BuildMeta,

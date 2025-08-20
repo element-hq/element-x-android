@@ -31,11 +31,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val loggerTag = LoggerTag("NotificationBroadcastReceiverHandler", LoggerTag.NotificationLoggerTag)
 
-class NotificationBroadcastReceiverHandler @Inject constructor(
+@Inject
+class NotificationBroadcastReceiverHandler(
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,

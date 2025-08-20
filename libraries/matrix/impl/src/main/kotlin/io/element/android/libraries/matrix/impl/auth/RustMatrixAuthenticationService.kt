@@ -7,12 +7,12 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
@@ -49,11 +49,12 @@ import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import timber.log.Timber
 import uniffi.matrix_sdk.OAuthAuthorizationData
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class RustMatrixAuthenticationService @Inject constructor(
+@Inject
+class RustMatrixAuthenticationService(
     private val sessionPathsFactory: SessionPathsFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,

@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.AppScope
 
 @ContributesTo(AppScope::class)
 interface VectorFirebaseMessagingServiceBindings {

@@ -29,9 +29,10 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class PinnedMessagesBannerPresenter @Inject constructor(
+@Inject
+class PinnedMessagesBannerPresenter(
     private val room: BaseRoom,
     private val itemFactory: PinnedMessagesBannerItemFactory,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,

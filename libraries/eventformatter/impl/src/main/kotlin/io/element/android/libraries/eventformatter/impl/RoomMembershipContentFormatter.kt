@@ -12,9 +12,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MembershipCha
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class RoomMembershipContentFormatter @Inject constructor(
+@Inject
+class RoomMembershipContentFormatter(
     private val matrixClient: MatrixClient,
     private val sp: StringProvider,
 ) {

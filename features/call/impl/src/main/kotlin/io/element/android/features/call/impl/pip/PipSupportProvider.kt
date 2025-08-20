@@ -11,11 +11,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.Inject
 
 interface PipSupportProvider {
     @ChecksSdkIntAtLeast(Build.VERSION_CODES.O)
@@ -23,7 +23,8 @@ interface PipSupportProvider {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultPipSupportProvider @Inject constructor(
+@Inject
+class DefaultPipSupportProvider(
     @ApplicationContext private val context: Context,
 ) : PipSupportProvider {
     override fun isPipSupported(): Boolean {

@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.ui.messages
 
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -16,10 +16,11 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.runningFold
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @SingleIn(RoomScope::class)
-class RoomNamesCache @Inject constructor() {
+@Inject
+class RoomNamesCache() {
     private val cache = MutableStateFlow(mapOf<RoomIdOrAlias, String?>())
     val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
 

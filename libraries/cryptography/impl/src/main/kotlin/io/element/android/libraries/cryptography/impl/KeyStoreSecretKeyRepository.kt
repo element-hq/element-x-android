@@ -10,23 +10,24 @@ package io.element.android.libraries.cryptography.impl
 import android.annotation.SuppressLint
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.KeyStoreException
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Default implementation of [SecretKeyRepository] that uses the Android Keystore to store the keys.
  * The generated key uses AES algorithm, with a key size of 128 bits, and the GCM block mode.
  */
 @ContributesBinding(AppScope::class)
-class KeyStoreSecretKeyRepository @Inject constructor(
+@Inject
+class KeyStoreSecretKeyRepository(
     private val keyStore: KeyStore,
 ) : SecretKeyRepository {
     // False positive lint issue

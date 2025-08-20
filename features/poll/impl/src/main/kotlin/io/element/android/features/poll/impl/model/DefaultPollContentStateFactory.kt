@@ -7,7 +7,7 @@
 
 package io.element.android.features.poll.impl.model
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.poll.api.pollcontent.PollAnswerItem
 import io.element.android.features.poll.api.pollcontent.PollContentState
 import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
@@ -17,10 +17,11 @@ import io.element.android.libraries.matrix.api.poll.isDisclosed
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(RoomScope::class)
-class DefaultPollContentStateFactory @Inject constructor(
+@Inject
+class DefaultPollContentStateFactory(
     private val matrixClient: MatrixClient,
 ) : PollContentStateFactory {
     override suspend fun create(

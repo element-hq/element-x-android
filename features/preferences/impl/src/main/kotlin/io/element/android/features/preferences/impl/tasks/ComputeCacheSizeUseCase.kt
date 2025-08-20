@@ -8,22 +8,23 @@
 package io.element.android.features.preferences.impl.tasks
 
 import android.content.Context
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface ComputeCacheSizeUseCase {
     suspend operator fun invoke(): String
 }
 
 @ContributesBinding(SessionScope::class)
-class DefaultComputeCacheSizeUseCase @Inject constructor(
+@Inject
+class DefaultComputeCacheSizeUseCase(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,

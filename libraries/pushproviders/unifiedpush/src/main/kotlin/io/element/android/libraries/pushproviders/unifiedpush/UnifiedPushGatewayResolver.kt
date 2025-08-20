@@ -7,17 +7,17 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
 import java.net.HttpURLConnection
 import java.net.URL
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 sealed interface UnifiedPushGatewayResolverResult {
     data class Success(val gateway: String) : UnifiedPushGatewayResolverResult
@@ -33,7 +33,8 @@ interface UnifiedPushGatewayResolver {
 private val loggerTag = LoggerTag("DefaultUnifiedPushGatewayResolver")
 
 @ContributesBinding(AppScope::class)
-class DefaultUnifiedPushGatewayResolver @Inject constructor(
+@Inject
+class DefaultUnifiedPushGatewayResolver(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : UnifiedPushGatewayResolver {

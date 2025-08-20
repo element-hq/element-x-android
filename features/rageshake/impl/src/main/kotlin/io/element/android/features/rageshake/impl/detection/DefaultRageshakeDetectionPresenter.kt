@@ -14,7 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionPresenter
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionState
@@ -23,14 +23,15 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.features.rageshake.api.screenshot.ImageResult
 import io.element.android.features.rageshake.impl.rageshake.RageShake
 import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultRageshakeDetectionPresenter @Inject constructor(
+@Inject
+class DefaultRageshakeDetectionPresenter(
     private val screenshotHolder: ScreenshotHolder,
     private val rageShake: RageShake,
     private val preferencesPresenter: RageshakePreferencesPresenter,

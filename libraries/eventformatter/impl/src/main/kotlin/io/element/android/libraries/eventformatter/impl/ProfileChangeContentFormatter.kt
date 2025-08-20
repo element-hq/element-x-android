@@ -10,9 +10,10 @@ package io.element.android.libraries.eventformatter.impl
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.services.toolbox.api.strings.StringProvider
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class ProfileChangeContentFormatter @Inject constructor(
+@Inject
+class ProfileChangeContentFormatter(
     private val sp: StringProvider,
 ) {
     fun format(

@@ -8,10 +8,10 @@
 package io.element.android.libraries.preferences.impl.store
 
 import android.content.Context
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
@@ -19,11 +19,12 @@ import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import kotlinx.coroutines.CoroutineScope
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultSessionPreferencesStoreFactory @Inject constructor(
+@Inject
+class DefaultSessionPreferencesStoreFactory(
     @ApplicationContext private val context: Context,
     sessionObserver: SessionObserver,
 ) : SessionPreferencesStoreFactory {

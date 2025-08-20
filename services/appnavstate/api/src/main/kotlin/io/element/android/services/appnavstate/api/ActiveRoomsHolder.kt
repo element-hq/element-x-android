@@ -7,19 +7,20 @@
 
 package io.element.android.services.appnavstate.api
 
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Holds the active rooms for a given session so they can be reused instead of instantiating new ones.
  */
 @SingleIn(AppScope::class)
-class ActiveRoomsHolder @Inject constructor() {
+@Inject
+class ActiveRoomsHolder {
     private val rooms = ConcurrentHashMap<SessionId, MutableSet<JoinedRoom>>()
 
     /**

@@ -55,9 +55,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class RoomDetailsPresenter @Inject constructor(
+@Inject
+class RoomDetailsPresenter(
     private val client: MatrixClient,
     private val room: JoinedRoom,
     private val featureFlagService: FeatureFlagService,

@@ -7,16 +7,17 @@
 
 package io.element.android.features.migration.impl.migrations
 
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
 
 /**
  * Delete the previous log files.
  */
-@ContributesMultibinding(AppScope::class)
-class AppMigration07 @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class AppMigration07(
     private val logFilesRemover: LogFilesRemover,
 ) : AppMigration {
     override val order: Int = 7

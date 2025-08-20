@@ -7,9 +7,10 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushApiFactory
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushCurrentUserPushConfigProvider
@@ -20,10 +21,10 @@ import io.element.android.libraries.troubleshoot.api.test.TestFilterData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@ContributesMultibinding(AppScope::class)
-class UnifiedPushMatrixGatewayTest @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class UnifiedPushMatrixGatewayTest(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val unifiedPushCurrentUserPushConfigProvider: UnifiedPushCurrentUserPushConfigProvider,

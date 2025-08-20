@@ -10,9 +10,10 @@ package io.element.android.features.messages.impl.timeline.factories.event
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TimelineItemContentFailedToParseMessageFactory @Inject constructor() {
+@Inject
+class TimelineItemContentFailedToParseMessageFactory() {
     fun create(@Suppress("UNUSED_PARAMETER") failedToParseMessageLike: FailedToParseMessageLikeContent): TimelineItemEventContent {
         return TimelineItemUnknownContent
     }

@@ -17,13 +17,14 @@ import io.element.android.libraries.androidutils.bitmap.rotateToExifMetadataOrie
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class ImageCompressor @Inject constructor(
+@Inject
+class ImageCompressor(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
 ) {

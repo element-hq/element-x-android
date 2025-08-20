@@ -42,9 +42,10 @@ import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class EventItemFactory @Inject constructor(
+@Inject
+class EventItemFactory(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
     private val dateFormatter: DateFormatter,

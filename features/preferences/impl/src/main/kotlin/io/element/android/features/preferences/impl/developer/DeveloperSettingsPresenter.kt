@@ -46,9 +46,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.net.URL
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class DeveloperSettingsPresenter @Inject constructor(
+@Inject
+class DeveloperSettingsPresenter(
     private val featureFlagService: FeatureFlagService,
     private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,

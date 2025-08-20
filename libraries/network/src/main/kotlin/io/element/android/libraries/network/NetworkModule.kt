@@ -7,12 +7,12 @@
 
 package io.element.android.libraries.network
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.network.interceptors.FormattedJsonHttpLogger
 import io.element.android.libraries.network.interceptors.UserAgentInterceptor
 import kotlinx.serialization.json.Json
@@ -20,7 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
-@Module
+@BindingContainer
 @ContributesTo(AppScope::class)
 object NetworkModule {
     @Provides

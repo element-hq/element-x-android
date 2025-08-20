@@ -22,9 +22,10 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class ChangeServerPresenter @Inject constructor(
+@Inject
+class ChangeServerPresenter(
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
     private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,

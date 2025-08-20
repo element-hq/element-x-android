@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.dateformatter.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.safeCapitalize
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 
 interface DateFormatterDay {
     fun format(
@@ -20,7 +20,8 @@ interface DateFormatterDay {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultDateFormatterDay @Inject constructor(
+@Inject
+class DefaultDateFormatterDay(
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,
 ) : DateFormatterDay {

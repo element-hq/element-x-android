@@ -11,15 +11,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.system.DateTimeObserver.Event
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import java.time.Instant
-import javax.inject.Inject
 
 interface DateTimeObserver {
     val changes: Flow<Event>
@@ -32,7 +32,8 @@ interface DateTimeObserver {
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class DefaultDateTimeObserver @Inject constructor(
+@Inject
+class DefaultDateTimeObserver(
     @ApplicationContext context: Context
 ) : DateTimeObserver {
     private val dateTimeReceiver = object : BroadcastReceiver() {

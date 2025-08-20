@@ -8,13 +8,14 @@
 package io.element.android.libraries.mediaviewer.impl.util
 
 import android.webkit.MimeTypeMap
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class FileExtensionExtractorWithValidation @Inject constructor() : FileExtensionExtractor {
+@Inject
+class FileExtensionExtractorWithValidation() : FileExtensionExtractor {
     override fun extractFromName(name: String): String {
         val fileExtension = name.substringAfterLast('.', "")
         // Makes sure the extension is known by the system, otherwise default to binary extension.

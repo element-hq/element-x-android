@@ -7,19 +7,20 @@
 
 package io.element.android.libraries.voicerecorder.impl.audio
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.opusencoder.OggOpusEncoder
 import timber.log.Timber
 import java.io.File
-import javax.inject.Inject
-import javax.inject.Provider
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provider
 
 /**
  * Safe wrapper for OggOpusEncoder.
  */
 @ContributesBinding(RoomScope::class)
-class DefaultEncoder @Inject constructor(
+@Inject
+class DefaultEncoder(
     private val encoderProvider: Provider<OggOpusEncoder>,
     config: AudioConfig,
 ) : Encoder {
@@ -31,7 +32,7 @@ class DefaultEncoder @Inject constructor(
         file: File,
     ) {
         encoder?.release()
-        encoder = encoderProvider.get().apply {
+        encoder = encoderProvider().apply {
             init(file.absolutePath, sampleRate)
             setBitrate(bitRate)
             // TODO check encoder application: 2048 (voice, default is typically 2049 as audio)

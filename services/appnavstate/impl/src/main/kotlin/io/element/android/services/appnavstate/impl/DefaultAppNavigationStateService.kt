@@ -7,10 +7,10 @@
 
 package io.element.android.services.appnavstate.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val loggerTag = LoggerTag("Navigation")
 
@@ -35,7 +35,8 @@ private val loggerTag = LoggerTag("Navigation")
  */
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class DefaultAppNavigationStateService @Inject constructor(
+@Inject
+class DefaultAppNavigationStateService(
     private val appForegroundStateService: AppForegroundStateService,
     @AppCoroutineScope
     coroutineScope: CoroutineScope,

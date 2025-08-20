@@ -10,19 +10,20 @@ package io.element.android.features.rageshake.impl.rageshake
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 private val enabledKey = booleanPreferencesKey("enabled")
 private val sensitivityKey = floatPreferencesKey("sensitivity")
 
 @ContributesBinding(AppScope::class)
-class PreferencesRageshakeDataStore @Inject constructor(
+@Inject
+class PreferencesRageshakeDataStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : RageshakeDataStore {
     private val store = preferenceDataStoreFactory.create("elementx_rageshake")

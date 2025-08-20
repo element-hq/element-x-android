@@ -18,7 +18,7 @@ import io.element.android.libraries.voiceplayer.api.aVoiceMessageState
 fun aFakeMediaItemPresenterFactories() = MediaItemPresenterFactories(
     mapOf(
         Pair(
-            MediaItem.Voice::class.java,
+            MediaItem.Voice::class,
             MediaItemPresenterFactory<MediaItem.Voice, VoiceMessageState> { Presenter { aVoiceMessageState() } },
         ),
     )

@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 
 interface ComposablePermissionStateProvider {
     @Composable
@@ -23,7 +23,8 @@ interface ComposablePermissionStateProvider {
 }
 
 @ContributesBinding(AppScope::class)
-class AccompanistPermissionStateProvider @Inject constructor() : ComposablePermissionStateProvider {
+@Inject
+class AccompanistPermissionStateProvider() : ComposablePermissionStateProvider {
     @Composable
     override fun provide(permission: String, onPermissionResult: (Boolean) -> Unit): PermissionState {
         return rememberPermissionState(

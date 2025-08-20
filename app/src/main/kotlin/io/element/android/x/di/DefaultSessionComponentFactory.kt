@@ -7,17 +7,18 @@
 
 package io.element.android.x.di
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.appnav.di.SessionComponentFactory
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultSessionComponentFactory @Inject constructor(
-    private val sessionComponentBuilder: SessionComponent.Builder
+@Inject
+class DefaultSessionComponentFactory(
+    private val appComponent: AppComponent
 ) : SessionComponentFactory {
     override fun create(client: MatrixClient): Any {
-        return sessionComponentBuilder.client(client).build()
+        return appComponent.sessionComponentFactory.createSessionComponent(client)
     }
 }

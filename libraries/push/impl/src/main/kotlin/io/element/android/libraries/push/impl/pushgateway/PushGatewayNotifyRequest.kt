@@ -6,12 +6,12 @@
  */
 package io.element.android.libraries.push.impl.pushgateway
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface PushGatewayNotifyRequest {
     data class Params(
@@ -26,7 +26,8 @@ interface PushGatewayNotifyRequest {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultPushGatewayNotifyRequest @Inject constructor(
+@Inject
+class DefaultPushGatewayNotifyRequest(
     private val pushGatewayApiFactory: PushGatewayApiFactory,
 ) : PushGatewayNotifyRequest {
     override suspend fun execute(params: PushGatewayNotifyRequest.Params) {

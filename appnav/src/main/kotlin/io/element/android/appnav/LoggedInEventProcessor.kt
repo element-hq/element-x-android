@@ -18,9 +18,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class LoggedInEventProcessor @Inject constructor(
+@Inject
+class LoggedInEventProcessor(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val roomMembershipObserver: RoomMembershipObserver,
 ) {

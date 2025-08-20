@@ -12,9 +12,10 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TimelineItemDaySeparatorFactory @Inject constructor(
+@Inject
+class TimelineItemDaySeparatorFactory(
     private val dateFormatter: DateFormatter,
 ) {
     fun create(virtualItem: VirtualTimelineItem.DayDivider): TimelineItemVirtualModel {

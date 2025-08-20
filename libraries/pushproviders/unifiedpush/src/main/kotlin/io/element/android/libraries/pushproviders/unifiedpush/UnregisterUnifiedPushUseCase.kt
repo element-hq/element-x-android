@@ -8,14 +8,14 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface UnregisterUnifiedPushUseCase {
     /**
@@ -30,7 +30,8 @@ interface UnregisterUnifiedPushUseCase {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultUnregisterUnifiedPushUseCase @Inject constructor(
+@Inject
+class DefaultUnregisterUnifiedPushUseCase(
     @ApplicationContext private val context: Context,
     private val unifiedPushStore: UnifiedPushStore,
     private val pusherSubscriber: PusherSubscriber,

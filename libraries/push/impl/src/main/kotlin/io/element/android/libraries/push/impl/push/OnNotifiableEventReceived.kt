@@ -7,22 +7,23 @@
 
 package io.element.android.libraries.push.impl.push
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface OnNotifiableEventReceived {
     fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>)
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultOnNotifiableEventReceived @Inject constructor(
+@Inject
+class DefaultOnNotifiableEventReceived(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,

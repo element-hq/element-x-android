@@ -25,9 +25,10 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class BugReportPresenter @Inject constructor(
+@Inject
+class BugReportPresenter(
     private val bugReporter: BugReporter,
     private val crashDataStore: CrashDataStore,
     private val screenshotHolder: ScreenshotHolder,

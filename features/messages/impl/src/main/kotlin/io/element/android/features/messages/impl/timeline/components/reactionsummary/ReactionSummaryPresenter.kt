@@ -21,9 +21,10 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class ReactionSummaryPresenter @Inject constructor(
+@Inject
+class ReactionSummaryPresenter(
     private val room: BaseRoom,
 ) : Presenter<ReactionSummaryState> {
     @Composable

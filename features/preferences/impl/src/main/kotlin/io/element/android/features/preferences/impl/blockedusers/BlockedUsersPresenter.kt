@@ -27,9 +27,10 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class BlockedUsersPresenter @Inject constructor(
+@Inject
+class BlockedUsersPresenter(
     private val matrixClient: MatrixClient,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<BlockedUsersState> {

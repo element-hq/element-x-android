@@ -11,18 +11,19 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.preferences.DefaultPreferencesCorruptionHandlerFactory
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultPreferencesDataStoreFactory @Inject constructor(
+@Inject
+class DefaultPreferencesDataStoreFactory(
     @ApplicationContext private val context: Context,
 ) : PreferenceDataStoreFactory {
     private val dataStoreHolders = ConcurrentHashMap<String, DataStoreHolder>()

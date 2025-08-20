@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicBoolean
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface MediaGalleryDataSource {
     fun start()
@@ -39,7 +39,8 @@ interface MediaGalleryDataSource {
 
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-class TimelineMediaGalleryDataSource @Inject constructor(
+@Inject
+class TimelineMediaGalleryDataSource(
     private val room: BaseRoom,
     private val mediaTimeline: MediaTimeline,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,

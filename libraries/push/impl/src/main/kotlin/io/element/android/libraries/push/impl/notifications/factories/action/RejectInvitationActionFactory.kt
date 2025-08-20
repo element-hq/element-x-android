@@ -13,7 +13,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationBroadcastReceiver
@@ -21,9 +21,10 @@ import io.element.android.libraries.push.impl.notifications.model.InviteNotifiab
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class RejectInvitationActionFactory @Inject constructor(
+@Inject
+class RejectInvitationActionFactory(
     @ApplicationContext private val context: Context,
     private val actionIds: NotificationActionIds,
     private val stringProvider: StringProvider,

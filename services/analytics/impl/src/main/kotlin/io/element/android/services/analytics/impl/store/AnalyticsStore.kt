@@ -10,14 +10,14 @@ package io.element.android.services.analytics.impl.store
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 /**
  * Local storage for:
@@ -36,7 +36,8 @@ interface AnalyticsStore {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultAnalyticsStore @Inject constructor(
+@Inject
+class DefaultAnalyticsStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : AnalyticsStore {
     private val userConsent = booleanPreferencesKey("user_consent")

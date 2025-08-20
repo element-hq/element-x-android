@@ -12,9 +12,10 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TimelineItemContentPollFactory @Inject constructor(
+@Inject
+class TimelineItemContentPollFactory(
     private val pollContentStateFactory: PollContentStateFactory,
 ) {
     suspend fun create(

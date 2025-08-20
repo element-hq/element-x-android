@@ -52,6 +52,7 @@ dependencyAnalysis = "2.19.0"
 # DI
 dagger = "2.57.1"
 anvil = "0.4.1"
+metro = "0.7.0-SNAPSHOT"
 
 # Auto service
 autoservice = "1.1.1"
@@ -68,6 +69,7 @@ compose_compiler_plugin = { module = "org.jetbrains.kotlin:compose-compiler-grad
 android_desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 anvil_gradle_plugin = { module = "dev.zacsweers.anvil:gradle-plugin", version.ref = "anvil" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+metro_gradle_plugin = { module = "dev.zacsweers.metro:gradle-plugin", version.ref = "metro" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
@@ -211,6 +213,8 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 inject = "javax.inject:javax.inject:1"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
+metro_compiler = { module = "dev.zacsweers.metro:compiler", version.ref = "metro" }
 anvil_compiler_api = { module = "dev.zacsweers.anvil:compiler-api", version.ref = "anvil" }
 anvil_compiler_utils = { module = "dev.zacsweers.anvil:compiler-utils", version.ref = "anvil" }
 
@@ -235,6 +239,7 @@ kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
+metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = "org.jlleitschuh.gradle.ktlint:13.1.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"

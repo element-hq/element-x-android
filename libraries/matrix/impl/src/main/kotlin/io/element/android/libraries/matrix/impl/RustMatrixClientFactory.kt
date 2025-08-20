@@ -38,11 +38,14 @@ import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.DecryptionSettings
 import uniffi.matrix_sdk_crypto.TrustRequirement
 import java.io.File
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
+import io.element.android.libraries.di.BaseDirectory
 
-class RustMatrixClientFactory @Inject constructor(
-    private val baseDirectory: File,
-    @CacheDirectory private val cacheDirectory: File,
+@Inject
+class RustMatrixClientFactory(
+    @Named("baseDirectory") private val baseDirectory: File,
+    @Named("cacheDirectory") private val cacheDirectory: File,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,

@@ -16,9 +16,10 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TimelineItemVirtualFactory @Inject constructor(
+@Inject
+class TimelineItemVirtualFactory(
     private val daySeparatorFactory: TimelineItemDaySeparatorFactory,
 ) {
     fun create(

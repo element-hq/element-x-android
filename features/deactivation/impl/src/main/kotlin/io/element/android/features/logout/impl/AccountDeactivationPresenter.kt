@@ -18,9 +18,10 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class AccountDeactivationPresenter @Inject constructor(
+@Inject
+class AccountDeactivationPresenter(
     private val matrixClient: MatrixClient,
 ) : Presenter<AccountDeactivationState> {
     @Composable

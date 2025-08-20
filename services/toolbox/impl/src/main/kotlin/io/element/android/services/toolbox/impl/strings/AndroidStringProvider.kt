@@ -10,13 +10,14 @@ package io.element.android.services.toolbox.impl.strings
 import android.content.res.Resources
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import io.element.android.services.toolbox.api.strings.StringProvider
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class AndroidStringProvider @Inject constructor(private val resources: Resources) : StringProvider {
+@Inject
+class AndroidStringProvider(private val resources: Resources) : StringProvider {
     override fun getString(@StringRes resId: Int): String {
         return resources.getString(resId)
     }

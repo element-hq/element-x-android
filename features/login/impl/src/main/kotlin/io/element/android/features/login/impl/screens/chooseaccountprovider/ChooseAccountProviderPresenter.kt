@@ -20,9 +20,10 @@ import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.uri.ensureProtocol
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class ChooseAccountProviderPresenter @Inject constructor(
+@Inject
+class ChooseAccountProviderPresenter(
     private val enterpriseService: EnterpriseService,
     private val loginHelper: LoginHelper,
 ) : Presenter<ChooseAccountProviderState> {

@@ -14,17 +14,18 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.androidutils.system.toast
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesNode(AppScope::class)
-class BugReportNode @AssistedInject constructor(
+@Inject
+class BugReportNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: BugReportPresenter,

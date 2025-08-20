@@ -10,9 +10,10 @@ package io.element.android.libraries.pushproviders.unifiedpush
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.pushproviders.api.PushData
 import kotlinx.serialization.json.Json
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class UnifiedPushParser @Inject constructor() {
+@Inject
+class UnifiedPushParser() {
     private val json by lazy { Json { ignoreUnknownKeys = true } }
 
     fun parse(message: ByteArray, clientSecret: String): PushData? {

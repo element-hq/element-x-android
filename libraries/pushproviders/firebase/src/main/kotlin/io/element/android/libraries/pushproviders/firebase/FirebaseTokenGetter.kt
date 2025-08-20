@@ -8,10 +8,10 @@
 package io.element.android.libraries.pushproviders.firebase
 
 import com.google.firebase.messaging.FirebaseMessaging
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -25,7 +25,8 @@ interface FirebaseTokenGetter {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFirebaseTokenGetter @Inject constructor(
+@Inject
+class DefaultFirebaseTokenGetter(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
 ) : FirebaseTokenGetter {
     override suspend fun get(): String {

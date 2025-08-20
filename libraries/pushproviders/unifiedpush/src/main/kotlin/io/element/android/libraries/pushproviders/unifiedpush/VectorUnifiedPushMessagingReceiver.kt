@@ -22,7 +22,8 @@ import org.unifiedpush.android.connector.MessagingReceiver
 import org.unifiedpush.android.connector.data.PushEndpoint
 import org.unifiedpush.android.connector.data.PushMessage
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.DaggerComponentOwner
 
 private val loggerTag = LoggerTag("VectorUnifiedPushMessagingReceiver", LoggerTag.PushLoggerTag)
 
@@ -39,7 +40,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var coroutineScope: CoroutineScope
 
     override fun onReceive(context: Context, intent: Intent) {
-        context.applicationContext.bindings<VectorUnifiedPushMessagingReceiverBindings>().inject(this)
+        ((context.applicationContext as DaggerComponentOwner).daggerComponent as VectorUnifiedPushMessagingReceiverBindings).inject(this)
         super.onReceive(context, intent)
     }
 

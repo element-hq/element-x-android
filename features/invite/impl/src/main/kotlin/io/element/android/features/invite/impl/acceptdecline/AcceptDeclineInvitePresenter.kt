@@ -24,9 +24,10 @@ import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class AcceptDeclineInvitePresenter @Inject constructor(
+@Inject
+class AcceptDeclineInvitePresenter(
     private val acceptInvite: AcceptInvite,
     private val declineInvite: DeclineInvite,
 ) : Presenter<AcceptDeclineInviteState> {

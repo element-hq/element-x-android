@@ -9,14 +9,15 @@ package io.element.android.features.knockrequests.impl.list
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultKnockRequestsListEntryPoint @Inject constructor() : KnockRequestsListEntryPoint {
+@Inject
+class DefaultKnockRequestsListEntryPoint() : KnockRequestsListEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
         return parentNode.createNode<KnockRequestsListNode>(buildContext)
     }

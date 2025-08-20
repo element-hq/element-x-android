@@ -10,11 +10,14 @@ package io.element.android.libraries.matrix.impl.paths
 import io.element.android.libraries.di.CacheDirectory
 import java.io.File
 import java.util.UUID
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
+import io.element.android.libraries.di.BaseDirectory
 
-class SessionPathsFactory @Inject constructor(
-    private val baseDirectory: File,
-    @CacheDirectory private val cacheDirectory: File,
+@Inject
+class SessionPathsFactory(
+    @Named("baseDirectory") private val baseDirectory: File,
+    @Named("cacheDirectory") private val cacheDirectory: File,
 ) {
     fun create(): SessionPaths {
         val subPath = UUID.randomUUID().toString()

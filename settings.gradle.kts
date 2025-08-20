@@ -9,6 +9,7 @@ import java.net.URI
 
 pluginManagement {
     repositories {
+        mavenLocal()
         includeBuild("plugins")
         gradlePluginPortal()
         google()
@@ -18,6 +19,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
         maven {

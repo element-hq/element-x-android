@@ -29,9 +29,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class LeaveRoomPresenter @Inject constructor(
+@Inject
+class LeaveRoomPresenter(
     private val client: MatrixClient,
     private val dispatchers: CoroutineDispatchers,
     private val notificationConversationService: NotificationConversationService,

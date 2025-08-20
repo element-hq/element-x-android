@@ -7,20 +7,21 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.currentSessionId
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface UnifiedPushCurrentUserPushConfigProvider {
     suspend fun provide(): CurrentUserPushConfig?
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultUnifiedPushCurrentUserPushConfigProvider @Inject constructor(
+@Inject
+class DefaultUnifiedPushCurrentUserPushConfigProvider(
     private val pushClientSecret: PushClientSecret,
     private val unifiedPushStore: UnifiedPushStore,
     private val appNavigationStateService: AppNavigationStateService,

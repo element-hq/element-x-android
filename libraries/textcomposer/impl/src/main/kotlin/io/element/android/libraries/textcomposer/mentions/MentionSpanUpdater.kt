@@ -12,12 +12,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface MentionSpanUpdater {
     fun updateMentionSpans(text: CharSequence): CharSequence
@@ -27,7 +27,8 @@ interface MentionSpanUpdater {
 }
 
 @ContributesBinding(RoomScope::class)
-class DefaultMentionSpanUpdater @Inject constructor(
+@Inject
+class DefaultMentionSpanUpdater(
     private val formatter: MentionSpanFormatter,
     private val theme: MentionSpanTheme,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,

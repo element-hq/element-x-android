@@ -14,9 +14,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TroubleshootNotificationsPresenter @Inject constructor(
+@Inject
+class TroubleshootNotificationsPresenter(
     private val troubleshootTestSuite: TroubleshootTestSuite,
 ) : Presenter<TroubleshootNotificationsState> {
     @Composable

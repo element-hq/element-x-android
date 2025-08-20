@@ -7,9 +7,9 @@
 
 package io.element.android.features.rageshake.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
 import io.element.android.features.rageshake.api.crash.CrashDetectionState
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionPresenter
@@ -17,10 +17,10 @@ import io.element.android.features.rageshake.api.detection.RageshakeDetectionSta
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
 @ContributesTo(AppScope::class)
-@Module
+@BindingContainer
 interface RageshakeModule {
     @Binds
     fun bindRageshakePreferencesPresenter(presenter: RageshakePreferencesPresenter): Presenter<RageshakePreferencesState>

@@ -18,13 +18,14 @@ import io.element.android.features.api.MigrationState
 import io.element.android.features.migration.impl.migrations.AppMigration
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @SingleIn(AppScope::class)
-class MigrationPresenter @Inject constructor(
+@Inject
+class MigrationPresenter(
     private val migrationStore: MigrationStore,
     migrations: Set<@JvmSuppressWildcards AppMigration>,
 ) : Presenter<MigrationState> {

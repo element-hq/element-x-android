@@ -18,11 +18,12 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.log.logger.LoggerTag
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val loggerTag = LoggerTag("PiP")
 
-class PictureInPicturePresenter @Inject constructor(
+@Inject
+class PictureInPicturePresenter(
     pipSupportProvider: PipSupportProvider,
 ) : Presenter<PictureInPictureState> {
     private val isPipSupported = pipSupportProvider.isPipSupported()

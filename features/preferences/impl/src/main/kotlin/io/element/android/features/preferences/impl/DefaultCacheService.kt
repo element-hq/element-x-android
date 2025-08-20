@@ -7,18 +7,19 @@
 
 package io.element.android.features.preferences.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.preferences.api.CacheService
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultCacheService @Inject constructor() : CacheService {
+@Inject
+class DefaultCacheService() : CacheService {
     private val _clearedCacheEventFlow = MutableSharedFlow<SessionId>(0)
     override val clearedCacheEventFlow: Flow<SessionId> = _clearedCacheEventFlow
 

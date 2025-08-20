@@ -7,13 +7,13 @@
 
 package io.element.android.libraries.deeplink.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.deeplink.api.DeepLinkCreator
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultDeepLinkCreator @Inject constructor() : DeepLinkCreator {

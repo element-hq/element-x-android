@@ -8,13 +8,14 @@
 package io.element.android.services.toolbox.impl.sdk
 
 import android.os.Build
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultBuildVersionSdkIntProvider @Inject constructor() :
+@Inject
+class DefaultBuildVersionSdkIntProvider() :
     BuildVersionSdkIntProvider {
     override fun get() = Build.VERSION.SDK_INT
 }

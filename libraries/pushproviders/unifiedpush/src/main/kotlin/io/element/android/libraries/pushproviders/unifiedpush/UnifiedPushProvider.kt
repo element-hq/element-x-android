@@ -7,18 +7,19 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-@ContributesMultibinding(AppScope::class)
-class UnifiedPushProvider @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class UnifiedPushProvider(
     private val unifiedPushDistributorProvider: UnifiedPushDistributorProvider,
     private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
     private val unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,

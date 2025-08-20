@@ -11,7 +11,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -22,9 +22,10 @@ import io.element.android.libraries.push.impl.notifications.NotificationBroadcas
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.TestNotificationReceiver
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class PendingIntentFactory @Inject constructor(
+@Inject
+class PendingIntentFactory(
     @ApplicationContext private val context: Context,
     private val intentProvider: IntentProvider,
     private val clock: SystemClock,

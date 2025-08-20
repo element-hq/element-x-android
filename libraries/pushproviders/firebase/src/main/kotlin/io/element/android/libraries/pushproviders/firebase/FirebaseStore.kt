@@ -9,13 +9,13 @@ package io.element.android.libraries.pushproviders.firebase
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * This class store the Firebase token in SharedPrefs.
@@ -27,7 +27,8 @@ interface FirebaseStore {
 }
 
 @ContributesBinding(AppScope::class)
-class SharedPreferencesFirebaseStore @Inject constructor(
+@Inject
+class SharedPreferencesFirebaseStore(
     private val sharedPreferences: SharedPreferences,
 ) : FirebaseStore {
     override fun getFcmToken(): String? {

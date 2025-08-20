@@ -7,12 +7,12 @@
 
 package io.element.android.features.login.impl.screens.createaccount
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import kotlinx.serialization.json.Json
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface MessageParser {
     /**
@@ -23,7 +23,8 @@ interface MessageParser {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultMessageParser @Inject constructor(
+@Inject
+class DefaultMessageParser(
     private val accountProviderDataSource: AccountProviderDataSource,
 ) : MessageParser {
     override fun parse(message: String): ExternalSession {

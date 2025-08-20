@@ -10,9 +10,10 @@ package io.element.android.features.messages.impl.timeline.factories.event
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TimelineItemContentRedactedFactory @Inject constructor() {
+@Inject
+class TimelineItemContentRedactedFactory() {
     fun create(@Suppress("UNUSED_PARAMETER") content: RedactedContent): TimelineItemEventContent {
         return TimelineItemRedactedContent
     }

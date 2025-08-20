@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.usersearch.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
@@ -20,10 +20,11 @@ import io.element.android.libraries.usersearch.api.UserSearchResultState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
-class MatrixUserRepository @Inject constructor(
+@Inject
+class MatrixUserRepository(
     private val client: MatrixClient,
     private val dataSource: UserListDataSource
 ) : UserRepository {

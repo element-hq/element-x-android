@@ -10,11 +10,11 @@ package io.element.android.libraries.pushproviders.unifiedpush
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.UserId
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface UnifiedPushStore {
     fun getEndpoint(clientSecret: String): String?
@@ -26,7 +26,8 @@ interface UnifiedPushStore {
 }
 
 @ContributesBinding(AppScope::class)
-class SharedPreferencesUnifiedPushStore @Inject constructor(
+@Inject
+class SharedPreferencesUnifiedPushStore(
     @ApplicationContext val context: Context,
     private val sharedPreferences: SharedPreferences,
 ) : UnifiedPushStore {

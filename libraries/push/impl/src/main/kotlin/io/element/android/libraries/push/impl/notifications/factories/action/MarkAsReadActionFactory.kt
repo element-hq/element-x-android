@@ -13,16 +13,17 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationBroadcastReceiver
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class MarkAsReadActionFactory @Inject constructor(
+@Inject
+class MarkAsReadActionFactory(
     @ApplicationContext private val context: Context,
     private val actionIds: NotificationActionIds,
     private val stringProvider: StringProvider,

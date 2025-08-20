@@ -8,16 +8,16 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeout
 import org.unifiedpush.android.connector.UnifiedPush
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
 interface RegisterUnifiedPushUseCase {
@@ -25,7 +25,8 @@ interface RegisterUnifiedPushUseCase {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultRegisterUnifiedPushUseCase @Inject constructor(
+@Inject
+class DefaultRegisterUnifiedPushUseCase(
     @ApplicationContext private val context: Context,
     private val endpointRegistrationHandler: EndpointRegistrationHandler,
 ) : RegisterUnifiedPushUseCase {

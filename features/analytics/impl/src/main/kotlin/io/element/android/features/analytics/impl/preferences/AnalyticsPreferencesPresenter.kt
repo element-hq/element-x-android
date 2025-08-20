@@ -18,9 +18,10 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class AnalyticsPreferencesPresenter @Inject constructor(
+@Inject
+class AnalyticsPreferencesPresenter(
     private val analyticsService: AnalyticsService,
     private val buildMeta: BuildMeta,
 ) : Presenter<AnalyticsPreferencesState> {

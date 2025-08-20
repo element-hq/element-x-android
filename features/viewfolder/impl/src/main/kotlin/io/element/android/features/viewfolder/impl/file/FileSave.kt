@@ -13,18 +13,18 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface FileSave {
     suspend fun save(
@@ -33,7 +33,8 @@ interface FileSave {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFileSave @Inject constructor(
+@Inject
+class DefaultFileSave(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
 ) : FileSave {

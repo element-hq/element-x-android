@@ -8,15 +8,16 @@
 package io.element.android.libraries.matrix.impl.keys
 
 import android.util.Base64
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import java.security.SecureRandom
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private const val SECRET_SIZE = 256
 
 @ContributesBinding(AppScope::class)
-class DefaultPassphraseGenerator @Inject constructor() : PassphraseGenerator {
+@Inject
+class DefaultPassphraseGenerator() : PassphraseGenerator {
     override fun generatePassphrase(): String? {
         val key = ByteArray(size = SECRET_SIZE)
         SecureRandom().nextBytes(key)

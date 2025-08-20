@@ -13,7 +13,7 @@ import android.text.Spanned
 import android.text.style.URLSpan
 import android.util.Patterns
 import androidx.core.text.getSpans
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.MatrixPatternType
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
@@ -26,14 +26,15 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.wysiwyg.view.spans.CodeBlockSpan
 import io.element.android.wysiwyg.view.spans.InlineCodeSpan
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface TextPillificationHelper {
     fun pillify(text: CharSequence, pillifyPermalinks: Boolean = true): CharSequence
 }
 
 @ContributesBinding(RoomScope::class)
-class DefaultTextPillificationHelper @Inject constructor(
+@Inject
+class DefaultTextPillificationHelper(
     private val mentionSpanProvider: MentionSpanProvider,
     private val permalinkParser: PermalinkParser,
     private val permalinkBuilder: PermalinkBuilder,

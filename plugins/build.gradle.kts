@@ -10,6 +10,7 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     google()
 }
@@ -23,6 +24,7 @@ dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
     implementation(libs.autonomousapps.dependencyanalysis.plugin)
     implementation(libs.anvil.gradle.plugin)
+    implementation(libs.metro.gradle.plugin)
     implementation(libs.ksp.gradle.plugin)
     implementation(libs.compose.compiler.plugin)
 }

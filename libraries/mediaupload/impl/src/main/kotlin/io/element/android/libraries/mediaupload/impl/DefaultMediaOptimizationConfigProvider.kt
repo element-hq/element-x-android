@@ -7,16 +7,17 @@
 
 package io.element.android.libraries.mediaupload.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultMediaOptimizationConfigProvider @Inject constructor(
+@Inject
+class DefaultMediaOptimizationConfigProvider(
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : MediaOptimizationConfigProvider {
     override suspend fun get(): MediaOptimizationConfig = MediaOptimizationConfig(

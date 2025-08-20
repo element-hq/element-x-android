@@ -8,20 +8,21 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.system.getApplicationLabel
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.pushproviders.api.Distributor
 import org.unifiedpush.android.connector.UnifiedPush
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface UnifiedPushDistributorProvider {
     fun getDistributors(): List<Distributor>
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultUnifiedPushDistributorProvider @Inject constructor(
+@Inject
+class DefaultUnifiedPushDistributorProvider(
     @ApplicationContext private val context: Context,
 ) : UnifiedPushDistributorProvider {
     override fun getDistributors(): List<Distributor> {

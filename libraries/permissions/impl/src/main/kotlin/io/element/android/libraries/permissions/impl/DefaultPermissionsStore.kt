@@ -9,17 +9,18 @@ package io.element.android.libraries.permissions.impl
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.permissions.api.PermissionsStore
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultPermissionsStore @Inject constructor(
+@Inject
+class DefaultPermissionsStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : PermissionsStore {
     private val store = preferenceDataStoreFactory.create("permissions_store")

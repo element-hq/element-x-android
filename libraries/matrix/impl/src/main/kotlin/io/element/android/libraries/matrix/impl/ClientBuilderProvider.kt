@@ -7,17 +7,18 @@
 
 package io.element.android.libraries.matrix.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
 import org.matrix.rustcomponents.sdk.ClientBuilder
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface ClientBuilderProvider {
     fun provide(): ClientBuilder
 }
 
 @ContributesBinding(AppScope::class)
-class RustClientBuilderProvider @Inject constructor() : ClientBuilderProvider {
+@Inject
+class RustClientBuilderProvider() : ClientBuilderProvider {
     override fun provide(): ClientBuilder {
         return ClientBuilder()
     }

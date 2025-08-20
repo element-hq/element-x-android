@@ -48,10 +48,11 @@ import io.element.android.libraries.matrix.ui.messages.toHtmlDocument
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Duration
 
-class TimelineItemContentMessageFactory @Inject constructor(
+@Inject
+class TimelineItemContentMessageFactory(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
     private val htmlConverterProvider: HtmlConverterProvider,

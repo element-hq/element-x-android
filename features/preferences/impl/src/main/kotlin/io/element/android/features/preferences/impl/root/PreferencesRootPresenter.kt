@@ -32,9 +32,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class PreferencesRootPresenter @Inject constructor(
+@Inject
+class PreferencesRootPresenter(
     private val matrixClient: MatrixClient,
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,

@@ -7,15 +7,16 @@
 
 package io.element.android.features.logout.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.logout.api.LogoutUseCase
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultLogoutUseCase @Inject constructor(
+@Inject
+class DefaultLogoutUseCase(
     private val authenticationService: MatrixAuthenticationService,
     private val matrixClientProvider: MatrixClientProvider,
 ) : LogoutUseCase {

@@ -18,9 +18,10 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.SdkMetadata
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.apperror.api.AppErrorStateService
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class RootPresenter @Inject constructor(
+@Inject
+class RootPresenter(
     private val crashDetectionPresenter: Presenter<CrashDetectionState>,
     private val rageshakeDetectionPresenter: Presenter<RageshakeDetectionState>,
     private val appErrorStateService: AppErrorStateService,

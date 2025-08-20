@@ -8,13 +8,13 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import androidx.compose.runtime.Composable
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.multibindings.IntoMap
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.IntoMap
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.messages.impl.timeline.di.TimelineItemEventContentKey
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
@@ -23,7 +23,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.voiceplayer.api.VoiceMessagePresenterFactory
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 
-@Module
+@BindingContainer
 @ContributesTo(RoomScope::class)
 interface VoiceMessagePresenterModule {
     @Binds
@@ -32,7 +32,8 @@ interface VoiceMessagePresenterModule {
     fun bindVoiceMessagePresenterFactory(factory: VoiceMessagePresenter.Factory): TimelineItemPresenterFactory<*, *>
 }
 
-class VoiceMessagePresenter @AssistedInject constructor(
+@Inject
+class VoiceMessagePresenter(
     voiceMessagePresenterFactory: VoiceMessagePresenterFactory,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {

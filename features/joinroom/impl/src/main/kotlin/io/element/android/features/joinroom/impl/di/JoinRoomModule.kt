@@ -7,9 +7,9 @@
 
 package io.element.android.features.joinroom.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import java.util.Optional
 
-@Module
+@BindingContainer
 @ContributesTo(SessionScope::class)
 object JoinRoomModule {
     @Provides

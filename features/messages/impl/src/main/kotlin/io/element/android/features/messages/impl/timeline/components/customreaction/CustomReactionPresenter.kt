@@ -16,9 +16,10 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class CustomReactionPresenter @Inject constructor(
+@Inject
+class CustomReactionPresenter(
     private val emojibaseProvider: EmojibaseProvider
 ) : Presenter<CustomReactionState> {
     @Composable

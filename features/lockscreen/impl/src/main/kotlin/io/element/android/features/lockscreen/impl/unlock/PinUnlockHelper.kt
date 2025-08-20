@@ -15,9 +15,10 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricAuthentica
 import io.element.android.features.lockscreen.impl.biometric.DefaultBiometricUnlockCallback
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class PinUnlockHelper @Inject constructor(
+@Inject
+class PinUnlockHelper(
     private val biometricAuthenticatorManager: BiometricAuthenticatorManager,
     private val pinCodeManager: PinCodeManager
 ) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
@@ -7,28 +7,21 @@
 
 package io.element.android.x.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import com.squareup.anvil.annotations.MergeSubcomponent
-import dagger.BindsInstance
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.NodeFactoriesBindings
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 
-@SingleIn(SessionScope::class)
-@MergeSubcomponent(SessionScope::class)
+@GraphExtension(SessionScope::class)
 interface SessionComponent : NodeFactoriesBindings {
-    @MergeSubcomponent.Builder
-    interface Builder {
-        @BindsInstance
-        fun client(matrixClient: MatrixClient): Builder
-
-        fun build(): SessionComponent
-    }
+    val roomComponentFactory: RoomComponent.Factory
 
     @ContributesTo(AppScope::class)
-    interface ParentBindings {
-        fun sessionComponentBuilder(): Builder
+    @GraphExtension.Factory
+    interface Factory {
+        fun createSessionComponent(@Provides matrixClient: MatrixClient): SessionComponent
     }
 }

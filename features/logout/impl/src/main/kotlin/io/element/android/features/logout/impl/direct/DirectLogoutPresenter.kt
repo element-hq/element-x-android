@@ -25,9 +25,10 @@ import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class DirectLogoutPresenter @Inject constructor(
+@Inject
+class DirectLogoutPresenter(
     private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
 ) : Presenter<DirectLogoutState> {

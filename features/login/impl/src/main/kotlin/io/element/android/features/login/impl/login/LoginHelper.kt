@@ -26,7 +26,7 @@ import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * This class is responsible for managing the login flow, including handling OIDC actions and
@@ -34,7 +34,8 @@ import javax.inject.Inject
  * It's a helper to avoid code duplication. It is used by [OnBoardingPresenter], [ConfirmAccountProviderPresenter]
  * and [ChooseAccountProviderPresenter].
  */
-class LoginHelper @Inject constructor(
+@Inject
+class LoginHelper(
     private val oidcActionFlow: OidcActionFlow,
     private val authenticationService: MatrixAuthenticationService,
     private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,

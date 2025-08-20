@@ -7,28 +7,30 @@
 
 package io.element.android.features.cachecleaner.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.cachecleaner.api.CacheCleaner
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 
 /**
  * Default implementation of [CacheCleaner].
  */
 @ContributesBinding(AppScope::class)
-class DefaultCacheCleaner @Inject constructor(
+@Inject
+class DefaultCacheCleaner(
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
-    @CacheDirectory private val cacheDir: File,
+    @Named("cacheDirectory") private val cacheDir: File,
 ) : CacheCleaner {
     companion object {
         val SUBDIRS_TO_CLEANUP = listOf("temp/media", "temp/voice")

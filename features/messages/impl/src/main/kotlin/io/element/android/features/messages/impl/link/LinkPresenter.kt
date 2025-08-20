@@ -14,9 +14,10 @@ import androidx.compose.runtime.remember
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.wysiwyg.link.Link
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class LinkPresenter @Inject constructor(
+@Inject
+class LinkPresenter(
     private val linkChecker: LinkChecker,
 ) : Presenter<LinkState> {
     @Composable

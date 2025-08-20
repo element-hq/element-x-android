@@ -42,9 +42,10 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class RoomDetailsEditPresenter @Inject constructor(
+@Inject
+class RoomDetailsEditPresenter(
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,

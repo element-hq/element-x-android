@@ -7,15 +7,16 @@
 
 package io.element.android.features.rageshake.impl.logs
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
 import io.element.android.features.rageshake.impl.reporter.DefaultBugReporter
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import java.io.File
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultLogFilesRemover @Inject constructor(
+@Inject
+class DefaultLogFilesRemover(
     private val bugReporter: DefaultBugReporter,
 ) : LogFilesRemover {
     override suspend fun perform(predicate: (File) -> Boolean) {

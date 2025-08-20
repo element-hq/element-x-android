@@ -14,13 +14,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * This migration is temporary, will be safe to remove after some time.
  * The goal is to set the server config if it's not set, and remove the local data.
  */
-class MediaPreviewConfigMigration @Inject constructor(
+@Inject
+class MediaPreviewConfigMigration(
     private val mediaPreviewService: MediaPreviewService,
     private val appPreferencesStore: AppPreferencesStore,
     @SessionCoroutineScope

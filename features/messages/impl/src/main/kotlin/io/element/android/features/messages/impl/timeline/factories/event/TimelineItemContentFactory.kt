@@ -26,9 +26,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TimelineItemContentFactory @Inject constructor(
+@Inject
+class TimelineItemContentFactory(
     private val messageFactory: TimelineItemContentMessageFactory,
     private val redactedMessageFactory: TimelineItemContentRedactedFactory,
     private val stickerFactory: TimelineItemContentStickerFactory,

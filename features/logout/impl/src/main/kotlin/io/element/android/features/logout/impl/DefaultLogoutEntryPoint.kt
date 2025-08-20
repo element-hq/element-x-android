@@ -10,14 +10,15 @@ package io.element.android.features.logout.impl
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultLogoutEntryPoint @Inject constructor() : LogoutEntryPoint {
+@Inject
+class DefaultLogoutEntryPoint() : LogoutEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): LogoutEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

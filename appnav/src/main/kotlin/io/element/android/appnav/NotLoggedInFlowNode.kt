@@ -20,8 +20,8 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
@@ -31,12 +31,13 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.utils.ForceOrientationInMobileDevices
 import io.element.android.libraries.designsystem.utils.ScreenOrientation
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.ui.media.NotLoggedInImageLoaderFactory
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-class NotLoggedInFlowNode @AssistedInject constructor(
+@Inject
+class NotLoggedInFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val loginEntryPoint: LoginEntryPoint,

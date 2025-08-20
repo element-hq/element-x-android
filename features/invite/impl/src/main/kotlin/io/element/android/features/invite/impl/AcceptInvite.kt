@@ -7,7 +7,7 @@
 
 package io.element.android.features.invite.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.core.extensions.mapFailure
@@ -19,7 +19,7 @@ import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface AcceptInvite {
     suspend operator fun invoke(roomId: RoomId): Result<RoomId>
@@ -30,7 +30,8 @@ interface AcceptInvite {
 }
 
 @ContributesBinding(SessionScope::class)
-class DefaultAcceptInvite @Inject constructor(
+@Inject
+class DefaultAcceptInvite(
     private val client: MatrixClient,
     private val joinRoom: JoinRoom,
     private val notificationCleaner: NotificationCleaner,

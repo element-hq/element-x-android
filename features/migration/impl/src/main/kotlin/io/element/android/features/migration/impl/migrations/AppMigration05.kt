@@ -7,16 +7,19 @@
 
 package io.element.android.features.migration.impl.migrations
 
-import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import java.io.File
-import javax.inject.Inject
 
-@ContributesMultibinding(AppScope::class)
-class AppMigration05 @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class AppMigration05(
     private val sessionStore: SessionStore,
-    private val baseDirectory: File,
+    @Named("baseDirectory") private val baseDirectory: File,
 ) : AppMigration {
     override val order: Int = 5
 

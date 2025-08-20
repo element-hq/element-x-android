@@ -13,12 +13,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -33,11 +33,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicInteger
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(scope = AppScope::class)
 @SingleIn(AppScope::class)
-class DefaultNetworkMonitor @Inject constructor(
+@Inject
+class DefaultNetworkMonitor(
     @ApplicationContext context: Context,
     @AppCoroutineScope
     appCoroutineScope: CoroutineScope,

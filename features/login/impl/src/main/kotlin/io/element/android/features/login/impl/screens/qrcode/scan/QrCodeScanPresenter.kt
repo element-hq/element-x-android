@@ -31,9 +31,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class QrCodeScanPresenter @Inject constructor(
+@Inject
+class QrCodeScanPresenter(
     private val qrCodeLoginDataFactory: MatrixQrCodeLoginDataFactory,
     private val qrCodeLoginManager: QrCodeLoginManager,
     private val coroutineDispatchers: CoroutineDispatchers,

@@ -20,9 +20,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TroubleshootTestSuite @Inject constructor(
+@Inject
+class TroubleshootTestSuite(
     private val notificationTroubleshootTests: Set<@JvmSuppressWildcards NotificationTroubleshootTest>,
     private val getCurrentPushProvider: GetCurrentPushProvider,
     private val analyticsService: AnalyticsService,

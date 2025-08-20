@@ -7,7 +7,7 @@
 
 package io.element.android.features.lockscreen.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
@@ -15,8 +15,8 @@ import io.element.android.features.lockscreen.impl.biometric.DefaultBiometricUnl
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
@@ -30,12 +30,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Duration
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultLockScreenService @Inject constructor(
+@Inject
+class DefaultLockScreenService(
     private val lockScreenConfig: LockScreenConfig,
     private val lockScreenStore: LockScreenStore,
     private val pinCodeManager: PinCodeManager,

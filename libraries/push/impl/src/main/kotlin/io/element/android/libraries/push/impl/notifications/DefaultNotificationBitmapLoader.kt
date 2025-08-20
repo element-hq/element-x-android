@@ -16,19 +16,20 @@ import coil3.request.ImageRequest
 import coil3.request.transformations
 import coil3.toBitmap
 import coil3.transform.CircleCropTransformation
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultNotificationBitmapLoader @Inject constructor(
+@Inject
+class DefaultNotificationBitmapLoader(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) : NotificationBitmapLoader {

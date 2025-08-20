@@ -9,25 +9,26 @@ package io.element.android.libraries.mediaviewer.impl.gallery.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.multibindings.Multibinds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Multibinds
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
-import javax.inject.Inject
+import kotlin.reflect.KClass
 
 /**
  * Dagger module that declares the [MediaItemPresenterFactory] map multi binding.
  *
  * Its sole purpose is to support the case of an empty map multibinding.
  */
-@Module
+@BindingContainer
 @ContributesTo(RoomScope::class)
 interface MediaItemPresenterFactoriesModule {
     @Multibinds
-    fun multiBindMediaItemPresenterFactories(): @JvmSuppressWildcards Map<Class<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>
+    fun multiBindMediaItemPresenterFactories(): @JvmSuppressWildcards Map<KClass<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>
 }
 
 /**
@@ -38,8 +39,9 @@ interface MediaItemPresenterFactoriesModule {
  * goes out of the [LazyColumn] viewport.
  */
 @SingleIn(RoomScope::class)
-class MediaItemPresenterFactories @Inject constructor(
-    private val factories: @JvmSuppressWildcards Map<Class<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>,
+@Inject
+class MediaItemPresenterFactories(
+    private val factories: @JvmSuppressWildcards Map<KClass<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>,
 ) {
     private val presenters: MutableMap<MediaItem.Event, Presenter<*>> = mutableMapOf()
 
@@ -57,7 +59,7 @@ class MediaItemPresenterFactories @Inject constructor(
     @Composable
     fun <C : MediaItem.Event, S : Any> rememberPresenter(
         content: C,
-        contentClass: Class<C>,
+        contentClass: KClass<C>,
     ): Presenter<S> = remember(content) {
         presenters[content]?.let {
             @Suppress("UNCHECKED_CAST")
@@ -86,5 +88,5 @@ inline fun <reified C : MediaItem.Event, S : Any> MediaItemPresenterFactories.re
     content: C
 ): Presenter<S> = rememberPresenter(
     content = content,
-    contentClass = C::class.java
+    contentClass = C::class
 )

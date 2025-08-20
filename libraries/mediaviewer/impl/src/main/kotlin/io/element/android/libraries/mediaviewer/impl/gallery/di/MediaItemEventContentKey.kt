@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery.di
 
-import dagger.MapKey
+import dev.zacsweers.metro.MapKey
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import kotlin.reflect.KClass
 

@@ -10,14 +10,15 @@ package io.element.android.features.createroom.impl
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultCreateRoomEntryPoint @Inject constructor() : CreateRoomEntryPoint {
+@Inject
+class DefaultCreateRoomEntryPoint() : CreateRoomEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): CreateRoomEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

@@ -9,11 +9,11 @@ package io.element.android.libraries.push.impl.notifications
 
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -34,7 +34,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.NotificationLoggerTag)
 
@@ -45,7 +45,8 @@ private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultNotificationDrawerManager @Inject constructor(
+@Inject
+class DefaultNotificationDrawerManager(
     private val notificationManager: NotificationManagerCompat,
     private val notificationRenderer: NotificationRenderer,
     private val appNavigationStateService: AppNavigationStateService,

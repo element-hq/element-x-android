@@ -7,9 +7,9 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
@@ -25,7 +25,7 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -47,7 +47,8 @@ interface CallNotificationEventResolver {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultCallNotificationEventResolver @Inject constructor(
+@Inject
+class DefaultCallNotificationEventResolver(
     private val stringProvider: StringProvider,
     private val appForegroundStateService: AppForegroundStateService,
     private val clientProvider: MatrixClientProvider,

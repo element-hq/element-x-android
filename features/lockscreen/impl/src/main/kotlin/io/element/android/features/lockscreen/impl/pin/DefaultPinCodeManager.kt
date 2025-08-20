@@ -7,22 +7,23 @@
 
 package io.element.android.features.lockscreen.impl.pin
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.CopyOnWriteArrayList
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_PIN_CODE"
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class DefaultPinCodeManager @Inject constructor(
+@Inject
+class DefaultPinCodeManager(
     private val secretKeyRepository: SecretKeyRepository,
     private val encryptionDecryptionService: EncryptionDecryptionService,
     private val lockScreenStore: LockScreenStore,

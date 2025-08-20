@@ -9,15 +9,16 @@ package io.element.android.features.location.impl.send
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultSendLocationEntryPoint @Inject constructor() : SendLocationEntryPoint {
+@Inject
+class DefaultSendLocationEntryPoint() : SendLocationEntryPoint {
     override fun builder(timelineMode: Timeline.Mode): SendLocationEntryPoint.Builder {
         return Builder(timelineMode)
     }

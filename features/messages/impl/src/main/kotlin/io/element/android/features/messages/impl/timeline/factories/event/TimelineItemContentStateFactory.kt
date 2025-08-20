@@ -12,9 +12,10 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TimelineItemContentStateFactory @Inject constructor(
+@Inject
+class TimelineItemContentStateFactory(
     private val timelineEventFormatter: TimelineEventFormatter,
 ) {
     fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {

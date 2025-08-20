@@ -9,14 +9,15 @@ package io.element.android.features.migration.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.api.MigrationEntryPoint
 import io.element.android.features.api.MigrationState
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultMigrationEntryPoint @Inject constructor(
+@Inject
+class DefaultMigrationEntryPoint(
     private val migrationPresenter: MigrationPresenter,
 ) : MigrationEntryPoint {
     @Composable

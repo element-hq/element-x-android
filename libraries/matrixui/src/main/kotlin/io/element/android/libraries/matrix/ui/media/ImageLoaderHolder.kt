@@ -8,14 +8,14 @@
 package io.element.android.libraries.matrix.ui.media
 
 import coil3.ImageLoader
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 interface ImageLoaderHolder {
     fun get(client: MatrixClient): ImageLoader
@@ -24,7 +24,8 @@ interface ImageLoaderHolder {
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class DefaultImageLoaderHolder @Inject constructor(
+@Inject
+class DefaultImageLoaderHolder(
     private val loggedInImageLoaderFactory: LoggedInImageLoaderFactory,
     private val sessionObserver: SessionObserver,
 ) : ImageLoaderHolder {

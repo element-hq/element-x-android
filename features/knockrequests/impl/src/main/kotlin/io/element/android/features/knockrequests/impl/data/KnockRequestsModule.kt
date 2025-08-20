@@ -7,16 +7,16 @@
 
 package io.element.android.features.knockrequests.impl.data
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
-@Module
+@BindingContainer
 @ContributesTo(RoomScope::class)
 object KnockRequestsModule {
     @Provides

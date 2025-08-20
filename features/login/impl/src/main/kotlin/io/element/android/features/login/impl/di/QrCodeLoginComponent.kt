@@ -7,22 +7,18 @@
 
 package io.element.android.features.login.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import com.squareup.anvil.annotations.MergeSubcomponent
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.GraphExtension
 import io.element.android.libraries.architecture.NodeFactoriesBindings
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 
 @SingleIn(QrCodeLoginScope::class)
-@MergeSubcomponent(QrCodeLoginScope::class)
+@GraphExtension(QrCodeLoginScope::class)
 interface QrCodeLoginComponent : NodeFactoriesBindings {
-    @MergeSubcomponent.Builder
-    interface Builder {
-        fun build(): QrCodeLoginComponent
-    }
-
     @ContributesTo(AppScope::class)
-    interface ParentBindings {
-        fun qrCodeLoginComponentBuilder(): Builder
+    @GraphExtension.Factory
+    interface Factory {
+        fun create(): QrCodeLoginComponent
     }
 }

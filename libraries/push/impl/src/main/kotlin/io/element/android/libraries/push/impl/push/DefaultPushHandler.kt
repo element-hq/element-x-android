@@ -7,13 +7,13 @@
 
 package io.element.android.libraries.push.impl.push
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
@@ -43,13 +43,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private val loggerTag = LoggerTag("PushHandler", LoggerTag.PushLoggerTag)
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultPushHandler @Inject constructor(
+@Inject
+class DefaultPushHandler(
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
     private val onRedactedEventReceived: OnRedactedEventReceived,
     private val incrementPushDataStore: IncrementPushDataStore,

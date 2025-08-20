@@ -20,9 +20,10 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class IdentityChangeStatePresenter @Inject constructor(
+@Inject
+class IdentityChangeStatePresenter(
     private val room: JoinedRoom,
     private val encryptionService: EncryptionService,
 ) : Presenter<IdentityChangeState> {

@@ -12,13 +12,14 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * A draft store that persists drafts in the room state.
  * It can be used to store drafts that should be persisted across app restarts.
  */
-class MatrixComposerDraftStore @Inject constructor(
+@Inject
+class MatrixComposerDraftStore(
     private val client: MatrixClient,
 ) : ComposerDraftStore {
     override suspend fun loadDraft(roomId: RoomId, threadRoot: ThreadId?): ComposerDraft? {

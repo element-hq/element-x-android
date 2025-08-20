@@ -7,12 +7,13 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import com.squareup.anvil.annotations.ContributesBinding
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -58,8 +59,9 @@ interface NotificationMediaRepo {
     ): Result<File>
 }
 
-class DefaultNotificationMediaRepo @AssistedInject constructor(
-    @CacheDirectory private val cacheDir: File,
+@Inject
+class DefaultNotificationMediaRepo(
+    @Named("cacheDirectory") private val cacheDir: File,
     private val mxcTools: MxcTools,
     @Assisted private val client: MatrixClient,
 ) : NotificationMediaRepo {

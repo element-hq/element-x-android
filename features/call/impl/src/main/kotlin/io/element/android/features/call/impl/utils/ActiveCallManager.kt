@@ -15,16 +15,16 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -52,7 +52,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -86,7 +86,8 @@ interface ActiveCallManager {
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultActiveCallManager @Inject constructor(
+@Inject
+class DefaultActiveCallManager(
     @ApplicationContext context: Context,
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,

@@ -28,9 +28,10 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class LogoutPresenter @Inject constructor(
+@Inject
+class LogoutPresenter(
     private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
 ) : Presenter<LogoutState> {

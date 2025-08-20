@@ -21,7 +21,7 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.appnav.RootFlowNode
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.DaggerComponentOwner
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize

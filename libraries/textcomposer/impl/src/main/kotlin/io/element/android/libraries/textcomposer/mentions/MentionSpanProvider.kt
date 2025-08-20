@@ -12,14 +12,15 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 private const val EVERYONE_MENTION_TEXT = "@room"
 
 /**
  * Provider for [MentionSpan]s.
  */
-open class MentionSpanProvider @Inject constructor(
+open @Inject
+class MentionSpanProvider(
     private val permalinkParser: PermalinkParser,
     private val mentionSpanFormatter: MentionSpanFormatter,
     private val mentionSpanTheme: MentionSpanTheme,

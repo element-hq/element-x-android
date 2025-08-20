@@ -9,25 +9,26 @@ package io.element.android.features.messages.impl.timeline.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.multibindings.Multibinds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Multibinds
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
-import javax.inject.Inject
+import dev.zacsweers.metro.SingleIn
+import kotlin.reflect.KClass
 
 /**
  * Dagger module that declares the [TimelineItemPresenterFactory] map multi binding.
  *
  * Its sole purpose is to support the case of an empty map multibinding.
  */
-@Module
+@BindingContainer
 @ContributesTo(RoomScope::class)
 interface TimelineItemPresenterFactoriesModule {
     @Multibinds
-    fun multiBindTimelineItemPresenterFactories(): @JvmSuppressWildcards Map<Class<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>
+    fun multiBindTimelineItemPresenterFactories(): @JvmSuppressWildcards Map<KClass<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>
 }
 
 /**
@@ -38,8 +39,9 @@ interface TimelineItemPresenterFactoriesModule {
  * goes out of the [LazyColumn] viewport.
  */
 @SingleIn(RoomScope::class)
-class TimelineItemPresenterFactories @Inject constructor(
-    private val factories: @JvmSuppressWildcards Map<Class<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>,
+@Inject
+class TimelineItemPresenterFactories(
+    private val factories: @JvmSuppressWildcards Map<KClass<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>,
 ) {
     private val presenters: MutableMap<TimelineItemEventContent, Presenter<*>> = mutableMapOf()
 
@@ -57,7 +59,7 @@ class TimelineItemPresenterFactories @Inject constructor(
     @Composable
     fun <C : TimelineItemEventContent, S : Any> rememberPresenter(
         content: C,
-        contentClass: Class<C>,
+        contentClass: KClass<C>,
     ): Presenter<S> = remember(content) {
         presenters[content]?.let {
             @Suppress("UNCHECKED_CAST")
@@ -86,5 +88,5 @@ inline fun <reified C : TimelineItemEventContent, S : Any> TimelineItemPresenter
     content: C
 ): Presenter<S> = rememberPresenter(
     content = content,
-    contentClass = C::class.java
+    contentClass = C::class
 )

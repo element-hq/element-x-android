@@ -11,14 +11,15 @@ import androidx.compose.runtime.Composable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.squareup.anvil.annotations.ContributesBinding
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AppScope
 
 @Suppress("unused")
-class DefaultPermissionsPresenter @AssistedInject constructor(
+@Inject
+class DefaultPermissionsPresenter(
     @Assisted private val permissions: List<String>
 ) : PermissionsPresenter {
     @AssistedFactory
