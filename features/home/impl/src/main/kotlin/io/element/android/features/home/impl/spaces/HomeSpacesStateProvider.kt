@@ -27,10 +27,12 @@ open class HomeSpacesStateProvider : PreviewParameterProvider<HomeSpacesState> {
 internal fun aHomeSpacesState(
     spaceRooms: List<SpaceRoom> = aListOfSpaceRooms(),
     seenSpaceInvites: Set<SpaceId> = emptySet(),
+    hideInvitesAvatar: Boolean = false,
     eventSink: (HomeSpacesEvents) -> Unit = {},
 ) = HomeSpacesState(
     spaceRooms = spaceRooms,
     seenSpaceInvites = seenSpaceInvites.toImmutableSet(),
+    hideInvitesAvatar = hideInvitesAvatar,
     eventSink = eventSink,
 )
 
