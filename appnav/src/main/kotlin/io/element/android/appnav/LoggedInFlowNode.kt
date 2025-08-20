@@ -284,7 +284,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Placeholder -> createNode<PlaceholderNode>(buildContext)
+            NavTarget.Placeholder -> createNode<LoggedInFlowNodePlaceholderNode>(buildContext)
             NavTarget.LoggedInPermanent -> {
                 val callback = object : LoggedInNode.Callback {
                     override fun navigateToNotificationTroubleshoot() {
@@ -561,12 +561,13 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    @ContributesNode(AppScope::class)
-    class PlaceholderNode @AssistedInject constructor(
-        @Assisted buildContext: BuildContext,
-        @Assisted plugins: List<Plugin>,
-    ) : Node(buildContext, plugins = plugins)
 }
+
+@ContributesNode(AppScope::class)
+class LoggedInFlowNodePlaceholderNode @AssistedInject constructor(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
+) : Node(buildContext, plugins = plugins)
 
 @Parcelize
 private class AttachRoomOperation(

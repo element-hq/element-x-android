@@ -98,7 +98,7 @@ class FtueFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Placeholder -> {
-                createNode<PlaceholderNode>(buildContext)
+                createNode<FtueFlowNodePlaceholderNode>(buildContext)
             }
             is NavTarget.SessionVerification -> {
                 val callback = object : FtueSessionVerificationFlowNode.Callback {
@@ -158,16 +158,17 @@ class FtueFlowNode @AssistedInject constructor(
         BackstackView()
     }
 
-    @ContributesNode(AppScope::class)
-    class PlaceholderNode @AssistedInject constructor(
-        @Assisted buildContext: BuildContext,
-        @Assisted plugins: List<Plugin>,
-    ) : Node(buildContext, plugins = plugins) {
-        @Composable
-        override fun View(modifier: Modifier) {
-            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+}
+
+@ContributesNode(AppScope::class)
+class FtueFlowNodePlaceholderNode @AssistedInject constructor(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
+) : Node(buildContext, plugins = plugins) {
+    @Composable
+    override fun View(modifier: Modifier) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
         }
     }
 }
