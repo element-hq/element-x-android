@@ -31,7 +31,7 @@ internal class FakeMergedQrCodeLoginComponent(private val qrCodeLoginManager: Qr
     override fun nodeFactories(): Map<Class<out Node>, AssistedNodeFactory<*>> {
         return mapOf(
             QrCodeLoginFlowNode::class.java to object : AssistedNodeFactory<QrCodeLoginFlowNode> {
-                override fun create(buildContext: BuildContext, plugins: List<Plugin>): QrCodeLoginFlowNode {
+                override fun createNode(buildContext: BuildContext, plugins: List<Plugin>): QrCodeLoginFlowNode {
                     return createNode<QrCodeLoginFlowNode>(buildContext, plugins)
                 }
             }

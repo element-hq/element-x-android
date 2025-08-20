@@ -40,7 +40,7 @@ inline fun <reified N : Node> NodeFactoriesBindings.createNode(
 
     @Suppress("UNCHECKED_CAST")
     val castedNodeFactory = nodeFactory as? AssistedNodeFactory<N>
-    val node = castedNodeFactory?.create(buildContext, plugins)
+    val node = castedNodeFactory?.createNode(buildContext, plugins)
     return node as N
 }
 

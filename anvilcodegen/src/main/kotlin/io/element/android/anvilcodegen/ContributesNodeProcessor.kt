@@ -48,7 +48,10 @@ class ContributesNodeProcessor(
         val enableLogging: Boolean = false,
     )
 
+    private var iteration = 0
+
     override fun process(resolver: Resolver): List<KSAnnotated> {
+        logger.warn("Processing ContributesNode annotations, iteration: ${iteration++}")
         val annotatedSymbols = resolver.getSymbolsWithAnnotation(ContributesNode::class.qualifiedName!!)
             .filterIsInstance<KSClassDeclaration>()
 
@@ -142,7 +145,7 @@ class ContributesNodeProcessor(
                     .addSuperinterface(ClassName.bestGuess(assistedNodeFactoryFqName.asString()).parameterizedBy(nodeClassName))
                     .addAnnotation(AssistedFactory::class)
                     .addFunction(
-                        FunSpec.builder("create")
+                        FunSpec.builder("createNode")
                             .addModifiers(KModifier.OVERRIDE, KModifier.ABSTRACT)
                             .addParameter("buildContext", buildContextClassName)
                             .addParameter("plugins", pluginsClassName)
