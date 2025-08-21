@@ -47,7 +47,7 @@ telephoto = "0.16.0"
 haze = "1.6.10"
 
 # Dependency analysis
-dependencyAnalysis = "2.19.0"
+dependencyAnalysis = "3.0.0"
 
 # DI
 dagger = "2.57"
