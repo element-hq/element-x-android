@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.knockrequests.impl.banner
+package io.element.android.libraries.designsystem.components.avatar.internal
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 

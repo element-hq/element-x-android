@@ -16,8 +16,8 @@ open class AvatarDataProvider : PreviewParameterProvider<AvatarData> {
             .map {
                 sequenceOf(
                     anAvatarData(size = it),
-                    anAvatarData(size = it).copy(name = null),
-                    anAvatarData(size = it).copy(url = "aUrl"),
+                    anAvatarData(size = it, name = null),
+                    anAvatarData(size = it, url = "aUrl"),
                 )
             }
             .flatten()
@@ -26,10 +26,12 @@ open class AvatarDataProvider : PreviewParameterProvider<AvatarData> {
 fun anAvatarData(
     // Let's the id not start with a 'a'.
     id: String = "@id_of_alice:server.org",
-    name: String = "Alice",
+    name: String? = "Alice",
+    url: String? = null,
     size: AvatarSize = AvatarSize.RoomListItem,
 ) = AvatarData(
     id = id,
     name = name,
+    url = url,
     size = size,
 )
