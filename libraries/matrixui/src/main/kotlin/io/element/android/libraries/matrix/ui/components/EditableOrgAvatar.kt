@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.ui.components
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -108,10 +108,11 @@ fun EditableOrgAvatar(
         )
         Surface(
             color = ElementTheme.colors.bgCanvasDefault,
+            shape = CircleShape,
+            border = BorderStroke(1.dp, color = ElementTheme.colors.borderInteractiveSecondary),
             modifier = Modifier
                 .clip(CircleShape)
                 .size(30.dp)
-                .border(1.dp, color = ElementTheme.colors.borderInteractiveSecondary, shape = CircleShape)
                 .align(Alignment.BottomEnd)
                 .clickable(
                     indication = ripple(),
