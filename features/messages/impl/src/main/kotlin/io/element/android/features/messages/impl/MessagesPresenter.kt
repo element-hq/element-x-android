@@ -63,6 +63,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -116,6 +118,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<MessagesState> {
     @AssistedFactory
     interface Factory {
@@ -321,9 +324,14 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.RemoveCaption -> handleRemoveCaption(targetEvent)
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState, timelineProtectionState)
             TimelineItemAction.ReplyInThread -> {
-                // Get either the thread id this event is in, or the event id if it's not in a thread so we can start one
-                val threadId = targetEvent.threadInfo.threadRootId ?: targetEvent.eventId!!.toThreadId()
-                navigator.onOpenThread(threadId, null)
+                val displayThreads = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
+                if (displayThreads) {
+                    // Get either the thread id this event is in, or the event id if it's not in a thread so we can start one
+                    val threadId = targetEvent.threadInfo.threadRootId ?: targetEvent.eventId!!.toThreadId()
+                    navigator.onOpenThread(threadId, null)
+                } else {
+                    handleActionReply(targetEvent, composerState, timelineProtectionState)
+                }
             }
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)

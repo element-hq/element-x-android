@@ -46,6 +46,8 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -1167,6 +1169,9 @@ class MessagesPresenterTest {
         val openThreadLambda = lambdaRecorder { _: ThreadId, _: EventId? -> }
         val presenter = createMessagesPresenter(
             navigator = FakeMessagesNavigator(onOpenThreadLambda = openThreadLambda),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.Threads.key to true)
+            ),
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
@@ -1184,6 +1189,9 @@ class MessagesPresenterTest {
         val openThreadLambda = lambdaRecorder { _: ThreadId, _: EventId? -> }
         val presenter = createMessagesPresenter(
             navigator = FakeMessagesNavigator(onOpenThreadLambda = openThreadLambda),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.Threads.key to true)
+            ),
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
@@ -1197,6 +1205,30 @@ class MessagesPresenterTest {
             ))
             awaitItem()
             openThreadLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID.toThreadId()), value(null))
+        }
+    }
+
+    @Test
+    fun `present - handle action reply in a thread with threads disabled`() = runTest {
+        val composerRecorder = EventsRecorder<MessageComposerEvents>()
+        val presenter = createMessagesPresenter(
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.Threads.key to false)
+            ),
+            messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ReplyInThread, aMessageEvent()))
+            awaitItem()
+            composerRecorder.assertSingle(
+                MessageComposerEvents.SetMode(
+                    composerMode = MessageComposerMode.Reply(
+                        replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID),
+                        hideImage = false,
+                    )
+                )
+            )
         }
     }
 
@@ -1231,6 +1263,7 @@ class MessagesPresenterTest {
             aRoomMemberModerationState()
         },
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
         actionListEventSink: (ActionListEvents) -> Unit = {},
     ): MessagesPresenter {
         return MessagesPresenter(
@@ -1259,6 +1292,7 @@ class MessagesPresenterTest {
             permalinkParser = permalinkParser,
             encryptionService = encryptionService,
             analyticsService = analyticsService,
+            featureFlagService = featureFlagService,
         )
     }
 }
