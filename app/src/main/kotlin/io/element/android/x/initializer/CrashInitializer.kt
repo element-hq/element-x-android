@@ -9,11 +9,15 @@ package io.element.android.x.initializer
 
 import android.content.Context
 import androidx.startup.Initializer
+import io.element.android.features.rageshake.impl.crash.PreferencesCrashDataStore
 import io.element.android.features.rageshake.impl.crash.VectorUncaughtExceptionHandler
+import io.element.android.libraries.architecture.bindings
 
 class CrashInitializer : Initializer<Unit> {
     override fun create(context: Context) {
-        VectorUncaughtExceptionHandler(context).activate()
+        VectorUncaughtExceptionHandler(
+            context.bindings<PreferencesCrashDataStore>()
+        ).activate()
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()

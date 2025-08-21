@@ -57,6 +57,7 @@ dependencies {
     testImplementation(projects.libraries.sessionStorage.implMemory)
     testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.features.rageshake.test)
+    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.services.toolbox.test)
     testImplementation(libs.network.mockwebserver)

@@ -7,19 +7,15 @@
 
 package io.element.android.features.rageshake.impl.crash
 
-import android.content.Context
 import android.os.Build
-import io.element.android.features.rageshake.impl.di.RageshakeBindings
-import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.data.tryOrNull
 import timber.log.Timber
 import java.io.PrintWriter
 import java.io.StringWriter
 
 class VectorUncaughtExceptionHandler(
-    context: Context
+    private val preferencesCrashDataStore: PreferencesCrashDataStore,
 ) : Thread.UncaughtExceptionHandler {
-    private val crashDataStore = context.bindings<RageshakeBindings>().preferencesCrashDataStore()
     private var previousHandler: Thread.UncaughtExceptionHandler? = null
 
     /**
@@ -67,7 +63,7 @@ class VectorUncaughtExceptionHandler(
             append(sw.buffer.toString())
         }
         Timber.e("FATAL EXCEPTION $bugDescription")
-        crashDataStore.setCrashData(bugDescription)
+        preferencesCrashDataStore.setCrashData(bugDescription)
         // Show the classical system popup
         previousHandler?.uncaughtException(thread, throwable)
     }
