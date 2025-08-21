@@ -27,6 +27,8 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
@@ -35,6 +37,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_THREAD_ID
+import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -173,7 +176,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
@@ -219,7 +221,6 @@ class ActionListPresenterTest {
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
-                        TimelineItemAction.Reply,
                         TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
@@ -314,7 +315,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
@@ -363,7 +363,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
@@ -411,7 +410,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.CopyLink,
@@ -457,7 +455,6 @@ class ActionListPresenterTest {
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
-                        TimelineItemAction.Reply,
                         TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
@@ -506,7 +503,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.CopyLink,
@@ -597,7 +593,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.AddCaption,
                         TimelineItemAction.CopyLink,
@@ -647,7 +642,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.EditCaption,
                         TimelineItemAction.CopyLink,
@@ -699,7 +693,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
@@ -813,7 +806,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.CopyLink,
@@ -860,7 +852,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.CopyLink,
@@ -913,7 +904,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.CopyLink,
@@ -1054,7 +1044,6 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.EndPoll,
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.EditPoll,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
@@ -1099,7 +1088,6 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.EndPoll,
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
@@ -1142,7 +1130,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
@@ -1187,7 +1174,6 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
@@ -1262,8 +1248,12 @@ class ActionListPresenterTest {
     }
 
     @Test
-    fun `present - compute for threaded timeline`() = runTest {
-        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, timelineMode = Timeline.Mode.Thread(A_THREAD_ID))
+    fun `present - compute for threaded timeline with threads enabled`() = runTest {
+        val presenter = createActionListPresenter(
+            isDeveloperModeEnabled = false,
+            timelineMode = Timeline.Mode.Thread(A_THREAD_ID),
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.Threads.key to true)),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1307,12 +1297,171 @@ class ActionListPresenterTest {
             )
         }
     }
+
+    @Test
+    fun `present - compute for remote timeline item with threads enabled`() = runTest {
+        val presenter = createActionListPresenter(
+            isDeveloperModeEnabled = false,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.Threads.key to true)),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                eventId = AN_EVENT_ID,
+                isMine = true,
+                isEditable = false,
+                content = aTimelineItemVoiceContent(
+                    caption = null,
+                ),
+            )
+
+            assertThat(messageEvent.isRemote).isTrue()
+
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = true,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true
+                    )
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    sentTimeFull = "0 Full true",
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.ReplyInThread,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - compute for remote timeline item already in thread with threads enabled`() = runTest {
+        val presenter = createActionListPresenter(
+            isDeveloperModeEnabled = false,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.Threads.key to true)),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                eventId = AN_EVENT_ID,
+                isMine = true,
+                isEditable = false,
+                content = aTimelineItemVoiceContent(
+                    caption = null,
+                ),
+                threadInfo = EventThreadInfo(A_THREAD_ID, null),
+            )
+
+            assertThat(messageEvent.isRemote).isTrue()
+
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = true,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true
+                    )
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    sentTimeFull = "0 Full true",
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.ReplyInThread,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - compute for local timeline item with threads enabled`() = runTest {
+        val presenter = createActionListPresenter(
+            isDeveloperModeEnabled = false,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.Threads.key to true)),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                eventId = null,
+                transactionId = A_TRANSACTION_ID,
+                isMine = true,
+                isEditable = false,
+                content = aTimelineItemVoiceContent(
+                    caption = null,
+                ),
+            )
+
+            assertThat(messageEvent.isRemote).isFalse()
+
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = true,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true
+                    )
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    sentTimeFull = "0 Full true",
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        // Can't reply in thread for local events
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+        }
+    }
 }
 
 private fun createActionListPresenter(
     isDeveloperModeEnabled: Boolean,
     room: BaseRoom = FakeBaseRoom(),
     timelineMode: Timeline.Mode = Timeline.Mode.Live,
+    featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
 ): ActionListPresenter {
     val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
     return DefaultActionListPresenter(
@@ -1322,5 +1471,6 @@ private fun createActionListPresenter(
         userSendFailureFactory = VerifiedUserSendFailureFactory(room),
         dateFormatter = FakeDateFormatter(),
         timelineMode = timelineMode,
+        featureFlagService = featureFlagService,
     )
 }
