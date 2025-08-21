@@ -11,12 +11,13 @@ import android.content.Context
 import androidx.startup.Initializer
 import io.element.android.features.rageshake.impl.crash.PreferencesCrashDataStore
 import io.element.android.features.rageshake.impl.crash.VectorUncaughtExceptionHandler
+import io.element.android.features.rageshake.impl.di.RageshakeBindings
 import io.element.android.libraries.architecture.bindings
 
 class CrashInitializer : Initializer<Unit> {
     override fun create(context: Context) {
         VectorUncaughtExceptionHandler(
-            context.bindings<PreferencesCrashDataStore>()
+            context.bindings<RageshakeBindings>().preferencesCrashDataStore(),
         ).activate()
     }
 
