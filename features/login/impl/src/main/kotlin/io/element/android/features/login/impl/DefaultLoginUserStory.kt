@@ -9,7 +9,7 @@ package io.element.android.features.login.impl
 
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.login.api.LoginUserStory
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import dev.zacsweers.metro.Inject

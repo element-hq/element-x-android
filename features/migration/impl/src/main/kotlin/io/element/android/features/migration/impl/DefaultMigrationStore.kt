@@ -14,8 +14,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import dev.zacsweers.metro.Inject

@@ -25,8 +25,8 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeFile
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeText
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
 import dev.zacsweers.metro.Inject
 

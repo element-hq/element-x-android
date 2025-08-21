@@ -9,7 +9,7 @@ package io.element.android.services.appnavstate.impl
 
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.RoomId

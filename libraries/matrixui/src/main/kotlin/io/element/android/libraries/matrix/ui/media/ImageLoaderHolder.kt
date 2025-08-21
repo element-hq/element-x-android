@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.ui.media
 
 import coil3.ImageLoader
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId

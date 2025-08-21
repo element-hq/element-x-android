@@ -14,7 +14,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 
 /**

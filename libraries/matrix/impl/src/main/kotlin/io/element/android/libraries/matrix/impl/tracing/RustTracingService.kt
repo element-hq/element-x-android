@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.impl.tracing
 
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingService

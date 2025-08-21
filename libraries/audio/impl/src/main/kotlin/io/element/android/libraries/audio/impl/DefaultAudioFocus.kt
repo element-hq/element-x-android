@@ -14,11 +14,11 @@ import android.media.AudioManager
 import android.os.Build
 import androidx.core.content.getSystemService
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.audio.api.AudioFocusRequester
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 
 @ContributesBinding(AppScope::class)
 @Inject

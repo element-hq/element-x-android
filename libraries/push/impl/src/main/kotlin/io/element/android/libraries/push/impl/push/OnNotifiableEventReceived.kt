@@ -8,7 +8,7 @@
 package io.element.android.libraries.push.impl.push
 
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent

@@ -11,7 +11,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService

@@ -10,7 +10,7 @@ package io.element.android.libraries.pushproviders.firebase
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onCompletion

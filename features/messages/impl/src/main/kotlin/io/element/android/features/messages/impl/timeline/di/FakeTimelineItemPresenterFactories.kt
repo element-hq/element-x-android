@@ -18,7 +18,7 @@ import io.element.android.libraries.voiceplayer.api.aVoiceMessageState
 fun aFakeTimelineItemPresenterFactories() = TimelineItemPresenterFactories(
     mapOf(
         Pair(
-            TimelineItemVoiceContent::class.java,
+            TimelineItemVoiceContent::class,
             TimelineItemPresenterFactory<TimelineItemVoiceContent, VoiceMessageState> { Presenter { aVoiceMessageState() } },
         ),
     )

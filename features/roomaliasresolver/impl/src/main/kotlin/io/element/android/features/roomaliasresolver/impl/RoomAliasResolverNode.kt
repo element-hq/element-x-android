@@ -21,7 +21,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 
-@ContributesNode(SessionScope::class)
+//// @ContributesNode(SessionScope::class)
 @Inject
 class RoomAliasResolverNode(
     @Assisted buildContext: BuildContext,

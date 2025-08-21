@@ -17,8 +17,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack

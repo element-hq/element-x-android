@@ -11,7 +11,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.RageshakeConfig
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map

@@ -12,7 +12,7 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService

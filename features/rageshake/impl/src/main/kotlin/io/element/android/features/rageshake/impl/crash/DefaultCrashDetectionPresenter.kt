@@ -20,7 +20,7 @@ import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
 import io.element.android.features.rageshake.api.crash.CrashDetectionState
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest

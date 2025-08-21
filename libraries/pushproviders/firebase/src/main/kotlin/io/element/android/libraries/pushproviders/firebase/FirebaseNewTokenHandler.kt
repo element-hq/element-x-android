@@ -10,7 +10,7 @@ package io.element.android.libraries.pushproviders.firebase
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.PusherSubscriber

@@ -9,7 +9,7 @@ package io.element.android.features.call.impl.utils
 
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.call.impl.BuildConfig
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsProvider
 import dev.zacsweers.metro.Inject
 

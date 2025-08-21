@@ -8,7 +8,7 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.services.appnavstate.api.AppNavigationStateService

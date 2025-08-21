@@ -10,7 +10,7 @@ package io.element.android.features.lockscreen.impl
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlin.time.Duration
 import io.element.android.appconfig.LockScreenConfig as AppConfigLockScreenConfig
 

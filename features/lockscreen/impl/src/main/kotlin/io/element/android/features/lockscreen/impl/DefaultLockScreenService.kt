@@ -15,7 +15,7 @@ import io.element.android.features.lockscreen.impl.biometric.DefaultBiometricUnl
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener

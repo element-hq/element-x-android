@@ -20,8 +20,8 @@ import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider

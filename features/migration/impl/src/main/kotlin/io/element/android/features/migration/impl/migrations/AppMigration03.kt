@@ -9,7 +9,7 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
 /**
  * This performs the same operation as [AppMigration01], since we need to clear the local logs again.

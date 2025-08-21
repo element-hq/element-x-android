@@ -27,7 +27,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.libraries.core.extensions.toSafeLength
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.strings.CommonStrings
 import dev.zacsweers.metro.Inject

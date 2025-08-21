@@ -16,8 +16,8 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 

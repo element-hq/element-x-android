@@ -47,7 +47,7 @@ import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEnt
 import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(SessionScope::class)
+// @ContributesNode(SessionScope::class)
 @Inject
 class PreferencesFlowNode(
     @Assisted buildContext: BuildContext,

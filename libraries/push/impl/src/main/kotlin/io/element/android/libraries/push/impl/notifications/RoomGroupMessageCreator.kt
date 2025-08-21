@@ -11,7 +11,7 @@ import android.app.Notification
 import android.graphics.Bitmap
 import coil3.ImageLoader
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader

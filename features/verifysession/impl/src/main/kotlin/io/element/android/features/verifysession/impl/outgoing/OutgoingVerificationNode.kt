@@ -20,31 +20,31 @@ import io.element.android.features.verifysession.api.OutgoingVerificationEntryPo
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
-@ContributesNode(SessionScope::class)
+// @ContributesNode(SessionScope::class)
 @Inject
 class OutgoingVerificationNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenterFactory: OutgoingVerificationPresenter.Factory,
+//    presenterFactory: OutgoingVerificationPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     private val callback = plugins<OutgoingVerificationEntryPoint.Callback>().first()
 
     private val inputs = inputs<OutgoingVerificationEntryPoint.Params>()
 
-    private val presenter = presenterFactory.create(
-        showDeviceVerifiedScreen = inputs.showDeviceVerifiedScreen,
-        verificationRequest = inputs.verificationRequest,
-    )
+//    private val presenter = presenterFactory.create(
+//        showDeviceVerifiedScreen = inputs.showDeviceVerifiedScreen,
+//        verificationRequest = inputs.verificationRequest,
+//    )
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        OutgoingVerificationView(
-            state = state,
-            modifier = modifier,
-            onLearnMoreClick = callback::onLearnMoreAboutEncryption,
-            onFinish = callback::onDone,
-            onBack = callback::onBack,
-        )
+//        val state = presenter.present()
+//        OutgoingVerificationView(
+//            state = state,
+//            modifier = modifier,
+//            onLearnMoreClick = callback::onLearnMoreAboutEncryption,
+//            onFinish = callback::onDone,
+//            onBack = callback::onBack,
+//        )
     }
 }

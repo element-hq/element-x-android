@@ -13,7 +13,7 @@ import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
 @ContributesTo(AppScope::class)
 @BindingContainer

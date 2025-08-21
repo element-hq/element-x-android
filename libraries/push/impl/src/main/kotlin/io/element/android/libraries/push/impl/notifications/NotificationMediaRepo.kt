@@ -13,7 +13,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Named
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.media.MediaSource

@@ -56,6 +56,8 @@ fun Project.setupAnvil(
     project.pluginManager.withPlugin(libs.plugins.metro.get().pluginId) {
         // Setup extension
         extensions.configure(MetroPluginExtension::class.java) {
+            debug.set(true)
+//            generateAssistedFactories.set(true)
 //            this.generateAssistedFactories.set(generateDaggerFactoriesUsingAnvil)
         }
     }
@@ -66,7 +68,7 @@ fun Project.setupAnvil(
         // Annotations to generate DI code for Appyx nodes
         dependencies.implementation(project.project(":anvilannotations"))
         // Code generator for the annotations above
-//        dependencies.add("ksp", project.project(":anvilcodegen"))
+        dependencies.add("ksp", project.project(":anvilcodegen"))
     }
 }
 

@@ -25,7 +25,7 @@ import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTa
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
-@ContributesNode(SessionScope::class)
+// @ContributesNode(SessionScope::class)
 @Inject
 class PreferencesRootNode(
     @Assisted buildContext: BuildContext,

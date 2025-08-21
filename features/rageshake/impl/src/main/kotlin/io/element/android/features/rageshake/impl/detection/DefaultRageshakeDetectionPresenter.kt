@@ -23,7 +23,7 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.features.rageshake.api.screenshot.ImageResult
 import io.element.android.features.rageshake.impl.rageshake.RageShake
 import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber

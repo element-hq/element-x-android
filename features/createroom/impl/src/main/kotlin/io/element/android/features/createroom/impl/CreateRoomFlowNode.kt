@@ -29,7 +29,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(SessionScope::class)
+// @ContributesNode(SessionScope::class)
 @Inject
 class CreateRoomFlowNode(
     @Assisted buildContext: BuildContext,

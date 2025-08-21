@@ -17,7 +17,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
 
-@ContributesNode(SessionScope::class)
+// @ContributesNode(SessionScope::class)
 @Inject
 class ResetIdentityRootNode(
     @Assisted buildContext: BuildContext,

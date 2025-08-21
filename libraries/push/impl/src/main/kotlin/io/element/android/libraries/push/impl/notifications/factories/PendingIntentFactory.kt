@@ -11,7 +11,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId

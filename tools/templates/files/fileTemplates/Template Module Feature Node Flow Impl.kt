@@ -15,7 +15,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.parcelize.Parcelize
 
 // CHANGE THE SCOPE

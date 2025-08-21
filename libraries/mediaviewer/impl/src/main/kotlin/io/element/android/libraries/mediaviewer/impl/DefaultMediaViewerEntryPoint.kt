@@ -13,7 +13,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.MediaInfo

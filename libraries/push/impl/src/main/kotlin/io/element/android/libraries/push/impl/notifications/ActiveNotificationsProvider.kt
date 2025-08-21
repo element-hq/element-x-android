@@ -11,7 +11,7 @@ import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider

@@ -11,7 +11,7 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.dateformatter.impl.TimezoneProvider
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.datetime.TimeZone
 import java.util.Locale
 import kotlin.time.Clock

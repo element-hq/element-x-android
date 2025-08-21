@@ -34,7 +34,7 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(SessionScope::class)
+// @ContributesNode(SessionScope::class)
 @Inject
 class FtueFlowNode(
     @Assisted buildContext: BuildContext,
@@ -159,17 +159,18 @@ class FtueFlowNode(
         BackstackView()
     }
 
-    @ContributesNode(AppScope::class)
-    @Inject
+}
+
+//@ContributesNode(AppScope::class)
+@Inject
 class PlaceholderNode(
-        @Assisted buildContext: BuildContext,
-        @Assisted plugins: List<Plugin>,
-    ) : Node(buildContext, plugins = plugins) {
-        @Composable
-        override fun View(modifier: Modifier) {
-            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
+) : Node(buildContext, plugins = plugins) {
+    @Composable
+    override fun View(modifier: Modifier) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
         }
     }
 }

@@ -18,7 +18,7 @@ import io.element.android.features.api.MigrationState
 import io.element.android.features.migration.impl.migrations.AppMigration
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import timber.log.Timber
 import dev.zacsweers.metro.Inject

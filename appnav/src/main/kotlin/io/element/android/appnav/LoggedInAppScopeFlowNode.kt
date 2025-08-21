@@ -29,7 +29,7 @@ import io.element.android.appnav.di.SessionComponentFactory
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
@@ -67,7 +67,9 @@ class LoggedInAppScopeFlowNode(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    override val daggerComponent = sessionComponentFactory.create(inputs.matrixClient)
+    override val daggerComponent = run {
+        sessionComponentFactory.create(inputs.matrixClient)
+    }
 
     override fun onBuilt() {
         super.onBuilt()

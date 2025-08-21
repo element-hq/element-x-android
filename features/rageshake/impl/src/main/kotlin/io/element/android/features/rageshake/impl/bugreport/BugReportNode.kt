@@ -20,10 +20,10 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.androidutils.system.toast
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@ContributesNode(AppScope::class)
+//@ContributesNode(AppScope::class)
 @Inject
 class BugReportNode(
     @Assisted buildContext: BuildContext,

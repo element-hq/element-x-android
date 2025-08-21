@@ -18,7 +18,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.util.openLearnMorePage
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
 @ContributesNode(AppScope::class)
 @Inject

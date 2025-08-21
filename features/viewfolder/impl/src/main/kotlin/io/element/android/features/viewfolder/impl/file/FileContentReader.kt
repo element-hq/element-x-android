@@ -10,7 +10,7 @@ package io.element.android.features.viewfolder.impl.file
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.withContext
 import java.io.File
 import dev.zacsweers.metro.Inject

@@ -11,7 +11,7 @@ import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.call.impl.receivers.DeclineCallBroadcastReceiver
 import io.element.android.features.call.impl.ui.ElementCallActivity
 import io.element.android.features.call.impl.ui.IncomingCallActivity
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
 @ContributesTo(AppScope::class)
 interface CallBindings {

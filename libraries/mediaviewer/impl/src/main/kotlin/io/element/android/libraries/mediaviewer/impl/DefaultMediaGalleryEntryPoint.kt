@@ -12,7 +12,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.impl.gallery.root.MediaGalleryRootNode
 import dev.zacsweers.metro.Inject

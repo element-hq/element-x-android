@@ -9,7 +9,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator

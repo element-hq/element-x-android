@@ -9,14 +9,15 @@ package io.element.android.libraries.mediaviewer.impl.gallery.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import dagger.multibindings.Multibinds
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Multibinds
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import kotlin.reflect.KClass
 
 /**
  * Dagger module that declares the [MediaItemPresenterFactory] map multi binding.
@@ -27,7 +28,7 @@ import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 @ContributesTo(RoomScope::class)
 interface MediaItemPresenterFactoriesModule {
     @Multibinds
-    fun multiBindMediaItemPresenterFactories(): @JvmSuppressWildcards Map<Class<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>
+    fun multiBindMediaItemPresenterFactories(): @JvmSuppressWildcards Map<KClass<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>
 }
 
 /**
@@ -40,7 +41,7 @@ interface MediaItemPresenterFactoriesModule {
 @SingleIn(RoomScope::class)
 @Inject
 class MediaItemPresenterFactories(
-    private val factories: @JvmSuppressWildcards Map<Class<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>,
+    private val factories: @JvmSuppressWildcards Map<KClass<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>,
 ) {
     private val presenters: MutableMap<MediaItem.Event, Presenter<*>> = mutableMapOf()
 
@@ -58,7 +59,7 @@ class MediaItemPresenterFactories(
     @Composable
     fun <C : MediaItem.Event, S : Any> rememberPresenter(
         content: C,
-        contentClass: Class<C>,
+        contentClass: KClass<C>,
     ): Presenter<S> = remember(content) {
         presenters[content]?.let {
             @Suppress("UNCHECKED_CAST")
@@ -87,5 +88,5 @@ inline fun <reified C : MediaItem.Event, S : Any> MediaItemPresenterFactories.re
     content: C
 ): Presenter<S> = rememberPresenter(
     content = content,
-    contentClass = C::class.java
+    contentClass = C::class
 )

@@ -9,7 +9,7 @@ package io.element.android.features.preferences.impl.notifications
 
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.Inject
 

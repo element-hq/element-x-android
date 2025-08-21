@@ -12,7 +12,7 @@ import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.CopyOnWriteArrayList

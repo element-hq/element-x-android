@@ -9,7 +9,7 @@ package io.element.android.libraries.dateformatter.impl
 
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.safeCapitalize
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 
 interface DateFormatterDay {

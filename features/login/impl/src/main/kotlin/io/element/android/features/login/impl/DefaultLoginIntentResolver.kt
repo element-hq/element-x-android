@@ -11,7 +11,7 @@ import androidx.core.net.toUri
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.login.api.LoginIntentResolver
 import io.element.android.features.login.api.LoginParams
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)

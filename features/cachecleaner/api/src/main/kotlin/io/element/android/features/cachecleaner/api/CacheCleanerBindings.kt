@@ -8,7 +8,7 @@
 package io.element.android.features.cachecleaner.api
 
 import dev.zacsweers.metro.ContributesTo
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
 @ContributesTo(AppScope::class)
 interface CacheCleanerBindings {

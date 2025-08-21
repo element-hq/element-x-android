@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.audio.api.AudioFocus
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
 import me.saket.telephoto.zoomable.OverzoomEffect

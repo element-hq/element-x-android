@@ -8,7 +8,7 @@
 package io.element.android.libraries.pushstore.impl.clientsecret
 
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretFactory
 import java.util.UUID
 import dev.zacsweers.metro.Inject

@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.impl.platform
 
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.platform.InitPlatformService
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.impl.tracing.map

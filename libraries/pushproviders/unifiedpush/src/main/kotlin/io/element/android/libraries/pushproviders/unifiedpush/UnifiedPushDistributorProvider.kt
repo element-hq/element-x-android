@@ -10,8 +10,8 @@ package io.element.android.libraries.pushproviders.unifiedpush
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.system.getApplicationLabel
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.pushproviders.api.Distributor
 import org.unifiedpush.android.connector.UnifiedPush
 import dev.zacsweers.metro.Inject

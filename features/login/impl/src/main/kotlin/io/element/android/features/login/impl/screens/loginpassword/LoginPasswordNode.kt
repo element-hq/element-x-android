@@ -15,9 +15,9 @@ import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
-@ContributesNode(AppScope::class)
+//@ContributesNode(AppScope::class)
 @Inject
 class LoginPasswordNode(
     @Assisted buildContext: BuildContext,

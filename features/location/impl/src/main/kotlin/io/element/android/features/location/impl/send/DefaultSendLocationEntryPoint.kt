@@ -12,7 +12,7 @@ import com.bumble.appyx.core.node.Node
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import dev.zacsweers.metro.Inject
 

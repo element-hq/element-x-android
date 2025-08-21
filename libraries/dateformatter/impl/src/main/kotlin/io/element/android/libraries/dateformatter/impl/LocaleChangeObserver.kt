@@ -13,8 +13,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.Inject
 

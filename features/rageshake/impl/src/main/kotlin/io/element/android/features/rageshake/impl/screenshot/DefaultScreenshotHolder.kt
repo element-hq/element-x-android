@@ -13,8 +13,8 @@ import androidx.core.net.toUri
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.bitmap.writeBitmap
 import io.element.android.libraries.androidutils.file.safeDelete
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import dev.zacsweers.metro.SingleIn
 import java.io.File
 import dev.zacsweers.metro.Inject

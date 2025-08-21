@@ -10,8 +10,8 @@ package io.element.android.features.invite.impl
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver

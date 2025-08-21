@@ -11,7 +11,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec

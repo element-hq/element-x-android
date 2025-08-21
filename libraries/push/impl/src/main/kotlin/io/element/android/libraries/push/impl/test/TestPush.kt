@@ -9,7 +9,7 @@ package io.element.android.libraries.push.impl.test
 
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.PushConfig
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest

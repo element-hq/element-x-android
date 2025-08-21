@@ -15,8 +15,8 @@ import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.push.impl.notifications.ActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.NotificationDisplayer

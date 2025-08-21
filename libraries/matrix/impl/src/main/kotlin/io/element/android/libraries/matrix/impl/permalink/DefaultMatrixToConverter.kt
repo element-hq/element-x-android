@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.libraries.core.extensions.replacePrefix
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.permalink.MatrixToConverter
 import dev.zacsweers.metro.Inject
 

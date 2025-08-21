@@ -9,7 +9,7 @@ package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Composable
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.compose.rememberRichTextEditorState
 import dev.zacsweers.metro.Inject

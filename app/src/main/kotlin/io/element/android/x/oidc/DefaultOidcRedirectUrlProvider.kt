@@ -8,7 +8,7 @@
 package io.element.android.x.oidc
 
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.x.R

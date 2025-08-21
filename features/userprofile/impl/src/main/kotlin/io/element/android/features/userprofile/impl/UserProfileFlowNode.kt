@@ -39,7 +39,7 @@ import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(SessionScope::class)
+// @ContributesNode(SessionScope::class)
 @Inject
 class UserProfileFlowNode(
     @Assisted buildContext: BuildContext,

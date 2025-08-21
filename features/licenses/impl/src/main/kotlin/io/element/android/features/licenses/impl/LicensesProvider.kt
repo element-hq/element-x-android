@@ -11,8 +11,8 @@ import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.licenses.impl.model.DependencyLicenseItem
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json

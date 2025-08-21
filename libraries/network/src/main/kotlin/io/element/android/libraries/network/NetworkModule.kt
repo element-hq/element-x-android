@@ -11,7 +11,7 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.network.interceptors.FormattedJsonHttpLogger
 import io.element.android.libraries.network.interceptors.UserAgentInterceptor

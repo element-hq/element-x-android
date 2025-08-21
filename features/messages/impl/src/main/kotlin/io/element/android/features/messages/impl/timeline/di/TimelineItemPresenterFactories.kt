@@ -17,6 +17,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import dev.zacsweers.metro.SingleIn
+import kotlin.reflect.KClass
 
 /**
  * Dagger module that declares the [TimelineItemPresenterFactory] map multi binding.
@@ -27,7 +28,7 @@ import dev.zacsweers.metro.SingleIn
 @ContributesTo(RoomScope::class)
 interface TimelineItemPresenterFactoriesModule {
     @Multibinds
-    fun multiBindTimelineItemPresenterFactories(): @JvmSuppressWildcards Map<Class<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>
+    fun multiBindTimelineItemPresenterFactories(): @JvmSuppressWildcards Map<KClass<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>
 }
 
 /**
@@ -40,7 +41,7 @@ interface TimelineItemPresenterFactoriesModule {
 @SingleIn(RoomScope::class)
 @Inject
 class TimelineItemPresenterFactories(
-    private val factories: @JvmSuppressWildcards Map<Class<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>,
+    private val factories: @JvmSuppressWildcards Map<KClass<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>,
 ) {
     private val presenters: MutableMap<TimelineItemEventContent, Presenter<*>> = mutableMapOf()
 
@@ -58,7 +59,7 @@ class TimelineItemPresenterFactories(
     @Composable
     fun <C : TimelineItemEventContent, S : Any> rememberPresenter(
         content: C,
-        contentClass: Class<C>,
+        contentClass: KClass<C>,
     ): Presenter<S> = remember(content) {
         presenters[content]?.let {
             @Suppress("UNCHECKED_CAST")
@@ -87,5 +88,5 @@ inline fun <reified C : TimelineItemEventContent, S : Any> TimelineItemPresenter
     content: C
 ): Presenter<S> = rememberPresenter(
     content = content,
-    contentClass = C::class.java
+    contentClass = C::class
 )

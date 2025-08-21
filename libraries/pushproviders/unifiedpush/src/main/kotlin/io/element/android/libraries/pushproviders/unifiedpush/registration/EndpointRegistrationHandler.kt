@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush.registration
 
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow

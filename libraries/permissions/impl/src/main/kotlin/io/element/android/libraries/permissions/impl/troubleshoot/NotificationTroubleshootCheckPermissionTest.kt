@@ -10,7 +10,7 @@ package io.element.android.libraries.permissions.impl.troubleshoot
 import android.Manifest
 import android.os.Build
 import dev.zacsweers.metro.ContributesIntoSet
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.impl.R
 import io.element.android.libraries.permissions.impl.action.PermissionActions

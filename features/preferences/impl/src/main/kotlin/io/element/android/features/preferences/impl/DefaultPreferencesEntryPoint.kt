@@ -13,7 +13,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)

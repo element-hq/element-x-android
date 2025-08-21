@@ -15,7 +15,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.impl.unlock.activity.PinUnlockActivity
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)

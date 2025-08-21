@@ -16,7 +16,7 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.NotificationConfig
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider

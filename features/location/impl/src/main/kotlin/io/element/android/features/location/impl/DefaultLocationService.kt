@@ -10,7 +10,7 @@ package io.element.android.features.location.impl
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.location.api.BuildConfig
 import io.element.android.features.location.api.LocationService
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)

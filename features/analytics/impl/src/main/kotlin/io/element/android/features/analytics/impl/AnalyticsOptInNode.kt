@@ -20,7 +20,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appconfig.AnalyticsConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
 @ContributesNode(AppScope::class)
 @Inject

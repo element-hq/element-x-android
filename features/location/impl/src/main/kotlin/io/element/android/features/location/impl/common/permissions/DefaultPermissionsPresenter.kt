@@ -15,7 +15,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.Inject
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
 @Suppress("unused")
 @Inject

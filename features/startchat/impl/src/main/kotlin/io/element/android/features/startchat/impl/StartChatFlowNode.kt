@@ -35,7 +35,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(SessionScope::class)
+//// @ContributesNode(SessionScope::class)
 @Inject
 class StartChatFlowNode(
     @Assisted buildContext: BuildContext,

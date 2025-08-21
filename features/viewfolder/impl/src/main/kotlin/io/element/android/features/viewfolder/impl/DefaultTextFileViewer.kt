@@ -13,7 +13,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.features.viewfolder.impl.file.ColorationMode
 import io.element.android.features.viewfolder.impl.file.FileContent
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.collections.immutable.ImmutableList
 import dev.zacsweers.metro.Inject
 

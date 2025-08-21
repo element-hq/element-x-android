@@ -66,8 +66,9 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForNavTargetAttached
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -554,6 +555,7 @@ class LoggedInFlowNode(
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
+            Text("I'm ALIVE!")
             val ftueState by ftueService.state.collectAsState()
             BackstackView()
             if (ftueState is FtueState.Complete) {
@@ -562,13 +564,14 @@ class LoggedInFlowNode(
         }
     }
 
-    @ContributesNode(AppScope::class)
-    @Inject
-class PlaceholderNode(
-        @Assisted buildContext: BuildContext,
-        @Assisted plugins: List<Plugin>,
-    ) : Node(buildContext, plugins = plugins)
 }
+
+//@ContributesNode(AppScope::class)
+@Inject
+class PlaceholderNode(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
+) : Node(buildContext, plugins = plugins)
 
 @Parcelize
 private class AttachRoomOperation(

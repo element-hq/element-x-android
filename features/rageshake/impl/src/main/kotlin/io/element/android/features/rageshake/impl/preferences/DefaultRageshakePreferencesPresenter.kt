@@ -22,7 +22,7 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.features.rageshake.impl.rageshake.RageShake
 import io.element.android.features.rageshake.impl.rageshake.RageshakeDataStore
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import dev.zacsweers.metro.Inject

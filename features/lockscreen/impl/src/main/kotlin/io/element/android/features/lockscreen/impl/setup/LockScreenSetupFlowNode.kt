@@ -31,7 +31,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(SessionScope::class)
+//// @ContributesNode(SessionScope::class)
 @Inject
 class LockScreenSetupFlowNode(
     @Assisted buildContext: BuildContext,

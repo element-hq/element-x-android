@@ -21,7 +21,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.designsystem.showkase.getBrowserIntent
 import io.element.android.libraries.di.SessionScope
 
-@ContributesNode(SessionScope::class)
+// @ContributesNode(SessionScope::class)
 @Inject
 class DeveloperSettingsNode(
     @Assisted buildContext: BuildContext,

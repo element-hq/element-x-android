@@ -15,7 +15,7 @@ import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint.InitialTarget
 import io.element.android.features.roomdetails.impl.RoomDetailsFlowNode.NavTarget
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)

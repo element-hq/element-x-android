@@ -21,7 +21,7 @@ import io.element.android.features.call.impl.receivers.DeclineCallBroadcastRecei
 import io.element.android.features.call.impl.ui.IncomingCallActivity
 import io.element.android.features.call.impl.utils.IntentProvider
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId

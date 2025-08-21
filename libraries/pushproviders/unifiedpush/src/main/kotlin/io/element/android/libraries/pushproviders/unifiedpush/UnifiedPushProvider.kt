@@ -8,7 +8,7 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import dev.zacsweers.metro.ContributesIntoSet
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig

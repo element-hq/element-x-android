@@ -7,7 +7,7 @@
 
 package io.element.android.services.appnavstate.api
 
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -20,7 +20,7 @@ import dev.zacsweers.metro.Inject
  */
 @SingleIn(AppScope::class)
 @Inject
-class ActiveRoomsHolder() {
+class ActiveRoomsHolder {
     private val rooms = ConcurrentHashMap<SessionId, MutableSet<JoinedRoom>>()
 
     /**

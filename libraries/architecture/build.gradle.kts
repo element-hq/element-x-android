@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -12,6 +14,8 @@ plugins {
 android {
     namespace = "io.element.android.libraries.architecture"
 }
+
+setupAnvil()
 
 dependencies {
     api(projects.libraries.di)

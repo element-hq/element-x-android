@@ -9,7 +9,7 @@ package io.element.android.libraries.push.impl.troubleshoot
 
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.push.api.GetCurrentPushProvider
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest

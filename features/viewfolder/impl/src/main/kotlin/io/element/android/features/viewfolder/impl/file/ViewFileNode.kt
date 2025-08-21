@@ -18,7 +18,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 
 @ContributesNode(AppScope::class)
 @Inject

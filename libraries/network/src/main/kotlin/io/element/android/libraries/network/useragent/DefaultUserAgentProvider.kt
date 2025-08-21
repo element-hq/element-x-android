@@ -10,7 +10,7 @@ package io.element.android.libraries.network.useragent
 import android.os.Build
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.SdkMetadata
 import dev.zacsweers.metro.Inject

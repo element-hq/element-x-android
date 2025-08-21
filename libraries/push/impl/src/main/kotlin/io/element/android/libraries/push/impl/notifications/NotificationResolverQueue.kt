@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId

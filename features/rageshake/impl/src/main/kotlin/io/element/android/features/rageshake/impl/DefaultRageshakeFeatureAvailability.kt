@@ -10,7 +10,7 @@ package io.element.android.features.rageshake.impl
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.rageshake.impl.reporter.BugReporterUrlProvider
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import dev.zacsweers.metro.Inject

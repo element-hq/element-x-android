@@ -9,7 +9,7 @@ package io.element.android.libraries.pushproviders.firebase.troubleshoot
 
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.pushproviders.firebase.FirebaseConfig
 import io.element.android.libraries.pushproviders.firebase.IsPlayServiceAvailable
 import io.element.android.libraries.pushproviders.firebase.R
