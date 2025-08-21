@@ -63,6 +63,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -318,8 +319,12 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.AddCaption -> handleActionAddCaption(targetEvent, composerState)
             TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState)
             TimelineItemAction.RemoveCaption -> handleRemoveCaption(targetEvent)
-            TimelineItemAction.Reply,
-            TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState, timelineProtectionState)
+            TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState, timelineProtectionState)
+            TimelineItemAction.ReplyInThread -> {
+                // Get either the thread id this event is in, or the event id if it's not in a thread so we can start one
+                val threadId = targetEvent.threadInfo.threadRootId ?: targetEvent.eventId!!.toThreadId()
+                navigator.onOpenThread(threadId, null)
+            }
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)

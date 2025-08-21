@@ -159,11 +159,11 @@ class DefaultActionListPresenter @AssistedInject constructor(
         val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
         return buildSet {
             if (timelineItem.canBeRepliedTo && usersEventPermissions.canSendMessage) {
-                if (timelineMode !is Timeline.Mode.Thread && timelineItem.threadInfo.threadRootId != null) {
+                if (timelineMode !is Timeline.Mode.Thread && timelineItem.isRemote) {
                     add(TimelineItemAction.ReplyInThread)
-                } else {
-                    add(TimelineItemAction.Reply)
                 }
+
+                add(TimelineItemAction.Reply)
             }
             if (timelineItem.isRemote && timelineItem.content.canBeForwarded()) {
                 add(TimelineItemAction.Forward)
