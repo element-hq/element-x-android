@@ -50,7 +50,7 @@ haze = "1.6.10"
 dependencyAnalysis = "2.19.0"
 
 # DI
-dagger = "2.57"
+dagger = "2.57.1"
 anvil = "0.4.1"
 
 # Auto service
