@@ -13,7 +13,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -23,7 +22,6 @@ import javax.inject.Inject
 private val appHasCrashedKey = booleanPreferencesKey("appHasCrashed")
 private val crashDataKey = stringPreferencesKey("crashData")
 
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class PreferencesCrashDataStore @Inject constructor(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,

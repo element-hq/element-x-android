@@ -12,14 +12,12 @@ import androidx.datastore.preferences.core.edit
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.permissions.api.PermissionsStore
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultPermissionsStore @Inject constructor(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,

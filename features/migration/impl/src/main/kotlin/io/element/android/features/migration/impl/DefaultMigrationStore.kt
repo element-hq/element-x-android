@@ -19,7 +19,6 @@ import javax.inject.Inject
 
 private val applicationMigrationVersion = intPreferencesKey("applicationMigrationVersion")
 
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultMigrationStore @Inject constructor(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
