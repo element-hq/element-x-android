@@ -16,24 +16,25 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.push.impl.PushDatabase
+import io.element.android.libraries.push.impl.store.DefaultPushDataStore.Companion.BATTERY_OPTIMIZATION_BANNER_STATE_DISMISSED
+import io.element.android.libraries.push.impl.store.DefaultPushDataStore.Companion.BATTERY_OPTIMIZATION_BANNER_STATE_INIT
+import io.element.android.libraries.push.impl.store.DefaultPushDataStore.Companion.BATTERY_OPTIMIZATION_BANNER_STATE_SHOW
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultPushDataStore @Inject constructor(
     private val pushDatabase: PushDatabase,
     private val dateFormatter: DateFormatter,
     private val dispatchers: CoroutineDispatchers,
-    private val preferencesFactory: PreferenceDataStoreFactory,
+    preferencesFactory: PreferenceDataStoreFactory,
 ) : PushDataStore {
     private val pushCounter = intPreferencesKey("push_counter")
 

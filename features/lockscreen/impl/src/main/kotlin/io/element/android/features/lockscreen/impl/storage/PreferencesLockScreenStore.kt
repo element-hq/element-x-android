@@ -15,14 +15,12 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class PreferencesLockScreenStore @Inject constructor(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,

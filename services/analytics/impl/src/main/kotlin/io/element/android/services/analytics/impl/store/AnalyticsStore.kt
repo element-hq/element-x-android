@@ -13,7 +13,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -36,7 +35,6 @@ interface AnalyticsStore {
     suspend fun reset()
 }
 
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultAnalyticsStore @Inject constructor(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,

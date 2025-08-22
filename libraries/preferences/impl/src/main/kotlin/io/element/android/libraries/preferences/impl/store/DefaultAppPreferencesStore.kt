@@ -14,7 +14,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
@@ -32,7 +31,6 @@ private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPr
 private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
 
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore @Inject constructor(
     private val buildMeta: BuildMeta,
