@@ -12,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -92,5 +93,6 @@ class UserPushStoreDataStoreTest {
     ) = UserPushStoreDataStore(
         context = InstrumentationRegistry.getInstrumentation().context,
         userId = sessionId,
+        factory = FakePreferenceDataStoreFactory(),
     )
 }

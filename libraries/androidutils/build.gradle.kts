@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.androidx.activity.activity)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.exifinterface)
+    implementation(libs.androidx.datastore.preferences)
     api(libs.androidx.browser)
 
     testImplementation(projects.tests.testutils)
