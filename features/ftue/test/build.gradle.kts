@@ -1,5 +1,3 @@
-import extension.setupAnvil
-
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -15,8 +13,6 @@ plugins {
 android {
     namespace = "io.element.android.features.ftue.test"
 }
-
-setupAnvil()
 
 dependencies {
     implementation(projects.features.ftue.api)

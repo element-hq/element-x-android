@@ -1,5 +1,3 @@
-import extension.setupAnvil
-
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -10,8 +8,6 @@ import extension.setupAnvil
 plugins {
     id("io.element.android-compose-library")
 }
-
-setupAnvil()
 
 android {
     namespace = "io.element.android.libraries.mediapickers.api"
