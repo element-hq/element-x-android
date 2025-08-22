@@ -11,7 +11,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.deeplink.DeepLinkCreator
+import io.element.android.libraries.deeplink.api.DeepLinkCreator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.RoomId

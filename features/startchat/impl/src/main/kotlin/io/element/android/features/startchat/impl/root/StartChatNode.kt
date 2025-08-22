@@ -21,7 +21,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.startchat.StartChatNavigator
-import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
+import io.element.android.libraries.deeplink.api.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.services.analytics.api.AnalyticsService
