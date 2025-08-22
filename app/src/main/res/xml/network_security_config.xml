@@ -2,14 +2,27 @@
 <network-security-config xmlns:tools="http://schemas.android.com/tools">
     <!-- Ref: https://developer.android.com/training/articles/security-config.html -->
     <!-- By default, do not allow clearText traffic -->
+
+    <!-- We can set the custom CA as the only valid cert for all domains by default -->
     <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="@raw/element_io_ca" />
+            <certificates src="@raw/livekit_ca" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Then override it for the main domain of the client -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">element.io</domain>
         <trust-anchors>
             <certificates src="system" />
             <certificates
                 src="user"
                 tools:ignore="AcceptsUserCertificates" />
+            <certificates src="@raw/element_io_ca" />
+            <certificates src="@raw/livekit_ca" />
         </trust-anchors>
-    </base-config>
+    </domain-config>
 
     <!-- Allow clearText traffic on some specified host -->
     <domain-config cleartextTrafficPermitted="true">

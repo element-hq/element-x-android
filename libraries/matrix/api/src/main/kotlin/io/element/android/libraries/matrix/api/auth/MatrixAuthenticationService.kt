@@ -63,3 +63,7 @@ interface MatrixAuthenticationService {
     /** Listen to new Matrix clients being created on authentication. */
     fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit)
 }
+
+interface CustomCaCertProvider {
+    fun get(): List<ByteArray>
+}

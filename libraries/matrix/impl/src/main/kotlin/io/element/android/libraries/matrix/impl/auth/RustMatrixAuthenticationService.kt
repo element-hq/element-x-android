@@ -7,13 +7,16 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
+import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.CustomCaCertProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -60,6 +63,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val rustMatrixClientFactory: RustMatrixClientFactory,
     private val passphraseGenerator: PassphraseGenerator,
     private val oidcConfigurationProvider: OidcConfigurationProvider,
+    private val cusstomCaCertProvider: CustomCaCertProvider,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.
@@ -319,12 +323,15 @@ class RustMatrixAuthenticationService @Inject constructor(
         config: suspend ClientBuilder.() -> ClientBuilder,
     ): Client {
         Timber.d("Creating client with simplified sliding sync")
+        val certs = cusstomCaCertProvider.get()
         return rustMatrixClientFactory
             .getBaseClientBuilder(
                 sessionPaths = sessionPaths,
                 passphrase = pendingPassphrase,
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
             )
+            .disableBuiltInRootCertificates()
+            .addRootCertificates(certs)
             .config()
             .build()
     }
