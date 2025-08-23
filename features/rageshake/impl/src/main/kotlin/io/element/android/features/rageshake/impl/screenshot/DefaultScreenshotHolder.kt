@@ -10,14 +10,14 @@ package io.element.android.features.rageshake.impl.screenshot
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.net.toUri
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.bitmap.writeBitmap
 import io.element.android.libraries.androidutils.file.safeDelete
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.ApplicationContext
-import dev.zacsweers.metro.SingleIn
 import java.io.File
-import dev.zacsweers.metro.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)

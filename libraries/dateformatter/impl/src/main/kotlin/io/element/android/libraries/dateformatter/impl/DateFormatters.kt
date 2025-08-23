@@ -9,6 +9,7 @@ package io.element.android.libraries.dateformatter.impl
 
 import android.text.format.DateUtils
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
@@ -17,7 +18,6 @@ import kotlinx.datetime.toJavaLocalDateTime
 import timber.log.Timber
 import java.time.Period
 import java.util.Locale
-import dev.zacsweers.metro.Inject
 import kotlin.math.absoluteValue
 import kotlin.time.Clock
 

@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.pushproviders.api.PushData
 import kotlinx.serialization.json.Json
-import dev.zacsweers.metro.Inject
 
 @Inject
 class UnifiedPushParser() {

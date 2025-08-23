@@ -9,10 +9,10 @@ package io.element.android.services.appnavstate.impl.di
 
 import android.content.Context
 import androidx.startup.AppInitializer
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.appnavstate.impl.initializer.AppForegroundStateServiceInitializer

@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 
 interface FirebaseTroubleshooter {
     suspend fun troubleshoot(): Result<Unit>

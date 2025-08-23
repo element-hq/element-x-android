@@ -12,9 +12,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
-import dev.zacsweers.metro.Inject
 
 @Inject
 class ReadReceiptBottomSheetPresenter() : Presenter<ReadReceiptBottomSheetState> {

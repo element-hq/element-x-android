@@ -14,10 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.RoomScope
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.wysiwyg.compose.StyledHtmlConverter
@@ -25,7 +26,6 @@ import io.element.android.wysiwyg.display.MentionDisplayHandler
 import io.element.android.wysiwyg.display.TextDisplay
 import io.element.android.wysiwyg.utils.HtmlConverter
 import uniffi.wysiwyg_composer.newMentionDetector
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(RoomScope::class)
 @SingleIn(RoomScope::class)

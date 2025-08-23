@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import io.element.android.features.licenses.impl.LicensesProvider
 import io.element.android.features.licenses.impl.model.DependencyLicenseItem
 import io.element.android.libraries.architecture.AsyncData
@@ -20,7 +21,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
-import dev.zacsweers.metro.Inject
 
 @Inject
 class DependencyLicensesListPresenter(

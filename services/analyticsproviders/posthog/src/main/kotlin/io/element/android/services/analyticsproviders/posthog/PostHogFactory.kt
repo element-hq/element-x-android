@@ -11,9 +11,9 @@ import android.content.Context
 import com.posthog.PostHogInterface
 import com.posthog.android.PostHogAndroid
 import com.posthog.android.PostHogAndroidConfig
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.ApplicationContext
-import dev.zacsweers.metro.Inject
 
 @Inject
 class PostHogFactory(

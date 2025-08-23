@@ -10,9 +10,9 @@ package io.element.android.libraries.androidutils.filesize
 import android.content.Context
 import android.os.Build
 import android.text.format.Formatter
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 

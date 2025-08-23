@@ -9,8 +9,9 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
 import android.content.Intent
-import io.element.android.libraries.architecture.bindings
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
@@ -22,8 +23,6 @@ import org.unifiedpush.android.connector.MessagingReceiver
 import org.unifiedpush.android.connector.data.PushEndpoint
 import org.unifiedpush.android.connector.data.PushMessage
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
-import io.element.android.libraries.di.DaggerComponentOwner
 
 private val loggerTag = LoggerTag("VectorUnifiedPushMessagingReceiver", LoggerTag.PushLoggerTag)
 

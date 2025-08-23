@@ -7,6 +7,7 @@
 
 package io.element.android.features.securebackup.impl.reset
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import dev.zacsweers.metro.Inject
 
 @Inject
 class ResetIdentityFlowManager(

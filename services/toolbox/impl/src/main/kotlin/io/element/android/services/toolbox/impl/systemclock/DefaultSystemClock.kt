@@ -7,10 +7,10 @@
 
 package io.element.android.services.toolbox.impl.systemclock
 
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
-import io.element.android.services.toolbox.api.systemclock.SystemClock
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 @ContributesBinding(AppScope::class)
 @Inject

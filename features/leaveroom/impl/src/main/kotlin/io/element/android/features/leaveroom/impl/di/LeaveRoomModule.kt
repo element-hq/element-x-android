@@ -7,8 +7,8 @@
 
 package io.element.android.features.leaveroom.impl.di
 
-import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.impl.LeaveRoomPresenter

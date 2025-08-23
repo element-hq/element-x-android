@@ -8,12 +8,12 @@
 package io.element.android.libraries.voicerecorder.impl.audio
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provider
 import io.element.android.libraries.di.RoomScope
 import io.element.android.opusencoder.OggOpusEncoder
 import timber.log.Timber
 import java.io.File
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.Provider
 
 /**
  * Safe wrapper for OggOpusEncoder.

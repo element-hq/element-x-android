@@ -10,11 +10,11 @@ package io.element.android.libraries.pushproviders.firebase
 import android.content.Context
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailabilityLight
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 interface IsPlayServiceAvailable {
     fun isAvailable(): Boolean

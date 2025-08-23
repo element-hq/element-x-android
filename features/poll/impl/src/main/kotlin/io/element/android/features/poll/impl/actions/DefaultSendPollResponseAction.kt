@@ -8,13 +8,13 @@
 package io.element.android.features.poll.impl.actions
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.services.analytics.api.AnalyticsService
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(RoomScope::class)
 @Inject

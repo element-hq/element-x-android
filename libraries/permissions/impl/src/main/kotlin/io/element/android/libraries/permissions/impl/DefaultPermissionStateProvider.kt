@@ -10,14 +10,14 @@ package io.element.android.libraries.permissions.impl
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
-import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.api.PermissionsStore
 import kotlinx.coroutines.flow.Flow
-import dev.zacsweers.metro.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)

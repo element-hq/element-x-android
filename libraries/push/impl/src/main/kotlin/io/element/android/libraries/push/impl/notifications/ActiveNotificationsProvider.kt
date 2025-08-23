@@ -9,14 +9,14 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 interface ActiveNotificationsProvider {
     fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification>

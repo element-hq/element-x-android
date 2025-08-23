@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.diff.DefaultDiffCacheInvalidator
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
@@ -21,7 +22,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import dev.zacsweers.metro.Inject
 
 @Inject
 class TimelineMediaItemsFactory(

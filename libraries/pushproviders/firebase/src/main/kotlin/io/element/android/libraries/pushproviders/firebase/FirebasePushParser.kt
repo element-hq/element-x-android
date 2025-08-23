@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
-import io.element.android.libraries.pushproviders.api.PushData
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.pushproviders.api.PushData
 
 @Inject
 class FirebasePushParser() {

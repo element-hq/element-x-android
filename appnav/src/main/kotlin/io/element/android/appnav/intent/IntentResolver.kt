@@ -8,6 +8,7 @@
 package io.element.android.appnav.intent
 
 import android.content.Intent
+import dev.zacsweers.metro.Inject
 import io.element.android.features.login.api.LoginIntentResolver
 import io.element.android.features.login.api.LoginParams
 import io.element.android.libraries.deeplink.api.DeeplinkData
@@ -17,7 +18,6 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcIntentResolver
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 sealed interface ResolvedIntent {
     data class Navigation(val deeplinkData: DeeplinkData) : ResolvedIntent

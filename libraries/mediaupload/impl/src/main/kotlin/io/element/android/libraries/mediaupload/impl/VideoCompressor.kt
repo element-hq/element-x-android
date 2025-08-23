@@ -27,6 +27,7 @@ import androidx.media3.transformer.ProgressHolder
 import androidx.media3.transformer.TransformationRequest
 import androidx.media3.transformer.Transformer
 import androidx.media3.transformer.VideoEncoderSettings
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -42,7 +43,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
-import dev.zacsweers.metro.Inject
 
 @Inject
 class VideoCompressor(

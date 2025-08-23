@@ -13,10 +13,10 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Multibinds
+import dev.zacsweers.metro.SingleIn
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
-import dev.zacsweers.metro.SingleIn
 import kotlin.reflect.KClass
 
 /**

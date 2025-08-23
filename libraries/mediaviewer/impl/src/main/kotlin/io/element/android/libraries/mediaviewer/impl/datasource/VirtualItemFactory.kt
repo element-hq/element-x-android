@@ -7,12 +7,12 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
-import dev.zacsweers.metro.Inject
 
 @Inject
 class VirtualItemFactory(

@@ -11,10 +11,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import androidx.preference.PreferenceManager
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.Named
 import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.ApplicationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.messages.impl.timeline.components.customreaction.DefaultEmojibaseProvider
@@ -24,11 +25,10 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import dev.zacsweers.metro.AppScope
-import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.di.CacheDirectory
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.x.BuildConfig
 import io.element.android.x.R
 import kotlinx.coroutines.CoroutineName
@@ -42,13 +42,13 @@ import java.io.File
 @ContributesTo(AppScope::class)
 object AppModule {
     @Provides
-    @Named("baseDirectory")
+    @BaseDirectory
     fun providesBaseDirectory(@ApplicationContext context: Context): File {
         return File(context.filesDir, "sessions")
     }
 
     @Provides
-    @Named("cacheDirectory")
+    @CacheDirectory
     fun providesCacheDirectory(@ApplicationContext context: Context): File {
         return context.cacheDir
     }

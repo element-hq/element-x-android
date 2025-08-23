@@ -8,8 +8,9 @@
 package io.element.android.libraries.mediaviewer.impl.datasource
 
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.RoomScope
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
@@ -21,7 +22,6 @@ import io.element.android.libraries.mediaviewer.impl.model.hasEvent
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import dev.zacsweers.metro.Inject
 
 interface MediaTimeline {
     suspend fun getTimeline(): Result<Timeline>

@@ -8,9 +8,11 @@
 package io.element.android.features.messages.impl.timeline
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.binding
 import io.element.android.features.messages.impl.timeline.di.LiveTimeline
 import io.element.android.libraries.di.RoomScope
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -34,8 +36,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.io.Closeable
 import java.util.Optional
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.binding
 
 /**
  * This controller is responsible of using the right timeline to display messages and make associated actions.

@@ -9,12 +9,12 @@ package io.element.android.features.location.impl.send
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.libraries.architecture.createNode
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

@@ -7,10 +7,10 @@
 
 package io.element.android.features.messages.impl.draft
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
-import dev.zacsweers.metro.Inject
 
 /**
  * A volatile draft store that keeps drafts in memory only.

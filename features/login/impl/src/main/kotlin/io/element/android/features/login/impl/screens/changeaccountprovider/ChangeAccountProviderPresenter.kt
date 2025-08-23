@@ -9,6 +9,7 @@ package io.element.android.features.login.impl.screens.changeaccountprovider
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
@@ -16,7 +17,6 @@ import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.uri.ensureProtocol
-import dev.zacsweers.metro.Inject
 
 @Inject
 class ChangeAccountProviderPresenter(

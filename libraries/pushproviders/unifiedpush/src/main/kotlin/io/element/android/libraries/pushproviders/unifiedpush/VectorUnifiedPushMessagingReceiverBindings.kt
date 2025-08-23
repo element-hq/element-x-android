@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import dev.zacsweers.metro.GraphExtension
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.GraphExtension
 
 @GraphExtension(AppScope::class)
 interface VectorUnifiedPushMessagingReceiverBindings {

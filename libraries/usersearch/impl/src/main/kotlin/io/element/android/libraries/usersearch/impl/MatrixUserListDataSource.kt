@@ -8,12 +8,12 @@
 package io.element.android.libraries.usersearch.impl
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserListDataSource
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
 @Inject

@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.features.login.impl.resolver.HomeserverData
 import io.element.android.features.login.impl.resolver.HomeserverResolver
@@ -23,7 +24,6 @@ import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import dev.zacsweers.metro.Inject
 
 @Inject
 class SearchAccountProviderPresenter(

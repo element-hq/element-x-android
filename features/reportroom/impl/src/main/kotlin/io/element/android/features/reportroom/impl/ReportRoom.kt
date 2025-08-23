@@ -8,10 +8,10 @@
 package io.element.android.features.reportroom.impl
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import dev.zacsweers.metro.Inject
 
 interface ReportRoom {
     suspend operator fun invoke(

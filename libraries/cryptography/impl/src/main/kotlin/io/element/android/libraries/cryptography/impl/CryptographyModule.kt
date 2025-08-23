@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.cryptography.impl
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.AppScope
 import java.security.KeyStore
 
 internal const val ANDROID_KEYSTORE = "AndroidKeyStore"

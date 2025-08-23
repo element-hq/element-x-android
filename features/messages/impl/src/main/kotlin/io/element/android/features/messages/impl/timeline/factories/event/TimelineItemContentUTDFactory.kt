@@ -7,10 +7,10 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
-import dev.zacsweers.metro.Inject
 
 @Inject
 class TimelineItemContentUTDFactory() {

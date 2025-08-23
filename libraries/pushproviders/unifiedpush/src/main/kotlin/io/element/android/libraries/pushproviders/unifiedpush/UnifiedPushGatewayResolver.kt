@@ -7,17 +7,17 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
-import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
 import java.net.HttpURLConnection
 import java.net.URL
-import dev.zacsweers.metro.Inject
 
 sealed interface UnifiedPushGatewayResolverResult {
     data class Success(val gateway: String) : UnifiedPushGatewayResolverResult

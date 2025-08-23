@@ -7,13 +7,13 @@
 
 package io.element.android.libraries.pushstore.impl.clientsecret
 
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

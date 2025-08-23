@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.SuperProperties
 import io.element.android.features.rageshake.api.crash.CrashDetectionState
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionState
@@ -18,7 +19,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.SdkMetadata
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.apperror.api.AppErrorStateService
-import dev.zacsweers.metro.Inject
 
 @Inject
 class RootPresenter(

@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.mediaupload.api
 
-import io.element.android.libraries.matrix.api.MatrixClient
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.matrix.api.MatrixClient
 
 /**
  * Provides the maximum upload size allowed by the Matrix server.

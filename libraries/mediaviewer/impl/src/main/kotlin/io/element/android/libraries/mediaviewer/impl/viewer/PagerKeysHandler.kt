@@ -7,9 +7,9 @@
 
 package io.element.android.libraries.mediaviewer.impl.viewer
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.impl.model.eventId
-import dev.zacsweers.metro.Inject
 
 /**
  * x and y are loading items.

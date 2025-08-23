@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import io.element.android.features.roomdirectory.impl.root.model.RoomDirectoryListState
 import io.element.android.features.roomdirectory.impl.root.model.toFeatureModel
 import io.element.android.libraries.architecture.Presenter
@@ -26,7 +27,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import dev.zacsweers.metro.Inject
 
 private const val SEARCH_BATCH_SIZE = 20
 

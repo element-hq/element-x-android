@@ -11,6 +11,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -20,7 +21,6 @@ import io.element.android.libraries.push.impl.notifications.NotificationBroadcas
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import dev.zacsweers.metro.Inject
 
 @Inject
 class MarkAsReadActionFactory(

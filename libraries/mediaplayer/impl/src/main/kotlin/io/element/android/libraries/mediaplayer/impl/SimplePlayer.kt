@@ -14,8 +14,8 @@ import androidx.media3.exoplayer.ExoPlayer
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 
 /**
  * A subset of media3 [Player] that only exposes the few methods we need making it easier to mock.

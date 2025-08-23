@@ -13,14 +13,14 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import dev.zacsweers.metro.AppScope
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

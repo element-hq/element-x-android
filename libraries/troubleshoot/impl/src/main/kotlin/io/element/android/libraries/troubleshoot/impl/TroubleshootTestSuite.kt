@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.troubleshoot.impl
 
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.NotificationTroubleshoot
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.push.api.GetCurrentPushProvider
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import dev.zacsweers.metro.Inject
 
 @Inject
 class TroubleshootTestSuite(

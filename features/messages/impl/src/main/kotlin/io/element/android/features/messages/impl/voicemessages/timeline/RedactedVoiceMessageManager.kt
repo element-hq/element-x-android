@@ -8,13 +8,13 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.withContext
-import dev.zacsweers.metro.Inject
 
 interface RedactedVoiceMessageManager {
     suspend fun onEachMatrixTimelineItem(timelineItems: List<MatrixTimelineItem>)

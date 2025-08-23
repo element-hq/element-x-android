@@ -8,8 +8,8 @@
 package io.element.android.features.preferences.impl.about
 
 import androidx.compose.runtime.Composable
-import io.element.android.libraries.architecture.Presenter
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.architecture.Presenter
 
 @Inject
 class AboutPresenter() : Presenter<AboutState> {

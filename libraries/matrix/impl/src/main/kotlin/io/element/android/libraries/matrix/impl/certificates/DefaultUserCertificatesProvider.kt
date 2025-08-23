@@ -7,12 +7,12 @@
 
 package io.element.android.libraries.matrix.impl.certificates
 
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.KeyStoreException
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

@@ -8,6 +8,7 @@
 package io.element.android.libraries.eventformatter.impl
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
@@ -29,7 +30,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownConten
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
 @Inject

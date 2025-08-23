@@ -7,10 +7,10 @@
 
 package io.element.android.features.rageshake.impl.reporter
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.appconfig.RageshakeConfig
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import io.element.android.appconfig.RageshakeConfig
 
 fun interface BugReportAppNameProvider {
     fun provide(): String

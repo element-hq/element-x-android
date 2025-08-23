@@ -7,13 +7,13 @@
 
 package io.element.android.features.login.impl.di
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.libraries.architecture.Presenter
-import dev.zacsweers.metro.AppScope
 
 @ContributesTo(AppScope::class)
 @BindingContainer

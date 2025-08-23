@@ -7,11 +7,11 @@
 
 package io.element.android.libraries.oidc.impl
 
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import io.element.android.libraries.oidc.api.OidcAction
-import dev.zacsweers.metro.Inject
 
 fun interface OidcUrlParser {
     fun parse(url: String): OidcAction?

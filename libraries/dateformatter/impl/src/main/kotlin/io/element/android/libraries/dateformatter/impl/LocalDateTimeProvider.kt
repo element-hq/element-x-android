@@ -7,9 +7,9 @@
 
 package io.element.android.libraries.dateformatter.impl
 
+import dev.zacsweers.metro.Inject
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toLocalDateTime
-import dev.zacsweers.metro.Inject
 import kotlin.time.Clock
 import kotlin.time.Instant
 

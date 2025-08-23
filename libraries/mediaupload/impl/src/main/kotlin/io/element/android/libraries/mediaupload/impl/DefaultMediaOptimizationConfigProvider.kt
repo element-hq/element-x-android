@@ -8,12 +8,12 @@
 package io.element.android.libraries.mediaupload.impl
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.flow.first
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
 @Inject

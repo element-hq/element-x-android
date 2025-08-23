@@ -7,12 +7,12 @@
 
 package io.element.android.features.rageshake.impl.logs
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
 import io.element.android.features.rageshake.impl.reporter.DefaultBugReporter
-import dev.zacsweers.metro.AppScope
 import java.io.File
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

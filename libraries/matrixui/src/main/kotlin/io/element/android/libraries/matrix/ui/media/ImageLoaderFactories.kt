@@ -13,13 +13,13 @@ import coil3.ImageLoader
 import coil3.gif.AnimatedImageDecoder
 import coil3.gif.GifDecoder
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provider
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import okhttp3.OkHttpClient
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.Provider
 
 interface LoggedInImageLoaderFactory {
     fun newImageLoader(matrixClient: MatrixClient): ImageLoader

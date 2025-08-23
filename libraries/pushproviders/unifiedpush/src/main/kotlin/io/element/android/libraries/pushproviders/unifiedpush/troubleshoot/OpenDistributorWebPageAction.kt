@@ -8,12 +8,12 @@
 package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
 import android.content.Context
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
-import dev.zacsweers.metro.Inject
 
 interface OpenDistributorWebPageAction {
     fun execute()

@@ -7,8 +7,8 @@
 
 package io.element.android.features.invite.impl.di
 
-import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.features.invite.api.SeenInvitesStore

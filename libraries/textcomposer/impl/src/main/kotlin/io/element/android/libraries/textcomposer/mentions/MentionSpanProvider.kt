@@ -7,20 +7,19 @@
 
 package io.element.android.libraries.textcomposer.mentions
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import dev.zacsweers.metro.Inject
 
 private const val EVERYONE_MENTION_TEXT = "@room"
 
 /**
  * Provider for [MentionSpan]s.
  */
-open @Inject
-class MentionSpanProvider(
+@Inject open class MentionSpanProvider(
     private val permalinkParser: PermalinkParser,
     private val mentionSpanFormatter: MentionSpanFormatter,
     private val mentionSpanTheme: MentionSpanTheme,

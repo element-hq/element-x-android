@@ -7,9 +7,9 @@
 
 package io.element.android.features.lockscreen.impl.setup.pin.validation
 
+import dev.zacsweers.metro.Inject
 import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
-import dev.zacsweers.metro.Inject
 
 @Inject
 class PinValidator(private val lockScreenConfig: LockScreenConfig) {

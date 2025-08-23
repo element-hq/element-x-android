@@ -7,10 +7,10 @@
 
 package io.element.android.features.startchat.impl.userlist
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import dev.zacsweers.metro.Inject
 
 @Inject
 class UserListDataStore() {

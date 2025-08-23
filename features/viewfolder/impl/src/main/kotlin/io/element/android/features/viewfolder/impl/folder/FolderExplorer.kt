@@ -7,14 +7,14 @@
 
 package io.element.android.features.viewfolder.impl.folder
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.viewfolder.impl.model.Item
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.withContext
 import java.io.File
-import dev.zacsweers.metro.Inject
 
 interface FolderExplorer {
     suspend fun getItems(path: String): List<Item>

@@ -8,12 +8,12 @@
 package io.element.android.services.appnavstate.api
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import java.util.concurrent.ConcurrentHashMap
-import dev.zacsweers.metro.Inject
 
 /**
  * Holds the active rooms for a given session so they can be reused instead of instantiating new ones.

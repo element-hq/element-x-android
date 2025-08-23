@@ -9,11 +9,11 @@ package io.element.android.features.migration.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.api.MigrationEntryPoint
 import io.element.android.features.api.MigrationState
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

@@ -8,9 +8,9 @@
 package io.element.android.features.enterprise.impl
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.libraries.di.SessionScope
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
 @Inject

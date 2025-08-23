@@ -7,12 +7,12 @@
 
 package io.element.android.features.login.impl.screens.createaccount
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import kotlinx.serialization.json.Json
-import dev.zacsweers.metro.Inject
 
 interface MessageParser {
     /**

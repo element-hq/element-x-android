@@ -7,12 +7,12 @@
 
 package io.element.android.features.messages.impl.draft
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 /**
  * A draft store that persists drafts in the room state.

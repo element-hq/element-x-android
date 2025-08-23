@@ -8,8 +8,8 @@
 package io.element.android.libraries.voicerecorder.impl.audio
 
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.RoomScope
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.RoomScope
 import kotlin.math.log10
 import kotlin.math.sqrt
 

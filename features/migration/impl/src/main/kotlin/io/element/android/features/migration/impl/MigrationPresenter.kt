@@ -14,14 +14,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.features.api.MigrationState
 import io.element.android.features.migration.impl.migrations.AppMigration
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.SingleIn
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 @SingleIn(AppScope::class)
 @Inject

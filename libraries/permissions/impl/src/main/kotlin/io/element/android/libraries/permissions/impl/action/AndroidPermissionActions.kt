@@ -8,11 +8,11 @@
 package io.element.android.libraries.permissions.impl.action
 
 import android.content.Context
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import dev.zacsweers.metro.AppScope
-import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
+import io.element.android.libraries.di.annotations.ApplicationContext
 
 @ContributesBinding(AppScope::class)
 @Inject

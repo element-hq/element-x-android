@@ -7,9 +7,9 @@
 
 package io.element.android.libraries.push.impl.troubleshoot
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator

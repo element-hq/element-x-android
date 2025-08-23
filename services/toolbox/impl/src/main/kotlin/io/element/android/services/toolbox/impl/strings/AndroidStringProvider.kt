@@ -10,10 +10,10 @@ package io.element.android.services.toolbox.impl.strings
 import android.content.res.Resources
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
-import io.element.android.services.toolbox.api.strings.StringProvider
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import io.element.android.services.toolbox.api.strings.StringProvider
 
 @ContributesBinding(AppScope::class)
 @Inject

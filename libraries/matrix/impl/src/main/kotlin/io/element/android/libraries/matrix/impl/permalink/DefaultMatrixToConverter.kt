@@ -9,12 +9,12 @@ package io.element.android.libraries.matrix.impl.permalink
 
 import android.net.Uri
 import androidx.core.net.toUri
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.libraries.core.extensions.replacePrefix
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.permalink.MatrixToConverter
-import dev.zacsweers.metro.Inject
 
 /**
  * Mapping of an input URI to a matrix.to compliant URI.

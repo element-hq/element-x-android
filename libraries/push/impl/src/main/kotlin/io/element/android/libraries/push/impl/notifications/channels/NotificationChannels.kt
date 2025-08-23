@@ -14,13 +14,13 @@ import android.provider.Settings
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.appconfig.NotificationConfig
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider
-import dev.zacsweers.metro.Inject
 
 /* ==========================================================================================
  * IDs for channels

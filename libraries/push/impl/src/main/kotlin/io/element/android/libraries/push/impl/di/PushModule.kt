@@ -9,12 +9,12 @@ package io.element.android.libraries.push.impl.di
 
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
-import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.Presenter
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.impl.battery.BatteryOptimizationPresenter

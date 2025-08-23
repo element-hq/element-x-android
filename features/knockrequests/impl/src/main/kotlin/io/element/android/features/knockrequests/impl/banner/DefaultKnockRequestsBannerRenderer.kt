@@ -10,9 +10,9 @@ package io.element.android.features.knockrequests.impl.banner
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.knockrequests.api.banner.KnockRequestsBannerRenderer
 import io.element.android.libraries.di.RoomScope
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(RoomScope::class)
 @Inject

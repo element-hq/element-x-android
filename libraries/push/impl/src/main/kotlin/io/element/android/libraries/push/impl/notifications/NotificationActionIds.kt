@@ -7,14 +7,13 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import io.element.android.libraries.core.meta.BuildMeta
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.meta.BuildMeta
 
 /**
  * Util class for creating notifications action Ids, using the application id.
  */
-data @Inject
-class NotificationActionIds(
+@Inject data class NotificationActionIds(
     private val buildMeta: BuildMeta,
 ) {
     val join = "${buildMeta.applicationId}.NotificationActions.JOIN_ACTION"
