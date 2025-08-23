@@ -17,9 +17,8 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
-@SingleIn(RoomScope::class)
 @GraphExtension(RoomScope::class)
-interface RoomComponent {
+interface RoomComponent : NodeFactoriesBindings {
     @ContributesTo(SessionScope::class)
     @GraphExtension.Factory
     interface Factory {

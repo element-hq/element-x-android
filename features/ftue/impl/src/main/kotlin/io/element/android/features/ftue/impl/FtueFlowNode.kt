@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class FtueFlowNode(
     @Assisted buildContext: BuildContext,
@@ -161,7 +161,7 @@ class FtueFlowNode(
 
 }
 
-//@ContributesNode(AppScope::class)
+@ContributesNode(AppScope::class)
 @Inject
 class PlaceholderNode(
     @Assisted buildContext: BuildContext,

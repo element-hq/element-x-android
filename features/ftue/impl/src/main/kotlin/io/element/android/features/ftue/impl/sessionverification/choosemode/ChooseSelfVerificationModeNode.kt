@@ -20,7 +20,7 @@ import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class ChooseSelfVerificationModeNode(
     @Assisted buildContext: BuildContext,

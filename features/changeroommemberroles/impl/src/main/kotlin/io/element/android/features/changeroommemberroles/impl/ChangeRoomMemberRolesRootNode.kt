@@ -31,7 +31,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import kotlinx.parcelize.Parcelize
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class ChangeRoomMemberRolesRootNode(
     @Assisted buildContext: BuildContext,

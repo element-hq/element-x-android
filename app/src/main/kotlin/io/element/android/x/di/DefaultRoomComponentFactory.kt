@@ -16,10 +16,10 @@ import dev.zacsweers.metro.Inject
 @ContributesBinding(SessionScope::class)
 @Inject
 class DefaultRoomComponentFactory(
-    private val roomComponentBuilder: RoomComponent.Factory
+    private val sessionComponent: SessionComponent,
 ) : RoomComponentFactory {
     override fun create(room: JoinedRoom): Any {
-        return roomComponentBuilder
+        return sessionComponent.roomComponentFactory
             .create(room, room)
     }
 }

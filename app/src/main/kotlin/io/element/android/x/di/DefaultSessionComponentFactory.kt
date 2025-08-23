@@ -7,12 +7,11 @@
 
 package io.element.android.x.di
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.appnav.di.SessionComponentFactory
 import dev.zacsweers.metro.AppScope
-import io.element.android.libraries.matrix.api.MatrixClient
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.asContribution
+import io.element.android.appnav.di.SessionComponentFactory
+import io.element.android.libraries.matrix.api.MatrixClient
 
 @ContributesBinding(AppScope::class)
 @Inject
@@ -20,8 +19,6 @@ class DefaultSessionComponentFactory(
     private val appComponent: AppComponent
 ) : SessionComponentFactory {
     override fun create(client: MatrixClient): Any {
-//        val asContribution = appComponent.sessionComponentFactory
-//        return asContribution.createSessionComponent(client)
         return appComponent.sessionComponentFactory.createSessionComponent(client)
     }
 }

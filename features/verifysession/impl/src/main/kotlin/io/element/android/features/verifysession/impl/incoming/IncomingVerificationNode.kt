@@ -20,7 +20,7 @@ import io.element.android.features.verifysession.api.IncomingVerificationEntryPo
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class IncomingVerificationNode(
     @Assisted buildContext: BuildContext,

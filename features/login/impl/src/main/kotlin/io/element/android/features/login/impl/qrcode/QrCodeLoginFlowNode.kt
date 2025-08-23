@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
-//@ContributesNode(AppScope::class)
+@ContributesNode(AppScope::class)
 @Inject
 class QrCodeLoginFlowNode(
     @Assisted buildContext: BuildContext,

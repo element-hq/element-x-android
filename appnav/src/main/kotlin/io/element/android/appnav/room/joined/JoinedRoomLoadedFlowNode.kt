@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class JoinedRoomLoadedFlowNode(
     @Assisted buildContext: BuildContext,

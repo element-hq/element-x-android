@@ -67,9 +67,7 @@ class LoggedInAppScopeFlowNode(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    override val daggerComponent = run {
-        sessionComponentFactory.create(inputs.matrixClient)
-    }
+    override val daggerComponent = sessionComponentFactory.create(inputs.matrixClient)
 
     override fun onBuilt() {
         super.onBuilt()

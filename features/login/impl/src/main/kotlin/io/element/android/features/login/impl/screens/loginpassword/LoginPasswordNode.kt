@@ -17,7 +17,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import dev.zacsweers.metro.AppScope
 
-//@ContributesNode(AppScope::class)
+@ContributesNode(AppScope::class)
 @Inject
 class LoginPasswordNode(
     @Assisted buildContext: BuildContext,

@@ -20,7 +20,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.libraries.di.SessionScope
 
-//// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class RoomDirectoryNode(
     @Assisted buildContext: BuildContext,

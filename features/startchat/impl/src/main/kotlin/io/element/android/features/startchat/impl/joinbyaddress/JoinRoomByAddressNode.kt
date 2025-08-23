@@ -19,7 +19,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.startchat.StartChatNavigator
 import io.element.android.libraries.di.SessionScope
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class JoinRoomByAddressNode(
     @Assisted buildContext: BuildContext,

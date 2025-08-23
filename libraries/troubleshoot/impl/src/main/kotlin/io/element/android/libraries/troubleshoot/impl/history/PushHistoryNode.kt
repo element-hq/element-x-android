@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
 import io.element.android.services.analytics.api.ScreenTracker
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class PushHistoryNode(
     @Assisted buildContext: BuildContext,

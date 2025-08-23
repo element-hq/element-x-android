@@ -20,7 +20,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
-//// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class DeclineAndBlockNode(
     @Assisted buildContext: BuildContext,

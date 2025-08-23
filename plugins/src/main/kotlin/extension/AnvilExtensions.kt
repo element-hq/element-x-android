@@ -56,7 +56,7 @@ fun Project.setupAnvil(
     project.pluginManager.withPlugin(libs.plugins.metro.get().pluginId) {
         // Setup extension
         extensions.configure(MetroPluginExtension::class.java) {
-            debug.set(true)
+//            debug.set(true)
 //            generateAssistedFactories.set(true)
 //            this.generateAssistedFactories.set(generateDaggerFactoriesUsingAnvil)
         }

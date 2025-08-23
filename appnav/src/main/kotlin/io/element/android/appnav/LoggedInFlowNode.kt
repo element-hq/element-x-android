@@ -555,7 +555,6 @@ class LoggedInFlowNode(
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
-            Text("I'm ALIVE!")
             val ftueState by ftueService.state.collectAsState()
             BackstackView()
             if (ftueState is FtueState.Complete) {
@@ -566,7 +565,7 @@ class LoggedInFlowNode(
 
 }
 
-//@ContributesNode(AppScope::class)
+@ContributesNode(AppScope::class)
 @Inject
 class PlaceholderNode(
     @Assisted buildContext: BuildContext,

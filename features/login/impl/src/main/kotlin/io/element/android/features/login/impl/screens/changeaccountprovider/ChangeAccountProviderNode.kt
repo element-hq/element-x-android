@@ -20,7 +20,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.util.openLearnMorePage
 import dev.zacsweers.metro.AppScope
 
-//@ContributesNode(AppScope::class)
+@ContributesNode(AppScope::class)
 @Inject
 class ChangeAccountProviderNode(
     @Assisted buildContext: BuildContext,

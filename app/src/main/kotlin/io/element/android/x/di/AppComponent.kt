@@ -17,7 +17,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 
 @GraphExtension(AppScope::class)
 interface AppComponent : NodeFactoriesBindings {
-    val sessionComponentFactory: SessionComponent.Factorrry
+    val sessionComponentFactory: SessionComponent.Factory
 
     @ContributesTo(GlobalScope::class)
     @GraphExtension.Factory

@@ -21,7 +21,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
 import io.element.android.services.analytics.api.ScreenTracker
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class TroubleshootNotificationsNode(
     @Assisted buildContext: BuildContext,

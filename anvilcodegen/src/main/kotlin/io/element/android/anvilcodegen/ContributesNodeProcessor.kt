@@ -101,7 +101,7 @@ class ContributesNodeProcessor(
         content.writeTo(
             codeGenerator = codeGenerator,
             dependencies = Dependencies(
-                aggregating = true,
+                aggregating = false,
                 ksClass.containingFile!!
             ),
         )
@@ -154,7 +154,7 @@ class ContributesNodeProcessor(
         content.writeTo(
             codeGenerator = codeGenerator,
             dependencies = Dependencies(
-                aggregating = true,
+                aggregating = false,
                 ksClass.containingFile!!
             ),
         )

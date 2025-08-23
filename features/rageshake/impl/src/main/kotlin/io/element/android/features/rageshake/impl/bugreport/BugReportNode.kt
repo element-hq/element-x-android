@@ -23,7 +23,7 @@ import io.element.android.libraries.androidutils.system.toast
 import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.ui.strings.CommonStrings
 
-//@ContributesNode(AppScope::class)
+@ContributesNode(AppScope::class)
 @Inject
 class BugReportNode(
     @Assisted buildContext: BuildContext,

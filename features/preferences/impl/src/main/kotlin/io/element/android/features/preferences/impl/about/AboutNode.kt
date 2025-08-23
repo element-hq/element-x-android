@@ -21,7 +21,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
 
-//// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class AboutNode(
     @Assisted buildContext: BuildContext,

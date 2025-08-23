@@ -36,7 +36,7 @@ import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-//// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class FtueSessionVerificationFlowNode(
     @Assisted buildContext: BuildContext,

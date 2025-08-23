@@ -21,7 +21,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.libraries.di.SessionScope
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class SecureBackupRootNode(
     @Assisted buildContext: BuildContext,

@@ -22,7 +22,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
 
-//// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class ConfigureRoomNode(
     @Assisted buildContext: BuildContext,

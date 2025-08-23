@@ -62,7 +62,7 @@ import timber.log.Timber
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-// @ContributesNode(SessionScope::class)
+@ContributesNode(SessionScope::class)
 @Inject
 class RoomFlowNode(
     @Assisted val buildContext: BuildContext,

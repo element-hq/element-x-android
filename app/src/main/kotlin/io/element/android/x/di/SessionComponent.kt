@@ -7,19 +7,21 @@
 
 package io.element.android.x.di
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.GraphExtension
 import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 
 @GraphExtension(SessionScope::class)
-interface SessionComponent {
+interface SessionComponent : NodeFactoriesBindings {
+    val roomComponentFactory: RoomComponent.Factory
+
     @ContributesTo(AppScope::class)
     @GraphExtension.Factory
-    interface Factorrry {
+    interface Factory {
         fun createSessionComponent(@Provides matrixClient: MatrixClient): SessionComponent
     }
 }

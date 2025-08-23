@@ -12,6 +12,6 @@ import dev.zacsweers.metro.MapKey
 import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
+@Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
 @MapKey
 annotation class NodeKey(val value: KClass<out Node>)
