@@ -7,14 +7,14 @@
 
 package io.element.android.libraries.push.impl.test
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.appconfig.PushConfig
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.appconfig.PushConfig
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
-import dev.zacsweers.metro.Inject
 
 interface TestPush {
     suspend fun execute(config: CurrentUserPushConfig)

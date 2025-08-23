@@ -15,6 +15,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
@@ -26,7 +27,6 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.launch
-import dev.zacsweers.metro.Inject
 
 class PinUnlockActivity : AppCompatActivity() {
     internal companion object {

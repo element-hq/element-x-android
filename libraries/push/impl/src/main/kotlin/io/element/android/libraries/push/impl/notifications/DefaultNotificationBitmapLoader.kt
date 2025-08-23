@@ -16,8 +16,9 @@ import coil3.request.ImageRequest
 import coil3.request.transformations
 import coil3.toBitmap
 import coil3.transform.CircleCropTransformation
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
@@ -25,7 +26,6 @@ import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

@@ -10,13 +10,14 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.ApplicationContext
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -50,7 +51,6 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.NotificationLoggerTag)
 

@@ -7,13 +7,13 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 @Inject
 class TimelineItemIndexer() {

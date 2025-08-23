@@ -8,13 +8,13 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import java.io.File
-import dev.zacsweers.metro.Inject
 
 @Inject
 class CreateRoomConfigStore(

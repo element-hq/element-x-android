@@ -11,6 +11,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -21,7 +22,6 @@ import io.element.android.libraries.push.impl.notifications.model.InviteNotifiab
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import dev.zacsweers.metro.Inject
 
 @Inject
 class AcceptInvitationActionFactory(

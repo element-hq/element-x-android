@@ -8,9 +8,9 @@
 package io.element.android.features.preferences.impl.analytics
 
 import androidx.compose.runtime.Composable
+import dev.zacsweers.metro.Inject
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 import io.element.android.libraries.architecture.Presenter
-import dev.zacsweers.metro.Inject
 
 @Inject
 class AnalyticsSettingsPresenter(

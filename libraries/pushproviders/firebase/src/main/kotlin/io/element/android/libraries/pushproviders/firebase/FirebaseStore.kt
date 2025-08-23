@@ -9,13 +9,13 @@ package io.element.android.libraries.pushproviders.firebase
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-import dev.zacsweers.metro.Inject
 
 /**
  * This class store the Firebase token in SharedPrefs.

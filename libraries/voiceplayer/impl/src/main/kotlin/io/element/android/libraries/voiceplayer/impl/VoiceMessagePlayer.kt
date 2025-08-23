@@ -8,6 +8,7 @@
 package io.element.android.libraries.voiceplayer.impl
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import java.io.File
-import dev.zacsweers.metro.Inject
 
 /**
  * A media player specialized in playing a single voice message.

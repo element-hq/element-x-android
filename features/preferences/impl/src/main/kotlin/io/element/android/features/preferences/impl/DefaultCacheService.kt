@@ -7,14 +7,14 @@
 
 package io.element.android.features.preferences.impl
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.preferences.api.CacheService
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.preferences.api.CacheService
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import dev.zacsweers.metro.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)

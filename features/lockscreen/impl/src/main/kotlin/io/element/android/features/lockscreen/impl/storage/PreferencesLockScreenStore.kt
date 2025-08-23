@@ -15,15 +15,15 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.lockscreen.impl.LockScreenConfig
 import dev.zacsweers.metro.AppScope
-import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.lockscreen.impl.LockScreenConfig
+import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import dev.zacsweers.metro.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "pin_code_store")
 

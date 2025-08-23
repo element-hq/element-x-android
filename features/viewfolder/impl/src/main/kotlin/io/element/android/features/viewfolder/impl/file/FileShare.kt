@@ -11,17 +11,17 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
-import dev.zacsweers.metro.Inject
 
 interface FileShare {
     suspend fun share(

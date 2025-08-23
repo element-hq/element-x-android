@@ -7,16 +7,16 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 private val loggerTag = LoggerTag("DefaultUnifiedPushNewGatewayHandler", LoggerTag.PushLoggerTag)
 

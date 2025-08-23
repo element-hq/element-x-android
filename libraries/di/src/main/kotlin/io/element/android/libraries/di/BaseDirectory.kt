@@ -12,7 +12,7 @@ import dev.zacsweers.metro.Qualifier
 /**
  * Qualifies a [File] object which represents the application base directory.
  */
-//@Retention(AnnotationRetention.RUNTIME)
+@Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 @Qualifier
 @Target(

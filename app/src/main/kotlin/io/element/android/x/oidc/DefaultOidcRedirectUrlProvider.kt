@@ -7,12 +7,12 @@
 
 package io.element.android.x.oidc
 
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.x.R
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

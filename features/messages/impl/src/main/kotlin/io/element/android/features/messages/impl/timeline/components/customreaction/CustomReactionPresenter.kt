@@ -12,11 +12,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.launch
-import dev.zacsweers.metro.Inject
 
 @Inject
 class CustomReactionPresenter(

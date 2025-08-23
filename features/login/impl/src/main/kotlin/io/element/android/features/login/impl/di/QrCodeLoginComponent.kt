@@ -7,13 +7,11 @@
 
 package io.element.android.features.login.impl.di
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.GraphExtension
 import io.element.android.libraries.architecture.NodeFactoriesBindings
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.SingleIn
 
-@SingleIn(QrCodeLoginScope::class)
 @GraphExtension(QrCodeLoginScope::class)
 interface QrCodeLoginComponent : NodeFactoriesBindings {
     @ContributesTo(AppScope::class)

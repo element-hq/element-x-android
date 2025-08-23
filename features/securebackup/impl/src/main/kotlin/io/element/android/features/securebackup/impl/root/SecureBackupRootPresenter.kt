@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import io.element.android.features.securebackup.impl.loggerTagDisable
 import io.element.android.features.securebackup.impl.loggerTagRoot
 import io.element.android.libraries.architecture.AsyncAction
@@ -30,7 +31,6 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 @Inject
 class SecureBackupRootPresenter(

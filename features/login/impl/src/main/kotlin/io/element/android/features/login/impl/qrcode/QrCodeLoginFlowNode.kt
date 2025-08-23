@@ -21,6 +21,7 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
@@ -38,7 +39,6 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
@@ -64,11 +64,11 @@ class QrCodeLoginFlowNode(
     ),
     buildContext = buildContext,
     plugins = plugins,
-) {//, DaggerComponentOwner {
+), DaggerComponentOwner {
     private var authenticationJob: Job? = null
 
-//    override val daggerComponent = qrCodeLoginComponentBuilder.create()
-//    private val qrCodeLoginManager by lazy { bindings<QrCodeLoginBindings>().qrCodeLoginManager() }
+    override val daggerComponent = qrCodeLoginComponentBuilder.create()
+    private val qrCodeLoginManager by lazy { bindings<QrCodeLoginBindings>().qrCodeLoginManager() }
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -97,51 +97,51 @@ class QrCodeLoginFlowNode(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun observeLoginStep() {
         lifecycleScope.launch {
-//            qrCodeLoginManager.currentLoginStep
-//                .collect { step ->
-//                    when (step) {
-//                        is QrCodeLoginStep.EstablishingSecureChannel -> {
-//                            backstack.replace(NavTarget.QrCodeConfirmation(QrCodeConfirmationStep.DisplayCheckCode(step.checkCode)))
-//                        }
-//                        is QrCodeLoginStep.WaitingForToken -> {
-//                            backstack.replace(NavTarget.QrCodeConfirmation(QrCodeConfirmationStep.DisplayVerificationCode(step.userCode)))
-//                        }
-//                        is QrCodeLoginStep.Failed -> {
-//                            when (val error = step.error) {
-//                                is QrLoginException.OtherDeviceNotSignedIn -> {
-//                                    // Do nothing here, it'll be handled in the scan QR screen
-//                                }
-//                                is QrLoginException.Cancelled -> {
-//                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Cancelled))
-//                                }
-//                                is QrLoginException.Expired -> {
-//                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Expired))
-//                                }
-//                                is QrLoginException.Declined -> {
-//                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Declined))
-//                                }
-//                                is QrLoginException.ConnectionInsecure -> {
-//                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.InsecureChannelDetected))
-//                                }
-//                                is QrLoginException.LinkingNotSupported -> {
-//                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.ProtocolNotSupported))
-//                                }
-//                                is QrLoginException.SlidingSyncNotAvailable -> {
-//                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.SlidingSyncNotAvailable))
-//                                }
-//                                is QrLoginException.OidcMetadataInvalid -> {
-//                                    Timber.e(error, "OIDC metadata is invalid")
-//                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.UnknownError))
-//                                }
-//                                else -> {
-//                                    Timber.e(error, "Unknown error found")
-//                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.UnknownError))
-//                                }
-//                            }
-//                        }
-//                        else -> Unit
-//                    }
-//                }
+            qrCodeLoginManager.currentLoginStep
+                .collect { step ->
+                    when (step) {
+                        is QrCodeLoginStep.EstablishingSecureChannel -> {
+                            backstack.replace(NavTarget.QrCodeConfirmation(QrCodeConfirmationStep.DisplayCheckCode(step.checkCode)))
+                        }
+                        is QrCodeLoginStep.WaitingForToken -> {
+                            backstack.replace(NavTarget.QrCodeConfirmation(QrCodeConfirmationStep.DisplayVerificationCode(step.userCode)))
+                        }
+                        is QrCodeLoginStep.Failed -> {
+                            when (val error = step.error) {
+                                is QrLoginException.OtherDeviceNotSignedIn -> {
+                                    // Do nothing here, it'll be handled in the scan QR screen
+                                }
+                                is QrLoginException.Cancelled -> {
+                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Cancelled))
+                                }
+                                is QrLoginException.Expired -> {
+                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Expired))
+                                }
+                                is QrLoginException.Declined -> {
+                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Declined))
+                                }
+                                is QrLoginException.ConnectionInsecure -> {
+                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.InsecureChannelDetected))
+                                }
+                                is QrLoginException.LinkingNotSupported -> {
+                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.ProtocolNotSupported))
+                                }
+                                is QrLoginException.SlidingSyncNotAvailable -> {
+                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.SlidingSyncNotAvailable))
+                                }
+                                is QrLoginException.OidcMetadataInvalid -> {
+                                    Timber.e(error, "OIDC metadata is invalid")
+                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.UnknownError))
+                                }
+                                else -> {
+                                    Timber.e(error, "Unknown error found")
+                                    backstack.replace(NavTarget.Error(QrCodeErrorScreenType.UnknownError))
+                                }
+                            }
+                        }
+                        else -> Unit
+                    }
+                }
         }
     }
 
@@ -197,15 +197,15 @@ class QrCodeLoginFlowNode(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun CoroutineScope.startAuthentication(qrCodeLoginData: MatrixQrCodeLoginData) {
         authenticationJob = launch(coroutineDispatchers.main) {
-//            qrCodeLoginManager.authenticate(qrCodeLoginData)
-//                .onSuccess {
-//                    defaultLoginUserStory.setLoginFlowIsDone(true)
-//                    authenticationJob = null
-//                }
-//                .onFailure { throwable ->
-//                    Timber.e(throwable, "QR code authentication failed")
-//                    authenticationJob = null
-//                }
+            qrCodeLoginManager.authenticate(qrCodeLoginData)
+                .onSuccess {
+                    defaultLoginUserStory.setLoginFlowIsDone(true)
+                    authenticationJob = null
+                }
+                .onFailure { throwable ->
+                    Timber.e(throwable, "QR code authentication failed")
+                    authenticationJob = null
+                }
         }
     }
 

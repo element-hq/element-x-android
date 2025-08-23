@@ -7,10 +7,10 @@
 
 package io.element.android.features.migration.impl.migrations
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
-import dev.zacsweers.metro.AppScope
 
 /**
  * Delete the previous log files.

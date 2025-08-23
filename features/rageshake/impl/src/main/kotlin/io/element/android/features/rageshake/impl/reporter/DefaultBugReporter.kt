@@ -11,7 +11,11 @@ import android.content.Context
 import android.os.Build
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provider
+import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
 import io.element.android.features.rageshake.api.reporter.BugReporter
@@ -24,9 +28,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.ApplicationContext
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.SdkMetadata
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -55,8 +57,6 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.Provider
 
 /**
  * BugReporter creates and sends the bug reports.

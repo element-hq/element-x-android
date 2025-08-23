@@ -7,8 +7,8 @@
 
 package io.element.android.features.roomcall.impl.di
 
-import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.impl.RoomCallStatePresenter

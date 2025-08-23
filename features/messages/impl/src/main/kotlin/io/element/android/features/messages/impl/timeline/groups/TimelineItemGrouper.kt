@@ -8,12 +8,12 @@
 package io.element.android.features.messages.impl.timeline.groups
 
 import androidx.annotation.VisibleForTesting
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.di.RoomScope
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.UniqueId
 import kotlinx.collections.immutable.toImmutableList
-import dev.zacsweers.metro.Inject
 
 @SingleIn(RoomScope::class)
 @Inject

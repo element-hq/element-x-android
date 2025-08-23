@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -14,7 +15,6 @@ import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import dev.zacsweers.metro.Inject
 
 @Inject
 class FallbackNotificationFactory(

@@ -9,9 +9,9 @@ package io.element.android.libraries.androidutils.file
 
 import android.content.Context
 import android.net.Uri
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
 

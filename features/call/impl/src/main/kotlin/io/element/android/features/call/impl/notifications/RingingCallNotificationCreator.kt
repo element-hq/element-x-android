@@ -15,6 +15,7 @@ import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.app.PendingIntentCompat
 import androidx.core.app.Person
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.receivers.DeclineCallBroadcastReceiver
@@ -29,7 +30,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
-import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
 /**

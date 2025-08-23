@@ -8,10 +8,10 @@
 package io.element.android.libraries.pushproviders.unifiedpush.registration
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import dev.zacsweers.metro.Inject
 
 data class RegistrationResult(
     val clientSecret: String,

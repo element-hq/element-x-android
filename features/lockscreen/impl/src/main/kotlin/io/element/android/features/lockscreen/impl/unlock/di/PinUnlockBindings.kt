@@ -7,9 +7,9 @@
 
 package io.element.android.features.lockscreen.impl.unlock.di
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.lockscreen.impl.unlock.activity.PinUnlockActivity
-import dev.zacsweers.metro.AppScope
 
 @ContributesTo(AppScope::class)
 interface PinUnlockBindings {

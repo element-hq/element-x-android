@@ -7,15 +7,15 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
-import dev.zacsweers.metro.Inject
 
 @ContributesIntoSet(AppScope::class)
 @Inject

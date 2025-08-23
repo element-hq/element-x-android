@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.ModerationActionState
@@ -41,7 +42,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
-import dev.zacsweers.metro.Inject
 
 @Inject
 class RoomMemberModerationPresenter(

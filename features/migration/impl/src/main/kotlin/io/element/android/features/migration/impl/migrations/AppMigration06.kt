@@ -7,10 +7,9 @@
 
 package io.element.android.features.migration.impl.migrations
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.Named
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import java.io.File
@@ -22,7 +21,7 @@ import java.io.File
 @Inject
 class AppMigration06(
     private val sessionStore: SessionStore,
-    @Named("cacheDirectory") private val cacheDirectory: File,
+    @CacheDirectory private val cacheDirectory: File,
 ) : AppMigration {
     override val order: Int = 6
 

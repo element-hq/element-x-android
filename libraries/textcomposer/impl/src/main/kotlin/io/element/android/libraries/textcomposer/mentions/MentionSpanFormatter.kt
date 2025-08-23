@@ -8,12 +8,12 @@
 package io.element.android.libraries.textcomposer.mentions
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
-import dev.zacsweers.metro.Inject
 
 private const val EVERYONE_DISPLAY_TEXT = "@room"
 private const val BUBBLE_ICON = "\uD83D\uDCAC" // 💬

@@ -11,8 +11,8 @@
 package io.element.android.features.securebackup.impl.setup
 
 import com.freeletics.flowredux.dsl.FlowReduxStateMachine
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import com.freeletics.flowredux.dsl.State as MachineState
 
 @Inject

@@ -7,9 +7,10 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
@@ -25,7 +26,6 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
 /**

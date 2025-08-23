@@ -7,13 +7,13 @@
 
 package io.element.android.features.analytics.impl.di
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 import io.element.android.features.analytics.impl.preferences.AnalyticsPreferencesPresenter
 import io.element.android.libraries.architecture.Presenter
-import dev.zacsweers.metro.AppScope
 
 @ContributesTo(AppScope::class)
 @BindingContainer

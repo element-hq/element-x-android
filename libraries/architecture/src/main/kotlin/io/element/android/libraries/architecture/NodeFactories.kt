@@ -11,10 +11,7 @@ import android.content.Context
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Multibinds
-import io.element.android.libraries.di.AppScope
 import kotlin.reflect.KClass
 
 inline fun <reified N : Node> Node.createNode(
@@ -49,7 +46,7 @@ inline fun <reified N : Node> NodeFactoriesBindings.createNode(
     return node as N
 }
 
-//@BindingContainer
+// @BindingContainer
 interface NodeFactoriesBindings {
     @Multibinds
     fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>>

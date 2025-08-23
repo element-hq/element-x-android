@@ -7,9 +7,10 @@
 
 package io.element.android.libraries.matrix.impl.tracing
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.meta.BuildMeta
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingService
@@ -17,7 +18,6 @@ import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import org.matrix.rustcomponents.sdk.TracingFileConfiguration
 import org.matrix.rustcomponents.sdk.reloadTracingFileWriter
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

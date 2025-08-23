@@ -9,38 +9,16 @@
 
 package io.element.android.features.verifysession.impl.outgoing
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import com.freeletics.flowredux.compose.rememberStateAndDispatch
-import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
-import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.encryption.EncryptionService
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
-import io.element.android.libraries.matrix.api.verification.VerificationFlowState
-import io.element.android.libraries.matrix.api.verification.VerificationRequest
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
-import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationStateMachine.Event as StateMachineEvent
-import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationStateMachine.State as StateMachineState
 
-//@Inject
-//class OutgoingVerificationPresenter(
+// @Inject
+// class OutgoingVerificationPresenter(
 //    @Assisted private val showDeviceVerifiedScreen: Boolean,
 //    @Assisted private val verificationRequest: VerificationRequest.Outgoing,
 //    private val sessionVerificationService: SessionVerificationService,
 //    private val encryptionService: EncryptionService,
-//) : Presenter<OutgoingVerificationState> {
+// ) : Presenter<OutgoingVerificationState> {
 //    @AssistedFactory
 //    interface Factory {
 //        fun create(
@@ -177,4 +155,4 @@ import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificat
 //            }
 //            .launchIn(this)
 //    }
-//}
+// }

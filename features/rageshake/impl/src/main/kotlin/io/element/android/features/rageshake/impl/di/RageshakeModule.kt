@@ -7,6 +7,7 @@
 
 package io.element.android.features.rageshake.impl.di
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
@@ -17,7 +18,6 @@ import io.element.android.features.rageshake.api.detection.RageshakeDetectionSta
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.libraries.architecture.Presenter
-import dev.zacsweers.metro.AppScope
 
 @ContributesTo(AppScope::class)
 @BindingContainer

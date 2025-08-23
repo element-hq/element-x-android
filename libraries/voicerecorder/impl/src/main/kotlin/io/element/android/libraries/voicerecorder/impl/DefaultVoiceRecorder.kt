@@ -10,11 +10,12 @@ package io.element.android.libraries.voicerecorder.impl
 import android.Manifest
 import androidx.annotation.RequiresPermission
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.VoiceMessageConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.di.RoomScope
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
@@ -37,7 +38,6 @@ import kotlinx.coroutines.yield
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
-import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TimeSource
 

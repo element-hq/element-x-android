@@ -7,12 +7,12 @@
 
 package io.element.android.features.login.impl
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.login.api.LoginUserStory
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.SingleIn
-import kotlinx.coroutines.flow.MutableStateFlow
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import io.element.android.features.login.api.LoginUserStory
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)

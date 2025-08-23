@@ -7,6 +7,7 @@
 
 package io.element.android.appnav.loggedin
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -14,7 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 /**
  * This migration is temporary, will be safe to remove after some time.

@@ -8,10 +8,10 @@
 package io.element.android.features.joinroom.impl.di
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
-import dev.zacsweers.metro.Inject
 
 interface KnockRoom {
     suspend operator fun invoke(

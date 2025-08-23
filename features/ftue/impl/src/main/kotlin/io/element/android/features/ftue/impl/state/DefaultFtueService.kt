@@ -11,11 +11,12 @@ import android.Manifest
 import android.os.Build
 import androidx.annotation.VisibleForTesting
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -31,7 +32,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)

@@ -10,11 +10,11 @@ package io.element.android.features.userprofile.impl
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.libraries.architecture.createNode
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

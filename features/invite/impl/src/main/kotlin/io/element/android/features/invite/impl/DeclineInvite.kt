@@ -8,12 +8,12 @@
 package io.element.android.features.invite.impl
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
-import dev.zacsweers.metro.Inject
 
 interface DeclineInvite {
     suspend operator fun invoke(

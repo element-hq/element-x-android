@@ -19,6 +19,7 @@ import android.provider.MediaStore
 import android.util.Size
 import androidx.core.net.toUri
 import com.vanniktech.blurhash.BlurHash
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.media.runAndRelease
@@ -30,7 +31,6 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import dev.zacsweers.metro.Inject
 import kotlin.coroutines.resume
 
 /**

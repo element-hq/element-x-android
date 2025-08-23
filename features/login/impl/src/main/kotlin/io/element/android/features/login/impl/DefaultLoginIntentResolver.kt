@@ -8,11 +8,11 @@
 package io.element.android.features.login.impl
 
 import androidx.core.net.toUri
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.login.api.LoginIntentResolver
 import io.element.android.features.login.api.LoginParams
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

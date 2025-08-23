@@ -8,13 +8,13 @@
 package io.element.android.features.login.impl.web
 
 import androidx.core.net.toUri
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 interface WebClientUrlForAuthenticationRetriever {
     suspend fun retrieve(homeServerUrl: String): String

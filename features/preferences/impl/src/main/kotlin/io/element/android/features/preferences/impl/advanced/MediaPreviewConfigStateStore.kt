@@ -10,12 +10,13 @@ package io.element.android.features.preferences.impl.advanced
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.SessionScope
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
@@ -27,7 +28,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 data class MediaPreviewConfigState(
     val hideInviteAvatars: Boolean,

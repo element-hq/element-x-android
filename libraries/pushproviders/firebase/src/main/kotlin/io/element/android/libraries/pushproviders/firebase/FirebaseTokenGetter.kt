@@ -8,10 +8,10 @@
 package io.element.android.libraries.pushproviders.firebase
 
 import com.google.firebase.messaging.FirebaseMessaging
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
-import timber.log.Timber
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine

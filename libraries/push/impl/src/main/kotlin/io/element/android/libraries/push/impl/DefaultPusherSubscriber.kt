@@ -7,12 +7,13 @@
 
 package io.element.android.libraries.push.impl
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.PushConfig
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.ClientException
@@ -23,7 +24,6 @@ import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 

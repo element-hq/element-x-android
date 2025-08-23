@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
@@ -21,7 +22,6 @@ import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPin
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.coroutines.delay
-import dev.zacsweers.metro.Inject
 
 /**
  * Some time for the ui to refresh before showing confirmation step.

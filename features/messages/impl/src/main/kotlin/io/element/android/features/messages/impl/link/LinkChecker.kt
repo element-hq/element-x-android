@@ -7,13 +7,13 @@
 
 package io.element.android.features.messages.impl.link
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.containsRtLOverride
-import dev.zacsweers.metro.AppScope
 import io.element.android.wysiwyg.link.Link
 import java.net.URI
-import dev.zacsweers.metro.Inject
 
 interface LinkChecker {
     fun isSafe(link: Link): Boolean

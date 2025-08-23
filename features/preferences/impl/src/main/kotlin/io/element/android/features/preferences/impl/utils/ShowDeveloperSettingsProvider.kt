@@ -7,13 +7,13 @@
 
 package io.element.android.features.preferences.impl.utils
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.ui.utils.MultipleTapToUnlock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import dev.zacsweers.metro.Inject
 
 @Inject
 class ShowDeveloperSettingsProvider(

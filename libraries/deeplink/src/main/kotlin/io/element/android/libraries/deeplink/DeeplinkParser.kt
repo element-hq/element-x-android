@@ -9,10 +9,10 @@ package io.element.android.libraries.deeplink
 
 import android.content.Intent
 import android.net.Uri
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import dev.zacsweers.metro.Inject
 
 @Inject
 class DeeplinkParser() {

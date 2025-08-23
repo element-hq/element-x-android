@@ -11,13 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(RoomScope::class)
 @Inject

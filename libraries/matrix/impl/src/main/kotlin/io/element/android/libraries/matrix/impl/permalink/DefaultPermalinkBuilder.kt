@@ -7,9 +7,10 @@
 
 package io.element.android.libraries.matrix.impl.permalink
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
@@ -17,7 +18,6 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilderError
 import org.matrix.rustcomponents.sdk.matrixToRoomAliasPermalink
 import org.matrix.rustcomponents.sdk.matrixToUserPermalink
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

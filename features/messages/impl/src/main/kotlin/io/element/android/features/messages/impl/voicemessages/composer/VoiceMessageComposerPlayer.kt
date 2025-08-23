@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl.voicemessages.composer
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
@@ -21,7 +22,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 /**
  * A media player for the voice message composer.

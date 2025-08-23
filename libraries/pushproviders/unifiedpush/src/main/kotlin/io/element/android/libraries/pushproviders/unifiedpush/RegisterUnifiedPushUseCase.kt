@@ -8,8 +8,9 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeout
 import org.unifiedpush.android.connector.UnifiedPush
-import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
 interface RegisterUnifiedPushUseCase {

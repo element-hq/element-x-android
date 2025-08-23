@@ -8,13 +8,13 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import androidx.compose.runtime.Composable
-import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.IntoMap
-import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.messages.impl.timeline.di.TimelineItemEventContentKey
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent

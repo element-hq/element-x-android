@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomList
@@ -21,7 +22,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import dev.zacsweers.metro.Inject
 
 private const val PAGE_SIZE = 30
 

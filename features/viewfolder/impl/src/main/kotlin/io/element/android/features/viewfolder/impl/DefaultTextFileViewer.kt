@@ -9,13 +9,13 @@ package io.element.android.features.viewfolder.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.features.viewfolder.impl.file.ColorationMode
 import io.element.android.features.viewfolder.impl.file.FileContent
-import dev.zacsweers.metro.AppScope
 import kotlinx.collections.immutable.ImmutableList
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

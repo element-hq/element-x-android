@@ -14,9 +14,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.persistentListOf
-import dev.zacsweers.metro.Inject
 
 @Inject
 class RoomListSearchPresenter(

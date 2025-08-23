@@ -8,14 +8,14 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 interface UnregisterUnifiedPushUseCase {
     /**

@@ -7,6 +7,7 @@
 
 package io.element.android.appnav
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -18,7 +19,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import dev.zacsweers.metro.Inject
 
 @Inject
 class LoggedInEventProcessor(

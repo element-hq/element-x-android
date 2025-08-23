@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.matrix.impl
 
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
-import org.matrix.rustcomponents.sdk.ClientBuilder
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import org.matrix.rustcomponents.sdk.ClientBuilder
 
 interface ClientBuilderProvider {
     fun provide(): ClientBuilder

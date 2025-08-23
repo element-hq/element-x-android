@@ -7,15 +7,15 @@
 
 package io.element.android.services.apperror.impl
 
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.services.apperror.api.AppErrorState
 import io.element.android.services.apperror.api.AppErrorStateService
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)

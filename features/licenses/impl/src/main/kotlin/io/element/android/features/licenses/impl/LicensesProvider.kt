@@ -8,16 +8,16 @@
 package io.element.android.features.licenses.impl
 
 import android.content.Context
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.licenses.impl.model.DependencyLicenseItem
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import dev.zacsweers.metro.Inject
 
 interface LicensesProvider {
     suspend fun provides(): List<DependencyLicenseItem>

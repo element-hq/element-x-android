@@ -7,11 +7,11 @@
 
 package io.element.android.libraries.matrix.api.user
 
-import io.element.android.libraries.di.SessionScope
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
-import dev.zacsweers.metro.Inject
 
 @SingleIn(SessionScope::class)
 @Inject

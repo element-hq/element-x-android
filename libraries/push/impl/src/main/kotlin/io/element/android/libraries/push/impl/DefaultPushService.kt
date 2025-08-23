@@ -7,9 +7,11 @@
 
 package io.element.android.libraries.push.impl
 
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.binding
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.GetCurrentPushProvider
@@ -26,8 +28,6 @@ import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.binding
 
 @ContributesBinding(AppScope::class, binding = binding<PushService>())
 @SingleIn(AppScope::class)

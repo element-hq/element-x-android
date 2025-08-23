@@ -10,7 +10,6 @@ package io.element.android.x
 import android.app.Application
 import androidx.startup.AppInitializer
 import dev.zacsweers.metro.asContribution
-import dev.zacsweers.metro.createGraphFactory
 import io.element.android.features.cachecleaner.api.CacheCleanerInitializer
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.AppComponent

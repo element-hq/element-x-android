@@ -10,16 +10,16 @@ package io.element.android.libraries.cryptography.impl
 import android.annotation.SuppressLint
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
-import dev.zacsweers.metro.AppScope
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.KeyStoreException
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
-import dev.zacsweers.metro.Inject
 
 /**
  * Default implementation of [SecretKeyRepository] that uses the Android Keystore to store the keys.

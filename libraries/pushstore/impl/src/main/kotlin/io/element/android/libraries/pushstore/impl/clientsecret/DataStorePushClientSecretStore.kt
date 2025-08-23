@@ -13,13 +13,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 import kotlinx.coroutines.flow.first
-import dev.zacsweers.metro.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "push_client_secret_store")
 

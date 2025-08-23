@@ -7,6 +7,7 @@
 
 package io.element.android.x.di
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.api.MigrationEntryPoint
 import io.element.android.features.enterprise.api.EnterpriseService
@@ -15,7 +16,6 @@ import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.platform.InitPlatformService
 import io.element.android.libraries.matrix.api.tracing.TracingService

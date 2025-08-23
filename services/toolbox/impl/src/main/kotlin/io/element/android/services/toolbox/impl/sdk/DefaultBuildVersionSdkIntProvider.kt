@@ -8,10 +8,10 @@
 package io.element.android.services.toolbox.impl.sdk
 
 import android.os.Build
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
-import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 
 @ContributesBinding(AppScope::class)
 @Inject

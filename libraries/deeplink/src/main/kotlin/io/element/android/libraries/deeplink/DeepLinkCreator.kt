@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.deeplink
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import dev.zacsweers.metro.Inject
 
 @Inject
 class DeepLinkCreator() {

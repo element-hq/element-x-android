@@ -11,12 +11,12 @@ import android.content.Context
 import android.content.Intent
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.impl.unlock.activity.PinUnlockActivity
 import io.element.android.libraries.architecture.createNode
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

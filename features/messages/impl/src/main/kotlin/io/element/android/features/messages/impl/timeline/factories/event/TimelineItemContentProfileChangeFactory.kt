@@ -7,12 +7,12 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
-import dev.zacsweers.metro.Inject
 
 @Inject
 class TimelineItemContentProfileChangeFactory(

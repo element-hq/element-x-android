@@ -13,14 +13,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.bool.orFalse
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.permissions.api.PermissionsStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import dev.zacsweers.metro.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "permissions_store")
 

@@ -13,6 +13,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import dev.zacsweers.metro.Inject
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.api.CurrentCallService
 import io.element.android.features.enterprise.api.SessionEnterpriseService
@@ -20,7 +21,6 @@ import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.ui.room.canCall
-import dev.zacsweers.metro.Inject
 
 @Inject
 class RoomCallStatePresenter(

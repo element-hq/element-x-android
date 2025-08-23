@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushApiFactory
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushCurrentUserPushConfigProvider

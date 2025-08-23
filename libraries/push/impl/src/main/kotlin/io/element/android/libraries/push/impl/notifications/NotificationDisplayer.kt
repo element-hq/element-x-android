@@ -13,11 +13,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 interface NotificationDisplayer {
     fun showNotificationMessage(tag: String?, id: Int, notification: Notification): Boolean

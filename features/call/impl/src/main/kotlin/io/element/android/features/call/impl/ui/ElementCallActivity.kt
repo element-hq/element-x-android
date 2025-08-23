@@ -30,6 +30,7 @@ import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.IntentCompat
 import androidx.core.util.Consumer
 import androidx.lifecycle.Lifecycle
+import dev.zacsweers.metro.Inject
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.CallType.ExternalUrl
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
@@ -50,7 +51,6 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 private val loggerTag = LoggerTag("ElementCallActivity")
 

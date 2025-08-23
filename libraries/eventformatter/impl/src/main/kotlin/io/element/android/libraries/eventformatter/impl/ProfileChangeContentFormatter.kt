@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.eventformatter.impl
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.services.toolbox.api.strings.StringProvider
-import dev.zacsweers.metro.Inject
 
 @Inject
 class ProfileChangeContentFormatter(

@@ -8,13 +8,13 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.androidutils.system.getApplicationLabel
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.system.getApplicationLabel
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.pushproviders.api.Distributor
 import org.unifiedpush.android.connector.UnifiedPush
-import dev.zacsweers.metro.Inject
 
 interface UnifiedPushDistributorProvider {
     fun getDistributors(): List<Distributor>

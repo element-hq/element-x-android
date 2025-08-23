@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import kotlinx.collections.immutable.toImmutableList
-import dev.zacsweers.metro.Inject
 
 @Inject
 class MediaItemsPostProcessor() {

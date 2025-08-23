@@ -10,16 +10,16 @@ package io.element.android.x.intent
 import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.deeplink.DeepLinkCreator
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.deeplink.DeepLinkCreator
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.x.MainActivity
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

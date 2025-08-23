@@ -10,8 +10,8 @@ package io.element.android.features.knockrequests.impl.data
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import io.element.android.libraries.di.RoomScope
 import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.JoinedRoom

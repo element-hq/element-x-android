@@ -11,10 +11,11 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.di.RoomScope
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +29,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
 /**

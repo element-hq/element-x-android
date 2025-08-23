@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.push.impl.push
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -16,7 +17,6 @@ import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @Inject

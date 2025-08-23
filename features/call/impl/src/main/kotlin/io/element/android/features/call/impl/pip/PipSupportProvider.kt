@@ -11,11 +11,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.bool.orFalse
 import dev.zacsweers.metro.AppScope
-import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.di.annotations.ApplicationContext
 
 interface PipSupportProvider {
     @ChecksSdkIntAtLeast(Build.VERSION_CODES.O)

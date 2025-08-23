@@ -12,12 +12,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import dev.zacsweers.metro.Inject
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
-import dev.zacsweers.metro.Inject
 
 @Inject
 class ChooseSelfVerificationModePresenter(

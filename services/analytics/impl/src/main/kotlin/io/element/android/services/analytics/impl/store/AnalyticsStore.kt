@@ -14,14 +14,14 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.bool.orFalse
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import dev.zacsweers.metro.Inject
 
 /**
  * Also accessed via reflection by the instrumentation tests @see [im.vector.app.ClearCurrentSessionRule].

@@ -13,13 +13,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.featureflag.api.Feature
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import dev.zacsweers.metro.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_featureflag")
 

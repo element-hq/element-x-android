@@ -10,12 +10,12 @@
 package io.element.android.features.verifysession.impl.incoming
 
 import com.freeletics.flowredux.dsl.FlowReduxStateMachine
+import dev.zacsweers.metro.Inject
 import io.element.android.features.verifysession.impl.util.andLogStateChange
 import io.element.android.features.verifysession.impl.util.logReceivedEvents
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import dev.zacsweers.metro.Inject
 import com.freeletics.flowredux.dsl.State as MachineState
 
 @Inject

@@ -9,8 +9,8 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 
 interface ReplyMessageExtractor {

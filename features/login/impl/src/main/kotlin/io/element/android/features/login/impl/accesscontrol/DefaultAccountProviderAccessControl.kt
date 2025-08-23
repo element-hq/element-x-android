@@ -7,14 +7,14 @@
 
 package io.element.android.features.login.impl.accesscontrol
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.libraries.core.uri.ensureProtocol
-import dev.zacsweers.metro.AppScope
 import io.element.android.libraries.wellknown.api.WellknownRetriever
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject

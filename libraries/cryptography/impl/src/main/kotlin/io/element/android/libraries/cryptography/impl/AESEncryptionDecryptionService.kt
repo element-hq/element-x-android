@@ -7,15 +7,15 @@
 
 package io.element.android.libraries.cryptography.impl
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
-import dev.zacsweers.metro.AppScope
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
-import dev.zacsweers.metro.Inject
 
 /**
  * Default implementation of [EncryptionDecryptionService] using AES encryption.

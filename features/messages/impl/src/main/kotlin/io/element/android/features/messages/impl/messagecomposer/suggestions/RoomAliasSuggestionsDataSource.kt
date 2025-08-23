@@ -8,13 +8,13 @@
 package io.element.android.features.messages.impl.messagecomposer.suggestions
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import dev.zacsweers.metro.Inject
 
 data class RoomAliasSuggestion(
     val roomAlias: RoomAlias,

@@ -7,15 +7,15 @@
 
 package io.element.android.libraries.wellknown.impl
 
-import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.uri.ensureProtocol
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.network.RetrofitFactory
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.WellKnown
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import timber.log.Timber
-import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
 @Inject
