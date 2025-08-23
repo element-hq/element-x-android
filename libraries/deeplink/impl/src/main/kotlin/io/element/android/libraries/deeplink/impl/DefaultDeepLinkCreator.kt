@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultDeepLinkCreator @Inject constructor() : DeepLinkCreator {
-    override fun room(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): String {
+    override fun create(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): String {
         return buildString {
             append("$SCHEME://$HOST/")
             append(sessionId.value)

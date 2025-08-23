@@ -12,5 +12,5 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 
 fun interface DeepLinkCreator {
-    fun room(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): String
+    fun create(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): String
 }

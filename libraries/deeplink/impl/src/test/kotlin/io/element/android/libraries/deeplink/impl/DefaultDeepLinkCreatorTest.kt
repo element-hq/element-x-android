@@ -15,13 +15,13 @@ import org.junit.Test
 
 class DefaultDeepLinkCreatorTest {
     @Test
-    fun room() {
+    fun create() {
         val sut = DefaultDeepLinkCreator()
-        assertThat(sut.room(A_SESSION_ID, null, null))
+        assertThat(sut.create(A_SESSION_ID, null, null))
             .isEqualTo("elementx://open/@alice:server.org")
-        assertThat(sut.room(A_SESSION_ID, A_ROOM_ID, null))
+        assertThat(sut.create(A_SESSION_ID, A_ROOM_ID, null))
             .isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain")
-        assertThat(sut.room(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID))
+        assertThat(sut.create(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID))
             .isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId")
     }
 }

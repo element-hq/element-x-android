@@ -33,7 +33,7 @@ class DefaultIntentProvider @Inject constructor(
     ): Intent {
         return Intent(context, MainActivity::class.java).apply {
             action = Intent.ACTION_VIEW
-            data = deepLinkCreator.room(sessionId, roomId, threadId).toUri()
+            data = deepLinkCreator.create(sessionId, roomId, threadId).toUri()
         }
     }
 }
