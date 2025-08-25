@@ -12,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
 import com.lemonappdev.konsist.api.ext.list.withName
+import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
@@ -29,6 +30,26 @@ class KonsistPreviewTest {
                 it.hasNameEndingWith("Preview") &&
                     it.hasNameEndingWith("LightPreview").not() &&
                     it.hasNameEndingWith("DarkPreview").not()
+            }
+    }
+
+    @Test
+    fun `Check functions with 'A11yPreview'`() {
+        Konsist
+            .scopeFromProject()
+            .functions()
+            .withNameEndingWith("A11yPreview")
+            .assertTrue(
+                additionalMessage = "Functions with 'A11yPreview' suffix should have '@Preview' annotation and not '@PreviewsDayNight'," +
+                    " should contain 'ElementPreview' composable," +
+                    " should contain the tested view" +
+                    " and should be internal."
+            ) {
+                val testedView = it.name.removeSuffix("A11yPreview")
+                it.text.contains("$testedView(") &&
+                    it.hasAllAnnotationsOf(PreviewsDayNight::class).not() &&
+                    it.text.contains("ElementPreview") &&
+                    it.hasInternalModifier
             }
     }
 
