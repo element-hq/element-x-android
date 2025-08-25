@@ -5,15 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:Suppress("SameParameterValue")
+
 package io.element.android.x.intent
 
 import android.content.Context
 import android.content.Intent
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.deeplink.DeepLinkCreator
+import io.element.android.libraries.deeplink.api.DeepLinkCreator
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.x.MainActivity
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,45 +30,31 @@ import org.robolectric.RuntimeEnvironment
 @RunWith(RobolectricTestRunner::class)
 class DefaultIntentProviderTest {
     @Test
-    fun `test getViewRoomIntent with Session`() {
-        val sut = createDefaultIntentProvider()
-        val result = sut.getViewRoomIntent(
-            sessionId = A_SESSION_ID,
-            roomId = null,
-            threadId = null,
+    fun `test getViewRoomIntent with data`() {
+        val deepLinkCreator = lambdaRecorder<SessionId, RoomId?, ThreadId?, String> { _, _, _ -> "deepLinkCreatorResult" }
+        val sut = createDefaultIntentProvider(
+            deepLinkCreator = { sessionId, roomId, threadId -> deepLinkCreator.invoke(sessionId, roomId, threadId) },
         )
-        result.commonAssertions()
-        assertThat(result.data.toString()).isEqualTo("elementx://open/@alice:server.org")
-    }
-
-    @Test
-    fun `test getViewRoomIntent with Session and Room`() {
-        val sut = createDefaultIntentProvider()
-        val result = sut.getViewRoomIntent(
-            sessionId = A_SESSION_ID,
-            roomId = A_ROOM_ID,
-            threadId = null,
-        )
-        result.commonAssertions()
-        assertThat(result.data.toString()).isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain")
-    }
-
-    @Test
-    fun `test getViewRoomIntent with Session, Room and Thread`() {
-        val sut = createDefaultIntentProvider()
         val result = sut.getViewRoomIntent(
             sessionId = A_SESSION_ID,
             roomId = A_ROOM_ID,
             threadId = A_THREAD_ID,
         )
         result.commonAssertions()
-        assertThat(result.data.toString()).isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId")
+        assertThat(result.data.toString()).isEqualTo("deepLinkCreatorResult")
+        deepLinkCreator.assertions().isCalledOnce().with(
+            value(A_SESSION_ID),
+            value(A_ROOM_ID),
+            value(A_THREAD_ID),
+        )
     }
 
-    private fun createDefaultIntentProvider(): DefaultIntentProvider {
+    private fun createDefaultIntentProvider(
+        deepLinkCreator: DeepLinkCreator = DeepLinkCreator { _, _, _ -> "" },
+    ): DefaultIntentProvider {
         return DefaultIntentProvider(
             context = RuntimeEnvironment.getApplication() as Context,
-            deepLinkCreator = DeepLinkCreator(),
+            deepLinkCreator = deepLinkCreator,
         )
     }
 

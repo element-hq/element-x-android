@@ -1,5 +1,3 @@
-import extension.setupAnvil
-
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -20,8 +18,6 @@ android {
         }
     }
 }
-
-setupAnvil()
 
 dependencies {
     implementation(projects.libraries.core)

@@ -1,19 +1,17 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright 2022-2024 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 plugins {
-    id("io.element.android-compose-library")
+    id("io.element.android-library")
 }
 
 android {
-    namespace = "io.element.android.libraries.voiceplayer.api"
+    namespace = "io.element.android.libraries.deeplink.api"
 }
 
 dependencies {
-    implementation(libs.androidx.annotationjvm)
-    implementation(libs.coroutines.core)
     implementation(projects.libraries.matrix.api)
 }

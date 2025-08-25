@@ -1,5 +1,3 @@
-import extension.setupAnvil
-
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -13,8 +11,6 @@ plugins {
 android {
     namespace = "io.element.android.libraries.mediaplayer.api"
 }
-
-setupAnvil()
 
 dependencies {
     implementation(projects.libraries.matrix.api)
