@@ -8,9 +8,8 @@
 package io.element.android.features.analytics.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import javax.inject.Inject
 
-open class AnalyticsOptInStateProvider @Inject constructor() : PreviewParameterProvider<AnalyticsOptInState> {
+open class AnalyticsOptInStateProvider : PreviewParameterProvider<AnalyticsOptInState> {
     override val values: Sequence<AnalyticsOptInState>
         get() = sequenceOf(
             aAnalyticsOptInState(),
