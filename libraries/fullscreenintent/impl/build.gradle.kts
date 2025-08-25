@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2024 New Vector Ltd.
@@ -15,7 +15,7 @@ android {
     namespace = "io.element.android.libraries.fullscreenintent.impl"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     api(projects.libraries.fullscreenintent.api)

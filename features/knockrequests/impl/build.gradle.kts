@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 plugins {
     id("io.element.android-compose-library")
@@ -21,7 +21,7 @@ android {
     }
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     api(projects.features.knockrequests.api)

@@ -8,7 +8,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import extension.allFeaturesApi
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 plugins {
     id("io.element.android-compose-library")
@@ -19,7 +19,7 @@ android {
     namespace = "io.element.android.appnav"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     allFeaturesApi(project)

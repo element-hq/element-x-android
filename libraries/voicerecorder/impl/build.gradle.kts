@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -14,7 +14,7 @@ android {
     namespace = "io.element.android.libraries.voicerecorder.impl"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     api(projects.libraries.voicerecorder.api)

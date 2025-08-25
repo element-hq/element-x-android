@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -14,7 +14,7 @@ android {
     namespace = "io.element.android.libraries.deeplink"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     implementation(projects.libraries.di)

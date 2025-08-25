@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2024 New Vector Ltd.
@@ -16,7 +16,7 @@ android {
     namespace = "io.element.android.features.ftue.test"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     implementation(projects.features.ftue.api)

@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -15,7 +15,7 @@ android {
     namespace = "io.element.android.services.appnavstate.api"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     implementation(libs.coroutines.core)
