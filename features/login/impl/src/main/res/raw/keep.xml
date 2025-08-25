@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2025 New Vector Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<!--
+ Note: one or several custom_logo drawable can be added at build time. Ensure that these
+ resource are not stripped out by the resource shrinker.
+ -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/custom_logo" />
