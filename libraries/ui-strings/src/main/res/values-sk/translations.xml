@@ -90,6 +90,7 @@
   <string name="action_enable">"Povoliť"</string>
   <string name="action_end_poll">"Ukončiť anketu"</string>
   <string name="action_enter_pin">"Zadajte PIN"</string>
+  <string name="action_finish">"Dokončiť"</string>
   <string name="action_forgot_password">"Zabudnuté heslo?"</string>
   <string name="action_forward">"Preposlať"</string>
   <string name="action_go_back">"Ísť späť"</string>
@@ -168,6 +169,8 @@
   <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
   <string name="common_an_image">"obrázok"</string>
   <string name="common_analytics">"Analytika"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Opustili ste miestnosť"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Boli ste odhlásení zo relácie."</string>
   <string name="common_appearance">"Vzhľad"</string>
   <string name="common_audio">"Zvuk"</string>
   <string name="common_blocked_users">"Blokovaní používatelia"</string>
@@ -308,6 +311,7 @@ Dôvod: %1$s."</string>
   <string name="common_signing_out">"Odhlasovanie"</string>
   <string name="common_something_went_wrong">"Niečo sa pokazilo"</string>
   <string name="common_something_went_wrong_message">"Vyskytol sa problém. Skúste to prosím znova."</string>
+  <string name="common_space">"Priestor"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d priestor"</item>
     <item quantity="few">"%1$d priestory"</item>

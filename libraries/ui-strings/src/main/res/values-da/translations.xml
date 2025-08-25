@@ -88,6 +88,7 @@
   <string name="action_enable">"Slå til"</string>
   <string name="action_end_poll">"Afslut afstemning"</string>
   <string name="action_enter_pin">"Indtast PIN-kode"</string>
+  <string name="action_finish">"Afslut"</string>
   <string name="action_forgot_password">"Har du glemt din adgangskode?"</string>
   <string name="action_forward">"Videresend"</string>
   <string name="action_go_back">"Gå tilbage"</string>
@@ -166,6 +167,8 @@
   <string name="common_advanced_settings">"Avancerede indstillinger"</string>
   <string name="common_an_image">"et billede"</string>
   <string name="common_analytics">"Analyse-værktøj"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Du forlod rummet"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Du blev logget ud af sessionen"</string>
   <string name="common_appearance">"Udseende"</string>
   <string name="common_audio">"Lyd"</string>
   <string name="common_blocked_users">"Blokerede brugere"</string>
@@ -300,6 +303,7 @@
   <string name="common_signing_out">"Logger ud"</string>
   <string name="common_something_went_wrong">"Noget gik galt"</string>
   <string name="common_something_went_wrong_message">"Vi stødte på et problem. Prøv venligst igen."</string>
+  <string name="common_space">"Klynge"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Klynge"</item>
     <item quantity="other">"%1$d Klynger"</item>

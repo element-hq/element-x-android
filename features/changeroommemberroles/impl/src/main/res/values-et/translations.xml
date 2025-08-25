@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_room_change_permissions_administrators">"Vaid peakasutajad"</string>
   <string name="screen_room_change_permissions_ban_people">"Suhtluskeelu seadmine"</string>
-  <string name="screen_room_change_permissions_delete_messages">"Sõnumite kustutamine"</string>
+  <string name="screen_room_change_permissions_delete_messages">"Eemalda sõnumid"</string>
   <string name="screen_room_change_permissions_everyone">"Kõik"</string>
   <string name="screen_room_change_permissions_invite_people">"Kutsu teisi osalejaid ja vasta ise liitumiskutsetele"</string>
   <string name="screen_room_change_permissions_member_moderation">"Jututoas osalejate modereerimine"</string>
