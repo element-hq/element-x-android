@@ -88,6 +88,7 @@
   <string name="action_enable">"Võta kasutusele"</string>
   <string name="action_end_poll">"Lõpeta küsitlus"</string>
   <string name="action_enter_pin">"Sisesta PIN-kood"</string>
+  <string name="action_finish">"Lõpeta"</string>
   <string name="action_forgot_password">"Kas unustasid salasõna?"</string>
   <string name="action_forward">"Edasta"</string>
   <string name="action_go_back">"Tagasi eelmisesse vaatesse"</string>
@@ -301,6 +302,7 @@ Põhjus: %1$s."</string>
   <string name="common_signing_out">"Logime välja"</string>
   <string name="common_something_went_wrong">"Midagi läks valesti"</string>
   <string name="common_something_went_wrong_message">"Tekkis viga. Palun proovi uuesti."</string>
+  <string name="common_space">"Kogukond"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d kogukond"</item>
     <item quantity="other">"%1$d kogukonda"</item>

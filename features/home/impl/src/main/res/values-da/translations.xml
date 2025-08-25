@@ -33,6 +33,7 @@ For nu kan du fravælge filtre for at se dine andre samtaler"</string>
   <string name="screen_roomlist_filter_invites">"Invitationer"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Du har ingen afventende invitationer."</string>
   <string name="screen_roomlist_filter_low_priority">"Lav prioritet"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Du har endnu ingen chats med lav prioritet"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Du kan fravælge filtre for at se dine andre samtaler"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Du har ingen samtaler til dette valg"</string>
   <string name="screen_roomlist_filter_people">"Mennesker"</string>

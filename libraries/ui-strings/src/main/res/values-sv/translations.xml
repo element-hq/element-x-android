@@ -8,9 +8,12 @@
     <item quantity="other">"%1$d siffror angivna"</item>
   </plurals>
   <string name="a11y_edit_avatar">"Redigera avatar"</string>
+  <string name="a11y_edit_room_address_hint">"Den fullständiga adressen kommer att vara %1$s"</string>
+  <string name="a11y_encryption_details">"Krypteringsdetaljer"</string>
   <string name="a11y_hide_password">"Dölj lösenord"</string>
   <string name="a11y_join_call">"Anslut till samtal"</string>
   <string name="a11y_jump_to_bottom">"Hoppa till botten"</string>
+  <string name="a11y_move_the_map_to_my_location">"Flytta kartan till min plats"</string>
   <string name="a11y_notifications_mentions_only">"Endast omnämningar"</string>
   <string name="a11y_notifications_muted">"Tystad"</string>
   <string name="a11y_notifications_new_mentions">"Nya omnämnanden"</string>
@@ -39,6 +42,8 @@
   <string name="a11y_send_files">"Skicka filer"</string>
   <string name="a11y_show_password">"Visa lösenord"</string>
   <string name="a11y_start_call">"Starta ett samtal"</string>
+  <string name="a11y_time_limited_action_required">"Tidsbegränsad åtgärd krävs"</string>
+  <string name="a11y_tombstoned_room">"Gravstensmärkt rum"</string>
   <string name="a11y_user_avatar">"Användaravatar"</string>
   <string name="a11y_user_menu">"Användarmeny"</string>
   <string name="a11y_view_avatar">"Visa avatar"</string>
@@ -83,6 +88,7 @@
   <string name="action_enable">"Aktivera"</string>
   <string name="action_end_poll">"Avsluta omröstning"</string>
   <string name="action_enter_pin">"Ange PIN-kod"</string>
+  <string name="action_finish">"Slutför"</string>
   <string name="action_forgot_password">"Glömt lösenordet?"</string>
   <string name="action_forward">"Vidarebefordra"</string>
   <string name="action_go_back">"Gå tillbaka"</string>
@@ -161,6 +167,8 @@
   <string name="common_advanced_settings">"Avancerade inställningar"</string>
   <string name="common_an_image">"en bild"</string>
   <string name="common_analytics">"Analysdata"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Du lämnade rummet"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Du loggades ut ur sessionen"</string>
   <string name="common_appearance">"Utseende"</string>
   <string name="common_audio">"Ljud"</string>
   <string name="common_blocked_users">"Blockerade användare"</string>
@@ -250,9 +258,12 @@ Anledning:%1$s."</string>
     <item quantity="one">"%d röst"</item>
     <item quantity="other">"%d röster"</item>
   </plurals>
+  <string name="common_preparing">"Förbereder …"</string>
   <string name="common_privacy_policy">"Integritetspolicy"</string>
   <string name="common_private_room">"Privat rum"</string>
+  <string name="common_private_space">"Privat utrymme"</string>
   <string name="common_public_room">"Offentligt rum"</string>
+  <string name="common_public_space">"Offentligt utrymme"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktioner"</string>
   <string name="common_reason">"Orsak"</string>
@@ -270,6 +281,10 @@ Anledning:%1$s."</string>
   <string name="common_room">"Rum"</string>
   <string name="common_room_name">"Rumsnamn"</string>
   <string name="common_room_name_placeholder">"t.ex. ditt projektnamn"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d Rum"</item>
+    <item quantity="other">"%1$d Rum"</item>
+  </plurals>
   <string name="common_saved_changes">"Sparade ändringar"</string>
   <string name="common_saving">"Sparar"</string>
   <string name="common_screen_lock">"Skärmlås"</string>
@@ -289,6 +304,11 @@ Anledning:%1$s."</string>
   <string name="common_signing_out">"Loggar ut"</string>
   <string name="common_something_went_wrong">"Något gick fel"</string>
   <string name="common_something_went_wrong_message">"Vi stötte på ett problem. Vänligen försök igen."</string>
+  <string name="common_space">"Utrymme"</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d Utrymme"</item>
+    <item quantity="other">"%1$d Utrymmen"</item>
+  </plurals>
   <string name="common_starting_chat">"Startar chatt …"</string>
   <string name="common_sticker">"Dekal"</string>
   <string name="common_success">"Lyckades"</string>
@@ -319,6 +339,12 @@ Anledning:%1$s."</string>
   <string name="common_verify_identity">"Verifiera identitet"</string>
   <string name="common_verify_user">"Verifiera användare"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Hög kvalitet"</string>
+  <string name="common_video_quality_high_description">"Bästa kvalitet men större filstorlek"</string>
+  <string name="common_video_quality_low">"Låg kvalitet"</string>
+  <string name="common_video_quality_low_description">"Snabbast uppladdningshastighet och minsta filstorlek"</string>
+  <string name="common_video_quality_standard">"Standardkvalitet"</string>
+  <string name="common_video_quality_standard_description">"Balans mellan kvalitet och uppladdningshastighet"</string>
   <string name="common_voice_message">"Röstmeddelande"</string>
   <string name="common_waiting">"Väntar …"</string>
   <string name="common_waiting_for_decryption_key">"Väntar på detta meddelande"</string>
@@ -333,6 +359,10 @@ Anledning:%1$s."</string>
 
 Är du säker på att du vill fortsätta?"</string>
   <string name="dialog_confirm_link_title">"Dubbelkolla den här länken"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Välj standardkvalitet för videor du laddar upp."</string>
+  <string name="dialog_default_video_quality_selector_title">"Videouppladdningskvalitet"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Maximal tillåten filstorlek är: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Filen är för stor för att laddas upp."</string>
   <string name="dialog_room_reported">"Rum anmält"</string>
   <string name="dialog_room_reported_and_left">"Anmälde och lämnade rummet"</string>
   <string name="dialog_title_confirmation">"Bekräftelse"</string>
@@ -341,6 +371,9 @@ Anledning:%1$s."</string>
   <string name="dialog_title_warning">"Varning"</string>
   <string name="dialog_unsaved_changes_description_android">"Dina ändringar har inte sparats. Är du säker på att du vill gå tillbaka?"</string>
   <string name="dialog_unsaved_changes_title">"Spara ändringar?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Den maximala tillåtna filstorleken är: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Välj kvaliteten på videon du vill ladda upp."</string>
+  <string name="dialog_video_quality_selector_title">"Välj videouppladdningskvalitet"</string>
   <string name="error_account_creation_not_possible">"Din hemserver måste uppgraderas för att stödja Matrix Authentication Service och skapande av konto."</string>
   <string name="error_failed_creating_the_permalink">"Misslyckades att skapa permalänken"</string>
   <string name="error_failed_loading_map">"%1$s kunde inte ladda kartan. Vänligen försök igen senare."</string>
@@ -368,6 +401,7 @@ Anledning:%1$s."</string>
   <string name="invite_friends_text">"Hallå, prata med mig på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Raseriskaka för att rapportera bugg"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Skärmdump"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Alternativ"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Ta bort %1$s"</string>
@@ -390,6 +424,7 @@ Anledning:%1$s."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ditt meddelande skickades inte eftersom %1$s inte har verifierat alla enheter"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"En eller flera av dina enheter är overifierade. Du kan skicka meddelandet ändå, eller så kan du avbryta nu och försöka igen senare efter att du har verifierat alla dina enheter."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ditt meddelande skickades inte eftersom du inte har verifierat en eller flera av dina enheter"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Redigera administratörer eller ägare"</string>
   <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>
   <string name="screen_room_event_pill">"Meddelande i %1$s"</string>
@@ -407,6 +442,9 @@ Anledning:%1$s."</string>
   <string name="screen_share_open_google_maps">"Öppna i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Öppna i OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Dela den här platsen"</string>
+  <string name="screen_space_list_description">"Utrymmen som du har skapat eller gått med i."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Utrymmen"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meddelandet skickades inte eftersom verifierad identitet för %1$s återställdes."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meddelandet skickades inte eftersom %1$s inte har verifierat alla enheter."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Meddelandet skickades inte eftersom du inte har verifierat en eller flera av dina enheter."</string>

@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Gå med i rummet"</string>
   <string name="screen_join_room_join_restricted_message">"Du kan behöva bli inbjuden eller vara medlem i ett utrymme för att gå med."</string>
   <string name="screen_join_room_knock_action">"Knacka för att gå med"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Tillåtna tecken %1$d av %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Meddelande (valfritt)"</string>
   <string name="screen_join_room_knock_sent_description">"Du kommer att få en inbjudan att gå med i rummet om din begäran accepteras."</string>
   <string name="screen_join_room_knock_sent_title">"Begäran om att gå med skickad"</string>
