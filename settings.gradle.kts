@@ -9,8 +9,7 @@ import java.net.URI
 
 pluginManagement {
     repositories {
-        mavenLocal()
-        includeBuild("plugins")
+                includeBuild("plugins")
         gradlePluginPortal()
         google()
         mavenCentral()
@@ -19,8 +18,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        mavenLocal()
-        google()
+                google()
         mavenCentral()
         maven {
             url = URI("https://www.jitpack.io")
