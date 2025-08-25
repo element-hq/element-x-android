@@ -287,7 +287,6 @@ dependencies {
     implementation(libs.serialization.json)
 
     implementation(libs.matrix.emojibase.bindings)
-    implementation(libs.unifiedpush)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)
