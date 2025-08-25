@@ -11,6 +11,7 @@ import android.content.Context
 import android.media.MediaCodecInfo
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Build
 import android.util.Size
 import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
@@ -98,14 +99,27 @@ class VideoCompressor @Inject constructor(
             }
             .build()
 
-        val encoderFactory = DefaultEncoderFactory.Builder(context)
-            .setRequestedVideoEncoderSettings(
-                VideoEncoderSettings.Builder()
-                    .setBitrateMode(MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR)
-                    .setBitrate(newBitrate)
-                    .build()
+        // CBR_FD and CBR allow lower file sizes, so we tend to prefer them for lower presets, VBR for higher ones
+        val availableBitRateModes = when (videoCompressionPreset) {
+            VideoCompressionPreset.HIGH -> listOfNotNull(
+                MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_VBR,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR_FD else null,
+                MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR,
+                MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CQ,
             )
-            .build()
+            else -> {
+                listOfNotNull(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR_FD else null,
+                    MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR,
+                    MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_VBR,
+                    MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CQ,
+                )
+            }
+        }
+
+        val encoderFactory = availableBitRateModes.firstNotNullOfOrNull {
+            runCatchingExceptions { encoderFactoryWithBitrateMode(it, newBitrate) }.getOrNull()
+        } ?: encoderFactoryWithBitrateMode(null, newBitrate)
 
         val videoTransformer = Transformer.Builder(context)
             .setVideoMimeType(MimeTypes.VIDEO_H264)
@@ -151,6 +165,21 @@ class VideoCompressor @Inject constructor(
             progressJob.cancel()
         }
     }
+
+    @OptIn(UnstableApi::class)
+    private fun encoderFactoryWithBitrateMode(
+        bitrateMode: Int? = null,
+        newBitrate: Int
+    ): DefaultEncoderFactory = DefaultEncoderFactory.Builder(context)
+        .setRequestedVideoEncoderSettings(
+            VideoEncoderSettings.Builder()
+                .run {
+                    if (bitrateMode != null) setBitrateMode(bitrateMode) else this
+                }
+                .setBitrate(newBitrate)
+                .build()
+        )
+        .build()
 
     private fun getVideoMetadata(uri: Uri): VideoFileMetadata? {
         return runCatchingExceptions {
