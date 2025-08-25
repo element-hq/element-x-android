@@ -40,10 +40,10 @@ class KonsistPreviewTest {
             .functions()
             .withNameEndingWith("A11yPreview")
             .assertTrue(
-                additionalMessage = "Functions with 'A11yPreview' suffix should have '@Previews' annotation and not '@PreviewsDayNight'," +
+                additionalMessage = "Functions with 'A11yPreview' suffix should have '@Preview' annotation and not '@PreviewsDayNight'," +
                     " should contain 'ElementPreview' composable," +
                     " should contain the tested view" +
-                    " and should be internal"
+                    " and should be internal."
             ) {
                 val testedView = it.name.removeSuffix("A11yPreview")
                 it.text.contains("$testedView(") &&
