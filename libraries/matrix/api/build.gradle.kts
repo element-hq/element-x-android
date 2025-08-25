@@ -15,6 +15,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+setupDependencyInjection(generateNodeFactories = false)
+
 android {
     namespace = "io.element.android.libraries.matrix.api"
 
@@ -41,8 +43,6 @@ android {
         )
     }
 }
-
-setupDependencyInjection()
 
 dependencies {
     implementation(projects.libraries.di)

@@ -108,7 +108,7 @@ class RustRoomFactory(
             val sdkRoom = awaitRoomInRoomList(roomId) ?: return@withContext null
 
             if (sdkRoom.membership() == Membership.JOINED) {
-                val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.HideThreadedEvents)
+                val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
                 // Init the live timeline in the SDK from the Room
                 val timeline = sdkRoom.timelineWithConfiguration(
                     TimelineConfiguration(

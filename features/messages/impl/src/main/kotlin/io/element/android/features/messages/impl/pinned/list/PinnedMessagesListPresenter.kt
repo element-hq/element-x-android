@@ -119,7 +119,7 @@ class PinnedMessagesListPresenter(
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
 
-        val displayThreadSummaries by featureFlagService.isFeatureEnabledFlow(FeatureFlags.HideThreadedEvents).collectAsState(false)
+        val displayThreadSummaries by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(false)
 
         var pinnedMessageItems by remember {
             mutableStateOf<AsyncData<ImmutableList<TimelineItem>>>(AsyncData.Uninitialized)

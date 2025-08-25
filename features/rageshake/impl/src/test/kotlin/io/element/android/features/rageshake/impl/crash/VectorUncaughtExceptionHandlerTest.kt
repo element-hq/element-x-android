@@ -9,28 +9,28 @@ package io.element.android.features.rageshake.impl.crash
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class VectorUncaughtExceptionHandlerTest {
     @Test
     fun `activate should change the default handler`() {
-        val sut = VectorUncaughtExceptionHandler(RuntimeEnvironment.getApplication())
+        val sut = VectorUncaughtExceptionHandler(PreferencesCrashDataStore(FakePreferenceDataStoreFactory()))
         sut.activate()
         assertThat(Thread.getDefaultUncaughtExceptionHandler()).isInstanceOf(VectorUncaughtExceptionHandler::class.java)
     }
 
     @Test
     fun `uncaught exception`() = runTest {
-        val crashDataStore = PreferencesCrashDataStore(RuntimeEnvironment.getApplication())
+        val crashDataStore = PreferencesCrashDataStore(FakePreferenceDataStoreFactory())
         assertThat(crashDataStore.appHasCrashed().first()).isFalse()
         assertThat(crashDataStore.crashInfo().first()).isEmpty()
-        val sut = VectorUncaughtExceptionHandler(RuntimeEnvironment.getApplication())
+        val sut = VectorUncaughtExceptionHandler(crashDataStore)
         sut.uncaughtException(Thread(), AN_EXCEPTION)
         assertThat(crashDataStore.appHasCrashed().first()).isTrue()
         val crashInfo = crashDataStore.crashInfo().first()

@@ -137,7 +137,7 @@ class TimelinePresenter(
         }.collectAsState(initial = true)
 
         val displayThreadSummaries by produceState(false) {
-            value = featureFlagService.isFeatureEnabled(FeatureFlags.HideThreadedEvents)
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         }
 
         fun handleEvents(event: TimelineEvents) {

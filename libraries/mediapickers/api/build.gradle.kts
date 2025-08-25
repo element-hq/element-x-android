@@ -1,5 +1,3 @@
-import extension.setupDependencyInjection
-
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -10,8 +8,6 @@ import extension.setupDependencyInjection
 plugins {
     id("io.element.android-compose-library")
 }
-
-setupDependencyInjection()
 
 android {
     namespace = "io.element.android.libraries.mediapickers.api"

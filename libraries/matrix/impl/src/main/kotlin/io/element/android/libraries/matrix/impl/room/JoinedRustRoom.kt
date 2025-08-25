@@ -156,7 +156,7 @@ class JoinedRustRoom(
     override suspend fun createTimeline(
         createTimelineParams: CreateTimelineParams,
     ): Result<Timeline> = withContext(roomDispatcher) {
-        val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.HideThreadedEvents)
+        val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         val focus = when (createTimelineParams) {
             is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents(
                 maxEventsToLoad = 100u,

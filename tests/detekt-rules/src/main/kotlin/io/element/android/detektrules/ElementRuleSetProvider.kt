@@ -18,6 +18,7 @@ class ElementRuleSetProvider : RuleSetProvider {
         id = ruleSetId,
         rules = listOf(
             RunCatchingRule(config),
+            ByPreferencesDataStoreRule(config),
         )
     )
 }

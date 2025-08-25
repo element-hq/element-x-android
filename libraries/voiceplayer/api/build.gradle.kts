@@ -1,5 +1,3 @@
-import extension.setupDependencyInjection
-
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -13,8 +11,6 @@ plugins {
 android {
     namespace = "io.element.android.libraries.voiceplayer.api"
 }
-
-setupDependencyInjection()
 
 dependencies {
     implementation(libs.androidx.annotationjvm)

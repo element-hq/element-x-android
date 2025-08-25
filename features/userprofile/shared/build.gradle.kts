@@ -1,5 +1,3 @@
-import extension.setupDependencyInjection
-
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -20,8 +18,6 @@ android {
         }
     }
 }
-
-setupDependencyInjection()
 
 dependencies {
     implementation(projects.libraries.core)

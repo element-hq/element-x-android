@@ -7,22 +7,16 @@
 
 package io.element.android.features.rageshake.impl.rageshake
 
-import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_rageshake")
 
 private val enabledKey = booleanPreferencesKey("enabled")
 private val sensitivityKey = floatPreferencesKey("sensitivity")
@@ -30,9 +24,9 @@ private val sensitivityKey = floatPreferencesKey("sensitivity")
 @ContributesBinding(AppScope::class)
 @Inject
 class PreferencesRageshakeDataStore(
-    @ApplicationContext context: Context
+    preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : RageshakeDataStore {
-    private val store = context.dataStore
+    private val store = preferenceDataStoreFactory.create("elementx_rageshake")
 
     override fun isEnabled(): Flow<Boolean> {
         return store.data.map { prefs ->

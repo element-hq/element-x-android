@@ -14,9 +14,7 @@ import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.test.FakeLoginIntentResolver
-import io.element.android.libraries.deeplink.DeepLinkCreator
-import io.element.android.libraries.deeplink.DeeplinkData
-import io.element.android.libraries.deeplink.DeeplinkParser
+import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -46,15 +44,11 @@ class IntentResolverTest {
 
     @Test
     fun `test resolve navigation intent root`() {
-        val sut = createIntentResolver()
+        val sut = createIntentResolver(
+            deeplinkParserResult = DeeplinkData.Root(A_SESSION_ID)
+        )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_VIEW
-            data = DeepLinkCreator().room(
-                sessionId = A_SESSION_ID,
-                roomId = null,
-                threadId = null,
-            )
-                .toUri()
         }
         val result = sut.resolve(intent)
         assertThat(result).isEqualTo(
@@ -68,15 +62,15 @@ class IntentResolverTest {
 
     @Test
     fun `test resolve navigation intent room`() {
-        val sut = createIntentResolver()
-        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
-            action = Intent.ACTION_VIEW
-            data = DeepLinkCreator().room(
+        val sut = createIntentResolver(
+            deeplinkParserResult = DeeplinkData.Room(
                 sessionId = A_SESSION_ID,
                 roomId = A_ROOM_ID,
                 threadId = null,
             )
-                .toUri()
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_VIEW
         }
         val result = sut.resolve(intent)
         assertThat(result).isEqualTo(
@@ -92,15 +86,15 @@ class IntentResolverTest {
 
     @Test
     fun `test resolve navigation intent thread`() {
-        val sut = createIntentResolver()
-        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
-            action = Intent.ACTION_VIEW
-            data = DeepLinkCreator().room(
+        val sut = createIntentResolver(
+            deeplinkParserResult = DeeplinkData.Room(
                 sessionId = A_SESSION_ID,
                 roomId = A_ROOM_ID,
                 threadId = A_THREAD_ID,
             )
-                .toUri()
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_VIEW
         }
         val result = sut.resolve(intent)
         assertThat(result).isEqualTo(
@@ -240,12 +234,13 @@ class IntentResolverTest {
     }
 
     private fun createIntentResolver(
+        deeplinkParserResult: DeeplinkData? = null,
         permalinkParserResult: (String) -> PermalinkData = { lambdaError() },
         loginIntentResolverResult: (String) -> LoginParams? = { lambdaError() },
         oidcIntentResolverResult: (Intent) -> OidcAction? = { lambdaError() },
     ): IntentResolver {
         return IntentResolver(
-            deeplinkParser = DeeplinkParser(),
+            deeplinkParser = { deeplinkParserResult },
             loginIntentResolver = FakeLoginIntentResolver(
                 parseResult = loginIntentResolverResult,
             ),

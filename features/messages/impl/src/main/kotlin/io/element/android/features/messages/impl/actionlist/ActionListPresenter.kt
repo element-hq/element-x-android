@@ -39,6 +39,8 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -69,6 +71,7 @@ class DefaultActionListPresenter(
     private val room: BaseRoom,
     private val userSendFailureFactory: VerifiedUserSendFailureFactory,
     private val dateFormatter: DateFormatter,
+    private val featureFlagService: FeatureFlagService,
 ) : ActionListPresenter {
     @AssistedFactory
     @ContributesBinding(RoomScope::class)
@@ -96,6 +99,8 @@ class DefaultActionListPresenter(
             room.roomInfoFlow.map { it.pinnedEventIds }
         }.collectAsState(initial = persistentListOf())
 
+        val isThreadsEnabled = featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(false)
+
         fun handleEvents(event: ActionListEvents) {
             when (event) {
                 ActionListEvents.Clear -> target.value = ActionListState.Target.None
@@ -105,6 +110,7 @@ class DefaultActionListPresenter(
                     isDeveloperModeEnabled = isDeveloperModeEnabled,
                     pinnedEventIds = pinnedEventIds,
                     target = target,
+                    isThreadsEnabled = isThreadsEnabled.value,
                 )
             }
         }
@@ -120,7 +126,8 @@ class DefaultActionListPresenter(
         usersEventPermissions: UserEventPermissions,
         isDeveloperModeEnabled: Boolean,
         pinnedEventIds: ImmutableList<EventId>,
-        target: MutableState<ActionListState.Target>
+        target: MutableState<ActionListState.Target>,
+        isThreadsEnabled: Boolean,
     ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
 
@@ -129,6 +136,7 @@ class DefaultActionListPresenter(
             usersEventPermissions = usersEventPermissions,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isEventPinned = pinnedEventIds.contains(timelineItem.eventId),
+            isThreadsEnabled = isThreadsEnabled,
         )
 
         val verifiedUserSendFailure = userSendFailureFactory.create(timelineItem.localSendState)
@@ -156,14 +164,23 @@ class DefaultActionListPresenter(
         usersEventPermissions: UserEventPermissions,
         isDeveloperModeEnabled: Boolean,
         isEventPinned: Boolean,
+        isThreadsEnabled: Boolean,
     ): List<TimelineItemAction> {
         val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
         return buildSet {
             if (timelineItem.canBeRepliedTo && usersEventPermissions.canSendMessage) {
-                if (timelineMode !is Timeline.Mode.Thread && timelineItem.threadInfo.threadRootId != null) {
+                if (isThreadsEnabled && timelineMode !is Timeline.Mode.Thread && timelineItem.isRemote) {
+                    // If threads are enabled, we can reply in thread if the item is remote
                     add(TimelineItemAction.ReplyInThread)
-                } else {
                     add(TimelineItemAction.Reply)
+                } else {
+                    if (!isThreadsEnabled && timelineItem.threadInfo.threadRootId != null) {
+                        // If threads are not enabled, we can reply in a thread if the item is already in the thread
+                        add(TimelineItemAction.ReplyInThread)
+                    } else {
+                        // Otherwise, we can only reply in the room
+                        add(TimelineItemAction.Reply)
+                    }
                 }
             }
             if (timelineItem.isRemote && timelineItem.content.canBeForwarded()) {

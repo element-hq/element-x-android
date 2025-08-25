@@ -1,5 +1,3 @@
-import extension.setupDependencyInjection
-
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -15,8 +13,6 @@ plugins {
 android {
     namespace = "io.element.android.features.ftue.test"
 }
-
-setupDependencyInjection()
 
 dependencies {
     implementation(projects.features.ftue.api)

@@ -7,29 +7,23 @@
 
 package io.element.android.libraries.permissions.impl
 
-import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.permissions.api.PermissionsStore
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "permissions_store")
 
 @ContributesBinding(AppScope::class)
 @Inject
 class DefaultPermissionsStore(
-    @ApplicationContext private val context: Context,
+    preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : PermissionsStore {
-    private val store = context.dataStore
+    private val store = preferenceDataStoreFactory.create("permissions_store")
 
     override suspend fun setPermissionDenied(permission: String, value: Boolean) {
         store.edit { prefs ->

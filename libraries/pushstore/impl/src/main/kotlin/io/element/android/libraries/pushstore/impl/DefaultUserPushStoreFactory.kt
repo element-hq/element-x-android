@@ -14,6 +14,7 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import java.util.concurrent.ConcurrentHashMap
@@ -23,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap
 @Inject
 class DefaultUserPushStoreFactory(
     @ApplicationContext private val context: Context,
+    private val preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : UserPushStoreFactory {
     // We can have only one class accessing a single data store, so keep a cache of them.
     private val cache = ConcurrentHashMap<SessionId, UserPushStore>()
@@ -30,7 +32,8 @@ class DefaultUserPushStoreFactory(
         return cache.getOrPut(userId) {
             UserPushStoreDataStore(
                 context = context,
-                userId = userId
+                userId = userId,
+                factory = preferenceDataStoreFactory,
             )
         }
     }

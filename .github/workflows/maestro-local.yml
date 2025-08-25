@@ -28,7 +28,7 @@ jobs:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.ref }}
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         name: Use JDK 21
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options

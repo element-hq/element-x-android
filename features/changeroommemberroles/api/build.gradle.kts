@@ -1,5 +1,3 @@
-import extension.setupDependencyInjection
-
 /*
  * Copyright 2025 New Vector Ltd.
  *
@@ -15,8 +13,6 @@ plugins {
 android {
     namespace = "io.element.android.features.changeroommemberroles.api"
 }
-
-setupDependencyInjection()
 
 dependencies {
     implementation(projects.anvilannotations)

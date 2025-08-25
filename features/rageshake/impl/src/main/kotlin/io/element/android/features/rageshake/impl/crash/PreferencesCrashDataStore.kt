@@ -7,23 +7,17 @@
 
 package io.element.android.features.rageshake.impl.crash
 
-import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
-
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_crash")
 
 private val appHasCrashedKey = booleanPreferencesKey("appHasCrashed")
 private val crashDataKey = stringPreferencesKey("crashData")
@@ -31,9 +25,9 @@ private val crashDataKey = stringPreferencesKey("crashData")
 @ContributesBinding(AppScope::class)
 @Inject
 class PreferencesCrashDataStore(
-    @ApplicationContext context: Context
+    preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : CrashDataStore {
-    private val store = context.dataStore
+    private val store = preferenceDataStoreFactory.create("elementx_crash")
 
     override fun setCrashData(crashData: String) {
         // Must block

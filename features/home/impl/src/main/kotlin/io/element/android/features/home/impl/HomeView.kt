@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.haze.hazeEffect
@@ -300,6 +301,25 @@ internal fun RoomListRoomSummary.contentType() = displayType.ordinal
 internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: HomeState) = ElementPreview {
     HomeView(
         homeState = state,
+        onRoomClick = {},
+        onSettingsClick = {},
+        onSetUpRecoveryClick = {},
+        onConfirmRecoveryKeyClick = {},
+        onStartChatClick = {},
+        onRoomSettingsClick = {},
+        onReportRoomClick = {},
+        onMenuActionClick = {},
+        onDeclineInviteAndBlockUser = {},
+        acceptDeclineInviteView = {},
+        leaveRoomView = {}
+    )
+}
+
+@Preview
+@Composable
+internal fun HomeViewA11yPreview() = ElementPreview {
+    HomeView(
+        homeState = aHomeState(),
         onRoomClick = {},
         onSettingsClick = {},
         onSetUpRecoveryClick = {},

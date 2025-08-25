@@ -33,6 +33,7 @@ Zatiaľ môžete zrušiť výber filtrov, aby ste videli ostatné konverzácie"<
   <string name="screen_roomlist_filter_invites">"Pozvánky"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Nemáte žiadne čakajúce pozvánky."</string>
   <string name="screen_roomlist_filter_low_priority">"Nízka priorita"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Zatiaľ nemáte žiadne konverzácie s nízkou prioritou."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Nemáte konverzácie pre tento výber"</string>
   <string name="screen_roomlist_filter_people">"Ľudia"</string>

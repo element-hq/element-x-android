@@ -58,6 +58,7 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -913,7 +914,7 @@ class JoinRoomPresenterTest {
         val client = FakeMatrixClient(
             getNotJoinedRoomResult = { _, _ ->
                 Result.success(
-                    aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.KnockRestricted(emptyList())))
+                    aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.KnockRestricted(persistentListOf())))
                 )
             }
         )
@@ -933,7 +934,7 @@ class JoinRoomPresenterTest {
         val client = FakeMatrixClient(
             getNotJoinedRoomResult = { _, _ ->
                 Result.success(
-                    aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Restricted(emptyList())))
+                    aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Restricted(persistentListOf())))
                 )
             }
         )

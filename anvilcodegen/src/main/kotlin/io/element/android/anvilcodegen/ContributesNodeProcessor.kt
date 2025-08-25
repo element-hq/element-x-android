@@ -27,6 +27,7 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.ksp.addOriginatingKSFile
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import dev.zacsweers.metro.Assisted
@@ -77,6 +78,7 @@ class ContributesNodeProcessor(
         )
             .addType(
                 TypeSpec.interfaceBuilder(moduleClassName)
+                    .addOriginatingKSFile(ksClass.containingFile!!)
                     .addAnnotation(BindingContainer::class)
                     .addAnnotation(AnnotationSpec.builder(ContributesTo::class).addMember("%T::class", scope.toTypeName()).build())
                     .addFunction(
@@ -100,10 +102,7 @@ class ContributesNodeProcessor(
 
         content.writeTo(
             codeGenerator = codeGenerator,
-            dependencies = Dependencies(
-                aggregating = false,
-                ksClass.containingFile!!
-            ),
+            dependencies = Dependencies(aggregating = false),
         )
     }
 
@@ -137,6 +136,7 @@ class ContributesNodeProcessor(
         val content = FileSpec.builder(generatedPackage, assistedFactoryClassName)
             .addType(
                 TypeSpec.interfaceBuilder(assistedFactoryClassName)
+                    .addOriginatingKSFile(ksClass.containingFile!!)
                     .addSuperinterface(ClassName.bestGuess(assistedNodeFactoryFqName.asString()).parameterizedBy(nodeClassName))
                     .addAnnotation(AssistedFactory::class)
                     .addFunction(
@@ -153,10 +153,7 @@ class ContributesNodeProcessor(
 
         content.writeTo(
             codeGenerator = codeGenerator,
-            dependencies = Dependencies(
-                aggregating = false,
-                ksClass.containingFile!!
-            ),
+            dependencies = Dependencies(aggregating = false),
         )
     }
 
