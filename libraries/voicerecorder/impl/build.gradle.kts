@@ -20,7 +20,6 @@ dependencies {
     api(projects.libraries.voicerecorder.api)
     api(libs.opusencoder)
 
-    implementation(libs.dagger)
     implementation(projects.appconfig)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.core)

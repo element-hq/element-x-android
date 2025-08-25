@@ -20,7 +20,6 @@ setupDependencyInjection()
 dependencies {
     api(projects.libraries.deeplink.api)
     implementation(projects.libraries.di)
-    implementation(libs.dagger)
     implementation(libs.androidx.corektx)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)

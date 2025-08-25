@@ -37,8 +37,6 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(libs.accompanist.permission)
     implementation(projects.libraries.uiStrings)
-    implementation(libs.dagger)
-
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

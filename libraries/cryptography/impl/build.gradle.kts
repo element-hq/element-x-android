@@ -18,7 +18,6 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(projects.libraries.di)
     api(projects.libraries.cryptography.api)
 

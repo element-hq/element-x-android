@@ -20,6 +20,5 @@ dependencies {
     api(projects.libraries.audio.api)
 
     implementation(libs.androidx.corektx)
-    implementation(libs.dagger)
     implementation(projects.libraries.di)
 }

@@ -36,7 +36,7 @@ plugins {
     alias(libs.plugins.licensee)
     alias(libs.plugins.kotlin.serialization)
     // To be able to update the firebase.xml files, uncomment and build the project
-    // id("com.google.gms.google-services")
+    // alias(libs.plugins.gms.google.services)
 }
 
 setupKover()

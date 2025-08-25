@@ -20,7 +20,6 @@ setupDependencyInjection()
 
 dependencies {
     api(projects.libraries.featureflag.api)
-    implementation(libs.dagger)
     implementation(libs.androidx.datastore.preferences)
     implementation(projects.appconfig)
     implementation(projects.libraries.di)

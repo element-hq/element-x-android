@@ -37,7 +37,6 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(libs.sentry)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)

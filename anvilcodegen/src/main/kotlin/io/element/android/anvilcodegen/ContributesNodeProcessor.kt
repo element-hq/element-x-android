@@ -56,9 +56,9 @@ class ContributesNodeProcessor(
         if (validSymbols.isEmpty()) return invalidSymbols
 
         for (ksClass in validSymbols) {
-//            if (config.enableLogging) {
+            if (config.enableLogging) {
                 logger.warn("Processing ${ksClass.qualifiedName?.asString()}")
-//            }
+            }
             generateModule(ksClass)
             generateFactory(ksClass)
         }

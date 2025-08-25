@@ -43,7 +43,6 @@ android {
 
 dependencies {
     implementation(projects.libraries.di)
-    implementation(libs.dagger)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.services.analytics.api)
