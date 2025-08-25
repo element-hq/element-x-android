@@ -24,7 +24,6 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.di)

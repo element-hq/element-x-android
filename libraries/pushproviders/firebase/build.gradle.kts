@@ -48,7 +48,6 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(libs.androidx.corektx)
     implementation(projects.features.enterprise.api)
     implementation(projects.libraries.architecture)

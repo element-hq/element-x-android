@@ -34,7 +34,6 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(libs.posthog) {
         exclude("com.android.support", "support-annotations")
     }

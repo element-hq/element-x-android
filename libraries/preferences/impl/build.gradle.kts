@@ -19,7 +19,6 @@ setupDependencyInjection()
 
 dependencies {
     api(projects.libraries.preferences.api)
-    implementation(libs.dagger)
     implementation(libs.androidx.datastore.preferences)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.di)

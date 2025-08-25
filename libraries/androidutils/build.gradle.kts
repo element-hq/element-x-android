@@ -25,7 +25,6 @@ dependencies {
 
     implementation(projects.libraries.core)
     implementation(projects.services.toolbox.api)
-    implementation(libs.dagger)
     implementation(libs.timber)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.activity.activity)

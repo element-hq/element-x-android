@@ -35,7 +35,6 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
     api(projects.libraries.matrix.api)
-    implementation(libs.dagger)
     implementation(projects.libraries.core)
     implementation("net.java.dev.jna:jna:5.17.0@aar")
     implementation(libs.androidx.datastore.preferences)

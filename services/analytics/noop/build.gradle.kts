@@ -17,7 +17,6 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
     api(projects.services.analytics.api)

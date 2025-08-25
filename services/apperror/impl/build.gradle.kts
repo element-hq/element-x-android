@@ -18,7 +18,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.dagger)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.designsystem)

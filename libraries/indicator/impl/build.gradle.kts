@@ -18,7 +18,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.dagger)
     implementation(projects.libraries.di)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
