@@ -31,6 +31,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
  *
  * Ref: https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=133-5427&t=5SHVppfYzjvkEywR-0
  * @param modifier Classical modifier.
+ * @param renderBackground whether to render the background image or not.
  * @param contentAlignment horizontal alignment of the contents.
  * @param footer optional footer.
  * @param content main content.
