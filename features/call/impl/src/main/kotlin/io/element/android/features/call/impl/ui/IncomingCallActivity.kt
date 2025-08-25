@@ -64,7 +64,7 @@ class IncomingCallActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        applicationContext.bindings<CallBindings>().inject(this)
+        bindings<CallBindings>().inject(this)
 
         // Set flags so it can be displayed in the lock screen
         @Suppress("DEPRECATION")

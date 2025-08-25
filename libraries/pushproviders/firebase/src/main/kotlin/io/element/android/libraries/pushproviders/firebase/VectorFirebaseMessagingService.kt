@@ -29,7 +29,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onCreate() {
         super.onCreate()
-        applicationContext.bindings<VectorFirebaseMessagingServiceBindings>().inject(this)
+        bindings<VectorFirebaseMessagingServiceBindings>().inject(this)
     }
 
     override fun onNewToken(token: String) {

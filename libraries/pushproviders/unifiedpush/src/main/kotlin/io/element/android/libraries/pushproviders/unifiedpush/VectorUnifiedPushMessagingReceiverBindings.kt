@@ -8,9 +8,14 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
+import org.unifiedpush.android.connector.MessagingReceiver
 
-@GraphExtension(AppScope::class)
+@ContributesTo(AppScope::class)
 interface VectorUnifiedPushMessagingReceiverBindings {
     fun inject(receiver: VectorUnifiedPushMessagingReceiver)
+
+    @Binds
+    fun bindsMessagingReceiver(vectorUnifiedPushMessagingReceiver: VectorUnifiedPushMessagingReceiver): MessagingReceiver
 }

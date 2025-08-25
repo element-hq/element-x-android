@@ -79,7 +79,7 @@ class ElementCallActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        applicationContext.bindings<CallBindings>().inject(this)
+        bindings<CallBindings>().inject(this)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
