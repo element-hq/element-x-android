@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -16,7 +16,7 @@ android {
     namespace = "io.element.android.libraries.matrix.impl"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     releaseImplementation(libs.matrix.sdk)

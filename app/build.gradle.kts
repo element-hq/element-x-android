@@ -13,7 +13,6 @@ import com.android.build.gradle.tasks.GenerateBuildConfig
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import config.BuildTimeConfig
 import extension.AssetCopyTask
-import extension.ComponentMergingStrategy
 import extension.GitBranchNameValueSource
 import extension.GitRevisionValueSource
 import extension.allEnterpriseImpl
@@ -23,7 +22,7 @@ import extension.allServicesImpl
 import extension.buildConfigFieldStr
 import extension.koverDependencies
 import extension.locales
-import extension.setupAnvil
+import extension.setupDependencyInjection
 import extension.setupKover
 import java.util.Locale
 
@@ -248,11 +247,7 @@ knit {
     }
 }
 
-setupAnvil(
-    generateDaggerCode = true,
-    generateDaggerFactoriesUsingAnvil = false,
-    componentMergingStrategy = ComponentMergingStrategy.KSP,
-)
+setupDependencyInjection()
 
 dependencies {
     allLibrariesImpl()

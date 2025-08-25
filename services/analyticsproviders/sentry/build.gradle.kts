@@ -1,7 +1,7 @@
 import config.BuildTimeConfig
 import extension.buildConfigFieldStr
 import extension.readLocalProperty
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -34,7 +34,7 @@ android {
     }
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     implementation(libs.dagger)
