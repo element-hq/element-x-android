@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun OnBoardingPage(
     modifier: Modifier = Modifier,
+    renderBackground: Boolean = true,
     contentAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     footer: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
@@ -47,13 +48,15 @@ fun OnBoardingPage(
             .fillMaxSize()
     ) {
         // BG
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            painter = painterResource(id = R.drawable.onboarding_bg),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-        )
+        if (renderBackground) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                painter = painterResource(id = R.drawable.onboarding_bg),
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()

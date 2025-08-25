@@ -36,6 +36,7 @@ class OnBoardingPresenter @AssistedInject constructor(
     private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val loginHelper: LoginHelper,
+    private val customLogoResIdProvider: CustomLogoResIdProvider,
 ) : Presenter<OnBoardingState> {
     @AssistedFactory
     interface Factory {
@@ -81,6 +82,9 @@ class OnBoardingPresenter @AssistedInject constructor(
         }
         val canReportBug by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
         var showReportBug by rememberSaveable { mutableStateOf(false) }
+        val customLogoResId = remember {
+            customLogoResIdProvider.get()
+        }
 
         val loginMode by loginHelper.collectLoginMode()
 
@@ -112,6 +116,7 @@ class OnBoardingPresenter @AssistedInject constructor(
             canReportBug = canReportBug && showReportBug,
             loginMode = loginMode,
             version = buildMeta.versionName,
+            customLogoResId = customLogoResId,
             eventSink = ::handleEvent,
         )
     }
