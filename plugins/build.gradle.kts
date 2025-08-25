@@ -10,8 +10,7 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
-    mavenCentral()
+        mavenCentral()
     google()
 }
 
