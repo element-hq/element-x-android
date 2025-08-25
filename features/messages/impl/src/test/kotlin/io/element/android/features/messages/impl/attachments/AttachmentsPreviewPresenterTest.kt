@@ -58,6 +58,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CompletableDeferred
@@ -77,7 +78,9 @@ class AttachmentsPreviewPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    private val mockMediaUrl: Uri = mockk("localMediaUri")
+    private val mockMediaUrl: Uri = mockk("localMediaUri") {
+        every { path } returns "/path/to/media"
+    }
 
     @Test
     fun `present - initial state`() = runTest {
