@@ -10,8 +10,8 @@ package io.element.android.libraries.pushproviders.unifiedpush
 import android.content.Context
 import android.content.Intent
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
@@ -39,7 +39,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var coroutineScope: CoroutineScope
 
     override fun onReceive(context: Context, intent: Intent) {
-        ((context.applicationContext as DaggerComponentOwner).daggerComponent as VectorUnifiedPushMessagingReceiverBindings).inject(this)
+        context.bindings<VectorUnifiedPushMessagingReceiverBindings>().inject(this)
         super.onReceive(context, intent)
     }
 
