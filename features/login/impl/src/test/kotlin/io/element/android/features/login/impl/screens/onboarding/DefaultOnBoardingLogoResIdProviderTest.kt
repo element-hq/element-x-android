@@ -16,7 +16,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class DefaultOnBoardingLogoResIdProviderTest {
     @Test
-    fun `when onboarding_logo resource exists, return its resId`() {
+    fun `when onboarding_logo resource does not exist, get() returns null`() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val sut = DefaultOnBoardingLogoResIdProvider(context)
         val result = sut.get()
