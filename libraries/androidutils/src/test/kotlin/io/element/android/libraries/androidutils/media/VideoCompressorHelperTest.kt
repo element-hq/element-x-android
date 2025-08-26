@@ -64,4 +64,16 @@ class VideoCompressorHelperTest {
         outputSize = helper.getOutputSize(inputSize)
         assertThat(outputSize).isEqualTo(Size(480, 640))
     }
+
+    @Test
+    fun `test calculateOptimalBitrate`() {
+        val helper = VideoCompressorHelper(maxSize = 720)
+        val inputSize = Size(1920, 1080)
+        var bitrate = helper.calculateOptimalBitrate(inputSize, frameRate = 30)
+        // Output size will be 720x405, so bitrate = 720*405*0.1*30 = 874800
+        assertThat(bitrate).isEqualTo(874800L)
+        // Half frame rate, half bitrate
+        bitrate = helper.calculateOptimalBitrate(inputSize, frameRate = 15)
+        assertThat(bitrate).isEqualTo(437400L)
+    }
 }
