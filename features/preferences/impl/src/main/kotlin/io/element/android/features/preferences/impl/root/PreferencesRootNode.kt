@@ -33,6 +33,7 @@ class PreferencesRootNode @AssistedInject constructor(
     private val directLogoutView: DirectLogoutView,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
+        fun onAddAccount()
         fun onOpenBugReport()
         fun onSecureBackupClick()
         fun onOpenAnalytics()
@@ -45,6 +46,10 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenBlockedUsers()
         fun onSignOutClick()
         fun onOpenAccountDeactivation()
+    }
+
+    private fun onAddAccount() {
+        plugins<Callback>().forEach { it.onAddAccount() }
     }
 
     private fun onOpenBugReport() {
@@ -118,6 +123,7 @@ class PreferencesRootNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onBackClick = this::navigateUp,
+            onAddAccountClick = this::onAddAccount,
             onOpenRageShake = this::onOpenBugReport,
             onOpenAnalytics = this::onOpenAnalytics,
             onOpenAbout = this::onOpenAbout,

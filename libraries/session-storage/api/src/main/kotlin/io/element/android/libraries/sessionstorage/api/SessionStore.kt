@@ -20,9 +20,11 @@ interface SessionStore {
      * No op if userId is not found in DB.
      */
     suspend fun updateData(sessionData: SessionData)
+    suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?)
     suspend fun getSession(sessionId: String): SessionData?
     suspend fun getAllSessions(): List<SessionData>
     suspend fun getLatestSession(): SessionData?
+    suspend fun setLatestSession(sessionId: String)
     suspend fun removeSession(sessionId: String)
 }
 

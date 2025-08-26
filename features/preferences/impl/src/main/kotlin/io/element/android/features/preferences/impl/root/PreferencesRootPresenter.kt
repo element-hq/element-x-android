@@ -23,13 +23,21 @@ import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,6 +52,8 @@ class PreferencesRootPresenter @Inject constructor(
     private val directLogoutPresenter: Presenter<DirectLogoutState>,
     private val showDeveloperSettingsProvider: ShowDeveloperSettingsProvider,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
+    private val featureFlagService: FeatureFlagService,
+    private val sessionStore: SessionStore,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
@@ -53,6 +63,25 @@ class PreferencesRootPresenter @Inject constructor(
             // Force a refresh of the profile
             matrixClient.getUserProfile()
         }
+
+        val isMultiAccountEnabled by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MultiAccount)
+        }.collectAsState(initial = false)
+
+        val otherSessions by remember {
+            sessionStore.sessionsFlow().map { list ->
+                list
+                    .filter { it.userId != matrixClient.sessionId.value }
+                    .map {
+                        MatrixUser(
+                            userId = UserId(it.userId),
+                            displayName = it.userDisplayName,
+                            avatarUrl = it.userAvatarUrl,
+                        )
+                    }
+                    .toPersistentList()
+            }
+        }.collectAsState(initial = persistentListOf())
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val hasAnalyticsProviders = remember { analyticsService.getAvailableAnalyticsProviders().isNotEmpty() }
@@ -95,6 +124,9 @@ class PreferencesRootPresenter @Inject constructor(
                 is PreferencesRootEvents.OnVersionInfoClick -> {
                     showDeveloperSettingsProvider.unlockDeveloperSettings(coroutineScope)
                 }
+                is PreferencesRootEvents.SwitchToSession -> coroutineScope.launch {
+                    sessionStore.setLatestSession(event.sessionId.value)
+                }
             }
         }
 
@@ -102,6 +134,8 @@ class PreferencesRootPresenter @Inject constructor(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
             deviceId = matrixClient.deviceId,
+            isMultiAccountEnabled = isMultiAccountEnabled,
+            otherSessions = otherSessions,
             showSecureBackup = !canVerifyUserSession,
             showSecureBackupBadge = showSecureBackupIndicator,
             accountManagementUrl = accountManagementUrl.value,

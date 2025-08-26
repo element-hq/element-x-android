@@ -56,6 +56,7 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
 ), DaggerComponentOwner {
     interface Callback : Plugin {
         fun onOpenBugReport()
+        fun onAddAccount()
     }
 
     @Parcelize
@@ -81,6 +82,10 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
         val callback = object : LoggedInFlowNode.Callback {
             override fun onOpenBugReport() {
                 plugins<Callback>().forEach { it.onOpenBugReport() }
+            }
+
+            override fun onAddAccount() {
+                plugins<Callback>().forEach { it.onAddAccount() }
             }
         }
         return createNode<LoggedInFlowNode>(buildContext, listOf(callback))

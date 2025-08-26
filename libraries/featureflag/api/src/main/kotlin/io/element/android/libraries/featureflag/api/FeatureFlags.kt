@@ -99,5 +99,12 @@ enum class FeatureFlags(
         description = "Renders thread messages as a dedicated timeline. Restarting the app is required for this setting to fully take effect.",
         defaultValue = { false },
         isFinished = false,
-    )
+    ),
+    MultiAccount(
+        key = "feature.multi_account",
+        title = "Multi account",
+        description = "Allow the application to connect to multiple accounts at the same time. Under active development!",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

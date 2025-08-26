@@ -116,6 +116,10 @@ class PreferencesFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Root -> {
                 val callback = object : PreferencesRootNode.Callback {
+                    override fun onAddAccount() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onAddAccount() }
+                    }
+
                     override fun onOpenBugReport() {
                         plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenBugReport() }
                     }
