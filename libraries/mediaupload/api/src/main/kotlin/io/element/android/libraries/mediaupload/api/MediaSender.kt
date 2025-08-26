@@ -62,7 +62,7 @@ class MediaSender @AssistedInject constructor(
         inReplyToEventId: EventId?,
     ): Result<Unit> {
         return getTimeline().flatMap {
-            Timber.d("Started sending media using timeline: ${it.mode}")
+            Timber.d("Started sending media ${mediaUploadInfo.file.path.hash()} using timeline: ${it.mode}")
             it.sendMedia(
                 uploadInfo = mediaUploadInfo,
                 caption = caption,
@@ -70,7 +70,7 @@ class MediaSender @AssistedInject constructor(
                 inReplyToEventId = inReplyToEventId,
             )
         }
-            .handleSendResult()
+            .handleSendResult(mediaUploadInfo.file.path)
     }
 
     suspend fun sendMedia(
@@ -96,7 +96,7 @@ class MediaSender @AssistedInject constructor(
                     inReplyToEventId = inReplyToEventId,
                 )
             }
-            .handleSendResult()
+            .handleSendResult(uri.path.orEmpty())
     }
 
     suspend fun sendVoiceMessage(
@@ -126,19 +126,19 @@ class MediaSender @AssistedInject constructor(
                     inReplyToEventId = inReplyToEventId,
                 )
             }
-            .handleSendResult()
+            .handleSendResult(uri.path.orEmpty())
     }
 
-    private fun Result<Unit>.handleSendResult() = this
+    private fun Result<Unit>.handleSendResult(path: String) = this
         .onFailure { error ->
             val job = ongoingUploadJobs.remove(Job)
-            Timber.e(error, "Sending media failed. Removing ongoing upload job. Total: ${ongoingUploadJobs.size}")
+            Timber.e(error, "Sending media ${path.hash()} failed. Removing ongoing upload job. Total: ${ongoingUploadJobs.size}")
             if (error !is CancellationException) {
                 job?.cancel()
             }
         }
         .onSuccess {
-            Timber.d("Sent media successfully. Removing ongoing upload job. Total: ${ongoingUploadJobs.size}")
+            Timber.d("Sent media ${path.hash()} successfully. Removing ongoing upload job. Total: ${ongoingUploadJobs.size}")
             ongoingUploadJobs.remove(Job)
         }
 
