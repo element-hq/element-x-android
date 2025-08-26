@@ -123,8 +123,8 @@ class ThumbnailFactory @Inject constructor(
         val thumbnailResult = ThumbnailResult(
             file = thumbnailFile,
             info = ThumbnailInfo(
-                height = bitmapThumbnail.height.toLong(),
                 width = bitmapThumbnail.width.toLong(),
+                height = bitmapThumbnail.height.toLong(),
                 mimetype = mimeTypeToThumbnailMimeType(mimeType),
                 size = thumbnailFile.length()
             ),

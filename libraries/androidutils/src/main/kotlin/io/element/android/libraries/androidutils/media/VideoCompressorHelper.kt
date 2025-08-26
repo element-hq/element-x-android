@@ -27,7 +27,11 @@ class VideoCompressorHelper(
     fun getOutputSize(inputSize: Size): Size {
         val resultMajor = min(inputSize.major(), maxSize)
         val aspectRatio = inputSize.major().toFloat() / inputSize.minor().toFloat()
-        return Size(resultMajor, (resultMajor / aspectRatio).roundToInt())
+        return if (inputSize.width >= inputSize.height) {
+            Size(resultMajor, (resultMajor / aspectRatio).roundToInt())
+        } else {
+            Size((resultMajor / aspectRatio).roundToInt(), resultMajor)
+        }
     }
 
     /**
