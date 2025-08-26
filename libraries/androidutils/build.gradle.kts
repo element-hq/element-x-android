@@ -38,6 +38,7 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.robolectric)
+    testImplementation(libs.androidx.test.ext.junit)
     testImplementation(libs.coroutines.core)
     testImplementation(libs.coroutines.test)
     testImplementation(projects.services.toolbox.test)
