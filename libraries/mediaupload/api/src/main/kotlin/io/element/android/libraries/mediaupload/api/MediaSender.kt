@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import timber.log.Timber
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 class MediaSender @AssistedInject constructor(
@@ -45,7 +46,7 @@ class MediaSender @AssistedInject constructor(
         mimeType: String,
         mediaOptimizationConfig: MediaOptimizationConfig,
     ): Result<MediaUploadInfo> {
-        Timber.d("Pre-processing media | uri: ${uri.path.orEmpty().hash()} | mimeType: $mimeType")
+        Timber.d("Pre-processing media | uri: ${mediaId(uri)} | mimeType: $mimeType")
         return preProcessor
             .process(
                 uri = uri,
@@ -61,8 +62,9 @@ class MediaSender @AssistedInject constructor(
         formattedCaption: String?,
         inReplyToEventId: EventId?,
     ): Result<Unit> {
+        val mediaLogId = mediaId(mediaUploadInfo.file)
         return getTimeline().flatMap {
-            Timber.d("Started sending media ${mediaUploadInfo.file.path.hash()} using timeline: ${it.mode}")
+            Timber.d("Started sending media $mediaLogId using timeline: ${it.mode}")
             it.sendMedia(
                 uploadInfo = mediaUploadInfo,
                 caption = caption,
@@ -70,7 +72,7 @@ class MediaSender @AssistedInject constructor(
                 inReplyToEventId = inReplyToEventId,
             )
         }
-            .handleSendResult(mediaUploadInfo.file.path)
+            .handleSendResult(mediaLogId)
     }
 
     suspend fun sendMedia(
@@ -96,7 +98,7 @@ class MediaSender @AssistedInject constructor(
                     inReplyToEventId = inReplyToEventId,
                 )
             }
-            .handleSendResult(uri.path.orEmpty())
+            .handleSendResult(mediaId(uri))
     }
 
     suspend fun sendVoiceMessage(
@@ -126,19 +128,19 @@ class MediaSender @AssistedInject constructor(
                     inReplyToEventId = inReplyToEventId,
                 )
             }
-            .handleSendResult(uri.path.orEmpty())
+            .handleSendResult(mediaId(uri))
     }
 
-    private fun Result<Unit>.handleSendResult(path: String) = this
+    private fun Result<Unit>.handleSendResult(mediaId: String) = this
         .onFailure { error ->
             val job = ongoingUploadJobs.remove(Job)
-            Timber.e(error, "Sending media ${path.hash()} failed. Removing ongoing upload job. Total: ${ongoingUploadJobs.size}")
+            Timber.e(error, "Sending media $mediaId failed. Removing ongoing upload job. Total: ${ongoingUploadJobs.size}")
             if (error !is CancellationException) {
                 job?.cancel()
             }
         }
         .onSuccess {
-            Timber.d("Sent media ${path.hash()} successfully. Removing ongoing upload job. Total: ${ongoingUploadJobs.size}")
+            Timber.d("Sent media $mediaId successfully. Removing ongoing upload job. Total: ${ongoingUploadJobs.size}")
             ongoingUploadJobs.remove(Job)
         }
 
@@ -221,3 +223,6 @@ class MediaSender @AssistedInject constructor(
      */
     fun cleanUp() = preProcessor.cleanUp()
 }
+
+private fun mediaId(uri: Uri?): String = uri?.path.orEmpty().hash()
+private fun mediaId(file: File): String = file.path.orEmpty().hash()
