@@ -5,8 +5,8 @@
   ~ Please see LICENSE files in the repository root for full details.
   -->
 <!--
- Note: one or several custom_logo drawable can be added at build time. Ensure that these
- resource are not stripped out by the resource shrinker.
+ Note: one or several onboarding_logo drawables can be added at build time. Ensure that these
+ resources are not stripped out by the resource shrinker.
  -->
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@drawable/custom_logo" />
+    tools:keep="@drawable/onboarding_logo" />

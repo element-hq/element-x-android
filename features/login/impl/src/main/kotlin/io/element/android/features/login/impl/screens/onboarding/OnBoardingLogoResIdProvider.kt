@@ -14,18 +14,18 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
 
-fun interface CustomLogoResIdProvider {
+fun interface OnBoardingLogoResIdProvider {
     fun get(): Int?
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultCustomLogoResIdProvider @Inject constructor(
+class DefaultOnBoardingLogoResIdProvider @Inject constructor(
     @ApplicationContext private val context: Context,
-) : CustomLogoResIdProvider {
+) : OnBoardingLogoResIdProvider {
     @SuppressLint("DiscouragedApi")
     override fun get(): Int? {
         val resId = context.resources
-            .getIdentifier("custom_logo", "drawable", context.packageName)
+            .getIdentifier("onboarding_logo", "drawable", context.packageName)
             .takeIf { it != 0 }
         return resId
     }
