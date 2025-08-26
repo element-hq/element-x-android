@@ -85,14 +85,14 @@ class OnBoardingPresenterTest {
     }
 
     @Test
-    fun `present - custom logo`() = runTest {
+    fun `present - on boarding logo`() = runTest {
         val presenter = createPresenter(
-            customLogoResIdProvider = CustomLogoResIdProvider { 42 },
+            onBoardingLogoResIdProvider = OnBoardingLogoResIdProvider { 42 },
         )
         presenter.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.customLogoResId).isEqualTo(42)
+            assertThat(initialState.onBoardingLogoResId).isEqualTo(42)
         }
     }
 
@@ -236,7 +236,7 @@ private fun createPresenter(
     wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
     rageshakeFeatureAvailability: () -> Flow<Boolean> = { flowOf(true) },
     loginHelper: LoginHelper = createLoginHelper(),
-    customLogoResIdProvider: CustomLogoResIdProvider = CustomLogoResIdProvider { null },
+    onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider = OnBoardingLogoResIdProvider { null },
 ) = OnBoardingPresenter(
     params = params,
     buildMeta = buildMeta,
@@ -247,7 +247,7 @@ private fun createPresenter(
     ),
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     loginHelper = loginHelper,
-    customLogoResIdProvider = customLogoResIdProvider,
+    onBoardingLogoResIdProvider = onBoardingLogoResIdProvider,
 )
 
 fun createLoginHelper(

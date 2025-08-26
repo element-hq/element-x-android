@@ -70,11 +70,11 @@ fun OnBoardingView(
 ) {
     OnBoardingPage(
         modifier = modifier,
-        renderBackground = state.customLogoResId == null,
+        renderBackground = state.onBoardingLogoResId == null,
         content = {
-            if (state.customLogoResId != null) {
-                OnBoardingSimpleLogo(
-                    customLogoResId = state.customLogoResId,
+            if (state.onBoardingLogoResId != null) {
+                OnBoardingLogo(
+                    onBoardingLogoResId = state.onBoardingLogoResId,
                 )
             } else {
                 OnBoardingContent(state = state)
@@ -150,8 +150,8 @@ private fun OnBoardingContent(state: OnBoardingState) {
 }
 
 @Composable
-private fun OnBoardingSimpleLogo(
-    customLogoResId: Int,
+private fun OnBoardingLogo(
+    onBoardingLogoResId: Int,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -161,7 +161,7 @@ private fun OnBoardingSimpleLogo(
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            painter = painterResource(id = customLogoResId),
+            painter = painterResource(id = onBoardingLogoResId),
             contentDescription = null
         )
     }

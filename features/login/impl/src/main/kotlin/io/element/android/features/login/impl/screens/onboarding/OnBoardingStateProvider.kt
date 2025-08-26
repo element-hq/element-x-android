@@ -47,6 +47,6 @@ fun anOnBoardingState(
     canReportBug = canReportBug,
     version = version,
     loginMode = loginMode,
-    customLogoResId = customLogoResId,
+    onBoardingLogoResId = customLogoResId,
     eventSink = eventSink,
 )

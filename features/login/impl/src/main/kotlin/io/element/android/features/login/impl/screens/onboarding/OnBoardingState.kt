@@ -20,7 +20,7 @@ data class OnBoardingState(
     val canReportBug: Boolean,
     val version: String,
     @DrawableRes
-    val customLogoResId: Int?,
+    val onBoardingLogoResId: Int?,
     val loginMode: AsyncData<LoginMode>,
     val eventSink: (OnBoardingEvents) -> Unit,
 ) {
