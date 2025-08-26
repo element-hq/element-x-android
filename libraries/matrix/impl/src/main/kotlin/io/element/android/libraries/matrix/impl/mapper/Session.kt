@@ -34,6 +34,10 @@ internal fun Session.toSessionData(
     passphrase = passphrase,
     sessionPath = sessionPaths.fileDirectory.absolutePath,
     cachePath = sessionPaths.cacheDirectory.absolutePath,
+    lastUsageIndex = 0,
+    lastUsageDate = Date(),
+    userDisplayName = null,
+    userAvatarUrl = null,
 )
 
 internal fun ExternalSession.toSessionData(
@@ -55,4 +59,8 @@ internal fun ExternalSession.toSessionData(
     passphrase = passphrase,
     sessionPath = sessionPaths.fileDirectory.absolutePath,
     cachePath = sessionPaths.cacheDirectory.absolutePath,
+    lastUsageIndex = 0,
+    lastUsageDate = Date(),
+    userDisplayName = null,
+    userAvatarUrl = null,
 )

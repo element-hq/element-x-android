@@ -29,6 +29,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.sessionstorage.api.SessionStore
 
 @Inject
 class HomePresenter(
@@ -41,10 +42,11 @@ class HomePresenter(
     private val logoutPresenter: Presenter<DirectLogoutState>,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val featureFlagService: FeatureFlagService,
+    private val sessionStore: SessionStore,
 ) : Presenter<HomeState> {
     @Composable
     override fun present(): HomeState {
-        val matrixUser = client.userProfile.collectAsState()
+        val matrixUser by client.userProfile.collectAsState()
         val isOnline by syncService.isOnline.collectAsState()
         val canReportBug by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
         val roomListState = roomListPresenter.present()
@@ -62,6 +64,15 @@ class HomePresenter(
             // Force a refresh of the profile
             client.getUserProfile()
         }
+        LaunchedEffect(matrixUser) {
+            // Ensure that the profile is always up to date in our
+            // session storage when it changes
+            sessionStore.updateUserProfile(
+                sessionId = matrixUser.userId.value,
+                displayName = matrixUser.displayName,
+                avatarUrl = matrixUser.avatarUrl,
+            )
+        }
         // Avatar indicator
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
         val directLogoutState = logoutPresenter.present()
@@ -76,7 +87,7 @@ class HomePresenter(
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         return HomeState(
-            matrixUser = matrixUser.value,
+            matrixUser = matrixUser,
             showAvatarIndicator = showAvatarIndicator,
             hasNetworkConnection = isOnline,
             currentHomeNavigationBarItem = currentHomeNavigationBarItem,

@@ -18,11 +18,13 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
+import java.util.Date
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -30,11 +32,12 @@ import timber.log.Timber
 class DatabaseSessionStore(
     private val database: SessionDatabase,
     private val dispatchers: CoroutineDispatchers,
+    private val systemClock: SystemClock,
 ) : SessionStore {
     private val sessionDataMutex = Mutex()
 
     override fun isLoggedIn(): Flow<LoggedInState> {
-        return database.sessionDataQueries.selectFirst()
+        return database.sessionDataQueries.selectLatest()
             .asFlow()
             .mapToOneOrNull(dispatchers.io)
             .map {
@@ -51,7 +54,15 @@ class DatabaseSessionStore(
 
     override suspend fun storeData(sessionData: SessionData) {
         sessionDataMutex.withLock {
-            database.sessionDataQueries.insertSessionData(sessionData.toDbModel())
+            val lastUsageIndex = getLastUsageIndex()
+            database.sessionDataQueries.insertSessionData(
+                sessionData
+                    .copy(
+                        lastUsageIndex = lastUsageIndex + 1,
+                        lastUsageDate = Date(systemClock.epochMillis()),
+                    )
+                    .toDbModel()
+            )
         }
     }
 
@@ -65,18 +76,66 @@ class DatabaseSessionStore(
                 Timber.e("User ${sessionData.userId} not found in session database")
                 return
             }
-            // Copy new data from SDK, but keep login timestamp
+            // Copy new data from SDK, but keep application data
             database.sessionDataQueries.updateSession(
                 sessionData.copy(
                     loginTimestamp = result.loginTimestamp,
+                    lastUsageIndex = result.lastUsageIndex,
+                    lastUsageDate = result.lastUsageDate,
+                    userDisplayName = result.userDisplayName,
+                    userAvatarUrl = result.userAvatarUrl,
                 ).toDbModel()
             )
         }
     }
 
+    override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?) {
+        sessionDataMutex.withLock {
+            val result = database.sessionDataQueries.selectByUserId(sessionId)
+                .executeAsOneOrNull()
+                ?.toApiModel()
+            if (result == null) {
+                Timber.e("User $sessionId not found in session database")
+                return
+            }
+            database.sessionDataQueries.updateSession(
+                result.copy(
+                    userDisplayName = displayName,
+                    userAvatarUrl = avatarUrl,
+                ).toDbModel()
+            )
+        }
+    }
+
+    override suspend fun setLatestSession(sessionId: String) {
+        val lastUsageIndex = getLatestSession()?.lastUsageIndex ?: 0
+        val result = database.sessionDataQueries.selectByUserId(sessionId)
+            .executeAsOneOrNull()
+            ?.toApiModel()
+        if (result == null) {
+            Timber.e("User $sessionId not found in session database")
+            return
+        }
+        sessionDataMutex.withLock {
+            // Update lastUsageDate and lastSessionIndex of the session
+            database.sessionDataQueries.updateSession(
+                result.copy(
+                    lastUsageIndex = lastUsageIndex + 1,
+                    lastUsageDate = Date(systemClock.epochMillis()),
+                ).toDbModel()
+            )
+        }
+    }
+
+    private fun getLastUsageIndex(): Long {
+        return database.sessionDataQueries.selectLatest()
+            .executeAsOneOrNull()
+            ?.lastUsageIndex ?: 0L
+    }
+
     override suspend fun getLatestSession(): SessionData? {
         return sessionDataMutex.withLock {
-            database.sessionDataQueries.selectFirst()
+            database.sessionDataQueries.selectLatest()
                 .executeAsOneOrNull()
                 ?.toApiModel()
         }

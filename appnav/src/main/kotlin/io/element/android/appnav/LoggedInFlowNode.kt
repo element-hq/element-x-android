@@ -139,6 +139,7 @@ class LoggedInFlowNode(
 ) {
     interface Callback : Plugin {
         fun onOpenBugReport()
+        fun onAddAccount()
     }
 
     private val loggedInFlowProcessor = LoggedInEventProcessor(
@@ -395,6 +396,10 @@ class LoggedInFlowNode(
             }
             is NavTarget.Settings -> {
                 val callback = object : PreferencesEntryPoint.Callback {
+                    override fun onAddAccount() {
+                        plugins<Callback>().forEach { it.onAddAccount() }
+                    }
+
                     override fun onOpenBugReport() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }

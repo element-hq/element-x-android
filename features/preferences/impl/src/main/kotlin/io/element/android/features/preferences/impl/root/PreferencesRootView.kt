@@ -23,6 +23,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -38,12 +39,14 @@ import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbar
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
+import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun PreferencesRootView(
     state: PreferencesRootState,
     onBackClick: () -> Unit,
+    onAddAccountClick: () -> Unit,
     onSecureBackupClick: () -> Unit,
     onManageAccountClick: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
@@ -74,7 +77,12 @@ fun PreferencesRootView(
             },
             user = state.myUser,
         )
-
+        if (state.isMultiAccountEnabled) {
+            MultiAccountSection(
+                state = state,
+                onAddAccountClick = onAddAccountClick,
+            )
+        }
         // 'Manage my app' section
         ManageAppSection(
             state = state,
@@ -112,6 +120,30 @@ fun PreferencesRootView(
             }
         )
     }
+}
+
+@Composable
+fun ColumnScope.MultiAccountSection(
+    state: PreferencesRootState,
+    onAddAccountClick: () -> Unit,
+) {
+    state.otherSessions.forEach { matrixUser ->
+        MatrixUserRow(
+            modifier = Modifier.clickable {
+                state.eventSink(PreferencesRootEvents.SwitchToSession(matrixUser.userId))
+            },
+            matrixUser = matrixUser,
+            avatarSize = AvatarSize.AccountItem,
+        )
+    }
+    ListItem(
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())),
+        headlineContent = {
+            Text("Add another account")
+        },
+        onClick = onAddAccountClick,
+    )
+    HorizontalDivider()
 }
 
 @Composable
@@ -286,6 +318,7 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
     PreferencesRootView(
         state = aPreferencesRootState(myUser = matrixUser),
         onBackClick = {},
+        onAddAccountClick = {},
         onOpenAnalytics = {},
         onOpenRageShake = {},
         onOpenDeveloperSettings = {},

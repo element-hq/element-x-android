@@ -21,6 +21,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.encryptedDb)
+    implementation(projects.services.toolbox.api)
     api(projects.libraries.sessionStorage.api)
     implementation(libs.sqldelight.driver.android)
     implementation(libs.sqlcipher)

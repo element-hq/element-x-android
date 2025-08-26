@@ -218,6 +218,10 @@ class RootFlowNode(
                     override fun onOpenBugReport() {
                         backstack.push(NavTarget.BugReport)
                     }
+
+                    override fun onAddAccount() {
+                        backstack.push(NavTarget.NotLoggedInFlow(null))
+                    }
                 }
                 createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }

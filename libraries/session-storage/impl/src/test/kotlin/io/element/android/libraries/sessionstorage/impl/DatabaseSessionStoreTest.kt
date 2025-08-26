@@ -45,11 +45,11 @@ class DatabaseSessionStoreTest {
 
     @Test
     fun `storeData persists the SessionData into the DB`() = runTest {
-        assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isNull()
+        assertThat(database.sessionDataQueries.selectLatest().executeAsOneOrNull()).isNull()
 
         databaseSessionStore.storeData(aSessionData.toApiModel())
 
-        assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isEqualTo(aSessionData)
+        assertThat(database.sessionDataQueries.selectLatest().executeAsOneOrNull()).isEqualTo(aSessionData)
         assertThat(database.sessionDataQueries.selectAll().executeAsList().size).isEqualTo(1)
     }
 
