@@ -29,7 +29,8 @@ class AndroidFileSizeFormatter @Inject constructor(
         } else {
             // First convert the size
             when {
-                fileSize < 1024 -> fileSize
+                fileSize <= 1 -> fileSize
+                fileSize < 1024 -> fileSize * 1000 / 1024
                 fileSize < 1024 * 1024 -> fileSize * 1000 / 1024
                 fileSize < 1024 * 1024 * 1024 -> fileSize * 1000 / 1024 * 1000 / 1024
                 else -> fileSize * 1000 / 1024 * 1000 / 1024 * 1000 / 1024
@@ -40,6 +41,6 @@ class AndroidFileSizeFormatter @Inject constructor(
             Formatter.formatShortFileSize(context, normalizedSize)
         } else {
             Formatter.formatFileSize(context, normalizedSize)
-        }
+        }.replace("kB", "KB")
     }
 }
