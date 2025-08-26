@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"براہ کرم تصدیق کریں کہ آپ اپنا اکاؤنٹ غیر فعال کرنا چاہتے ہیں۔ اس کارروائی کو کالعدم نہیں کیا جا سکتا۔"</string>
+  <string name="screen_deactivate_account_delete_all_messages">"میرے تمام پیغامات ڈیلیٹ کریں۔"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"انتباہ: مستقبل کے صارفین نامکمل گفتگو دیکھ سکتے ہیں۔"</string>
+  <string name="screen_deactivate_account_description">"اپنے اکاؤنٹ کو غیر فعال کرنا %1$s ہے، یہ کرے گا:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"ناقابل واپسی"</string>
+  <string name="screen_deactivate_account_list_item_1">"‏%1$s آپ کا اکاؤنٹ (آپ دوبارہ لاگ ان نہیں ہو سکتے، اور آپ کی ID کو دوبارہ استعمال نہیں کیا جا سکتا)۔"</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"مستقل طور پر غیر فعال کریں"</string>
+  <string name="screen_deactivate_account_list_item_2">"آپ کو تمام چیت رومز سے ہٹا دے گا۔"</string>
+  <string name="screen_deactivate_account_list_item_3">"ہمارے شناختی سرور سے اپنے اکاؤنٹ کی معلومات کو حذف کریں۔"</string>
+  <string name="screen_deactivate_account_list_item_4">"آپ کے پیغامات اب بھی رجسٹرڈ صارفین کو نظر آئیں گے لیکن اگر آپ انہیں حذف کرنے کا انتخاب کرتے ہیں تو نئے یا غیر رجسٹرڈ صارفین کے لیے دستیاب نہیں ہوں گے۔"</string>
+  <string name="screen_deactivate_account_title">"اکاؤنٹ کو غیر فعال کریں"</string>
+</resources>

@@ -33,7 +33,7 @@ class TimelineControllerTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
-        val sut = TimelineController(joinedRoom)
+        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
 
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
@@ -72,7 +72,7 @@ class TimelineControllerTest {
                 }
             }
         )
-        val sut = TimelineController(joinedRoom)
+        val sut = TimelineController(joinedRoom, liveTimeline)
 
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
@@ -100,7 +100,7 @@ class TimelineControllerTest {
         val joinedRoom = FakeJoinedRoom(
             liveTimeline = liveTimeline
         )
-        val sut = TimelineController(joinedRoom)
+        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
@@ -119,7 +119,7 @@ class TimelineControllerTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
-        val sut = TimelineController(joinedRoom)
+        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
@@ -147,7 +147,7 @@ class TimelineControllerTest {
         val joinedRoom = FakeJoinedRoom(
             liveTimeline = liveTimeline
         )
-        val sut = TimelineController(joinedRoom)
+        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
         assertThat(sut.timelineItems().first()).hasSize(1)
     }
 
@@ -169,7 +169,7 @@ class TimelineControllerTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
-        val sut = TimelineController(joinedRoom)
+        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
         sut.activeTimelineFlow().test {
             sut.focusOnEvent(AN_EVENT_ID)
             awaitItem().also { state ->
@@ -194,7 +194,7 @@ class TimelineControllerTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
-        val sut = TimelineController(joinedRoom)
+        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
 
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->

@@ -11,7 +11,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.deeplink.DeepLinkCreator
+import io.element.android.libraries.deeplink.api.DeepLinkCreator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -33,7 +33,7 @@ class DefaultIntentProvider @Inject constructor(
     ): Intent {
         return Intent(context, MainActivity::class.java).apply {
             action = Intent.ACTION_VIEW
-            data = deepLinkCreator.room(sessionId, roomId, threadId).toUri()
+            data = deepLinkCreator.create(sessionId, roomId, threadId).toUri()
         }
     }
 }

@@ -46,7 +46,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAt
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.RoomPreviewMembersCountMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.MembersCountMolecule
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.Announcement
@@ -546,7 +546,7 @@ private fun DefaultLoadedContent(
         },
         memberCount = {
             if (contentState.showMemberCount) {
-                RoomPreviewMembersCountMolecule(memberCount = contentState.numberOfMembers ?: 0)
+                MembersCountMolecule(memberCount = contentState.numberOfMembers ?: 0)
             }
         }
     )

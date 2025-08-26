@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"اتاق جدید"</string>
+  <string name="screen_room_directory_search_title">"فهرست اتاق‌ها"</string>
+  <string name="screen_start_chat_error_starting_chat">"هنگام تلاش برای شروع چت خطایی روی داد"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"پیوستن به اتاق با نشانی"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"نشانی معتبری نیست"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"ورود…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"اتاق مطابق پیدا شد"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"اتاق پیدا نشد"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"نمونه: ‪#room-name:matrix.org"</string>
+</resources>

@@ -33,6 +33,7 @@ Aga seni… oma teiste vestluste nägemiseks pead eemaldama filtrid"</string>
   <string name="screen_roomlist_filter_invites">"Kutsed"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Sul pole ootel kutseid."</string>
   <string name="screen_roomlist_filter_low_priority">"Vähetähtis"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Sul pole veel ühtegi olulist vestlust"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Oma teiste vestluste nägemiseks sa pead filtrid eemaldama"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Selle valiku jaoks sul veel pole vestlusi"</string>
   <string name="screen_roomlist_filter_people">"Inimesed"</string>

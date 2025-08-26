@@ -2,11 +2,17 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_avatar">"Abatarra"</string>
   <string name="a11y_delete">"Ezabatu"</string>
+  <string name="a11y_edit_avatar">"Editatu abatarra"</string>
+  <string name="a11y_encryption_details">"Zifraketaren xehetasunak"</string>
   <string name="a11y_hide_password">"Ezkutatu pasahitza"</string>
   <string name="a11y_join_call">"Batu deira"</string>
   <string name="a11y_jump_to_bottom">"Joan behera"</string>
+  <string name="a11y_move_the_map_to_my_location">"Mugitu mapa nire kokapenera"</string>
   <string name="a11y_notifications_mentions_only">"Aipamenak soilik"</string>
   <string name="a11y_notifications_muted">"Mutututa"</string>
+  <string name="a11y_notifications_new_mentions">"Aipamen berriak"</string>
+  <string name="a11y_notifications_new_messages">"Mezu berriak"</string>
+  <string name="a11y_other_user_avatar">"Beste erabiltzailearen abatarra"</string>
   <string name="a11y_page_n">"%1$d. orria"</string>
   <string name="a11y_pause">"Eten"</string>
   <string name="a11y_paused_voice_message">"Ahots-mezua, iraupena: %1$s, uneko posizioa: %2$s"</string>
@@ -24,14 +30,18 @@
   <string name="a11y_read_receipts_single">"%1$s(e)k irakurri du"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Egin tap guztiak ikusteko"</string>
   <string name="a11y_remove_reaction">"Kendu %1$s erreakzioa"</string>
+  <string name="a11y_room_avatar">"Gelaren abatarra"</string>
   <string name="a11y_send_files">"Bidali fitxategiak"</string>
   <string name="a11y_show_password">"Erakutsi pasahitza"</string>
   <string name="a11y_start_call">"Hasi dei bat"</string>
+  <string name="a11y_user_avatar">"Erabiltzailearen abatarra"</string>
   <string name="a11y_user_menu">"Erabiltzailea-menua"</string>
+  <string name="a11y_view_avatar">"Ikusi abatarra"</string>
   <string name="a11y_view_details">"Ikusi xehetasunak"</string>
   <string name="a11y_voice_message">"Ahots-mezua, iraupena: %1$s"</string>
   <string name="a11y_voice_message_record">"Grabatu ahots-mezua."</string>
   <string name="a11y_voice_message_stop_recording">"Utzi grabatzeari"</string>
+  <string name="a11y_your_avatar">"Zure abatarra"</string>
   <string name="action_accept">"Onartu"</string>
   <string name="action_add_caption">"Gehitu testua"</string>
   <string name="action_add_to_timeline">"Gehitu denbora-lerrora"</string>
@@ -68,6 +78,7 @@
   <string name="action_enable">"Gaitu"</string>
   <string name="action_end_poll">"Amaitu inkesta"</string>
   <string name="action_enter_pin">"Sartu PINa"</string>
+  <string name="action_finish">"Amaitu"</string>
   <string name="action_forgot_password">"Pasahitza ahaztu duzu?"</string>
   <string name="action_forward">"Birbidali"</string>
   <string name="action_go_back">"Joan atzera"</string>
@@ -114,7 +125,9 @@
   <string name="action_save">"Gorde"</string>
   <string name="action_search">"Bilatu"</string>
   <string name="action_send">"Bidali"</string>
+  <string name="action_send_edited_message">"Bidali editatutako mezua"</string>
   <string name="action_send_message">"Bidali mezua"</string>
+  <string name="action_send_voice_message">"Bidali ahots-mezua"</string>
   <string name="action_share">"Partekatu"</string>
   <string name="action_share_link">"Partekatu esteka"</string>
   <string name="action_show">"Erakutsi"</string>
@@ -130,6 +143,7 @@
   <string name="action_tap_for_options">"Sakatu aukerak ikusteko"</string>
   <string name="action_try_again">"Saiatu berriro"</string>
   <string name="action_unpin">"Utzi finkatzeari"</string>
+  <string name="action_view">"Ikusi"</string>
   <string name="action_view_in_timeline">"Ikusi denbora-lerroan"</string>
   <string name="action_view_source">"Ikusi iturburua"</string>
   <string name="action_yes">"Bai"</string>
@@ -139,6 +153,7 @@
   <string name="common_about">"Honi buruz"</string>
   <string name="common_adding_caption">"Testua gehitzen"</string>
   <string name="common_advanced_settings">"Ezarpen aurreratuak"</string>
+  <string name="common_an_image">"irudia"</string>
   <string name="common_analytics">"Estatistikak"</string>
   <string name="common_appearance">"Itxura"</string>
   <string name="common_audio">"Audioa"</string>
@@ -227,9 +242,12 @@ Arrazoia: %1$s."</string>
     <item quantity="one">"Boto %d"</item>
     <item quantity="other">"%d boto"</item>
   </plurals>
+  <string name="common_preparing">"Prestatzen…"</string>
   <string name="common_privacy_policy">"Pribatutasun-politika"</string>
   <string name="common_private_room">"Gela pribatua"</string>
+  <string name="common_private_space">"Gune pribatua"</string>
   <string name="common_public_room">"Gela publikoa"</string>
+  <string name="common_public_space">"Gune publikoa"</string>
   <string name="common_reaction">"Erreakzioa"</string>
   <string name="common_reactions">"Erreakzioak"</string>
   <string name="common_reason">"Arrazoia"</string>
@@ -260,6 +278,8 @@ Arrazoia: %1$s."</string>
   <string name="common_shared_location">"Partekatutako kokapena"</string>
   <string name="common_signing_out">"Saioa amaitzen"</string>
   <string name="common_something_went_wrong">"Arazoren bat egon da"</string>
+  <string name="common_something_went_wrong_message">"Arazo bat topatu dugu. Saiatu berriro."</string>
+  <string name="common_space">"Gunea"</string>
   <string name="common_starting_chat">"Txata hasten…"</string>
   <string name="common_sticker">"Pegatina"</string>
   <string name="common_success">"Arrakasta"</string>
@@ -289,6 +309,12 @@ Arrazoia: %1$s."</string>
   <string name="common_verify_identity">"Egiaztatu identitatea"</string>
   <string name="common_verify_user">"Egiaztatu erabiltzailea"</string>
   <string name="common_video">"Bideoa"</string>
+  <string name="common_video_quality_high">"Kalitate handia"</string>
+  <string name="common_video_quality_high_description">"Kalitate handiena baina fitxategi-tamaina handiagoa"</string>
+  <string name="common_video_quality_low">"Kalitate txikia"</string>
+  <string name="common_video_quality_low_description">"Igoera abiadura azkarrena eta fitxategi-tamaina txikiena"</string>
+  <string name="common_video_quality_standard">"Erdiko kalitatea"</string>
+  <string name="common_video_quality_standard_description">"Kalitate eta igoera-abiaduraren arteko oreka"</string>
   <string name="common_voice_message">"Ahots-mezua"</string>
   <string name="common_waiting">"Zain…"</string>
   <string name="common_waiting_for_decryption_key">"Mezu honen zain"</string>
@@ -298,6 +324,7 @@ Arrazoia: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s(r)en identitatea berrezarri da."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s(r)en %2$s identitatea berrezarri da. %3$s"</string>
   <string name="dialog_confirm_link_title">"Egiaztatu honako esteka"</string>
+  <string name="dialog_default_video_quality_selector_title">"Bideoaren igoera-kalitatea"</string>
   <string name="dialog_room_reported">"Gela salatu da"</string>
   <string name="dialog_room_reported_and_left">"Gela salatu eta utzi da"</string>
   <string name="dialog_title_confirmation">"Baieztapena"</string>
@@ -306,6 +333,7 @@ Arrazoia: %1$s."</string>
   <string name="dialog_title_warning">"Abisua"</string>
   <string name="dialog_unsaved_changes_description_android">"Zure aldaketak ez dira gorde. Ziur itzuli nahi duzula?"</string>
   <string name="dialog_unsaved_changes_title">"Aldaketak gorde?"</string>
+  <string name="dialog_video_quality_selector_title">"Hautatu bideoaren igoera-kalitatea"</string>
   <string name="error_failed_creating_the_permalink">"Huts egin du esteka iraunkorra sortzeak"</string>
   <string name="error_failed_loading_map">"%1$s ezin izan da mapa kargatu. Saiatu berriro geroago."</string>
   <string name="error_failed_loading_messages">"Huts egin du mezuak kargatzeak"</string>
@@ -324,6 +352,7 @@ Arrazoia: %1$s."</string>
   <string name="invite_friends_rich_title">"🔐️ Zatoz nirekin %1$s(e)ra"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Astindu erroreen berri emateko"</string>
+  <string name="screen_create_poll_options_section_title">"Aukerak"</string>
   <string name="screen_media_picker_error_failed_selection">"Huts egin du multimedia aukeratzeak, saiatu berriro."</string>
   <string name="screen_pinned_timeline_screen_title_empty">"Finkatutako mezuak"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Bidali mezua hala ere"</string>

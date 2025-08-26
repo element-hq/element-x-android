@@ -61,8 +61,8 @@ class VideoCompressor @Inject constructor(
         val width = metadata?.width ?: Int.MAX_VALUE
         val height = metadata?.height ?: Int.MAX_VALUE
 
-        val videoResizeEffect = videoCompressorConfig.videoCompressorHelper?.let {
-            val outputSize = it.getOutputSize(Size(width, height))
+        val videoResizeEffect = run {
+            val outputSize = videoCompressorConfig.videoCompressorHelper.getOutputSize(Size(width, height))
             if (metadata?.rotation == 90 || metadata?.rotation == 270) {
                 // If the video is rotated, we need to swap width and height
                 Presentation.createForWidthAndHeight(
@@ -89,19 +89,14 @@ class VideoCompressor @Inject constructor(
         val inputMediaItem = MediaItem.fromUri(uri)
         val outputMediaItem = EditedMediaItem.Builder(inputMediaItem)
             .setFrameRate(newFrameRate)
-            .run {
-                if (videoResizeEffect != null) {
-                    setEffects(Effects(emptyList(), listOf(videoResizeEffect)))
-                } else {
-                    this
-                }
-            }
+            .setEffects(Effects(emptyList(), listOf(videoResizeEffect)))
             .build()
 
         val encoderFactory = DefaultEncoderFactory.Builder(context)
             .setRequestedVideoEncoderSettings(
                 VideoEncoderSettings.Builder()
-                    .setBitrateMode(MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR)
+                    // Use VBR which is generally better for quality and compatibility, although slightly worse for file size
+                    .setBitrateMode(MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_VBR)
                     .setBitrate(newBitrate)
                     .build()
             )

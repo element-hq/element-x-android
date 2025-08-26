@@ -1,4 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"biometrik autentifikatsiya"</string>
+  <string name="screen_app_lock_biometric_unlock">"biometrik qulf ochish"</string>
+  <string name="screen_app_lock_settings_change_pin">"PIN kodni o\'zgartirish"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Biometrik qulfni ochishga ruxsat bering"</string>
+  <string name="screen_app_lock_settings_remove_pin">"PIN-kodni olib tashlang"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Haqiqatan ham PIN kodni olib tashlamoqchimisiz?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"PIN kod olib tashlansinmi?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Ruxsat berish %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Men PIN kod ishlatishni maʼqul koʻraman"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Oʻzingizga vaqt tejang va har safar ilovani ochish uchun %1$s dan foydalaning"</string>
+  <string name="screen_app_lock_setup_choose_pin">"PIN kodni tanlang"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"PIN kodni tasdiqlang"</string>
+  <string name="screen_app_lock_setup_pin_context">"Qulflash %1$s suhbatlaringizga qoʻshimcha xavfsizlik qoʻshish uchun.
+
+Esda qoladigan biror narsani tanlang. Agar ushbu PIN kodni unutib qolsangiz, dasturdan chiqib ketasiz."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Xavfsizlik sabablari bilan buni PIN kodingiz sifatida tanlay olmaysiz"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Boshqa PIN kod tanlang"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Iltimos, bir xil PIN kodni ikkita marta kiriting"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN kodlar bir-biriga mos kelmadi"</string>
+  <string name="screen_app_lock_signout_alert_message">"Davom etish uchun qayta kirishingiz va yangi PIN yaratishingiz kerak boʻladi."</string>
+  <string name="screen_app_lock_signout_alert_title">"Siz tizimdan chiqmoqdasiz"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Sizda %1$d ta ochishga urinish mavjud"</item>
+    <item quantity="other">"Sizda %1$d ta ochishga urinish mavjud"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Notoʻgʻri PIN. Sizda yana %1$d ta imkoniyat bor"</item>
+    <item quantity="other">"Notoʻgʻri PIN. Sizda yana %1$d ta imkoniyat bor"</item>
+  </plurals>
   <string name="screen_signout_in_progress_dialog_content">"Chiqish…"</string>
 </resources>

@@ -52,11 +52,14 @@ import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.room.getDirectRoomMember
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
+import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -64,6 +67,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
@@ -97,13 +101,13 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 class MessageComposerPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
-    @SessionCoroutineScope
-    private val sessionCoroutineScope: CoroutineScope,
+    @Assisted private val timelineController: TimelineController,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val localMediaFactory: LocalMediaFactory,
-    private val mediaSender: MediaSender,
+    private val mediaSenderFactory: MediaSender.Factory,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val locationService: LocationService,
@@ -113,17 +117,19 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
-    private val timelineController: TimelineController,
     private val draftService: ComposerDraftService,
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
     private val suggestionsProcessor: SuggestionsProcessor,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
+    private val notificationConversationService: NotificationConversationService,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
-        fun create(navigator: MessagesNavigator): MessageComposerPresenter
+        fun create(timelineController: TimelineController, navigator: MessagesNavigator): MessageComposerPresenter
     }
+
+    private val mediaSender = mediaSenderFactory.create(timelineMode = timelineController.mainTimelineMode())
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
@@ -423,11 +429,13 @@ class MessageComposerPresenter @AssistedInject constructor(
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
             is MessageComposerMode.Attachment,
-            is MessageComposerMode.Normal -> room.liveTimeline.sendMessage(
-                body = message.markdown,
-                htmlBody = message.html,
-                intentionalMentions = message.intentionalMentions
-            )
+            is MessageComposerMode.Normal -> timelineController.invokeOnCurrentTimeline {
+                sendMessage(
+                    body = message.markdown,
+                    htmlBody = message.html,
+                    intentionalMentions = message.intentionalMentions
+                )
+            }
             is MessageComposerMode.Edit -> {
                 timelineController.invokeOnCurrentTimeline {
                     // First try to edit the message in the current timeline
@@ -463,6 +471,18 @@ class MessageComposerPresenter @AssistedInject constructor(
                 }
             }
         }
+
+        val roomInfo = room.info()
+        val roomMembers = room.membersStateFlow.value
+
+        notificationConversationService.onSendMessage(
+            sessionId = room.sessionId,
+            roomId = roomInfo.id,
+            roomName = roomInfo.name ?: roomInfo.id.value,
+            roomIsDirect = roomInfo.isDm,
+            roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers.getDirectRoomMember(roomInfo = roomInfo, sessionId = room.sessionId)?.avatarUrl,
+        )
+
         analyticsService.capture(
             Composer(
                 inThread = capturedMode.inThread,
@@ -510,7 +530,6 @@ class MessageComposerPresenter @AssistedInject constructor(
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
-            progressCallback = null,
             mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
         ).getOrThrow()
     }

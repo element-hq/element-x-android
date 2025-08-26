@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.room.join
 
 import io.element.android.libraries.matrix.api.room.join.JoinRule
+import kotlinx.collections.immutable.toPersistentList
 import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
 
 fun RustJoinRule.map(): JoinRule {
@@ -16,9 +17,9 @@ fun RustJoinRule.map(): JoinRule {
         RustJoinRule.Private -> JoinRule.Private
         RustJoinRule.Knock -> JoinRule.Knock
         RustJoinRule.Invite -> JoinRule.Invite
-        is RustJoinRule.Restricted -> JoinRule.Restricted(rules.map { it.map() })
+        is RustJoinRule.Restricted -> JoinRule.Restricted(rules.map { it.map() }.toPersistentList())
         is RustJoinRule.Custom -> JoinRule.Custom(repr)
-        is RustJoinRule.KnockRestricted -> JoinRule.KnockRestricted(rules.map { it.map() })
+        is RustJoinRule.KnockRestricted -> JoinRule.KnockRestricted(rules.map { it.map() }.toPersistentList())
     }
 }
 

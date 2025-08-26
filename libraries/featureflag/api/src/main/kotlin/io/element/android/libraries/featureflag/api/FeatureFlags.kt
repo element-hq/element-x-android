@@ -93,4 +93,11 @@ enum class FeatureFlags(
         // False so it's displayed in the developer options screen
         isFinished = false,
     ),
+    Threads(
+        key = "feature.thread_timeline",
+        title = "Threads",
+        description = "Renders thread messages as a dedicated timeline. Restarting the app is required for this setting to fully take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    )
 }

@@ -10,14 +10,20 @@ package io.element.android.libraries.push.api.notifications
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.IconCompat
 import coil3.ImageLoader
+import io.element.android.libraries.matrix.ui.media.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
 
 interface NotificationBitmapLoader {
     /**
      * Get icon of a room.
      * @param path mxc url
      * @param imageLoader Coil image loader
+     * @param targetSize The size we want the bitmap to be resized to
      */
-    suspend fun getRoomBitmap(path: String?, imageLoader: ImageLoader): Bitmap?
+    suspend fun getRoomBitmap(
+        path: String?,
+        imageLoader: ImageLoader,
+        targetSize: Long = AVATAR_THUMBNAIL_SIZE_IN_PIXEL,
+    ): Bitmap?
 
     /**
      * Get icon of a user.

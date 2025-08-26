@@ -29,11 +29,24 @@ object ComposablePreviewProvider : TestParameter.TestParameterValuesProvider {
         AndroidComposablePreviewScanner()
             .scanPackageTrees(*PACKAGE_TREES)
             .getPreviews()
+            .filter { composablePreview -> composablePreview.methodName.endsWith("A11yPreview").not() }
             .withIndex()
             .toList()
     }
 
     override fun provideValues(): List<IndexedValue<ComposablePreview<AndroidPreviewInfo>>> = values
+}
+
+object ComposableA11yPreviewProvider : TestParameter.TestParameterValuesProvider {
+    private val values: List<ComposablePreview<AndroidPreviewInfo>> by lazy {
+        AndroidComposablePreviewScanner()
+            .scanPackageTrees(*PACKAGE_TREES)
+            .getPreviews()
+            .filter { composablePreview -> composablePreview.methodName.endsWith("A11yPreview") }
+            .toList()
+    }
+
+    override fun provideValues(): List<ComposablePreview<AndroidPreviewInfo>> = values
 }
 
 object Shard1ComposablePreviewProvider : TestParameter.TestParameterValuesProvider {

@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -73,7 +74,6 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheet
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
@@ -105,6 +105,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -196,17 +197,21 @@ fun MessagesView(
                 topBar = {
                     Column {
                         ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                        MessagesViewTopBar(
-                            roomName = state.roomName,
-                            roomAvatar = state.roomAvatar,
-                            isTombstoned = state.isTombstoned,
-                            heroes = state.heroes,
-                            roomCallState = state.roomCallState,
-                            dmUserIdentityState = state.dmUserVerificationState,
-                            onBackClick = { hidingKeyboard { onBackClick() } },
-                            onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
-                            onJoinCallClick = onJoinCallClick,
-                        )
+                        if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
+                            ThreadTopBar(onBackClick = onBackClick)
+                        } else {
+                            MessagesViewTopBar(
+                                roomName = state.roomName,
+                                roomAvatar = state.roomAvatar,
+                                isTombstoned = state.isTombstoned,
+                                heroes = state.heroes,
+                                roomCallState = state.roomCallState,
+                                dmUserIdentityState = state.dmUserVerificationState,
+                                onBackClick = { hidingKeyboard { onBackClick() } },
+                                onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
+                                onJoinCallClick = onJoinCallClick,
+                            )
+                        }
                     }
                 },
                 content = { padding ->
@@ -414,23 +419,26 @@ private fun MessagesViewContent(
                 onJoinCallClick = onJoinCallClick,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
             )
-            AnimatedVisibility(
-                visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
-                enter = expandVertically(),
-                exit = shrinkVertically(),
-            ) {
-                fun focusOnPinnedEvent(eventId: EventId) {
-                    state.timelineState.eventSink(
-                        TimelineEvents.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
+
+            if (state.timelineState.timelineMode !is Timeline.Mode.Thread) {
+                AnimatedVisibility(
+                    visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
+                    enter = expandVertically(),
+                    exit = shrinkVertically(),
+                ) {
+                    fun focusOnPinnedEvent(eventId: EventId) {
+                        state.timelineState.eventSink(
+                            TimelineEvents.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
+                        )
+                    }
+                    PinnedMessagesBannerView(
+                        state = state.pinnedMessagesBannerState,
+                        onClick = ::focusOnPinnedEvent,
+                        onViewAllClick = onViewAllPinnedMessagesClick,
                     )
                 }
-                PinnedMessagesBannerView(
-                    state = state.pinnedMessagesBannerState,
-                    onClick = ::focusOnPinnedEvent,
-                    onViewAllClick = onViewAllPinnedMessagesClick,
-                )
+                knockRequestsBannerView()
             }
-            knockRequestsBannerView()
         }
     }
 }
@@ -537,6 +545,21 @@ private fun MessagesViewTopBar(
             Spacer(Modifier.width(8.dp))
         },
         windowInsets = WindowInsets(0.dp)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ThreadTopBar(
+    onBackClick: () -> Unit,
+) {
+    TopAppBar(
+        navigationIcon = {
+            BackButton(onClick = onBackClick)
+        },
+        title = {
+            Text(stringResource(CommonStrings.common_thread))
+        }
     )
 }
 

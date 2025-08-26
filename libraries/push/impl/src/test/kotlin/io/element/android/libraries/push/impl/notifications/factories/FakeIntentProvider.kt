@@ -14,5 +14,5 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.intent.IntentProvider
 
 class FakeIntentProvider : IntentProvider {
-    override fun getViewRoomIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?) = Intent()
+    override fun getViewRoomIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?) = Intent(Intent.ACTION_VIEW)
 }

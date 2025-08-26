@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nowy pokój"</string>
+  <string name="screen_room_directory_search_title">"Katalog pokoi"</string>
+  <string name="screen_start_chat_error_starting_chat">"Wystąpił błąd podczas próby rozpoczęcia czatu"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Dołącz do pokoju za pomocą adresu"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Nieprawidłowy adres"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Wprowadź…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Znaleziono pasujący pokój"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Nie znaleziono pokoju"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"np. #room-name:matrix.org"</string>
+</resources>

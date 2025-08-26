@@ -8,6 +8,8 @@
   <string name="screen_advanced_settings_element_call_base_url">"自定义 Element Call URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"为 Element 通话设置根 URL。"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL 无效，请确保包含协议（http/https）和正确的地址。"</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"在房间邀请请求中隐藏头像"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"在时间轴中隐藏媒体预览"</string>
   <string name="screen_advanced_settings_media_compression_description">"针对上传进行优化"</string>
   <string name="screen_advanced_settings_media_compression_title">"媒体"</string>
   <string name="screen_advanced_settings_push_provider_android">"通知推送提供者"</string>
@@ -16,6 +18,11 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"关闭后已读回执将不会发送给他人，但仍能收到他人的已读回执。"</string>
   <string name="screen_advanced_settings_share_presence">"分享在线状态"</string>
   <string name="screen_advanced_settings_share_presence_description">"关闭后将无法发送或接收已读回执、输入通知"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"始终隐藏"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"始终显示"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"在私人房间"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"随时可以通过点击隐藏的媒体来显示它"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"在时间轴中显示媒体"</string>
   <string name="screen_advanced_settings_view_source_description">"启用在时间轴中查看消息源码的选项。"</string>
   <string name="screen_blocked_users_empty">"您没有屏蔽用户"</string>
   <string name="screen_blocked_users_unblock_alert_action">"解封"</string>
@@ -55,6 +62,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系统设置"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"系统通知已关闭"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"推送历史记录"</string>
   <string name="troubleshoot_notifications_entry_point_section">"排查问题"</string>
   <string name="troubleshoot_notifications_entry_point_title">"排查通知问题"</string>
 </resources>

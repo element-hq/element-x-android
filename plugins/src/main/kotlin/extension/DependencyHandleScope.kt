@@ -59,7 +59,7 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
 
 fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:androidutils"))
-    implementation(project(":libraries:deeplink"))
+    implementation(project(":libraries:deeplink:impl"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:matrix:impl"))
     implementation(project(":libraries:matrixui"))

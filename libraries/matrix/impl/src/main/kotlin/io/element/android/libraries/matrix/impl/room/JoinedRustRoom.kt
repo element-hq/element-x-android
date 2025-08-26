@@ -11,6 +11,8 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -83,6 +85,7 @@ class JoinedRustRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
+    private val featureFlagService: FeatureFlagService,
 ) : JoinedRoom, BaseRoom by baseRoom {
     // Create a dispatcher for all room methods...
     private val roomDispatcher = coroutineDispatchers.io.limitedParallelism(32)
@@ -132,7 +135,7 @@ class JoinedRustRoom(
 
     override val roomNotificationSettingsStateFlow = MutableStateFlow<RoomNotificationSettingsState>(RoomNotificationSettingsState.Unknown)
 
-    override val liveTimeline = liveInnerTimeline.map(mode = Timeline.Mode.LIVE) {
+    override val liveTimeline = liveInnerTimeline.map(mode = Timeline.Mode.Live) {
         syncUpdateFlow.value = systemClock.epochMillis()
     }
 
@@ -153,21 +156,26 @@ class JoinedRustRoom(
     override suspend fun createTimeline(
         createTimelineParams: CreateTimelineParams,
     ): Result<Timeline> = withContext(roomDispatcher) {
+        val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         val focus = when (createTimelineParams) {
             is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents(
                 maxEventsToLoad = 100u,
                 maxConcurrentRequests = 10u,
             )
-            is CreateTimelineParams.MediaOnly -> TimelineFocus.Live(hideThreadedEvents = false)
+            is CreateTimelineParams.MediaOnly -> TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents)
             is CreateTimelineParams.Focused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
-                hideThreadedEvents = false,
+                hideThreadedEvents = hideThreadedEvents,
             )
             is CreateTimelineParams.MediaOnlyFocused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
+                // Never hide threaded events in media focused timeline
                 hideThreadedEvents = false,
+            )
+            is CreateTimelineParams.Threaded -> TimelineFocus.Thread(
+                rootEventId = createTimelineParams.threadRootEventId.value,
             )
         }
 
@@ -182,7 +190,8 @@ class JoinedRustRoom(
                 )
             )
             is CreateTimelineParams.Focused,
-            CreateTimelineParams.PinnedOnly -> TimelineFilter.All
+            CreateTimelineParams.PinnedOnly,
+            is CreateTimelineParams.Threaded -> TimelineFilter.All
         }
 
         val internalIdPrefix = when (createTimelineParams) {
@@ -190,6 +199,7 @@ class JoinedRustRoom(
             is CreateTimelineParams.Focused -> "focus_${createTimelineParams.focusedEventId}"
             is CreateTimelineParams.MediaOnly -> "MediaGallery_"
             is CreateTimelineParams.MediaOnlyFocused -> "MediaGallery_${createTimelineParams.focusedEventId}"
+            is CreateTimelineParams.Threaded -> "Thread_${createTimelineParams.threadRootEventId}"
         }
 
         // Note that for TimelineFilter.MediaOnlyFocused, the date separator will be filtered out,
@@ -198,7 +208,8 @@ class JoinedRustRoom(
             is CreateTimelineParams.MediaOnly,
             is CreateTimelineParams.MediaOnlyFocused -> DateDividerMode.MONTHLY
             is CreateTimelineParams.Focused,
-            CreateTimelineParams.PinnedOnly -> DateDividerMode.DAILY
+            CreateTimelineParams.PinnedOnly,
+            is CreateTimelineParams.Threaded -> DateDividerMode.DAILY
         }
 
         // Track read receipts only for focused timeline for performance optimization
@@ -216,17 +227,19 @@ class JoinedRustRoom(
                 )
             ).let { innerTimeline ->
                 val mode = when (createTimelineParams) {
-                    is CreateTimelineParams.Focused -> Timeline.Mode.FOCUSED_ON_EVENT
-                    is CreateTimelineParams.MediaOnly -> Timeline.Mode.MEDIA
-                    is CreateTimelineParams.MediaOnlyFocused -> Timeline.Mode.FOCUSED_ON_EVENT
-                    CreateTimelineParams.PinnedOnly -> Timeline.Mode.PINNED_EVENTS
+                    is CreateTimelineParams.Focused -> Timeline.Mode.FocusedOnEvent(createTimelineParams.focusedEventId)
+                    is CreateTimelineParams.MediaOnly -> Timeline.Mode.Media
+                    is CreateTimelineParams.MediaOnlyFocused -> Timeline.Mode.FocusedOnEvent(createTimelineParams.focusedEventId)
+                    CreateTimelineParams.PinnedOnly -> Timeline.Mode.PinnedEvents
+                    is CreateTimelineParams.Threaded -> Timeline.Mode.Thread(createTimelineParams.threadRootEventId)
                 }
                 innerTimeline.map(mode = mode)
             }
         }.mapFailure {
             when (createTimelineParams) {
                 is CreateTimelineParams.Focused,
-                is CreateTimelineParams.MediaOnlyFocused -> it.toFocusEventException()
+                is CreateTimelineParams.MediaOnlyFocused,
+                is CreateTimelineParams.Threaded -> it.toFocusEventException()
                 CreateTimelineParams.MediaOnly,
                 CreateTimelineParams.PinnedOnly -> it
             }

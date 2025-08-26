@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Eemalda link"</string>
   <string name="rich_text_editor_unindent">"Eemalda taandrida"</string>
   <string name="rich_text_editor_url_placeholder">"Link"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
   <string name="screen_room_voice_message_tooltip">"Salvestamiseks hoia nuppu all"</string>
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"建立聊天室"</string>
+  <string name="screen_room_directory_search_title">"聊天室目錄"</string>
+  <string name="screen_start_chat_error_starting_chat">"嘗試開始聊天時發生錯誤"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"按地址加入聊天室"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"不是有效的位址"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"輸入……"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"找到相符的聊天室"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"找不到聊天室"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"例如 #room-name:matrix.org"</string>
+</resources>

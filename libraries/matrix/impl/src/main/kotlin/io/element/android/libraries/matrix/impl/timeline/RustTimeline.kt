@@ -7,9 +7,9 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
+import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -27,7 +27,6 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
-import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.media.toMSC3246range
@@ -81,7 +80,7 @@ private const val PAGINATION_SIZE = 50
 
 class RustTimeline(
     private val inner: InnerTimeline,
-    mode: Timeline.Mode,
+    override val mode: Timeline.Mode,
     systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
@@ -120,19 +119,20 @@ class RustTimeline(
     private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
 
     override val backwardPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PINNED_EVENTS)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PinnedEvents)
     )
 
     override val forwardPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode == Timeline.Mode.FOCUSED_ON_EVENT)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode !is Timeline.Mode.FocusedOnEvent)
     )
 
     init {
-        if (mode != Timeline.Mode.PINNED_EVENTS) {
-            coroutineScope.fetchMembers()
+        when (mode) {
+            is Timeline.Mode.Live, is Timeline.Mode.FocusedOnEvent -> coroutineScope.fetchMembers()
+            else -> Unit
         }
 
-        if (mode == Timeline.Mode.LIVE) {
+        if (mode == Timeline.Mode.Live) {
             // When timeline is live, we need to listen to the back pagination status as
             // sdk can automatically paginate backwards.
             coroutineScope.registerBackPaginationStatusListener()
@@ -221,6 +221,7 @@ class RustTimeline(
                         items = items,
                         hasMoreToLoadBackward = backwardPaginationStatus.hasMoreToLoad,
                         hasMoreToLoadForward = forwardPaginationStatus.hasMoreToLoad,
+                        timelineMode = mode,
                     )
                 }
                 .let { items ->
@@ -336,9 +337,9 @@ class RustTimeline(
         imageInfo: ImageInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
+        Timber.d("Sending image ${file.path.hash()}")
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendImage(
                 params = UploadParameters(
@@ -347,13 +348,11 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
-                thumbnailPath = thumbnailFile?.path,
+                thumbnailSource = thumbnailFile?.path?.let(UploadSource::File),
                 imageInfo = imageInfo.map(),
-                progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
@@ -364,9 +363,9 @@ class RustTimeline(
         videoInfo: VideoInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
+        Timber.d("Sending video ${file.path.hash()}")
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendVideo(
                 params = UploadParameters(
@@ -375,13 +374,11 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
-                thumbnailPath = thumbnailFile?.path,
+                thumbnailSource = thumbnailFile?.path?.let(UploadSource::File),
                 videoInfo = videoInfo.map(),
-                progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
@@ -391,9 +388,9 @@ class RustTimeline(
         audioInfo: AudioInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
+        Timber.d("Sending audio ${file.path.hash()}")
         return sendAttachment(listOf(file)) {
             inner.sendAudio(
                 params = UploadParameters(
@@ -402,12 +399,10 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
                 audioInfo = audioInfo.map(),
-                progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
@@ -417,9 +412,9 @@ class RustTimeline(
         fileInfo: FileInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
+        Timber.d("Sending file ${file.path.hash()}")
         return sendAttachment(listOf(file)) {
             inner.sendFile(
                 params = UploadParameters(
@@ -428,12 +423,10 @@ class RustTimeline(
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
                     },
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
                 fileInfo = fileInfo.map(),
-                progressWatcher = progressCallback?.toProgressWatcher(),
             )
         }
     }
@@ -479,7 +472,6 @@ class RustTimeline(
         file: File,
         audioInfo: AudioInfo,
         waveform: List<Float>,
-        progressCallback: ProgressCallback?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file)) {
@@ -489,13 +481,11 @@ class RustTimeline(
                     // Maybe allow a caption in the future?
                     caption = null,
                     formattedCaption = null,
-                    useSendQueue = true,
                     mentions = null,
                     inReplyTo = inReplyToEventId?.value,
                 ),
                 audioInfo = audioInfo.map(),
                 waveform = waveform.toMSC3246range(),
-                progressWatcher = progressCallback?.toProgressWatcher(),
             )
         }
     }

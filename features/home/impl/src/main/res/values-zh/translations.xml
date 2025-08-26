@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"请关闭本应用的电池优化设置，确保不错过任何消息通知。"</string>
   <string name="banner_battery_optimization_submit_android">"禁用优化"</string>
   <string name="banner_battery_optimization_title_android">"通知未送达？"</string>
   <string name="banner_set_up_recovery_content">"生成新的恢复密钥，该密钥可用于在您无法访问设备时恢复加密的消息历史记录。"</string>

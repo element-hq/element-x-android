@@ -88,6 +88,7 @@
   <string name="action_enable">"Enable"</string>
   <string name="action_end_poll">"End poll"</string>
   <string name="action_enter_pin">"Enter PIN"</string>
+  <string name="action_finish">"Finish"</string>
   <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_forward">"Forward"</string>
   <string name="action_go_back">"Go back"</string>
@@ -166,6 +167,8 @@
   <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_an_image">"an image"</string>
   <string name="common_analytics">"Analytics"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"You left the room"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"You were logged out of the session"</string>
   <string name="common_appearance">"Appearance"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Blocked users"</string>
@@ -301,6 +304,7 @@ Reason: %1$s."</string>
   <string name="common_signing_out">"Signing out"</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>
+  <string name="common_space">"Space"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Space"</item>
     <item quantity="other">"%1$d Spaces"</item>

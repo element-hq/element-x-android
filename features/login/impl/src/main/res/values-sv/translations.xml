@@ -13,6 +13,9 @@
   <string name="screen_change_account_provider_other">"Annan"</string>
   <string name="screen_change_account_provider_subtitle">"Använd en annan kontoleverantör, till exempel din egen privata server eller ett jobbkonto."</string>
   <string name="screen_change_account_provider_title">"Byt kontoleverantör"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"Element Pro-appen krävs på %1$s. Ladda ner den från butiken."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Element Pro krävs"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Vi kunde inte nå den här hemservern. Kontrollera att du har angett hemserverns URL korrekt. Om URL:en är korrekt kontaktar du administratören för hemservern för ytterligare hjälp."</string>
   <string name="screen_change_server_error_invalid_well_known">"Sliding Sync är inte tillgängligt på grund av ett problem i .well-known-filen:
 %1$s"</string>

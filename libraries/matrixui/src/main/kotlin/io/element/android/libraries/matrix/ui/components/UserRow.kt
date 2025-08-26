@@ -30,6 +30,7 @@ internal fun UserRow(
     name: String,
     subtext: String?,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     trailingContent: @Composable (() -> Unit)? = null,
 ) {
     Row(
@@ -54,14 +55,14 @@ internal fun UserRow(
                 text = name,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = ElementTheme.colors.textPrimary,
+                color = if (enabled) ElementTheme.colors.textPrimary else ElementTheme.colors.textDisabled,
                 style = ElementTheme.typography.fontBodyLgRegular,
             )
             // Id
             subtext?.let {
                 Text(
                     text = subtext,
-                    color = ElementTheme.colors.textSecondary,
+                    color = if (enabled) ElementTheme.colors.textSecondary else ElementTheme.colors.textDisabled,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = ElementTheme.typography.fontBodySmRegular,

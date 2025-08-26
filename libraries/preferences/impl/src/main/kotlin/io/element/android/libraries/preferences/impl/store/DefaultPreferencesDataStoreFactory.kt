@@ -12,20 +12,33 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidutils.preferences.DefaultPreferencesCorruptionHandlerFactory
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultPreferencesDataStoreFactory @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : PreferenceDataStoreFactory {
+    private val dataStoreHolders = ConcurrentHashMap<String, DataStoreHolder>()
+
     private class DataStoreHolder(name: String) {
-        val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = name)
+        val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+            name = name,
+            corruptionHandler = DefaultPreferencesCorruptionHandlerFactory.replaceWithEmpty(),
+        )
     }
+
     override fun create(name: String): DataStore<Preferences> {
-        return with(DataStoreHolder(name)) {
+        val holder = dataStoreHolders.getOrPut(name) {
+            DataStoreHolder(name)
+        }
+        return with(holder) {
             context.dataStore
         }
     }

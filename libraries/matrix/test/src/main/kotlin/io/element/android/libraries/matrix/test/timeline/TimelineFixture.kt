@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
@@ -103,7 +104,7 @@ fun aMessageContent(
     body: String = "body",
     inReplyTo: InReplyTo? = null,
     isEdited: Boolean = false,
-    isThreaded: Boolean = false,
+    threadInfo: EventThreadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
     messageType: MessageType = TextMessageType(
         body = body,
         formatted = null
@@ -112,7 +113,7 @@ fun aMessageContent(
     body = body,
     inReplyTo = inReplyTo,
     isEdited = isEdited,
-    isThreaded = isThreaded,
+    threadInfo = threadInfo,
     type = messageType
 )
 

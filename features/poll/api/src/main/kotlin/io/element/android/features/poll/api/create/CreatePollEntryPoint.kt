@@ -10,9 +10,11 @@ package io.element.android.features.poll.api.create
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.matrix.api.timeline.Timeline
 
 interface CreatePollEntryPoint : FeatureEntryPoint {
     data class Params(
+        val timelineMode: Timeline.Mode,
         val mode: CreatePollMode,
     )
 

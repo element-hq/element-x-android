@@ -13,12 +13,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.preferencesDataStoreFile
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.pushstore.api.UserPushStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -31,6 +31,7 @@ import timber.log.Timber
 class UserPushStoreDataStore(
     private val context: Context,
     userId: SessionId,
+    factory: PreferenceDataStoreFactory,
 ) : UserPushStore {
     // Hash the sessionId to get rid of exotic chars and take only the first 16 chars.
     // The risk of collision is not high.
@@ -49,28 +50,28 @@ class UserPushStoreDataStore(
         }
     }
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = preferenceName)
+    private val store: DataStore<Preferences> = factory.create(preferenceName)
     private val pushProviderName = stringPreferencesKey("pushProviderName")
     private val currentPushKey = stringPreferencesKey("currentPushKey")
     private val notificationEnabled = booleanPreferencesKey("notificationEnabled")
     private val ignoreRegistrationError = booleanPreferencesKey("ignoreRegistrationError")
 
     override suspend fun getPushProviderName(): String? {
-        return context.dataStore.data.first()[pushProviderName]
+        return store.data.first()[pushProviderName]
     }
 
     override suspend fun setPushProviderName(value: String) {
-        context.dataStore.edit {
+        store.edit {
             it[pushProviderName] = value
         }
     }
 
     override suspend fun getCurrentRegisteredPushKey(): String? {
-        return context.dataStore.data.first()[currentPushKey]
+        return store.data.first()[currentPushKey]
     }
 
     override suspend fun setCurrentRegisteredPushKey(value: String?) {
-        context.dataStore.edit {
+        store.edit {
             if (value == null) {
                 it.remove(currentPushKey)
             } else {
@@ -80,11 +81,11 @@ class UserPushStoreDataStore(
     }
 
     override fun getNotificationEnabledForDevice(): Flow<Boolean> {
-        return context.dataStore.data.map { it[notificationEnabled].orTrue() }
+        return store.data.map { it[notificationEnabled].orTrue() }
     }
 
     override suspend fun setNotificationEnabledForDevice(enabled: Boolean) {
-        context.dataStore.edit {
+        store.edit {
             it[notificationEnabled] = enabled
         }
     }
@@ -94,17 +95,17 @@ class UserPushStoreDataStore(
     }
 
     override fun ignoreRegistrationError(): Flow<Boolean> {
-        return context.dataStore.data.map { it[ignoreRegistrationError].orFalse() }
+        return store.data.map { it[ignoreRegistrationError].orFalse() }
     }
 
     override suspend fun setIgnoreRegistrationError(ignore: Boolean) {
-        context.dataStore.edit {
+        store.edit {
             it[ignoreRegistrationError] = ignore
         }
     }
 
     override suspend fun reset() {
-        context.dataStore.edit {
+        store.edit {
             it.clear()
         }
         // Also delete the file

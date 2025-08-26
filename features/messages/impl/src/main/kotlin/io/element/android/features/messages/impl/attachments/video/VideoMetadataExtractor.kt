@@ -18,10 +18,12 @@ import dagger.assisted.AssistedInject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 interface VideoMetadataExtractor : AutoCloseable {
     fun getSize(): Result<Size>
-    fun getDuration(): Result<Long>
+    fun getDuration(): Result<Duration>
     interface Factory {
         fun create(uri: Uri): VideoMetadataExtractor
     }
@@ -57,9 +59,10 @@ class DefaultVideoMetadataExtractor @AssistedInject constructor(
         }
     }
 
-    override fun getDuration(): Result<Long> = runCatchingExceptions {
+    override fun getDuration(): Result<Duration> = runCatchingExceptions {
         mediaMetadataRetriever.value.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
             ?.takeIf { it > 0L }
+            ?.milliseconds
             ?: error("Could not retrieve video duration from metadata")
     }
 

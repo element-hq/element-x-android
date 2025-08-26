@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Ta bort länk"</string>
   <string name="rich_text_editor_unindent">"Ta bort indrag"</string>
   <string name="rich_text_editor_url_placeholder">"Länk"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Bildtexter kanske inte är synliga för personer som använder äldre appar."</string>
   <string name="screen_room_voice_message_tooltip">"Håll för att spela in"</string>
 </resources>

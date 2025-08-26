@@ -24,5 +24,6 @@
   <string name="rich_text_editor_remove_link">"Удалить ссылку"</string>
   <string name="rich_text_editor_unindent">"Без отступа"</string>
   <string name="rich_text_editor_url_placeholder">"Ссылка"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Подпись может быть не видна пользователям старых приложений."</string>
   <string name="screen_room_voice_message_tooltip">"Удерживайте для записи"</string>
 </resources>

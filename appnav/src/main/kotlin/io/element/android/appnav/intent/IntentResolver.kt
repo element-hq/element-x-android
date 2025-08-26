@@ -10,8 +10,8 @@ package io.element.android.appnav.intent
 import android.content.Intent
 import io.element.android.features.login.api.LoginIntentResolver
 import io.element.android.features.login.api.LoginParams
-import io.element.android.libraries.deeplink.DeeplinkData
-import io.element.android.libraries.deeplink.DeeplinkParser
+import io.element.android.libraries.deeplink.api.DeeplinkData
+import io.element.android.libraries.deeplink.api.DeeplinkParser
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.oidc.api.OidcAction

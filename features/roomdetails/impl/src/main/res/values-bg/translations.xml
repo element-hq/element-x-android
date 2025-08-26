@@ -22,8 +22,6 @@
   <string name="screen_room_change_role_section_moderators">"Модератори"</string>
   <string name="screen_room_change_role_section_users">"Членове"</string>
   <string name="screen_room_details_add_topic_title">"Добавяне на тема"</string>
-  <string name="screen_room_details_already_a_member">"Вече е член"</string>
-  <string name="screen_room_details_already_invited">"Вече е бил поканен"</string>
   <string name="screen_room_details_badge_encrypted">"С шифроване"</string>
   <string name="screen_room_details_badge_not_encrypted">"Без шифроване"</string>
   <string name="screen_room_details_badge_public">"Общодостъпна стая"</string>

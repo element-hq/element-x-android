@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Kaydedilmemiş değişiklikleriniz var."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Değişiklikleri Kaydet?"</string>
   <string name="screen_room_details_add_topic_title">"Konu ekle"</string>
-  <string name="screen_room_details_already_a_member">"Zaten üye"</string>
-  <string name="screen_room_details_already_invited">"Zaten davet edildi"</string>
   <string name="screen_room_details_badge_encrypted">"Şifrelenmiş"</string>
   <string name="screen_room_details_badge_not_encrypted">"Şifrelenmemiş"</string>
   <string name="screen_room_details_badge_public">"Herkese açık oda"</string>

@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Hapus tautan"</string>
   <string name="rich_text_editor_unindent">"Hapus indentasi"</string>
   <string name="rich_text_editor_url_placeholder">"Tautan"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Keterangan mungkin tidak terlihat oleh orang yang menggunakan aplikasi lama."</string>
   <string name="screen_room_voice_message_tooltip">"Tahan untuk merekam"</string>
 </resources>

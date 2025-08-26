@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2025 New Vector Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<!--
+ Note: one or several onboarding_logo drawables can be added at build time. Ensure that these
+ resources are not stripped out by the resource shrinker.
+ -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/onboarding_logo" />

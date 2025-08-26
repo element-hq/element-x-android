@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.haze.hazeEffect
@@ -72,7 +73,7 @@ fun HomeView(
     onSettingsClick: () -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
-    onCreateRoomClick: () -> Unit,
+    onStartChatClick: () -> Unit,
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     onReportRoomClick: (roomId: RoomId) -> Unit,
@@ -116,7 +117,7 @@ fun HomeView(
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                 onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
                 onOpenSettings = { if (firstThrottler.canHandle()) onSettingsClick() },
-                onCreateRoomClick = { if (firstThrottler.canHandle()) onCreateRoomClick() },
+                onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
                 onMenuActionClick = onMenuActionClick,
                 modifier = Modifier.padding(top = topPadding),
             )
@@ -145,7 +146,7 @@ private fun HomeScaffold(
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomId) -> Unit,
     onOpenSettings: () -> Unit,
-    onCreateRoomClick: () -> Unit,
+    onStartChatClick: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -236,7 +237,7 @@ private fun HomeScaffold(
                         onSetUpRecoveryClick = onSetUpRecoveryClick,
                         onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                         onRoomClick = ::onRoomClick,
-                        onCreateRoomClick = onCreateRoomClick,
+                        onCreateRoomClick = onStartChatClick,
                         contentPadding = PaddingValues(
                             // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80,
                             // and include provided bottom padding
@@ -280,7 +281,7 @@ private fun HomeScaffold(
         floatingActionButton = {
             if (state.displayActions) {
                 FloatingActionButton(
-                    onClick = onCreateRoomClick,
+                    onClick = onStartChatClick,
                 ) {
                     Icon(
                         imageVector = CompoundIcons.Plus(),
@@ -304,7 +305,26 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: 
         onSettingsClick = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
-        onCreateRoomClick = {},
+        onStartChatClick = {},
+        onRoomSettingsClick = {},
+        onReportRoomClick = {},
+        onMenuActionClick = {},
+        onDeclineInviteAndBlockUser = {},
+        acceptDeclineInviteView = {},
+        leaveRoomView = {}
+    )
+}
+
+@Preview
+@Composable
+internal fun HomeViewA11yPreview() = ElementPreview {
+    HomeView(
+        homeState = aHomeState(),
+        onRoomClick = {},
+        onSettingsClick = {},
+        onSetUpRecoveryClick = {},
+        onConfirmRecoveryKeyClick = {},
+        onStartChatClick = {},
         onRoomSettingsClick = {},
         onReportRoomClick = {},
         onMenuActionClick = {},

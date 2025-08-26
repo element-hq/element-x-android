@@ -8,7 +8,7 @@
 package io.element.android.features.userprofile.shared
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
+import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState

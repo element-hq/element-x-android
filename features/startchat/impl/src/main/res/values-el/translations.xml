@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Νέα αίθουσα"</string>
+  <string name="screen_room_directory_search_title">"Κατάλογος αιθουσών"</string>
+  <string name="screen_start_chat_error_starting_chat">"Παρουσιάστηκε σφάλμα κατά την προσπάθεια έναρξης μιας συνομιλίας"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Συμμετοχή σε αίθουσα μέσω διεύθυνσης"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Μη έγκυρη διεύθυνση"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Εισάγετε…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Βρέθηκε η αντίστοιχη αίθουσα"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Η αίθουσα δεν βρέθηκε"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"π.χ. #όνομα-αίθουσας:matrix.org"</string>
+</resources>

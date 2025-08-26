@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Mae gennych newidiadau heb eu cadw."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Cadw\'r newidiadau?"</string>
   <string name="screen_room_details_add_topic_title">"Ychwanegu pwnc"</string>
-  <string name="screen_room_details_already_a_member">"Eisoes yn aelod"</string>
-  <string name="screen_room_details_already_invited">"Wedi gwahodd yn barod"</string>
   <string name="screen_room_details_badge_encrypted">"Wedi\'i amgryptio"</string>
   <string name="screen_room_details_badge_not_encrypted">"Heb ei amgryptio"</string>
   <string name="screen_room_details_badge_public">"Ystafell gyhoeddus"</string>

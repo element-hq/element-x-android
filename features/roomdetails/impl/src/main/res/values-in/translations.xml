@@ -7,7 +7,7 @@
   <string name="screen_polls_history_title">"Pemungutan suara"</string>
   <string name="screen_room_change_permissions_administrators">"Hanya admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Cekal orang-orang"</string>
-  <string name="screen_room_change_permissions_delete_messages">"Hapus pesan"</string>
+  <string name="screen_room_change_permissions_delete_messages">"Hilangkan pesan"</string>
   <string name="screen_room_change_permissions_everyone">"Semua orang"</string>
   <string name="screen_room_change_permissions_invite_people">"Undang orang-orang dan terima permintaan untuk bergabung"</string>
   <string name="screen_room_change_permissions_member_moderation">"Moderasi anggota"</string>
@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Anda memiliki perubahan yang belum disimpan."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Simpan perubahan?"</string>
   <string name="screen_room_details_add_topic_title">"Tambahkan topik"</string>
-  <string name="screen_room_details_already_a_member">"Sudah menjadi anggota"</string>
-  <string name="screen_room_details_already_invited">"Sudah diundang"</string>
   <string name="screen_room_details_badge_encrypted">"Terenkripsi"</string>
   <string name="screen_room_details_badge_not_encrypted">"Tidak terenkripsi"</string>
   <string name="screen_room_details_badge_public">"Ruangan publik"</string>

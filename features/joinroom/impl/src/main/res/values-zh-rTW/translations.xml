@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"加入聊天室"</string>
   <string name="screen_join_room_join_restricted_message">"您可能需要被邀請成為空間的成員才能加入。"</string>
   <string name="screen_join_room_knock_action">"傳送加入請求"</string>
+  <string name="screen_join_room_knock_message_characters_count">"允許的字元 %1$d 中的 %2$d"</string>
   <string name="screen_join_room_knock_message_description">"訊息（選擇性）"</string>
   <string name="screen_join_room_knock_sent_description">"若接受了您的請求，您將會收到加入聊天是的邀請。"</string>
   <string name="screen_join_room_knock_sent_title">"已傳送加入請求"</string>

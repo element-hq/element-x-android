@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"منسلکہ شامل کریں"</string>
   <string name="rich_text_editor_bullet_list">"گولئی فہرست تبدیل کریں"</string>
-  <string name="rich_text_editor_close_formatting_options">"تنسیق کے اختیارات بند کریں"</string>
+  <string name="rich_text_editor_close_formatting_options">"ٹیکسٹ فارمیٹنگ کو منسوخ اور بند کریں۔"</string>
   <string name="rich_text_editor_code_block">"رمز بلاک تبدیل کریں"</string>
   <string name="rich_text_editor_composer_placeholder">"پیغام…"</string>
   <string name="rich_text_editor_create_link">"ایک ربط بنائیں"</string>

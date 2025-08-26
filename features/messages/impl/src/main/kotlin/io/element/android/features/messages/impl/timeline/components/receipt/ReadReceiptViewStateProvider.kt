@@ -20,7 +20,7 @@ class ReadReceiptViewStateProvider : PreviewParameterProvider<ReadReceiptViewSta
     override val values: Sequence<ReadReceiptViewState>
         get() = sequenceOf(
             aReadReceiptViewState(),
-            aReadReceiptViewState(sendState = LocalEventSendState.Sending),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sending.Event),
             aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId"))),
             aReadReceiptViewState(
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),

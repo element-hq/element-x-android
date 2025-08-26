@@ -1,0 +1,2 @@
+Main changes in this version: you can now create shortcuts to your recent conversations, several bug fixes related to media processing and downloading.
+Full changelog: https://github.com/element-hq/element-x-android/releases

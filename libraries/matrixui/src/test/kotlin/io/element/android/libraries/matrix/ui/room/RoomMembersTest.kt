@@ -99,7 +99,7 @@ class RoomMembersTest {
         val joinedRoom = FakeBaseRoom(
             sessionId = A_USER_ID,
         ).apply {
-            givenRoomInfo(aRoomInfo(isDirect = true))
+            givenRoomInfo(aRoomInfo(isDirect = true, activeMembersCount = 3L))
         }
         moleculeFlow(RecompositionMode.Immediate) {
             joinedRoom.getDirectRoomMember(

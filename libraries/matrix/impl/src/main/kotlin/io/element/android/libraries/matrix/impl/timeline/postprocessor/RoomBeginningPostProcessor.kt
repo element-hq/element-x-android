@@ -28,7 +28,7 @@ class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
     ): List<MatrixTimelineItem> {
         return when {
             items.isEmpty() -> items
-            mode == Timeline.Mode.PINNED_EVENTS -> items
+            mode == Timeline.Mode.PinnedEvents -> items
             isDm -> processForDM(items, roomCreator)
             hasMoreToLoadBackwards -> items
             else -> processForRoom(items)

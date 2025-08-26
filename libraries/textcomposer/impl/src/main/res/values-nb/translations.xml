@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Fjern lenke"</string>
   <string name="rich_text_editor_unindent">"Fjern innrykk"</string>
   <string name="rich_text_editor_url_placeholder">"Lenke"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Teksting er kanskje ikke synlig for personer som bruker eldre apper."</string>
   <string name="screen_room_voice_message_tooltip">"Hold for å ta opp"</string>
 </resources>

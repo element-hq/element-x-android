@@ -44,7 +44,7 @@ import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.launchMolecule
-import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
+import io.element.android.libraries.deeplink.api.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -120,8 +120,8 @@ class HomeFlowNode @AssistedInject constructor(
         plugins<HomeEntryPoint.Callback>().forEach { it.onSettingsClick() }
     }
 
-    private fun onCreateRoomClick() {
-        plugins<HomeEntryPoint.Callback>().forEach { it.onCreateRoomClick() }
+    private fun onStartChatClick() {
+        plugins<HomeEntryPoint.Callback>().forEach { it.onStartChatClick() }
     }
 
     private fun onSetUpRecoveryClick() {
@@ -171,7 +171,7 @@ class HomeFlowNode @AssistedInject constructor(
                 homeState = state,
                 onRoomClick = this::onRoomClick,
                 onSettingsClick = this::onOpenSettings,
-                onCreateRoomClick = this::onCreateRoomClick,
+                onStartChatClick = this::onStartChatClick,
                 onSetUpRecoveryClick = this::onSetUpRecoveryClick,
                 onConfirmRecoveryKeyClick = this::onSessionConfirmRecoveryKeyClick,
                 onRoomSettingsClick = this::onRoomSettingsClick,

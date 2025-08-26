@@ -82,8 +82,9 @@ class MediaViewerNode @AssistedInject constructor(
             }
             when (timelineMode) {
                 null -> timelineMediaGalleryDataSource
-                Timeline.Mode.LIVE,
-                Timeline.Mode.FOCUSED_ON_EVENT -> {
+                Timeline.Mode.Live,
+                is Timeline.Mode.FocusedOnEvent,
+                is Timeline.Mode.Thread -> {
                     // Does timelineMediaGalleryDataSource knows the eventId?
                     val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
                     val isEventKnown = lastData?.hasEvent(eventId) == true
@@ -97,14 +98,14 @@ class MediaViewerNode @AssistedInject constructor(
                         )
                     }
                 }
-                Timeline.Mode.PINNED_EVENTS -> {
+                Timeline.Mode.PinnedEvents -> {
                     focusedTimelineMediaGalleryDataSourceFactory.createFor(
                         eventId = eventId,
                         mediaItem = inputs.toMediaItem(),
                         onlyPinnedEvents = true,
                     )
                 }
-                Timeline.Mode.MEDIA -> timelineMediaGalleryDataSource
+                Timeline.Mode.Media -> timelineMediaGalleryDataSource
             }
         }
     }

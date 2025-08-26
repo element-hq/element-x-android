@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.api.room
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -33,4 +34,10 @@ fun RoomMembersState.joinedRoomMembers(): List<RoomMember> {
 
 fun RoomMembersState.activeRoomMembers(): List<RoomMember> {
     return roomMembers().orEmpty().filter { it.membership.isActive() }
+}
+
+fun RoomMembersState.getDirectRoomMember(roomInfo: RoomInfo, sessionId: SessionId): RoomMember? {
+    return roomMembers()
+        ?.takeIf { roomInfo.isDm }
+        ?.find { it.userId != sessionId && it.membership.isActive() }
 }

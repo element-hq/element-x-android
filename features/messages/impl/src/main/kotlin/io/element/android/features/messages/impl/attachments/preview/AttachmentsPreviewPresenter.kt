@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorPresenter
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.safeDelete
+import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.firstInstanceOf
@@ -32,8 +33,8 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
@@ -47,12 +48,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.coroutines.coroutineContext
 
 class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
     @Assisted private val onDoneListener: OnDoneListener,
-    private val mediaSender: MediaSender,
+    @Assisted private val timelineMode: Timeline.Mode,
+    mediaSenderFactory: MediaSender.Factory,
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
     private val mediaOptimizationSelectorPresenterFactory: MediaOptimizationSelectorPresenter.Factory,
@@ -63,9 +64,12 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     interface Factory {
         fun create(
             attachment: Attachment,
+            timelineMode: Timeline.Mode,
             onDoneListener: OnDoneListener,
         ): AttachmentsPreviewPresenter
     }
+
+    private val mediaSender = mediaSenderFactory.create(timelineMode)
 
     @Composable
     override fun present(): AttachmentsPreviewState {
@@ -258,6 +262,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             mediaOptimizationConfig = mediaOptimizationConfig,
         ).fold(
             onSuccess = { mediaUploadInfo ->
+                Timber.d("Media ${mediaUploadInfo.file.path.orEmpty().hash()} finished processing, it's now ready to upload")
                 sendActionState.value = SendActionState.Sending.ReadyToUpload(mediaUploadInfo)
             },
             onFailure = {
@@ -304,20 +309,11 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         dismissAfterSend: Boolean,
         inReplyToEventId: EventId?,
     ) = runCatchingExceptions {
-        val context = coroutineContext
-        val progressCallback = object : ProgressCallback {
-            override fun onProgress(current: Long, total: Long) {
-                // Note will not happen if useSendQueue is true
-                if (context.isActive) {
-                    sendActionState.value = SendActionState.Sending.Uploading(current.toFloat() / total.toFloat(), mediaUploadInfo)
-                }
-            }
-        }
+        sendActionState.value = SendActionState.Sending.Uploading(mediaUploadInfo)
         mediaSender.sendPreProcessedMedia(
             mediaUploadInfo = mediaUploadInfo,
             caption = caption,
             formattedCaption = null,
-            progressCallback = progressCallback,
             inReplyToEventId = inReplyToEventId,
         ).getOrThrow()
     }.fold(

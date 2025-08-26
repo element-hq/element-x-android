@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -37,14 +38,14 @@ private const val MSG_TYPE_GALLERY_UNSTABLE = "dm.filament.gallery"
 class EventMessageMapper {
     private val inReplyToMapper by lazy { InReplyToMapper(TimelineEventContentMapper()) }
 
-    fun map(message: MsgLikeKind.Message, inReplyTo: InReplyToDetails?, isThreaded: Boolean): MessageContent = message.use {
+    fun map(message: MsgLikeKind.Message, inReplyTo: InReplyToDetails?, threadInfo: EventThreadInfo): MessageContent = message.use {
         val type = it.content.msgType.use(this::mapMessageType)
         val inReplyToEvent: InReplyTo? = inReplyTo?.use(inReplyToMapper::map)
         MessageContent(
             body = it.content.body,
             inReplyTo = inReplyToEvent,
             isEdited = it.content.isEdited,
-            isThreaded = isThreaded,
+            threadInfo = threadInfo,
             type = type
         )
     }

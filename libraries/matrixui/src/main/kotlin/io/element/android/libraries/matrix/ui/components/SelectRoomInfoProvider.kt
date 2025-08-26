@@ -20,7 +20,7 @@ class SelectRoomInfoProvider : PreviewParameterProvider<SelectRoomInfo> {
         get() = sequenceOf(
             aSelectRoomInfo(roomId = RoomId("!room1:domain")),
             aSelectRoomInfo(roomId = RoomId("!room2:domain"), name = "Room with a name"),
-            aSelectRoomInfo(roomId = RoomId("!room3:domain"), name = "Room with a name and alias", canonicalAlias = RoomAlias("#alias:domain")),
+            aSelectRoomInfo(roomId = RoomId("!room3:domain"), name = "Room with a name and avatar", avatarUrl = "anUrl"),
         )
 }
 

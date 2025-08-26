@@ -29,6 +29,10 @@
   <string name="screen_room_change_role_section_users">"اعضا"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"تغییراتی ذخیره نشده دارید."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"ذخیرهٔ تغییرات؟"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d نفر"</item>
+    <item quantity="other">"%1$d نفر"</item>
+  </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"برداشت و تحریم عضو"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"تنها برداشتن عضو"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"رفع انسداد"</string>

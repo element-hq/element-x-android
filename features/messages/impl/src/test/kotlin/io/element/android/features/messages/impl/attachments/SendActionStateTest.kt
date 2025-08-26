@@ -17,10 +17,21 @@ class SendActionStateTest {
     @Test
     fun `mediaUploadInfo() should return the value from Uploading class`() {
         val mediaUploadInfo: MediaUploadInfo = aMediaUploadInfo()
-        val state: SendActionState = SendActionState.Sending.Uploading(
-            progress = 0.5f,
-            mediaUploadInfo = aMediaUploadInfo()
-        )
+        val state: SendActionState = SendActionState.Sending.Uploading(mediaUploadInfo = aMediaUploadInfo())
+        assertThat(state.mediaUploadInfo()).isEqualTo(mediaUploadInfo)
+    }
+
+    @Test
+    fun `mediaUploadInfo() should return the value from ReadyToUpload class`() {
+        val mediaUploadInfo: MediaUploadInfo = aMediaUploadInfo()
+        val state: SendActionState = SendActionState.Sending.ReadyToUpload(mediaInfo = aMediaUploadInfo())
+        assertThat(state.mediaUploadInfo()).isEqualTo(mediaUploadInfo)
+    }
+
+    @Test
+    fun `mediaUploadInfo() should return the value from Failure class`() {
+        val mediaUploadInfo: MediaUploadInfo = aMediaUploadInfo()
+        val state: SendActionState = SendActionState.Failure(error = IllegalStateException("An error"), mediaUploadInfo = aMediaUploadInfo())
         assertThat(state.mediaUploadInfo()).isEqualTo(mediaUploadInfo)
     }
 }

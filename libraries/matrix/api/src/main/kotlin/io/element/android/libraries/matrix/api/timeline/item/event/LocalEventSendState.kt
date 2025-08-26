@@ -14,7 +14,14 @@ import io.element.android.libraries.matrix.api.core.UserId
 
 @Immutable
 sealed interface LocalEventSendState {
-    data object Sending : LocalEventSendState
+    sealed interface Sending : LocalEventSendState {
+        data object Event : Sending
+        data class MediaWithProgress(
+            val index: Long,
+            val progress: Long,
+            val total: Long
+        ) : Sending
+    }
     sealed interface Failed : LocalEventSendState {
         data class Unknown(val error: String) : Failed
         data object SendingFromUnverifiedDevice : Failed

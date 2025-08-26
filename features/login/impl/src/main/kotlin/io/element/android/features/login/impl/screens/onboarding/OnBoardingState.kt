@@ -7,6 +7,7 @@
 
 package io.element.android.features.login.impl.screens.onboarding
 
+import androidx.annotation.DrawableRes
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.libraries.architecture.AsyncData
 
@@ -18,6 +19,8 @@ data class OnBoardingState(
     val canCreateAccount: Boolean,
     val canReportBug: Boolean,
     val version: String,
+    @DrawableRes
+    val onBoardingLogoResId: Int?,
     val loginMode: AsyncData<LoginMode>,
     val eventSink: (OnBoardingEvents) -> Unit,
 ) {

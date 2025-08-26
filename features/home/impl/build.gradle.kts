@@ -38,7 +38,7 @@ dependencies {
     implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.eventformatter.api)
     implementation(projects.libraries.indicator.api)
-    implementation(projects.libraries.deeplink)
+    implementation(projects.libraries.deeplink.api)
     implementation(projects.libraries.fullscreenintent.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.permissions.noop)

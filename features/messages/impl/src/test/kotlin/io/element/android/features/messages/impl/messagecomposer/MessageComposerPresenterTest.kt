@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
@@ -84,6 +85,7 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenterFac
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -127,6 +129,7 @@ class MessageComposerPresenterTest {
     private val mockMediaUrl: Uri = mockk("localMediaUri")
     private val localMediaFactory = FakeLocalMediaFactory(mockMediaUrl)
     private val analyticsService = FakeAnalyticsService()
+    private val notificationConversationService = FakeNotificationConversationService()
 
     @Test
     fun `present - initial state`() = runTest {
@@ -1181,7 +1184,7 @@ class MessageComposerPresenterTest {
             room = FakeJoinedRoom(
                 typingNoticeResult = { Result.success(Unit) },
                 liveTimeline = FakeTimeline().apply {
-                    sendFileLambda = { _, _, _, _, _, _ ->
+                    sendFileLambda = { _, _, _, _, _ ->
                         Result.success(FakeMediaUploadHandler())
                     }
                 }
@@ -1521,6 +1524,7 @@ class MessageComposerPresenterTest {
         room: JoinedRoom = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         ),
+        timeline: Timeline = room.liveTimeline,
         navigator: MessagesNavigator = FakeMessagesNavigator(),
         pickerProvider: PickerProvider = this@MessageComposerPresenterTest.pickerProvider,
         locationService: LocationService = FakeLocationService(true),
@@ -1546,11 +1550,21 @@ class MessageComposerPresenterTest {
         mediaPickerProvider = pickerProvider,
         sessionPreferencesStore = sessionPreferencesStore,
         localMediaFactory = localMediaFactory,
-        mediaSender = MediaSender(
-            preProcessor = mediaPreProcessor,
-            room = room,
-            mediaOptimizationConfigProvider = { MediaOptimizationConfig(compressImages = true, videoCompressionPreset = VideoCompressionPreset.STANDARD) }
-        ),
+        mediaSenderFactory = object : MediaSender.Factory {
+            override fun create(timelineMode: Timeline.Mode): MediaSender {
+                return MediaSender(
+                    preProcessor = mediaPreProcessor,
+                    room = room,
+                    timelineMode = timelineMode,
+                    mediaOptimizationConfigProvider = {
+                        MediaOptimizationConfig(
+                        compressImages = true,
+                        videoCompressionPreset = VideoCompressionPreset.STANDARD
+                    )
+                    }
+                )
+            }
+        },
         snackbarDispatcher = snackbarDispatcher,
         analyticsService = analyticsService,
         locationService = locationService,
@@ -1560,12 +1574,13 @@ class MessageComposerPresenterTest {
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
-        timelineController = TimelineController(room),
+        timelineController = TimelineController(room, timeline),
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
         suggestionsProcessor = SuggestionsProcessor(),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
+        notificationConversationService = notificationConversationService,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

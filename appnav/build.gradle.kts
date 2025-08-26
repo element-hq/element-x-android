@@ -27,7 +27,7 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.deeplink)
+    implementation(projects.libraries.deeplink.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.oidc.api)
     implementation(projects.libraries.preferences.api)
@@ -65,6 +65,7 @@ dependencies {
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.analytics.test)
+    testImplementation(projects.services.toolbox.test)
     testImplementation(libs.test.appyx.junit)
     testImplementation(libs.test.arch.core)
 }

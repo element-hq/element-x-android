@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"您不会看到来自该用户的任何信息或房间邀请"</string>
   <string name="screen_decline_and_block_block_user_option_title">"封禁用户"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"向您的帐户提供商举报此房间。"</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"描述举报的原因…"</string>
+  <string name="screen_decline_and_block_title">"拒绝并屏蔽"</string>
   <string name="screen_invites_decline_chat_message">"您确定要拒绝加入 %1$s 的邀请吗？"</string>
   <string name="screen_invites_decline_chat_title">"拒绝邀请"</string>
   <string name="screen_invites_decline_direct_chat_message">"您确定要拒绝与 %1$s 开始私聊吗？"</string>
   <string name="screen_invites_decline_direct_chat_title">"拒绝聊天"</string>
   <string name="screen_invites_empty_list">"没有邀请"</string>
   <string name="screen_invites_invited_you">"%1$s （%2$s）邀请了你"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"是的，拒绝并屏蔽"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"您确定要拒绝加入此房间的邀请吗？这也将阻止%1$s 与您联系或邀请您加入房间。"</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"拒绝邀请并屏蔽"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"拒绝并屏蔽"</string>
 </resources>

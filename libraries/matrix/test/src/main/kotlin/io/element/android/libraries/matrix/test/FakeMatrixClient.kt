@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.DeviceId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -95,6 +94,7 @@ class FakeMatrixClient(
     private val isLivekitRtcSupportedLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
     private val getMaxUploadSizeResult: () -> Result<Long> = { lambdaError() },
+    private val getJoinedRoomIdsResult: () -> Result<Set<RoomId>> = { Result.success(emptySet()) },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -140,6 +140,10 @@ class FakeMatrixClient(
 
     override suspend fun findDM(userId: UserId): Result<RoomId?> {
         return findDmResult
+    }
+
+    override suspend fun getJoinedRoomIds(): Result<Set<RoomId>> {
+        return getJoinedRoomIdsResult()
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = simulateLongTask {
@@ -201,7 +205,6 @@ class FakeMatrixClient(
     override suspend fun uploadMedia(
         mimeType: String,
         data: ByteArray,
-        progressCallback: ProgressCallback?
     ): Result<String> {
         return uploadMediaResult
     }

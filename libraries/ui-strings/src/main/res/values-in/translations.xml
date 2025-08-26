@@ -11,6 +11,9 @@
   <string name="a11y_jump_to_bottom">"Lompat ke bawah"</string>
   <string name="a11y_notifications_mentions_only">"Hanya sebutan"</string>
   <string name="a11y_notifications_muted">"Dibisukan"</string>
+  <string name="a11y_notifications_new_mentions">"Sebutan baru"</string>
+  <string name="a11y_notifications_new_messages">"Pesan baru"</string>
+  <string name="a11y_notifications_ongoing_call">"Panggilan berlangsung"</string>
   <string name="a11y_other_user_avatar">"Avatar pengguna lain"</string>
   <string name="a11y_page_n">"Halaman %1$d"</string>
   <string name="a11y_pause">"Jeda"</string>
@@ -99,6 +102,7 @@
   <string name="action_no">"Tidak"</string>
   <string name="action_not_now">"Jangan sekarang"</string>
   <string name="action_ok">"Oke"</string>
+  <string name="action_open_context_menu">"Buka menu konteks"</string>
   <string name="action_open_settings">"Pengaturan"</string>
   <string name="action_open_with">"Buka dengan"</string>
   <string name="action_pin">"Sematkan"</string>
@@ -106,9 +110,9 @@
   <string name="action_quote">"Kutip"</string>
   <string name="action_react">"Bereaksi"</string>
   <string name="action_reject">"Tolak"</string>
-  <string name="action_remove">"Hapus"</string>
-  <string name="action_remove_caption">"Hapus keterangan"</string>
-  <string name="action_remove_message">"Hapus pesan"</string>
+  <string name="action_remove">"Hilangkan"</string>
+  <string name="action_remove_caption">"Hilangkan keterangan"</string>
+  <string name="action_remove_message">"Hilangkan pesan"</string>
   <string name="action_reply">"Balas"</string>
   <string name="action_reply_in_thread">"Balas dalam utas"</string>
   <string name="action_report">"Laporkan"</string>
@@ -123,7 +127,9 @@
   <string name="action_save">"Simpan"</string>
   <string name="action_search">"Cari"</string>
   <string name="action_send">"Kirim"</string>
+  <string name="action_send_edited_message">"Kirim pesan tersunting"</string>
   <string name="action_send_message">"Kirim pesan"</string>
+  <string name="action_send_voice_message">"Kirim pesan suara"</string>
   <string name="action_share">"Bagikan"</string>
   <string name="action_share_link">"Bagikan tautan"</string>
   <string name="action_show">"Tampilkan"</string>
@@ -209,7 +215,7 @@ Alasan: %1$s."</string>
     <item quantity="other">"%d lainnya"</item>
   </plurals>
   <plurals name="common_member_count">
-    <item quantity="other">"%1$d anggota"</item>
+    <item quantity="other">"%1$d Anggota"</item>
   </plurals>
   <string name="common_message">"Pesan"</string>
   <string name="common_message_actions">"Tindakan pesan"</string>

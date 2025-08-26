@@ -17,6 +17,8 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
 
@@ -56,7 +58,10 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(
                     ),
                     inReplyTo = inReplyToDetails,
                     displayNameAmbiguous = displayNameAmbiguous,
-                    isThreaded = true,
+                    threadInfo = EventThreadInfo(
+                        threadRootId = ThreadId("\$thread-root-id"),
+                        threadSummary = null,
+                    ),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
             )

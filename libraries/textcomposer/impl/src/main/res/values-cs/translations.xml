@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Odstranit odkaz"</string>
   <string name="rich_text_editor_unindent">"Zrušit odsazení"</string>
   <string name="rich_text_editor_url_placeholder">"Odkaz"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Titulky nemusí být viditelné pro lidi, kteří používají starší aplikace."</string>
   <string name="screen_room_voice_message_tooltip">"Držte pro nahrávání"</string>
 </resources>

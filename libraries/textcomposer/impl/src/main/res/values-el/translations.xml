@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Κατάργηση συνδέσμου"</string>
   <string name="rich_text_editor_unindent">"Χωρίς εσοχή"</string>
   <string name="rich_text_editor_url_placeholder">"Σύνδεσμος"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Οι λεζάντες ενδέχεται να μην είναι ορατές σε άτομα που χρησιμοποιούν παλαιότερες εφαρμογές."</string>
   <string name="screen_room_voice_message_tooltip">"Κράτα για εγγραφή"</string>
 </resources>

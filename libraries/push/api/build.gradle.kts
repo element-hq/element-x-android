@@ -17,5 +17,6 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.coil.compose)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.pushproviders.api)
 }

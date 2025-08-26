@@ -163,11 +163,13 @@ fun TimelineView(
                 ) { timelineItem ->
                     TimelineItemRow(
                         timelineItem = timelineItem,
+                        timelineMode = state.timelineMode,
                         timelineRoomInfo = state.timelineRoomInfo,
                         timelineProtectionState = timelineProtectionState,
                         renderReadReceipts = state.renderReadReceipts,
                         isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                         focusedEventId = state.focusedEventId,
+                        displayThreadSummaries = state.displayThreadSummaries,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
                         onLinkLongClick = ::onLinkLongClick,

@@ -35,8 +35,6 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Sie haben ungespeicherte Änderungen."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Änderungen speichern?"</string>
   <string name="screen_room_details_add_topic_title">"Thema hinzufügen"</string>
-  <string name="screen_room_details_already_a_member">"Bereits Mitglied"</string>
-  <string name="screen_room_details_already_invited">"Bereits eingeladen"</string>
   <string name="screen_room_details_badge_encrypted">"Verschlüsselt"</string>
   <string name="screen_room_details_badge_not_encrypted">"Nicht verschlüsselt"</string>
   <string name="screen_room_details_badge_public">"Öffentlicher Raum"</string>

@@ -39,6 +39,8 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
@@ -71,6 +73,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<PinnedMessagesListState> {
     @AssistedFactory
     interface Factory {
@@ -115,6 +118,8 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
 
+        val displayThreadSummaries by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(false)
+
         var pinnedMessageItems by remember {
             mutableStateOf<AsyncData<ImmutableList<TimelineItem>>>(AsyncData.Uninitialized)
         }
@@ -134,6 +139,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
             timelineRoomInfo = timelineRoomInfo,
             timelineProtectionState = timelineProtectionState,
             linkState = linkState,
+            displayThreadSummaries = displayThreadSummaries,
             userEventPermissions = userEventPermissions,
             timelineItems = pinnedMessageItems,
             eventSink = ::handleEvents
@@ -230,6 +236,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private fun pinnedMessagesListState(
         timelineRoomInfo: TimelineRoomInfo,
         timelineProtectionState: TimelineProtectionState,
+        displayThreadSummaries: Boolean,
         linkState: LinkState,
         userEventPermissions: UserEventPermissions,
         timelineItems: AsyncData<ImmutableList<TimelineItem>>,
@@ -246,6 +253,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                     PinnedMessagesListState.Filled(
                         timelineRoomInfo = timelineRoomInfo,
                         timelineProtectionState = timelineProtectionState,
+                        displayThreadSummaries = displayThreadSummaries,
                         linkState = linkState,
                         userEventPermissions = userEventPermissions,
                         timelineItems = timelineItems.data,

@@ -10,6 +10,10 @@
   <string name="screen_change_account_provider_other">"Beste bat"</string>
   <string name="screen_change_account_provider_subtitle">"Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat."</string>
   <string name="screen_change_account_provider_title">"Aldatu kontu-hornitzailea"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Element Pro behar da"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Hautatutako kontu-hornitzailea ez da bateragarria Sliding Sync-ekin. Beharrezkoa da zerbitzaria bertsio-berritzea %1$s erabiltzeko."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Ez da %1$s kontu-hornitzailea onartzen."</string>
   <string name="screen_change_server_form_header">"Zerbitzariaren URLa"</string>
   <string name="screen_change_server_form_notice">"Sartu domeinu-helbide bat."</string>
   <string name="screen_change_server_subtitle">"Zein da zure zerbitzariaren helbidea?"</string>
@@ -17,10 +21,12 @@
   <string name="screen_create_account_title">"Sortu kontua"</string>
   <string name="screen_login_error_deactivated_account">"Kontu hau desaktibatuta dago."</string>
   <string name="screen_login_error_invalid_credentials">"Erabiltzaile-izena edo/eta pasahitza okerrak"</string>
+  <string name="screen_login_error_unsupported_authentication">"Hautatutako zerbitzaria ez da bateragarria pasahitz edo OIDC saio-hasierarekin. Jarri harremanetan administratzailearekin edo aukeratu beste zerbitzari bat."</string>
   <string name="screen_login_form_header">"Sartu zure datuak"</string>
   <string name="screen_login_subtitle">"Matrix komunikazio seguru eta deszentralizaturako sare irekia da."</string>
   <string name="screen_login_title">"Ongi etorri!"</string>
   <string name="screen_login_title_with_homeserver">"Hasi saioa %1$s(e)n"</string>
+  <string name="screen_onboarding_app_version">"%1$s bertsioa"</string>
   <string name="screen_onboarding_sign_in_manually">"Hasi saioa eskuz"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Hasi saioa QR kodearekin"</string>
   <string name="screen_onboarding_sign_up">"Sortu kontua"</string>
@@ -67,5 +73,6 @@ Saiatu saioa eskuz hasten, edo eskaneatu QR kodea beste gailu batean."</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Elementeko langileentzako zerbitzari pribatua."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix komunikazio seguru eta deszentralizaturako sare irekia da."</string>
   <string name="screen_server_confirmation_title_login">"%1$s(e)n saioa hastear zaude"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Aukeratu kontu-hornitzailea"</string>
   <string name="screen_server_confirmation_title_register">"%1$s(e)n kontua sortzear zaude"</string>
 </resources>

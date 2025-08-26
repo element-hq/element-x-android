@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -209,4 +210,5 @@ private fun TestScope.createLeaveRoomPresenter(
 ): LeaveRoomPresenter = LeaveRoomPresenter(
     client = client,
     dispatchers = testCoroutineDispatchers(false),
+    notificationConversationService = FakeNotificationConversationService(),
 )
