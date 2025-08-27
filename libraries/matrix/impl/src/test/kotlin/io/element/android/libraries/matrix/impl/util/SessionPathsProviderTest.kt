@@ -26,7 +26,7 @@ class SessionPathsProviderTest {
     fun `if session is found, provides returns the data`() = runTest {
         val store = InMemorySessionStore()
         val sut = SessionPathsProvider(store)
-        store.storeData(
+        store.addSession(
             aSessionData(
                 sessionPath = "/a/path/to/a/session",
                 cachePath = "/a/path/to/a/cache",

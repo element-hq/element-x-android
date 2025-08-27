@@ -105,7 +105,7 @@ class DefaultBugReporterTest {
         server.start()
 
         val mockSessionStore = InMemorySessionStore().apply {
-            storeData(aSessionData(sessionId = "@foo:example.com", deviceId = "ABCDEFGH"))
+            addSession(aSessionData(sessionId = "@foo:example.com", deviceId = "ABCDEFGH"))
         }
 
         val fakeEncryptionService = FakeEncryptionService()
@@ -166,7 +166,7 @@ class DefaultBugReporterTest {
         server.start()
 
         val mockSessionStore = InMemorySessionStore().apply {
-            storeData(aSessionData("@foo:example.com", "ABCDEFGH"))
+            addSession(aSessionData("@foo:example.com", "ABCDEFGH"))
         }
 
         val fakeEncryptionService = FakeEncryptionService()
@@ -309,7 +309,7 @@ class DefaultBugReporterTest {
         val sut = createDefaultBugReporter(
             buildMeta = aBuildMeta(isEnterpriseBuild = true),
             sessionStore = InMemorySessionStore().apply {
-                storeData(aSessionData(sessionId = "@alice:domain.com"))
+                addSession(aSessionData(sessionId = "@alice:domain.com"))
             }
         )
         assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs/domain.com")
@@ -319,7 +319,7 @@ class DefaultBugReporterTest {
     fun `foss build - the log directory is initialized to the root log directory`() = runTest {
         val sut = createDefaultBugReporter(
             sessionStore = InMemorySessionStore().apply {
-                storeData(aSessionData(sessionId = "@alice:domain.com"))
+                addSession(aSessionData(sessionId = "@alice:domain.com"))
             }
         )
         assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs")

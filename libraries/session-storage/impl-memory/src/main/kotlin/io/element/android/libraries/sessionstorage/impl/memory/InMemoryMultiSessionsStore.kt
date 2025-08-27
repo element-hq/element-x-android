@@ -19,7 +19,7 @@ class InMemoryMultiSessionsStore : SessionStore {
 
     override fun sessionsFlow(): Flow<List<SessionData>> = error("Not implemented")
 
-    override suspend fun storeData(sessionData: SessionData) {
+    override suspend fun addSession(sessionData: SessionData) {
         sessions.add(sessionData)
     }
 
