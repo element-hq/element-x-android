@@ -11,7 +11,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
-import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
@@ -253,11 +252,9 @@ private fun createPresenter(
 fun createLoginHelper(
     oidcActionFlow: OidcActionFlow = FakeOidcActionFlow(),
     authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
-    defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
     webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
 ): LoginHelper = LoginHelper(
     oidcActionFlow = oidcActionFlow,
     authenticationService = authenticationService,
-    defaultLoginUserStory = defaultLoginUserStory,
     webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,
 )

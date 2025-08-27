@@ -13,7 +13,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.test.FakeEnterpriseService
-import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
@@ -30,7 +29,6 @@ import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
 import io.element.android.libraries.oidc.test.customtab.FakeOidcActionFlow
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.waitForPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -186,13 +184,9 @@ class ConfirmAccountProviderPresenterTest {
     fun `present - oidc - success with success`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService()
         val defaultOidcActionFlow = FakeOidcActionFlow()
-        val defaultLoginUserStory = DefaultLoginUserStory().apply {
-            setLoginFlowIsDone(false)
-        }
         val presenter = createConfirmAccountProviderPresenter(
             matrixAuthenticationService = authenticationService,
             defaultOidcActionFlow = defaultOidcActionFlow,
-            defaultLoginUserStory = defaultLoginUserStory,
         )
         authenticationService.givenHomeserver(A_HOMESERVER_OIDC)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -207,11 +201,9 @@ class ConfirmAccountProviderPresenterTest {
             assertThat(successState.submitEnabled).isFalse()
             assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
             assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
-            assertThat(defaultLoginUserStory.loginFlowIsDone.value).isFalse()
             defaultOidcActionFlow.post(OidcAction.Success("aUrl"))
             val successSuccessState = awaitItem()
             assertThat(successSuccessState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
-            waitForPredicate { defaultLoginUserStory.loginFlowIsDone.value }
         }
     }
 
@@ -357,7 +349,6 @@ class ConfirmAccountProviderPresenterTest {
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         defaultOidcActionFlow: OidcActionFlow = FakeOidcActionFlow(),
-        defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
         webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
     ) = ConfirmAccountProviderPresenter(
         params = params,
@@ -365,7 +356,6 @@ class ConfirmAccountProviderPresenterTest {
         loginHelper = createLoginHelper(
             authenticationService = matrixAuthenticationService,
             oidcActionFlow = defaultOidcActionFlow,
-            defaultLoginUserStory = defaultLoginUserStory,
             webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,
         ),
     )

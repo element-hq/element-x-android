@@ -12,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderPresenter
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter
@@ -38,7 +37,6 @@ import javax.inject.Inject
 class LoginHelper @Inject constructor(
     private val oidcActionFlow: OidcActionFlow,
     private val authenticationService: MatrixAuthenticationService,
-    private val defaultLoginUserStory: DefaultLoginUserStory,
     private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,
 ) {
     private val loginModeState: MutableState<AsyncData<LoginMode>> = mutableStateOf(AsyncData.Uninitialized)
@@ -108,9 +106,6 @@ class LoginHelper @Inject constructor(
             }
             is OidcAction.Success -> {
                 authenticationService.loginWithOidc(oidcAction.url)
-                    .onSuccess { _ ->
-                        defaultLoginUserStory.setLoginFlowIsDone(true)
-                    }
                     .onFailure { failure ->
                         loginModeState.value = AsyncData.Failure(failure)
                     }

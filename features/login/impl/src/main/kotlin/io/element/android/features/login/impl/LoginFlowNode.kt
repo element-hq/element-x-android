@@ -55,7 +55,6 @@ class LoginFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val defaultLoginUserStory: DefaultLoginUserStory,
     private val oidcActionFlow: OidcActionFlow,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
@@ -77,7 +76,6 @@ class LoginFlowNode @AssistedInject constructor(
 
     override fun onBuilt() {
         super.onBuilt()
-        defaultLoginUserStory.setLoginFlowIsDone(false)
         lifecycle.subscribe(
             onResume = {
                 if (externalAppStarted) {

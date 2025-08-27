@@ -11,7 +11,6 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -88,9 +87,6 @@ class CreateAccountPresenterTest {
 
     @Test
     fun `present - receiving a message able to be parsed change the state to success`() = runTest {
-        val defaultLoginUserStory = DefaultLoginUserStory()
-        defaultLoginUserStory.setLoginFlowIsDone(false)
-        assertThat(defaultLoginUserStory.loginFlowIsDone.value).isFalse()
         val lambda = lambdaRecorder<String, ExternalSession> { _ -> anExternalSession() }
         val sessionVerificationService = FakeSessionVerificationService()
         val client = FakeMatrixClient(sessionVerificationService = sessionVerificationService)
@@ -100,7 +96,6 @@ class CreateAccountPresenterTest {
                 importCreatedSessionLambda = { Result.success(A_SESSION_ID) }
             ),
             messageParser = FakeMessageParser(lambda),
-            defaultLoginUserStory = defaultLoginUserStory,
             clientProvider = clientProvider,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -113,14 +108,10 @@ class CreateAccountPresenterTest {
             assertThat(awaitItem().createAction.dataOrNull()).isEqualTo(A_SESSION_ID)
         }
         lambda.assertions().isCalledOnce().with(value("aMessage"))
-        assertThat(defaultLoginUserStory.loginFlowIsDone.value).isTrue()
     }
 
     @Test
     fun `present - receiving a message able to be parsed but error in importing change the state to error`() = runTest {
-        val defaultLoginUserStory = DefaultLoginUserStory()
-        defaultLoginUserStory.setLoginFlowIsDone(false)
-        assertThat(defaultLoginUserStory.loginFlowIsDone.value).isFalse()
         val presenter = createPresenter(
             authenticationService = FakeMatrixAuthenticationService(
                 importCreatedSessionLambda = { Result.failure(AN_EXCEPTION) }
@@ -135,20 +126,17 @@ class CreateAccountPresenterTest {
             assertThat(awaitItem().createAction.isLoading()).isTrue()
             assertThat(awaitItem().createAction.errorOrNull()).isNotNull()
         }
-        assertThat(defaultLoginUserStory.loginFlowIsDone.value).isFalse()
     }
 
     private fun createPresenter(
         url: String = "aUrl",
         authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
-        defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
         messageParser: MessageParser = FakeMessageParser(),
         buildMeta: BuildMeta = aBuildMeta(),
         clientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
     ) = CreateAccountPresenter(
         url = url,
         authenticationService = authenticationService,
-        defaultLoginUserStory = defaultLoginUserStory,
         messageParser = messageParser,
         buildMeta = buildMeta,
         clientProvider = clientProvider,
