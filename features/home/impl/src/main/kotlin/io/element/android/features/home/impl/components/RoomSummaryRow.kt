@@ -304,8 +304,10 @@ private fun MessagePreviewAndIndicatorRow(
                 MentionIndicatorAtom()
             }
             if (room.hasNewContent) {
+                val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
                 UnreadIndicatorAtom(
-                    color = tint
+                    color = tint,
+                    contentDescription = contentDescription,
                 )
             }
         }

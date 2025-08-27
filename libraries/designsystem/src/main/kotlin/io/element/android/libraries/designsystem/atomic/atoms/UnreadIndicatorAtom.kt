@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
@@ -24,7 +23,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.unreadIndicator
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun UnreadIndicatorAtom(
@@ -32,11 +30,13 @@ fun UnreadIndicatorAtom(
     size: Dp = 12.dp,
     color: Color = ElementTheme.colors.unreadIndicator,
     isVisible: Boolean = true,
+    contentDescription: String? = null,
 ) {
-    val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
     Box(
         modifier = modifier
-            .semantics { this.contentDescription = contentDescription }
+            .semantics {
+                contentDescription?.let { this.contentDescription = it }
+            }
             .size(size)
             .clip(CircleShape)
             .background(if (isVisible) color else Color.Transparent)
