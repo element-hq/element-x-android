@@ -244,6 +244,6 @@ paparazzi = "app.cash.paparazzi:2.0.0-alpha02"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
-sonarqube = "org.sonarqube:6.2.0.5505"
+sonarqube = "org.sonarqube:6.3.1.5724"
 licensee = "app.cash.licensee:1.13.0"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
