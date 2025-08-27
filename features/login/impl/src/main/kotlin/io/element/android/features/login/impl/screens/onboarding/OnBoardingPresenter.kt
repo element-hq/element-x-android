@@ -27,6 +27,7 @@ import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.utils.MultipleTapToUnlock
 
 class OnBoardingPresenter @AssistedInject constructor(
@@ -37,6 +38,7 @@ class OnBoardingPresenter @AssistedInject constructor(
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val loginHelper: LoginHelper,
     private val onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider,
+    private val sessionStore: SessionStore,
 ) : Presenter<OnBoardingState> {
     @AssistedFactory
     interface Factory {
@@ -85,6 +87,10 @@ class OnBoardingPresenter @AssistedInject constructor(
         val onBoardingLogoResId = remember {
             onBoardingLogoResIdProvider.get()
         }
+        val isAddingAccount by produceState(initialValue = false) {
+            // We are adding an account if there is at least one session already stored
+            value = sessionStore.getAllSessions().isNotEmpty()
+        }
 
         val loginMode by loginHelper.collectLoginMode()
 
@@ -108,6 +114,7 @@ class OnBoardingPresenter @AssistedInject constructor(
         }
 
         return OnBoardingState(
+            isAddingAccount = isAddingAccount,
             productionApplicationName = buildMeta.productionApplicationName,
             defaultAccountProvider = defaultAccountProvider,
             mustChooseAccountProvider = mustChooseAccountProvider,
