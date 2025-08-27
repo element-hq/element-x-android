@@ -30,7 +30,7 @@ class RustMatrixAuthenticationServiceTest {
             sessionStore = sessionStore,
         )
         assertThat(sut.getLatestSessionId()).isNull()
-        sessionStore.storeData(aSessionData(sessionId = "@alice:server.org"))
+        sessionStore.addSession(aSessionData(sessionId = "@alice:server.org"))
         assertThat(sut.getLatestSessionId()).isEqualTo(SessionId("@alice:server.org"))
     }
 

@@ -52,7 +52,7 @@ class DatabaseSessionStore(
             }
     }
 
-    override suspend fun storeData(sessionData: SessionData) {
+    override suspend fun addSession(sessionData: SessionData) {
         sessionDataMutex.withLock {
             val lastUsageIndex = getLastUsageIndex()
             database.sessionDataQueries.insertSessionData(
