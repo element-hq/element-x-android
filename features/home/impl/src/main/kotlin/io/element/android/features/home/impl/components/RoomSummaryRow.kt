@@ -285,6 +285,7 @@ private fun MessagePreviewAndIndicatorRow(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
+
         // Call and unread
         Row(
             modifier = Modifier.height(16.dp),
@@ -371,7 +372,7 @@ private fun OnGoingCallIcon(
     Icon(
         modifier = Modifier.size(16.dp),
         imageVector = CompoundIcons.VideoCallSolid(),
-        contentDescription = null,
+        contentDescription = stringResource(CommonStrings.a11y_notifications_ongoing_call),
         tint = color,
     )
 }
@@ -380,7 +381,7 @@ private fun OnGoingCallIcon(
 private fun NotificationOffIndicatorAtom() {
     Icon(
         modifier = Modifier.size(16.dp),
-        contentDescription = null,
+        contentDescription = stringResource(CommonStrings.a11y_notifications_muted),
         imageVector = CompoundIcons.NotificationsOffSolid(),
         tint = ElementTheme.colors.iconQuaternary,
     )
@@ -390,7 +391,7 @@ private fun NotificationOffIndicatorAtom() {
 private fun MentionIndicatorAtom() {
     Icon(
         modifier = Modifier.size(16.dp),
-        contentDescription = null,
+        contentDescription = stringResource(CommonStrings.a11y_notifications_new_mentions),
         imageVector = CompoundIcons.Mention(),
         tint = ElementTheme.colors.unreadIndicator,
     )
