@@ -23,6 +23,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -86,6 +87,13 @@ fun LoginModeView(
                 is AccountCreationNotSupported -> {
                     ErrorDialog(
                         content = stringResource(CommonStrings.error_account_creation_not_possible),
+                        onSubmit = onClearError,
+                    )
+                }
+                is AuthenticationException.AccountAlreadyLoggedIn -> {
+                    // TODO i18n
+                    ErrorDialog(
+                        content = "You're already logged in on this device as ${error.message}.",
                         onSubmit = onClearError,
                     )
                 }

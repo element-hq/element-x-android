@@ -15,6 +15,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -149,6 +150,8 @@ class RustMatrixAuthenticationService(
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
                 client.login(username, password, "Element X Android", null)
+                // Ensure that the user is not already logged in with the same account
+                ensureNotAlreadyLoggedIn(client)
                 val sessionData = client.session()
                     .toSessionData(
                         isTokenValid = true,
@@ -237,17 +240,19 @@ class RustMatrixAuthenticationService(
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
                 client.loginWithOidcCallback(callbackUrl)
+
+                // Free the pending data since we won't use it to abort the flow anymore
+                pendingOAuthAuthorizationData?.close()
+                pendingOAuthAuthorizationData = null
+
+                // Ensure that the user is not already logged in with the same account
+                ensureNotAlreadyLoggedIn(client)
                 val sessionData = client.session().toSessionData(
                     isTokenValid = true,
                     loginType = LoginType.OIDC,
                     passphrase = pendingPassphrase,
                     sessionPaths = currentSessionPaths,
                 )
-
-                // Free the pending data since we won't use it to abort the flow anymore
-                pendingOAuthAuthorizationData?.close()
-                pendingOAuthAuthorizationData = null
-
                 val matrixClient = rustMatrixClientFactory.create(client)
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.storeData(sessionData)
@@ -260,6 +265,21 @@ class RustMatrixAuthenticationService(
                 Timber.e(failure, "Failed to login with OIDC")
                 failure.mapAuthenticationException()
             }
+        }
+    }
+
+    @Throws(AuthenticationException.AccountAlreadyLoggedIn::class)
+    private suspend fun ensureNotAlreadyLoggedIn(client: Client) {
+        val newUserId = client.userId()
+        val accountAlreadyLoggedIn = sessionStore.getAllSessions().any {
+            it.userId == newUserId
+        }
+        if (accountAlreadyLoggedIn) {
+            // Sign out the client, ignoring any error
+            runCatchingExceptions {
+                client.logout()
+            }
+            throw AuthenticationException.AccountAlreadyLoggedIn(newUserId)
         }
     }
 
@@ -285,7 +305,8 @@ class RustMatrixAuthenticationService(
                     oidcConfiguration = oidcConfiguration,
                     progressListener = progressListener,
                 )
-
+                // Ensure that the user is not already logged in with the same account
+                ensureNotAlreadyLoggedIn(client)
                 val sessionData = client.session()
                     .toSessionData(
                         isTokenValid = true,

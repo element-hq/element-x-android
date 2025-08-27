@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.api.auth
 
 sealed class AuthenticationException(message: String) : Exception(message) {
+    class AccountAlreadyLoggedIn(userId: String) : AuthenticationException(userId)
     class InvalidServerName(message: String) : AuthenticationException(message)
     class SlidingSyncVersion(message: String) : AuthenticationException(message)
     class Oidc(message: String) : AuthenticationException(message)
