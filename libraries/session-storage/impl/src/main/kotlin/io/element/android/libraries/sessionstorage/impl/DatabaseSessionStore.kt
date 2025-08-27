@@ -108,6 +108,11 @@ class DatabaseSessionStore(
     }
 
     override suspend fun setLatestSession(sessionId: String) {
+        val latestSession = getLatestSession()
+        if (latestSession?.userId == sessionId) {
+            // Already the latest session
+            return
+        }
         val lastUsageIndex = getLatestSession()?.lastUsageIndex ?: 0
         val result = database.sessionDataQueries.selectByUserId(sessionId)
             .executeAsOneOrNull()

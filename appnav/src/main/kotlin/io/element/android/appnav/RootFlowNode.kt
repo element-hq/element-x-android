@@ -54,6 +54,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
 import io.element.android.libraries.sessionstorage.api.LoggedInState
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -76,6 +77,7 @@ class RootFlowNode(
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
     private val bugReporter: BugReporter,
+    private val sessionStore: SessionStore,
 ) : BaseFlowNode<RootFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.SplashScreen,
@@ -365,7 +367,8 @@ class RootFlowNode(
 
     // [sessionId] will be null for permalink.
     private suspend fun attachSession(sessionId: SessionId?): LoggedInFlowNode {
-        // TODO handle multi-session
+        // Ensure that the session is the latest one
+        sessionId?.let { sessionStore.setLatestSession(it.value) }
         return waitForChildAttached<LoggedInAppScopeFlowNode, NavTarget> { navTarget ->
             navTarget is NavTarget.LoggedInFlow && (sessionId == null || navTarget.sessionId == sessionId)
         }
