@@ -38,7 +38,9 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
+import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -58,6 +60,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun OnBoardingView(
     state: OnBoardingState,
+    onBackPressed: () -> Unit,
     onSignInWithQrCode: () -> Unit,
     onSignIn: (mustChooseAccountProvider: Boolean) -> Unit,
     onCreateAccount: () -> Unit,
@@ -66,6 +69,52 @@ fun OnBoardingView(
     onLearnMoreClick: () -> Unit,
     onCreateAccountContinue: (url: String) -> Unit,
     onReportProblem: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val loginView = @Composable {
+        LoginModeView(
+            loginMode = state.loginMode,
+            onClearError = {
+                state.eventSink(OnBoardingEvents.ClearError)
+            },
+            onLearnMoreClick = onLearnMoreClick,
+            onOidcDetails = onOidcDetails,
+            onNeedLoginPassword = onNeedLoginPassword,
+            onCreateAccountContinue = onCreateAccountContinue,
+        )
+    }
+    val buttons = @Composable {
+        OnBoardingButtons(
+            state = state,
+            onSignInWithQrCode = onSignInWithQrCode,
+            onSignIn = onSignIn,
+            onCreateAccount = onCreateAccount,
+            onReportProblem = onReportProblem,
+        )
+    }
+
+    if (state.isAddingAccount) {
+        AddOtherAccountScaffold(
+            modifier = modifier,
+            loginView = loginView,
+            buttons = buttons,
+            onBackPressed = onBackPressed,
+        )
+    } else {
+        AddFirstAccountScaffold(
+            modifier = modifier,
+            state = state,
+            loginView = loginView,
+            buttons = buttons,
+        )
+    }
+}
+
+@Composable
+private fun AddFirstAccountScaffold(
+    state: OnBoardingState,
+    loginView: @Composable () -> Unit,
+    buttons: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnBoardingPage(
@@ -79,26 +128,29 @@ fun OnBoardingView(
             } else {
                 OnBoardingContent(state = state)
             }
-            LoginModeView(
-                loginMode = state.loginMode,
-                onClearError = {
-                    state.eventSink(OnBoardingEvents.ClearError)
-                },
-                onLearnMoreClick = onLearnMoreClick,
-                onOidcDetails = onOidcDetails,
-                onNeedLoginPassword = onNeedLoginPassword,
-                onCreateAccountContinue = onCreateAccountContinue,
-            )
+            loginView()
         },
         footer = {
-            OnBoardingButtons(
-                state = state,
-                onSignInWithQrCode = onSignInWithQrCode,
-                onSignIn = onSignIn,
-                onCreateAccount = onCreateAccount,
-                onReportProblem = onReportProblem,
-            )
+            buttons()
         }
+    )
+}
+
+@Composable
+private fun AddOtherAccountScaffold(
+    loginView: @Composable () -> Unit,
+    buttons: @Composable () -> Unit,
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    FlowStepPage(
+        modifier = modifier,
+        // TODO i18n
+        title = "Add account",
+        iconStyle = BigIcon.Style.Default(CompoundIcons.HomeSolid()),
+        buttons = { buttons() },
+        content = loginView,
+        onBackClick = onBackPressed,
     )
 }
 
@@ -226,27 +278,29 @@ private fun OnBoardingButtons(
                     .fillMaxWidth()
             )
         }
-        if (state.canReportBug) {
-            // Add a report problem text button. Use a Text since we need a special theme here.
-            Text(
-                modifier = Modifier
-                    .clickable(onClick = onReportProblem)
-                    .padding(16.dp),
-                text = stringResource(id = CommonStrings.common_report_a_problem),
-                style = ElementTheme.typography.fontBodySmRegular,
-                color = ElementTheme.colors.textSecondary,
-            )
-        } else {
-            Text(
-                modifier = Modifier
-                    .clickable {
-                        state.eventSink(OnBoardingEvents.OnVersionClick)
-                    }
-                    .padding(16.dp),
-                text = stringResource(id = R.string.screen_onboarding_app_version, state.version),
-                style = ElementTheme.typography.fontBodySmRegular,
-                color = ElementTheme.colors.textSecondary,
-            )
+        if (state.isAddingAccount.not()) {
+            if (state.canReportBug) {
+                // Add a report problem text button. Use a Text since we need a special theme here.
+                Text(
+                    modifier = Modifier
+                        .clickable(onClick = onReportProblem)
+                        .padding(16.dp),
+                    text = stringResource(id = CommonStrings.common_report_a_problem),
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            } else {
+                Text(
+                    modifier = Modifier
+                        .clickable {
+                            state.eventSink(OnBoardingEvents.OnVersionClick)
+                        }
+                        .padding(16.dp),
+                    text = stringResource(id = R.string.screen_onboarding_app_version, state.version),
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            }
         }
     }
 }
@@ -258,6 +312,7 @@ internal fun OnBoardingViewPreview(
 ) = ElementPreview {
     OnBoardingView(
         state = state,
+        onBackPressed = {},
         onSignInWithQrCode = {},
         onSignIn = {},
         onCreateAccount = {},

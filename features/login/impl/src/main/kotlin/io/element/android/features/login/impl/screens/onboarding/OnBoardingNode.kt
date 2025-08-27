@@ -97,6 +97,7 @@ class OnBoardingNode(
             onNeedLoginPassword = ::onLoginPasswordNeeded,
             onLearnMoreClick = { openLearnMorePage(context) },
             onCreateAccountContinue = ::onCreateAccountContinue,
+            onBackPressed = ::navigateUp,
         )
     }
 }
