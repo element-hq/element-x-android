@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
@@ -288,7 +289,10 @@ private fun MessagePreviewAndIndicatorRow(
 
         // Call and unread
         Row(
-            modifier = Modifier.height(16.dp),
+            modifier = Modifier
+                .height(16.dp)
+                // Used to force this line to be read aloud earlier than the latest event when using Talkback
+                .zIndex(-1f),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
