@@ -15,7 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -28,7 +27,6 @@ import javax.inject.Inject
 class LoginPasswordPresenter @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : Presenter<LoginPasswordState> {
     @Composable
     override fun present(): LoginPasswordState {
@@ -69,8 +67,6 @@ class LoginPasswordPresenter @Inject constructor(
         loggedInState.value = AsyncData.Loading()
         authenticationService.login(formState.login.trim(), formState.password)
             .onSuccess { sessionId ->
-                // We will not navigate to the WaitList screen, so the login user story is done
-                defaultLoginUserStory.setLoginFlowIsDone(true)
                 loggedInState.value = AsyncData.Success(sessionId)
             }
             .onFailure { failure ->

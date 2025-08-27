@@ -10,7 +10,6 @@ package io.element.android.features.login.impl.screens.loginpassword
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.test.FakeEnterpriseService
-import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -64,12 +63,9 @@ class LoginPasswordPresenterTest {
     fun `present - submit`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService()
         authenticationService.givenHomeserver(A_HOMESERVER)
-        val loginUserStory = DefaultLoginUserStory().apply { setLoginFlowIsDone(false) }
         createLoginPasswordPresenter(
             authenticationService = authenticationService,
-            defaultLoginUserStory = loginUserStory,
         ).test {
-            assertThat(loginUserStory.loginFlowIsDone.value).isFalse()
             val initialState = awaitItem()
             initialState.eventSink.invoke(LoginPasswordEvents.SetLogin(A_USER_NAME))
             initialState.eventSink.invoke(LoginPasswordEvents.SetPassword(A_PASSWORD))
@@ -80,7 +76,6 @@ class LoginPasswordPresenterTest {
             assertThat(submitState.loginAction).isInstanceOf(AsyncData.Loading::class.java)
             val loggedInState = awaitItem()
             assertThat(loggedInState.loginAction).isEqualTo(AsyncData.Success(A_SESSION_ID))
-            assertThat(loginUserStory.loginFlowIsDone.value).isTrue()
         }
     }
 
@@ -134,10 +129,8 @@ class LoginPasswordPresenterTest {
     private fun createLoginPasswordPresenter(
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
-        defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory()
     ): LoginPasswordPresenter = LoginPasswordPresenter(
         authenticationService = authenticationService,
         accountProviderDataSource = accountProviderDataSource,
-        defaultLoginUserStory = defaultLoginUserStory,
     )
 }

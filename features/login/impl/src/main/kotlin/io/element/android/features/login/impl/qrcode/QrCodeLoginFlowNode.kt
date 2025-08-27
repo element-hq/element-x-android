@@ -24,7 +24,6 @@ import com.bumble.appyx.navmodel.backstack.operation.replace
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.di.QrCodeLoginBindings
 import io.element.android.features.login.impl.di.QrCodeLoginComponent
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationNode
@@ -54,7 +53,6 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     qrCodeLoginComponentBuilder: QrCodeLoginComponent.Builder,
-    private val defaultLoginUserStory: DefaultLoginUserStory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : BaseFlowNode<QrCodeLoginFlowNode.NavTarget>(
     backstack = BackStack(
@@ -198,7 +196,6 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
         authenticationJob = launch(coroutineDispatchers.main) {
             qrCodeLoginManager.authenticate(qrCodeLoginData)
                 .onSuccess {
-                    defaultLoginUserStory.setLoginFlowIsDone(true)
                     authenticationJob = null
                 }
                 .onFailure { throwable ->
