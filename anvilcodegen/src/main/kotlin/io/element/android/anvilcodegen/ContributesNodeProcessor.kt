@@ -28,7 +28,6 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.TypeSpec
-import com.squareup.kotlinpoet.ksp.addOriginatingKSFile
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import dagger.Binds
@@ -79,7 +78,6 @@ class ContributesNodeProcessor(
         )
             .addType(
                 TypeSpec.classBuilder(moduleClassName)
-                    .addOriginatingKSFile(ksClass.containingFile!!)
                     .addModifiers(KModifier.ABSTRACT)
                     .addAnnotation(Module::class)
                     .addAnnotation(AnnotationSpec.builder(ContributesTo::class).addMember("%T::class", scope.toTypeName()).build())
@@ -104,7 +102,10 @@ class ContributesNodeProcessor(
 
         content.writeTo(
             codeGenerator = codeGenerator,
-            dependencies = Dependencies(aggregating = false),
+            dependencies = Dependencies(
+                aggregating = true,
+                ksClass.containingFile!!
+            ),
         )
     }
 
@@ -138,7 +139,6 @@ class ContributesNodeProcessor(
         val content = FileSpec.builder(generatedPackage, assistedFactoryClassName)
             .addType(
                 TypeSpec.interfaceBuilder(assistedFactoryClassName)
-                    .addOriginatingKSFile(ksClass.containingFile!!)
                     .addSuperinterface(ClassName.bestGuess(assistedNodeFactoryFqName.asString()).parameterizedBy(nodeClassName))
                     .addAnnotation(AssistedFactory::class)
                     .addFunction(
@@ -155,7 +155,10 @@ class ContributesNodeProcessor(
 
         content.writeTo(
             codeGenerator = codeGenerator,
-            dependencies = Dependencies(aggregating = false),
+            dependencies = Dependencies(
+                aggregating = true,
+                ksClass.containingFile!!
+            ),
         )
     }
 
