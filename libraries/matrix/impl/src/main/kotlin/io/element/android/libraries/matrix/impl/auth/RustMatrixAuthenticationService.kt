@@ -158,7 +158,7 @@ class RustMatrixAuthenticationService(
                     )
                 val matrixClient = rustMatrixClientFactory.create(client)
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
-                sessionStore.storeData(sessionData)
+                sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
                 currentClient = null
@@ -182,7 +182,7 @@ class RustMatrixAuthenticationService(
                     sessionPaths = currentSessionPaths,
                 )
                 clear()
-                sessionStore.storeData(sessionData)
+                sessionStore.addSession(sessionData)
                 SessionId(sessionData.userId)
             }
         }
@@ -250,7 +250,7 @@ class RustMatrixAuthenticationService(
 
                 val matrixClient = rustMatrixClientFactory.create(client)
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
-                sessionStore.storeData(sessionData)
+                sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
                 currentClient = null
@@ -295,7 +295,7 @@ class RustMatrixAuthenticationService(
                     )
                 val matrixClient = rustMatrixClientFactory.create(client)
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
-                sessionStore.storeData(sessionData)
+                sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
                 currentClient = null

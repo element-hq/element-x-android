@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 interface SessionStore {
     fun isLoggedIn(): Flow<LoggedInState>
     fun sessionsFlow(): Flow<List<SessionData>>
-    suspend fun storeData(sessionData: SessionData)
+    suspend fun addSession(sessionData: SessionData)
 
     /**
      * Will update the session data matching the userId, except the value of loginTimestamp.

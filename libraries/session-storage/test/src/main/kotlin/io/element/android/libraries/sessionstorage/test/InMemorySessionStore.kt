@@ -37,7 +37,7 @@ class InMemorySessionStore(
 
     override fun sessionsFlow(): Flow<List<SessionData>> = sessionDataListFlow.asStateFlow()
 
-    override suspend fun storeData(sessionData: SessionData) {
+    override suspend fun addSession(sessionData: SessionData) {
         val currentList = sessionDataListFlow.value.toMutableList()
         currentList.removeAll { it.userId == sessionData.userId }
         currentList.add(sessionData)
