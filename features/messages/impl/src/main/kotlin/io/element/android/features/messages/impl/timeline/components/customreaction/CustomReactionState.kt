@@ -9,11 +9,13 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 
 import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 
 data class CustomReactionState(
     val target: Target,
     val selectedEmoji: ImmutableSet<String>,
+    val recentlyUsedEmojis: ImmutableList<String>,
     val eventSink: (CustomReactionEvents) -> Unit,
 ) {
     sealed interface Target {

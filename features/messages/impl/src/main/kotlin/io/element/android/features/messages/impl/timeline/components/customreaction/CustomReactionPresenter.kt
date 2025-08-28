@@ -9,17 +9,23 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.utils.EmojiHistoryStore
 import io.element.android.libraries.architecture.Presenter
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableSet
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CustomReactionPresenter @Inject constructor(
-    private val emojibaseProvider: EmojibaseProvider
+    private val emojibaseProvider: EmojibaseProvider,
+    private val emojiHistoryStore: EmojiHistoryStore,
 ) : Presenter<CustomReactionState> {
     @Composable
     override fun present(): CustomReactionState {
@@ -46,6 +52,9 @@ class CustomReactionPresenter @Inject constructor(
             when (event) {
                 is CustomReactionEvents.ShowCustomReactionSheet -> handleShowCustomReactionSheet(event.event)
                 is CustomReactionEvents.DismissCustomReactionSheet -> handleDismissCustomReactionSheet()
+                is CustomReactionEvents.AddEmojiToRecentlyUsed -> localCoroutineScope.launch {
+                    emojiHistoryStore.add(event.emoji)
+                }
             }
         }
         val event = (target.value as? CustomReactionState.Target.Success)?.event
@@ -55,9 +64,22 @@ class CustomReactionPresenter @Inject constructor(
             ?.mapNotNull { if (it.isHighlighted) it.key else null }
             .orEmpty()
             .toImmutableSet()
+
+        val recentlyUsedEmojis by produceState(persistentListOf()) {
+            emojiHistoryStore.getAll()
+                .collect { map ->
+                    value = map.entries
+                        .sortedByDescending { it.value }
+                        .map { it.key }
+                        .take(60)
+                        .toPersistentList()
+                }
+        }
+
         return CustomReactionState(
             target = target.value,
             selectedEmoji = selectedEmoji,
+            recentlyUsedEmojis = recentlyUsedEmojis,
             eventSink = { handleEvents(it) }
         )
     }

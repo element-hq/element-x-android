@@ -16,6 +16,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 data class ActionListState(
     val target: Target,
+    val recentlyUsedEmojis: ImmutableList<String>,
     val eventSink: (ActionListEvents) -> Unit,
 ) {
     @Immutable

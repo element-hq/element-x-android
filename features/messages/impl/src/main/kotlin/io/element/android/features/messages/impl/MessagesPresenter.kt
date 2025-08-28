@@ -39,6 +39,7 @@ import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBan
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineState
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
@@ -224,6 +225,7 @@ class MessagesPresenter @AssistedInject constructor(
                     )
                 }
                 is MessagesEvents.ToggleReaction -> {
+                    customReactionState.eventSink(CustomReactionEvents.AddEmojiToRecentlyUsed(event.emoji))
                     localCoroutineScope.toggleReaction(event.emoji, event.eventOrTransactionId)
                 }
                 is MessagesEvents.InviteDialogDismissed -> {

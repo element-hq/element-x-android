@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -186,9 +187,11 @@ fun aReactionSummaryState(
 
 fun aCustomReactionState(
     target: CustomReactionState.Target = CustomReactionState.Target.None,
+    recentlyUsedEmojis: ImmutableList<String> = persistentListOf(),
     eventSink: (CustomReactionEvents) -> Unit = {},
 ) = CustomReactionState(
     target = target,
+    recentlyUsedEmojis = recentlyUsedEmojis,
     selectedEmoji = persistentSetOf(),
     eventSink = eventSink,
 )

@@ -90,6 +90,7 @@ import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -218,6 +219,7 @@ private fun ActionListViewContent(
                 if (target.displayEmojiReactions) {
                     item {
                         EmojiReactionsRow(
+                            recentlyUsedEmojis = state.recentlyUsedEmojis,
                             highlightedEmojis = target.event.reactionsState.highlightedKeys,
                             onEmojiReactionClick = onEmojiReactionClick,
                             onCustomReactionClick = onCustomReactionClick,
@@ -338,6 +340,7 @@ private val emojiRippleRadius = 24.dp
 
 @Composable
 private fun EmojiReactionsRow(
+    recentlyUsedEmojis: ImmutableList<String>,
     highlightedEmojis: ImmutableList<String>,
     onEmojiReactionClick: (String) -> Unit,
     onCustomReactionClick: () -> Unit,
@@ -347,15 +350,8 @@ private fun EmojiReactionsRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
-        // TODO use most recently used emojis here when available from the Rust SDK
-        val defaultEmojis = sequenceOf(
-            "👍️",
-            "👎️",
-            "🔥",
-            "❤️",
-            "👏"
-        )
-        for (emoji in defaultEmojis) {
+        val emojis = (recentlyUsedEmojis.takeIf { it.isNotEmpty() } ?: persistentListOf("👍️", "👎️", "🔥", "❤️", "👏"))
+        for (emoji in emojis) {
             val isHighlighted = highlightedEmojis.contains(emoji)
             EmojiButton(
                 modifier = Modifier

@@ -7,13 +7,13 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import io.element.android.emojibasebindings.Emoji
+import io.element.android.features.messages.impl.timeline.components.customreaction.picker.EmojiPicker
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -50,8 +50,8 @@ fun CustomReactionBottomSheet(
             EmojiPicker(
                 onSelectEmoji = ::onEmojiSelectedDismiss,
                 emojibaseStore = target.emojibaseStore,
+                recentlyUsedEmojis = state.recentlyUsedEmojis,
                 selectedEmojis = state.selectedEmoji,
-                modifier = Modifier.fillMaxSize(),
             )
         }
     }

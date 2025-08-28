@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 
 open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
@@ -177,9 +178,11 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
 
 fun anActionListState(
     target: ActionListState.Target = ActionListState.Target.None,
+    recentlyUsedEmojis: ImmutableList<String> = persistentListOf(),
     eventSink: (ActionListEvents) -> Unit = {},
 ) = ActionListState(
     target = target,
+    recentlyUsedEmojis = recentlyUsedEmojis,
     eventSink = eventSink
 )
 
