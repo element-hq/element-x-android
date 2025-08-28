@@ -11,18 +11,20 @@ import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 fun aPreferencesRootState(
-    myUser: MatrixUser,
+    myUser: MatrixUser = aMatrixUser(),
+    otherSessions: List<MatrixUser> = emptyList(),
     eventSink: (PreferencesRootEvents) -> Unit = { _ -> },
 ) = PreferencesRootState(
     myUser = myUser,
     version = "Version 1.1 (1)",
     deviceId = DeviceId("ILAKNDNASDLK"),
     isMultiAccountEnabled = true,
-    otherSessions = persistentListOf(),
+    otherSessions = otherSessions.toPersistentList(),
     showSecureBackup = true,
     showSecureBackupBadge = true,
     accountManagementUrl = "aUrl",

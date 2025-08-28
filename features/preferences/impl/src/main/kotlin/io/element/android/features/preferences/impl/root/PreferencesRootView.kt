@@ -8,6 +8,7 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -26,9 +27,11 @@ import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -40,6 +43,7 @@ import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -123,10 +127,14 @@ fun PreferencesRootView(
 }
 
 @Composable
-fun ColumnScope.MultiAccountSection(
+private fun ColumnScope.MultiAccountSection(
     state: PreferencesRootState,
     onAddAccountClick: () -> Unit,
 ) {
+    HorizontalDivider(
+        thickness = 8.dp,
+        color = ElementTheme.colors.bgSubtleSecondary,
+    )
     state.otherSessions.forEach { matrixUser ->
         MatrixUserRow(
             modifier = Modifier.clickable {
@@ -135,6 +143,7 @@ fun ColumnScope.MultiAccountSection(
             matrixUser = matrixUser,
             avatarSize = AvatarSize.AccountItem,
         )
+        HorizontalDivider()
     }
     ListItem(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())),
@@ -143,7 +152,10 @@ fun ColumnScope.MultiAccountSection(
         },
         onClick = onAddAccountClick,
     )
-    HorizontalDivider()
+    HorizontalDivider(
+        thickness = 8.dp,
+        color = ElementTheme.colors.bgSubtleSecondary,
+    )
 }
 
 @Composable
@@ -334,3 +346,17 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onDeactivateClick = {},
     )
 }
+
+@PreviewsDayNight
+@Composable
+internal fun MultiAccountSectionPreview() = ElementPreview {
+    Column {
+        MultiAccountSection(
+            state = aPreferencesRootState(
+                otherSessions = aMatrixUserList(),
+            ),
+            onAddAccountClick = {},
+        )
+    }
+}
+
