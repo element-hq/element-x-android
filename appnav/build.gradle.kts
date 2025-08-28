@@ -25,6 +25,7 @@ dependencies {
     allFeaturesApi(project)
 
     implementation(projects.libraries.core)
+    implementation(projects.libraries.accountselect.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.deeplink.api)

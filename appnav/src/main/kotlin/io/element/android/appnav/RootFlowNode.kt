@@ -39,6 +39,7 @@ import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
+import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -58,6 +59,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -73,6 +75,7 @@ class RootFlowNode @AssistedInject constructor(
     private val bugReportEntryPoint: BugReportEntryPoint,
     private val viewFolderEntryPoint: ViewFolderEntryPoint,
     private val signedOutEntryPoint: SignedOutEntryPoint,
+    private val accountSelectEntryPoint: AccountSelectEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
     private val bugReporter: BugReporter,
@@ -184,6 +187,12 @@ class RootFlowNode @AssistedInject constructor(
         data object SplashScreen : NavTarget
 
         @Parcelize
+        data class AccountSelect(
+            val currentSessionId: SessionId,
+            val intent: Intent,
+        ) : NavTarget
+
+        @Parcelize
         data class NotLoggedInFlow(
             val params: LoginParams?
         ) : NavTarget
@@ -277,6 +286,29 @@ class RootFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
+            is NavTarget.AccountSelect -> {
+                val callback: AccountSelectEntryPoint.Callback = object : AccountSelectEntryPoint.Callback {
+                    override fun onAccountSelected(sessionId: SessionId) {
+                        lifecycleScope.launch {
+                            if (sessionId == navTarget.currentSessionId) {
+                                // Ensure that the account selection Node is removed from the backstack
+                                // Do not pop when the account is changed to avoid a UI flicker.
+                                backstack.pop()
+                            }
+                            attachSession(sessionId)
+                                .attachIncomingShare(navTarget.intent)
+                        }
+                    }
+
+                    override fun onCancel() {
+                        backstack.pop()
+                    }
+                }
+                accountSelectEntryPoint
+                    .nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
+            }
         }
     }
 
@@ -327,9 +359,20 @@ class RootFlowNode @AssistedInject constructor(
             // No session, open login
             switchToNotLoggedInFlow(null)
         } else {
-            // TODO Multi-account: show a screen to select an account
-            attachSession(latestSessionId)
-                .attachIncomingShare(intent)
+            // wait for the current session to be restored
+            val loggedInFlowNode = attachSession(latestSessionId)
+            if (sessionStore.getAllSessions().size > 1) {
+                // Several accounts, let the user choose which one to use
+                backstack.push(
+                    NavTarget.AccountSelect(
+                        currentSessionId = latestSessionId,
+                        intent = intent,
+                    )
+                )
+            } else {
+                // Only one account, directly attach the incoming share node.
+                loggedInFlowNode.attachIncomingShare(intent)
+            }
         }
     }
 
