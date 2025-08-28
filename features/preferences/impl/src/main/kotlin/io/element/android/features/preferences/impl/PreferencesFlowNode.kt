@@ -226,8 +226,8 @@ class PreferencesFlowNode(
                             }
                         }
 
-                        override fun onItemClick(sessionId: SessionId, roomId: RoomId, eventId: EventId) {
-                            plugins<PreferencesEntryPoint.Callback>().forEach { it.navigateTo(sessionId, roomId, eventId) }
+                        override fun navigateTo(roomId: RoomId, eventId: EventId) {
+                            plugins<PreferencesEntryPoint.Callback>().forEach { it.navigateTo(roomId, eventId) }
                         }
                     })
                     .build()

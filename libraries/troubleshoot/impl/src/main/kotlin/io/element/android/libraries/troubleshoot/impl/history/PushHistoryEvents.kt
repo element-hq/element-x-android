@@ -7,8 +7,13 @@
 
 package io.element.android.libraries.troubleshoot.impl.history
 
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+
 sealed interface PushHistoryEvents {
     data class SetShowOnlyErrors(val showOnlyErrors: Boolean) : PushHistoryEvents
     data class Reset(val requiresConfirmation: Boolean) : PushHistoryEvents
+    data class NavigateTo(val sessionId: SessionId, val roomId: RoomId, val eventId: EventId): PushHistoryEvents
     data object ClearDialog : PushHistoryEvents
 }

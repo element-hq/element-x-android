@@ -20,7 +20,6 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
 import io.element.android.services.analytics.api.ScreenTracker
 
@@ -29,20 +28,22 @@ import io.element.android.services.analytics.api.ScreenTracker
 class PushHistoryNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: PushHistoryPresenter,
+    presenterFactory: PushHistoryPresenter.Factory,
     private val screenTracker: ScreenTracker,
-) : Node(buildContext, plugins = plugins) {
+) : Node(buildContext, plugins = plugins), PushHistoryNavigator {
     private fun onDone() {
         plugins<PushHistoryEntryPoint.Callback>().forEach {
             it.onDone()
         }
     }
 
-    private fun onItemClick(sessionId: SessionId, roomId: RoomId, eventId: EventId) {
+    override fun navigateTo(roomId: RoomId, eventId: EventId) {
         plugins<PushHistoryEntryPoint.Callback>().forEach {
-            it.onItemClick(sessionId, roomId, eventId)
+            it.navigateTo(roomId, eventId)
         }
     }
+
+    private val presenter = presenterFactory.create(this)
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -51,7 +52,6 @@ class PushHistoryNode(
         PushHistoryView(
             state = state,
             onBackClick = ::onDone,
-            onItemClick = ::onItemClick,
             modifier = modifier,
         )
     }
