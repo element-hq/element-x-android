@@ -1,0 +1,41 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.libraries.architecture
+
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeout
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Duration.Companion.milliseconds
+
+class AsyncActionTest {
+    @Test
+    fun `updates state on timeout`() = runTest {
+        val state: MutableState<AsyncAction<Int>> = mutableStateOf(AsyncAction.Uninitialized)
+        val timeoutMillis = 500L
+        val operationTimeMillis = 1000L
+
+        try {
+            runUpdatingState(state = state) {
+                withTimeout(timeoutMillis.milliseconds) {
+                    delay(operationTimeMillis)
+                }
+                Result.success(0)
+            }
+            assertTrue("Expected CancellationException, but nothing was thrown", false)
+        } catch (e: CancellationException) {
+            assertTrue(state.value.isFailure())
+            assertSame(e, state.value.errorOrNull())
+        }
+    }
+}

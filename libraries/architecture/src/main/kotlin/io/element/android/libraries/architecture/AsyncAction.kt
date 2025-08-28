@@ -13,6 +13,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Sealed type that allows to model an asynchronous operation triggered by the user.
@@ -159,17 +160,25 @@ suspend inline fun <T> runUpdatingState(
         callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
     }
     state.value = AsyncAction.Loading
-    return resultBlock().fold(
-        onSuccess = {
-            state.value = AsyncAction.Success(it)
-            Result.success(it)
-        },
-        onFailure = {
-            val error = errorTransform(it)
-            state.value = AsyncAction.Failure(
-                error = error,
-            )
-            Result.failure(error)
-        }
-    )
+    try {
+        return resultBlock().fold(
+            onSuccess = {
+                state.value = AsyncAction.Success(it)
+                Result.success(it)
+            },
+            onFailure = {
+                val error = errorTransform(it)
+                state.value = AsyncAction.Failure(
+                    error = error,
+                )
+                Result.failure(error)
+            }
+        )
+    } catch (e: CancellationException) {
+        val error = errorTransform(e)
+        state.value = AsyncAction.Failure(
+            error = error,
+        )
+        throw e
+    }
 }
