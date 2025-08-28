@@ -48,12 +48,14 @@ fun aPushHistoryState(
     pushHistoryItems: List<PushHistoryItem> = emptyList(),
     showOnlyErrors: Boolean = false,
     resetAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    showNotSameAccountError: Boolean = false,
     eventSink: (PushHistoryEvents) -> Unit = {},
 ) = PushHistoryState(
     pushCounter = pushCounter,
     pushHistoryItems = pushHistoryItems.toImmutableList(),
     showOnlyErrors = showOnlyErrors,
     resetAction = resetAction,
+    showNotSameAccountError = showNotSameAccountError,
     eventSink = eventSink,
 )
 
