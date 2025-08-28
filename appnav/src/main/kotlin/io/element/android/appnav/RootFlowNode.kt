@@ -299,19 +299,25 @@ class RootFlowNode(
     }
 
     private suspend fun onLoginLink(params: LoginParams) {
-        // Is there a session already?
-        val latestSessionId = authenticationService.getLatestSessionId()
-        if (latestSessionId == null) {
-            // No session, open login
-            if (accountProviderAccessControl.isAllowedToConnectToAccountProvider(params.accountProvider.ensureProtocol())) {
-                switchToNotLoggedInFlow(params)
+        if (accountProviderAccessControl.isAllowedToConnectToAccountProvider(params.accountProvider.ensureProtocol())) {
+            // Is there a session already?
+            val sessions = sessionStore.getAllSessions()
+            if (sessions.isNotEmpty()) {
+                val loginHintMatrixId = params.loginHint?.removePrefix("mxid:")
+                val existingAccount = sessions.find { it.userId == loginHintMatrixId }
+                if (existingAccount != null) {
+                    // We have an existing account matching the login hint, ensure this is the current session
+                    sessionStore.setLatestSession(existingAccount.userId)
+                } else {
+                    val latestSessionId = sessions.maxBy { it.lastUsageIndex }.userId
+                    attachSession(SessionId(latestSessionId))
+                    backstack.push(NavTarget.NotLoggedInFlow(params))
+                }
             } else {
-                Timber.w("Login link ignored, we are not allowed to connect to the homeserver")
-                switchToNotLoggedInFlow(null)
+                switchToNotLoggedInFlow(params)
             }
         } else {
-            // Just ignore the login link if we already have a session
-            Timber.w("Login link ignored, we already have a session")
+            Timber.w("Login link ignored, we are not allowed to connect to the homeserver")
         }
     }
 
@@ -322,6 +328,7 @@ class RootFlowNode(
             // No session, open login
             switchToNotLoggedInFlow(null)
         } else {
+            // TODO Multi-account: show a screen to select an account
             attachSession(latestSessionId)
                 .attachIncomingShare(intent)
         }
