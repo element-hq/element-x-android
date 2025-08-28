@@ -81,6 +81,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:mediaupload:impl"))
     implementation(project(":libraries:usersearch:impl"))
     implementation(project(":libraries:textcomposer:impl"))
+    implementation(project(":libraries:accountselect:impl"))
     implementation(project(":libraries:roomselect:impl"))
     implementation(project(":libraries:cryptography:impl"))
     implementation(project(":libraries:voiceplayer:impl"))
