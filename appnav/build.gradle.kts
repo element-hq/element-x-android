@@ -29,6 +29,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.deeplink.api)
+    implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.oidc.api)
     implementation(projects.libraries.preferences.api)

@@ -48,6 +48,8 @@ import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
@@ -81,6 +83,7 @@ class RootFlowNode(
     private val oidcActionFlow: OidcActionFlow,
     private val bugReporter: BugReporter,
     private val sessionStore: SessionStore,
+    private val featureFlagService: FeatureFlagService,
 ) : BaseFlowNode<RootFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.SplashScreen,
@@ -335,15 +338,19 @@ class RootFlowNode(
             // Is there a session already?
             val sessions = sessionStore.getAllSessions()
             if (sessions.isNotEmpty()) {
-                val loginHintMatrixId = params.loginHint?.removePrefix("mxid:")
-                val existingAccount = sessions.find { it.userId == loginHintMatrixId }
-                if (existingAccount != null) {
-                    // We have an existing account matching the login hint, ensure this is the current session
-                    sessionStore.setLatestSession(existingAccount.userId)
+                if (featureFlagService.isFeatureEnabled(FeatureFlags.MultiAccount)) {
+                    val loginHintMatrixId = params.loginHint?.removePrefix("mxid:")
+                    val existingAccount = sessions.find { it.userId == loginHintMatrixId }
+                    if (existingAccount != null) {
+                        // We have an existing account matching the login hint, ensure this is the current session
+                        sessionStore.setLatestSession(existingAccount.userId)
+                    } else {
+                        val latestSessionId = sessions.maxBy { it.lastUsageIndex }.userId
+                        attachSession(SessionId(latestSessionId))
+                        backstack.push(NavTarget.NotLoggedInFlow(params))
+                    }
                 } else {
-                    val latestSessionId = sessions.maxBy { it.lastUsageIndex }.userId
-                    attachSession(SessionId(latestSessionId))
-                    backstack.push(NavTarget.NotLoggedInFlow(params))
+                    Timber.w("Login link ignored, multi account is disabled")
                 }
             } else {
                 switchToNotLoggedInFlow(params)
