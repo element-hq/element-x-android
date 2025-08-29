@@ -60,7 +60,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ExpandableBottomSheetLayout(
-    sheetDragHandle: @Composable BoxScope.() -> Unit,
+    sheetDragHandle: @Composable BoxScope.(toggleAction: () -> Unit) -> Unit,
     bottomSheetContent: @Composable ColumnScope.() -> Unit,
     state: ExpandableBottomSheetLayoutState,
     maxBottomSheetContentHeight: Dp,
@@ -152,7 +152,19 @@ fun ExpandableBottomSheetLayout(
                 }
         ) {
             Box(Modifier.fillMaxWidth()) {
-                sheetDragHandle()
+                sheetDragHandle {
+                    coroutineScope.launch {
+                        val destination = if (state.position == ExpandableBottomSheetLayoutState.Position.EXPANDED) {
+                            state.internalPosition = ExpandableBottomSheetLayoutState.Position.COLLAPSED
+                            minBottomContentHeightPx.toFloat()
+                        } else {
+                            state.internalPosition = ExpandableBottomSheetLayoutState.Position.EXPANDED
+                            calculatedMaxBottomContentHeightPx.toFloat()
+                        }
+                        animatable.snapTo(currentBottomContentHeightPx.toFloat())
+                        animatable.animateTo(destination)
+                    }
+                }
             }
             bottomSheetContent()
         }

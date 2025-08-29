@@ -38,7 +38,7 @@ class ExpandableBottomSheetLayoutState {
     /**
      * The current position of the bottom sheet layout.
      */
-    val position = internalPosition
+    val position get() = internalPosition
 
     /**
      * The percentage of the bottom sheet layout that is currently being dragged.

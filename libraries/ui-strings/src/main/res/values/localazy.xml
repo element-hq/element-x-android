@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Add reaction: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_collapse_message_text_field">"Minimise message text field"</string>
   <string name="a11y_delete">"Delete"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d digit entered"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Edit avatar"</string>
   <string name="a11y_edit_room_address_hint">"The full address will be %1$s"</string>
   <string name="a11y_encryption_details">"Encryption details"</string>
+  <string name="a11y_expand_message_text_field">"Expand message text field"</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
