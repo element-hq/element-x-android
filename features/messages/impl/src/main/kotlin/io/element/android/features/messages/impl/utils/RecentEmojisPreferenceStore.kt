@@ -18,12 +18,14 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 interface RecentEmojisProvider {
     suspend fun add(emoji: String): Result<Unit>
@@ -41,6 +43,9 @@ class RustRecentEmojisProvider @Inject constructor(
     override suspend fun add(emoji: String): Result<Unit> {
         return runCatchingExceptions {
             matrixClient.addRecentlyUsedEmoji(emoji)
+
+            // Wait a bit and reload the recently used emojis
+            delay(500.milliseconds)
             matrixClient.getRecentlyUsedEmojis().onSuccess {
                 recentEmojisFlow.emit(it)
             }
