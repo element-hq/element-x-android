@@ -14,14 +14,33 @@ import android.net.Uri
 import android.text.Editable
 import android.text.InputType
 import android.text.Selection
+import android.text.SpannableStringBuilder
 import android.view.View
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
 import androidx.core.text.getSpans
 import androidx.core.view.ContentInfoCompat
 import androidx.core.view.OnReceiveContentListener
@@ -29,8 +48,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.setPadding
 import androidx.core.widget.addTextChangedListener
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.emojibasebindings.EmojibaseDatasource
+import io.element.android.emojibasebindings.allEmojis
+import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
@@ -41,6 +65,8 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.libraries.textcomposer.model.aMarkdownTextEditorState
 import io.element.android.wysiwyg.compose.RichTextEditorStyle
 import io.element.android.wysiwyg.compose.internal.applyStyleInCompose
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 @Suppress("ModifierMissing")
 @Composable
@@ -78,10 +104,75 @@ fun MarkdownTextInput(
 
     val mentionSpanUpdater = LocalMentionSpanUpdater.current
 
+    var editTextLayoutCoordinates by remember { mutableStateOf<androidx.compose.ui.layout.LayoutCoordinates?>(null) }
+
+    val popUpPositionProvider = remember {
+        object : PopupPositionProvider {
+            override fun calculatePosition(
+                anchorBounds: IntRect,
+                windowSize: IntSize,
+                layoutDirection: LayoutDirection,
+                popupContentSize: IntSize,
+            ): IntOffset {
+                val editTextPosition = editTextLayoutCoordinates?.positionInParent()
+                return IntOffset(
+                    x = anchorBounds.left + (editTextPosition?.x ?: 0f).toInt(),
+                    y = anchorBounds.top + (editTextPosition?.y ?: 0f).toInt() - popupContentSize.height,
+                )
+            }
+        }
+    }
+
+    val context = LocalContext.current
+    val emojiBase = remember { EmojibaseDatasource().load(context) }
+    val currentSuggestion = state.currentSuggestion
+    if (currentSuggestion?.type == SuggestionType.Emoji) {
+        Popup(
+            popupPositionProvider = popUpPositionProvider,
+        ) {
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                shadowElevation = 10.dp,
+            ) {
+                val suggestionText = currentSuggestion.text
+                val emojis by produceState(persistentListOf<String>(), suggestionText) {
+                    value = if (suggestionText.isNotBlank()) {
+                        emojiBase.allEmojis
+                            .filter { emoji -> emoji.shortcodes.any { it.startsWith(suggestionText) } }
+                            .take(10)
+                            .map { it.unicode }
+                            .toPersistentList()
+                    } else {
+                        persistentListOf()
+                    }
+                }
+
+                LazyRow(
+                    modifier = Modifier.widthIn(max = 320.dp),
+                ) {
+                    items(items = emojis, key = { emoji -> emoji }) { emoji ->
+                        Text(
+                            modifier = Modifier.padding(vertical = 6.dp, horizontal = 4.dp)
+                                .niceClickable {
+                                    val newText = SpannableStringBuilder(state.text.value()).apply {
+                                        replace(currentSuggestion.start, currentSuggestion.end, emoji)
+                                    }
+                                    state.text.update(newText = newText, needsDisplaying = true)
+                            },
+                            text = emoji,
+                            style = ElementTheme.typography.fontHeadingMdRegular,
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     AndroidView(
         modifier = Modifier
             .padding(top = 6.dp, bottom = 6.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .onPlaced { editTextLayoutCoordinates = it },
         factory = { context ->
             MarkdownEditText(context).apply {
                 tag = TestTags.plainTextEditor.value // Needed for UI tests
@@ -157,7 +248,7 @@ private fun Editable.checkSuggestionNeeded(): Suggestion? {
     // If a mention span already exists we don't need suggestions
     if (getSpans<MentionSpan>(startOfWord, startOfWord + 1).isNotEmpty()) return null
 
-    return if (firstChar in listOf('@', '#', '/')) {
+    return if (firstChar in listOf('@', '#', '/', ':')) {
         var endOfWord = end
         while (endOfWord < this.length && !this[endOfWord].isWhitespace()) {
             endOfWord++
@@ -167,6 +258,7 @@ private fun Editable.checkSuggestionNeeded(): Suggestion? {
             '@' -> SuggestionType.Mention
             '#' -> SuggestionType.Room
             '/' -> SuggestionType.Command
+            ':' -> SuggestionType.Emoji
             else -> error("Unknown suggestion type. This should never happen.")
         }
         Suggestion(startOfWord, endOfWord, suggestionType, text)

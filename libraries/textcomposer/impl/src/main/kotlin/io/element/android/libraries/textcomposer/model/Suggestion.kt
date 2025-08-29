@@ -28,6 +28,7 @@ sealed interface SuggestionType {
     data object Mention : SuggestionType
     data object Command : SuggestionType
     data object Room : SuggestionType
+    data object Emoji : SuggestionType
     data class Custom(val pattern: String) : SuggestionType
 
     companion object {
