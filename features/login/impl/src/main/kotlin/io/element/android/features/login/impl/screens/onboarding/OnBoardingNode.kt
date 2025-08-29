@@ -96,7 +96,7 @@ class OnBoardingNode @AssistedInject constructor(
             onNeedLoginPassword = ::onLoginPasswordNeeded,
             onLearnMoreClick = { openLearnMorePage(context) },
             onCreateAccountContinue = ::onCreateAccountContinue,
-            onBackPressed = ::navigateUp,
+            onBackClick = ::navigateUp,
         )
     }
 }

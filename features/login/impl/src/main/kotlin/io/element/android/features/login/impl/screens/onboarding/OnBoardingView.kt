@@ -60,7 +60,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun OnBoardingView(
     state: OnBoardingState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     onSignInWithQrCode: () -> Unit,
     onSignIn: (mustChooseAccountProvider: Boolean) -> Unit,
     onCreateAccount: () -> Unit,
@@ -98,7 +98,7 @@ fun OnBoardingView(
             modifier = modifier,
             loginView = loginView,
             buttons = buttons,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
         )
     } else {
         AddFirstAccountScaffold(
@@ -140,7 +140,7 @@ private fun AddFirstAccountScaffold(
 private fun AddOtherAccountScaffold(
     loginView: @Composable () -> Unit,
     buttons: @Composable () -> Unit,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     FlowStepPage(
@@ -150,7 +150,7 @@ private fun AddOtherAccountScaffold(
         iconStyle = BigIcon.Style.Default(CompoundIcons.HomeSolid()),
         buttons = { buttons() },
         content = loginView,
-        onBackClick = onBackPressed,
+        onBackClick = onBackClick,
     )
 }
 
@@ -312,7 +312,7 @@ internal fun OnBoardingViewPreview(
 ) = ElementPreview {
     OnBoardingView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
         onSignInWithQrCode = {},
         onSignIn = {},
         onCreateAccount = {},
