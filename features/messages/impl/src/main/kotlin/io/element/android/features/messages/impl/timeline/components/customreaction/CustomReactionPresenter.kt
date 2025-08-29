@@ -15,17 +15,17 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.utils.EmojiHistoryStore
+import io.element.android.features.messages.impl.utils.RecentEmojisProvider
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CustomReactionPresenter @Inject constructor(
     private val emojibaseProvider: EmojibaseProvider,
-    private val emojiHistoryStore: EmojiHistoryStore,
+    private val recentEmojisProvider: RecentEmojisProvider,
 ) : Presenter<CustomReactionState> {
     @Composable
     override fun present(): CustomReactionState {
@@ -53,7 +53,7 @@ class CustomReactionPresenter @Inject constructor(
                 is CustomReactionEvents.ShowCustomReactionSheet -> handleShowCustomReactionSheet(event.event)
                 is CustomReactionEvents.DismissCustomReactionSheet -> handleDismissCustomReactionSheet()
                 is CustomReactionEvents.AddEmojiToRecentlyUsed -> localCoroutineScope.launch {
-                    emojiHistoryStore.add(event.emoji)
+                    recentEmojisProvider.add(event.emoji)
                 }
             }
         }
@@ -66,14 +66,7 @@ class CustomReactionPresenter @Inject constructor(
             .toImmutableSet()
 
         val recentlyUsedEmojis by produceState(persistentListOf()) {
-            emojiHistoryStore.getAll()
-                .collect { map ->
-                    value = map.entries
-                        .sortedByDescending { it.value }
-                        .map { it.key }
-                        .take(60)
-                        .toPersistentList()
-                }
+            recentEmojisProvider.getAllFlow().collect { value = it.take(60).toImmutableList() }
         }
 
         return CustomReactionState(

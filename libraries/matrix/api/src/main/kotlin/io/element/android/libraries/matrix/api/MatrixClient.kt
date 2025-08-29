@@ -176,6 +176,9 @@ interface MatrixClient {
      * Returns the maximum file upload size allowed by the Matrix server.
      */
     suspend fun getMaxFileUploadSize(): Result<Long>
+
+    suspend fun addRecentlyUsedEmoji(emoji: String): Result<Unit>
+    suspend fun getRecentlyUsedEmojis(): Result<List<String>>
 }
 
 /**

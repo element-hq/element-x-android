@@ -36,7 +36,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.features.messages.impl.timeline.model.event.canBeForwarded
 import io.element.android.features.messages.impl.timeline.model.event.canReact
-import io.element.android.features.messages.impl.utils.EmojiHistoryStore
+import io.element.android.features.messages.impl.utils.RecentEmojisProvider
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
@@ -73,7 +73,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
     private val userSendFailureFactory: VerifiedUserSendFailureFactory,
     private val dateFormatter: DateFormatter,
     private val featureFlagService: FeatureFlagService,
-    private val emojiHistoryStore: EmojiHistoryStore,
+    private val recentEmojisProvider: RecentEmojisProvider,
 ) : ActionListPresenter {
     @AssistedFactory
     @ContributesBinding(RoomScope::class)
@@ -104,16 +104,8 @@ class DefaultActionListPresenter @AssistedInject constructor(
         val isThreadsEnabled = featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(false)
 
         val recentlyUsedEmojis by produceState(persistentListOf()) {
-            emojiHistoryStore.getAll().collect { emojiUsageMap ->
-                // Sort by usage count descending
-                val sortedEmojis = emojiUsageMap.entries
-                    .sortedByDescending { it.value }
-                    .map { it.key }
-                    // Only display the latest 5
-                    .take(5)
-                    .toImmutableList()
-                value = sortedEmojis
-            }
+            recentEmojisProvider.getAllFlow()
+                .collect { value = it.take(5).toImmutableList() }
         }
 
         fun handleEvents(event: ActionListEvents) {
