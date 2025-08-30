@@ -14,7 +14,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.ForwardEventException
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.timeline.runWithTimelineListenerRegistered
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.MsgLikeKind
 import org.matrix.rustcomponents.sdk.RoomListService
@@ -63,9 +62,6 @@ class RoomContentForwarder(
                 }
             }.onFailure {
                 failedForwardingTo.add(RoomId(room.id()))
-                if (it is CancellationException) {
-                    throw it
-                }
             }
         }
 
