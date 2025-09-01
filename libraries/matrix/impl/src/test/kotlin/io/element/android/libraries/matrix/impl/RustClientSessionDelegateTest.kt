@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -15,7 +15,7 @@ import io.element.android.libraries.matrix.impl.room.FakeTimelineEventTypeFilter
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers

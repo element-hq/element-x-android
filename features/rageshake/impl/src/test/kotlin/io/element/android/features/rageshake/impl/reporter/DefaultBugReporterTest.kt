@@ -27,7 +27,7 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.tracing.FakeTracingService
 import io.element.android.libraries.network.useragent.DefaultUserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers

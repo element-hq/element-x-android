@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.impl.util
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
