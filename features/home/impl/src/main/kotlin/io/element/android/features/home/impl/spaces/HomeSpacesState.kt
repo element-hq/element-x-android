@@ -12,8 +12,14 @@ import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.collections.immutable.ImmutableSet
 
 data class HomeSpacesState(
+    val space: CurrentSpace,
     val spaceRooms: List<SpaceRoom>,
     val seenSpaceInvites: ImmutableSet<SpaceId>,
     val hideInvitesAvatar: Boolean,
     val eventSink: (HomeSpacesEvents) -> Unit,
 )
+
+sealed interface CurrentSpace {
+    object Root : CurrentSpace
+    data class Space(val spaceRoom: SpaceRoom) : CurrentSpace
+}

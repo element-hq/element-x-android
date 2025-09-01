@@ -35,7 +35,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun SpaceMembersView(
     heroes: ImmutableList<MatrixUser>,
-    numberOfMembers: Long,
+    numberOfMembers: Int,
     modifier: Modifier = Modifier,
 ) {
     if (heroes.isEmpty()) {
@@ -60,7 +60,7 @@ fun SpaceMembersView(
 @Composable
 private fun SpaceMembersWithAvatar(
     heroes: ImmutableList<AvatarData>,
-    numberOfMembers: Long,
+    numberOfMembers: Int,
     modifier: Modifier = Modifier,
 ) {
     Row(

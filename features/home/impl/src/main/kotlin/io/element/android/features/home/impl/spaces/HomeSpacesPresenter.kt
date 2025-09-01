@@ -43,6 +43,7 @@ class HomeSpacesPresenter @Inject constructor(
         }
 
         return HomeSpacesState(
+            space = CurrentSpace.Root,
             spaceRooms = spaceRooms,
             seenSpaceInvites = seenSpaceInvites,
             hideInvitesAvatar = hideInvitesAvatar,
