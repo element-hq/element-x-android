@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Reageeri: %1$s"</string>
   <string name="a11y_avatar">"Tunnuspilt"</string>
+  <string name="a11y_collapse_message_text_field">"Vähenda tekstivälja"</string>
   <string name="a11y_delete">"Kustuta"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d number sisestatud"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Muuda tunnuspilti"</string>
   <string name="a11y_edit_room_address_hint">"Täisaadress saab olema %1$s"</string>
   <string name="a11y_encryption_details">"Krüptimise üksikasjad"</string>
+  <string name="a11y_expand_message_text_field">"Laienda tekstivälja"</string>
   <string name="a11y_hide_password">"Peida salasõna"</string>
   <string name="a11y_join_call">"Liitu kõnega"</string>
   <string name="a11y_jump_to_bottom">"Mine lõppu"</string>
@@ -167,6 +169,8 @@
   <string name="common_advanced_settings">"Täiendavad seadistused"</string>
   <string name="common_an_image">"pilt"</string>
   <string name="common_analytics">"Analüütika"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Sa oled jututoast lahkunud"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sa olid sessioonist väljaloginud"</string>
   <string name="common_appearance">"Välimus"</string>
   <string name="common_audio">"Heli"</string>
   <string name="common_blocked_users">"Blokeeritud kasutajad"</string>

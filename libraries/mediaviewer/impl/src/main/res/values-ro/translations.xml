@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Acest fișier va fi șters din cameră și membrii nu vor mai avea acces la el."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Ştergeţi fişierul?"</string>
+  <string name="screen_media_browser_download_error_message">"Verificați conexiunea la internet și încercați din nou."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Documentele, fișierele audio și mesajele vocale încărcate în această cameră vor fi afișate aici."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Nu există încă fișiere încărcate"</string>
+  <string name="screen_media_browser_list_loading_files">"Se încarcă fișierele…"</string>
+  <string name="screen_media_browser_list_loading_media">"Se încarcă media…"</string>
+  <string name="screen_media_browser_list_mode_files">"Fișiere"</string>
+  <string name="screen_media_browser_list_mode_media">"Media"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Imaginile și videoclipurile încărcate în această cameră vor fi afișate aici."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Nu a fost încărcat încă niciun fișier media"</string>
+  <string name="screen_media_browser_title">"Media și fișiere"</string>
+  <string name="screen_media_details_file_format">"Format fişier"</string>
+  <string name="screen_media_details_filename">"Nume fișier"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Nu mai există fișiere de afișat"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Nu mai există conținut media de afișat"</string>
+  <string name="screen_media_details_uploaded_by">"Încărcat de"</string>
+  <string name="screen_media_details_uploaded_on">"Încărcat la"</string>
+</resources>

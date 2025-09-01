@@ -8,7 +8,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"Brugerdefineret URL til opkaldsbase for Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Angiv en brugerdefineret basis-URL til Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ugyldig URL, sørg for at inkludere protokollen (http/https) og den korrekte adresse."</string>
-  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skjul avatarer i ruminvitationsanmodninger"</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skjul avatarer i anmodninger om invitation til rum"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Skjul forhåndsvisning af medier i tidslinjen"</string>
   <string name="screen_advanced_settings_media_compression_description">"Upload fotos og videoer hurtigere, og reducér dataforbrug"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimér mediekvaliteten"</string>
@@ -65,7 +65,7 @@ Hvis du fortsætter, kan nogle af dine indstillinger blive ændret."</string>
   <string name="screen_notification_settings_mode_all">"Alle"</string>
   <string name="screen_notification_settings_mode_mentions">"Omtaler"</string>
   <string name="screen_notification_settings_notification_section_title">"Giv mig besked om"</string>
-  <string name="screen_notification_settings_room_mention_label">"Giv mig besked på @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Giv mig besked ved @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"For at modtage notifikationer, skal du ændre din %1$s ."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systemindstillinger"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systemmeddelelser slået fra"</string>

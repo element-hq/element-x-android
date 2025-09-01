@@ -13,6 +13,7 @@
   <string name="screen_change_account_provider_other">"Jiný"</string>
   <string name="screen_change_account_provider_subtitle">"Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet."</string>
   <string name="screen_change_account_provider_title">"Změnit poskytovatele účtu"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Na %1$s je vyžadována aplikace Element Pro. Stáhněte si ji prosím z obchodu."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Vyžadován Element Pro"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nepodařilo se nám připojit k tomuto domovskému serveru. Zkontrolujte prosím, zda jste správně zadali adresu URL domovského serveru. Pokud je adresa URL správná, obraťte se na správce domovského serveru, který vám poskytne další pomoc."</string>

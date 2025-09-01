@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Tilføj reaktion: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_collapse_message_text_field">"Minimér tekstfeltet for beskeder"</string>
   <string name="a11y_delete">"Slet"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d ciffer indtastet"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Redigér avatar"</string>
   <string name="a11y_edit_room_address_hint">"Den fulde adresse vil være %1$s"</string>
   <string name="a11y_encryption_details">"Krypteringsoplysninger"</string>
+  <string name="a11y_expand_message_text_field">"Udvid tekstfeltet for beskeder"</string>
   <string name="a11y_hide_password">"Skjul adgangskode"</string>
   <string name="a11y_join_call">"Deltag i opkald"</string>
   <string name="a11y_jump_to_bottom">"Hop til bunden"</string>
@@ -69,7 +71,7 @@
   <string name="action_copy">"Kopiér"</string>
   <string name="action_copy_caption">"Kopiér billedtekst"</string>
   <string name="action_copy_link">"Kopiér link"</string>
-  <string name="action_copy_link_to_message">"Kopier link til besked"</string>
+  <string name="action_copy_link_to_message">"Kopiér link til besked"</string>
   <string name="action_copy_text">"Kopiér tekst"</string>
   <string name="action_create">"Opret"</string>
   <string name="action_create_a_room">"Opret et rum"</string>
@@ -94,9 +96,9 @@
   <string name="action_go_back">"Gå tilbage"</string>
   <string name="action_ignore">"Ignorér"</string>
   <string name="action_invite">"Invitér"</string>
-  <string name="action_invite_friends">"Invitér folk"</string>
-  <string name="action_invite_friends_to_app">"Invitér folk til %1$s"</string>
-  <string name="action_invite_people_to_app">"Invitér folk til %1$s"</string>
+  <string name="action_invite_friends">"Invitér andre"</string>
+  <string name="action_invite_friends_to_app">"Invitér andre til %1$s"</string>
+  <string name="action_invite_people_to_app">"Invitér andre til %1$s"</string>
   <string name="action_invites_list">"Invitationer"</string>
   <string name="action_join">"Deltag"</string>
   <string name="action_learn_more">"Få mere at vide"</string>
@@ -244,7 +246,7 @@
   <string name="common_open_source_licenses">"Open Source-licenser"</string>
   <string name="common_or">"eller"</string>
   <string name="common_password">"Adgangskode"</string>
-  <string name="common_people">"Mennesker"</string>
+  <string name="common_people">"Brugere"</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Tilladelse"</string>
   <string name="common_pinned">"Fastgjort"</string>

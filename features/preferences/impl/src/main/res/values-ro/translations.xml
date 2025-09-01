@@ -8,12 +8,29 @@
   <string name="screen_advanced_settings_element_call_base_url">"Adresa URL de bază Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Setați o adresă URL de bază personalizată pentru Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invalid, vă rugăm să vă asigurați că includeți protocolul (http/https) și adresa corectă."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Ascundeți avatarele din invitațiile pentru camere"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Ascundeți previzualizările media în lista de mesaje"</string>
+  <string name="screen_advanced_settings_media_compression_description">"Încărcați fotografii și videoclipuri mai rapid și reduceți consumul de date"</string>
+  <string name="screen_advanced_settings_media_compression_title">"Optimizați calitatea media"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderare și siguranță"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimizați automat imaginile pentru încărcări mai rapide și dimensiuni mai mici ale fișierelor."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimizați calitatea încărcării imaginilor"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Atingeți aici pentru a schimba."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Înaltă (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Scăzută (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Calitatea încărcării videoclipurilor"</string>
   <string name="screen_advanced_settings_push_provider_android">"Furnizor de notificări push"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Dezactivați editorul avansat pentru a tasta manual Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Chitanțe de citire"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Dacă dezactivată, chitanțele dumneavoastră de citire nu vor fi trimise nimănui. Veți primi în continuare chitanțe de citire de la alți utilizatori."</string>
   <string name="screen_advanced_settings_share_presence">"Împărtășiți prezența"</string>
   <string name="screen_advanced_settings_share_presence_description">"Dacă dezactivată, nu veți putea trimite sau primi chitanțe de citire sau notificări de tastare."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Ascundeţi întotdeauna"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Afișați întotdeauna"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"În camere private"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Un fișier media ascuns poate fi afișat oricând prin apăsarea pe acesta."</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Afișați conținutul media în lista de mesaje"</string>
   <string name="screen_advanced_settings_view_source_description">"Activați opțiunea pentru a vizualiza sursa mesajelor."</string>
   <string name="screen_blocked_users_empty">"Nu aveți utilizatori blocați"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Deblocați"</string>
@@ -55,6 +72,7 @@ Dacă continuați, unele dintre setările dumneavoastră pot fi modificate."</st
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"Setări de sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificările de sistem sunt dezactivate"</string>
   <string name="screen_notification_settings_title">"Notificări"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Istoricul notificărilor"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Depanare"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Depanați notificările"</string>
 </resources>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_media_browser_delete_confirmation_subtitle">"Diese Datei wird aus dem Chatroom entfernt und die Mitglieder werden keinen Zugriff mehr darauf haben."</string>
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Diese Datei wird aus dem Chat entfernt und die Mitglieder werden keinen Zugriff mehr darauf haben."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Datei löschen?"</string>
-  <string name="screen_media_browser_download_error_message">"Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."</string>
-  <string name="screen_media_browser_files_empty_state_subtitle">"Dokumente, Audiodateien und Sprachnachrichten, die in diesen Chatroom hochgeladen wurden, werden hier angezeigt."</string>
+  <string name="screen_media_browser_download_error_message">"Überprüfe deine Internetverbindung und versuche es erneut."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Dokumente, Audiodateien und Sprachnachrichten, die in diesen Chat hochgeladen wurden, werden hier angezeigt."</string>
   <string name="screen_media_browser_files_empty_state_title">"Es wurden noch keine Dateien hochgeladen"</string>
   <string name="screen_media_browser_list_loading_files">"Dateien werden geladen…"</string>
   <string name="screen_media_browser_list_loading_media">"Medien werden geladen…"</string>
   <string name="screen_media_browser_list_mode_files">"Dateien"</string>
   <string name="screen_media_browser_list_mode_media">"Medien"</string>
-  <string name="screen_media_browser_media_empty_state_subtitle">"In diesen Chatroom hochgeladene Bilder und Videos werden hier angezeigt."</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"In diesen Chat hochgeladene Bilder und Videos werden hier angezeigt."</string>
   <string name="screen_media_browser_media_empty_state_title">"Noch keine Medien hochgeladen"</string>
   <string name="screen_media_browser_title">"Medien und Dateien"</string>
   <string name="screen_media_details_file_format">"Dateiformat"</string>

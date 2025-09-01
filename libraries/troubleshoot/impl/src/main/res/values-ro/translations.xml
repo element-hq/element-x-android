@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"Istoricul notificărilor"</string>
   <string name="troubleshoot_notifications_screen_action">"Rulați testele"</string>
   <string name="troubleshoot_notifications_screen_action_again">"Rulați din nou testele"</string>
   <string name="troubleshoot_notifications_screen_failure">"Unele teste au eșuat. Vă rugăm să verificați detaliile."</string>

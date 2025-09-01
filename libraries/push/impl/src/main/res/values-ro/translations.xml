@@ -13,6 +13,7 @@
     <item quantity="one">"%d notificare"</item>
     <item quantity="other">"%d notificări"</item>
   </plurals>
+  <string name="notification_fallback_content">"Aveți mesaje noi"</string>
   <string name="notification_incoming_call">"Apel primit"</string>
   <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
   <string name="notification_invitation_action_join">"Alăturați-vă"</string>
@@ -64,6 +65,7 @@
     <item quantity="few">"S-au găsit %1$d furnizori push: %2$s"</item>
     <item quantity="other">"S-au găsit %1$d furnizori push: %2$s"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplicația a fost creată cu suport pentru: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Detectați furnizorii push"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Verificați dacă aplicația poate afișa notificări."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Notificarea nu a fost apăsată."</string>

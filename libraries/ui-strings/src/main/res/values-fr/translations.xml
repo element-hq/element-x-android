@@ -88,6 +88,7 @@
   <string name="action_enable">"Activer"</string>
   <string name="action_end_poll">"Terminer le sondage"</string>
   <string name="action_enter_pin">"Saisir le code PIN"</string>
+  <string name="action_finish">"Terminer"</string>
   <string name="action_forgot_password">"Mot de passe oublié ?"</string>
   <string name="action_forward">"Transférer"</string>
   <string name="action_go_back">"Retour"</string>
@@ -166,6 +167,8 @@
   <string name="common_advanced_settings">"Paramètres avancés"</string>
   <string name="common_an_image">"une image"</string>
   <string name="common_analytics">"Statistiques d’utilisation"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Vous avez quitter le salon"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Vous avez été déconnecté de la session"</string>
   <string name="common_appearance">"Apparence"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Utilisateurs bloqués"</string>
@@ -301,6 +304,7 @@ Raison : %1$s."</string>
   <string name="common_signing_out">"Déconnexion"</string>
   <string name="common_something_went_wrong">"Une erreur s’est produite"</string>
   <string name="common_something_went_wrong_message">"Nous avons rencontré un problème. Veuillez réessayer."</string>
+  <string name="common_space">"Espace"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Espace"</item>
     <item quantity="other">"%1$d Espaces"</item>

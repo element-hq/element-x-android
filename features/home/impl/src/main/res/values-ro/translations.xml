@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="banner_set_up_recovery_content">"Recuperați-vă identitatea criptografică și istoricul mesajelor cu o cheie de recuperare dacă ați pierdut toate dispozitivele existente."</string>
+  <string name="banner_battery_optimization_content_android">"Dezactivați optimizarea bateriei pentru această aplicație, pentru a vă asigura că toate notificările sunt primite."</string>
+  <string name="banner_battery_optimization_submit_android">"Dezactivați optimizarea"</string>
+  <string name="banner_battery_optimization_title_android">"Nu primiți notificări?"</string>
+  <string name="banner_set_up_recovery_content">"Recuperați-vă identitatea criptografică și mesajele anterioare cu o cheie de recuperare dacă ați pierdut toate dispozitivele existente."</string>
   <string name="banner_set_up_recovery_submit">"Configurați recuperarea"</string>
   <string name="banner_set_up_recovery_title">"Configurați recuperarea pentru a vă proteja contul"</string>
-  <string name="confirm_recovery_key_banner_message">"Backup-ul pentru chat nu este sincronizat în prezent. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup."</string>
+  <string name="confirm_recovery_key_banner_message">"Backup-ul pentru chat nu este sincronizat. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Introduceți cheia de recuperare"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Ați uitat cheia de recuperare?"</string>
   <string name="confirm_recovery_key_banner_title">"Backup-ul nu este sincronizat"</string>
   <string name="full_screen_intent_banner_message">"Pentru a vă asigura că nu pierdeți niciodată un apel important, vă rugăm să modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>
   <string name="full_screen_intent_banner_title">"Îmbunătățiți-vă experiența in timpul unui apel"</string>
   <string name="screen_home_tab_chats">"Toate conversatiile"</string>
+  <string name="screen_home_tab_spaces">"Spații"</string>
   <string name="screen_invites_decline_chat_message">"Sigur doriți să refuzați alăturarea la %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Refuzați invitația"</string>
   <string name="screen_invites_decline_direct_chat_message">"Sigur doriți să refuzați conversațiile cu %1$s?"</string>
@@ -17,6 +23,7 @@
   <string name="screen_migration_message">"Acesta este un proces care se desfășoară o singură dată, vă mulțumim pentru așteptare."</string>
   <string name="screen_migration_title">"Contul dumneavoastră se configurează"</string>
   <string name="screen_roomlist_a11y_create_message">"Creați o conversație sau o cameră nouă"</string>
+  <string name="screen_roomlist_clear_filters">"Ștergeți filtrele"</string>
   <string name="screen_roomlist_empty_message">"Începeți prin a trimite mesaje cuiva."</string>
   <string name="screen_roomlist_empty_title">"Nu există încă discuții."</string>
   <string name="screen_roomlist_filter_favourites">"Favorite"</string>
@@ -26,6 +33,7 @@ Deocamdată, puteți deselecta filtrele pentru a vedea celelalte chat-uri"</stri
   <string name="screen_roomlist_filter_invites">"Invitații"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Nu aveți invitații în așteptare."</string>
   <string name="screen_roomlist_filter_low_priority">"Prioritate scăzută"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Nu aveți încă niciun chat cu prioritate scăzută."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puteți deselecta filtrele pentru a vedea celelalte chat-uri"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Nu aveți chat-uri pentru această selecție"</string>
   <string name="screen_roomlist_filter_people">"Persoane"</string>
@@ -39,6 +47,7 @@ Nu aveți mesaje necitite!"</string>
   <string name="screen_roomlist_main_space_title">"Toate conversatiile"</string>
   <string name="screen_roomlist_mark_as_read">"Marcați ca citită"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcați ca necitită"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Această cameră a fost modernizată."</string>
   <string name="session_verification_banner_message">"Se pare că folosiți un dispozitiv nou. Verificați-vă identitatea cu un alt dispozitiv pentru a accesa mesajele dumneavoastră criptate."</string>
   <string name="session_verification_banner_title">"Verificați că sunteți dumneavoastră"</string>
 </resources>

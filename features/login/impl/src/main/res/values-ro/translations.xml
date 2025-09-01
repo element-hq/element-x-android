@@ -13,10 +13,18 @@
   <string name="screen_change_account_provider_other">"Altul"</string>
   <string name="screen_change_account_provider_subtitle">"Utilizați un alt furnizor de cont, cum ar fi propriul server privat sau un cont de serviciu."</string>
   <string name="screen_change_account_provider_title">"Schimbați furnizorul contului"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"Aplicația Element Pro este necesară pe %1$s. Descărcați-o din magazin."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Este necesar Element Pro"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nu am putut accesa acest homeserver. Te rugăm să verifici că ai introdus corect adresa URL a homeserver-ului. Dacă adresa URL este corectă, contactează administratorul homeserver-ului pentru ajutor suplimentar."</string>
-  <string name="screen_change_server_error_invalid_well_known">"Sliding sync nu este disponibil din cauza unei probleme în fișierul well-known:
+  <string name="screen_change_server_error_invalid_well_known">"Serverul nu este disponibil din cauza unei probleme în fișierul well-known:
 %1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Furnizorul de cont selectat nu acceptă Sliding sync. Pentru a utiliza funcția „ %1$s ”, este necesară o actualizare a serverului."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s nu are voie să se conecteze la %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Această aplicație a fost configurată pentru a permite: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Furnizorul de cont %1$s nu este permis."</string>
   <string name="screen_change_server_form_header">"Adresa URL a homeserver-ului"</string>
+  <string name="screen_change_server_form_notice">"Introduceți o adresă de domeniu."</string>
   <string name="screen_change_server_subtitle">"Care este adresa serverului dumneavoastră?"</string>
   <string name="screen_change_server_title">"Selectați serverul dumneavoastra"</string>
   <string name="screen_create_account_title">"Creați un cont"</string>
@@ -29,7 +37,9 @@
   <string name="screen_login_subtitle">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>
   <string name="screen_login_title">"Bine ați revenit!"</string>
   <string name="screen_login_title_with_homeserver">"Conectați-vă la %1$s"</string>
+  <string name="screen_onboarding_app_version">"Versiunea %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Conectați-vă manual"</string>
+  <string name="screen_onboarding_sign_in_to">"Conectați-vă la %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Conectați-vă cu un cod QR"</string>
   <string name="screen_onboarding_sign_up">"Creați un cont"</string>
   <string name="screen_onboarding_welcome_message">"Bine ați venit la cel mai rapid %1$s din toate timpurile. Supraalimentat pentru viteză și simplitate."</string>
@@ -76,12 +86,13 @@
   <string name="screen_qr_code_login_start_over_button">"Începeți din nou"</string>
   <string name="screen_qr_code_login_unknown_error_description">"A apărut o eroare neașteptată. Vă rugăm să încercați din nou."</string>
   <string name="screen_qr_code_login_verify_code_loading">"În așteptarea celuilalt dispozitiv"</string>
-  <string name="screen_qr_code_login_verify_code_subtitle">"Furnizorul dumneavoastră de cont poate solicita următorul cod pentru a verifica conectarea."</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"Furnizorul dumneavoastră de cont poate cere următorul cod pentru a verifica conectarea."</string>
   <string name="screen_qr_code_login_verify_code_title">"Codul dumneavoastră de verificare"</string>
   <string name="screen_server_confirmation_change_server">"Schimbați furnizorul contului"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Un server privat pentru angajații Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>
   <string name="screen_server_confirmation_message_register">"Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile."</string>
   <string name="screen_server_confirmation_title_login">"Sunteți pe cale să vă conectați la %1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Alegeți furnizorul de cont"</string>
   <string name="screen_server_confirmation_title_register">"Sunteți pe cale să creați un cont pe %1$s"</string>
 </resources>

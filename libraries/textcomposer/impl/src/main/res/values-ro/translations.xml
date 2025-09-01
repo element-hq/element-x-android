@@ -4,11 +4,18 @@
   <string name="rich_text_editor_bullet_list">"Comutați lista cu puncte"</string>
   <string name="rich_text_editor_close_formatting_options">"Închideți opțiunile de formatare"</string>
   <string name="rich_text_editor_code_block">"Comutați blocul de cod"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Adăugați o descriere"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Mesaj criptat…"</string>
   <string name="rich_text_editor_composer_placeholder">"Mesaj…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Mesaj necriptat…"</string>
   <string name="rich_text_editor_create_link">"Creați un link"</string>
   <string name="rich_text_editor_edit_link">"Editați link-ul"</string>
+  <string name="rich_text_editor_format_action">"%1$s, stare: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Aplicați formatul aldin"</string>
   <string name="rich_text_editor_format_italic">"Aplicați formatul italic"</string>
+  <string name="rich_text_editor_format_state_disabled">"dezactivat"</string>
+  <string name="rich_text_editor_format_state_off">"dezactivat"</string>
+  <string name="rich_text_editor_format_state_on">"activat"</string>
   <string name="rich_text_editor_format_strikethrough">"Aplicați formatul barat"</string>
   <string name="rich_text_editor_format_underline">"Aplică formatul de subliniere"</string>
   <string name="rich_text_editor_full_screen_toggle">"Comutați modul ecran complet"</string>
@@ -21,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Ștergeți linkul"</string>
   <string name="rich_text_editor_unindent">"Dez-identare"</string>
   <string name="rich_text_editor_url_placeholder">"Link"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Este posibil ca descrierile să nu fie vizibile pentru persoanele care folosesc aplicații mai vechi."</string>
   <string name="screen_room_voice_message_tooltip">"Țineți apăsat pentru a înregistra"</string>
 </resources>
