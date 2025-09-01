@@ -17,7 +17,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 @SingleIn(RoomScope::class)
 @Inject
-class TimelineItemGrouper() {
+class TimelineItemGrouper {
     /**
      * Keys are identifier of items in a group, only one by group will be kept.
      * Values are the actual groupIds.

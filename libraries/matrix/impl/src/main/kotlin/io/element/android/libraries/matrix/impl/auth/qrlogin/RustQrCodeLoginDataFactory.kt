@@ -17,7 +17,7 @@ import org.matrix.rustcomponents.sdk.QrCodeData
 
 @ContributesBinding(AppScope::class)
 @Inject
-class RustQrCodeLoginDataFactory() : MatrixQrCodeLoginDataFactory {
+class RustQrCodeLoginDataFactory : MatrixQrCodeLoginDataFactory {
     override fun parseQrCodeData(data: ByteArray): Result<MatrixQrCodeLoginData> {
         return runCatchingExceptions { SdkQrCodeLoginData(QrCodeData.fromBytes(data)) }
     }

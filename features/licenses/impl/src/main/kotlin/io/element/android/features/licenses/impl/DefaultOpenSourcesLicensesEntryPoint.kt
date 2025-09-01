@@ -17,7 +17,7 @@ import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultOpenSourcesLicensesEntryPoint() : OpenSourceLicensesEntryPoint {
+class DefaultOpenSourcesLicensesEntryPoint : OpenSourceLicensesEntryPoint {
     override fun getNode(node: Node, buildContext: BuildContext): Node {
         return node.createNode<DependenciesFlowNode>(buildContext)
     }

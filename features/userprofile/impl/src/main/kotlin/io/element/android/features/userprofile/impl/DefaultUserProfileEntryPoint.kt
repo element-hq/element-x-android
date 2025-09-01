@@ -18,7 +18,7 @@ import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultUserProfileEntryPoint() : UserProfileEntryPoint {
+class DefaultUserProfileEntryPoint : UserProfileEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): UserProfileEntryPoint.NodeBuilder {
         return object : UserProfileEntryPoint.NodeBuilder {
             val plugins = ArrayList<Plugin>()

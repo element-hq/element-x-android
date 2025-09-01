@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.api.permalink.MatrixToConverter
  */
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultMatrixToConverter() : MatrixToConverter {
+class DefaultMatrixToConverter : MatrixToConverter {
     /**
      * Try to convert a URL from an element web instance or from a client permalink to a matrix.to url.
      * To be successfully converted, URL path should contain one of the [SUPPORTED_PATHS].

@@ -18,7 +18,7 @@ import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultLoginEntryPoint() : LoginEntryPoint {
+class DefaultLoginEntryPoint : LoginEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): LoginEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

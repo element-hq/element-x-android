@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
  * Currently it's used to store draft message when moving to edit mode.
  */
 @Inject
-class VolatileComposerDraftStore() : ComposerDraftStore {
+class VolatileComposerDraftStore : ComposerDraftStore {
     private val drafts: MutableMap<String, ComposerDraft> = mutableMapOf()
 
     override suspend fun loadDraft(roomId: RoomId, threadRoot: ThreadId?): ComposerDraft? {

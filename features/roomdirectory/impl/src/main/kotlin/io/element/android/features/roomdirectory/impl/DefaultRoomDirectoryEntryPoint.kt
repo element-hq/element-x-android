@@ -19,7 +19,7 @@ import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultRoomDirectoryEntryPoint() : RoomDirectoryEntryPoint {
+class DefaultRoomDirectoryEntryPoint : RoomDirectoryEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDirectoryEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

@@ -36,7 +36,7 @@ import io.element.android.libraries.mediaviewer.impl.model.eventId
  * (keyOffset = -1)
  */
 @Inject
-class PagerKeysHandler() {
+class PagerKeysHandler {
     private data class Data(
         val mediaItems: List<MediaItem>,
         val keyOffset: Long,

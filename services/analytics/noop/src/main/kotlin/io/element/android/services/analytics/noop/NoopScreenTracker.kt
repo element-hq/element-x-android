@@ -16,7 +16,7 @@ import io.element.android.services.analytics.api.ScreenTracker
 
 @ContributesBinding(AppScope::class)
 @Inject
-class NoopScreenTracker() : ScreenTracker {
+class NoopScreenTracker : ScreenTracker {
     @Composable
     override fun TrackScreen(screen: MobileScreen.ScreenName) = Unit
 }

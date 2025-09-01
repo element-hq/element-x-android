@@ -13,7 +13,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 
 @Inject
-class TimelineItemContentRedactedFactory() {
+class TimelineItemContentRedactedFactory {
     fun create(@Suppress("UNUSED_PARAMETER") content: RedactedContent): TimelineItemEventContent {
         return TimelineItemRedactedContent
     }

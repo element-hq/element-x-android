@@ -14,7 +14,7 @@ import io.element.android.libraries.di.SessionScope
 
 @ContributesBinding(SessionScope::class)
 @Inject
-class DefaultSessionEnterpriseService() : SessionEnterpriseService {
+class DefaultSessionEnterpriseService : SessionEnterpriseService {
     override suspend fun init() = Unit
     override suspend fun isElementCallAvailable(): Boolean = true
 }

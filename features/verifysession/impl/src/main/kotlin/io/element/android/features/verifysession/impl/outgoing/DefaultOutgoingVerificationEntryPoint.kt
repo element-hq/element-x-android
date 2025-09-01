@@ -18,7 +18,7 @@ import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultOutgoingVerificationEntryPoint() : OutgoingVerificationEntryPoint {
+class DefaultOutgoingVerificationEntryPoint : OutgoingVerificationEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): OutgoingVerificationEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

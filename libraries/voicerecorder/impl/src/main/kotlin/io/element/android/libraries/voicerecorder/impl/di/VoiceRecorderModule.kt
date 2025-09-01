@@ -39,7 +39,7 @@ object VoiceRecorderModule {
     }
 
     @Provides
-    fun provideVoiceFileConfig(): VoiceFileConfig =
+    public fun provideVoiceFileConfig(): VoiceFileConfig =
         VoiceFileConfig(
             cacheSubdir = "voice_recordings",
             fileExt = "ogg",

@@ -13,7 +13,7 @@ import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import kotlinx.collections.immutable.toImmutableList
 
 @Inject
-class MediaItemsPostProcessor() {
+class MediaItemsPostProcessor {
     fun process(
         mediaItems: List<MediaItem>,
     ): GroupedMediaItems {

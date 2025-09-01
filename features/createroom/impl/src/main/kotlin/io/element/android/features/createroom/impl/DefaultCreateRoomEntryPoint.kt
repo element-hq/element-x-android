@@ -18,7 +18,7 @@ import io.element.android.libraries.di.SessionScope
 
 @ContributesBinding(SessionScope::class)
 @Inject
-class DefaultCreateRoomEntryPoint() : CreateRoomEntryPoint {
+class DefaultCreateRoomEntryPoint : CreateRoomEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): CreateRoomEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

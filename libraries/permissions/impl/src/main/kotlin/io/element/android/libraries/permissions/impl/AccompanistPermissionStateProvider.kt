@@ -24,7 +24,7 @@ interface ComposablePermissionStateProvider {
 
 @ContributesBinding(AppScope::class)
 @Inject
-class AccompanistPermissionStateProvider() : ComposablePermissionStateProvider {
+class AccompanistPermissionStateProvider : ComposablePermissionStateProvider {
     @Composable
     override fun provide(permission: String, onPermissionResult: (Boolean) -> Unit): PermissionState {
         return rememberPermissionState(

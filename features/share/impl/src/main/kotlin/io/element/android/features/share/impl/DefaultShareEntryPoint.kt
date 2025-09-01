@@ -18,7 +18,7 @@ import io.element.android.libraries.di.SessionScope
 
 @ContributesBinding(SessionScope::class)
 @Inject
-class DefaultShareEntryPoint() : ShareEntryPoint {
+class DefaultShareEntryPoint : ShareEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): ShareEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

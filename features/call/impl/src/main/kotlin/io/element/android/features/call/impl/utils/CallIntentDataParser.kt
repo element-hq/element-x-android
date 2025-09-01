@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import dev.zacsweers.metro.Inject
 
 @Inject
-class CallIntentDataParser() {
+class CallIntentDataParser {
     private val validHttpSchemes = sequenceOf("https")
     private val knownHosts = sequenceOf(
         "call.element.io",

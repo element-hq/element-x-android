@@ -22,7 +22,7 @@ import io.element.android.libraries.di.SessionScope
 
 @ContributesBinding(SessionScope::class)
 @Inject
-class DefaultDirectLogoutView() : DirectLogoutView {
+class DefaultDirectLogoutView : DirectLogoutView {
     @Composable
     override fun Render(state: DirectLogoutState) {
         val eventSink = state.eventSink

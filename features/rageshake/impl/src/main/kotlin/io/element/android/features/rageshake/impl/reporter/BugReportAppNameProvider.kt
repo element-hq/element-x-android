@@ -18,6 +18,6 @@ fun interface BugReportAppNameProvider {
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultBugReportAppNameProvider() : BugReportAppNameProvider {
+class DefaultBugReportAppNameProvider : BugReportAppNameProvider {
     override fun provide(): String = RageshakeConfig.BUG_REPORT_APP_NAME
 }

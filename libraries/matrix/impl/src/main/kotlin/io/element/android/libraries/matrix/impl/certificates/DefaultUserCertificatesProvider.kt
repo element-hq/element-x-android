@@ -16,7 +16,7 @@ import java.security.KeyStoreException
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultUserCertificatesProvider() : UserCertificatesProvider {
+class DefaultUserCertificatesProvider : UserCertificatesProvider {
     /**
      * Get additional user-installed certificates from the `AndroidCAStore` `Keystore`.
      *

@@ -15,7 +15,7 @@ import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultBuildVersionSdkIntProvider() :
+class DefaultBuildVersionSdkIntProvider :
     BuildVersionSdkIntProvider {
     override fun get() = Build.VERSION.SDK_INT
 }

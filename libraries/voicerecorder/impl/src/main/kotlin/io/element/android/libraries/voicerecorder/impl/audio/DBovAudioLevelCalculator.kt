@@ -21,7 +21,7 @@ import kotlin.math.sqrt
  */
 @ContributesBinding(RoomScope::class)
 @Inject
-class DBovAudioLevelCalculator() : AudioLevelCalculator {
+class DBovAudioLevelCalculator : AudioLevelCalculator {
     override fun calculateAudioLevel(buffer: ShortArray): Float {
         return buffer.rms().dBov().normalize().coerceIn(0f, 1f)
     }

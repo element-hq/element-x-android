@@ -18,7 +18,7 @@ import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultCreatePollEntryPoint() : CreatePollEntryPoint {
+class DefaultCreatePollEntryPoint : CreatePollEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): CreatePollEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

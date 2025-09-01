@@ -20,7 +20,7 @@ interface TimelineEventTypeFilterFactory {
 
 @ContributesBinding(AppScope::class)
 @Inject
-class RustTimelineEventTypeFilterFactory() : TimelineEventTypeFilterFactory {
+class RustTimelineEventTypeFilterFactory : TimelineEventTypeFilterFactory {
     override fun create(listStateEventType: List<StateEventType>): TimelineEventTypeFilter {
         return TimelineEventTypeFilter.exclude(
             listStateEventType.map { stateEventType ->

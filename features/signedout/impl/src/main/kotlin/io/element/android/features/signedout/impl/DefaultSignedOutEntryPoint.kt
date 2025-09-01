@@ -18,7 +18,7 @@ import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultSignedOutEntryPoint() : SignedOutEntryPoint {
+class DefaultSignedOutEntryPoint : SignedOutEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): SignedOutEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

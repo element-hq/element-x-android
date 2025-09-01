@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.flowOf
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 @Inject
-class NoopAnalyticsService() : AnalyticsService {
+class NoopAnalyticsService : AnalyticsService {
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
     override val userConsentFlow: Flow<Boolean> = flowOf(false)
     override suspend fun setUserConsent(userConsent: Boolean) = Unit

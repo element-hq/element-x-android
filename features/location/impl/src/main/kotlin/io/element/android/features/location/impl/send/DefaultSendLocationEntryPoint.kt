@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultSendLocationEntryPoint() : SendLocationEntryPoint {
+class DefaultSendLocationEntryPoint : SendLocationEntryPoint {
     override fun builder(timelineMode: Timeline.Mode): SendLocationEntryPoint.Builder {
         return Builder(timelineMode)
     }

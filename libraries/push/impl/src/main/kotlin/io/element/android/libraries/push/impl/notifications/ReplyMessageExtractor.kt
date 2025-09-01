@@ -19,7 +19,7 @@ interface ReplyMessageExtractor {
 
 @ContributesBinding(AppScope::class)
 @Inject
-class AndroidReplyMessageExtractor() : ReplyMessageExtractor {
+class AndroidReplyMessageExtractor : ReplyMessageExtractor {
     override fun getReplyMessage(intent: Intent): String? {
         return RemoteInput.getResultsFromIntent(intent)
             ?.getCharSequence(NotificationBroadcastReceiver.KEY_TEXT_REPLY)

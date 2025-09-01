@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.flowOf
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultEnterpriseService() : EnterpriseService {
+class DefaultEnterpriseService : EnterpriseService {
     override val isEnterpriseBuild = false
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false

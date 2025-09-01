@@ -21,7 +21,7 @@ import org.matrix.rustcomponents.sdk.matrixToUserPermalink
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultPermalinkBuilder() : PermalinkBuilder {
+class DefaultPermalinkBuilder : PermalinkBuilder {
     override fun permalinkForUser(userId: UserId): Result<String> {
         if (!MatrixPatterns.isUserId(userId.value)) {
             return Result.failure(PermalinkBuilderError.InvalidData)

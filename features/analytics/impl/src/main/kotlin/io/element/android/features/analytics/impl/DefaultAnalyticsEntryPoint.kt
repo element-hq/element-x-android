@@ -17,7 +17,7 @@ import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultAnalyticsEntryPoint() : AnalyticsEntryPoint {
+class DefaultAnalyticsEntryPoint : AnalyticsEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
         return parentNode.createNode<AnalyticsOptInNode>(buildContext)
     }

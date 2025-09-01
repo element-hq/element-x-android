@@ -15,7 +15,7 @@ import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 
 @ContributesBinding(AppScope::class)
 @Inject
-class FileExtensionExtractorWithValidation() : FileExtensionExtractor {
+class FileExtensionExtractorWithValidation : FileExtensionExtractor {
     override fun extractFromName(name: String): String {
         val fileExtension = name.substringAfterLast('.', "")
         // Makes sure the extension is known by the system, otherwise default to binary extension.

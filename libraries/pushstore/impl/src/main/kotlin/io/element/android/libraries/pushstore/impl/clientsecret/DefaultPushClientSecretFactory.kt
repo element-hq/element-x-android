@@ -15,7 +15,7 @@ import java.util.UUID
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultPushClientSecretFactory() : PushClientSecretFactory {
+class DefaultPushClientSecretFactory : PushClientSecretFactory {
     override fun create(): String {
         return UUID.randomUUID().toString()
     }

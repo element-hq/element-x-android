@@ -19,7 +19,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultTextFileViewer() : TextFileViewer {
+class DefaultTextFileViewer : TextFileViewer {
     @Composable
     override fun Render(
         lines: ImmutableList<String>,

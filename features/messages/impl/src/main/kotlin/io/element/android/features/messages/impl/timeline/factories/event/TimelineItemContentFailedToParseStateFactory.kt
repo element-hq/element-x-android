@@ -13,7 +13,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 
 @Inject
-class TimelineItemContentFailedToParseStateFactory() {
+class TimelineItemContentFailedToParseStateFactory {
     @Suppress("UNUSED_PARAMETER")
     fun create(failedToParseState: FailedToParseStateContent): TimelineItemEventContent {
         return TimelineItemUnknownContent

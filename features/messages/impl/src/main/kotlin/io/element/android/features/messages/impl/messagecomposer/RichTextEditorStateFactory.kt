@@ -21,7 +21,7 @@ interface RichTextEditorStateFactory {
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultRichTextEditorStateFactory() : RichTextEditorStateFactory {
+class DefaultRichTextEditorStateFactory : RichTextEditorStateFactory {
     @Composable
     override fun remember(): RichTextEditorState {
         return rememberRichTextEditorState()

@@ -25,20 +25,20 @@ import io.element.android.libraries.di.SessionScope
 class DeclineAndBlockNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-//    presenterFactory: DeclineAndBlockPresenter.Factory,
+    presenterFactory: DeclineAndBlockPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(val inviteData: InviteData) : NodeInputs
 
     private val inviteData = inputs<Inputs>().inviteData
-//    private val presenter = presenterFactory.create(inviteData)
+    private val presenter = presenterFactory.create(inviteData)
 
     @Composable
     override fun View(modifier: Modifier) {
-//        val state = presenter.present()
-//        DeclineAndBlockView(
-//            state = state,
-//            onBackClick = ::navigateUp,
-//            modifier = modifier
-//        )
+        val state = presenter.present()
+        DeclineAndBlockView(
+            state = state,
+            onBackClick = ::navigateUp,
+            modifier = modifier
+        )
     }
 }

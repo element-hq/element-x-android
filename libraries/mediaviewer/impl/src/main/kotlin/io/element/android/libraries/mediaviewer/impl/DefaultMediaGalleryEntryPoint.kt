@@ -19,7 +19,7 @@ import io.element.android.libraries.mediaviewer.impl.gallery.root.MediaGalleryRo
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultMediaGalleryEntryPoint() : MediaGalleryEntryPoint {
+class DefaultMediaGalleryEntryPoint : MediaGalleryEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): MediaGalleryEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

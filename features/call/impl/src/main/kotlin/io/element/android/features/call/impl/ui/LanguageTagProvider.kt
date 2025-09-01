@@ -20,7 +20,7 @@ interface LanguageTagProvider {
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultLanguageTagProvider() : LanguageTagProvider {
+class DefaultLanguageTagProvider : LanguageTagProvider {
     @Composable
     override fun provideLanguageTag(): String? {
         return LocalConfiguration.current.locales.get(0)?.toLanguageTag()

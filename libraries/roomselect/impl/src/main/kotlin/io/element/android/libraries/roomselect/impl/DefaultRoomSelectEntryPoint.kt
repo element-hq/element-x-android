@@ -18,7 +18,7 @@ import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 
 @ContributesBinding(SessionScope::class)
 @Inject
-class DefaultRoomSelectEntryPoint() : RoomSelectEntryPoint {
+class DefaultRoomSelectEntryPoint : RoomSelectEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomSelectEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

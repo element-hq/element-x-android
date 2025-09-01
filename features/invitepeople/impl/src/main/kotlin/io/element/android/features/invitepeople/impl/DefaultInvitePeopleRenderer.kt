@@ -17,7 +17,7 @@ import io.element.android.libraries.di.SessionScope
 
 @ContributesBinding(SessionScope::class)
 @Inject
-class DefaultInvitePeopleRenderer() : InvitePeopleRenderer {
+class DefaultInvitePeopleRenderer : InvitePeopleRenderer {
     @Composable
     override fun Render(state: InvitePeopleState, modifier: Modifier) {
         if (state is DefaultInvitePeopleState) {

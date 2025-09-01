@@ -15,7 +15,7 @@ import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsPro
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultCallAnalyticCredentialsProvider() : CallAnalyticCredentialsProvider {
+class DefaultCallAnalyticCredentialsProvider : CallAnalyticCredentialsProvider {
     override val posthogUserId: String? = BuildConfig.POSTHOG_USER_ID.takeIf { it.isNotBlank() }
     override val posthogApiHost: String? = BuildConfig.POSTHOG_API_HOST.takeIf { it.isNotBlank() }
     override val posthogApiKey: String? = BuildConfig.POSTHOG_API_KEY.takeIf { it.isNotBlank() }

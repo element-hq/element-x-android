@@ -18,7 +18,7 @@ import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultPushHistoryEntryPoint() : PushHistoryEntryPoint {
+class DefaultPushHistoryEntryPoint : PushHistoryEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): PushHistoryEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

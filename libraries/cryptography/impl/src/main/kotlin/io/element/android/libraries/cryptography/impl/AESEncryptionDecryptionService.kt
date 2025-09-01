@@ -22,7 +22,7 @@ import javax.crypto.spec.GCMParameterSpec
  */
 @ContributesBinding(AppScope::class)
 @Inject
-class AESEncryptionDecryptionService() : EncryptionDecryptionService {
+class AESEncryptionDecryptionService : EncryptionDecryptionService {
     override fun createEncryptionCipher(key: SecretKey): Cipher {
         return Cipher.getInstance(AESEncryptionSpecs.CIPHER_TRANSFORMATION).apply {
             init(Cipher.ENCRYPT_MODE, key)

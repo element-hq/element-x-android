@@ -16,7 +16,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.preferences.DefaultPreferencesCorruptionHandlerFactory
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import java.util.concurrent.ConcurrentHashMap
 

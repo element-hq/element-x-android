@@ -12,7 +12,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 
 @Inject
-class AboutPresenter() : Presenter<AboutState> {
+class AboutPresenter : Presenter<AboutState> {
     @Composable
     override fun present(): AboutState {
         return AboutState(

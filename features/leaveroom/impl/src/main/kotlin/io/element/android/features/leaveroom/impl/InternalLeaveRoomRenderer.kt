@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesBinding(SessionScope::class)
 @Inject
-class InternalLeaveRoomRenderer() : LeaveRoomRenderer {
+class InternalLeaveRoomRenderer : LeaveRoomRenderer {
     @Composable
     override fun Render(state: LeaveRoomState, onSelectNewOwners: (RoomId) -> Unit, modifier: Modifier) {
         if (state is InternalLeaveRoomState) {

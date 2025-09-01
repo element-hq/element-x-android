@@ -21,7 +21,7 @@ import timber.log.Timber
 
 @ContributesBinding(RoomScope::class)
 @Inject
-class DefaultRoomMemberModerationRenderer() : RoomMemberModerationRenderer {
+class DefaultRoomMemberModerationRenderer : RoomMemberModerationRenderer {
     @Composable
     override fun Render(
         state: RoomMemberModerationState,

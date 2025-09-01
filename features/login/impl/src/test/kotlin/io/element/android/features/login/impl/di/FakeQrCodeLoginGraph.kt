@@ -10,11 +10,10 @@ package io.element.android.features.login.impl.di
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.features.login.impl.qrcode.FakeQrCodeLoginManager
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.qrcode.QrCodeLoginManager
 import io.element.android.libraries.architecture.AssistedNodeFactory
-import io.element.android.libraries.architecture.createNode
+import kotlin.reflect.KClass
 
 internal class FakeQrCodeLoginGraph(
     private val qrCodeLoginManager: QrCodeLoginManager,
@@ -23,7 +22,7 @@ internal class FakeQrCodeLoginGraph(
         return mapOf(
             QrCodeLoginFlowNode::class to object : AssistedNodeFactory<QrCodeLoginFlowNode> {
                 override fun create(buildContext: BuildContext, plugins: List<Plugin>): QrCodeLoginFlowNode {
-                    return createNode<QrCodeLoginFlowNode>(buildContext, plugins)
+                    error("This factory should not be called in tests")
                 }
             }
         )
@@ -33,9 +32,9 @@ internal class FakeQrCodeLoginGraph(
 
     internal class Builder(
         private val qrCodeLoginManager: QrCodeLoginManager,
-    ) : QrCodeLoginComponent.Factory {
-        override fun create(): QrCodeLoginComponent {
-            return FakeQrCodeLoginComponent(qrCodeLoginManager)
+    ) : QrCodeLoginGraph.Factory {
+        override fun create(): QrCodeLoginGraph {
+            return FakeQrCodeLoginGraph(qrCodeLoginManager)
         }
     }
 }

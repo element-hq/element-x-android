@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 @Inject
-class DefaultOidcActionFlow() : OidcActionFlow {
+class DefaultOidcActionFlow : OidcActionFlow {
     private val mutableStateFlow = MutableStateFlow<OidcAction?>(null)
 
     override fun post(oidcAction: OidcAction) {
