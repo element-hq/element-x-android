@@ -7,14 +7,16 @@
 
 package io.element.android.libraries.accountselect.impl
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.impl.memory.InMemoryMultiSessionsStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
-import kotlinx.coroutines.test.TestScope
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -26,15 +28,50 @@ class AccountSelectPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createAccountSelectPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.accounts).isEmpty()
         }
     }
 
-    private fun TestScope.createAccountSelectPresenter(
+    @Test
+    fun `present - multiple accounts case`() = runTest {
+        val presenter = createAccountSelectPresenter(
+            sessionStore = InMemoryMultiSessionsStore().apply {
+                addSession(aSessionData(sessionId = A_SESSION_ID.value))
+                addSession(
+                    aSessionData(
+                        sessionId = A_SESSION_ID_2.value,
+                        userDisplayName = "Bob",
+                        userAvatarUrl = "avatarUrl",
+                    )
+                )
+            }
+        )
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.accounts).hasSize(2)
+            val firstAccount = initialState.accounts[0]
+            assertThat(firstAccount).isEqualTo(
+                MatrixUser(
+                    userId = A_SESSION_ID,
+                    displayName = null,
+                    avatarUrl = null,
+                )
+            )
+            val secondAccount = initialState.accounts[1]
+            assertThat(secondAccount).isEqualTo(
+                MatrixUser(
+                    userId = A_SESSION_ID_2,
+                    displayName = "Bob",
+                    avatarUrl = "avatarUrl",
+                )
+            )
+        }
+    }
+
+    private fun createAccountSelectPresenter(
         sessionStore: SessionStore = InMemorySessionStore(),
     ) = AccountSelectPresenter(
         sessionStore = sessionStore,
