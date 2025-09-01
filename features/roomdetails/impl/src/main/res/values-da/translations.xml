@@ -6,7 +6,7 @@
   <string name="screen_notification_settings_mentions_only_disclaimer">"Din hjemmeserver understøtter ikke denne mulighed i krypterede rum, og derfor er det muligt at du ikke får besked i alle rum."</string>
   <string name="screen_polls_history_title">"Afstemninger"</string>
   <string name="screen_room_change_permissions_administrators">"Kun admins"</string>
-  <string name="screen_room_change_permissions_ban_people">"Spær personer"</string>
+  <string name="screen_room_change_permissions_ban_people">"Spær brugere"</string>
   <string name="screen_room_change_permissions_delete_messages">"Fjern beskeder"</string>
   <string name="screen_room_change_permissions_everyone">"Alle"</string>
   <string name="screen_room_change_permissions_invite_people">"Invitér personer og acceptér anmodninger om at deltage"</string>
@@ -50,7 +50,7 @@
   <string name="screen_room_details_error_loading_notification_settings">"Der opstod en fejl under indlæsning af notifikationsindstillinger."</string>
   <string name="screen_room_details_error_muting">"Det lykkedes ikke at slå lyden fra for dette rum. Prøv igen."</string>
   <string name="screen_room_details_error_unmuting">"Det lykkedes ikke at slå lyden til igen i dette rum. Prøv igen."</string>
-  <string name="screen_room_details_invite_people_title">"Invitér folk"</string>
+  <string name="screen_room_details_invite_people_title">"Invitér andre"</string>
   <string name="screen_room_details_leave_conversation_title">"Forlad samtalen"</string>
   <string name="screen_room_details_leave_room_title">"Forlad rum"</string>
   <string name="screen_room_details_media_gallery_title">"Medier og filer"</string>
@@ -129,7 +129,7 @@ Vi anbefaler ikke at aktivere kryptering for rum, som alle kan finde og deltage 
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktivér end-to-end-kryptering"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle kan finde og deltage"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Enhver"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Folk kan kun deltage, hvis de bliver inviteret"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Andre kan kun deltage, hvis de bliver inviteret"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Kun med invitation"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Adgang til rummet"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Klynger understøttes ikke i øjeblikket"</string>

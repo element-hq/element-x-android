@@ -2,12 +2,13 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_chat_backup_key_backup_action_disable">"Dezactivați backupul"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Activați backupul"</string>
-  <string name="screen_chat_backup_key_backup_description">"Stocați identitatea criptografică și cheile de mesaje în siguranță pe server. Acest lucru vă va permite să vizualizați istoricul mesajelor pe orice dispozitiv nou. %1$s."</string>
+  <string name="screen_chat_backup_key_backup_description">"Stocați identitatea criptografică și cheile de mesaje în siguranță pe server. Acest lucru vă va permite să vizualizați mesajele anterioare pe orice dispozitiv nou. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Backup"</string>
+  <string name="screen_chat_backup_key_storage_disabled_error">"Stocarea cheilor trebuie activată pentru a configura recuperarea."</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"Încărcați cheile de pe acest dispozitiv"</string>
   <string name="screen_chat_backup_key_storage_toggle_title">"Permiteți stocarea cheilor"</string>
   <string name="screen_chat_backup_recovery_action_change">"Schimbați cheia de recuperare"</string>
-  <string name="screen_chat_backup_recovery_action_change_description">"Recuperați-vă identitatea criptografică și istoricul mesajelor cu o cheie de recuperare dacă ați pierdut toate dispozitivele existente."</string>
+  <string name="screen_chat_backup_recovery_action_change_description">"Recuperați-vă identitatea criptografică și mesajele anterioare cu o cheie de recuperare dacă ați pierdut toate dispozitivele existente."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Introduceți cheia de recuperare"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Backup-ul pentru chat nu este sincronizat în prezent."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurați recuperarea"</string>
@@ -21,7 +22,7 @@
   <string name="screen_create_new_recovery_key_title">"Resetați criptarea contului dumneavoastră folosind un alt dispozitiv"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Continuați resetarea"</string>
   <string name="screen_encryption_reset_bullet_1">"Detaliile contului, contactele, preferințele și lista de chat vor fi păstrate"</string>
-  <string name="screen_encryption_reset_bullet_2">"Veți pierde mesajele istorice care au fost stocate doar pe server"</string>
+  <string name="screen_encryption_reset_bullet_2">"Veți pierde mesajele anterioare care au fost stocate doar pe server"</string>
   <string name="screen_encryption_reset_bullet_3">"Va trebui să verificați din nou toate dispozitivele și contactele existente"</string>
   <string name="screen_encryption_reset_footer">"Resetați-vă identitatea numai dacă nu aveți acces la un alt dispozitiv conectat și ați pierdut cheia de recuperare."</string>
   <string name="screen_encryption_reset_title">"Nu puteți confirma? Va trebui să vă resetați identitatea."</string>
@@ -29,7 +30,7 @@
   <string name="screen_key_backup_disable_confirmation_description">"Veți pierde mesajele criptate dacă sunteți deconectat de pe toate dispozitivele."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Sunteți sigur că doriți să dezactivați backup-ul?"</string>
   <string name="screen_key_backup_disable_description">"Dezactivarea backup-ului va șterge backup-ul curent și va dezactiva alte măsuri de securitate. În acest caz, veți:"</string>
-  <string name="screen_key_backup_disable_description_point_1">"Nu veți avea istoricul mesajelor criptate pe dispozitive noi"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Nu veți avea mesajele anterioare criptate pe dispozitive noi"</string>
   <string name="screen_key_backup_disable_description_point_2">"Veți pierde accesul la mesajele criptate dacă sunteți deconectat de pe %1$s peste tot"</string>
   <string name="screen_key_backup_disable_title">"Sunteți sigur că doriți să dezactivați backup-ul?"</string>
   <string name="screen_recovery_key_change_description">"Obțineți o nouă cheie de recuperare dacă ați pierdut-o pe cea existentă. După schimbarea cheii de recuperare, cea veche nu va mai funcționa."</string>
@@ -45,6 +46,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Introduceți…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Ați pierdut cheia de recuperare?"</string>
   <string name="screen_recovery_key_confirm_success">"Cheia de recuperare confirmată"</string>
+  <string name="screen_recovery_key_confirm_title">"Introduceți cheia de recuperare"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Cheia de recuperare copiată"</string>
   <string name="screen_recovery_key_generating_key">"Se generează…"</string>
   <string name="screen_recovery_key_save_action">"Salvați cheia de recuperare"</string>

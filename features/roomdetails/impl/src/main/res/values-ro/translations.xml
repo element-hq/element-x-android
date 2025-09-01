@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"Veți avea nevoie de o adresă de cameră pentru a o face vizibilă în director."</string>
+  <string name="screen_edit_room_address_title">"Adresa camerei"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"A apărut o eroare în timpul actualizării setărilor pentru notificari."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, este posibil să nu primiți notificări în unele camere."</string>
   <string name="screen_polls_history_title">"Sondaje"</string>
   <string name="screen_room_change_permissions_administrators">"Doar administratori"</string>
   <string name="screen_room_change_permissions_ban_people">"Interziceți persoane"</string>
-  <string name="screen_room_change_permissions_delete_messages">"Eliminați mesaje"</string>
+  <string name="screen_room_change_permissions_delete_messages">"Ștergeți mesajele"</string>
   <string name="screen_room_change_permissions_everyone">"Toți"</string>
-  <string name="screen_room_change_permissions_invite_people">"Invitați persoane"</string>
+  <string name="screen_room_change_permissions_invite_people">"Invitați persoane și acceptați cereri de alaturare"</string>
   <string name="screen_room_change_permissions_member_moderation">"Moderarea membrilor"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mesaje și conținut"</string>
   <string name="screen_room_change_permissions_moderators">"Administratori și moderatori"</string>
-  <string name="screen_room_change_permissions_remove_people">"Îndepărtați persoane"</string>
+  <string name="screen_room_change_permissions_remove_people">"Îndepărtați persoane și refuzați cereri de alăturare"</string>
   <string name="screen_room_change_permissions_room_avatar">"Schimbați avatarul camerei"</string>
   <string name="screen_room_change_permissions_room_details">"Detaliile camerei"</string>
   <string name="screen_room_change_permissions_room_name">"Schimbă numele camerei"</string>
@@ -20,13 +22,17 @@
   <string name="screen_room_change_role_administrators_title">"Editați administratorii"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Promovați utilizatorul să aibă același nivel de putere ca dumneavoastră. Nu veți putea anula această acțiune."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Adăugați administrator?"</string>
+  <string name="screen_room_change_role_confirm_change_owners_description">"Nu veți putea anula această acțiune. Transferați dreptul de proprietate către utilizatorii selectați. Odată ce părăsiți această pagină, acțiunea va fi definitivă."</string>
+  <string name="screen_room_change_role_confirm_change_owners_title">"Transferați proprietatea?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Retrogradare"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Nu veți putea anula această modificare, deoarece vă retrogradați. Dacă sunteți ultimul utilizator privilegiat din cameră, va fi imposibil să recâștigați privilegiile."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Vreți să vă retrogradați?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (În așteptare)"</string>
   <string name="screen_room_change_role_invited_member_name_android">"(În așteptare)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Administratorii au automat privilegii de moderator"</string>
+  <string name="screen_room_change_role_moderators_owner_section_footer">"Proprietarii au automat privilegii de administrator."</string>
   <string name="screen_room_change_role_moderators_title">"Editați moderatorii"</string>
+  <string name="screen_room_change_role_owners_title">"Alegeți proprietari"</string>
   <string name="screen_room_change_role_section_administrators">"Administratori"</string>
   <string name="screen_room_change_role_section_moderators">"Moderatori"</string>
   <string name="screen_room_change_role_section_users">"Membri"</string>
@@ -47,12 +53,16 @@
   <string name="screen_room_details_invite_people_title">"Invitați prieteni"</string>
   <string name="screen_room_details_leave_conversation_title">"Părăsiți conversația"</string>
   <string name="screen_room_details_leave_room_title">"Părăsiți camera"</string>
+  <string name="screen_room_details_media_gallery_title">"Media și fișiere"</string>
   <string name="screen_room_details_notification_mode_custom">"Personalizat"</string>
   <string name="screen_room_details_notification_mode_default">"Implicit"</string>
   <string name="screen_room_details_notification_title">"Notificări"</string>
   <string name="screen_room_details_pinned_events_row_title">"Mesaje fixate"</string>
+  <string name="screen_room_details_profile_row_title">"Profil"</string>
+  <string name="screen_room_details_requests_to_join_title">"Cereri de alăturare"</string>
   <string name="screen_room_details_roles_and_permissions">"Roluri și permisiuni"</string>
   <string name="screen_room_details_room_name_label">"Numele camerei"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Securitate &amp; confidențialitate"</string>
   <string name="screen_room_details_security_title">"Securitate"</string>
   <string name="screen_room_details_share_room_title">"Partajați camera"</string>
   <string name="screen_room_details_title">"Informatii camera"</string>
@@ -63,7 +73,7 @@
     <item quantity="one">"o persoană"</item>
     <item quantity="other">"%1$d persoane"</item>
   </plurals>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Eliminați și interziceți membrul"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Îndepărtați și interziceți membrul"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Doar înlăturare"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Anulare excludere"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Se vor putea alătura din nou acestei săli dacă sunt invitați."</string>
@@ -73,6 +83,7 @@
   <string name="screen_room_member_list_pending_header_title">"În așteptare"</string>
   <string name="screen_room_member_list_role_administrator">"Administrator"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
+  <string name="screen_room_member_list_role_owner">"Proprietar"</string>
   <string name="screen_room_member_list_room_members_header_title">"Membrii camerei"</string>
   <string name="screen_room_member_list_unbanning_user">"Se anulează interzicerea lui %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Permiteți setări personalizate"</string>
@@ -81,7 +92,7 @@
   <string name="screen_room_notification_settings_default_setting_footnote">"Îl puteți schimba în %1$s."</string>
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"Setări generale"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Setare implicită"</string>
-  <string name="screen_room_notification_settings_edit_remove_setting">"Stergeți setarea personalizată"</string>
+  <string name="screen_room_notification_settings_edit_remove_setting">"Ștergeți setarea personalizată"</string>
   <string name="screen_room_notification_settings_error_loading_settings">"A apărut o eroare la încărcarea setărilor pentry notificari."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Nu s-a reușit restaurarea modului implicit, vă rugăm să încercați din nou."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nu s-a reușit setarea modului, vă rugăm să încercați din nou."</string>
@@ -90,12 +101,14 @@
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"În această cameră, anunțați-mă pentru"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratori"</string>
+  <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratori și proprietari"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Schimbare rol"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_member">"Degradare la membru"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_moderator">"Degradare la moderator"</string>
   <string name="screen_room_roles_and_permissions_member_moderation">"Moderarea membrilor"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mesaje și conținut"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatori"</string>
+  <string name="screen_room_roles_and_permissions_owners">"Proprietari"</string>
   <string name="screen_room_roles_and_permissions_permissions_header">"Permisiuni"</string>
   <string name="screen_room_roles_and_permissions_reset">"Resetați permisiunile"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"După ce resetați permisiunile, veți pierde setările curente."</string>
@@ -103,8 +116,37 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roluri"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detaliile camerei"</string>
   <string name="screen_room_roles_and_permissions_title">"Roluri și permisiuni"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Adăugați adresa camerei"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Oricine poate cere să se alăture camerei, dar un administrator sau moderator va trebui să accepte cererea."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Cereți să vă alăturați"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Da, activați criptarea"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Odată activată, criptarea pentru o cameră nu poate fi dezactivată. Mesajele anterioare vor fi vizibile numai pentru membrii camerei de la momentul la care au fost invitați sau de la momentul la care s-au alăturat camerei. 
+Nimeni în afară de membrii camerei nu va putea citi messaje. Acest lucru poate împiedica funcționarea corectă a boților și a punților. 
+Nu recomandăm activarea criptării pentru camerele pe care oricine le poate găsi și la care se poate alătura."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Activați criptarea?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Odată activată, criptarea nu poate fi dezactivată."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Criptare"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Activați criptarea end-to-end"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Oricine poate găsi și alătura camerei"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Oricine"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Persoanele se pot alătura numai dacă invitate"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Doar pe bază de invitație"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Acces la cameră"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Spațiile nu sunt momentan suportate."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Membrii spațiului"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Veți avea nevoie de o adresă de cameră pentru a o face vizibilă în directorul de camere."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Adresa camerei"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Permiteți găsirea acestei camere prin căutarea în directorul de camere publice al %1$s"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Vizibilă în directorul de camere publice"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Oricine"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Cine poate citi mesajele anterioare"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Doar pentru membri, de la momentul în care au fost invitați"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Doar pentru membri, după selectarea acestei opțiuni"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Adresele camerelor sunt modalități de a găsi și accesa camere. Acest lucru vă asigură, de asemenea, că puteți partaja cu ușurință camera dumneavoastră cu alte persoane.
+Puteți alege să publicați camera în directorul public al camerelor serverului dumneavoastră."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Publicare cameră"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresele camerelor sunt modalități de a găsi și accesa camerele. Acest lucru vă asigură, de asemenea, că puteți partaja cu ușurință camera dvs. cu alte persoane.
+Adresa este necesară și pentru ca camera să fie vizibilă în directorul public de camere al %1$s."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Vizibilitatea camerei"</string>
+  <string name="screen_security_and_privacy_title">"Securitate &amp; confidențialitate"</string>
 </resources>

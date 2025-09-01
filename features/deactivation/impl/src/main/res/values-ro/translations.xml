@@ -7,7 +7,7 @@
   <string name="screen_deactivate_account_description_bold_part">"ireversibilă"</string>
   <string name="screen_deactivate_account_list_item_1">"%1$s contul dumneavoastră (nu vă puteți conecta din nou, iar ID-ul dvs. nu poate fi reutilizat)."</string>
   <string name="screen_deactivate_account_list_item_1_bold_part">"Dezactivați permanent"</string>
-  <string name="screen_deactivate_account_list_item_2">"Elimina din toate camerele de chat."</string>
+  <string name="screen_deactivate_account_list_item_2">"Îndepărta din toate camerele de chat."</string>
   <string name="screen_deactivate_account_list_item_3">"Șterge informațiile contului dumneavoastră de pe serverul nostru de identitate."</string>
   <string name="screen_deactivate_account_list_item_4">"Mesajele dumneavoastră vor fi în continuare vizibile pentru utilizatorii înregistrați, dar nu vor fi disponibile pentru utilizatorii noi sau neînregistrați dacă alegeți să le ștergeți."</string>
   <string name="screen_deactivate_account_title">"Dezactivați contul"</string>

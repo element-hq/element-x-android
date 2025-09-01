@@ -36,7 +36,7 @@ For nu kan du fravælge filtre for at se dine andre samtaler"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"Du har endnu ingen chats med lav prioritet"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Du kan fravælge filtre for at se dine andre samtaler"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Du har ingen samtaler til dette valg"</string>
-  <string name="screen_roomlist_filter_people">"Mennesker"</string>
+  <string name="screen_roomlist_filter_people">"Brugere"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"Du har ingen DM\'er endnu"</string>
   <string name="screen_roomlist_filter_rooms">"Rum"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"Du er ikke i noget rum endnu"</string>

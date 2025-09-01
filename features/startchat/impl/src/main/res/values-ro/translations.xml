@@ -3,4 +3,10 @@
   <string name="screen_create_room_action_create_room">"Cameră nouă"</string>
   <string name="screen_room_directory_search_title">"Director de camere"</string>
   <string name="screen_start_chat_error_starting_chat">"A apărut o eroare la încercarea începerii conversației"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Gasiți o cameră după adresă"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Adresa nu e este validă"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Introduceți…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"S-a găsit o cameră"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Nu a putut fi găsită nici o cameră"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"de exemplu #nume-camera:matrix.org"</string>
 </resources>

@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Přidat reakci: %1$s"</string>
   <string name="a11y_avatar">"Profilový obrázek"</string>
+  <string name="a11y_collapse_message_text_field">"Minimalizovat textové pole zprávy"</string>
   <string name="a11y_delete">"Smazat"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"zadána %1$d číslice"</item>
@@ -11,6 +12,7 @@
   <string name="a11y_edit_avatar">"Upravit avatar"</string>
   <string name="a11y_edit_room_address_hint">"Úplná adresa bude %1$s"</string>
   <string name="a11y_encryption_details">"Podrobnosti o šifrování"</string>
+  <string name="a11y_expand_message_text_field">"Rozbalit textové pole zprávy"</string>
   <string name="a11y_hide_password">"Skrýt heslo"</string>
   <string name="a11y_join_call">"Připojit se k hovoru"</string>
   <string name="a11y_jump_to_bottom">"Přejít dolů"</string>
@@ -90,6 +92,7 @@
   <string name="action_enable">"Povolit"</string>
   <string name="action_end_poll">"Ukončit hlasování"</string>
   <string name="action_enter_pin">"Zadejte PIN"</string>
+  <string name="action_finish">"Dokončit"</string>
   <string name="action_forgot_password">"Zapomněli jste heslo?"</string>
   <string name="action_forward">"Přeposlat"</string>
   <string name="action_go_back">"Přejít zpět"</string>
@@ -168,6 +171,8 @@
   <string name="common_advanced_settings">"Pokročilá nastavení"</string>
   <string name="common_an_image">"obrázek"</string>
   <string name="common_analytics">"Analytika"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Opustili jste místnost"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Byli jste odhlášeni z relace"</string>
   <string name="common_appearance">"Vzhled"</string>
   <string name="common_audio">"Zvuk"</string>
   <string name="common_blocked_users">"Blokovaní uživatelé"</string>
@@ -260,9 +265,12 @@ Důvod: %1$s."</string>
     <item quantity="few">"%d hlasy"</item>
     <item quantity="other">"%d hlasů"</item>
   </plurals>
+  <string name="common_preparing">"Příprava…"</string>
   <string name="common_privacy_policy">"Zásady ochrany osobních údajů"</string>
   <string name="common_private_room">"Soukromá místnost"</string>
+  <string name="common_private_space">"Soukromý prostor"</string>
   <string name="common_public_room">"Veřejná místnost"</string>
+  <string name="common_public_space">"Veřejný prostor"</string>
   <string name="common_reaction">"Reakce"</string>
   <string name="common_reactions">"Reakce"</string>
   <string name="common_reason">"Důvod"</string>
@@ -279,6 +287,11 @@ Důvod: %1$s."</string>
   <string name="common_room">"Místnost"</string>
   <string name="common_room_name">"Název místnosti"</string>
   <string name="common_room_name_placeholder">"např. název vašeho projektu"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d místnost"</item>
+    <item quantity="few">"%1$d místnosti"</item>
+    <item quantity="other">"%1$d místností"</item>
+  </plurals>
   <string name="common_saved_changes">"Uložené změny"</string>
   <string name="common_saving">"Ukládání"</string>
   <string name="common_screen_lock">"Zámek obrazovky"</string>
@@ -298,6 +311,12 @@ Důvod: %1$s."</string>
   <string name="common_signing_out">"Odhlašování"</string>
   <string name="common_something_went_wrong">"Něco se nepovedlo"</string>
   <string name="common_something_went_wrong_message">"Narazili jsme na problém. Zkuste to prosím znovu."</string>
+  <string name="common_space">"Prostor"</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d prostor"</item>
+    <item quantity="few">"%1$d prostory"</item>
+    <item quantity="other">"%1$d prostorů"</item>
+  </plurals>
   <string name="common_starting_chat">"Zahajování chatu…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspěch"</string>
@@ -328,6 +347,12 @@ Důvod: %1$s."</string>
   <string name="common_verify_identity">"Ověření identity"</string>
   <string name="common_verify_user">"Ověřit uživatele"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Vysoká kvalita"</string>
+  <string name="common_video_quality_high_description">"Nejlepší kvalita, ale větší velikost souboru"</string>
+  <string name="common_video_quality_low">"Nízká kvalita"</string>
+  <string name="common_video_quality_low_description">"Nejrychlejší rychlost nahrávání a nejmenší velikost souboru"</string>
+  <string name="common_video_quality_standard">"Standardní kvalita"</string>
+  <string name="common_video_quality_standard_description">"Rovnováha mezi kvalitou a rychlostí nahrávání"</string>
   <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
@@ -342,6 +367,10 @@ Důvod: %1$s."</string>
 
 Opravdu chcete pokračovat?"</string>
   <string name="dialog_confirm_link_title">"Zkontrolujte tento odkaz"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Vyberte výchozí kvalitu nahrávaných videí."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kvalita nahrávání videa"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Maximální povolená velikost souboru je: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Soubor je pro nahrání příliš velký."</string>
   <string name="dialog_room_reported">"Místnost nahlášena"</string>
   <string name="dialog_room_reported_and_left">"Nahlášen a opustil místnost"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
@@ -350,6 +379,9 @@ Opravdu chcete pokračovat?"</string>
   <string name="dialog_title_warning">"Upozornění"</string>
   <string name="dialog_unsaved_changes_description_android">"Vaše změny nebyly uloženy. Opravdu se chcete vrátit?"</string>
   <string name="dialog_unsaved_changes_title">"Uložit změny?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Maximální povolená velikost souboru je: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vyberte kvalitu videa, které chcete nahrát."</string>
+  <string name="dialog_video_quality_selector_title">"Vyberte kvalitu nahrávání videa"</string>
   <string name="error_account_creation_not_possible">"Váš domovský server je třeba upgradovat, aby podporoval službu Matrix Authentication Service a vytváření účtu."</string>
   <string name="error_failed_creating_the_permalink">"Vytvoření trvalého odkazu se nezdařilo"</string>
   <string name="error_failed_loading_map">"%1$s nemohl načíst mapu. Zkuste to prosím později."</string>
@@ -401,6 +433,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno nebo více vašich zařízení není ověřeno. Zprávu můžete přesto odeslat, nebo ji můžete prozatím zrušit a zkusit to znovu později, až ověříte všechna svá zařízení."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Upravit správce nebo vlastníky"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
   <string name="screen_room_event_pill">"Zpráva v %1$s"</string>
@@ -418,6 +451,9 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_share_open_google_maps">"Otevřít v Mapách Google"</string>
   <string name="screen_share_open_osm_maps">"Otevřít v OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Sdílet tuto polohu"</string>
+  <string name="screen_space_list_description">"Prostory, které jste vytvořili nebo se k nim připojili."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Prostory"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení."</string>

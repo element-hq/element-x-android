@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Nyt rum"</string>
-  <string name="screen_create_room_add_people_title">"Invitér folk"</string>
+  <string name="screen_create_room_add_people_title">"Invitér andre"</string>
   <string name="screen_create_room_error_creating_room">"Der opstod en fejl ved oprettelsen af rummet"</string>
   <string name="screen_create_room_private_option_description">"Kun inviterede personer kan få adgang til dette rum. Alle meddelelser er ende-til-ende krypteret."</string>
   <string name="screen_create_room_private_option_title">"Privat rum"</string>

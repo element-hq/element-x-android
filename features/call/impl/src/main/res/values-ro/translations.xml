@@ -3,5 +3,6 @@
   <string name="call_foreground_service_channel_title_android">"Apel în curs"</string>
   <string name="call_foreground_service_message_android">"Atingeți pentru a reveni la apel."</string>
   <string name="call_foreground_service_title_android">"☎️ Apel în curs"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Call nu permite utilizarea dispozitivelor audio Bluetooth în această versiune Android. Vă rugăm să selectați un alt dispozitiv audio."</string>
   <string name="screen_incoming_call_subtitle_android">"Primiți un apel Element Call"</string>
 </resources>
