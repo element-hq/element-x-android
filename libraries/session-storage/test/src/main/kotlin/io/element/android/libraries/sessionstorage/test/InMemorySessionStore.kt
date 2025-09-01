@@ -15,8 +15,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 
-class InMemorySessionStore : SessionStore {
-    private val sessionDataListFlow = MutableStateFlow<List<SessionData>>(emptyList())
+class InMemorySessionStore(
+    initialList: List<SessionData> = emptyList(),
+) : SessionStore {
+    private val sessionDataListFlow = MutableStateFlow(initialList)
 
     override fun isLoggedIn(): Flow<LoggedInState> {
         return sessionDataListFlow.map {

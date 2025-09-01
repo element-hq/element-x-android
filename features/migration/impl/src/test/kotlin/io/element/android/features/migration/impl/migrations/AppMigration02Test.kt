@@ -20,12 +20,12 @@ import org.junit.Test
 class AppMigration02Test {
     @Test
     fun `test migration`() = runTest {
-        val sessionStore = InMemorySessionStore().apply {
-            updateData(aSessionData())
-        }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData()),
+        )
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSessionVerificationSkipped = false)
         val sessionPreferencesStoreFactory = FakeSessionPreferencesStoreFactory(
-            getLambda = lambdaRecorder { _, _, -> sessionPreferencesStore },
+            getLambda = lambdaRecorder { _, _ -> sessionPreferencesStore },
             removeLambda = lambdaRecorder { _ -> }
         )
         val migration = AppMigration02(sessionStore = sessionStore, sessionPreferenceStoreFactory = sessionPreferencesStoreFactory)

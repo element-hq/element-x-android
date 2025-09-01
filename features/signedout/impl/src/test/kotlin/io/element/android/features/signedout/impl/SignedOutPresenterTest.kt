@@ -31,9 +31,9 @@ class SignedOutPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val aSessionData = aSessionData()
-        val sessionStore = InMemorySessionStore().apply {
-            storeData(aSessionData)
-        }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData)
+        )
         val presenter = createSignedOutPresenter(sessionStore = sessionStore)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -48,9 +48,9 @@ class SignedOutPresenterTest {
     @Test
     fun `present - sign in again`() = runTest {
         val aSessionData = aSessionData()
-        val sessionStore = InMemorySessionStore().apply {
-            storeData(aSessionData)
-        }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData)
+        )
         val presenter = createSignedOutPresenter(sessionStore = sessionStore)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

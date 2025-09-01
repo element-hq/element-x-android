@@ -18,15 +18,15 @@ import java.io.File
 class AppMigration06Test {
     @Test
     fun `empty cache path should be set to an expected path`() = runTest {
-        val sessionStore = InMemorySessionStore().apply {
-            updateData(
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
                 aSessionData(
                     sessionId = A_SESSION_ID.value,
                     sessionPath = "/a/path/to/a/session/AN_ID",
                     cachePath = "",
                 )
             )
-        }
+        )
         val migration = AppMigration06(sessionStore = sessionStore, cacheDirectory = File("/a/path/cache"))
         migration.migrate()
         val storedData = sessionStore.getSession(A_SESSION_ID.value)!!
@@ -35,14 +35,14 @@ class AppMigration06Test {
 
     @Test
     fun `non empty cache path should not be impacted by the migration`() = runTest {
-        val sessionStore = InMemorySessionStore().apply {
-            updateData(
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
                 aSessionData(
                     sessionId = A_SESSION_ID.value,
                     cachePath = "/a/path/existing",
                 )
             )
-        }
+        )
         val migration = AppMigration05(sessionStore = sessionStore, baseDirectory = File("/a/path/cache"))
         migration.migrate()
         val storedData = sessionStore.getSession(A_SESSION_ID.value)!!

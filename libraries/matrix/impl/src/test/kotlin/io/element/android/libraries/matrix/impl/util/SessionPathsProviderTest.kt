@@ -24,14 +24,15 @@ class SessionPathsProviderTest {
 
     @Test
     fun `if session is found, provides returns the data`() = runTest {
-        val store = InMemorySessionStore()
-        val sut = SessionPathsProvider(store)
-        store.storeData(
-            aSessionData(
-                sessionPath = "/a/path/to/a/session",
-                cachePath = "/a/path/to/a/cache",
+        val store = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(
+                    sessionPath = "/a/path/to/a/session",
+                    cachePath = "/a/path/to/a/cache",
+                )
             )
         )
+        val sut = SessionPathsProvider(store)
         val result = sut.provides(A_SESSION_ID)!!
         assertThat(result.fileDirectory.absolutePath).isEqualTo("/a/path/to/a/session")
         assertThat(result.cacheDirectory.absolutePath).isEqualTo("/a/path/to/a/cache")

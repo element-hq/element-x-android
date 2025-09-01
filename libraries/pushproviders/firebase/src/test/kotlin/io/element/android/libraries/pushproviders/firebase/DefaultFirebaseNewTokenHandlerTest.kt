@@ -49,11 +49,13 @@ class DefaultFirebaseNewTokenHandlerTest {
         val registerPusherResult = lambdaRecorder<MatrixClient, String, String, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val pusherSubscriber = FakePusherSubscriber(registerPusherResult = registerPusherResult)
         val firebaseNewTokenHandler = createDefaultFirebaseNewTokenHandler(
-            sessionStore = InMemorySessionStore().apply {
-                storeData(aSessionData(A_USER_ID.value))
-                storeData(aSessionData(A_USER_ID_2.value))
-                storeData(aSessionData(A_USER_ID_3.value))
-            },
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(A_USER_ID.value),
+                    aSessionData(A_USER_ID_2.value),
+                    aSessionData(A_USER_ID_3.value),
+                )
+            ),
             matrixClientProvider = FakeMatrixClientProvider { sessionId ->
                 when (sessionId) {
                     A_USER_ID -> Result.success(aMatrixClient1)
@@ -88,9 +90,9 @@ class DefaultFirebaseNewTokenHandlerTest {
         val registerPusherResult = lambdaRecorder<MatrixClient, String, String, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val pusherSubscriber = FakePusherSubscriber(registerPusherResult = registerPusherResult)
         val firebaseNewTokenHandler = createDefaultFirebaseNewTokenHandler(
-            sessionStore = InMemorySessionStore().apply {
-                storeData(aSessionData(A_USER_ID.value))
-            },
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(aSessionData(A_USER_ID.value))
+            ),
             matrixClientProvider = FakeMatrixClientProvider {
                 Result.failure(IllegalStateException())
             },
@@ -112,9 +114,9 @@ class DefaultFirebaseNewTokenHandlerTest {
         val registerPusherResult = lambdaRecorder<MatrixClient, String, String, Result<Unit>> { _, _, _ -> Result.failure(AN_EXCEPTION) }
         val pusherSubscriber = FakePusherSubscriber(registerPusherResult = registerPusherResult)
         val firebaseNewTokenHandler = createDefaultFirebaseNewTokenHandler(
-            sessionStore = InMemorySessionStore().apply {
-                storeData(aSessionData(A_USER_ID.value))
-            },
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(aSessionData(A_USER_ID.value))
+            ),
             matrixClientProvider = FakeMatrixClientProvider {
                 Result.success(aMatrixClient1)
             },

@@ -23,11 +23,12 @@ import org.junit.Test
 class RustClientSessionDelegateTest {
     @Test
     fun `saveSessionInKeychain should update the store`() = runTest {
-        val sessionStore = InMemorySessionStore()
-        sessionStore.storeData(
-            aSessionData(
-                accessToken = "anAccessToken",
-                refreshToken = "aRefreshToken",
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(
+                    accessToken = "anAccessToken",
+                    refreshToken = "aRefreshToken",
+                )
             )
         )
         val sut = aRustClientSessionDelegate(sessionStore)

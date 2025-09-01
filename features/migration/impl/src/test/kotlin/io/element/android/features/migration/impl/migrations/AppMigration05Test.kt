@@ -18,14 +18,14 @@ import java.io.File
 class AppMigration05Test {
     @Test
     fun `empty session path should be set to an expected path`() = runTest {
-        val sessionStore = InMemorySessionStore().apply {
-            updateData(
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
                 aSessionData(
                     sessionId = A_SESSION_ID.value,
                     sessionPath = "",
                 )
             )
-        }
+        )
         val migration = AppMigration05(sessionStore = sessionStore, baseDirectory = File("/a/path"))
         migration.migrate()
         val storedData = sessionStore.getSession(A_SESSION_ID.value)!!
@@ -34,14 +34,14 @@ class AppMigration05Test {
 
     @Test
     fun `non empty session path should not be impacted by the migration`() = runTest {
-        val sessionStore = InMemorySessionStore().apply {
-            updateData(
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
                 aSessionData(
                     sessionId = A_SESSION_ID.value,
                     sessionPath = "/a/path/existing",
                 )
             )
-        }
+        )
         val migration = AppMigration05(sessionStore = sessionStore, baseDirectory = File("/a/path"))
         migration.migrate()
         val storedData = sessionStore.getSession(A_SESSION_ID.value)!!

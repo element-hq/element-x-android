@@ -104,9 +104,9 @@ class DefaultBugReporterTest {
         )
         server.start()
 
-        val mockSessionStore = InMemorySessionStore().apply {
-            storeData(aSessionData(sessionId = "@foo:example.com", deviceId = "ABCDEFGH"))
-        }
+        val mockSessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData(sessionId = "@foo:example.com", deviceId = "ABCDEFGH"))
+        )
 
         val fakeEncryptionService = FakeEncryptionService()
         val matrixClient = FakeMatrixClient(encryptionService = fakeEncryptionService)
@@ -165,9 +165,9 @@ class DefaultBugReporterTest {
         )
         server.start()
 
-        val mockSessionStore = InMemorySessionStore().apply {
-            storeData(aSessionData("@foo:example.com", "ABCDEFGH"))
-        }
+        val mockSessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData("@foo:example.com", "ABCDEFGH"))
+        )
 
         val fakeEncryptionService = FakeEncryptionService()
         val matrixClient = FakeMatrixClient(encryptionService = fakeEncryptionService)
@@ -308,9 +308,9 @@ class DefaultBugReporterTest {
     fun `the log directory is initialized using the last session store data`() = runTest {
         val sut = createDefaultBugReporter(
             buildMeta = aBuildMeta(isEnterpriseBuild = true),
-            sessionStore = InMemorySessionStore().apply {
-                storeData(aSessionData(sessionId = "@alice:domain.com"))
-            }
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(aSessionData(sessionId = "@alice:domain.com"))
+            )
         )
         assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs/domain.com")
     }
@@ -318,9 +318,9 @@ class DefaultBugReporterTest {
     @Test
     fun `foss build - the log directory is initialized to the root log directory`() = runTest {
         val sut = createDefaultBugReporter(
-            sessionStore = InMemorySessionStore().apply {
-                storeData(aSessionData(sessionId = "@alice:domain.com"))
-            }
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(aSessionData(sessionId = "@alice:domain.com"))
+            )
         )
         assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs")
     }
