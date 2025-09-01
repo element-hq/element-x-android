@@ -15,10 +15,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
 class InMemorySessionStore(
+    initialSessionData: SessionData? = null,
     private val updateUserProfileResult: (String, String?, String?) -> Unit = { _, _, _ -> error("Not implemented") },
     private val setLatestSessionResult: (String) -> Unit = { error("Not implemented") },
 ) : SessionStore {
-    private var sessionDataFlow = MutableStateFlow<SessionData?>(null)
+    private var sessionDataFlow = MutableStateFlow(initialSessionData)
 
     override fun isLoggedIn(): Flow<LoggedInState> {
         return sessionDataFlow.map {
@@ -46,6 +47,10 @@ class InMemorySessionStore(
     }
 
     override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?) {
+        sessionDataFlow.value = sessionDataFlow.value?.copy(
+            userDisplayName = displayName,
+            userAvatarUrl = avatarUrl
+        )
         updateUserProfileResult(sessionId, displayName, avatarUrl)
     }
 

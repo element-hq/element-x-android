@@ -30,10 +30,14 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -49,22 +53,36 @@ class HomePresenterTest {
             userAvatarUrl = null,
         )
         matrixClient.givenGetProfileResult(matrixClient.sessionId, Result.success(MatrixUser(matrixClient.sessionId, A_USER_NAME, AN_AVATAR_URL)))
+        val updateUserProfileResult = lambdaRecorder<String, String?, String?, Unit> { _, _, _ -> }
         val presenter = createHomePresenter(
             client = matrixClient,
             rageshakeFeatureAvailability = { flowOf(false) },
+            sessionStore = InMemorySessionStore(
+                initialSessionData = aSessionData(
+                    sessionId = matrixClient.sessionId.value,
+                ),
+                updateUserProfileResult = updateUserProfileResult,
+            ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.matrixUser).isEqualTo(MatrixUser(A_USER_ID))
+            assertThat(initialState.matrixUserAndNeighbors.first()).isEqualTo(
+                MatrixUser(A_USER_ID, null, null)
+            )
             assertThat(initialState.canReportBug).isFalse()
             val withUserState = awaitItem()
-            assertThat(withUserState.matrixUser.userId).isEqualTo(A_USER_ID)
-            assertThat(withUserState.matrixUser.displayName).isEqualTo(A_USER_NAME)
-            assertThat(withUserState.matrixUser.avatarUrl).isEqualTo(AN_AVATAR_URL)
+            assertThat(withUserState.matrixUserAndNeighbors.first()).isEqualTo(
+                MatrixUser(A_USER_ID, A_USER_NAME, AN_AVATAR_URL)
+            )
             assertThat(withUserState.showAvatarIndicator).isFalse()
             assertThat(withUserState.isSpaceFeatureEnabled).isFalse()
+            updateUserProfileResult.assertions().isCalledOnce().with(
+                value(matrixClient.sessionId),
+                value(A_USER_NAME),
+                value(AN_AVATAR_URL),
+            )
         }
     }
 
@@ -72,6 +90,9 @@ class HomePresenterTest {
     fun `present - can report bug`() = runTest {
         val presenter = createHomePresenter(
             rageshakeFeatureAvailability = { flowOf(true) },
+            sessionStore = InMemorySessionStore(
+                updateUserProfileResult = { _, _, _ -> },
+            ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -89,6 +110,9 @@ class HomePresenterTest {
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.Space.key to true),
             ),
+            sessionStore = InMemorySessionStore(
+                updateUserProfileResult = { _, _, _ -> },
+            ),
         )
         presenter.test {
             skipItems(1)
@@ -102,6 +126,9 @@ class HomePresenterTest {
         val indicatorService = FakeIndicatorService()
         val presenter = createHomePresenter(
             indicatorService = indicatorService,
+            sessionStore = InMemorySessionStore(
+                updateUserProfileResult = { _, _, _ -> },
+            ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -121,19 +148,28 @@ class HomePresenterTest {
             userAvatarUrl = null,
         )
         matrixClient.givenGetProfileResult(matrixClient.sessionId, Result.failure(AN_EXCEPTION))
-        val presenter = createHomePresenter(client = matrixClient)
+        val presenter = createHomePresenter(
+            client = matrixClient,
+            sessionStore = InMemorySessionStore(
+                updateUserProfileResult = { _, _, _ -> },
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.matrixUser).isEqualTo(MatrixUser(matrixClient.sessionId))
+            assertThat(initialState.matrixUserAndNeighbors.first()).isEqualTo(MatrixUser(matrixClient.sessionId))
             // No new state is coming
         }
     }
 
     @Test
     fun `present - NavigationBar change`() = runTest {
-        val presenter = createHomePresenter()
+        val presenter = createHomePresenter(
+            sessionStore = InMemorySessionStore(
+                updateUserProfileResult = { _, _, _ -> },
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -145,13 +181,14 @@ class HomePresenterTest {
         }
     }
 
-    private fun TestScope.createHomePresenter(
+    private fun createHomePresenter(
         client: MatrixClient = FakeMatrixClient(),
         syncService: SyncService = FakeSyncService(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { flowOf(false) },
         indicatorService: IndicatorService = FakeIndicatorService(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService()
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+        sessionStore: SessionStore = InMemorySessionStore(),
     ) = HomePresenter(
         client = client,
         syncService = syncService,
@@ -162,5 +199,6 @@ class HomePresenterTest {
         homeSpacesPresenter = { aHomeSpacesState() },
         rageshakeFeatureAvailability = rageshakeFeatureAvailability,
         featureFlagService = featureFlagService,
+        sessionStore = sessionStore,
     )
 }
