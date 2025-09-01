@@ -54,7 +54,7 @@ class InMemorySessionStore(
     }
 
     override suspend fun getSession(sessionId: String): SessionData? {
-        return sessionDataListFlow.value.first { it.userId == sessionId }
+        return sessionDataListFlow.value.firstOrNull { it.userId == sessionId }
     }
 
     override suspend fun getAllSessions(): List<SessionData> {
