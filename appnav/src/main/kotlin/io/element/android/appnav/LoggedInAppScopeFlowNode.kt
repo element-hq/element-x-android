@@ -11,6 +11,7 @@ package io.element.android.appnav
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
@@ -26,6 +27,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.SessionComponentFactory
+import io.element.android.libraries.architecture.LocalDaggerComponentOwner
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
@@ -54,6 +56,11 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ), DaggerComponentOwner {
+    override val parentOwner: DaggerComponentOwner?
+        get() = generateSequence(parent, Node::parent)
+            .filterIsInstance<DaggerComponentOwner>()
+            .firstOrNull()
+
     interface Callback : Plugin {
         fun onOpenBugReport()
     }
@@ -90,9 +97,11 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = navModel,
-            modifier = modifier,
-        )
+        CompositionLocalProvider(LocalDaggerComponentOwner provides this) {
+            Children(
+                navModel = navModel,
+                modifier = modifier,
+            )
+        }
     }
 }

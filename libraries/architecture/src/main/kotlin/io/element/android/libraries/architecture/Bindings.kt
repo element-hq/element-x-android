@@ -22,7 +22,7 @@ fun <T : Any> Context.bindings(klass: Class<T>): T {
         .plus(applicationContext)
         .filterIsInstance<DaggerComponentOwner>()
         .map { it.daggerComponent }
-        .flatMap { if (it is Collection<*>) it else listOf(it) }
+        .flatMap { it as? Collection<*> ?: listOf(it) }
         .filterIsInstance(klass)
         .firstOrNull()
         ?: error("Unable to find bindings for ${klass.name}")
@@ -33,11 +33,18 @@ fun <T : Any> Node.optionalBindings(klass: Class<T>): T? {
     return generateSequence(this, Node::parent)
         .filterIsInstance<DaggerComponentOwner>()
         .map { it.daggerComponent }
-        .flatMap { if (it is Collection<*>) it else listOf(it) }
+        .flatMap { it as? Collection<*> ?: listOf(it) }
         .filterIsInstance(klass)
         .firstOrNull()
 }
 
 fun <T : Any> Node.bindings(klass: Class<T>): T {
     return optionalBindings(klass) ?: error("Unable to find bindings for ${klass.name}")
+}
+
+fun <T : Any> DaggerComponentOwner.bindings(klass: Class<T>): T? {
+    return generateSequence(this, DaggerComponentOwner::parentOwner)
+        .flatMap { it.daggerComponent as? Collection<*> ?: listOf(it.daggerComponent) }
+        .filterIsInstance(klass)
+        .firstOrNull()
 }

@@ -9,6 +9,7 @@ package io.element.android.features.changeroommemberroles.impl
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
@@ -22,6 +23,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.RoomComponentFactory
 import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesEntryPoint
 import io.element.android.features.changeroommemberroes.api.ChangeRoomMemberRolesListType
+import io.element.android.libraries.architecture.LocalDaggerComponentOwner
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
@@ -44,6 +46,11 @@ class ChangeRoomMemberRolesRootNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ), DaggerComponentOwner, ChangeRoomMemberRolesEntryPoint.NodeProxy {
+    override val parentOwner: DaggerComponentOwner?
+        get() = generateSequence(parent, Node::parent)
+            .filterIsInstance<DaggerComponentOwner>()
+            .firstOrNull()
+
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
@@ -71,7 +78,9 @@ class ChangeRoomMemberRolesRootNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(modifier = modifier, navModel = navModel)
+        CompositionLocalProvider(LocalDaggerComponentOwner provides this) {
+            Children(modifier = modifier, navModel = navModel)
+        }
     }
 
     override val roomId: RoomId = inputs.joinedRoom.roomId

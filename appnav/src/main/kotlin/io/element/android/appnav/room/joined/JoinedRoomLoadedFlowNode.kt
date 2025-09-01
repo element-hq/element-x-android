@@ -9,6 +9,7 @@ package io.element.android.appnav.room.joined
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -26,6 +27,7 @@ import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.LocalDaggerComponentOwner
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.DaggerComponentOwner
@@ -68,6 +70,12 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ), DaggerComponentOwner {
+    override val parentOwner: DaggerComponentOwner?
+        get() = generateSequence(parent, Node::parent)
+            .onEach { println(it) }
+            .filterIsInstance<DaggerComponentOwner>()
+            .firstOrNull()
+
     interface Callback : Plugin {
         fun onOpenRoom(roomId: RoomId, serverNames: List<String>)
         fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
@@ -202,6 +210,8 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        CompositionLocalProvider(LocalDaggerComponentOwner provides this) {
+            BackstackView()
+        }
     }
 }

@@ -29,4 +29,6 @@ class ElementXApplication : Application(), DaggerComponentOwner {
         }
         logApplicationInfo(this)
     }
+
+    override val parentOwner: DaggerComponentOwner? = null
 }

@@ -14,4 +14,6 @@ package io.element.android.libraries.di
 interface DaggerComponentOwner {
     /** This is either a component, or a list of components. */
     val daggerComponent: Any
+
+    val parentOwner: DaggerComponentOwner?
 }

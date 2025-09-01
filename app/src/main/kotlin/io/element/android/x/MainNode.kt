@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
@@ -20,6 +21,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.appnav.RootFlowNode
+import io.element.android.libraries.architecture.LocalDaggerComponentOwner
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.DaggerComponentOwner
@@ -40,6 +42,10 @@ class MainNode(
 ),
     DaggerComponentOwner {
     override val daggerComponent = (context as DaggerComponentOwner).daggerComponent
+    override val parentOwner: DaggerComponentOwner? get() {
+        println("No parent owner")
+        return null
+    }
 
     override fun resolve(navTarget: RootNavTarget, buildContext: BuildContext): Node {
         return createNode<RootFlowNode>(buildContext = buildContext)
@@ -47,7 +53,9 @@ class MainNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(navModel = navModel)
+        CompositionLocalProvider(LocalDaggerComponentOwner provides this) {
+            Children(navModel = navModel)
+        }
     }
 
     fun handleIntent(intent: Intent) {

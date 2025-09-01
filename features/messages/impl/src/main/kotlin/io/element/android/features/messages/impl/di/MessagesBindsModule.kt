@@ -20,6 +20,7 @@ import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBan
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.customreaction.EmojibaseProvider
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
@@ -29,6 +30,7 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.RoomScope
 
 @ContributesTo(RoomScope::class)
@@ -60,4 +62,9 @@ interface MessagesBindsModule {
 
     @Binds
     fun bindIdentityChangeStatePresenter(presenter: IdentityChangeStatePresenter): Presenter<IdentityChangeState>
+}
+
+@ContributesTo(AppScope::class)
+interface EmojiBaseBindings {
+    fun provideEmojiBase(): EmojibaseProvider
 }

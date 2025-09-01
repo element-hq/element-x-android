@@ -10,6 +10,7 @@ package io.element.android.features.login.impl.qrcode
 import android.os.Parcelable
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +34,7 @@ import io.element.android.features.login.impl.screens.qrcode.intro.QrCodeIntroNo
 import io.element.android.features.login.impl.screens.qrcode.scan.QrCodeScanNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.LocalDaggerComponentOwner
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
@@ -65,6 +67,11 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     private var authenticationJob: Job? = null
 
     override val daggerComponent = qrCodeLoginComponentBuilder.build()
+    override val parentOwner: DaggerComponentOwner?
+        get() = generateSequence(parent, Node::parent)
+            .filterIsInstance<DaggerComponentOwner>()
+            .firstOrNull()
+
     private val qrCodeLoginManager by lazy { bindings<QrCodeLoginBindings>().qrCodeLoginManager() }
 
     sealed interface NavTarget : Parcelable {
@@ -207,7 +214,9 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        CompositionLocalProvider(LocalDaggerComponentOwner provides this) {
+            BackstackView()
+        }
     }
 }
 
