@@ -38,11 +38,11 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun SpaceHeaderView(
     avatarData: AvatarData,
-    name: String,
-    topic: String,
-    joinRule: JoinRule,
+    name: String?,
+    topic: String?,
+    joinRule: JoinRule?,
     heroes: ImmutableList<MatrixUser>,
-    numberOfMembers: Long,
+    numberOfMembers: Int,
     numberOfRooms: Int,
     modifier: Modifier = Modifier,
     topicMaxLines: Int = Int.MAX_VALUE,
@@ -58,29 +58,34 @@ fun SpaceHeaderView(
             avatarData = avatarData,
             avatarType = AvatarType.Space(false),
         )
-        Text(
-            text = name,
-            style = ElementTheme.typography.fontHeadingLgBold,
-            color = ElementTheme.colors.textPrimary,
-            textAlign = TextAlign.Center,
-        )
-        SpaceInfoRow(
-            joinRule = joinRule,
-            numberOfRooms = numberOfRooms,
-        )
+        name?.let {
+            Text(
+                text = name,
+                style = ElementTheme.typography.fontHeadingLgBold,
+                color = ElementTheme.colors.textPrimary,
+                textAlign = TextAlign.Center,
+            )
+        }
+        if (joinRule != null)
+            SpaceInfoRow(
+                joinRule = joinRule,
+                numberOfRooms = numberOfRooms,
+            )
         SpaceMembersView(
             heroes = heroes,
             numberOfMembers = numberOfMembers,
             modifier = Modifier.padding(horizontal = 32.dp),
         )
-        Text(
-            text = topic,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.colors.textPrimary,
-            textAlign = TextAlign.Center,
-            maxLines = topicMaxLines,
-            overflow = TextOverflow.Ellipsis,
-        )
+        topic?.let {
+            Text(
+                text = topic,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textPrimary,
+                textAlign = TextAlign.Center,
+                maxLines = topicMaxLines,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 }
 
