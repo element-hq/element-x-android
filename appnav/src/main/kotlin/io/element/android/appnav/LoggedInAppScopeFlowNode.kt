@@ -26,11 +26,11 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.appnav.di.SessionComponentFactory
+import io.element.android.appnav.di.SessionGraphFactory
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.di.DaggerComponentOwner
+import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import kotlinx.parcelize.Parcelize
@@ -45,7 +45,7 @@ import kotlinx.parcelize.Parcelize
 class LoggedInAppScopeFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    sessionComponentFactory: SessionComponentFactory,
+    sessionGraphFactory: SessionGraphFactory,
     private val imageLoaderHolder: ImageLoaderHolder,
 ) : ParentNode<LoggedInAppScopeFlowNode.NavTarget>(
     navModel = PermanentNavModel(
@@ -54,7 +54,7 @@ class LoggedInAppScopeFlowNode(
     ),
     buildContext = buildContext,
     plugins = plugins
-), DaggerComponentOwner {
+), DependencyInjectionGraphOwner {
     interface Callback : Plugin {
         fun onOpenBugReport()
     }
@@ -67,7 +67,7 @@ class LoggedInAppScopeFlowNode(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    override val daggerComponent = sessionComponentFactory.create(inputs.matrixClient)
+    override val graph = sessionGraphFactory.create(inputs.matrixClient)
 
     override fun onBuilt() {
         super.onBuilt()

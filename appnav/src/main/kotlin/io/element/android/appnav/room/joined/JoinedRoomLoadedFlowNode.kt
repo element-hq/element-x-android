@@ -28,7 +28,7 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.di.DaggerComponentOwner
+import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -68,7 +68,7 @@ class JoinedRoomLoadedFlowNode(
     ),
     buildContext = buildContext,
     plugins = plugins,
-), DaggerComponentOwner {
+), DependencyInjectionGraphOwner {
     interface Callback : Plugin {
         fun onOpenRoom(roomId: RoomId, serverNames: List<String>)
         fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
@@ -83,7 +83,7 @@ class JoinedRoomLoadedFlowNode(
 
     private val inputs: Inputs = inputs()
     private val callbacks = plugins.filterIsInstance<Callback>()
-    override val daggerComponent = roomComponentFactory.create(inputs.room)
+    override val graph = roomComponentFactory.create(inputs.room)
 
     init {
         lifecycle.subscribe(

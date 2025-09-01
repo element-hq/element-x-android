@@ -9,6 +9,6 @@ package io.element.android.appnav.di
 
 import io.element.android.libraries.matrix.api.MatrixClient
 
-interface SessionComponentFactory {
+interface SessionGraphFactory {
     fun create(client: MatrixClient): Any
 }

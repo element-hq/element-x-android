@@ -13,10 +13,10 @@ import dev.zacsweers.metro.GraphExtension
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 
 @GraphExtension(QrCodeLoginScope::class)
-interface QrCodeLoginComponent : NodeFactoriesBindings {
+interface QrCodeLoginGraph : NodeFactoriesBindings {
     @ContributesTo(AppScope::class)
     @GraphExtension.Factory
     interface Factory {
-        fun create(): QrCodeLoginComponent
+        fun create(): QrCodeLoginGraph
     }
 }

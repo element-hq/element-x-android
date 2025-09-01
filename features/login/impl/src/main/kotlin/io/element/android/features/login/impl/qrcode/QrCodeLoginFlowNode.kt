@@ -26,7 +26,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.di.QrCodeLoginBindings
-import io.element.android.features.login.impl.di.QrCodeLoginComponent
+import io.element.android.features.login.impl.di.QrCodeLoginGraph
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationNode
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationStep
 import io.element.android.features.login.impl.screens.qrcode.error.QrCodeErrorNode
@@ -38,7 +38,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.DaggerComponentOwner
+import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
@@ -53,7 +53,7 @@ import timber.log.Timber
 class QrCodeLoginFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    qrCodeLoginComponentBuilder: QrCodeLoginComponent.Factory,
+    qrCodeLoginGraphFactory: QrCodeLoginGraph.Factory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : BaseFlowNode<QrCodeLoginFlowNode.NavTarget>(
     backstack = BackStack(
@@ -62,10 +62,10 @@ class QrCodeLoginFlowNode(
     ),
     buildContext = buildContext,
     plugins = plugins,
-), DaggerComponentOwner {
+), DependencyInjectionGraphOwner {
     private var authenticationJob: Job? = null
 
-    override val daggerComponent = qrCodeLoginComponentBuilder.create()
+    override val graph = qrCodeLoginGraphFactory.create()
     private val qrCodeLoginManager by lazy { bindings<QrCodeLoginBindings>().qrCodeLoginManager() }
 
     sealed interface NavTarget : Parcelable {

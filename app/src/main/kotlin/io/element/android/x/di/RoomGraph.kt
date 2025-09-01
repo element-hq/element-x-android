@@ -17,13 +17,13 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 @GraphExtension(RoomScope::class)
-interface RoomComponent : NodeFactoriesBindings {
+interface RoomGraph : NodeFactoriesBindings {
     @ContributesTo(SessionScope::class)
     @GraphExtension.Factory
     interface Factory {
         fun create(
             @Provides joinedRoom: JoinedRoom,
             @Provides baseRoom: BaseRoom
-        ): RoomComponent
+        ): RoomGraph
     }
 }

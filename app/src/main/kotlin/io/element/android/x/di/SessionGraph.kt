@@ -16,12 +16,12 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 
 @GraphExtension(SessionScope::class)
-interface SessionComponent : NodeFactoriesBindings {
-    val roomComponentFactory: RoomComponent.Factory
+interface SessionGraph : NodeFactoriesBindings {
+    val roomGraphFactory: RoomGraph.Factory
 
     @ContributesTo(AppScope::class)
     @GraphExtension.Factory
     interface Factory {
-        fun createSessionComponent(@Provides matrixClient: MatrixClient): SessionComponent
+        fun create(@Provides matrixClient: MatrixClient): SessionGraph
     }
 }

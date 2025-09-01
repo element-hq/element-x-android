@@ -10,15 +10,15 @@ package io.element.android.x.di
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import io.element.android.appnav.di.SessionComponentFactory
+import io.element.android.appnav.di.SessionGraphFactory
 import io.element.android.libraries.matrix.api.MatrixClient
 
 @ContributesBinding(AppScope::class)
 @Inject
-class DefaultSessionComponentFactory(
-    private val appComponent: AppComponent
-) : SessionComponentFactory {
+class DefaultSessionGraphFactory(
+    private val appGraph: AppGraph
+) : SessionGraphFactory {
     override fun create(client: MatrixClient): Any {
-        return appComponent.sessionComponentFactory.createSessionComponent(client)
+        return appGraph.sessionGraphFactory.create(client)
     }
 }
