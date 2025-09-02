@@ -34,6 +34,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Text
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun EmojiItem(
@@ -86,7 +87,7 @@ internal fun EmojiItemPreview() = ElementPreview {
                     hexcode = "",
                     label = "",
                     tags = null,
-                    shortcodes = emptyList(),
+                    shortcodes = persistentListOf(),
                     unicode = "👍",
                     skins = null
                 ),
