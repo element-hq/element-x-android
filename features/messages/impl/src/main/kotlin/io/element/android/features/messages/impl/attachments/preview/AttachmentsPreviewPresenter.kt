@@ -53,6 +53,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
     @Assisted private val onDoneListener: OnDoneListener,
     @Assisted private val timelineMode: Timeline.Mode,
+    @Assisted private val inReplyToEventId: EventId?,
     mediaSenderFactory: MediaSender.Factory,
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
@@ -66,6 +67,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             attachment: Attachment,
             timelineMode: Timeline.Mode,
             onDoneListener: OnDoneListener,
+            inReplyToEventId: EventId?,
         ): AttachmentsPreviewPresenter
     }
 
@@ -181,7 +183,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                                 caption = caption,
                                 sendActionState = sendActionState,
                                 dismissAfterSend = false,
-                                inReplyToEventId = null,
+                                inReplyToEventId = inReplyToEventId,
                             )
 
                             // Clean up the pre-processed media after it's been sent
