@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalInspectionMode
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.libraries.architecture.Presenter
@@ -57,9 +58,13 @@ class EmojiPickerPresenter(
             }
         }
 
+        val isInPreview = LocalInspectionMode.current
         fun handleEvents(event: EmojiPickerEvents) {
             when (event) {
-                is EmojiPickerEvents.ToggleSearchActive -> isSearchActive = event.isActive
+                // For some reason, in preview mode the SearchBar emits this event with an `isActive = true` value automatically
+                is EmojiPickerEvents.ToggleSearchActive -> if (!isInPreview) {
+                    isSearchActive = event.isActive
+                }
                 is EmojiPickerEvents.UpdateSearchQuery -> searchQuery = event.query
             }
         }
@@ -73,4 +78,3 @@ class EmojiPickerPresenter(
         )
     }
 }
-
