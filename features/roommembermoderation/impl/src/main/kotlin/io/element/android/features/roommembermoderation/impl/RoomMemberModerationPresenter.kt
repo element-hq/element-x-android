@@ -38,10 +38,12 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 class RoomMemberModerationPresenter @Inject constructor(
     private val room: JoinedRoom,
@@ -97,6 +99,7 @@ class RoomMemberModerationPresenter @Inject constructor(
                             unbanUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
                     }
+                    moderationActions.value = persistentListOf()
                 }
                 is InternalRoomMemberModerationEvents.DoKickUser -> {
                     selectedUser?.let {
@@ -204,7 +207,15 @@ class RoomMemberModerationPresenter @Inject constructor(
             action.runUpdatingState {
                 val result = block()
                 if (result.isSuccess) {
-                    room.membersStateFlow.drop(1).take(1)
+                    // We wait a bit to ensure the server has processed the membership change
+                    delay(50.milliseconds)
+
+                    // Update the members to ensure we have the latest state
+                    launch { room.updateMembers() }
+
+                    // Wait for the membership change to be processed and returned
+                    // We drop the first emission as it's the current state
+                    room.membersStateFlow.drop(1).first()
                 }
                 result
             }

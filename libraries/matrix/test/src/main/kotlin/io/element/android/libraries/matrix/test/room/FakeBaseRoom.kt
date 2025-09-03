@@ -59,7 +59,7 @@ class FakeBaseRoom(
     private val markAsReadResult: (ReceiptType) -> Result<Unit> = { Result.success(Unit) },
     private val powerLevelsResult: () -> Result<RoomPowerLevelsValues> = { lambdaError() },
     private val leaveRoomLambda: () -> Result<Unit> = { lambdaError() },
-    private val updateMembersResult: () -> Unit = { lambdaError() },
+    private var updateMembersResult: () -> Unit = { lambdaError() },
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
@@ -223,6 +223,10 @@ class FakeBaseRoom(
     override suspend fun reportRoom(reason: String?) = reportRoomResult(reason)
 
     override fun predecessorRoom(): PredecessorRoom? = predecessorRoomResult()
+
+    fun givenUpdateMembersResult(result: () -> Unit) {
+        updateMembersResult = result
+    }
 }
 
 fun defaultRoomPowerLevelValues() = RoomPowerLevelsValues(
