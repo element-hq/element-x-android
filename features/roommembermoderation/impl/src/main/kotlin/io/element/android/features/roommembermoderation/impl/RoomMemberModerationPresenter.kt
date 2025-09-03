@@ -84,6 +84,9 @@ class RoomMemberModerationPresenter @Inject constructor(
                     )
                 }
                 is RoomMemberModerationEvents.ProcessAction -> {
+                    // First, hide any list of existing actions that could be displayed
+                    moderationActions.value = persistentListOf()
+
                     when (event.action) {
                         is ModerationAction.DisplayProfile -> Unit
                         is ModerationAction.KickUser -> {
@@ -99,7 +102,6 @@ class RoomMemberModerationPresenter @Inject constructor(
                             unbanUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
                     }
-                    moderationActions.value = persistentListOf()
                 }
                 is InternalRoomMemberModerationEvents.DoKickUser -> {
                     selectedUser?.let {
@@ -121,6 +123,7 @@ class RoomMemberModerationPresenter @Inject constructor(
                 }
                 is InternalRoomMemberModerationEvents.Reset -> {
                     selectedUser = null
+                    moderationActions.value = persistentListOf()
                     kickUserAsyncAction.value = AsyncAction.Uninitialized
                     banUserAsyncAction.value = AsyncAction.Uninitialized
                     unbanUserAsyncAction.value = AsyncAction.Uninitialized

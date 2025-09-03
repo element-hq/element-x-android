@@ -357,6 +357,7 @@ class RoomMemberModerationPresenterTest {
                 canBanResult = { _ -> Result.success(canBan) },
                 canKickResult = { _ -> Result.success(canKick) },
                 userRoleResult = { Result.success(myUserRole) },
+                updateMembersResult = { Result.success(Unit) }
             ),
         ).apply {
             val roomMembers = listOfNotNull(targetRoomMember).toPersistentList()
