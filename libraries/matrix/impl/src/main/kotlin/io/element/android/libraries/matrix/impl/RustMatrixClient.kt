@@ -191,11 +191,6 @@ class RustMatrixClient(
         innerSpaceService = innerSpaceService,
         sessionCoroutineScope = sessionCoroutineScope,
         sessionDispatcher = sessionDispatcher,
-        //roomListFactory = RoomListFactory(
-        //    innerRoomListService = innerRoomListService,
-        //    sessionCoroutineScope = sessionCoroutineScope,
-        //),
-        //roomSyncSubscriber = roomSyncSubscriber,
     )
 
     private val verificationService = RustSessionVerificationService(

@@ -39,7 +39,7 @@ class HomeSpacesPresenter @Inject constructor(
         }.collectAsState(persistentSetOf())
 
         fun handleEvents(event: HomeSpacesEvents) {
-            //when (event) { }
+            // when (event) { }
         }
 
         return HomeSpacesState(

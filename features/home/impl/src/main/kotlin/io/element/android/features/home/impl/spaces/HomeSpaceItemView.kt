@@ -120,7 +120,7 @@ internal fun HomeSpaceItemView(
 }
 
 @Composable
-fun NameAndIndicatorRow(
+private fun NameAndIndicatorRow(
     name: String?,
     showIndicator: Boolean,
     modifier: Modifier = Modifier,
@@ -152,8 +152,8 @@ private fun SpaceScaffoldRow(
     spaceRoom: SpaceRoom,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    modifier: Modifier = Modifier,
     hideAvatars: Boolean,
+    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val clickModifier = Modifier
