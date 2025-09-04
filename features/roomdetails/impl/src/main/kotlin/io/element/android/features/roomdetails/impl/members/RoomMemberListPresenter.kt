@@ -38,6 +38,7 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -66,11 +67,6 @@ class RoomMemberListPresenter @Inject constructor(
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val canInvite by room.canInviteAsState(syncUpdateFlow.value)
         val roomModerationState = roomMembersModerationPresenter.present()
-        val activeRoomMemberCount by produceState(0L) {
-            room.roomInfoFlow.map { it.activeMembersCount }
-                .distinctUntilChanged()
-                .collect { value = it }
-        }
 
         val roomMemberIdentityStates by produceState(persistentMapOf<UserId, IdentityState>()) {
             room.roomMemberIdentityStateChange(waitForEncryption = true)
@@ -81,8 +77,12 @@ class RoomMemberListPresenter @Inject constructor(
         }
 
         // Update the room members when the screen is loaded or the active member count changes
-        LaunchedEffect(activeRoomMemberCount) {
-            room.updateMembers()
+        LaunchedEffect(Unit) {
+            room.roomInfoFlow.map { it.activeMembersCount }
+                .distinctUntilChanged()
+                .collectLatest {
+                    room.updateMembers()
+                }
         }
 
         LaunchedEffect(membersState, roomMemberIdentityStates) {
