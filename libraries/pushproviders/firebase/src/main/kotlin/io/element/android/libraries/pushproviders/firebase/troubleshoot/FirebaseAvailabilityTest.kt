@@ -7,8 +7,9 @@
 
 package io.element.android.libraries.pushproviders.firebase.troubleshoot
 
-import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.pushproviders.firebase.FirebaseConfig
 import io.element.android.libraries.pushproviders.firebase.IsPlayServiceAvailable
 import io.element.android.libraries.pushproviders.firebase.R
@@ -19,10 +20,10 @@ import io.element.android.libraries.troubleshoot.api.test.TestFilterData
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
-@ContributesMultibinding(AppScope::class)
-class FirebaseAvailabilityTest @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class FirebaseAvailabilityTest(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
     private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {

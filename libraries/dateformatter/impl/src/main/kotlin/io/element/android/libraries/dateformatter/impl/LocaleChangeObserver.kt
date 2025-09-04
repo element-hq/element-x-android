@@ -12,11 +12,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.di.annotations.ApplicationContext
 
 fun interface LocaleChangeObserver {
     fun addListener(listener: LocaleChangeListener)
@@ -28,7 +28,8 @@ interface LocaleChangeListener {
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultLocaleChangeObserver @Inject constructor(
+@Inject
+class DefaultLocaleChangeObserver(
     @ApplicationContext private val context: Context,
 ) : LocaleChangeObserver {
     init {

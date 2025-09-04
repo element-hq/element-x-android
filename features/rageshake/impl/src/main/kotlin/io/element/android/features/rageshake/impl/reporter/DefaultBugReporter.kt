@@ -11,7 +11,11 @@ import android.content.Context
 import android.os.Build
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provider
+import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
 import io.element.android.features.rageshake.api.reporter.BugReporter
@@ -24,9 +28,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.SdkMetadata
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -55,15 +57,14 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Provider
 
 /**
  * BugReporter creates and sends the bug reports.
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultBugReporter @Inject constructor(
+@Inject
+class DefaultBugReporter(
     @ApplicationContext private val context: Context,
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
@@ -255,7 +256,7 @@ class DefaultBugReporter @Inject constructor(
                 var errorMessage: String? = null
                 // trigger the request
                 try {
-                    response = okHttpClient.get()
+                    response = okHttpClient()
                         .newCall(request)
                         .execute()
                 } catch (e: CancellationException) {

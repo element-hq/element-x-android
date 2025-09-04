@@ -7,6 +7,7 @@
 
 package io.element.android.features.login.impl.resolver
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.parallelMap
@@ -21,12 +22,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import java.util.Collections
-import javax.inject.Inject
 
 /**
  * Resolve homeserver base on search terms.
  */
-class HomeserverResolver @Inject constructor(
+@Inject
+class HomeserverResolver(
     private val dispatchers: CoroutineDispatchers,
     private val wellknownRetriever: WellknownRetriever,
 ) {

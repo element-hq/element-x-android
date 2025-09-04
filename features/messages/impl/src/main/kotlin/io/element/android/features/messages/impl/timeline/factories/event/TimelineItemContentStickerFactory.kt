@@ -7,15 +7,16 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
-import javax.inject.Inject
 
-class TimelineItemContentStickerFactory @Inject constructor(
+@Inject
+class TimelineItemContentStickerFactory(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor
 ) {

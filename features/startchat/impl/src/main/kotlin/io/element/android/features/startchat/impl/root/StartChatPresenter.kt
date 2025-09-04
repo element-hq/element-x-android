@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import dev.zacsweers.metro.Inject
 import io.element.android.features.startchat.api.StartDMAction
 import io.element.android.features.startchat.impl.userlist.SelectionMode
 import io.element.android.features.startchat.impl.userlist.UserListDataStore
@@ -27,9 +28,9 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.usersearch.api.UserRepository
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class StartChatPresenter @Inject constructor(
+@Inject
+class StartChatPresenter(
     presenterFactory: UserListPresenter.Factory,
     userRepository: UserRepository,
     userListDataStore: UserListDataStore,

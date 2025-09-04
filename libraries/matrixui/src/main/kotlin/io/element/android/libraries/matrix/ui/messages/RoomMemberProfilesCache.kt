@@ -7,18 +7,19 @@
 
 package io.element.android.libraries.matrix.ui.messages
 
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.runningFold
-import javax.inject.Inject
 
 @SingleIn(RoomScope::class)
-class RoomMemberProfilesCache @Inject constructor() {
+@Inject
+class RoomMemberProfilesCache {
     private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
     val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
 

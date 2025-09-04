@@ -7,16 +7,16 @@
 
 package io.element.android.features.messages.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import io.element.android.features.messages.impl.timeline.di.LiveTimeline
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 
 @ContributesTo(RoomScope::class)
-@Module
+@BindingContainer
 object MessagesProvidesModule {
     @Provides
     @LiveTimeline

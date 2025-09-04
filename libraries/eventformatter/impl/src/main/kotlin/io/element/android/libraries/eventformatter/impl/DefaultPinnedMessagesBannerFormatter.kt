@@ -9,7 +9,8 @@ package io.element.android.libraries.eventformatter.impl
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.text.AnnotatedString
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.PinnedMessagesBannerFormatter
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -35,10 +36,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisambigua
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
-import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultPinnedMessagesBannerFormatter @Inject constructor(
+@Inject
+class DefaultPinnedMessagesBannerFormatter(
     private val sp: StringProvider,
     private val permalinkParser: PermalinkParser,
 ) : PinnedMessagesBannerFormatter {

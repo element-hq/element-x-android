@@ -7,16 +7,17 @@
 
 package io.element.android.libraries.push.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.push.api.GetCurrentPushProvider
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.currentSessionId
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultGetCurrentPushProvider @Inject constructor(
+@Inject
+class DefaultGetCurrentPushProvider(
     private val pushStoreFactory: UserPushStoreFactory,
     private val appNavigationStateService: AppNavigationStateService,
 ) : GetCurrentPushProvider {

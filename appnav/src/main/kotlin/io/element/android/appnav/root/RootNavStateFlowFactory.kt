@@ -9,6 +9,7 @@ package io.element.android.appnav.root
 
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.core.state.SavedStateMap
+import dev.zacsweers.metro.Inject
 import io.element.android.appnav.di.MatrixSessionCache
 import io.element.android.features.preferences.api.CacheService
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -18,7 +19,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
 private const val SAVE_INSTANCE_KEY = "io.element.android.x.RootNavStateFlowFactory.SAVE_INSTANCE_KEY"
 
@@ -26,7 +26,8 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.RootNavStateFlowFact
  * This class is responsible for creating a flow of [RootNavState].
  * It gathers data from multiple datasource and creates a unique one.
  */
-class RootNavStateFlowFactory @Inject constructor(
+@Inject
+class RootNavStateFlowFactory(
     private val authenticationService: MatrixAuthenticationService,
     private val cacheService: CacheService,
     private val matrixSessionCache: MatrixSessionCache,

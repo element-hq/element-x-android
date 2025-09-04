@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.di.annotations
 
-import javax.inject.Qualifier
+import dev.zacsweers.metro.Qualifier
 
 /**
  * Qualifies a [CoroutineScope] object which represents the base coroutine scope to use for the application.

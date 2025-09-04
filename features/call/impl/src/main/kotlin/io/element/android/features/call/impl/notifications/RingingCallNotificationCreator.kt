@@ -15,13 +15,14 @@ import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.app.PendingIntentCompat
 import androidx.core.app.Person
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.receivers.DeclineCallBroadcastReceiver
 import io.element.android.features.call.impl.ui.IncomingCallActivity
 import io.element.android.features.call.impl.utils.IntentProvider
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -29,13 +30,13 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 /**
  * Creates a notification for a ringing call.
  */
-class RingingCallNotificationCreator @Inject constructor(
+@Inject
+class RingingCallNotificationCreator(
     @ApplicationContext private val context: Context,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,

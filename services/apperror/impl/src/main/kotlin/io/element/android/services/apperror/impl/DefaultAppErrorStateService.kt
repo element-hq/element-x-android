@@ -7,19 +7,20 @@
 
 package io.element.android.services.apperror.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.services.apperror.api.AppErrorState
 import io.element.android.services.apperror.api.AppErrorStateService
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class DefaultAppErrorStateService @Inject constructor(
+@Inject
+class DefaultAppErrorStateService(
     private val stringProvider: StringProvider,
 ) : AppErrorStateService {
     private val currentAppErrorState = MutableStateFlow<AppErrorState>(AppErrorState.NoError)

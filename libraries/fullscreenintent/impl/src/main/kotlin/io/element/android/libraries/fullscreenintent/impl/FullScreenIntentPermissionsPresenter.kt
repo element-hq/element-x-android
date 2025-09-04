@@ -19,6 +19,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvents
@@ -28,9 +31,10 @@ import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class FullScreenIntentPermissionsPresenter @Inject constructor(
+@SingleIn(AppScope::class)
+@Inject
+class FullScreenIntentPermissionsPresenter(
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val externalIntentLauncher: ExternalIntentLauncher,
     private val buildMeta: BuildMeta,

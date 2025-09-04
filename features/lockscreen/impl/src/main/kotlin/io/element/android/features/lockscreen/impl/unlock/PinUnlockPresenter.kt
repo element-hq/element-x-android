@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticator
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
@@ -29,9 +30,9 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class PinUnlockPresenter @Inject constructor(
+@Inject
+class PinUnlockPresenter(
     private val pinCodeManager: PinCodeManager,
     private val biometricAuthenticatorManager: BiometricAuthenticatorManager,
     private val logoutUseCase: LogoutUseCase,

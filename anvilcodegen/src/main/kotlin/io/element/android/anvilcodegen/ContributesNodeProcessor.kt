@@ -19,7 +19,6 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.validate
-import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
@@ -30,12 +29,12 @@ import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
-import dagger.Binds
-import dagger.Module
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.multibindings.IntoMap
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoMap
 import io.element.android.anvilannotations.ContributesNode
 import org.jetbrains.kotlin.name.FqName
 
@@ -77,9 +76,8 @@ class ContributesNodeProcessor(
             fileName = moduleClassName,
         )
             .addType(
-                TypeSpec.classBuilder(moduleClassName)
-                    .addModifiers(KModifier.ABSTRACT)
-                    .addAnnotation(Module::class)
+                TypeSpec.interfaceBuilder(moduleClassName)
+                    .addAnnotation(BindingContainer::class)
                     .addAnnotation(AnnotationSpec.builder(ContributesTo::class).addMember("%T::class", scope.toTypeName()).build())
                     .addFunction(
                         FunSpec.builder("bind${ksClass.simpleName.asString()}Factory")
@@ -103,7 +101,7 @@ class ContributesNodeProcessor(
         content.writeTo(
             codeGenerator = codeGenerator,
             dependencies = Dependencies(
-                aggregating = true,
+                aggregating = false,
                 ksClass.containingFile!!
             ),
         )
@@ -113,23 +111,23 @@ class ContributesNodeProcessor(
     private fun generateFactory(ksClass: KSClassDeclaration) {
         val generatedPackage = ksClass.packageName.asString()
         val assistedFactoryClassName = "${ksClass.simpleName.asString()}_AssistedFactory"
-        val constructor = ksClass.getConstructors().singleOrNull { it.isAnnotationPresent(AssistedInject::class) }
-        val assistedParameters = constructor?.parameters?.filter { it.isAnnotationPresent(Assisted::class) }.orEmpty()
-        if (constructor == null || assistedParameters.size != 2) {
+        val constructor = ksClass.getConstructors().first { it.parameters.isNotEmpty() }
+        val assistedParameters = constructor.parameters.filter { it.isAnnotationPresent(Assisted::class) }
+        if (assistedParameters.size != 2) {
             error(
-                "${ksClass.qualifiedName} must have an @AssistedInject constructor with 2 @Assisted parameters",
+                "${ksClass.qualifiedName?.asString()} must have an @Inject constructor with 2 @Assisted parameters. Found: ${assistedParameters.size}",
             )
         }
         val contextAssistedParam = assistedParameters[0]
         if (contextAssistedParam.name?.asString() != "buildContext") {
             error(
-                "${ksClass.qualifiedName} @Assisted parameter must be named buildContext",
+                "${ksClass.qualifiedName?.asString()} @Assisted parameter must be named buildContext",
             )
         }
         val pluginsAssistedParam = assistedParameters[1]
         if (pluginsAssistedParam.name?.asString() != "plugins") {
             error(
-                "${ksClass.qualifiedName} @Assisted parameter must be named plugins",
+                "${ksClass.qualifiedName?.asString()} @Assisted parameter must be named plugins",
             )
         }
 
@@ -156,7 +154,7 @@ class ContributesNodeProcessor(
         content.writeTo(
             codeGenerator = codeGenerator,
             dependencies = Dependencies(
-                aggregating = true,
+                aggregating = false,
                 ksClass.containingFile!!
             ),
         )

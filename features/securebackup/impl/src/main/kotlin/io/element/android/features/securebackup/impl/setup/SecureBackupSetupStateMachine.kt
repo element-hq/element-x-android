@@ -11,11 +11,12 @@
 package io.element.android.features.securebackup.impl.setup
 
 import com.freeletics.flowredux.dsl.FlowReduxStateMachine
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import javax.inject.Inject
 import com.freeletics.flowredux.dsl.State as MachineState
 
-class SecureBackupSetupStateMachine @Inject constructor() : FlowReduxStateMachine<SecureBackupSetupStateMachine.State, SecureBackupSetupStateMachine.Event>(
+@Inject
+class SecureBackupSetupStateMachine : FlowReduxStateMachine<SecureBackupSetupStateMachine.State, SecureBackupSetupStateMachine.Event>(
     initialState = State.Initial
 ) {
     init {

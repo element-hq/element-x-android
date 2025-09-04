@@ -7,7 +7,8 @@
 
 package io.element.android.libraries.eventformatter.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
@@ -29,10 +30,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownConten
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
-import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultTimelineEventFormatter @Inject constructor(
+@Inject
+class DefaultTimelineEventFormatter(
     private val sp: StringProvider,
     private val buildMeta: BuildMeta,
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,

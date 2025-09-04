@@ -7,20 +7,19 @@
 
 package io.element.android.x.di
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.appnav.di.RoomComponentFactory
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultRoomComponentFactory @Inject constructor(
-    private val roomComponentBuilder: RoomComponent.Builder
+@Inject
+class DefaultRoomComponentFactory(
+    private val sessionGraph: SessionGraph,
 ) : RoomComponentFactory {
     override fun create(room: JoinedRoom): Any {
-        return roomComponentBuilder
-            .joinedRoom(room)
-            .baseRoom(room)
-            .build()
+        return sessionGraph.roomGraphFactory
+            .create(room, room)
     }
 }

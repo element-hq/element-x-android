@@ -14,8 +14,8 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -24,7 +24,8 @@ import io.element.android.libraries.mediaviewer.impl.gallery.di.MediaItemPresent
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 @ContributesNode(RoomScope::class)
-class MediaGalleryNode @AssistedInject constructor(
+@Inject
+class MediaGalleryNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: MediaGalleryPresenter.Factory,

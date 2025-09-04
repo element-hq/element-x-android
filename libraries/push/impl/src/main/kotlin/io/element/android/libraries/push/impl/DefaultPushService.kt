@@ -7,9 +7,11 @@
 
 package io.element.android.libraries.push.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.binding
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.GetCurrentPushProvider
@@ -26,11 +28,11 @@ import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
-import javax.inject.Inject
 
-@ContributesBinding(AppScope::class, boundType = PushService::class)
+@ContributesBinding(AppScope::class, binding = binding<PushService>())
 @SingleIn(AppScope::class)
-class DefaultPushService @Inject constructor(
+@Inject
+class DefaultPushService(
     private val testPush: TestPush,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushProviders: Set<@JvmSuppressWildcards PushProvider>,

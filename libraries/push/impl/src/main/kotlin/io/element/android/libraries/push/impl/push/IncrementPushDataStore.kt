@@ -7,17 +7,18 @@
 
 package io.element.android.libraries.push.impl.push
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
-import javax.inject.Inject
 
 interface IncrementPushDataStore {
     suspend fun incrementPushCounter()
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultIncrementPushDataStore @Inject constructor(
+@Inject
+class DefaultIncrementPushDataStore(
     private val defaultPushDataStore: DefaultPushDataStore
 ) : IncrementPushDataStore {
     override suspend fun incrementPushCounter() {

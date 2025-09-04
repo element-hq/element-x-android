@@ -7,7 +7,9 @@
 
 package io.element.android.libraries.matrix.impl
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -38,10 +40,10 @@ import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.DecryptionSettings
 import uniffi.matrix_sdk_crypto.TrustRequirement
 import java.io.File
-import javax.inject.Inject
 
-class RustMatrixClientFactory @Inject constructor(
-    private val baseDirectory: File,
+@Inject
+class RustMatrixClientFactory(
+    @BaseDirectory private val baseDirectory: File,
     @CacheDirectory private val cacheDirectory: File,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,

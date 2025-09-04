@@ -9,15 +9,16 @@ package io.element.android.features.invite.impl.declineandblock
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBlockEntryPoint
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultDeclineAndBlockEntryPoint @Inject constructor() : DeclineInviteAndBlockEntryPoint {
+@Inject
+class DefaultDeclineAndBlockEntryPoint : DeclineInviteAndBlockEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext, inviteData: InviteData): Node {
         val inputs = DeclineAndBlockNode.Inputs(inviteData)
         return parentNode.createNode<DeclineAndBlockNode>(buildContext, plugins = listOf(inputs))

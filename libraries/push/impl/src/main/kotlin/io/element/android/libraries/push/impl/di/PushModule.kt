@@ -9,17 +9,17 @@ package io.element.android.libraries.push.impl.di
 
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.impl.battery.BatteryOptimizationPresenter
 
-@Module
+@BindingContainer
 @ContributesTo(AppScope::class)
 interface PushModule {
     companion object {

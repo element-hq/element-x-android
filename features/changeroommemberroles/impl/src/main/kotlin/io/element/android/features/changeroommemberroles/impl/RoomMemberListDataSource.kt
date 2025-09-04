@@ -7,15 +7,16 @@
 
 package io.element.android.features.changeroommemberroles.impl
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class RoomMemberListDataSource @Inject constructor(
+@Inject
+class RoomMemberListDataSource(
     private val room: BaseRoom,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {

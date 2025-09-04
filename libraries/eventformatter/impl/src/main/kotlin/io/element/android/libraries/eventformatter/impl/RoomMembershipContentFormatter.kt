@@ -7,14 +7,15 @@
 
 package io.element.android.libraries.eventformatter.impl
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
-import javax.inject.Inject
 
-class RoomMembershipContentFormatter @Inject constructor(
+@Inject
+class RoomMembershipContentFormatter(
     private val matrixClient: MatrixClient,
     private val sp: StringProvider,
 ) {

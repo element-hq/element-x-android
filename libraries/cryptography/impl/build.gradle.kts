@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -15,10 +15,9 @@ android {
     namespace = "io.element.android.libraries.cryptography.impl"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(projects.libraries.di)
     api(projects.libraries.cryptography.api)
 

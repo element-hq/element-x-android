@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.architecture.AsyncData
@@ -42,11 +43,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 private val pusherTag = LoggerTag("Pusher", LoggerTag.PushLoggerTag)
 
-class LoggedInPresenter @Inject constructor(
+@Inject
+class LoggedInPresenter(
     private val matrixClient: MatrixClient,
     private val syncService: SyncService,
     private val pushService: PushService,

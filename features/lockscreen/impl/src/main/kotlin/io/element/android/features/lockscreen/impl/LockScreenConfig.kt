@@ -7,10 +7,10 @@
 
 package io.element.android.features.lockscreen.impl
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import kotlin.time.Duration
 import io.element.android.appconfig.LockScreenConfig as AppConfigLockScreenConfig
 
@@ -25,7 +25,7 @@ data class LockScreenConfig(
 )
 
 @ContributesTo(AppScope::class)
-@Module
+@BindingContainer
 object LockScreenConfigModule {
     @Provides
     fun providesLockScreenConfig(): LockScreenConfig = LockScreenConfig(

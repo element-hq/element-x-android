@@ -15,8 +15,8 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.BaseRoom
@@ -29,7 +29,8 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 @ContributesNode(RoomScope::class)
-class RolesAndPermissionsNode @AssistedInject constructor(
+@Inject
+class RolesAndPermissionsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RolesAndPermissionsPresenter,

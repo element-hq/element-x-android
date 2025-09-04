@@ -7,10 +7,11 @@
 
 package io.element.android.libraries.matrix.impl.widget
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsProvider
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -21,11 +22,11 @@ import uniffi.matrix_sdk.EncryptionSystem
 import uniffi.matrix_sdk.HeaderStyle
 import uniffi.matrix_sdk.NotificationType
 import uniffi.matrix_sdk.VirtualElementCallWidgetOptions
-import javax.inject.Inject
 import uniffi.matrix_sdk.Intent as CallIntent
 
 @ContributesBinding(AppScope::class)
-class DefaultCallWidgetSettingsProvider @Inject constructor(
+@Inject
+class DefaultCallWidgetSettingsProvider(
     private val buildMeta: BuildMeta,
     private val callAnalyticsCredentialsProvider: CallAnalyticCredentialsProvider,
     private val analyticsService: AnalyticsService,

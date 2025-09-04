@@ -10,14 +10,15 @@ package io.element.android.features.share.impl
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
-import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultShareEntryPoint @Inject constructor() : ShareEntryPoint {
+@Inject
+class DefaultShareEntryPoint : ShareEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): ShareEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

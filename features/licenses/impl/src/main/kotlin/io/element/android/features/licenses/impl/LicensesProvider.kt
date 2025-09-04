@@ -8,23 +8,24 @@
 package io.element.android.features.licenses.impl
 
 import android.content.Context
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.licenses.impl.model.DependencyLicenseItem
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import javax.inject.Inject
 
 interface LicensesProvider {
     suspend fun provides(): List<DependencyLicenseItem>
 }
 
 @ContributesBinding(AppScope::class)
-class AssetLicensesProvider @Inject constructor(
+@Inject
+class AssetLicensesProvider(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
 ) : LicensesProvider {

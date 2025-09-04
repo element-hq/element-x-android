@@ -9,17 +9,18 @@ package io.element.android.features.login.impl.screens.onboarding
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.annotations.ApplicationContext
 
 fun interface OnBoardingLogoResIdProvider {
     fun get(): Int?
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultOnBoardingLogoResIdProvider @Inject constructor(
+@Inject
+class DefaultOnBoardingLogoResIdProvider(
     @ApplicationContext private val context: Context,
 ) : OnBoardingLogoResIdProvider {
     @SuppressLint("DiscouragedApi")

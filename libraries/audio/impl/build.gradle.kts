@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2025 New Vector Ltd.
@@ -14,12 +14,11 @@ android {
     namespace = "io.element.android.libraries.audio.impl"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     api(projects.libraries.audio.api)
 
     implementation(libs.androidx.corektx)
-    implementation(libs.dagger)
     implementation(projects.libraries.di)
 }

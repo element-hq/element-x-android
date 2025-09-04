@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
@@ -20,9 +21,9 @@ import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.uri.ensureProtocol
-import javax.inject.Inject
 
-class ChooseAccountProviderPresenter @Inject constructor(
+@Inject
+class ChooseAccountProviderPresenter(
     private val enterpriseService: EnterpriseService,
     private val loginHelper: LoginHelper,
 ) : Presenter<ChooseAccountProviderState> {

@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -14,10 +14,9 @@ android {
     namespace = "io.element.android.services.analytics.noop"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
     api(projects.services.analytics.api)

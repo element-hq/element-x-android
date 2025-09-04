@@ -7,16 +7,16 @@
 
 package io.element.android.features.leaveroom.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.impl.LeaveRoomPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 
 @ContributesTo(SessionScope::class)
-@Module
+@BindingContainer
 interface LeaveRoomModule {
     @Binds
     fun bindLeaveRoomPresenter(presenter: LeaveRoomPresenter): Presenter<LeaveRoomState>

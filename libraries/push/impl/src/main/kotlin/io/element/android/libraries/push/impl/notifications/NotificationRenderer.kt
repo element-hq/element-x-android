@@ -8,6 +8,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import coil3.ImageLoader
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
@@ -18,11 +19,11 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import timber.log.Timber
-import javax.inject.Inject
 
 private val loggerTag = LoggerTag("NotificationRenderer", LoggerTag.NotificationLoggerTag)
 
-class NotificationRenderer @Inject constructor(
+@Inject
+class NotificationRenderer(
     private val notificationDisplayer: NotificationDisplayer,
     private val notificationDataFactory: NotificationDataFactory,
 ) {

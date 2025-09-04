@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -16,11 +16,10 @@ android {
     namespace = "io.element.android.libraries.featureflag.impl"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     api(projects.libraries.featureflag.api)
-    implementation(libs.dagger)
     implementation(libs.androidx.datastore.preferences)
     implementation(projects.appconfig)
     implementation(projects.libraries.di)

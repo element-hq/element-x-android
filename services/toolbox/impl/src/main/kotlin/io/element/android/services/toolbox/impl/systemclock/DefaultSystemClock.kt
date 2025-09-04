@@ -7,13 +7,14 @@
 
 package io.element.android.services.toolbox.impl.systemclock
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultSystemClock @Inject constructor() : SystemClock {
+@Inject
+class DefaultSystemClock : SystemClock {
     /**
      * Provides a UTC epoch in milliseconds
      *

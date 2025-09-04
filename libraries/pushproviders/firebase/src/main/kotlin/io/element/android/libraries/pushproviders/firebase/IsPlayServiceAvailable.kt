@@ -10,11 +10,11 @@ package io.element.android.libraries.pushproviders.firebase
 import android.content.Context
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailabilityLight
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
-import javax.inject.Inject
 
 interface IsPlayServiceAvailable {
     fun isAvailable(): Boolean
@@ -27,7 +27,8 @@ fun IsPlayServiceAvailable.checkAvailableOrThrow() {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultIsPlayServiceAvailable @Inject constructor(
+@Inject
+class DefaultIsPlayServiceAvailable(
     @ApplicationContext private val context: Context,
 ) : IsPlayServiceAvailable {
     override fun isAvailable(): Boolean {

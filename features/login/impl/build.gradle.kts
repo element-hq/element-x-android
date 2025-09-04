@@ -1,5 +1,4 @@
-import extension.ComponentMergingStrategy
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -24,7 +23,7 @@ android {
     }
 }
 
-setupAnvil(componentMergingStrategy = ComponentMergingStrategy.KSP)
+setupDependencyInjection()
 
 dependencies {
     implementation(projects.appconfig)

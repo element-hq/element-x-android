@@ -7,18 +7,19 @@
 
 package io.element.android.features.joinroom.impl.di
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import javax.inject.Inject
 
 interface CancelKnockRoom {
     suspend operator fun invoke(roomId: RoomId): Result<Unit>
 }
 
 @ContributesBinding(SessionScope::class)
-class DefaultCancelKnockRoom @Inject constructor(private val client: MatrixClient) : CancelKnockRoom {
+@Inject
+class DefaultCancelKnockRoom(private val client: MatrixClient) : CancelKnockRoom {
     override suspend fun invoke(roomId: RoomId): Result<Unit> {
         return client
             .getRoom(roomId)

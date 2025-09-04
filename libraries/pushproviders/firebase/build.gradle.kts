@@ -8,7 +8,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import config.BuildTimeConfig
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 plugins {
     id("io.element.android-library")
@@ -45,10 +45,9 @@ android {
     }
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(libs.androidx.corektx)
     implementation(projects.features.enterprise.api)
     implementation(projects.libraries.architecture)

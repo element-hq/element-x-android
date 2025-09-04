@@ -7,6 +7,7 @@
 
 package io.element.android.features.home.impl.search
 
+import dev.zacsweers.metro.Inject
 import io.element.android.features.home.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -20,11 +21,11 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 private const val PAGE_SIZE = 30
 
-class RoomListSearchDataSource @Inject constructor(
+@Inject
+class RoomListSearchDataSource(
     roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
     private val roomSummaryFactory: RoomListRoomSummaryFactory,

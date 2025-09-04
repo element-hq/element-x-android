@@ -8,7 +8,8 @@
 package io.element.android.libraries.deeplink.impl.usecase
 
 import android.app.Activity
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.deeplink.api.usecase.InviteFriendsUseCase
@@ -18,11 +19,11 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
-import javax.inject.Inject
 import io.element.android.libraries.androidutils.R as AndroidUtilsR
 
 @ContributesBinding(SessionScope::class)
-class DefaultInviteFriendsUseCase @Inject constructor(
+@Inject
+class DefaultInviteFriendsUseCase(
     private val stringProvider: StringProvider,
     private val matrixClient: MatrixClient,
     private val buildMeta: BuildMeta,

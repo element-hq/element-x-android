@@ -11,10 +11,9 @@ plugins {
 
 dependencies {
     implementation(projects.anvilannotations)
-    api(libs.anvil.compiler.api)
-    implementation(libs.anvil.compiler.utils)
+    implementation(libs.metro.runtime)
+    implementation(libs.kotlin.compiler)
     implementation(libs.kotlinpoet)
-    implementation(libs.dagger)
     implementation(libs.ksp.plugin)
     implementation(libs.kotlinpoet.ksp)
 }

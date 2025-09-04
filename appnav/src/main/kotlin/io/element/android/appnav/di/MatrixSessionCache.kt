@@ -10,9 +10,10 @@ package io.element.android.appnav.di
 import androidx.annotation.VisibleForTesting
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.core.state.SavedStateMap
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -22,7 +23,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
 
 private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHolder.SaveInstanceKey"
 
@@ -33,7 +33,8 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHold
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class MatrixSessionCache @Inject constructor(
+@Inject
+class MatrixSessionCache(
     private val authenticationService: MatrixAuthenticationService,
     private val syncOrchestratorFactory: SyncOrchestrator.Factory,
 ) : MatrixClientProvider {

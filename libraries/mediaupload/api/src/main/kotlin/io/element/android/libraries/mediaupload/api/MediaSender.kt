@@ -8,9 +8,9 @@
 package io.element.android.libraries.mediaupload.api
 
 import android.net.Uri
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.flatMapCatching
@@ -25,7 +25,8 @@ import timber.log.Timber
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
-class MediaSender @AssistedInject constructor(
+@Inject
+class MediaSender(
     private val preProcessor: MediaPreProcessor,
     private val room: JoinedRoom,
     @Assisted private val timelineMode: Timeline.Mode,

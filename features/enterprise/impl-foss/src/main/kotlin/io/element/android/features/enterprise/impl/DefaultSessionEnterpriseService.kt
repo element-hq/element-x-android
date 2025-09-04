@@ -7,13 +7,14 @@
 
 package io.element.android.features.enterprise.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.libraries.di.SessionScope
-import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultSessionEnterpriseService @Inject constructor() : SessionEnterpriseService {
+@Inject
+class DefaultSessionEnterpriseService : SessionEnterpriseService {
     override suspend fun init() = Unit
     override suspend fun isElementCallAvailable(): Boolean = true
 }

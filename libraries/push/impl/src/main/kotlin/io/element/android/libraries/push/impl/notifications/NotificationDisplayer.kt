@@ -13,11 +13,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
-import javax.inject.Inject
 
 interface NotificationDisplayer {
     fun showNotificationMessage(tag: String?, id: Int, notification: Notification): Boolean
@@ -27,7 +27,8 @@ interface NotificationDisplayer {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultNotificationDisplayer @Inject constructor(
+@Inject
+class DefaultNotificationDisplayer(
     @ApplicationContext private val context: Context,
     private val notificationManager: NotificationManagerCompat
 ) : NotificationDisplayer {

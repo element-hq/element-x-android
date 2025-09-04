@@ -7,6 +7,7 @@
 
 package io.element.android.features.poll.impl.history.model
 
+import dev.zacsweers.metro.Inject
 import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
@@ -15,9 +16,9 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class PollHistoryItemsFactory @Inject constructor(
+@Inject
+class PollHistoryItemsFactory(
     private val pollContentStateFactory: PollContentStateFactory,
     private val dateFormatter: DateFormatter,
     private val dispatchers: CoroutineDispatchers,

@@ -7,20 +7,21 @@
 
 package io.element.android.features.viewfolder.impl.file
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.withContext
 import java.io.File
-import javax.inject.Inject
 
 interface FileContentReader {
     suspend fun getLines(path: String): Result<List<String>>
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFileContentReader @Inject constructor(
+@Inject
+class DefaultFileContentReader(
     private val dispatchers: CoroutineDispatchers,
 ) : FileContentReader {
     override suspend fun getLines(path: String): Result<List<String>> = withContext(dispatchers.io) {

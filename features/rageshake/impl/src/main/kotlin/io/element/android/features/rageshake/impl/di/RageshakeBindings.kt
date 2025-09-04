@@ -7,9 +7,9 @@
 
 package io.element.android.features.rageshake.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.rageshake.impl.crash.PreferencesCrashDataStore
-import io.element.android.libraries.di.AppScope
 
 @ContributesTo(AppScope::class)
 interface RageshakeBindings {
