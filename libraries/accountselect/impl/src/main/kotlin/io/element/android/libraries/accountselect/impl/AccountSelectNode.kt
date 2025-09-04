@@ -12,15 +12,16 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.SessionId
 
 @ContributesNode(AppScope::class)
-class AccountSelectNode @AssistedInject constructor(
+@Inject
+class AccountSelectNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: AccountSelectPresenter,

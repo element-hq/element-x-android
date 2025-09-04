@@ -10,15 +10,16 @@ package io.element.android.libraries.accountselect.impl
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import javax.inject.Inject
 
-class AccountSelectPresenter @Inject constructor(
+@Inject
+class AccountSelectPresenter(
     private val sessionStore: SessionStore,
 ) : Presenter<AccountSelectState> {
     @Composable
