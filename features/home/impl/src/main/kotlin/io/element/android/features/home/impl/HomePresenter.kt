@@ -37,7 +37,8 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @Inject
@@ -58,8 +59,19 @@ class HomePresenter(
         val coroutineState = rememberCoroutineScope()
         val matrixUser by client.userProfile.collectAsState()
         val matrixUserAndNeighbors by remember {
-            sessionStore.sessionsFlow().map { list ->
-                list.takeCurrentUserWithNeighbors(matrixUser).toPersistentList()
+            combine(
+                client.userProfile.onEach { user ->
+                    // Ensure that the profile is always up to date in our
+                    // session storage when it changes
+                    sessionStore.updateUserProfile(
+                        sessionId = user.userId.value,
+                        displayName = user.displayName,
+                        avatarUrl = user.avatarUrl,
+                    )
+                },
+                sessionStore.sessionsFlow()
+            ) { user, sessions ->
+                sessions.takeCurrentUserWithNeighbors(user).toPersistentList()
             }
         }.collectAsState(initial = persistentListOf(matrixUser))
         val isOnline by syncService.isOnline.collectAsState()
@@ -78,15 +90,6 @@ class HomePresenter(
         LaunchedEffect(Unit) {
             // Force a refresh of the profile
             client.getUserProfile()
-        }
-        LaunchedEffect(matrixUser) {
-            // Ensure that the profile is always up to date in our
-            // session storage when it changes
-            sessionStore.updateUserProfile(
-                sessionId = matrixUser.userId.value,
-                displayName = matrixUser.displayName,
-                avatarUrl = matrixUser.avatarUrl,
-            )
         }
         // Avatar indicator
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()

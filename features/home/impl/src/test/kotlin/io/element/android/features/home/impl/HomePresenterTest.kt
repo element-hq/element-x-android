@@ -60,6 +60,8 @@ class HomePresenterTest {
             sessionStore = InMemorySessionStore(
                 initialSessionData = aSessionData(
                     sessionId = matrixClient.sessionId.value,
+                    userDisplayName = null,
+                    userAvatarUrl = null,
                 ),
                 updateUserProfileResult = updateUserProfileResult,
             ),
@@ -72,17 +74,26 @@ class HomePresenterTest {
                 MatrixUser(A_USER_ID, null, null)
             )
             assertThat(initialState.canReportBug).isFalse()
+            skipItems(1)
             val withUserState = awaitItem()
             assertThat(withUserState.matrixUserAndNeighbors.first()).isEqualTo(
                 MatrixUser(A_USER_ID, A_USER_NAME, AN_AVATAR_URL)
             )
             assertThat(withUserState.showAvatarIndicator).isFalse()
             assertThat(withUserState.isSpaceFeatureEnabled).isFalse()
-            updateUserProfileResult.assertions().isCalledOnce().with(
-                value(matrixClient.sessionId),
-                value(A_USER_NAME),
-                value(AN_AVATAR_URL),
-            )
+            updateUserProfileResult.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(
+                        value(matrixClient.sessionId.value),
+                        value(null),
+                        value(null),
+                    ),
+                    listOf(
+                        value(matrixClient.sessionId.value),
+                        value(A_USER_NAME),
+                        value(AN_AVATAR_URL),
+                    ),
+                )
         }
     }
 
