@@ -193,7 +193,8 @@ class RootFlowNode(
         @Parcelize
         data class AccountSelect(
             val currentSessionId: SessionId,
-            val intent: Intent,
+            val intent: Intent?,
+            val permalinkData: PermalinkData?,
         ) : NavTarget
 
         @Parcelize
@@ -299,8 +300,13 @@ class RootFlowNode(
                                 // Do not pop when the account is changed to avoid a UI flicker.
                                 backstack.pop()
                             }
-                            attachSession(sessionId)
-                                .attachIncomingShare(navTarget.intent)
+                            attachSession(sessionId).apply {
+                                if (navTarget.intent != null) {
+                                    attachIncomingShare(navTarget.intent)
+                                } else if (navTarget.permalinkData != null) {
+                                    attachPermalinkData(navTarget.permalinkData)
+                                }
+                            }
                         }
                     }
 
@@ -375,6 +381,7 @@ class RootFlowNode(
                     NavTarget.AccountSelect(
                         currentSessionId = latestSessionId,
                         intent = intent,
+                        permalinkData = null,
                     )
                 )
             } else {
@@ -386,25 +393,53 @@ class RootFlowNode(
 
     private suspend fun navigateTo(permalinkData: PermalinkData) {
         Timber.d("Navigating to $permalinkData")
-        attachSession(null)
-            .apply {
-                when (permalinkData) {
-                    is PermalinkData.FallbackLink -> Unit
-                    is PermalinkData.RoomEmailInviteLink -> Unit
-                    is PermalinkData.RoomLink -> {
-                        attachRoom(
-                            roomIdOrAlias = permalinkData.roomIdOrAlias,
-                            trigger = JoinedRoom.Trigger.MobilePermalink,
-                            serverNames = permalinkData.viaParameters,
-                            eventId = permalinkData.eventId,
-                            clearBackstack = true
+        // Is there a session already?
+        val latestSessionId = authenticationService.getLatestSessionId()
+        if (latestSessionId == null) {
+            // No session, open login
+            switchToNotLoggedInFlow(null)
+        } else {
+            // wait for the current session to be restored
+            val loggedInFlowNode = attachSession(latestSessionId)
+            when (permalinkData) {
+                is PermalinkData.FallbackLink -> Unit
+                is PermalinkData.RoomEmailInviteLink -> Unit
+                else -> {
+                    if (sessionStore.getAllSessions().size > 1) {
+                        // Several accounts, let the user choose which one to use
+                        backstack.push(
+                            NavTarget.AccountSelect(
+                                currentSessionId = latestSessionId,
+                                intent = null,
+                                permalinkData = permalinkData,
+                            )
                         )
-                    }
-                    is PermalinkData.UserLink -> {
-                        attachUser(permalinkData.userId)
+                    } else {
+                        // Only one account, directly attach the room or the user node.
+                        loggedInFlowNode.attachPermalinkData(permalinkData)
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun LoggedInFlowNode.attachPermalinkData(permalinkData: PermalinkData) {
+        when (permalinkData) {
+            is PermalinkData.FallbackLink -> Unit
+            is PermalinkData.RoomEmailInviteLink -> Unit
+            is PermalinkData.RoomLink -> {
+                attachRoom(
+                    roomIdOrAlias = permalinkData.roomIdOrAlias,
+                    trigger = JoinedRoom.Trigger.MobilePermalink,
+                    serverNames = permalinkData.viaParameters,
+                    eventId = permalinkData.eventId,
+                    clearBackstack = true
+                )
+            }
+            is PermalinkData.UserLink -> {
+                attachUser(permalinkData.userId)
+            }
+        }
     }
 
     private suspend fun navigateTo(deeplinkData: DeeplinkData) {
@@ -422,12 +457,11 @@ class RootFlowNode(
         oidcActionFlow.post(oidcAction)
     }
 
-    // [sessionId] will be null for permalink.
-    private suspend fun attachSession(sessionId: SessionId?): LoggedInFlowNode {
+    private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
         // Ensure that the session is the latest one
-        sessionId?.let { sessionStore.setLatestSession(it.value) }
+        sessionStore.setLatestSession(sessionId.value)
         return waitForChildAttached<LoggedInAppScopeFlowNode, NavTarget> { navTarget ->
-            navTarget is NavTarget.LoggedInFlow && (sessionId == null || navTarget.sessionId == sessionId)
+            navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == sessionId
         }
             .attachSession()
     }
