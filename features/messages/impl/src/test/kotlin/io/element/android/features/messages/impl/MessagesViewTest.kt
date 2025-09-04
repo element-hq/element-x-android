@@ -370,6 +370,7 @@ class MessagesViewTest {
                     displayEmojiReactions = true,
                     actions = persistentListOf(TimelineItemAction.Edit),
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    recentEmojis = persistentListOf(),
                 )
             ),
         )
@@ -462,6 +463,7 @@ class MessagesViewTest {
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(TimelineItemAction.Edit),
+                    recentEmojis = persistentListOf(),
                 ),
             ),
             customReactionState = aCustomReactionState(
@@ -491,6 +493,7 @@ class MessagesViewTest {
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = aChangedIdentitySendFailure(),
                     actions = persistentListOf(),
+                    recentEmojis = persistentListOf(),
                 ),
             ),
             timelineState = aTimelineState(eventSink = eventsRecorder)

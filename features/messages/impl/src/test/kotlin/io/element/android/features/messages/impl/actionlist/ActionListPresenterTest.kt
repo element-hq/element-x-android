@@ -94,7 +94,8 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.ViewSource,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -135,7 +136,8 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.ViewSource,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -182,7 +184,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -228,7 +231,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -274,7 +278,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -322,7 +327,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -370,7 +376,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -417,7 +424,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -463,7 +471,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -509,7 +518,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -552,7 +562,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -599,7 +610,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Pin,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -650,7 +662,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.RemoveCaption,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -699,7 +712,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyCaption,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -739,7 +753,8 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.ViewSource,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -812,7 +827,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -858,7 +874,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -911,7 +928,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
             initialState.eventSink.invoke(ActionListEvents.Clear)
@@ -1004,7 +1022,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Edit,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1048,7 +1067,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1091,7 +1111,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1133,7 +1154,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1178,7 +1200,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1215,7 +1238,8 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.ViewSource
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1292,7 +1316,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1345,7 +1370,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1399,7 +1425,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1450,7 +1477,8 @@ class ActionListPresenterTest {
                         // Can't reply in thread for local events
                         TimelineItemAction.Reply,
                         TimelineItemAction.Redact,
-                    )
+                    ),
+                    recentEmojis = persistentListOf(),
                 )
             )
         }
@@ -1472,5 +1500,6 @@ private fun createActionListPresenter(
         dateFormatter = FakeDateFormatter(),
         timelineMode = timelineMode,
         featureFlagService = featureFlagService,
+        getRecentEmojis = { Result.success(persistentListOf()) },
     )
 }

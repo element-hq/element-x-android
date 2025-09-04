@@ -57,6 +57,7 @@ import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -70,6 +71,7 @@ import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.recentemojis.AddRecentEmoji
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomInfo
@@ -121,6 +123,7 @@ class MessagesPresenter(
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
+    private val addRecentEmoji: AddRecentEmoji,
 ) : Presenter<MessagesState> {
     @AssistedFactory
     interface Factory {
@@ -398,6 +401,7 @@ class MessagesPresenter(
     ) = launch(dispatchers.io) {
         timelineController.invokeOnCurrentTimeline {
             toggleReaction(emoji, eventOrTransactionId)
+                .flatMap { added -> if (added) addRecentEmoji(emoji) else Result.success(Unit) }
                 .onFailure { Timber.e(it) }
         }
     }

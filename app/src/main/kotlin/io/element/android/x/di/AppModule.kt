@@ -33,7 +33,6 @@ import io.element.android.x.BuildConfig
 import io.element.android.x.R
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.plus
 import java.io.File
@@ -107,11 +106,7 @@ object AppModule {
     @Provides
     @SingleIn(AppScope::class)
     fun providesCoroutineDispatchers(): CoroutineDispatchers {
-        return CoroutineDispatchers(
-            io = Dispatchers.IO,
-            computation = Dispatchers.Default,
-            main = Dispatchers.Main,
-        )
+        return CoroutineDispatchers.Default
     }
 
     @Provides

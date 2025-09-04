@@ -23,7 +23,10 @@ class CustomReactionPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    private val presenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
+    private val presenter = CustomReactionPresenter(
+        emojibaseProvider = FakeEmojibaseProvider(),
+        getRecentEmojis = { Result.success(emptyList()) },
+    )
 
     @Test
     fun `present - handle selecting and de-selecting an event`() = runTest {
