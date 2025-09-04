@@ -187,7 +187,7 @@ private fun OutgoingVerificationHeader(step: Step, request: VerificationRequest.
         is Step.Exit -> return
     }
     val timeLimitMessage = if (step.isTimeLimited) {
-        stringResource(CommonStrings.a11y_time_limited_action_required)
+        stringResource(CommonStrings.a11y_session_verification_time_limited_action_required)
     } else {
         ""
     }
