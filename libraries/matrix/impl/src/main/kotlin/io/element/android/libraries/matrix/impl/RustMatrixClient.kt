@@ -715,6 +715,18 @@ class RustMatrixClient(
         runCatchingExceptions { innerClient.getMaxMediaUploadSize().toLong() }
     }
 
+    override suspend fun addRecentEmoji(emoji: String): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.addRecentEmoji(emoji)
+        }
+    }
+
+    override suspend fun getRecentEmojis(): Result<List<String>> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.getRecentEmojis().map { it.emoji }
+        }
+    }
+
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {

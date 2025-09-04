@@ -9,29 +9,39 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.recentemojis.GetRecentEmojis
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.launch
 
 @Inject
 class CustomReactionPresenter(
-    private val emojibaseProvider: EmojibaseProvider
+    private val emojibaseProvider: EmojibaseProvider,
+    private val getRecentEmojis: GetRecentEmojis,
 ) : Presenter<CustomReactionState> {
     @Composable
     override fun present(): CustomReactionState {
+        val localCoroutineScope = rememberCoroutineScope()
+        var recentEmojis by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
+
         val target: MutableState<CustomReactionState.Target> = remember {
             mutableStateOf(CustomReactionState.Target.None)
         }
 
-        val localCoroutineScope = rememberCoroutineScope()
         fun handleShowCustomReactionSheet(event: TimelineItem.Event) {
             target.value = CustomReactionState.Target.Loading(event)
             localCoroutineScope.launch {
+                recentEmojis = getRecentEmojis().getOrNull()?.toImmutableList() ?: persistentListOf()
                 target.value = CustomReactionState.Target.Success(
                     event = event,
                     emojibaseStore = emojibaseProvider.emojibaseStore
@@ -56,9 +66,11 @@ class CustomReactionPresenter(
             ?.mapNotNull { if (it.isHighlighted) it.key else null }
             .orEmpty()
             .toImmutableSet()
+
         return CustomReactionState(
             target = target.value,
             selectedEmoji = selectedEmoji,
+            recentEmojis = recentEmojis,
             eventSink = { handleEvents(it) }
         )
     }

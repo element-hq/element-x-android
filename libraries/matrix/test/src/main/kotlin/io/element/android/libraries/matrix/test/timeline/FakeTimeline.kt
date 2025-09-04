@@ -304,9 +304,9 @@ class FakeTimeline(
         )
     }
 
-    var toggleReactionLambda: (emoji: String, eventOrTransactionId: EventOrTransactionId) -> Result<Unit> = { _, _ -> lambdaError() }
+    var toggleReactionLambda: (emoji: String, eventOrTransactionId: EventOrTransactionId) -> Result<Boolean> = { _, _ -> lambdaError() }
 
-    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = simulateLongTask {
+    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Boolean> = simulateLongTask {
         toggleReactionLambda(
             emoji,
             eventOrTransactionId,

@@ -42,6 +42,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.recentemojis.GetRecentEmojis
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -72,6 +73,7 @@ class DefaultActionListPresenter(
     private val userSendFailureFactory: VerifiedUserSendFailureFactory,
     private val dateFormatter: DateFormatter,
     private val featureFlagService: FeatureFlagService,
+    private val getRecentEmojis: GetRecentEmojis,
 ) : ActionListPresenter {
     @AssistedFactory
     @ContributesBinding(RoomScope::class)
@@ -152,7 +154,8 @@ class DefaultActionListPresenter(
                 ),
                 displayEmojiReactions = displayEmojiReactions,
                 verifiedUserSendFailure = verifiedUserSendFailure,
-                actions = actions.toImmutableList()
+                actions = actions.toImmutableList(),
+                recentEmojis = getRecentEmojis().getOrNull()?.toImmutableList() ?: persistentListOf()
             )
         } else {
             target.value = ActionListState.Target.None

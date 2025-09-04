@@ -55,6 +55,7 @@ fun CustomReactionBottomSheet(
                 onSelectEmoji = ::onEmojiSelectedDismiss,
                 state = presenter.present(),
                 selectedEmojis = state.selectedEmoji,
+                recentEmojis = state.recentEmojis,
                 modifier = Modifier.fillMaxSize(),
             )
         }
