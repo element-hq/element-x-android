@@ -261,6 +261,7 @@ dependencies {
         allEnterpriseImpl(project)
         implementation(projects.appicon.enterprise)
     } else {
+        implementation(projects.features.enterprise.implFoss)
         implementation(projects.appicon.element)
     }
     allFeaturesImpl(project)
