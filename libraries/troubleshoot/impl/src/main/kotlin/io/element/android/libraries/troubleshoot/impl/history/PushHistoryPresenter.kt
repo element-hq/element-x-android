@@ -59,7 +59,7 @@ class PushHistoryPresenter(
             }
         }.collectAsState(emptyList())
         var resetAction: AsyncAction<Unit> by remember { mutableStateOf(AsyncAction.Uninitialized) }
-        var showNotSameAccountError  by remember { mutableStateOf(false) }
+        var showNotSameAccountError by remember { mutableStateOf(false) }
 
         fun handleEvents(event: PushHistoryEvents) {
             when (event) {

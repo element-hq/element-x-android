@@ -31,8 +31,8 @@ class AccountSelectNode @AssistedInject constructor(
         callbacks.forEach { it.onCancel() }
     }
 
-    private fun onAccountSelected(sessionId: SessionId) {
-        callbacks.forEach { it.onAccountSelected(sessionId) }
+    private fun onSelectAccount(sessionId: SessionId) {
+        callbacks.forEach { it.onSelectAccount(sessionId) }
     }
 
     @Composable
@@ -41,7 +41,7 @@ class AccountSelectNode @AssistedInject constructor(
         AccountSelectView(
             state = state,
             onDismiss = ::onDismiss,
-            onAccountSelected = ::onAccountSelected,
+            onSelectAccount = ::onSelectAccount,
             modifier = modifier,
         )
     }

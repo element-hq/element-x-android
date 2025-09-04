@@ -22,7 +22,7 @@ interface AccountSelectEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onAccountSelected(sessionId: SessionId)
+        fun onSelectAccount(sessionId: SessionId)
         fun onCancel()
     }
 }

@@ -293,7 +293,7 @@ class RootFlowNode(
             }
             is NavTarget.AccountSelect -> {
                 val callback: AccountSelectEntryPoint.Callback = object : AccountSelectEntryPoint.Callback {
-                    override fun onAccountSelected(sessionId: SessionId) {
+                    override fun onSelectAccount(sessionId: SessionId) {
                         lifecycleScope.launch {
                             if (sessionId == navTarget.currentSessionId) {
                                 // Ensure that the account selection Node is removed from the backstack

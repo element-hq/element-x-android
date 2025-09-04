@@ -34,7 +34,7 @@ import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 @Composable
 fun AccountSelectView(
     state: AccountSelectState,
-    onAccountSelected: (SessionId) -> Unit,
+    onSelectAccount: (SessionId) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -63,7 +63,7 @@ fun AccountSelectView(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    onAccountSelected(matrixUser.userId)
+                                    onSelectAccount(matrixUser.userId)
                                 }
                                 .padding(vertical = 8.dp),
                             matrixUser = matrixUser,
@@ -81,7 +81,7 @@ fun AccountSelectView(
 internal fun AccountSelectViewPreview(@PreviewParameter(AccountSelectStateProvider::class) state: AccountSelectState) = ElementPreview {
     AccountSelectView(
         state = state,
-        onAccountSelected = {},
+        onSelectAccount = {},
         onDismiss = {},
     )
 }

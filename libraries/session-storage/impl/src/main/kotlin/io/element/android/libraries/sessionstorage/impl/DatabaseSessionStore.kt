@@ -133,7 +133,8 @@ class DatabaseSessionStore(
     private fun getLastUsageIndex(): Long {
         return database.sessionDataQueries.selectLatest()
             .executeAsOneOrNull()
-            ?.lastUsageIndex ?: 0L
+            ?.lastUsageIndex
+            ?: 0L
     }
 
     override suspend fun getLatestSession(): SessionData? {

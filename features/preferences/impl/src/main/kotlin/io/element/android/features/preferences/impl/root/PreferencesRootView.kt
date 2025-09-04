@@ -359,4 +359,3 @@ internal fun MultiAccountSectionPreview() = ElementPreview {
         )
     }
 }
-

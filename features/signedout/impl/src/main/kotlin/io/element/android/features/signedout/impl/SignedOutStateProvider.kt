@@ -10,7 +10,6 @@ package io.element.android.features.signedout.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
-import java.util.Date
 
 open class SignedOutStateProvider : PreviewParameterProvider<SignedOutState> {
     override val values: Sequence<SignedOutState>
