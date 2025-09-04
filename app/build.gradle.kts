@@ -103,7 +103,8 @@ android {
     }
 
     val baseAppName = BuildTimeConfig.APPLICATION_NAME
-    logger.warnInBox("Building ${defaultConfig.applicationId} ($baseAppName)")
+    val buildType = if (isEnterpriseBuild) "Enterprise" else "FOSS"
+    logger.warnInBox("Building ${defaultConfig.applicationId} ($baseAppName) [$buildType]")
 
     buildTypes {
         val oidcRedirectSchemeBase = BuildTimeConfig.METADATA_HOST_REVERSED ?: "io.element.android"
@@ -260,6 +261,7 @@ dependencies {
         allEnterpriseImpl(project)
         implementation(projects.appicon.enterprise)
     } else {
+        implementation(projects.features.enterprise.implFoss)
         implementation(projects.appicon.element)
     }
     allFeaturesImpl(project)
