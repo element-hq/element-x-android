@@ -12,6 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.impl.roomlist.aRoomListState
+import io.element.android.features.home.impl.spaces.aHomeSpacesState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -158,6 +159,7 @@ class HomePresenterTest {
         indicatorService = indicatorService,
         logoutPresenter = { aDirectLogoutState() },
         roomListPresenter = { aRoomListState() },
+        homeSpacesPresenter = { aHomeSpacesState() },
         rageshakeFeatureAvailability = rageshakeFeatureAvailability,
         featureFlagService = featureFlagService,
     )
