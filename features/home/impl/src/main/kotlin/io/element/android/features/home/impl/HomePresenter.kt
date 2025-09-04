@@ -7,6 +7,7 @@
 
 package io.element.android.features.home.impl
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -119,7 +120,8 @@ class HomePresenter(
     }
 }
 
-private fun List<SessionData>.takeCurrentUserWithNeighbors(matrixUser: MatrixUser): List<MatrixUser> {
+@VisibleForTesting
+internal fun List<SessionData>.takeCurrentUserWithNeighbors(matrixUser: MatrixUser): List<MatrixUser> {
     // Sort by position to always have the same order (not depending on last account usage)
     return sortedBy { it.position }
         .map {
