@@ -148,7 +148,7 @@ private fun ColumnScope.MultiAccountSection(
     ListItem(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())),
         headlineContent = {
-            Text("Add another account")
+            Text(stringResource(CommonStrings.common_add_another_account))
         },
         onClick = onAddAccountClick,
     )

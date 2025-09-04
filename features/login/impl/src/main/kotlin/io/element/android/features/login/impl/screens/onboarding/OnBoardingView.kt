@@ -145,8 +145,7 @@ private fun AddOtherAccountScaffold(
 ) {
     FlowStepPage(
         modifier = modifier,
-        // TODO i18n
-        title = "Add account",
+        title = stringResource(CommonStrings.common_add_account),
         iconStyle = BigIcon.Style.Default(CompoundIcons.HomeSolid()),
         buttons = { buttons() },
         content = loginView,

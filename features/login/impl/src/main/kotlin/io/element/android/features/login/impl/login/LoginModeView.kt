@@ -91,9 +91,8 @@ fun LoginModeView(
                     )
                 }
                 is AuthenticationException.AccountAlreadyLoggedIn -> {
-                    // TODO i18n
                     ErrorDialog(
-                        content = "You're already logged in on this device as ${error.message}.",
+                        content = stringResource(CommonStrings.error_account_already_logged_in, error.message.orEmpty()),
                         onSubmit = onClearError,
                     )
                 }

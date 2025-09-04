@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -28,6 +29,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Suppress("MultipleEmitters") // False positive
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,8 +45,7 @@ fun AccountSelectView(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                // TODO i18n
-                titleStr = "Select account",
+                titleStr = stringResource(CommonStrings.common_select_account),
                 navigationIcon = {
                     BackButton(onClick = { onDismiss() })
                 },
