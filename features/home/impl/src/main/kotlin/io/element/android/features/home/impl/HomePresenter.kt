@@ -120,8 +120,8 @@ class HomePresenter(
 }
 
 private fun List<SessionData>.takeCurrentUserWithNeighbors(matrixUser: MatrixUser): List<MatrixUser> {
-    // Sort by userId to always have the same order (not depending on last account usage)
-    return sortedBy { it.userId }
+    // Sort by position to always have the same order (not depending on last account usage)
+    return sortedBy { it.position }
         .map {
             if (it.userId == matrixUser.userId.value) {
                 // Always use the freshest profile for the current user

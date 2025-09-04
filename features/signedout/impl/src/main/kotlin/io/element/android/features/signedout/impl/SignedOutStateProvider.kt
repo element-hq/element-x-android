@@ -44,8 +44,8 @@ private fun aSessionData(
         passphrase = null,
         sessionPath = "/a/path/to/a/session",
         cachePath = "/a/path/to/a/cache",
+        position = 0,
         lastUsageIndex = 0,
-        lastUsageDate = Date(),
         userDisplayName = null,
         userAvatarUrl = null,
     )

@@ -9,7 +9,6 @@ package io.element.android.libraries.sessionstorage.test
 
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
-import java.util.Date
 
 fun aSessionData(
     sessionId: String = "@alice:server.org",
@@ -19,8 +18,8 @@ fun aSessionData(
     cachePath: String = "/a/path/to/a/cache",
     accessToken: String = "anAccessToken",
     refreshToken: String? = "aRefreshToken",
+    position: Long = 0,
     lastUsageIndex: Long = 0,
-    lastUsageDate: Date = Date(0),
     userDisplayName: String? = null,
     userAvatarUrl: String? = null,
 ): SessionData {
@@ -38,8 +37,8 @@ fun aSessionData(
         passphrase = null,
         sessionPath = sessionPath,
         cachePath = cachePath,
+        position = position,
         lastUsageIndex = lastUsageIndex,
-        lastUsageDate = lastUsageDate,
         userDisplayName = userDisplayName,
         userAvatarUrl = userAvatarUrl,
     )

@@ -18,13 +18,11 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
-import java.util.Date
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -32,7 +30,6 @@ import java.util.Date
 class DatabaseSessionStore(
     private val database: SessionDatabase,
     private val dispatchers: CoroutineDispatchers,
-    private val systemClock: SystemClock,
 ) : SessionStore {
     private val sessionDataMutex = Mutex()
 
@@ -58,8 +55,10 @@ class DatabaseSessionStore(
             database.sessionDataQueries.insertSessionData(
                 sessionData
                     .copy(
+                        // position value does not really matter, so just use lastUsageIndex + 1 to ensure that
+                        // the value is always greater than value of any existing account
+                        position = lastUsageIndex + 1,
                         lastUsageIndex = lastUsageIndex + 1,
-                        lastUsageDate = Date(systemClock.epochMillis()),
                     )
                     .toDbModel()
             )
@@ -80,8 +79,8 @@ class DatabaseSessionStore(
             database.sessionDataQueries.updateSession(
                 sessionData.copy(
                     loginTimestamp = result.loginTimestamp,
+                    position = result.position,
                     lastUsageIndex = result.lastUsageIndex,
-                    lastUsageDate = result.lastUsageDate,
                     userDisplayName = result.userDisplayName,
                     userAvatarUrl = result.userAvatarUrl,
                 ).toDbModel()
@@ -122,11 +121,10 @@ class DatabaseSessionStore(
             return
         }
         sessionDataMutex.withLock {
-            // Update lastUsageDate and lastSessionIndex of the session
+            // Update lastUsageIndex of the session
             database.sessionDataQueries.updateSession(
                 result.copy(
                     lastUsageIndex = lastUsageIndex + 1,
-                    lastUsageDate = Date(systemClock.epochMillis()),
                 ).toDbModel()
             )
         }

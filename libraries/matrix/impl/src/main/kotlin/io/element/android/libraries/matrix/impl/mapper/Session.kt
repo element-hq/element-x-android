@@ -34,8 +34,9 @@ internal fun Session.toSessionData(
     passphrase = passphrase,
     sessionPath = sessionPaths.fileDirectory.absolutePath,
     cachePath = sessionPaths.cacheDirectory.absolutePath,
+    // Note: position and lastUsageIndex will be set by the SessionStore when adding the session
+    position = 0,
     lastUsageIndex = 0,
-    lastUsageDate = Date(),
     userDisplayName = null,
     userAvatarUrl = null,
 )
@@ -59,8 +60,8 @@ internal fun ExternalSession.toSessionData(
     passphrase = passphrase,
     sessionPath = sessionPaths.fileDirectory.absolutePath,
     cachePath = sessionPaths.cacheDirectory.absolutePath,
+    position = 0,
     lastUsageIndex = 0,
-    lastUsageDate = Date(),
     userDisplayName = null,
     userAvatarUrl = null,
 )

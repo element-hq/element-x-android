@@ -27,8 +27,8 @@ internal fun SessionData.toDbModel(): DbSessionData {
         passphrase = passphrase,
         sessionPath = sessionPath,
         cachePath = cachePath,
+        position = position,
         lastUsageIndex = lastUsageIndex,
-        lastUsageDate = lastUsageDate.time,
         userDisplayName = userDisplayName,
         userAvatarUrl = userAvatarUrl,
     )
@@ -49,8 +49,8 @@ internal fun DbSessionData.toApiModel(): SessionData {
         passphrase = passphrase,
         sessionPath = sessionPath,
         cachePath = cachePath,
+        position = position,
         lastUsageIndex = lastUsageIndex,
-        lastUsageDate = Date(lastUsageDate),
         userDisplayName = userDisplayName,
         userAvatarUrl = userAvatarUrl,
     )
