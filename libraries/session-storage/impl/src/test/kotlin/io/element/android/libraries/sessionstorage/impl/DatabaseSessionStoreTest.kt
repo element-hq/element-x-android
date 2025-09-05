@@ -55,12 +55,19 @@ class DatabaseSessionStoreTest {
     }
 
     @Test
-    fun `isLoggedIn emits true while there are sessions in the DB`() = runTest {
-        databaseSessionStore.isLoggedIn().test {
+    fun `loggedInStateFlow emits LoggedIn while there are sessions in the DB`() = runTest {
+        databaseSessionStore.loggedInStateFlow().test {
             assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
-            database.sessionDataQueries.insertSessionData(aSessionData)
+            databaseSessionStore.addSession(aSessionData.toApiModel())
             assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(sessionId = aSessionData.userId, isTokenValid = true))
-            database.sessionDataQueries.removeSession(aSessionData.userId)
+            // Add a second session
+            databaseSessionStore.addSession(aSessionData.copy(userId = "otherUserId").toApiModel())
+            assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(sessionId = "otherUserId", isTokenValid = true))
+            // Remove the second session
+            databaseSessionStore.removeSession("otherUserId")
+            assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(sessionId = aSessionData.userId, isTokenValid = true))
+            // Remove the first session
+            databaseSessionStore.removeSession(aSessionData.userId)
             assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
         }
     }

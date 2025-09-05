@@ -85,7 +85,7 @@ class RustMatrixAuthenticationService(
     }
 
     override fun loggedInStateFlow(): Flow<LoggedInState> {
-        return sessionStore.isLoggedIn()
+        return sessionStore.loggedInStateFlow()
     }
 
     override suspend fun getLatestSessionId(): SessionId? = withContext(coroutineDispatchers.io) {

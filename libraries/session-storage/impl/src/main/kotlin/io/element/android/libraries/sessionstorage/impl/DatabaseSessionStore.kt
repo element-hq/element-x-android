@@ -33,7 +33,7 @@ class DatabaseSessionStore(
 ) : SessionStore {
     private val sessionDataMutex = Mutex()
 
-    override fun isLoggedIn(): Flow<LoggedInState> {
+    override fun loggedInStateFlow(): Flow<LoggedInState> {
         return database.sessionDataQueries.selectLatest()
             .asFlow()
             .mapToOneOrNull(dispatchers.io)

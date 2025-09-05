@@ -16,7 +16,7 @@ interface SessionStore {
      * If there is at least one session, the state is [LoggedInState.LoggedIn] with the latest used session.
      * If there is no session, the state is [LoggedInState.NotLoggedIn].
      */
-    fun isLoggedIn(): Flow<LoggedInState>
+    fun loggedInStateFlow(): Flow<LoggedInState>
 
     /**
      * Return a flow of all sessions ordered by last usage descending.
