@@ -25,6 +25,7 @@ import org.matrix.rustcomponents.sdk.PusherKind
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SessionVerificationController
+import org.matrix.rustcomponents.sdk.SpaceService
 import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
@@ -52,6 +53,7 @@ class FakeFfiClient(
     override suspend fun cachedAvatarUrl(): String? = null
     override suspend fun restoreSession(session: Session) = Unit
     override fun syncService(): SyncServiceBuilder = FakeFfiSyncServiceBuilder()
+    override fun spaceService(): SpaceService = FakeFfiSpaceService()
     override fun roomDirectorySearch(): RoomDirectorySearch = FakeFfiRoomDirectorySearch()
     override suspend fun setPusher(
         identifiers: PusherIdentifiers,
