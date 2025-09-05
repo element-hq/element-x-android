@@ -112,7 +112,7 @@ class MessagesNode(
     interface Callback : Plugin {
         fun onRoomDetailsClick()
         fun onEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean
-        fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
+        fun onPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun onUserDataClick(userId: UserId)
         fun onPermalinkClick(data: PermalinkData)
         fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
@@ -219,8 +219,8 @@ class MessagesNode(
         callbacks.forEach { it.onEditPollClick(eventId) }
     }
 
-    override fun onPreviewAttachment(attachments: ImmutableList<Attachment>) {
-        callbacks.forEach { it.onPreviewAttachments(attachments) }
+    override fun onPreviewAttachment(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
+        callbacks.forEach { it.onPreviewAttachments(attachments, inReplyToEventId) }
     }
 
     override fun onNavigateToRoom(roomId: RoomId, serverNames: List<String>) {
