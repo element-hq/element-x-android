@@ -134,7 +134,7 @@ class DatabaseSessionStore(
         return database.sessionDataQueries.selectLatest()
             .executeAsOneOrNull()
             ?.lastUsageIndex
-            ?: 0L
+            ?: -1L
     }
 
     override suspend fun getLatestSession(): SessionData? {

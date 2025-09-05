@@ -13,6 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.session.SessionData
 import io.element.android.libraries.sessionstorage.api.LoggedInState
+import io.element.android.libraries.sessionstorage.api.LoginType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -122,7 +123,7 @@ class DatabaseSessionStoreTest {
     }
 
     @Test
-    fun `update session update all fields except loginTimestamp`() = runTest {
+    fun `update session update all fields except info used by the application`() = runTest {
         val firstSessionData = SessionData(
             userId = "userId",
             deviceId = "deviceId",
@@ -137,6 +138,10 @@ class DatabaseSessionStoreTest {
             passphrase = "aPassphrase",
             sessionPath = "sessionPath",
             cachePath = "cachePath",
+            position = 0,
+            lastUsageIndex = 0,
+            userDisplayName = "userDisplayName",
+            userAvatarUrl = "userAvatarUrl",
         )
         val secondSessionData = SessionData(
             userId = "userId",
@@ -150,8 +155,12 @@ class DatabaseSessionStoreTest {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphraseAltered",
-            sessionPath = "sessionPath",
-            cachePath = "cachePath",
+            sessionPath = "sessionPathAltered",
+            cachePath = "cachePathAltered",
+            position = 1,
+            lastUsageIndex = 1,
+            userDisplayName = "userDisplayNameAltered",
+            userAvatarUrl = "userAvatarUrlAltered",
         )
         assertThat(firstSessionData.userId).isEqualTo(secondSessionData.userId)
         assertThat(firstSessionData.loginTimestamp).isNotEqualTo(secondSessionData.loginTimestamp)
@@ -172,6 +181,11 @@ class DatabaseSessionStoreTest {
         assertThat(alteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
         assertThat(alteredSession.oidcData).isEqualTo(secondSessionData.oidcData)
         assertThat(alteredSession.passphrase).isEqualTo(secondSessionData.passphrase)
+        // Check that application data have not been altered
+        assertThat(alteredSession.position).isEqualTo(firstSessionData.position)
+        assertThat(alteredSession.lastUsageIndex).isEqualTo(firstSessionData.lastUsageIndex)
+        assertThat(alteredSession.userDisplayName).isEqualTo(firstSessionData.userDisplayName)
+        assertThat(alteredSession.userAvatarUrl).isEqualTo(firstSessionData.userAvatarUrl)
     }
 
     @Test
@@ -186,10 +200,14 @@ class DatabaseSessionStoreTest {
             loginTimestamp = 1,
             oidcData = "aOidcData",
             isTokenValid = 1,
-            loginType = null,
+            loginType = LoginType.PASSWORD.name,
             passphrase = "aPassphrase",
             sessionPath = "sessionPath",
             cachePath = "cachePath",
+            position = 0,
+            lastUsageIndex = 0,
+            userDisplayName = "userDisplayName",
+            userAvatarUrl = "userAvatarUrl",
         )
         val secondSessionData = SessionData(
             userId = "userIdUnknown",
@@ -201,10 +219,14 @@ class DatabaseSessionStoreTest {
             loginTimestamp = 2,
             oidcData = "aOidcDataAltered",
             isTokenValid = 1,
-            loginType = null,
+            loginType = LoginType.PASSWORD.name,
             passphrase = "aPassphraseAltered",
-            sessionPath = "sessionPath",
-            cachePath = "cachePath",
+            sessionPath = "sessionPathAltered",
+            cachePath = "cachePathAltered",
+            position = 1,
+            lastUsageIndex = 1,
+            userDisplayName = "userDisplayNameAltered",
+            userAvatarUrl = "userAvatarUrlAltered",
         )
         assertThat(firstSessionData.userId).isNotEqualTo(secondSessionData.userId)
 
@@ -214,14 +236,6 @@ class DatabaseSessionStoreTest {
         // Get the session and check that it has not been altered
         val notAlteredSession = databaseSessionStore.getSession(firstSessionData.userId)!!.toDbModel()
 
-        assertThat(notAlteredSession.userId).isEqualTo(firstSessionData.userId)
-        assertThat(notAlteredSession.deviceId).isEqualTo(firstSessionData.deviceId)
-        assertThat(notAlteredSession.accessToken).isEqualTo(firstSessionData.accessToken)
-        assertThat(notAlteredSession.refreshToken).isEqualTo(firstSessionData.refreshToken)
-        assertThat(notAlteredSession.homeserverUrl).isEqualTo(firstSessionData.homeserverUrl)
-        assertThat(notAlteredSession.slidingSyncProxy).isEqualTo(firstSessionData.slidingSyncProxy)
-        assertThat(notAlteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
-        assertThat(notAlteredSession.oidcData).isEqualTo(firstSessionData.oidcData)
-        assertThat(notAlteredSession.passphrase).isEqualTo(firstSessionData.passphrase)
+        assertThat(notAlteredSession).isEqualTo(firstSessionData)
     }
 }
