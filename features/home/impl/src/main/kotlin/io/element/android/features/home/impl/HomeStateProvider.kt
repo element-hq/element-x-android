@@ -21,6 +21,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toPersistentList
 
 open class HomeStateProvider : PreviewParameterProvider<HomeState> {
     override val values: Sequence<HomeState>
@@ -48,6 +49,7 @@ open class HomeStateProvider : PreviewParameterProvider<HomeState> {
 
 internal fun aHomeState(
     matrixUser: MatrixUser = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
+    matrixUserAndNeighbors: List<MatrixUser> = listOf(matrixUser),
     showAvatarIndicator: Boolean = false,
     hasNetworkConnection: Boolean = true,
     snackbarMessage: SnackbarMessage? = null,
@@ -59,7 +61,7 @@ internal fun aHomeState(
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
     eventSink: (HomeEvents) -> Unit = {}
 ) = HomeState(
-    matrixUser = matrixUser,
+    matrixUserAndNeighbors = matrixUserAndNeighbors.toPersistentList(),
     showAvatarIndicator = showAvatarIndicator,
     hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = snackbarMessage,

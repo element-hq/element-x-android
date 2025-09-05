@@ -13,12 +13,9 @@ import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.sessionstorage.api.LoggedInState
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface MatrixAuthenticationService {
-    fun loggedInStateFlow(): Flow<LoggedInState>
     suspend fun getLatestSessionId(): SessionId?
 
     /**

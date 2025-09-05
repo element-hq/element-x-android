@@ -11,19 +11,25 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -41,7 +47,6 @@ import io.element.android.features.home.impl.filters.RoomListFiltersView
 import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.backgroundVerticalGradient
@@ -57,23 +62,29 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomListTopBar(
     title: String,
-    matrixUser: MatrixUser,
+    matrixUserAndNeighbors: ImmutableList<MatrixUser>,
     showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
     onToggleSearch: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     onOpenSettings: () -> Unit,
+    onAccountSwitch: (SessionId) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     displayMenuItems: Boolean,
     displayFilters: Boolean,
@@ -83,10 +94,11 @@ fun RoomListTopBar(
 ) {
     DefaultRoomListTopBar(
         title = title,
-        matrixUser = matrixUser,
+        matrixUserAndNeighbors = matrixUserAndNeighbors,
         showAvatarIndicator = showAvatarIndicator,
         areSearchResultsDisplayed = areSearchResultsDisplayed,
         onOpenSettings = onOpenSettings,
+        onAccountSwitch = onAccountSwitch,
         onSearchClick = onToggleSearch,
         onMenuActionClick = onMenuActionClick,
         scrollBehavior = scrollBehavior,
@@ -102,11 +114,12 @@ fun RoomListTopBar(
 @Composable
 private fun DefaultRoomListTopBar(
     title: String,
-    matrixUser: MatrixUser,
+    matrixUserAndNeighbors: ImmutableList<MatrixUser>,
     showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
     scrollBehavior: TopAppBarScrollBehavior,
     onOpenSettings: () -> Unit,
+    onAccountSwitch: (SessionId) -> Unit,
     onSearchClick: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     displayMenuItems: Boolean,
@@ -116,12 +129,6 @@ private fun DefaultRoomListTopBar(
     modifier: Modifier = Modifier,
 ) {
     val collapsedFraction = scrollBehavior.state.collapsedFraction
-    val avatarData by remember(matrixUser) {
-        derivedStateOf {
-            matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
-        }
-    }
-
     Box(modifier = modifier) {
         val collapsedTitleTextStyle = ElementTheme.typography.aliasScreenTitle
         val expandedTitleTextStyle = ElementTheme.typography.fontHeadingLgBold.copy(
@@ -158,8 +165,9 @@ private fun DefaultRoomListTopBar(
                     },
                     navigationIcon = {
                         NavigationIcon(
-                            avatarData = avatarData,
+                            matrixUserAndNeighbors = matrixUserAndNeighbors,
                             showAvatarIndicator = showAvatarIndicator,
+                            onAccountSwitch = onAccountSwitch,
                             onClick = onOpenSettings,
                         )
                     },
@@ -247,19 +255,67 @@ private fun DefaultRoomListTopBar(
 
 @Composable
 private fun NavigationIcon(
-    avatarData: AvatarData,
+    matrixUserAndNeighbors: ImmutableList<MatrixUser>,
+    showAvatarIndicator: Boolean,
+    onAccountSwitch: (SessionId) -> Unit,
+    onClick: () -> Unit,
+) {
+    if (matrixUserAndNeighbors.size == 1) {
+        AccountIcon(
+            matrixUser = matrixUserAndNeighbors.single(),
+            isCurrentAccount = true,
+            showAvatarIndicator = showAvatarIndicator,
+            onClick = onClick,
+        )
+    } else {
+        // Render a vertical pager
+        val pagerState = rememberPagerState(initialPage = 1) { matrixUserAndNeighbors.size }
+        // Listen to page changes and switch account if needed
+        val latestOnAccountSwitch by rememberUpdatedState(onAccountSwitch)
+        LaunchedEffect(pagerState) {
+            snapshotFlow { pagerState.settledPage }.collect { page ->
+                latestOnAccountSwitch(SessionId(matrixUserAndNeighbors[page].userId.value))
+            }
+        }
+        VerticalPager(
+            state = pagerState,
+            modifier = Modifier.height(48.dp),
+        ) { page ->
+            AccountIcon(
+                matrixUser = matrixUserAndNeighbors[page],
+                isCurrentAccount = page == 1,
+                showAvatarIndicator = page == 1 && showAvatarIndicator,
+                onClick = if (page == 1) {
+                    onClick
+                } else {
+                    {}
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun AccountIcon(
+    matrixUser: MatrixUser,
+    isCurrentAccount: Boolean,
     showAvatarIndicator: Boolean,
     onClick: () -> Unit,
 ) {
     IconButton(
-        modifier = Modifier.testTag(TestTags.homeScreenSettings),
+        modifier = if (isCurrentAccount) Modifier.testTag(TestTags.homeScreenSettings) else Modifier,
         onClick = onClick,
     ) {
         Box {
+            val avatarData by remember(matrixUser) {
+                derivedStateOf {
+                    matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
+                }
+            }
             Avatar(
                 avatarData = avatarData,
                 avatarType = AvatarType.User,
-                contentDescription = stringResource(CommonStrings.common_settings),
+                contentDescription = if (isCurrentAccount) stringResource(CommonStrings.common_settings) else null,
             )
             if (showAvatarIndicator) {
                 RedIndicatorAtom(
@@ -276,11 +332,12 @@ private fun NavigationIcon(
 internal fun DefaultRoomListTopBarPreview() = ElementPreview {
     DefaultRoomListTopBar(
         title = stringResource(R.string.screen_roomlist_main_space_title),
-        matrixUser = MatrixUser(UserId("@id:domain"), "Alice"),
+        matrixUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
         onOpenSettings = {},
+        onAccountSwitch = {},
         onSearchClick = {},
         displayMenuItems = true,
         displayFilters = true,
@@ -296,11 +353,33 @@ internal fun DefaultRoomListTopBarPreview() = ElementPreview {
 internal fun DefaultRoomListTopBarWithIndicatorPreview() = ElementPreview {
     DefaultRoomListTopBar(
         title = stringResource(R.string.screen_roomlist_main_space_title),
-        matrixUser = MatrixUser(UserId("@id:domain"), "Alice"),
+        matrixUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = true,
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
         onOpenSettings = {},
+        onAccountSwitch = {},
+        onSearchClick = {},
+        displayMenuItems = true,
+        displayFilters = true,
+        filtersState = aRoomListFiltersState(),
+        canReportBug = true,
+        onMenuActionClick = {},
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@PreviewsDayNight
+@Composable
+internal fun DefaultRoomListTopBarMultiAccountPreview() = ElementPreview {
+    DefaultRoomListTopBar(
+        title = stringResource(R.string.screen_roomlist_main_space_title),
+        matrixUserAndNeighbors = aMatrixUserList().take(3).toPersistentList(),
+        showAvatarIndicator = false,
+        areSearchResultsDisplayed = false,
+        scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
+        onOpenSettings = {},
+        onAccountSwitch = {},
         onSearchClick = {},
         displayMenuItems = true,
         displayFilters = true,
