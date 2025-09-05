@@ -546,7 +546,7 @@ private fun DefaultLoadedContent(
         },
         memberCount = {
             if (contentState.showMemberCount) {
-                MembersCountMolecule(memberCount = contentState.numberOfMembers ?: 0)
+                MembersCountMolecule(memberCount = contentState.numberOfMembers?.toInt() ?: 0)
             }
         }
     )
