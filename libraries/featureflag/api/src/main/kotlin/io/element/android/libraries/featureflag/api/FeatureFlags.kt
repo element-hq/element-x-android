@@ -102,8 +102,9 @@ enum class FeatureFlags(
     ),
     MultiAccount(
         key = "feature.multi_account",
-        title = "Multi account",
-        description = "Allow the application to connect to multiple accounts at the same time. Under active development!",
+        title = "Multi accounts",
+        description = "Allow the application to connect to multiple accounts at the same time." +
+            "\n\nWARNING: this feature is EXPERIMENTAL and UNSTABLE.",
         defaultValue = { false },
         isFinished = false,
     ),
