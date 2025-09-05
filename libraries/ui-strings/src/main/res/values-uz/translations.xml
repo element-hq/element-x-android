@@ -331,7 +331,6 @@ Sababi:%1$s."</string>
   <string name="dialog_title_warning">"Ogohlantirish"</string>
   <string name="dialog_unsaved_changes_description_android">"Oʻzgarishlar saqlanmadi. Haqiqatan ham orqaga qaytmoqchimisiz?"</string>
   <string name="dialog_unsaved_changes_title">"O‘zgartirishlarni saqlaysizmi?"</string>
-  <string name="error_account_creation_not_possible">"Hisobingizni %1$s faolsizlantirish quyidagi natijalarga olib keladi:"</string>
   <string name="error_failed_creating_the_permalink">"Doimiy havola yaratilmadi"</string>
   <string name="error_failed_loading_map">"%1$sxaritani yuklay olmadi. Iltimos keyinroq qayta urinib ko\'ring."</string>
   <string name="error_failed_loading_messages">"Xabarlar yuklanmadi"</string>
