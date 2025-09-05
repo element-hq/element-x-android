@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.seenSpaceIds
 import io.element.android.libraries.architecture.Presenter
@@ -19,9 +20,9 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class HomeSpacesPresenter @Inject constructor(
+@Inject
+class HomeSpacesPresenter(
     private val client: MatrixClient,
     private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<HomeSpacesState> {
