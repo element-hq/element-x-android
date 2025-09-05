@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"加入聊天室"</string>
   <string name="screen_join_room_join_restricted_message">"您可能需要受到邀请或成为某个空间的成员才能加入。"</string>
   <string name="screen_join_room_knock_action">"加入聊天室"</string>
+  <string name="screen_join_room_knock_message_characters_count">"允许的字符数量 %2$d中的%1$d"</string>
   <string name="screen_join_room_knock_message_description">"消息（可选）"</string>
   <string name="screen_join_room_knock_sent_description">"如果您的请求被接受，您将收到加入房间的邀请。"</string>
   <string name="screen_join_room_knock_sent_title">"加入请求已发送"</string>

@@ -2,10 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Ek ekle"</string>
   <string name="rich_text_editor_bullet_list">"Madde işaretli listeyi aç/kapat"</string>
-  <string name="rich_text_editor_close_formatting_options">"Biçimlendirme seçeneklerini kapat"</string>
+  <string name="rich_text_editor_close_formatting_options">"İptal et ve biçimlendirme seçeneklerini kapat"</string>
   <string name="rich_text_editor_code_block">"Kod Bloğunu Aç/Kapat"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Açıklama ekle"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Şifrelenmiş mesaj…"</string>
   <string name="rich_text_editor_composer_placeholder">"Mesaj…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Şifrelenmemiş mesaj…"</string>
   <string name="rich_text_editor_create_link">"Bir bağlantı oluştur"</string>
   <string name="rich_text_editor_edit_link">"Bağlantıyı Düzenle"</string>
   <string name="rich_text_editor_format_bold">"Kalın biçimi uygula"</string>

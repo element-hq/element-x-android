@@ -13,12 +13,15 @@
   <string name="screen_change_account_provider_other">"其他"</string>
   <string name="screen_change_account_provider_subtitle">"使用其他账户提供商，例如您自己的私人服务器或工作账户。"</string>
   <string name="screen_change_account_provider_title">"更改账户提供方"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"%1$s 需要 Element Pro 应用。请从应用商店下载。"</string>
   <string name="screen_change_server_error_element_pro_required_title">"需要 Element Pro 版"</string>
   <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此服务器。请检查您输入的服务器网址是否正确。如果 URL 正确，请联系您的服务器管理员寻求进一步帮助。"</string>
   <string name="screen_change_server_error_invalid_well_known">"由于 .well-known 文件中存在问题，服务器不可用：
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"所选账户提供商不支持跨屏同步。需要升级服务器才能使用%1$s。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s不允许连接到%2$s。"</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"本应用已配置为允许访问：%1$s 。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"账户提供商%1$s 不被允许。"</string>
   <string name="screen_change_server_form_header">"服务器网址"</string>
   <string name="screen_change_server_form_notice">"输入域名地址。"</string>

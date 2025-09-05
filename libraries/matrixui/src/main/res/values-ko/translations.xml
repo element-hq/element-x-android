@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"초대장 보내기"</string>
+  <string name="screen_bottom_sheet_create_dm_message">"%1$s 와 채팅을 시작하시겠습니까?"</string>
+  <string name="screen_bottom_sheet_create_dm_title">"초대장을 보내시겠습니까?"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) 당신을 초대했습니다"</string>
+</resources>

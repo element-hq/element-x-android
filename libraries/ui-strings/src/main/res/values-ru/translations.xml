@@ -8,15 +8,19 @@
     <item quantity="few">"Ведено %1$d цифры"</item>
     <item quantity="many">"Введено много цифр"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Изменить аватар"</string>
+  <string name="a11y_edit_room_address_hint">"Полный адрес %1$s"</string>
   <string name="a11y_encryption_details">"Сведения о шифровании"</string>
   <string name="a11y_hide_password">"Скрыть пароль"</string>
   <string name="a11y_join_call">"Присоединиться к звонку"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
+  <string name="a11y_move_the_map_to_my_location">"Переместить карту на мое местоположение"</string>
   <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
   <string name="a11y_notifications_muted">"Звук отключен"</string>
   <string name="a11y_notifications_new_mentions">"Новые упоминания"</string>
   <string name="a11y_notifications_new_messages">"Новые сообшения"</string>
   <string name="a11y_notifications_ongoing_call">"Текущий вызов"</string>
+  <string name="a11y_other_user_avatar">"Аватар другого пользователя"</string>
   <string name="a11y_page_n">"Страница %1$d"</string>
   <string name="a11y_pause">"Приостановить"</string>
   <string name="a11y_paused_voice_message">"Голосовое сообщение, длительность: %1$s, текущая позиция: %2$s"</string>
@@ -35,14 +39,20 @@
   <string name="a11y_read_receipts_single">"Прочитано %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Нажмите, чтобы показать все"</string>
   <string name="a11y_remove_reaction">"Удалить реакцию с %1$s"</string>
+  <string name="a11y_remove_reaction_with">"Удалить реакцию %1$s"</string>
+  <string name="a11y_room_avatar">"Аватар комнаты"</string>
   <string name="a11y_send_files">"Отправить файлы"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Требуется срочное действие"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
+  <string name="a11y_user_avatar">"Аватар пользователя"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
+  <string name="a11y_view_avatar">"Просмотреть аватар"</string>
   <string name="a11y_view_details">"Подробнее"</string>
   <string name="a11y_voice_message">"Голосовое сообщение, продолжительность: %1$s"</string>
   <string name="a11y_voice_message_record">"Записать голосовое сообщение."</string>
   <string name="a11y_voice_message_stop_recording">"Остановить запись"</string>
+  <string name="a11y_your_avatar">"Ваш аватар"</string>
   <string name="action_accept">"Разрешить"</string>
   <string name="action_add_caption">"Добавить подпись"</string>
   <string name="action_add_to_timeline">"Добавить в хронологию"</string>
@@ -79,6 +89,7 @@
   <string name="action_enable">"Включить"</string>
   <string name="action_end_poll">"Завершить опрос"</string>
   <string name="action_enter_pin">"Введите PIN-код"</string>
+  <string name="action_finish">"Завершить"</string>
   <string name="action_forgot_password">"Забыли пароль?"</string>
   <string name="action_forward">"Переслать"</string>
   <string name="action_go_back">"Вернуться"</string>
@@ -101,6 +112,7 @@
   <string name="action_no">"Нет"</string>
   <string name="action_not_now">"Не сейчас"</string>
   <string name="action_ok">"Ок"</string>
+  <string name="action_open_context_menu">"Открыть контекстное меню"</string>
   <string name="action_open_settings">"Открыть настройки"</string>
   <string name="action_open_with">"Открыть с помощью"</string>
   <string name="action_pin">"Закрепить"</string>
@@ -125,7 +137,9 @@
   <string name="action_save">"Сохранить"</string>
   <string name="action_search">"Поиск"</string>
   <string name="action_send">"Отправить"</string>
+  <string name="action_send_edited_message">"Отправить изменённое сообщение"</string>
   <string name="action_send_message">"Отправить сообщение"</string>
+  <string name="action_send_voice_message">"Отправить голосовое сообщение"</string>
   <string name="action_share">"Поделиться"</string>
   <string name="action_share_link">"Поделиться ссылкой"</string>
   <string name="action_show">"Показать"</string>
@@ -141,6 +155,7 @@
   <string name="action_tap_for_options">"Нажмите для просмотра вариантов"</string>
   <string name="action_try_again">"Повторить попытку"</string>
   <string name="action_unpin">"Открепить"</string>
+  <string name="action_view">"Просмотр"</string>
   <string name="action_view_in_timeline">"Просмотр в хронологии"</string>
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
@@ -151,7 +166,9 @@
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
   <string name="common_adding_caption">"Добавление подписи"</string>
   <string name="common_advanced_settings">"Дополнительные настройки"</string>
+  <string name="common_an_image">"изображение"</string>
   <string name="common_analytics">"Аналитика"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Вы покинули комнату"</string>
   <string name="common_appearance">"Внешний вид"</string>
   <string name="common_audio">"Аудио"</string>
   <string name="common_blocked_users">"Заблокированные пользователи"</string>
@@ -244,14 +261,22 @@
     <item quantity="few">"%d голоса"</item>
     <item quantity="many">"%d голосов"</item>
   </plurals>
+  <string name="common_preparing">"Подготовка…"</string>
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
   <string name="common_private_room">"Частная комната"</string>
+  <string name="common_private_space">"Приватное пространство"</string>
   <string name="common_public_room">"Общедоступная комната"</string>
+  <string name="common_public_space">"Публичное пространство"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
   <string name="common_reason">"Причина"</string>
   <string name="common_recovery_key">"Ключ восстановления"</string>
   <string name="common_refreshing">"Обновление…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d ответ"</item>
+    <item quantity="few">"%1$d ответа"</item>
+    <item quantity="many">"%1$d ответов"</item>
+  </plurals>
   <string name="common_replying_to">"Отвечает на %1$s"</string>
   <string name="common_report_a_bug">"Сообщить об ошибке"</string>
   <string name="common_report_a_problem">"Сообщить о проблеме"</string>
@@ -271,6 +296,7 @@
   <string name="common_sending">"Отправка…"</string>
   <string name="common_sending_failed">"Сбой отправки"</string>
   <string name="common_sent">"Отправлено"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Сервер не поддерживается"</string>
   <string name="common_server_url">"Адрес сервера"</string>
   <string name="common_settings">"Настройки"</string>
@@ -278,6 +304,7 @@
   <string name="common_signing_out">"Выход…"</string>
   <string name="common_something_went_wrong">"Что-то пошло не так"</string>
   <string name="common_something_went_wrong_message">"Мы столкнулись с проблемой. Пожалуйста, попробуйте еще раз."</string>
+  <string name="common_space">"Подпространство"</string>
   <string name="common_starting_chat">"Чат запускается…"</string>
   <string name="common_sticker">"Стикер"</string>
   <string name="common_success">"Успешно"</string>
@@ -308,20 +335,30 @@
   <string name="common_verify_identity">"Подтвердить личность"</string>
   <string name="common_verify_user">"Подтвердить пользователя"</string>
   <string name="common_video">"Видео"</string>
+  <string name="common_video_quality_high">"Высокое качество"</string>
+  <string name="common_video_quality_high_description">"Лучшее качество, но больший размер файла"</string>
+  <string name="common_video_quality_low">"Низкое качество"</string>
+  <string name="common_video_quality_low_description">"Быстрая скорость загрузки и меньший размер файла"</string>
+  <string name="common_video_quality_standard">"Стандартное качество"</string>
+  <string name="common_video_quality_standard_description">"Сочетание качества и скорости загрузки"</string>
   <string name="common_voice_message">"Голосовое сообщение"</string>
   <string name="common_waiting">"Ожидание…"</string>
   <string name="common_waiting_for_decryption_key">"Ожидание ключа расшифровки"</string>
   <string name="common_you">"Вы"</string>
   <string name="crypto_identity_change_pin_violation">"Идентификатор %1$s изменился. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Пользователь %1$s сменил имя пользователя на %2$s. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Пользователь %1$s сменил имя на %2$s. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s была сброшена."</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s подтвержденная личность изменилась. %3$s"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Пользователь %1$s сменил имя на %2$s. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Вывод верификации"</string>
   <string name="dialog_confirm_link_message">"Ссылка %1$s ведет вас на другой сайт %2$s
 
 Вы действительно хотите продолжить?"</string>
   <string name="dialog_confirm_link_title">"Перепроверьте эту ссылку"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Выберите качество загружаемых видео по умолчанию."</string>
+  <string name="dialog_default_video_quality_selector_title">"Качество загружаемого видео"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Максимально допустимый размер файла: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Размер файла слишком большой для загрузки."</string>
   <string name="dialog_room_reported">"Сообщение о комнате"</string>
   <string name="dialog_room_reported_and_left">"Пожаловался и покинул комнату"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
@@ -330,6 +367,7 @@
   <string name="dialog_title_warning">"Предупреждение"</string>
   <string name="dialog_unsaved_changes_description_android">"Изменения не сохранены. Вы действительно хотите вернуться?"</string>
   <string name="dialog_unsaved_changes_title">"Сохранить изменения?"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Выберите качество видео, которое вы хотите загрузить."</string>
   <string name="dialog_video_quality_selector_title">"Выберите качество загружаемого видео"</string>
   <string name="error_account_creation_not_possible">"Ваш домашний сервер необходимо обновить, чтобы он поддерживал Matrix Authentication Service и создание учётных записей."</string>
   <string name="error_failed_creating_the_permalink">"Не удалось создать постоянную ссылку"</string>
@@ -337,6 +375,7 @@
   <string name="error_failed_loading_messages">"Не удалось загрузить сообщения"</string>
   <string name="error_failed_locating_user">"%1$s не удалось получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже."</string>
   <string name="error_failed_uploading_voice_message">"Не удалось загрузить голосовое сообщение."</string>
+  <string name="error_invalid_invite">"Комната больше не существует или приглашение не действительно."</string>
   <string name="error_message_not_found">"Сообщение не найдено"</string>
   <string name="error_missing_location_auth_android">"У %1$s нет разрешения на доступ к вашему местоположению. Вы можете разрешить доступ в Настройках."</string>
   <string name="error_missing_location_rationale_android">"У %1$s нет разрешения на доступ к вашему местоположению. Разрешите доступ ниже."</string>
@@ -346,6 +385,7 @@
   <string name="error_room_address_invalid_symbols">"Некоторые символы не допускаются. Поддерживаются только буквы, цифры и следующие символы! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Некоторые сообщения не были отправлены"</string>
   <string name="error_unknown">"Извините, произошла ошибка"</string>
+  <string name="event_shield_mismatched_sender">"Отправитель события и владелец устройства не совпадают."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Подлинность этого зашифрованного сообщения не может быть гарантирована на этом устройстве."</string>
   <string name="event_shield_reason_previously_verified">"Зашифровано ранее проверенным пользователем."</string>
   <string name="event_shield_reason_sent_in_clear">"Не зашифровано."</string>
@@ -356,6 +396,11 @@
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Скриншот"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Параметры"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Удалить %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Настройки"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Нажмите на сообщение и выберите “%1$s”, чтобы добавить его сюда."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закрепите важные сообщения, чтобы их можно было легко найти"</string>
@@ -375,9 +420,13 @@
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше сообщение не было отправлено, потому что %1$s не проверил одно или несколько устройств"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Одно или несколько ваших устройств не проверены. Вы можете отправить сообщение в любом случае или отменить его пока и повторить попытку позже, проверив все свои устройства."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше сообщение не было отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Редактировать роль владельца и администратора"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
   <string name="screen_room_event_pill">"Сообщение в %1$s"</string>
+  <string name="screen_room_grouped_state_events_expand">"Развернуть"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Уменьшить"</string>
+  <string name="screen_room_permalink_same_room_android">"Эта комната уже просматривается!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s из %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Закрепленные сообщения"</string>
   <string name="screen_room_pinned_banner_loading_description">"Загрузка сообщения…"</string>

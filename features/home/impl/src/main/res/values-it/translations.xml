@@ -3,7 +3,7 @@
   <string name="banner_battery_optimization_content_android">"Disabilita l\'ottimizzazione della batteria per questa app, per assicurarti che tutte le notifiche vengano ricevute."</string>
   <string name="banner_battery_optimization_submit_android">"Disabilita l\'ottimizzazione"</string>
   <string name="banner_battery_optimization_title_android">"Le notifiche non arrivano?"</string>
-  <string name="banner_set_up_recovery_content">"Genera una nuova chiave di recupero che può essere usata per ripristinare la cronologia dei messaggi crittografati nel caso in cui tu perda l\'accesso ai tuoi dispositivi."</string>
+  <string name="banner_set_up_recovery_content">"Recupera la tua identità crittografica e la cronologia dei messaggi con una chiave di recupero se hai perso tutti i tuoi dispositivi."</string>
   <string name="banner_set_up_recovery_submit">"Configura il recupero"</string>
   <string name="banner_set_up_recovery_title">"Configura il ripristino"</string>
   <string name="confirm_recovery_key_banner_message">"Conferma la chiave di recupero per mantenere l\'accesso all\'archiviazione delle chiavi e alla cronologia dei messaggi."</string>
@@ -13,6 +13,7 @@
   <string name="full_screen_intent_banner_message">"Per non perdere mai una chiamata importante, modifica le impostazioni per consentire le notifiche a schermo intero quando il telefono è bloccato."</string>
   <string name="full_screen_intent_banner_title">"Migliora la tua esperienza di chiamata"</string>
   <string name="screen_home_tab_chats">"Tutte le conversazioni"</string>
+  <string name="screen_home_tab_spaces">"Spazi"</string>
   <string name="screen_invites_decline_chat_message">"Vuoi davvero rifiutare l\'invito ad entrare in %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Rifiuta l\'invito"</string>
   <string name="screen_invites_decline_direct_chat_message">"Vuoi davvero rifiutare questa conversazione privata con %1$s?"</string>
@@ -32,6 +33,7 @@ Per il momento, puoi deselezionare i filtri per vedere le altre conversazioni."<
   <string name="screen_roomlist_filter_invites">"Inviti"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Non hai nessun invito in sospeso."</string>
   <string name="screen_roomlist_filter_low_priority">"Bassa priorità"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Non hai ancora conversazioni a bassa priorità"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puoi deselezionare i filtri per vedere le altre conversazioni."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Non hai conversazioni per questa selezione"</string>
   <string name="screen_roomlist_filter_people">"Persone"</string>

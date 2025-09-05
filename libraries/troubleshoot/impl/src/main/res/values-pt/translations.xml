@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_push_history_title">"Histórico de notificações"</string>
+  <string name="screen_push_history_title">"Histórico de push"</string>
   <string name="troubleshoot_notifications_screen_action">"Correr testes"</string>
   <string name="troubleshoot_notifications_screen_action_again">"Correr testes novamente"</string>
   <string name="troubleshoot_notifications_screen_failure">"Alguns testes falharam. Por favor, verifica os detalhes."</string>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"이 앱의 배터리 최적화를 비활성화하여 모든 알림이 정상적으로 수신되도록 합니다."</string>
+  <string name="banner_battery_optimization_submit_android">"최적화 비활성화"</string>
+  <string name="banner_battery_optimization_title_android">"알림이 도착하지 않나요?"</string>
+  <string name="banner_set_up_recovery_content">"기존의 모든 기기를 분실한 경우 복구 키를 사용하여 암호화된 ID 및 메시지 기록을 복구할 수 있습니다."</string>
+  <string name="banner_set_up_recovery_submit">"복구 설정"</string>
+  <string name="banner_set_up_recovery_title">"계정을 보호하기 위해 복구를 설정하세요"</string>
+  <string name="confirm_recovery_key_banner_message">"키 저장소 및 메시지 기록에 대한 액세스를 유지하려면 복구 키를 확인하세요."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"복구 키를 입력하세요"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"복구 키를 잊으셨나요?"</string>
+  <string name="confirm_recovery_key_banner_title">"귀하의 키 저장소가 동기화되지 않았습니다"</string>
+  <string name="full_screen_intent_banner_message">"중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요."</string>
+  <string name="full_screen_intent_banner_title">"통화 경험을 향상시키세요"</string>
+  <string name="screen_home_tab_chats">"채팅"</string>
+  <string name="screen_home_tab_spaces">"스페이스"</string>
+  <string name="screen_invites_decline_chat_message">"정말로 %1$s 에 참가하지 않고 초대를 거절하시겠어요?"</string>
+  <string name="screen_invites_decline_chat_title">"초대 거절"</string>
+  <string name="screen_invites_decline_direct_chat_message">"%1$s 와의 비공개 채팅을 정말 거부하시겠습니까?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"채팅 거절"</string>
+  <string name="screen_invites_empty_list">"초대 없음"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) 당신을 초대했습니다"</string>
+  <string name="screen_migration_message">"이 과정은 한 번만 진행됩니다, 기다려 주셔서 감사합니다."</string>
+  <string name="screen_migration_title">"계정 설정하기"</string>
+  <string name="screen_roomlist_a11y_create_message">"새로운 대화 또는 방 만들기"</string>
+  <string name="screen_roomlist_clear_filters">"필터 지우기"</string>
+  <string name="screen_roomlist_empty_message">"누군가에게 메시지를 보내어 시작해 보세요."</string>
+  <string name="screen_roomlist_empty_title">"아직 채팅이 없습니다."</string>
+  <string name="screen_roomlist_filter_favourites">"즐겨찾기"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"채팅 설정에서 채팅을 즐겨찾기에 추가할 수 있습니다.
+현재는 다른 채팅을 보려면 필터를 선택 해제해야 합니다."</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"아직 즐겨찾는 채팅이 없습니다."</string>
+  <string name="screen_roomlist_filter_invites">"초대"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"보류 중인 초대가 없습니다."</string>
+  <string name="screen_roomlist_filter_low_priority">"낮은 우선순위"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"아직 낮은 우선순위 채팅이 없습니다."</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"다른 채팅을 보려면 필터 선택을 해제하세요."</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"이 선택 항목에 대한 채팅이 없습니다."</string>
+  <string name="screen_roomlist_filter_people">"사람"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"아직 DM이 없습니다."</string>
+  <string name="screen_roomlist_filter_rooms">"방"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"아직 어떤 방에도 있지 않습니다."</string>
+  <string name="screen_roomlist_filter_unreads">"읽지 않은 항목"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"축하합니다!
+읽지 않은 메시지가 없습니다!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"가입 요청이 전송되었습니다"</string>
+  <string name="screen_roomlist_main_space_title">"채팅"</string>
+  <string name="screen_roomlist_mark_as_read">"읽음으로 표시"</string>
+  <string name="screen_roomlist_mark_as_unread">"읽지 않음으로 표시"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"이 방이 업그레이드되었습니다"</string>
+  <string name="session_verification_banner_message">"새 장치를 사용 중인 것 같습니다. 다른 디바이스로 인증하여 암호화된 메시지에 액세스하세요."</string>
+  <string name="session_verification_banner_title">"본인인지 확인하세요"</string>
+</resources>

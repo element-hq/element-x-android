@@ -46,6 +46,7 @@
   <string name="screen_session_verification_waiting_another_device_title">"在另一台设备上开始验证"</string>
   <string name="screen_session_verification_waiting_other_device_title">"正在等待其他设备"</string>
   <string name="screen_session_verification_waiting_other_user_title">"等待其他用户"</string>
+  <string name="screen_session_verification_waiting_subtitle">"一旦被接受，您将能够继续进行验证。"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"请在其他会话中接受验证请求。"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"等待接受请求"</string>
   <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>

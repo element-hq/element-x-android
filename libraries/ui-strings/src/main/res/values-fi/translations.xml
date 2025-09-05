@@ -40,9 +40,9 @@
   <string name="a11y_remove_reaction_with">"Poista reaktio: %1$s"</string>
   <string name="a11y_room_avatar">"Huoneen avatar"</string>
   <string name="a11y_send_files">"Lähetä tiedostoja"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Aikarajoitettu toimenpide vaaditaan"</string>
   <string name="a11y_show_password">"Näytä salasana"</string>
   <string name="a11y_start_call">"Aloita puhelu"</string>
-  <string name="a11y_time_limited_action_required">"Aikarajoitettu toimenpide vaaditaan"</string>
   <string name="a11y_tombstoned_room">"Haudattu huone"</string>
   <string name="a11y_user_avatar">"Käyttäjän avatar"</string>
   <string name="a11y_user_menu">"Käyttäjävalikko"</string>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"확인할 수 없나요?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"새로운 복구 키 만들기"</string>
+  <string name="screen_identity_confirmation_subtitle">"보안 메시징을 설정하려면 이 장치를 확인하세요."</string>
+  <string name="screen_identity_confirmation_title">"본인 확인"</string>
+  <string name="screen_identity_confirmation_use_another_device">"다른 기기 사용"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"복구 키 사용"</string>
+  <string name="screen_identity_confirmed_subtitle">"이제 메시지를 안전하게 읽거나 보낼 수 있으며, 채팅 상대도 이 기기를 신뢰할 수 있습니다."</string>
+  <string name="screen_identity_confirmed_title">"기기 검증됨"</string>
+  <string name="screen_identity_use_another_device">"다른 기기 사용"</string>
+  <string name="screen_identity_waiting_on_other_device">"다른 기기에서 대기 중…"</string>
+  <string name="screen_notification_optin_subtitle">"나중에 설정을 변경할 수 있습니다."</string>
+  <string name="screen_notification_optin_title">"알림을 허용하고 메시지를 놓치지 마세요."</string>
+  <string name="screen_session_verification_enter_recovery_key">"복구 키를 입력하세요"</string>
+</resources>

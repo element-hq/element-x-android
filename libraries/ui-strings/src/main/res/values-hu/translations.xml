@@ -42,9 +42,9 @@
   <string name="a11y_remove_reaction_with">"Reakció eltávolítása: %1$s"</string>
   <string name="a11y_room_avatar">"Szoba profilképe"</string>
   <string name="a11y_send_files">"Fájlküldés"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Időkorlátos művelet szükséges"</string>
   <string name="a11y_show_password">"Jelszó megjelenítése"</string>
   <string name="a11y_start_call">"Hanghívás indítása"</string>
-  <string name="a11y_time_limited_action_required">"Időkorlátos művelet szükséges"</string>
   <string name="a11y_tombstoned_room">"Elévült szoba"</string>
   <string name="a11y_user_avatar">"Felhasználói profilkép"</string>
   <string name="a11y_user_menu">"Felhasználói menü"</string>

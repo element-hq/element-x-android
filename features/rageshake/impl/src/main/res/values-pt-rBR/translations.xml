@@ -13,6 +13,6 @@
   <string name="screen_bug_report_include_logs_error">"Seus registros são grandes demais portanto não podem serem inclusos no relatório, por favor envie-os para a gente de outra maneira."</string>
   <string name="screen_bug_report_include_screenshot">"Enviar captura de tela"</string>
   <string name="screen_bug_report_logs_description">"Os registros serão incluídos com sua mensagem para garantir que tudo esteja funcionando corretamente. Para enviar sua mensagem sem registros, desative essa configuração."</string>
-  <string name="screen_bug_report_rash_logs_alert_title">"%1$s fechou inesperadamente na última vez que foi usado. Gostaria de compartilhar um relatório de falhas conosco?"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s falhou inesperadamente na última vez que foi usado. Gostaria de compartilhar um relatório de falhas conosco?"</string>
   <string name="screen_bug_report_view_logs">"Ver registros"</string>
 </resources>

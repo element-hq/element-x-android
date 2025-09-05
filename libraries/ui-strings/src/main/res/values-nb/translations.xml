@@ -38,9 +38,9 @@
   <string name="a11y_remove_reaction_with">"Fjern reaksjonen med %1$s"</string>
   <string name="a11y_room_avatar">"Romavatar"</string>
   <string name="a11y_send_files">"Sende filer"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Tidsbegrenset handling kreves"</string>
   <string name="a11y_show_password">"Vis passord"</string>
   <string name="a11y_start_call">"Start en samtale"</string>
-  <string name="a11y_time_limited_action_required">"Tidsbegrenset handling kreves"</string>
   <string name="a11y_user_avatar">"Brukeravatar"</string>
   <string name="a11y_user_menu">"Brukermeny"</string>
   <string name="a11y_view_avatar">"Vis avatar"</string>

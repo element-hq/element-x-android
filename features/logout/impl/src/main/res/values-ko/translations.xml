@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"정말 로그아웃하시겠습니까?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"로그아웃"</string>
+  <string name="screen_signout_confirmation_dialog_title">"로그아웃"</string>
+  <string name="screen_signout_in_progress_dialog_content">"로그아웃 중…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"마지막 세션에서 로그아웃하려고 합니다. 지금 로그아웃하면 암호화된 메시지에 액세스할 수 없게 됩니다."</string>
+  <string name="screen_signout_key_backup_disabled_title">"백업이 꺼져 있습니다."</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"오프라인으로 전환했을 때 키가 아직 백업 중이었습니다. 로그아웃하기 전에 키를 백업할 수 있도록 다시 연결하세요."</string>
+  <string name="screen_signout_key_backup_offline_title">"귀하의 키는 아직 백업 중입니다."</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"로그아웃하기 전에 이 과정이 완료될 때까지 기다려 주시기 바랍니다."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"귀하의 키는 아직 백업 중입니다."</string>
+  <string name="screen_signout_preference_item">"로그아웃"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"마지막 세션에서 로그아웃할 것입니다. 지금 로그아웃하면 암호화된 메시지에 액세스할 수 없게 됩니다."</string>
+  <string name="screen_signout_recovery_disabled_title">"복구가 설정되지 않았습니다"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"마지막 세션에서 로그아웃하려고 합니다. 지금 로그아웃하면 암호화된 메시지에 액세스할 수 없게 될 수 있습니다."</string>
+  <string name="screen_signout_save_recovery_key_title">"복구 키를 저장하셨습니까?"</string>
+</resources>

@@ -44,7 +44,6 @@
   <string name="a11y_send_files">"Dateien senden"</string>
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_start_call">"Anruf starten"</string>
-  <string name="a11y_time_limited_action_required">"Zeitlich begrenztes Handeln erforderlich"</string>
   <string name="a11y_tombstoned_room">"Stillgelegter Chat"</string>
   <string name="a11y_user_avatar">"Nutzer-Avatar"</string>
   <string name="a11y_user_menu">"Nutzer-Menü"</string>
@@ -90,7 +89,7 @@
   <string name="action_enable">"Aktivieren"</string>
   <string name="action_end_poll">"Umfrage beenden"</string>
   <string name="action_enter_pin">"PIN eingeben"</string>
-  <string name="action_finish">"Fertig"</string>
+  <string name="action_finish">"Fertigstellen"</string>
   <string name="action_forgot_password">"Passwort vergessen?"</string>
   <string name="action_forward">"Weiterleiten"</string>
   <string name="action_go_back">"Zurück"</string>

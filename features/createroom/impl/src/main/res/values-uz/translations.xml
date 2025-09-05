@@ -7,7 +7,15 @@
   <string name="screen_create_room_private_option_title">"Shaxsiy xona"</string>
   <string name="screen_create_room_public_option_description">"Bu xonani har kim topishi mumkin.
 Buni xona sozlamalaridan istalgan vaqtda oʻzgartirishingiz mumkin."</string>
+  <string name="screen_create_room_public_option_title">"Jamoat xonasi"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Bu xonaga istalgan kishi qo‘shilishi mumkin"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Har kim"</string>
+  <string name="screen_create_room_room_access_section_header">"Xonaga kirish"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Xonaga qo‘shilishni istalgan kishi so‘rashi mumkin, lekin administrator yoki moderator so‘rovni qabul qilishi kerak"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Qo‘shilishni so‘rang"</string>
+  <string name="screen_create_room_room_address_section_footer">"Ushbu xona ommaviy xonalar ro‘yxatida ko‘rinishi uchun sizga xona manzili kerak bo‘ladi."</string>
   <string name="screen_create_room_room_name_label">"Xona nomi"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Xonaning ko‘rinishi"</string>
   <string name="screen_create_room_title">"Xonani yaratish"</string>
   <string name="screen_create_room_topic_label">"Mavzu (ixtiyoriy)"</string>
 </resources>

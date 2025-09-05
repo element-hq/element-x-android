@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"로그아웃 및 업그레이드"</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"%1$s 더 이상 이전 프로토콜을 지원하지 않습니다. 계속 사용하려면 로그아웃 후 다시 로그인해 주세요."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"귀하의 홈서버는 더 이상 이전 프로토콜을 지원하지 않습니다. 앱을 계속 사용하려면 로그아웃한 후 다시 로그인하세요."</string>
+</resources>

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Profil resmi"</string>
   <string name="a11y_delete">"Sil"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d basamak girildi"</item>
     <item quantity="other">"%1$d basamak girildi"</item>
   </plurals>
   <string name="a11y_hide_password">"Şifreyi gizle"</string>
+  <string name="a11y_join_call">"Aramaya katıl"</string>
   <string name="a11y_jump_to_bottom">"Aşağıya atla"</string>
   <string name="a11y_notifications_mentions_only">"Yalnızca bahsetmeler"</string>
   <string name="a11y_notifications_muted">"Sessiz"</string>
@@ -59,6 +61,7 @@
   <string name="action_delete_poll">"Anketi Sil"</string>
   <string name="action_disable">"Devre dışı"</string>
   <string name="action_discard">"Vazgeç"</string>
+  <string name="action_dismiss">"Kapat"</string>
   <string name="action_done">"Bitti"</string>
   <string name="action_edit">"Düzenle"</string>
   <string name="action_edit_caption">"Açıklamayı düzenle"</string>
@@ -145,7 +148,9 @@
   <string name="common_copied_to_clipboard">"Panoya kopyalandı"</string>
   <string name="common_copyright">"Telif Hakkı"</string>
   <string name="common_creating_room">"Oda yaratmak…"</string>
+  <string name="common_current_user_canceled_knock">"İstek iptal edildi"</string>
   <string name="common_current_user_left_room">"Sol oda"</string>
+  <string name="common_current_user_rejected_invite">"Davet reddedildi"</string>
   <string name="common_dark">"Koyu"</string>
   <string name="common_decryption_error">"Şifre çözme hatası"</string>
   <string name="common_developer_options">"Geliştirici seçenekleri"</string>
@@ -158,6 +163,7 @@
   <string name="common_editing">"Düzenleme"</string>
   <string name="common_editing_caption">"Açıklamayı düzenleme"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Boş dosya"</string>
   <string name="common_encryption">"Şifreleme"</string>
   <string name="common_encryption_enabled">"Şifreleme etkin"</string>
   <string name="common_enter_your_pin">"PIN\'inizi girin"</string>
@@ -182,6 +188,7 @@ Neden: %1$s."</string>
   <string name="common_invite_unknown_profile">"Bu Matrix Kimliği bulunamıyor, bu nedenle davet alınmayabilir."</string>
   <string name="common_leaving_room">"Odadan ayrılma"</string>
   <string name="common_light">"Aydınlık"</string>
+  <string name="common_line_copied_to_clipboard">"Metin panoya kopyalandı"</string>
   <string name="common_link_copied_to_clipboard">"Bağlantı panoya kopyalandı"</string>
   <string name="common_loading">"Yükleniyor…"</string>
   <string name="common_loading_more">"Daha fazla yükleniyor…"</string>
@@ -191,7 +198,7 @@ Neden: %1$s."</string>
   </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d üye"</item>
-    <item quantity="other">"%1$d üye"</item>
+    <item quantity="other">"%1$d üyeleri"</item>
   </plurals>
   <string name="common_message">"Mesaj"</string>
   <string name="common_message_actions">"Mesaj eylemleri"</string>
@@ -202,6 +209,7 @@ Neden: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Sonuç yok"</string>
   <string name="common_no_room_name">"Oda adı yok"</string>
+  <string name="common_not_encrypted">"Şifrelenmemiş"</string>
   <string name="common_offline">"Çevrimdışı"</string>
   <string name="common_open_source_licenses">"Açık kaynak lisansları"</string>
   <string name="common_or">"veya"</string>
@@ -285,12 +293,16 @@ Neden: %1$s."</string>
   <string name="common_waiting">"Bekleniyor…"</string>
   <string name="common_waiting_for_decryption_key">"Bu mesajı bekliyorum"</string>
   <string name="common_you">"Sen"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s kişinin kimliği değişmiş gibi görünüyor. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s\'ın %2$s kimliği değişmiş gibi görünüyor. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s kişinin kimliği değişti. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s\'ın %2$s kimliği değişti. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s kullanıcısının doğrulanmış kimliği değişti."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s kullanıcısının %2$s doğrulanmış kimliği değişti.  %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Doğrulamayı iptal et"</string>
+  <string name="dialog_confirm_link_message">"%1$s bağlantısı seni başka bir siteye yönlendiriyor %2$s
+
+Devam etmek istediğinizden emin misiniz?"</string>
+  <string name="dialog_confirm_link_title">"Bu bağlantıyı tekrardan kontrol edin"</string>
   <string name="dialog_title_confirmation">"Onaylama"</string>
   <string name="dialog_title_error">"Hata"</string>
   <string name="dialog_title_success">"Başarılı"</string>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"옵션 추가"</string>
+  <string name="screen_create_poll_anonymous_desc">"투표가 끝난 이후에만 결과 표시"</string>
+  <string name="screen_create_poll_anonymous_headline">"투표 숨기기"</string>
+  <string name="screen_create_poll_answer_hint">"옵션 %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"변경 내용이 저장되지 않았습니다. 정말로 돌아가시겠습니까?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"삭제 옵션 %1$s"</string>
+  <string name="screen_create_poll_question_desc">"질문 또는 주제"</string>
+  <string name="screen_create_poll_question_hint">"무슨 투표인가요?"</string>
+  <string name="screen_create_poll_title">"투표 생성"</string>
+  <string name="screen_edit_poll_delete_confirmation">"정말 이 투표를 삭제하시겠습니까?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"투표 삭제"</string>
+  <string name="screen_edit_poll_title">"투표 수정"</string>
+  <string name="screen_polls_history_empty_ongoing">"진행 중인 투표를 찾을 수 없습니다."</string>
+  <string name="screen_polls_history_empty_past">"과거의 투표를 찾을 수 없습니다."</string>
+  <string name="screen_polls_history_filter_ongoing">"진행 중"</string>
+  <string name="screen_polls_history_filter_past">"과거"</string>
+  <string name="screen_polls_history_title">"투표"</string>
+</resources>
