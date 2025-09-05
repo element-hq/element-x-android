@@ -11,8 +11,22 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface SessionStore {
+    /**
+     * A flow emitting the current logged in state.
+     * If there is at least one session, the state is [LoggedInState.LoggedIn] with the latest used session.
+     * If there is no session, the state is [LoggedInState.NotLoggedIn].
+     */
     fun isLoggedIn(): Flow<LoggedInState>
+
+    /**
+     * Return a flow of all sessions ordered by last usage descending.
+     */
     fun sessionsFlow(): Flow<List<SessionData>>
+
+    /**
+     * Add a new session. If other sessions exist, the new one will be set as the latest used one, and
+     * the added session position will be set to a value higher than the other session positions.
+     */
     suspend fun addSession(sessionData: SessionData)
 
     /**
@@ -20,11 +34,35 @@ interface SessionStore {
      * No op if userId is not found in DB.
      */
     suspend fun updateData(sessionData: SessionData)
+
+    /**
+     * Update the user profile info of the session matching the userId.
+     */
     suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?)
+
+    /**
+     * Get the session data matching the userId, or null if not found.
+     */
     suspend fun getSession(sessionId: String): SessionData?
+
+    /**
+     * Get all sessions ordered by last usage descending.
+     */
     suspend fun getAllSessions(): List<SessionData>
+
+    /**
+     * Get the latest session, or null if no session exists.
+     */
     suspend fun getLatestSession(): SessionData?
+
+    /**
+     * Set the session with [sessionId] as the latest used one.
+     */
     suspend fun setLatestSession(sessionId: String)
+
+    /**
+     * Remove the session matching the sessionId.
+     */
     suspend fun removeSession(sessionId: String)
 }
 
