@@ -20,7 +20,7 @@ import io.element.android.libraries.di.RoomScope
 import kotlin.reflect.KClass
 
 /**
- * Dagger module that declares the [TimelineItemPresenterFactory] map multi binding.
+ * Container that declares the [TimelineItemPresenterFactory] map multi binding.
  *
  * Its sole purpose is to support the case of an empty map multibinding.
  */

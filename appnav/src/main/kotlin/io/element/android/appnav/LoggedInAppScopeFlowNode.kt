@@ -36,7 +36,7 @@ import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import kotlinx.parcelize.Parcelize
 
 /**
- * `LoggedInAppScopeFlowNode` is a Node responsible to set up the Dagger
+ * `LoggedInAppScopeFlowNode` is a Node responsible to set up the Session graph.
  * [io.element.android.libraries.di.SessionScope]. It has only one child: [LoggedInFlowNode].
  * This allow to inject objects with SessionScope in the constructor of [LoggedInFlowNode].
  */
