@@ -20,7 +20,7 @@ class InMemorySessionStore(
 ) : SessionStore {
     private val sessionDataListFlow = MutableStateFlow(initialList)
 
-    override fun isLoggedIn(): Flow<LoggedInState> {
+    override fun loggedInStateFlow(): Flow<LoggedInState> {
         return sessionDataListFlow.map {
             if (it.isEmpty()) {
                 LoggedInState.NotLoggedIn
