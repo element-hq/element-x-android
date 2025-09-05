@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.dialogs.SlidingSyncNotSupportedDialog
 import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.features.login.impl.error.ChangeServerErrorProvider
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.libraries.androidutils.system.openGooglePlay
 import io.element.android.libraries.architecture.AsyncData
@@ -120,7 +119,7 @@ fun LoginModeView(
 
 @PreviewsDayNight
 @Composable
-internal fun LoginModeViewPreview(@PreviewParameter(ChangeServerErrorProvider::class) error: ChangeServerError) {
+internal fun LoginModeViewPreview(@PreviewParameter(LoginModeViewErrorProvider::class) error: Throwable) {
     ElementPreview {
         LoginModeView(
             loginMode = AsyncData.Failure(error),
