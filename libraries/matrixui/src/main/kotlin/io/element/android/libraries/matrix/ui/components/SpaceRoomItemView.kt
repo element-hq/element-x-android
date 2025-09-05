@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.home.impl.spaces
+package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,88 +22,66 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.atomic.molecules.InviteButtonsRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
-import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
-internal fun HomeSpaceItemView(
+fun SpaceRoomItemView(
     spaceRoom: SpaceRoom,
     showUnreadIndicator: Boolean,
     hideAvatars: Boolean,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SpaceScaffoldRow(
+    SpaceRoomItemScaffold(
         modifier = modifier,
-        spaceRoom = spaceRoom,
-        onClick = onClick,
+        avatarData = spaceRoom.getAvatarData(AvatarSize.SpaceListItem),
+        isSpace = spaceRoom.isSpace,
         hideAvatars = hideAvatars,
-        onLongClick = { },
+        onClick = onClick,
+        onLongClick = onLongClick,
     ) {
         NameAndIndicatorRow(
             name = spaceRoom.name,
-            showIndicator = showUnreadIndicator,
+            showIndicator = showUnreadIndicator
         )
         Spacer(modifier = Modifier.height(1.dp))
-        if (!spaceRoom.worldReadable) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .size(16.dp)
-                        .padding(end = 4.dp),
-                    imageVector = CompoundIcons.LockSolid(),
-                    contentDescription = null,
-                    tint = ElementTheme.colors.iconTertiary,
-                )
-                Text(
-                    modifier = Modifier.weight(1f),
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                    text = stringResource(CommonStrings.common_private_space),
-                    fontStyle = FontStyle.Italic.takeIf { spaceRoom.name == null },
-                    color = ElementTheme.colors.textSecondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            Spacer(modifier = Modifier.height(1.dp))
-        }
-        val spaceSummary = stringResource(
-            CommonStrings.screen_space_list_details,
-            pluralStringResource(CommonPlurals.common_rooms, spaceRoom.childrenCount, spaceRoom.childrenCount),
-            pluralStringResource(CommonPlurals.common_member_count, spaceRoom.numJoinedMembers, spaceRoom.numJoinedMembers),
+        SubtitleRow(
+            visibilityIcon = spaceRoom.visibilityIcon(),
+            subtitle = spaceRoom.subtitle()
         )
+        Spacer(modifier = Modifier.height(1.dp))
         Text(
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyMdRegular,
-            text = spaceSummary,
+            text = spaceRoom.info(),
             fontStyle = FontStyle.Italic.takeIf { spaceRoom.name == null },
             color = ElementTheme.colors.textSecondary,
             maxLines = 1,
@@ -120,7 +98,38 @@ internal fun HomeSpaceItemView(
 }
 
 @Composable
-fun NameAndIndicatorRow(
+private fun SubtitleRow(
+    visibilityIcon: ImageVector?,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (visibilityIcon != null) {
+            Icon(
+                modifier = Modifier
+                    .size(16.dp)
+                    .padding(end = 4.dp),
+                imageVector = visibilityIcon,
+                contentDescription = null,
+                tint = ElementTheme.colors.iconTertiary,
+            )
+        }
+        Text(
+            modifier = Modifier.weight(1f),
+            style = ElementTheme.typography.fontBodyMdRegular,
+            text = subtitle,
+            color = ElementTheme.colors.textSecondary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun NameAndIndicatorRow(
     name: String?,
     showIndicator: Boolean,
     modifier: Modifier = Modifier,
@@ -148,8 +157,9 @@ fun NameAndIndicatorRow(
 }
 
 @Composable
-private fun SpaceScaffoldRow(
-    spaceRoom: SpaceRoom,
+private fun SpaceRoomItemScaffold(
+    avatarData: AvatarData,
+    isSpace: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -173,8 +183,8 @@ private fun SpaceScaffoldRow(
             .height(IntrinsicSize.Min),
     ) {
         Avatar(
-            avatarData = spaceRoom.getAvatarData(AvatarSize.SpaceListItem),
-            avatarType = AvatarType.Space(),
+            avatarData = avatarData,
+            avatarType = if (isSpace) AvatarType.Space() else AvatarType.Room(),
             hideImage = hideAvatars,
         )
         Spacer(modifier = Modifier.width(16.dp))
@@ -185,13 +195,39 @@ private fun SpaceScaffoldRow(
     }
 }
 
-@PreviewsDayNight
 @Composable
-internal fun HomeSpaceItemViewPreview(@PreviewParameter(SpaceRoomProvider::class) spaceRoom: SpaceRoom) = ElementPreview {
-    HomeSpaceItemView(
-        spaceRoom = spaceRoom,
-        showUnreadIndicator = false,
-        hideAvatars = true,
-        onClick = {},
-    )
+@ReadOnlyComposable
+private fun SpaceRoom.subtitle(): String {
+    return if (isSpace) {
+        if (joinRule == JoinRule.Public) {
+            stringResource(CommonStrings.common_public_space)
+        } else {
+            stringResource(CommonStrings.common_private_space)
+        }
+    } else {
+        pluralStringResource(CommonPlurals.common_member_count, numJoinedMembers, numJoinedMembers)
+    }
+}
+
+@Composable
+@ReadOnlyComposable
+private fun SpaceRoom.info(): String {
+    return if (isSpace) {
+        stringResource(
+            CommonStrings.screen_space_list_details,
+            pluralStringResource(CommonPlurals.common_rooms, childrenCount, childrenCount),
+            pluralStringResource(CommonPlurals.common_member_count, numJoinedMembers, numJoinedMembers),
+        )
+    } else {
+        topic.orEmpty()
+    }
+}
+
+@Composable
+private fun SpaceRoom.visibilityIcon(): ImageVector? {
+    return if (joinRule == JoinRule.Public) {
+        CompoundIcons.Public()
+    } else {
+        CompoundIcons.LockSolid()
+    }
 }

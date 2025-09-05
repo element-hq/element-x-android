@@ -15,10 +15,10 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.ui.components.SpaceHeaderRootView
 import io.element.android.libraries.matrix.ui.components.SpaceHeaderView
+import io.element.android.libraries.matrix.ui.components.SpaceRoomItemView
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import kotlinx.collections.immutable.toImmutableList
 
@@ -55,12 +55,15 @@ fun HomeSpacesView(
         state.spaceRooms.forEach {
             item(it.roomId) {
                 val isInvitation = it.state == CurrentUserMembership.INVITED
-                HomeSpaceItemView(
+                SpaceRoomItemView(
                     spaceRoom = it,
                     showUnreadIndicator = isInvitation && it.roomId !in state.seenSpaceInvites,
                     hideAvatars = isInvitation && state.hideInvitesAvatar,
                     onClick = {
                         onSpaceClick(it.roomId)
+                    },
+                    onLongClick = {
+
                     }
                 )
             }
