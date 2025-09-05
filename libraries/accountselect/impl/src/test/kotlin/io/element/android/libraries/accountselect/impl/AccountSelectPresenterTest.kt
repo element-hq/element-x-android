@@ -12,8 +12,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.impl.memory.InMemoryMultiSessionsStore
-import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
@@ -37,16 +36,16 @@ class AccountSelectPresenterTest {
     @Test
     fun `present - multiple accounts case`() = runTest {
         val presenter = createAccountSelectPresenter(
-            sessionStore = InMemoryMultiSessionsStore().apply {
-                addSession(aSessionData(sessionId = A_SESSION_ID.value))
-                addSession(
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = A_SESSION_ID.value),
                     aSessionData(
                         sessionId = A_SESSION_ID_2.value,
                         userDisplayName = "Bob",
                         userAvatarUrl = "avatarUrl",
-                    )
+                    ),
                 )
-            }
+            )
         )
         presenter.test {
             skipItems(1)

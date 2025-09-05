@@ -31,7 +31,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -58,10 +58,12 @@ class HomePresenterTest {
             client = matrixClient,
             rageshakeFeatureAvailability = { flowOf(false) },
             sessionStore = InMemorySessionStore(
-                initialSessionData = aSessionData(
-                    sessionId = matrixClient.sessionId.value,
-                    userDisplayName = null,
-                    userAvatarUrl = null,
+                initialList = listOf(
+                    aSessionData(
+                        sessionId = matrixClient.sessionId.value,
+                        userDisplayName = null,
+                        userAvatarUrl = null,
+                    )
                 ),
                 updateUserProfileResult = updateUserProfileResult,
             ),

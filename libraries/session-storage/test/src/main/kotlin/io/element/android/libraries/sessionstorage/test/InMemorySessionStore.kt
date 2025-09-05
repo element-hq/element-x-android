@@ -12,58 +12,63 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 
 class InMemorySessionStore(
-    initialSessionData: SessionData? = null,
+    initialList: List<SessionData> = emptyList(),
     private val updateUserProfileResult: (String, String?, String?) -> Unit = { _, _, _ -> error("Not implemented") },
     private val setLatestSessionResult: (String) -> Unit = { error("Not implemented") },
 ) : SessionStore {
-    private var sessionDataFlow = MutableStateFlow(initialSessionData)
+    private val sessionDataListFlow = MutableStateFlow(initialList)
 
     override fun isLoggedIn(): Flow<LoggedInState> {
-        return sessionDataFlow.map {
-            if (it == null) {
+        return sessionDataListFlow.map {
+            if (it.isEmpty()) {
                 LoggedInState.NotLoggedIn
             } else {
-                LoggedInState.LoggedIn(
-                    sessionId = it.userId,
-                    isTokenValid = it.isTokenValid,
-                )
+                it.first().let { sessionData ->
+                    LoggedInState.LoggedIn(
+                        sessionId = sessionData.userId,
+                        isTokenValid = sessionData.isTokenValid,
+                    )
+                }
             }
         }
     }
 
-    override fun sessionsFlow(): Flow<List<SessionData>> {
-        return sessionDataFlow.map { listOfNotNull(it) }
-    }
+    override fun sessionsFlow(): Flow<List<SessionData>> = sessionDataListFlow.asStateFlow()
 
     override suspend fun addSession(sessionData: SessionData) {
-        sessionDataFlow.value = sessionData
+        val currentList = sessionDataListFlow.value.toMutableList()
+        currentList.removeAll { it.userId == sessionData.userId }
+        currentList.add(sessionData)
+        sessionDataListFlow.value = currentList
     }
 
     override suspend fun updateData(sessionData: SessionData) {
-        sessionDataFlow.value = sessionData
+        val currentList = sessionDataListFlow.value.toMutableList()
+        val index = currentList.indexOfFirst { it.userId == sessionData.userId }
+        if (index != -1) {
+            currentList[index] = sessionData
+            sessionDataListFlow.value = currentList
+        }
     }
 
     override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?) {
-        sessionDataFlow.value = sessionDataFlow.value?.copy(
-            userDisplayName = displayName,
-            userAvatarUrl = avatarUrl
-        )
         updateUserProfileResult(sessionId, displayName, avatarUrl)
     }
 
     override suspend fun getSession(sessionId: String): SessionData? {
-        return sessionDataFlow.value.takeIf { it?.userId == sessionId }
+        return sessionDataListFlow.value.firstOrNull { it.userId == sessionId }
     }
 
     override suspend fun getAllSessions(): List<SessionData> {
-        return listOfNotNull(sessionDataFlow.value)
+        return sessionDataListFlow.value
     }
 
     override suspend fun getLatestSession(): SessionData? {
-        return sessionDataFlow.value
+        return sessionDataListFlow.value.firstOrNull()
     }
 
     override suspend fun setLatestSession(sessionId: String) {
@@ -71,8 +76,8 @@ class InMemorySessionStore(
     }
 
     override suspend fun removeSession(sessionId: String) {
-        if (sessionDataFlow.value?.userId == sessionId) {
-            sessionDataFlow.value = null
-        }
+        val currentList = sessionDataListFlow.value.toMutableList()
+        currentList.removeAll { it.userId == sessionId }
+        sessionDataListFlow.value = currentList
     }
 }

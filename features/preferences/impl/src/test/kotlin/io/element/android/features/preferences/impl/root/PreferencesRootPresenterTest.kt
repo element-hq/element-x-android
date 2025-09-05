@@ -31,8 +31,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.impl.memory.InMemoryMultiSessionsStore
-import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -195,16 +194,16 @@ class PreferencesRootPresenterTest {
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.MultiAccount.key to true)
             ),
-            sessionStore = InMemoryMultiSessionsStore().apply {
-                addSession(aSessionData(sessionId = A_SESSION_ID.value))
-                addSession(
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = A_SESSION_ID.value),
                     aSessionData(
                         sessionId = A_SESSION_ID_2.value,
                         userDisplayName = "Bob",
                         userAvatarUrl = "avatarUrl",
-                    )
+                    ),
                 )
-            }
+            )
         ).test {
             val state = awaitFirstItem()
             assertThat(state.isMultiAccountEnabled).isTrue()
