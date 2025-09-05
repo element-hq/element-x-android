@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.ui.components.SpaceHeaderRootView
@@ -24,7 +25,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun HomeSpacesView(
     state: HomeSpacesState,
-    onSpaceClick: (SpaceId) -> Unit,
+    onSpaceClick: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier) {
@@ -52,14 +53,14 @@ fun HomeSpacesView(
             }
         }
         state.spaceRooms.forEach {
-            item(it.spaceId) {
+            item(it.roomId) {
                 val isInvitation = it.state == CurrentUserMembership.INVITED
                 HomeSpaceItemView(
                     spaceRoom = it,
-                    showUnreadIndicator = isInvitation && it.spaceId !in state.seenSpaceInvites,
+                    showUnreadIndicator = isInvitation && it.roomId !in state.seenSpaceInvites,
                     hideAvatars = isInvitation && state.hideInvitesAvatar,
                     onClick = {
-                        onSpaceClick(it.spaceId)
+                        onSpaceClick(it.roomId)
                     }
                 )
             }

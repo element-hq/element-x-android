@@ -7,6 +7,7 @@
 
 package io.element.android.features.home.impl.spaces
 
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.collections.immutable.ImmutableSet
@@ -14,7 +15,7 @@ import kotlinx.collections.immutable.ImmutableSet
 data class HomeSpacesState(
     val space: CurrentSpace,
     val spaceRooms: List<SpaceRoom>,
-    val seenSpaceInvites: ImmutableSet<SpaceId>,
+    val seenSpaceInvites: ImmutableSet<RoomId>,
     val hideInvitesAvatar: Boolean,
     val eventSink: (HomeSpacesEvents) -> Unit,
 )

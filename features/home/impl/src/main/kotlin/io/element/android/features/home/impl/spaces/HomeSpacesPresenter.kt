@@ -12,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.seenSpaceIds
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -33,9 +32,9 @@ class HomeSpacesPresenter @Inject constructor(
                 .mediaPreviewConfigFlow
                 .mapState { config -> config.hideInviteAvatar }
         }.collectAsState()
-        val spaceRooms by client.spaceService.spaceRooms.collectAsState(emptyList())
+        val spaceRooms by client.spaceService.spaceRoomsFlow.collectAsState(emptyList())
         val seenSpaceInvites by remember {
-            seenInvitesStore.seenSpaceIds().map { it.toPersistentSet() }
+            seenInvitesStore.seenRoomIds().map { it.toPersistentSet() }
         }.collectAsState(persistentSetOf())
 
         fun handleEvents(event: HomeSpacesEvents) {

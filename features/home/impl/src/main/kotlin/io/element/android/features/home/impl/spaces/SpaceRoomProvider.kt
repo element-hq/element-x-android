@@ -9,7 +9,7 @@ package io.element.android.features.home.impl.spaces
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.SpaceId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
@@ -18,42 +18,42 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 
 class SpaceRoomProvider : PreviewParameterProvider<SpaceRoom> {
     override val values: Sequence<SpaceRoom> = sequenceOf(
-        aSpaceRooms(),
-        aSpaceRooms(
+        aSpaceRoom(),
+        aSpaceRoom(
             numJoinedMembers = 5,
             childrenCount = 10,
             worldReadable = true,
-            spaceId = SpaceId("!spaceId0:example.com"),
+            roomId = RoomId("!spaceId0:example.com"),
         ),
-        aSpaceRooms(
+        aSpaceRoom(
             numJoinedMembers = 5,
             childrenCount = 10,
             worldReadable = true,
             avatarUrl = "anUrl",
-            spaceId = SpaceId("!spaceId1:example.com"),
+            roomId = RoomId("!spaceId1:example.com"),
         ),
-        aSpaceRooms(
+        aSpaceRoom(
             name = null,
             numJoinedMembers = 5,
             childrenCount = 10,
             worldReadable = true,
             avatarUrl = "anUrl",
-            spaceId = SpaceId("!spaceId2:example.com"),
+            roomId = RoomId("!spaceId2:example.com"),
             state = CurrentUserMembership.INVITED,
         ),
-        aSpaceRooms(
+        aSpaceRoom(
             name = null,
             numJoinedMembers = 5,
             childrenCount = 10,
             worldReadable = true,
             avatarUrl = "anUrl",
-            spaceId = SpaceId("!spaceId3:example.com"),
+            roomId = RoomId("!spaceId3:example.com"),
             state = CurrentUserMembership.INVITED,
         ),
     )
 }
 
-fun aSpaceRooms(
+fun aSpaceRoom(
     name: String? = "Space name",
     avatarUrl: String? = null,
     canonicalAlias: RoomAlias? = null,
@@ -62,7 +62,7 @@ fun aSpaceRooms(
     heroes: List<MatrixUser> = emptyList(),
     joinRule: JoinRule? = null,
     numJoinedMembers: Int = 0,
-    spaceId: SpaceId = SpaceId("!spaceId:example.com"),
+    roomId: RoomId = RoomId("!roomId:example.com"),
     roomType: RoomType = RoomType.Space,
     state: CurrentUserMembership? = null,
     topic: String? = null,
@@ -76,7 +76,7 @@ fun aSpaceRooms(
     heroes = heroes,
     joinRule = joinRule,
     numJoinedMembers = numJoinedMembers,
-    spaceId = spaceId,
+    roomId = roomId,
     roomType = roomType,
     state = state,
     topic = topic,
