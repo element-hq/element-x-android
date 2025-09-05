@@ -123,6 +123,82 @@ class DatabaseSessionStoreTest {
     }
 
     @Test
+    fun `updateUserProfile does nothing if the session is not found`() = runTest {
+        databaseSessionStore.updateUserProfile(aSessionData.userId, "userDisplayName", "userAvatarUrl")
+        assertThat(database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOneOrNull()).isNull()
+    }
+
+    @Test
+    fun `updateUserProfile update the data`() = runTest {
+        database.sessionDataQueries.insertSessionData(aSessionData)
+        databaseSessionStore.updateUserProfile(aSessionData.userId, "userDisplayName", "userAvatarUrl")
+        val updatedSession = database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOne()
+        assertThat(updatedSession.userDisplayName).isEqualTo("userDisplayName")
+        assertThat(updatedSession.userAvatarUrl).isEqualTo("userAvatarUrl")
+    }
+
+    @Test
+    fun `setLatestSession is no op when the session is already the latest session`() = runTest {
+        database.sessionDataQueries.insertSessionData(aSessionData)
+        val session = database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOne()
+        assertThat(session.lastUsageIndex).isEqualTo(0)
+        assertThat(session.position).isEqualTo(0)
+        databaseSessionStore.setLatestSession(aSessionData.userId)
+        assertThat(database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOne().lastUsageIndex).isEqualTo(0)
+    }
+
+    @Test
+    fun `setLatestSession is no op when the session is not found`() = runTest {
+        databaseSessionStore.setLatestSession(aSessionData.userId)
+    }
+
+    @Test
+    fun `multi session test`() = runTest {
+        databaseSessionStore.addSession(aSessionData.toApiModel())
+        val session = databaseSessionStore.getSession(aSessionData.userId)!!
+        assertThat(session.lastUsageIndex).isEqualTo(0)
+        assertThat(session.position).isEqualTo(0)
+        val secondSessionData = aSessionData.copy(
+            userId = "otherUserId",
+            position = 1,
+            lastUsageIndex = 1,
+        )
+        databaseSessionStore.addSession(secondSessionData.toApiModel())
+        val secondSession = database.sessionDataQueries.selectByUserId(secondSessionData.userId).executeAsOne()
+        assertThat(secondSession.lastUsageIndex).isEqualTo(1)
+        assertThat(secondSession.position).isEqualTo(1)
+        // Set the first session as the latest
+        databaseSessionStore.setLatestSession(aSessionData.userId)
+        val firstSession = database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOne()
+        assertThat(firstSession.lastUsageIndex).isEqualTo(2)
+        assertThat(firstSession.position).isEqualTo(0)
+        // Check that the second session has not been altered
+        val secondSession2 = database.sessionDataQueries.selectByUserId(secondSessionData.userId).executeAsOne()
+        assertThat(secondSession2.lastUsageIndex).isEqualTo(1)
+        assertThat(secondSession2.position).isEqualTo(1)
+    }
+
+    @Test
+    fun `test sessionsFlow()`() = runTest {
+        databaseSessionStore.sessionsFlow().test {
+            assertThat(awaitItem()).isEmpty()
+            databaseSessionStore.addSession(aSessionData.toApiModel())
+            assertThat(awaitItem().size).isEqualTo(1)
+            val secondSessionData = aSessionData.copy(
+                userId = "otherUserId",
+                position = 1,
+                lastUsageIndex = 1,
+            )
+            databaseSessionStore.addSession(secondSessionData.toApiModel())
+            assertThat(awaitItem().size).isEqualTo(2)
+            databaseSessionStore.removeSession(aSessionData.userId)
+            assertThat(awaitItem().size).isEqualTo(1)
+            databaseSessionStore.removeSession(secondSessionData.userId)
+            assertThat(awaitItem()).isEmpty()
+        }
+    }
+
+    @Test
     fun `update session update all fields except info used by the application`() = runTest {
         val firstSessionData = SessionData(
             userId = "userId",
