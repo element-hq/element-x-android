@@ -28,4 +28,6 @@ data class SpaceRoom(
     val state: CurrentUserMembership?,
     val topic: String?,
     val worldReadable: Boolean,
-)
+) {
+    val isSpace = roomType == RoomType.Space
+}
