@@ -11,9 +11,19 @@ package io.element.android.libraries.troubleshoot.impl.history
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.test.FakePushService
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -29,6 +39,7 @@ class PushHistoryPresenterTest {
             assertThat(initialState.pushHistoryItems).isEmpty()
             assertThat(initialState.showOnlyErrors).isFalse()
             assertThat(initialState.resetAction).isEqualTo(AsyncAction.Uninitialized)
+            assertThat(initialState.showNotSameAccountError).isFalse()
         }
     }
 
@@ -119,11 +130,57 @@ class PushHistoryPresenterTest {
         }
     }
 
+    @Test
+    fun `present - item click current account`() = runTest {
+        val pushHistoryNavigatorResult = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createPushHistoryPresenter(
+            pushHistoryNavigator = { roomId, eventId ->
+                pushHistoryNavigatorResult(roomId, eventId)
+            }
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(
+                PushHistoryEvents.NavigateTo(
+                    sessionId = A_SESSION_ID,
+                    roomId = A_ROOM_ID,
+                    eventId = AN_EVENT_ID,
+                )
+            )
+            pushHistoryNavigatorResult.assertions()
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(AN_EVENT_ID))
+        }
+    }
+
+    @Test
+    fun `present - item click not current account`() = runTest {
+        val presenter = createPushHistoryPresenter()
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(
+                PushHistoryEvents.NavigateTo(
+                    sessionId = A_SESSION_ID_2,
+                    roomId = A_ROOM_ID,
+                    eventId = AN_EVENT_ID,
+                )
+            )
+            assertThat(awaitItem().showNotSameAccountError).isTrue()
+            // Reset error
+            initialState.eventSink(PushHistoryEvents.ClearDialog)
+            assertThat(awaitItem().showNotSameAccountError).isFalse()
+        }
+    }
+
     private fun createPushHistoryPresenter(
+        pushHistoryNavigator: PushHistoryNavigator = PushHistoryNavigator { _, _ -> lambdaError() },
         pushService: PushService = FakePushService(),
+        matrixClient: MatrixClient = FakeMatrixClient(),
     ): PushHistoryPresenter {
         return PushHistoryPresenter(
+            pushHistoryNavigator = pushHistoryNavigator,
             pushService = pushService,
+            matrixClient = matrixClient,
         )
     }
 }

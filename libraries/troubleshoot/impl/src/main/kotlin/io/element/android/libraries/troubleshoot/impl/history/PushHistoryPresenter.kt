@@ -27,7 +27,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-interface PushHistoryNavigator {
+fun interface PushHistoryNavigator {
     fun navigateTo(roomId: RoomId, eventId: EventId)
 }
 
