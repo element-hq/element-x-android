@@ -94,14 +94,14 @@ class LoginHelper(
     }
 
     private suspend fun onOidcAction(oidcAction: OidcAction) {
-        if (oidcAction is OidcAction.GoBack && loginModeState.value !is AsyncData.Loading) {
+        if (oidcAction is OidcAction.GoBack && oidcAction.toUnblock && loginModeState.value !is AsyncData.Loading) {
             // Ignore GoBack action if the current state is not Loading. This GoBack action is coming from LoginFlowNode.
             // This can happen if there is an error, for instance attempt to login again on the same account.
             return
         }
         loginModeState.value = AsyncData.Loading()
         when (oidcAction) {
-            OidcAction.GoBack -> {
+            is OidcAction.GoBack -> {
                 authenticationService.cancelOidcLogin()
                     .onSuccess {
                         loginModeState.value = AsyncData.Uninitialized

@@ -87,7 +87,7 @@ class LoginFlowNode(
                     // by pressing back or by closing the Custom Chrome Tab.
                     lifecycleScope.launch {
                         delay(5000)
-                        oidcActionFlow.post(OidcAction.GoBack)
+                        oidcActionFlow.post(OidcAction.GoBack(toUnblock = true))
                     }
                 }
             }

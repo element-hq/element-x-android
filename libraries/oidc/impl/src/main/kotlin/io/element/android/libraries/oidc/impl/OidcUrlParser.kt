@@ -36,7 +36,7 @@ class DefaultOidcUrlParser(
      */
     override fun parse(url: String): OidcAction? {
         if (url.startsWith(oidcRedirectUrlProvider.provide()).not()) return null
-        if (url.contains("error=access_denied")) return OidcAction.GoBack
+        if (url.contains("error=access_denied")) return OidcAction.GoBack()
         if (url.contains("code=")) return OidcAction.Success(url)
 
         // Other case not supported, let's crash the app for now

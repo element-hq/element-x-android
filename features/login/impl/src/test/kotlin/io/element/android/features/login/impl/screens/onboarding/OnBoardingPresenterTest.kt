@@ -29,6 +29,9 @@ import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationSer
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.oidc.api.OidcActionFlow
 import io.element.android.libraries.oidc.test.customtab.FakeOidcActionFlow
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
@@ -79,7 +82,24 @@ class OnBoardingPresenterTest {
             assertThat(initialState.productionApplicationName).isEqualTo("B")
             assertThat(initialState.canCreateAccount).isEqualTo(OnBoardingConfig.CAN_CREATE_ACCOUNT)
             assertThat(initialState.canReportBug).isFalse()
+            assertThat(initialState.isAddingAccount).isFalse()
             assertThat(awaitItem().canLoginWithQrCode).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - initial state adding account`() = runTest {
+        val presenter = createPresenter(
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData()
+                )
+            )
+        )
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.isAddingAccount).isTrue()
         }
     }
 
@@ -236,6 +256,7 @@ private fun createPresenter(
     rageshakeFeatureAvailability: () -> Flow<Boolean> = { flowOf(true) },
     loginHelper: LoginHelper = createLoginHelper(),
     onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider = OnBoardingLogoResIdProvider { null },
+    sessionStore: SessionStore = InMemorySessionStore(),
 ) = OnBoardingPresenter(
     params = params,
     buildMeta = buildMeta,
@@ -247,6 +268,7 @@ private fun createPresenter(
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     loginHelper = loginHelper,
     onBoardingLogoResIdProvider = onBoardingLogoResIdProvider,
+    sessionStore = sessionStore,
 )
 
 fun createLoginHelper(

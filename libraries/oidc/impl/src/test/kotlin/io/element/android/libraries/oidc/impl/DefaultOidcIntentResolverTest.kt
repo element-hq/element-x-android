@@ -29,7 +29,7 @@ class DefaultOidcIntentResolverTest {
             data = "io.element.android:/?error=access_denied&state=IFF1UETGye2ZA8pO".toUri()
         }
         val result = sut.resolve(intent)
-        assertThat(result).isEqualTo(OidcAction.GoBack)
+        assertThat(result).isEqualTo(OidcAction.GoBack())
     }
 
     @Test
