@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.anvilannotations
+package io.element.android.annotations
 
 import kotlin.reflect.KClass
 

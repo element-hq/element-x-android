@@ -24,7 +24,7 @@ import com.bumble.appyx.navmodel.backstack.operation.replace
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.di.QrCodeLoginBindings
 import io.element.android.features.login.impl.di.QrCodeLoginGraph
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationNode

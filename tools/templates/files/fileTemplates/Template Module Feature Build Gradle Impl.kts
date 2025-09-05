@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 plugins {
     id("io.element.android-compose-library")
@@ -9,7 +9,7 @@ android {
     namespace = "io.element.android.features.${MODULE_NAME}.impl"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     api(projects.features.${MODULE_NAME}.api)

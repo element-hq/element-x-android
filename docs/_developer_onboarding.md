@@ -249,8 +249,7 @@ Main libraries and frameworks used in this application:
 
 - Navigation state with [Appyx](https://bumble-tech.github.io/appyx/). Please
   watch [this video](https://www.droidcon.com/2022/11/15/model-driven-navigation-with-appyx-from-zero-to-hero/) to learn more about Appyx!
-- DI: [Dagger](https://dagger.dev/) and [Anvil](https://github.com/square/anvil). Please
-  watch [this video](https://www.droidcon.com/2022/06/28/dagger-anvil-learning-to-love-dependency-injection/) to learn more about Anvil!
+- Dependency injection: [Metro](https://zacsweers.github.io/metro/latest/)
 - Reactive State management with Compose runtime and [Molecule](https://github.com/cashapp/molecule)
 
 Some patterns are inspired by [Circuit](https://slackhq.github.io/circuit/)

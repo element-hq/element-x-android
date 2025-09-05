@@ -23,7 +23,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
     implementation(projects.services.toolbox.api)
-    implementation(projects.anvilannotations)
 
     implementation(libs.coroutines.core)
     implementation(libs.androidx.corektx)

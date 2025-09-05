@@ -32,8 +32,8 @@ val localAarProjects = listOf(
 
 val excludedKoverSubProjects = listOf(
     ":app",
-    ":anvilannotations",
-    ":anvilcodegen",
+    ":annotations",
+    ":codegen",
     ":tests:testutils",
     // Exclude modules which are not Android libraries
     // See https://github.com/Kotlin/kotlinx-kover/issues/312
@@ -65,10 +65,6 @@ fun Project.setupKover() {
                     classes(
                         // Exclude generated classes.
                         "*_ModuleKt",
-                        "anvil.hint.binding.io.element.*",
-                        "anvil.hint.merge.*",
-                        "anvil.hint.multibinding.io.element.*",
-                        "anvil.module.*",
                         "com.airbnb.android.showkase*",
                         "io.element.android.libraries.designsystem.showkase.*",
                         "io.element.android.x.di.DaggerAppComponent*",
