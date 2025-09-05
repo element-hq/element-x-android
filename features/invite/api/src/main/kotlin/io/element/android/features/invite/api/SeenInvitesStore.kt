@@ -38,9 +38,3 @@ interface SeenInvitesStore {
      */
     suspend fun clear()
 }
-
-fun SeenInvitesStore.seenSpaceIds(): Flow<Set<SpaceId>> {
-    return seenRoomIds().map { roomIds ->
-        roomIds.map { it.toSpaceId() }.toSet()
-    }
-}

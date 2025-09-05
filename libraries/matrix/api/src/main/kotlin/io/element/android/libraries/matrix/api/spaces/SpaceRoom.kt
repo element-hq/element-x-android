@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.api.spaces
 
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.SpaceId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
@@ -23,7 +23,7 @@ data class SpaceRoom(
     val heroes: List<MatrixUser>,
     val joinRule: JoinRule?,
     val numJoinedMembers: Int,
-    val spaceId: SpaceId,
+    val roomId: RoomId,
     val roomType: RoomType,
     val state: CurrentUserMembership?,
     val topic: String?,
