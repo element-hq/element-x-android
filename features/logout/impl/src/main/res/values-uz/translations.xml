@@ -6,6 +6,7 @@
   <string name="screen_signout_in_progress_dialog_content">"Chiqish…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Siz oxirgi sessiyangizdan chiqmoqdasiz. Agar hozir chiqib ketsangiz, shifrlangan xabarlaringizga kira olmaysiz."</string>
   <string name="screen_signout_key_backup_disabled_title">"Siz zaxira nusxasini oʻchirdingiz"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Siz oflayn bo‘lganingizda ham kalitlaringiz zaxiralanish jarayonida edi. Tizimdan chiqishdan oldin kalitlaringizning to‘liq zaxiralanishini ta’minlash uchun qayta ulanishingiz zarur."</string>
   <string name="screen_signout_key_backup_offline_title">"Kalitlaringiz hamon zaxiralanmoqda"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Tizimdan chiqishdan oldin bu jarayon tugashini kuting."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Kalitlaringiz hamon zaxiralanmoqda"</string>

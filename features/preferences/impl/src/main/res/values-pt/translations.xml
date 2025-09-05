@@ -13,6 +13,13 @@
   <string name="screen_advanced_settings_media_compression_description">"Carrega fotos e vídeos mais rapidamente e reduz a utilização de dados"</string>
   <string name="screen_advanced_settings_media_compression_title">"Otimiza a qualidade da mídia"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderação e Segurança"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Otimiza automaticamente as imagens para carregamentos mais rápidos e tamanhos de ficheiros mais pequenos."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimiza a qualidade do carregamento de imagens"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Toca aqui para alterar."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Alta (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Baixa (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Padrão (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Qualidade de carregamento do vídeo"</string>
   <string name="screen_advanced_settings_push_provider_android">"Fornecedor de envio"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Desativa o editor de texto rico para poderes escrever Markdown manualmente."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Recibos de leitura"</string>

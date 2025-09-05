@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"添加表情符号：%1$s"</string>
   <string name="a11y_avatar">"头像"</string>
+  <string name="a11y_collapse_message_text_field">"最小化消息文本框"</string>
   <string name="a11y_delete">"删除"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"已输入 %1$d 个数字"</item>
   </plurals>
   <string name="a11y_edit_avatar">"编辑头像"</string>
+  <string name="a11y_edit_room_address_hint">"完整地址为%1$s"</string>
   <string name="a11y_encryption_details">"加密详情"</string>
+  <string name="a11y_expand_message_text_field">"展开消息文本框"</string>
   <string name="a11y_hide_password">"隐藏密码"</string>
   <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
   <string name="a11y_move_the_map_to_my_location">"将地图移动到我的位置"</string>
   <string name="a11y_notifications_mentions_only">"仅提及"</string>
   <string name="a11y_notifications_muted">"通知已关闭"</string>
+  <string name="a11y_notifications_new_mentions">"新提及"</string>
+  <string name="a11y_notifications_new_messages">"新消息"</string>
   <string name="a11y_notifications_ongoing_call">"正在进行的通话"</string>
   <string name="a11y_other_user_avatar">"其他用户的头像"</string>
   <string name="a11y_page_n">"第 %1$d 页"</string>
@@ -31,10 +37,13 @@
   <string name="a11y_read_receipts_single">"%1$s 已读"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"点击以显示全部"</string>
   <string name="a11y_remove_reaction">"撤回反应 %1$s"</string>
+  <string name="a11y_remove_reaction_with">"移除表情符号%1$s"</string>
   <string name="a11y_room_avatar">"房间头像"</string>
   <string name="a11y_send_files">"发送文件"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"时限内必须完成的任务"</string>
   <string name="a11y_show_password">"显示密码"</string>
   <string name="a11y_start_call">"开始通话"</string>
+  <string name="a11y_tombstoned_room">"墓碑聊天室"</string>
   <string name="a11y_user_avatar">"用户头像"</string>
   <string name="a11y_user_menu">"用户菜单"</string>
   <string name="a11y_view_avatar">"查看头像"</string>
@@ -79,6 +88,7 @@
   <string name="action_enable">"启用"</string>
   <string name="action_end_poll">"结束投票"</string>
   <string name="action_enter_pin">"输入 PIN"</string>
+  <string name="action_finish">"完成"</string>
   <string name="action_forgot_password">"忘记密码？"</string>
   <string name="action_forward">"转发"</string>
   <string name="action_go_back">"返回"</string>
@@ -101,6 +111,7 @@
   <string name="action_no">"否"</string>
   <string name="action_not_now">"以后再说"</string>
   <string name="action_ok">"好"</string>
+  <string name="action_open_context_menu">"打开上下文菜单"</string>
   <string name="action_open_settings">"打开设置"</string>
   <string name="action_open_with">"用其他方式打开"</string>
   <string name="action_pin">"置顶"</string>
@@ -110,7 +121,7 @@
   <string name="action_reject">"拒绝"</string>
   <string name="action_remove">"移除"</string>
   <string name="action_remove_caption">"删除标题"</string>
-  <string name="action_remove_message">"删除消息"</string>
+  <string name="action_remove_message">"移除消息"</string>
   <string name="action_reply">"回复"</string>
   <string name="action_reply_in_thread">"在消息列中回复"</string>
   <string name="action_report">"举报"</string>
@@ -125,7 +136,9 @@
   <string name="action_save">"保存"</string>
   <string name="action_search">"搜索"</string>
   <string name="action_send">"发送"</string>
+  <string name="action_send_edited_message">"发送编辑后的消息"</string>
   <string name="action_send_message">"发送消息"</string>
+  <string name="action_send_voice_message">"发送语音消息"</string>
   <string name="action_share">"分享"</string>
   <string name="action_share_link">"分享链接"</string>
   <string name="action_show">"显示"</string>
@@ -152,7 +165,10 @@
   <string name="common_acceptable_use_policy">"可接受的使用政策"</string>
   <string name="common_adding_caption">"添加标题"</string>
   <string name="common_advanced_settings">"高级设置"</string>
+  <string name="common_an_image">"一张图片"</string>
   <string name="common_analytics">"分析"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"你离开了聊天室"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"您已被注销当前会话"</string>
   <string name="common_appearance">"外观"</string>
   <string name="common_audio">"音频"</string>
   <string name="common_blocked_users">"已屏蔽用户"</string>
@@ -239,9 +255,12 @@
   <plurals name="common_poll_votes_count">
     <item quantity="other">"%d 票"</item>
   </plurals>
+  <string name="common_preparing">"正在准备…"</string>
   <string name="common_privacy_policy">"隐私政策"</string>
   <string name="common_private_room">"私有聊天室"</string>
+  <string name="common_private_space">"私有空间"</string>
   <string name="common_public_room">"公共聊天室"</string>
+  <string name="common_public_space">"公开空间"</string>
   <string name="common_reaction">"回应"</string>
   <string name="common_reactions">"回应"</string>
   <string name="common_reason">"理由"</string>
@@ -258,6 +277,9 @@
   <string name="common_room">"聊天室"</string>
   <string name="common_room_name">"聊天室名称"</string>
   <string name="common_room_name_placeholder">"例如：您的项目名称"</string>
+  <plurals name="common_rooms">
+    <item quantity="other">"%1$d 房间"</item>
+  </plurals>
   <string name="common_saved_changes">"保存的更改"</string>
   <string name="common_saving">"正在保存"</string>
   <string name="common_screen_lock">"屏幕锁定"</string>
@@ -269,6 +291,7 @@
   <string name="common_sending">"正在发送…"</string>
   <string name="common_sending_failed">"发送失败"</string>
   <string name="common_sent">"已发送"</string>
+  <string name="common_sentence_delimiter">"。 "</string>
   <string name="common_server_not_supported">"服务器不支持"</string>
   <string name="common_server_url">"服务器 URL"</string>
   <string name="common_settings">"设置"</string>
@@ -276,6 +299,10 @@
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"发生了一些错误"</string>
   <string name="common_something_went_wrong_message">"我们遇到了一个问题。请重试。"</string>
+  <string name="common_space">"空间"</string>
+  <plurals name="common_spaces">
+    <item quantity="other">"%1$d 空间"</item>
+  </plurals>
   <string name="common_starting_chat">"开始聊天…"</string>
   <string name="common_sticker">"贴纸"</string>
   <string name="common_success">"成功"</string>
@@ -290,7 +317,7 @@
   <string name="common_unable_to_decrypt">"无法解密"</string>
   <string name="common_unable_to_decrypt_insecure_device">"从不安全的设备发送"</string>
   <string name="common_unable_to_decrypt_no_access">"无权访问此消息"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"发送者的已验证身份已改变"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"发送者的已验证身份已重置"</string>
   <string name="common_unable_to_invite_message">"无法向部分用户发送邀请。"</string>
   <string name="common_unable_to_invite_title">"无法发送邀请"</string>
   <string name="common_unlock">"解锁"</string>
@@ -306,20 +333,30 @@
   <string name="common_verify_identity">"验证身份"</string>
   <string name="common_verify_user">"验证用户"</string>
   <string name="common_video">"视频"</string>
+  <string name="common_video_quality_high">"高质量"</string>
+  <string name="common_video_quality_high_description">"质量最好但文件较大"</string>
+  <string name="common_video_quality_low">"低质量"</string>
+  <string name="common_video_quality_low_description">"最快的上传速度和最小的文件大小"</string>
+  <string name="common_video_quality_standard">"标准质量"</string>
+  <string name="common_video_quality_standard_description">"质量与上传速度的平衡"</string>
   <string name="common_voice_message">"语音消息"</string>
   <string name="common_waiting">"等待…"</string>
   <string name="common_waiting_for_decryption_key">"正在等待解密密钥"</string>
   <string name="common_you">"您"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s 的身份似乎已经改变。%2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s 的 %2$s 身份似乎已经改变。%3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s的身份已重置。%2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s %2$s 的身份已重置。%3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s 的身份已重置。"</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s 的 %2$s 已验证身份已发生改变。%3$s"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s %2$s 的身份已重置。%3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"撤回验证"</string>
   <string name="dialog_confirm_link_message">"链接 %1$s 将跳转至外部网站 %2$s
 
 确定要继续吗？"</string>
   <string name="dialog_confirm_link_title">"请再次确认链接"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"选择您上传的视频的默认质量。"</string>
+  <string name="dialog_default_video_quality_selector_title">"视频上传质量"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"允许的最大文件大小为：%1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"文件太大，无法上传"</string>
   <string name="dialog_room_reported">"已举报房间"</string>
   <string name="dialog_room_reported_and_left">"举报并离开房间"</string>
   <string name="dialog_title_confirmation">"确认"</string>
@@ -328,6 +365,9 @@
   <string name="dialog_title_warning">"警告"</string>
   <string name="dialog_unsaved_changes_description_android">"更改尚未保存，确定要返回吗？"</string>
   <string name="dialog_unsaved_changes_title">"保存更改？"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"允许的最大文件大小为：%1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"选择您要上传的视频的质量。"</string>
+  <string name="dialog_video_quality_selector_title">"选择视频上传质量"</string>
   <string name="error_account_creation_not_possible">"您的服务器需要升级，以支持 Matrix 鉴权服务和账户创建。"</string>
   <string name="error_failed_creating_the_permalink">"创建固定链接失败"</string>
   <string name="error_failed_loading_map">"%1$s 无法加载地图，请稍后再试。"</string>
@@ -344,6 +384,7 @@
   <string name="error_room_address_invalid_symbols">"不允许使用某些字符。仅支持字母、数字和以下符号 $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"某些信息尚未发送"</string>
   <string name="error_unknown">"抱歉，发生了错误"</string>
+  <string name="event_shield_mismatched_sender">"事件发送者与发送设备的所有者不匹配。"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"此加密消息的真实性无法在此设备上保证。"</string>
   <string name="event_shield_reason_previously_verified">"由先前验证过的用户加密。"</string>
   <string name="event_shield_reason_sent_in_clear">"未加密。"</string>
@@ -354,6 +395,10 @@
   <string name="invite_friends_text">"嗨！请通过 %1$s 与我联系：%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"摇一摇以报错"</string>
+  <string name="screen_bug_report_a11y_screenshot">"屏幕截图"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s：%2$s"</string>
+  <string name="screen_create_poll_options_section_title">"选项"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"移除%1$s"</string>
   <string name="screen_create_poll_settings_section_title">"设置"</string>
   <string name="screen_media_picker_error_failed_selection">"选择媒体失败，请重试。"</string>
   <string name="screen_pinned_timeline_empty_state_description">"按下消息并选择 “%1$s” 将其包含在此处。"</string>
@@ -366,14 +411,19 @@
   <string name="screen_reset_identity_confirmation_title">"无法确认？请前往您的帐户重置您的身份。"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"撤回验证并发送"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"您可以撤回验证并仍然发送此消息；也可以暂时取消验证，在重新验证 %1$s 后重试。"</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"您的消息未发送，因为 %1$s 的已验证身份已发生改变"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"您的消息未发送，因为%1$s的已验证身份已被重置"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"仍然发送消息"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s 正在使用一个或多个未经验证的设备。您还是可以继续发送信息；也可以暂时取消，等 %2$s 验证了所有设备后重试。"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"您的消息未发送，因为%1$s尚未验证所有设备"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"您有未验证的设备。您仍然可以发送消息；也可以暂时取消，并在验证所有设备后稍后重试。"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"您的消息未发送，因为您有尚未验证的设备。"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"编辑管理员或所有者"</string>
   <string name="screen_room_error_failed_processing_media">"处理要上传的媒体失败，请重试。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"无法获取用户信息"</string>
+  <string name="screen_room_event_pill">"%1$s 中的消息"</string>
+  <string name="screen_room_grouped_state_events_expand">"展开"</string>
+  <string name="screen_room_grouped_state_events_reduce">"折叠"</string>
+  <string name="screen_room_permalink_same_room_android">"已经在此房间了！"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"置顶消息 %1$s"</string>
   <string name="screen_room_pinned_banner_loading_description">"正在加载消息…"</string>
@@ -385,7 +435,10 @@
   <string name="screen_share_open_google_maps">"在 Google Maps 中打开"</string>
   <string name="screen_share_open_osm_maps">"在 OpenStreetMap 中打开"</string>
   <string name="screen_share_this_location_action">"分享这个位置"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未发送，因为 %1$s 的已验证身份已经发生改变。"</string>
+  <string name="screen_space_list_description">"您创建或加入的空间。"</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"空间"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未发送，因为%1$s的已验证身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未发送，因为%1$s尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未发送，因为您有尚未验证的设备。"</string>
   <string name="screen_view_location_title">"位置"</string>

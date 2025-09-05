@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"So‘rovni bekor qilish"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Ha, bekor qiling"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Bu xonaga qo‘shilish so‘rovingizni bekor qilishni xohlayotganingizga ishonchingiz komilmi?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Qo‘shilish so‘rovini bekor qilish"</string>
+  <string name="screen_join_room_join_action">"Xonaga qoʻshilish"</string>
+  <string name="screen_join_room_knock_action">"Qoʻshilish soʻrovini yuborish"</string>
+  <string name="screen_join_room_knock_message_description">"Xabar (ixtiyoriy)"</string>
+  <string name="screen_join_room_knock_sent_description">"Agar so‘rovingiz qabul qilinsa, xonaga qo‘shilish taklifini olasiz."</string>
+  <string name="screen_join_room_knock_sent_title">"Qo‘shilish so‘rovi yuborildi"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s hali maydon xizmatini qoʻllab-quvvatlamaydi. maydonga veb-sayt orqali kirishingiz mumkin."</string>
+  <string name="screen_join_room_space_not_supported_title">"Maydonlar hali qoʻllab-quvvatlanmaydi"</string>
+  <string name="screen_join_room_subtitle_knock">"Quyidagi tugmani bosing va xona administratoriga xabar beriladi. Ruxsat berilgandan soʻng suhbatga qoʻshilishingiz mumkin boʻladi."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Xabarlar tarixini koʻrish uchun siz ushbu xonaning aʼzosi boʻlishingiz shart."</string>
+  <string name="screen_join_room_title_knock">"Bu xonaga qoʻshilishni xohlaysizmi?"</string>
+  <string name="screen_join_room_title_no_preview">"Oldindan koʻrish imkoni yoʻq"</string>
+</resources>

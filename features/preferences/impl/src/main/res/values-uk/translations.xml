@@ -13,6 +13,9 @@
   <string name="screen_advanced_settings_media_compression_description">"Швидше завантажуйте фотографії та відео та зменшуйте використання даних"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимізуйте медіаякість"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерування й безпека"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Автоматична оптимізація зображень для швидшого вивантаження та зменшення розміру файлів."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Оптимізація якості вивантажуваних зображень"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s, торкніться тут, щоб змінити."</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Висока (1080p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Низька (480p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Стандартна (720p)"</string>

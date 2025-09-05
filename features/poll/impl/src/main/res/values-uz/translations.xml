@@ -4,8 +4,16 @@
   <string name="screen_create_poll_anonymous_desc">"Natijalarni faqat soʻrov tugagandan keyin koʻrsatish"</string>
   <string name="screen_create_poll_anonymous_headline">"Ovozlarni yashirish"</string>
   <string name="screen_create_poll_answer_hint">"Variant%1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Oʻzgarishlar saqlanmadi. Haqiqatan ham orqaga qaytmoqchimisiz?"</string>
   <string name="screen_create_poll_question_desc">"Savol yoki mavzu"</string>
   <string name="screen_create_poll_question_hint">"So\'rovnoma nima haqida?"</string>
   <string name="screen_create_poll_title">"So‘rovnoma yaratish"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Siz rostdan ham bu soʻrovnomani oʻchirib tashlamoqchimisiz?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"So‘rovnomani o‘chirish"</string>
   <string name="screen_edit_poll_title">"So‘rovnomani tahrirlash"</string>
+  <string name="screen_polls_history_empty_ongoing">"Davom etayotgan soʻrovlar topilmadi."</string>
+  <string name="screen_polls_history_empty_past">"Avvalgi soʻrovnomalar topilmadi."</string>
+  <string name="screen_polls_history_filter_ongoing">"Jarayonda"</string>
+  <string name="screen_polls_history_filter_past">"Oʻtgan"</string>
+  <string name="screen_polls_history_title">"Soʻrovnomalar"</string>
 </resources>

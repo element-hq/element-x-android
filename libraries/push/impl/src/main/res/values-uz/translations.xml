@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Qo\'ng\'iroq"</string>
   <string name="notification_channel_listening_for_events">"Voqealarni tinglash"</string>
   <string name="notification_channel_noisy">"Shovqinli bildirishnomalar"</string>
+  <string name="notification_channel_ringing_calls">"Jiringlayotgan qoʻngʻiroqlar"</string>
   <string name="notification_channel_silent">"Ovozsiz bildirishnomalar"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s:%2$d xabar"</item>
@@ -13,6 +14,7 @@
     <item quantity="other">"%dbildirishnomalar"</item>
   </plurals>
   <string name="notification_fallback_content">"Sizda yangi xabarlar bor."</string>
+  <string name="notification_incoming_call">"📹 Kiruvchi qoʻngʻiroq"</string>
   <string name="notification_inline_reply_failed">"** Yuborilmadi - iltimos, xonani oching"</string>
   <string name="notification_invitation_action_join">"Qo\'shilish"</string>
   <string name="notification_invitation_action_reject">"Rad etish"</string>
@@ -21,15 +23,20 @@
     <item quantity="other">"%dtaklifnomalar"</item>
   </plurals>
   <string name="notification_invite_body">"Sizni suhbatga taklif qildi"</string>
+  <string name="notification_invite_body_with_sender">"%1$s sizni suhbatga taklif qildi"</string>
+  <string name="notification_mentioned_you_body">"%1$s sizni eslatib oʻtdi"</string>
   <string name="notification_new_messages">"Yangi xabarlar"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%dyangi xabar"</item>
     <item quantity="other">"%dyangi xabarlar"</item>
   </plurals>
   <string name="notification_reaction_body">"%1$sbilan munosabat bildiring"</string>
+  <string name="notification_room_action_mark_as_read">"Oʻqilgan deb belgilash"</string>
   <string name="notification_room_action_quick_reply">"Tez javob"</string>
   <string name="notification_room_invite_body">"Sizni xonaga kirishga taklif qildi"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s sizni xonaga kirishga taklif qildi"</string>
   <string name="notification_sender_me">"Men"</string>
+  <string name="notification_sender_mention_reply">"%1$s eslatib o‘tdi yoki javob qaytardi"</string>
   <string name="notification_test_push_notification_content">"Siz bildirishnomani ko\'ryapsiz! Meni bosing!"</string>
   <string name="notification_ticker_text_dm">"%1$s:%2$s"</string>
   <string name="notification_ticker_text_group">"%1$s:%2$s%3$s"</string>
@@ -47,4 +54,26 @@
   <string name="push_distributor_background_sync_android">"Orqa Fon sinxronizatsiyasi"</string>
   <string name="push_distributor_firebase_android">"Google xizmatlari"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Yaroqli Google Play xizmatlari topilmadi. Bildirishnomalar to\'g\'ri ishlamasligi mumkin."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Joriy provayder nomini oling."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Hech qanday push-provayder tanlanmagan."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Joriy push provider: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Joriy push provider"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Ilova kamida bitta push-provayderni qo‘llab-quvvatlashini tekshiring."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Hech qanday push-provayder xizmati topilmadi."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Topildi %1$d push provider: %2$s"</item>
+    <item quantity="other">"Topildi %1$d push provayderlar: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Provayderni qoʻllab-quvvatlash"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Ilova bildirishnomani koʻrsata olishini tekshiring."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Bildirishnoma bosilmagan."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Bildirishnomani ko‘rsatib boʻlmaydi."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Bildirishnoma bosildi!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Bildirishnomani koʻrsatish"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Sinovni davom ettirish uchun bildirishnoma ustiga bosing."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Ilovaning push-bildirishnomalarni qabul qilayotganiga ishonch hosil qiling."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Xato: pusher so‘rovni rad etdi."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Xato: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Xatolik, push qilishni sinab bo‘lmadi."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Xatolik, taym aut pushni kutmoqda."</string>
 </resources>

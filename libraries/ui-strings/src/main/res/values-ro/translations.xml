@@ -44,9 +44,9 @@
   <string name="a11y_remove_reaction_with">"Îndepărtați reacția %1$s"</string>
   <string name="a11y_room_avatar">"Avatarul camerei"</string>
   <string name="a11y_send_files">"Trimiteți fișiere"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Acțiune cu termen limită necesară"</string>
   <string name="a11y_show_password">"Afișați parola"</string>
   <string name="a11y_start_call">"Începeți un apel"</string>
-  <string name="a11y_time_limited_action_required">"Acțiune cu termen limită necesară"</string>
   <string name="a11y_tombstoned_room">"Cameră terminată"</string>
   <string name="a11y_user_avatar">"Avatar utilizator"</string>
   <string name="a11y_user_menu">"Meniu utilizator"</string>

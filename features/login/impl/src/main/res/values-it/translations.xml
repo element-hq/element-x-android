@@ -13,6 +13,9 @@
   <string name="screen_change_account_provider_other">"Altro"</string>
   <string name="screen_change_account_provider_subtitle">"Utilizza un provider di account diverso, ad esempio il tuo server privato o un account di lavoro."</string>
   <string name="screen_change_account_provider_title">"Cambia fornitore dell\'account"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"L\'app Element Pro è necessaria su %1$s. Scaricala dallo store."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Element Pro è richiesto"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Non siamo riusciti a raggiungere questo homeserver. Verifica di aver inserito correttamente l\'URL. Se l\'URL è corretto, contatta l\'amministratore del homeserver per ulteriore assistenza."</string>
   <string name="screen_change_server_error_invalid_well_known">"Il server non è disponibile per un problema nel file well-known:
 %1$s"</string>

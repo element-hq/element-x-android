@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"차단"</string>
+  <string name="screen_dm_details_block_alert_description">"차단된 사용자는 메시지를 보낼 수 없으며, 그들의 모든 메시지는 숨겨집니다. 언제든지 차단 해제할 수 있습니다."</string>
+  <string name="screen_dm_details_block_user">"사용자 차단하기"</string>
+  <string name="screen_dm_details_unblock_alert_action">"차단 해제"</string>
+  <string name="screen_dm_details_unblock_alert_description">"그들로부터 보낸 모든 메시지를 다시 볼 수 있게 됩니다."</string>
+  <string name="screen_dm_details_unblock_user">"사용자 차단 해제"</string>
+  <string name="screen_room_member_details_block_alert_action">"차단"</string>
+  <string name="screen_room_member_details_block_alert_description">"차단된 사용자는 메시지를 보낼 수 없으며, 그들의 모든 메시지는 숨겨집니다. 언제든지 차단 해제할 수 있습니다."</string>
+  <string name="screen_room_member_details_block_user">"사용자 차단하기"</string>
+  <string name="screen_room_member_details_title">"프로필"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"차단 해제"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"그들로부터 보낸 모든 메시지를 다시 볼 수 있게 됩니다."</string>
+  <string name="screen_room_member_details_unblock_user">"사용자 차단 해제"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"웹 앱을 사용하여 이 사용자를 확인하세요."</string>
+  <string name="screen_room_member_details_verify_button_title">"확인 %1$s"</string>
+  <string name="screen_start_chat_error_starting_chat">"채팅을 시작하는 동안 오류가 발생했습니다."</string>
+</resources>

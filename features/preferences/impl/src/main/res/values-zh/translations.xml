@@ -12,6 +12,14 @@
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"在时间轴中隐藏媒体预览"</string>
   <string name="screen_advanced_settings_media_compression_description">"针对上传进行优化"</string>
   <string name="screen_advanced_settings_media_compression_title">"媒体"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"内容审核与安全"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"自动优化图像以实现更快的上传速度和更小的文件大小。"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"优化图片上传质量"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s。点击此处更改。"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"高 (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"低画质 (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"标准 (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"视频上传质量"</string>
   <string name="screen_advanced_settings_push_provider_android">"通知推送提供者"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"禁用富文本编辑器，手动输入 Markdown。"</string>
   <string name="screen_advanced_settings_send_read_receipts">"已读回执"</string>

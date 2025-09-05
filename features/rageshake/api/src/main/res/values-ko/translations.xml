@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s이(가) 이전에 마지막으로 사용할 때 충돌했습니다. 충돌 보고서를 공유해주실 수 있나요?"</string>
+  <string name="rageshake_detection_dialog_content">"휴대폰을 강하게 흔드셨습니다. 버그 보고 화면을 여시겠어요?"</string>
+  <string name="settings_rageshake">"강하게 흔들기"</string>
+  <string name="settings_rageshake_detection_threshold">"감지 수준"</string>
+</resources>

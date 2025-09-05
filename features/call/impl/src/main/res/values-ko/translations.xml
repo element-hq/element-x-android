@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="call_foreground_service_channel_title_android">"수신 중인 통화"</string>
+  <string name="call_foreground_service_message_android">"탭해서 통화로 돌아가기"</string>
+  <string name="call_foreground_service_title_android">"☎️ 통화 진행 중"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Call은 이 Android 버전에서 Bluetooth 오디오 장치 사용을 지원하지 않습니다. 다른 오디오 장치를 선택하세요."</string>
+  <string name="screen_incoming_call_subtitle_android">"Element 전화 수신"</string>
+</resources>

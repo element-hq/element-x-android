@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"개인 데이터는 기록하거나 프로파일링하지 않습니다."</string>
+  <string name="screen_analytics_prompt_help_us_improve">"익명화된 사용 데이터를 공유하여 문제점을 파악하는 데 도움을 주십시오."</string>
+  <string name="screen_analytics_prompt_read_terms">"모든 이용 약관은 %1$s 에서 확인하실 수 있습니다."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"여기"</string>
+  <string name="screen_analytics_prompt_settings">"이 기능을 언제든지 비활성화할 수 있습니다."</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"우리는 귀하의 데이터를 제3자와 공유하지 않습니다."</string>
+  <string name="screen_analytics_prompt_title">"%1$s 개선하기"</string>
+</resources>

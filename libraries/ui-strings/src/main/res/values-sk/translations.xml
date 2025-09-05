@@ -42,9 +42,9 @@
   <string name="a11y_remove_reaction_with">"Odstrániť reakciu s %1$s"</string>
   <string name="a11y_room_avatar">"Obrázok miestnosti"</string>
   <string name="a11y_send_files">"Odoslať súbory"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje sa časovo obmedzená akcia"</string>
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_start_call">"Začať hovor"</string>
-  <string name="a11y_time_limited_action_required">"Vyžaduje sa časovo obmedzená akcia"</string>
   <string name="a11y_tombstoned_room">"Opustená miestnosť"</string>
   <string name="a11y_user_avatar">"Profilový obrázok"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>

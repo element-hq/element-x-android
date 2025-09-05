@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"스크린샷 첨부"</string>
+  <string name="screen_bug_report_contact_me">"후속 질문이 있는 경우 저에게 연락하실 수 있습니다."</string>
+  <string name="screen_bug_report_contact_me_title">"문의하기"</string>
+  <string name="screen_bug_report_edit_screenshot">"스크린샷 수정"</string>
+  <string name="screen_bug_report_editor_description">"문제를 설명해 주세요. 무엇을 했나요? 무슨 일이 일어날 것으로 예상했나요? 실제로 무슨 일이 일어났나요. 가능한 한 자세히 설명해 주세요."</string>
+  <string name="screen_bug_report_editor_placeholder">"문제를 설명해 주세요…"</string>
+  <string name="screen_bug_report_editor_supporting">"가능하다면 영어로 설명을 작성해 주십시오."</string>
+  <string name="screen_bug_report_error_description_too_short">"설명 내용이 너무 짧습니다. 발생한 상황에 대해 더 자세한 내용을 제공해 주시기 바랍니다. 감사합니다!"</string>
+  <string name="screen_bug_report_include_crash_logs">"충돌 로그 보내기"</string>
+  <string name="screen_bug_report_include_logs">"로그 허용"</string>
+  <string name="screen_bug_report_include_logs_error">"귀하의 로그가 너무 커서 이 보고서에 포함할 수 없습니다. 다른 방법으로 보내주시기 바랍니다."</string>
+  <string name="screen_bug_report_include_screenshot">"스크린샷 전송"</string>
+  <string name="screen_bug_report_logs_description">"모든 기능이 제대로 작동하는지 확인하기 위해 로그애 메시지가 포함됩니다. 로그 없이 메시지를 보내려면 이 설정을 해제하세요."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s이(가) 이전에 마지막으로 사용할 때 충돌했습니다. 충돌 보고서를 공유해주실 수 있나요?"</string>
+  <string name="screen_bug_report_view_logs">"로그 보기"</string>
+</resources>

@@ -17,7 +17,7 @@
   <string name="screen_join_room_invite_required_message">"Вам необходимо приглашение для того, чтобы присоединиться к этой комнате"</string>
   <string name="screen_join_room_join_action">"Присоединиться к комнате"</string>
   <string name="screen_join_room_join_restricted_message">"Чтобы присоединиться, вам необходимо приглашение или быть участником сообщества."</string>
-  <string name="screen_join_room_knock_action">"Постучите, чтобы присоединиться"</string>
+  <string name="screen_join_room_knock_action">"Отправить запрос на присоединение"</string>
   <string name="screen_join_room_knock_message_description">"Сообщение (опционально)"</string>
   <string name="screen_join_room_knock_sent_description">"Вы получите приглашение присоединиться к комнате, как только ваш запрос будет принят."</string>
   <string name="screen_join_room_knock_sent_title">"Запрос на присоединение отправлен"</string>

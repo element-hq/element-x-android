@@ -2,16 +2,26 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Aggiungi reazione: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_collapse_message_text_field">"Riduci al minimo il campo di testo del messaggio"</string>
   <string name="a11y_delete">"Elimina"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d cifra inserita"</item>
     <item quantity="other">"%1$d cifre inserite"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Modifica avatar"</string>
+  <string name="a11y_edit_room_address_hint">"L\'indirizzo completo sarà %1$s"</string>
+  <string name="a11y_encryption_details">"Dettagli sulla crittografia"</string>
+  <string name="a11y_expand_message_text_field">"Allarga il campo di testo del messaggio"</string>
   <string name="a11y_hide_password">"Nascondi password"</string>
   <string name="a11y_join_call">"Entra in chiamata"</string>
   <string name="a11y_jump_to_bottom">"Vai alla fine"</string>
+  <string name="a11y_move_the_map_to_my_location">"Sposta la mappa sulla mia posizione"</string>
   <string name="a11y_notifications_mentions_only">"Solo menzioni"</string>
   <string name="a11y_notifications_muted">"Silenziato"</string>
+  <string name="a11y_notifications_new_mentions">"Nuove menzioni"</string>
+  <string name="a11y_notifications_new_messages">"Nuovi messaggi"</string>
+  <string name="a11y_notifications_ongoing_call">"Chiamata in corso"</string>
+  <string name="a11y_other_user_avatar">"Avatar dell\'altro utente"</string>
   <string name="a11y_page_n">"Pagina %1$d"</string>
   <string name="a11y_pause">"Pausa"</string>
   <string name="a11y_paused_voice_message">"Messaggio vocale, durata: %1$s, posizione attuale: %2$s"</string>
@@ -30,15 +40,20 @@
   <string name="a11y_read_receipts_tap_to_show_all">"Tocca per mostrare tutti"</string>
   <string name="a11y_remove_reaction">"Rimuovi la reazione con %1$s"</string>
   <string name="a11y_remove_reaction_with">"Rimuovere la reazione con %1$s"</string>
+  <string name="a11y_room_avatar">"Avatar della stanza"</string>
   <string name="a11y_send_files">"Invia file"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Azione a tempo limitato richiesta"</string>
   <string name="a11y_show_password">"Mostra password"</string>
   <string name="a11y_start_call">"Avvia una chiamata"</string>
+  <string name="a11y_tombstoned_room">"Stanza obsoleta"</string>
+  <string name="a11y_user_avatar">"Avatar utente"</string>
   <string name="a11y_user_menu">"Menu utente"</string>
   <string name="a11y_view_avatar">"Visualizza avatar"</string>
   <string name="a11y_view_details">"Visualizza dettagli"</string>
   <string name="a11y_voice_message">"Messaggio vocale, durata: %1$s"</string>
   <string name="a11y_voice_message_record">"Registra un messaggio vocale."</string>
   <string name="a11y_voice_message_stop_recording">"Ferma la registrazione"</string>
+  <string name="a11y_your_avatar">"Il tuo avatar"</string>
   <string name="action_accept">"Accetta"</string>
   <string name="action_add_caption">"Aggiungi didascalia"</string>
   <string name="action_add_to_timeline">"Aggiungi alla conversazione"</string>
@@ -75,6 +90,7 @@
   <string name="action_enable">"Attiva"</string>
   <string name="action_end_poll">"Termina sondaggio"</string>
   <string name="action_enter_pin">"Inserisci PIN"</string>
+  <string name="action_finish">"Fine"</string>
   <string name="action_forgot_password">"Password dimenticata?"</string>
   <string name="action_forward">"Inoltra"</string>
   <string name="action_go_back">"Indietro"</string>
@@ -97,6 +113,7 @@
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Non ora"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_context_menu">"Apri il menu contestuale"</string>
   <string name="action_open_settings">"Impostazioni"</string>
   <string name="action_open_with">"Apri con"</string>
   <string name="action_pin">"Fissa"</string>
@@ -121,7 +138,9 @@
   <string name="action_save">"Salva"</string>
   <string name="action_search">"Ricerca"</string>
   <string name="action_send">"Invia"</string>
+  <string name="action_send_edited_message">"Invia messaggio modificato"</string>
   <string name="action_send_message">"Invia messaggio"</string>
+  <string name="action_send_voice_message">"Invia messaggio vocale"</string>
   <string name="action_share">"Condividi"</string>
   <string name="action_share_link">"Condividi collegamento"</string>
   <string name="action_show">"Mostra"</string>
@@ -137,6 +156,7 @@
   <string name="action_tap_for_options">"Tocca per le opzioni"</string>
   <string name="action_try_again">"Riprova"</string>
   <string name="action_unpin">"Rimuovi dai fissati"</string>
+  <string name="action_view">"Visualizza"</string>
   <string name="action_view_in_timeline">"Visualizza nella conversazione"</string>
   <string name="action_view_source">"Vedi codice sorgente"</string>
   <string name="action_yes">"Sì"</string>
@@ -149,6 +169,8 @@
   <string name="common_advanced_settings">"Impostazioni avanzate"</string>
   <string name="common_an_image">"un\'immagine"</string>
   <string name="common_analytics">"Statistiche di utilizzo"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Hai lasciato la stanza"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sei stato disconnesso dalla sessione"</string>
   <string name="common_appearance">"Aspetto"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Utenti bloccati"</string>
@@ -219,7 +241,7 @@ Motivo:. %1$s"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nessun risultato"</string>
   <string name="common_no_room_name">"Nessun nome della stanza"</string>
-  <string name="common_not_encrypted">"Non cifrata"</string>
+  <string name="common_not_encrypted">"Non cifrato"</string>
   <string name="common_offline">"Non in linea"</string>
   <string name="common_open_source_licenses">"Licenze open source"</string>
   <string name="common_or">"o"</string>
@@ -238,9 +260,12 @@ Motivo:. %1$s"</string>
     <item quantity="one">"%d voto"</item>
     <item quantity="other">"%d voti"</item>
   </plurals>
+  <string name="common_preparing">"Preparazione…"</string>
   <string name="common_privacy_policy">"Informativa sulla privacy"</string>
   <string name="common_private_room">"Stanza privata"</string>
+  <string name="common_private_space">"Spazio privato"</string>
   <string name="common_public_room">"Stanza pubblica"</string>
+  <string name="common_public_space">"Spazio pubblico"</string>
   <string name="common_reaction">"Reazione"</string>
   <string name="common_reactions">"Reazioni"</string>
   <string name="common_reason">"Motivo"</string>
@@ -258,6 +283,10 @@ Motivo:. %1$s"</string>
   <string name="common_room">"Stanza"</string>
   <string name="common_room_name">"Nome stanza"</string>
   <string name="common_room_name_placeholder">"ad es. il nome del tuo progetto"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d Stanza"</item>
+    <item quantity="other">"%1$d Stanze"</item>
+  </plurals>
   <string name="common_saved_changes">"Modifiche salvate"</string>
   <string name="common_saving">"Salvataggio"</string>
   <string name="common_screen_lock">"Blocco schermo"</string>
@@ -277,6 +306,11 @@ Motivo:. %1$s"</string>
   <string name="common_signing_out">"Disconnessione"</string>
   <string name="common_something_went_wrong">"Qualcosa è andato storto"</string>
   <string name="common_something_went_wrong_message">"Abbiamo riscontrato un problema. Per favore riprova."</string>
+  <string name="common_space">"Spazio"</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d Spazio"</item>
+    <item quantity="other">"%1$d Spazi"</item>
+  </plurals>
   <string name="common_starting_chat">"Avvio della conversazione…"</string>
   <string name="common_sticker">"Adesivo"</string>
   <string name="common_success">"Operazione riuscita"</string>
@@ -307,6 +341,12 @@ Motivo:. %1$s"</string>
   <string name="common_verify_identity">"Verifica l\'identità"</string>
   <string name="common_verify_user">"Verifica utente"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Qualità alta"</string>
+  <string name="common_video_quality_high_description">"Migliore qualità ma dimensioni del file maggiori"</string>
+  <string name="common_video_quality_low">"Qualità bassa"</string>
+  <string name="common_video_quality_low_description">"Velocità di caricamento più elevata e dimensioni file più piccole"</string>
+  <string name="common_video_quality_standard">"Qualità standard"</string>
+  <string name="common_video_quality_standard_description">"Equilibrio tra qualità e velocità di caricamento"</string>
   <string name="common_voice_message">"Messaggio vocale"</string>
   <string name="common_waiting">"In attesa…"</string>
   <string name="common_waiting_for_decryption_key">"In attesa del messaggio"</string>
@@ -321,6 +361,10 @@ Motivo:. %1$s"</string>
 
 Sei sicuro di voler continuare?"</string>
   <string name="dialog_confirm_link_title">"Ricontrolla questo link"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Seleziona la qualità predefinita dei video che carichi."</string>
+  <string name="dialog_default_video_quality_selector_title">"Qualità del caricamento video"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"La dimensione massima consentita per il file è: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"La dimensione del file è troppo grande per essere caricata"</string>
   <string name="dialog_room_reported">"Stanza segnalata"</string>
   <string name="dialog_room_reported_and_left">"Stanza segnalata ed abbandonata"</string>
   <string name="dialog_title_confirmation">"Conferma"</string>
@@ -329,6 +373,9 @@ Sei sicuro di voler continuare?"</string>
   <string name="dialog_title_warning">"Attenzione"</string>
   <string name="dialog_unsaved_changes_description_android">"Le modifiche non sono state salvate. Vuoi davvero tornare indietro?"</string>
   <string name="dialog_unsaved_changes_title">"Salvare le modifiche?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"La dimensione massima consentita per il file è: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Seleziona la qualità del video che vuoi caricare."</string>
+  <string name="dialog_video_quality_selector_title">"Seleziona la qualità di caricamento del video"</string>
   <string name="error_account_creation_not_possible">"Il tuo homeserver deve essere aggiornato per supportare il Matrix Authentication Service e la creazione di account."</string>
   <string name="error_failed_creating_the_permalink">"Impossibile creare il collegamento permanente"</string>
   <string name="error_failed_loading_map">"%1$s non è riuscito a caricare la mappa. Riprova più tardi."</string>
@@ -356,6 +403,7 @@ Sei sicuro di voler continuare?"</string>
   <string name="invite_friends_text">"Ehi, parliamo su %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Scuoti per segnalare un problema"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Istantanea schermo"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Risposte"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Rimuovi %1$s"</string>
@@ -378,6 +426,7 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Il tuo messaggio non è stato inviato perché %1$s non ha verificato tutti i dispositivi."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Uno o più dispositivi non sono verificati. Puoi inviare il messaggio comunque, oppure annullarlo e riprovare più tardi dopo aver verificato tutti i tuoi dispositivi."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Il tuo messaggio non è stato inviato perché non hai verificato uno o più dispositivi."</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Modifica amministratori o proprietari"</string>
   <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossibile recuperare i dettagli dell\'utente"</string>
   <string name="screen_room_event_pill">"Messaggio in %1$s"</string>
@@ -395,6 +444,9 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_share_open_google_maps">"Apri in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Apri in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Condividi questa posizione"</string>
+  <string name="screen_space_list_description">"Spazi che hai creato o a cui hai aderito."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Spazi"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Messaggio non inviato perché l\'identità verificata di %1$s è stata reimpostata."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Messaggio non inviato perché %1$s non ha verificato tutti i dispositivi."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Messaggio non inviato perché non hai verificato uno o più dispositivi."</string>

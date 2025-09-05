@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Xonadan chetlashtirish"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Taqiqlash"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Taklif qilingan taqdirda ham, ular bu xonaga boshqa qo‘shila olmaydilar."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Haqiqatan ham bu aʼzoni taqiqlamoqchimisiz?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Taqiqlash %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Profilni koʻrish"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Xonadan olib tashlash"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Aʻzo oʻchirilsinmi va kelgusida qoʻshilish taqiqlansinmi?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Oʻchirish %1$s …"</string>
+</resources>

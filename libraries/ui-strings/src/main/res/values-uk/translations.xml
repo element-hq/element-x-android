@@ -42,9 +42,10 @@
   <string name="a11y_remove_reaction_with">"Прибрати реакцію %1$s"</string>
   <string name="a11y_room_avatar">"Аватар кімнати"</string>
   <string name="a11y_send_files">"Надіслати файли"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Необхідно виконати дію, обмежену в часі"</string>
   <string name="a11y_show_password">"Показати пароль"</string>
   <string name="a11y_start_call">"Розпочати виклик"</string>
-  <string name="a11y_time_limited_action_required">"Необхідно виконати дію, обмежену в часі"</string>
+  <string name="a11y_tombstoned_room">"Кімната більше не використовується"</string>
   <string name="a11y_user_avatar">"Аватар користувача"</string>
   <string name="a11y_user_menu">"Меню користувача"</string>
   <string name="a11y_view_avatar">"Переглянути аватар"</string>
@@ -364,7 +365,10 @@
 
 Ви впевнені, що хочете продовжити?"</string>
   <string name="dialog_confirm_link_title">"Уважно перевірте це посилання"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Вибір усталеної якості вивантажуваних відео."</string>
   <string name="dialog_default_video_quality_selector_title">"Якість вивантаження відео"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Максимально дозволений розмір файлу: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Розмір файлу завеликий для вивантаження"</string>
   <string name="dialog_room_reported">"Скаргу на кімнату надіслано"</string>
   <string name="dialog_room_reported_and_left">"Поскаржитися та вийти з кімнати"</string>
   <string name="dialog_title_confirmation">"Підтвердження"</string>
@@ -373,6 +377,9 @@
   <string name="dialog_title_warning">"Попередження"</string>
   <string name="dialog_unsaved_changes_description_android">"Внесені зміни не збережено. Ви впевнені, що хочете повернутися?"</string>
   <string name="dialog_unsaved_changes_title">"Зберегти зміни?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально дозволений розмір файлу: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Виберіть якість відео, яке ви хочете вивантажити."</string>
+  <string name="dialog_video_quality_selector_title">"Виберіть якість вивантажуваного відео"</string>
   <string name="error_account_creation_not_possible">"Ваш домашній сервер потрібно оновити, щоб він підтримував службу автентифікації Matrix і створення облікових записів."</string>
   <string name="error_failed_creating_the_permalink">"Не вдалося створити постійне посилання"</string>
   <string name="error_failed_loading_map">"%1$s не може завантажити мапу. Повторіть спробу пізніше."</string>

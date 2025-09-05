@@ -24,7 +24,7 @@
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Esta aplicação foi configurada para permitir: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Operador de conta %1$s não permitido."</string>
   <string name="screen_change_server_form_header">"URL do servidor"</string>
-  <string name="screen_change_server_form_notice">"Insere um endereço"</string>
+  <string name="screen_change_server_form_notice">"Introduz um domínio"</string>
   <string name="screen_change_server_subtitle">"Qual é o endereço do teu servidor?"</string>
   <string name="screen_change_server_title">"Seleciona o teu servidor"</string>
   <string name="screen_create_account_title">"Criar conta"</string>
@@ -39,7 +39,7 @@
   <string name="screen_login_title_with_homeserver">"Iniciar sessão em %1$s"</string>
   <string name="screen_onboarding_app_version">"Versão %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Iniciar sessão manualmente"</string>
-  <string name="screen_onboarding_sign_in_to">"Iniciar sessão em %1$s"</string>
+  <string name="screen_onboarding_sign_in_to">"Faz login em %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Iniciar sessão com código QR"</string>
   <string name="screen_onboarding_sign_up">"Criar conta"</string>
   <string name="screen_onboarding_welcome_message">"Bem-vindo(a) à %1$s mais rápida de sempre. Super rápida e simples."</string>

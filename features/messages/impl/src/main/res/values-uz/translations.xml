@@ -26,6 +26,7 @@
   <string name="screen_room_encrypted_history_banner_unverified">"Xabar tarixi ushbu xonada mavjud emas. Xabar tarixini koʻrish uchun ushbu qurilmani tasdiqlang."</string>
   <string name="screen_room_invite_again_alert_message">"Ularni yana taklif qilmoqchimisiz?"</string>
   <string name="screen_room_invite_again_alert_title">"Siz bu chatda yolg\'izsiz"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Butun xonani xabardor qiling"</string>
   <string name="screen_room_mentions_at_room_title">"Har kim"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Yana yuboring"</string>
   <string name="screen_room_retry_send_menu_title">"Xabaringiz yuborilmadi"</string>
@@ -42,4 +43,13 @@
     <item quantity="one">"%1$dxonani almashtirish"</item>
     <item quantity="other">"%1$dxona o\'zgarishi"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s va %3$d boshqalar"</item>
+    <item quantity="other">"%1$s, %2$s va %3$d boshqalar"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%s yozmoqda…"</item>
+    <item quantity="other">"%s yozmoqda…"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s va %2$s"</string>
 </resources>
