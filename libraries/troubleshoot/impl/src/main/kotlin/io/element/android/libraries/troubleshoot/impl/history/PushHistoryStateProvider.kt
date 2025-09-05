@@ -40,6 +40,9 @@ open class PushHistoryStateProvider : PreviewParameterProvider<PushHistoryState>
             aPushHistoryState(
                 resetAction = AsyncAction.ConfirmingNoParams,
             ),
+            aPushHistoryState(
+                showNotSameAccountError = true,
+            ),
         )
 }
 
