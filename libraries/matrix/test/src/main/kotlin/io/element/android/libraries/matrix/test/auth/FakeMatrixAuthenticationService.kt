@@ -19,14 +19,11 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.simulateLongTask
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOf
 
 val A_OIDC_DATA = OidcDetails(url = "a-url")
 
@@ -45,10 +42,6 @@ class FakeMatrixAuthenticationService(
     private var onAuthenticationListener: ((MatrixClient) -> Unit)? = null
 
     var getLatestSessionIdLambda: (() -> SessionId?) = { null }
-
-    override fun loggedInStateFlow(): Flow<LoggedInState> {
-        return flowOf(LoggedInState.NotLoggedIn)
-    }
 
     override suspend fun getLatestSessionId(): SessionId? = getLatestSessionIdLambda()
 
