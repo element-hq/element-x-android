@@ -22,8 +22,6 @@ open class AccountSelectStateProvider : PreviewParameterProvider<AccountSelectSt
 
 private fun anAccountSelectState(
     accounts: List<MatrixUser> = listOf(),
-    eventSink: (AccountSelectEvents) -> Unit = {},
 ) = AccountSelectState(
     accounts = accounts.toPersistentList(),
-    eventSink = eventSink,
 )

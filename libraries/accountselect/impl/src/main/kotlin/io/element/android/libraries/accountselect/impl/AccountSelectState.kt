@@ -12,5 +12,4 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class AccountSelectState(
     val accounts: ImmutableList<MatrixUser>,
-    val eventSink: (AccountSelectEvents) -> Unit
 )

@@ -37,11 +37,8 @@ class AccountSelectPresenter(
                 .toPersistentList()
         }
 
-        fun handleEvents(event: AccountSelectEvents) {}
-
         return AccountSelectState(
             accounts = accounts,
-            eventSink = ::handleEvents
         )
     }
 }
