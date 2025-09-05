@@ -24,7 +24,7 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.appnav.room.joined.LoadingRoomNodeView

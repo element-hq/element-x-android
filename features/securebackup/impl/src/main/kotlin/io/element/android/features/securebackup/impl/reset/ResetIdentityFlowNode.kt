@@ -25,7 +25,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.securebackup.impl.reset.password.ResetIdentityPasswordNode
 import io.element.android.features.securebackup.impl.reset.root.ResetIdentityRootNode

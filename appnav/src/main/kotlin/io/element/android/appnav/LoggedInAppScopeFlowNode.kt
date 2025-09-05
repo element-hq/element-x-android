@@ -25,7 +25,7 @@ import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.di.SessionGraphFactory
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
@@ -36,7 +36,7 @@ import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import kotlinx.parcelize.Parcelize
 
 /**
- * `LoggedInAppScopeFlowNode` is a Node responsible to set up the Dagger
+ * `LoggedInAppScopeFlowNode` is a Node responsible to set up the Session graph.
  * [io.element.android.libraries.di.SessionScope]. It has only one child: [LoggedInFlowNode].
  * This allow to inject objects with SessionScope in the constructor of [LoggedInFlowNode].
  */

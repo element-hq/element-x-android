@@ -22,7 +22,7 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.features.ftue.impl.sessionverification.choosemode.ChooseSelfVerificationModeNode
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint

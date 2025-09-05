@@ -17,7 +17,7 @@ import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode

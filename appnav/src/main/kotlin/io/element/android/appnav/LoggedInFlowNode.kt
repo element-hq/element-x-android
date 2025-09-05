@@ -40,7 +40,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.loggedin.MediaPreviewConfigMigration
 import io.element.android.appnav.loggedin.SendQueues

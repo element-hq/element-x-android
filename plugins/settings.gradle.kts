@@ -9,7 +9,7 @@ rootProject.name = "ElementX_plugins"
 
 dependencyResolutionManagement {
     repositories {
-                mavenCentral()
+        mavenCentral()
     }
     versionCatalogs {
         create("libs") {

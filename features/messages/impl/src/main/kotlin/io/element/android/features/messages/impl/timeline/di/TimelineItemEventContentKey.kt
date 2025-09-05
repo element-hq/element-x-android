@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 
 /**
  * Annotation to add a factory of type [TimelineItemPresenterFactory] to a
- * Dagger map multi binding keyed with a subclass of [TimelineItemEventContent].
+ * dependency injection map multi binding keyed with a subclass of [TimelineItemEventContent].
  */
 @Retention(AnnotationRetention.RUNTIME)
 @MapKey

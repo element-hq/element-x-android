@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 
 /**
  * Annotation to add a factory of type [MediaItemPresenterFactory] to a
- * Dagger map multi binding keyed with a subclass of [MediaItem.Event].
+ * DI map multi binding keyed with a subclass of [MediaItem.Event].
  */
 @Retention(AnnotationRetention.RUNTIME)
 @MapKey

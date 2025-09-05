@@ -19,7 +19,7 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.deactivation.api.AccountDeactivationEntryPoint
 import io.element.android.features.licenses.api.OpenSourceLicensesEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint

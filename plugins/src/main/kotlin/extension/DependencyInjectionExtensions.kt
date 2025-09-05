@@ -29,9 +29,9 @@ fun Project.setupDependencyInjection(
         applyPluginIfNeeded(libs.plugins.ksp)
 
         // Annotations to generate DI code for Appyx nodes
-        dependencies.implementation(project.project(":anvilannotations"))
+        dependencies.implementation(project.project(":annotations"))
         // Code generator for the annotations above
-        dependencies.add("ksp", project.project(":anvilcodegen"))
+        dependencies.add("ksp", project.project(":codegen"))
     }
 }
 

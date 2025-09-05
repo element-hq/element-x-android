@@ -23,7 +23,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.libraries.architecture.BackstackView

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.anvilcodegen
+package io.element.android.codegen
 
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getConstructors
@@ -35,7 +35,7 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoMap
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import org.jetbrains.kotlin.name.FqName
 
 class ContributesNodeProcessor(

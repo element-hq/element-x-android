@@ -22,7 +22,7 @@ import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.MobileScreen
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.leaveroom.api.LeaveRoomRenderer
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.architecture.appyx.launchMolecule

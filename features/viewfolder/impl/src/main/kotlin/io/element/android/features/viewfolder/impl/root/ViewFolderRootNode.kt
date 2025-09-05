@@ -20,7 +20,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
 import io.element.android.features.viewfolder.impl.file.ViewFileNode
 import io.element.android.features.viewfolder.impl.folder.ViewFolderNode

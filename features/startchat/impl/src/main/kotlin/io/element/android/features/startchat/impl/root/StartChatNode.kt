@@ -19,7 +19,7 @@ import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.MobileScreen
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.startchat.StartChatNavigator
 import io.element.android.libraries.deeplink.api.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope

@@ -37,7 +37,7 @@ inline fun <reified N : Node> NodeFactoriesBindings.createNode(
     val nodeClass = N::class
     val nodeFactoryMap = nodeFactories()
     // Note to developers: If you got the error below, make sure to build again after
-    // clearing the cache (sometimes several times) to let Dagger generate the NodeFactory.
+    // clearing the cache (sometimes several times) to let codegen generate the NodeFactory.
     val nodeFactory = nodeFactoryMap[nodeClass] ?: error("Cannot find NodeFactory for ${nodeClass.java.name}.")
 
     @Suppress("UNCHECKED_CAST")
