@@ -35,14 +35,14 @@
   <string name="screen_login_error_unsupported_authentication">"O servidor selecionado não suporta a entrada por senha ou OIDC. Entre em contato com o administrador ou escolha outro servidor."</string>
   <string name="screen_login_form_header">"Digite seus dados"</string>
   <string name="screen_login_subtitle">"A Matrix é uma rede aberta para comunicação segura e descentralizada."</string>
-  <string name="screen_login_title">"Boas vindas novamente!"</string>
+  <string name="screen_login_title">"Boas-vindas novamente!"</string>
   <string name="screen_login_title_with_homeserver">"Entrar em %1$s"</string>
   <string name="screen_onboarding_app_version">"Versão %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Entrar manualmente"</string>
   <string name="screen_onboarding_sign_in_to">"Entrar em %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Entrar com código QR"</string>
   <string name="screen_onboarding_sign_up">"Criar conta"</string>
-  <string name="screen_onboarding_welcome_message">"Boas vindas ao %1$s mais rápido de todos os tempos. Turbinado para velocidade e simplicidade."</string>
+  <string name="screen_onboarding_welcome_message">"Boas-vindas ao %1$s mais rápido de todos os tempos. Turbinado para velocidade e simplicidade."</string>
   <string name="screen_onboarding_welcome_subtitle">"Bem-vindo ao %1$s. Turbinado, para velocidade e simplicidade"</string>
   <string name="screen_onboarding_welcome_title">"Esteja no seu elemento"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Estabelecendo uma conexão segura"</string>

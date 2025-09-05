@@ -42,7 +42,6 @@
   <string name="a11y_remove_reaction_with">"Entferne Reaktionen mit %1$s"</string>
   <string name="a11y_room_avatar">"Avatar"</string>
   <string name="a11y_send_files">"Dateien senden"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Zeitlich begrenztes Handeln erforderlich"</string>
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_start_call">"Anruf starten"</string>
   <string name="a11y_tombstoned_room">"Stillgelegter Chat"</string>

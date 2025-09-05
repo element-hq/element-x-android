@@ -42,7 +42,7 @@
   <string name="a11y_remove_reaction_with">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_room_avatar">"Avatar du salon"</string>
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Demande d’action qui expirera dans un instant"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Action limitée dans le temps requise, vous avez une minute pour effectuer la vérification"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_tombstoned_room">"Salon clôturé"</string>
