@@ -137,7 +137,10 @@ class DefaultNotificationCreator(
                 // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 // ID of the corresponding shortcut, for conversation features under API 30+
-                .setShortcutId(roomInfo.roomId.value)
+                // Must match those created in the ShortcutInfoCompat.Builder()
+                // for the notification to appear as a "Conversation":
+                // https://developer.android.com/develop/ui/views/notifications/conversations
+                .setShortcutId("${roomInfo.sessionId.value}-${roomInfo.roomId.value}")
                 // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
                 // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
                 .setGroup(roomInfo.sessionId.value)
