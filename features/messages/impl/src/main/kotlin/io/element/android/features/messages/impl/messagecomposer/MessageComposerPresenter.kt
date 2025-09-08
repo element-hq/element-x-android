@@ -165,8 +165,8 @@ class MessageComposerPresenter(
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
             handlePickedMedia(uri, mimeType)
         }
-        val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri ->
-            handlePickedMedia(uri, MimeTypes.OctetStream)
+        val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri, mimeType ->
+            handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
             handlePickedMedia(uri, MimeTypes.Jpeg)
