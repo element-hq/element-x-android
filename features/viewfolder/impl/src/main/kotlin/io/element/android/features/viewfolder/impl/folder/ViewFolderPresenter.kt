@@ -19,7 +19,8 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.viewfolder.impl.model.Item
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 @Inject
 class ViewFolderPresenter(
@@ -35,7 +36,7 @@ class ViewFolderPresenter(
 
     @Composable
     override fun present(): ViewFolderState {
-        var content by remember { mutableStateOf(emptyList<Item>()) }
+        var content by remember { mutableStateOf(persistentListOf<Item>()) }
         val title = remember {
             buildString {
                 if (path.contains(buildMeta.applicationId)) {
@@ -48,11 +49,11 @@ class ViewFolderPresenter(
             content = buildList {
                 if (canGoUp) add(Item.Parent)
                 addAll(folderExplorer.getItems(path))
-            }
+            }.toPersistentList()
         }
         return ViewFolderState(
             title = title,
-            content = content.toImmutableList(),
+            content = content,
         )
     }
 }
