@@ -18,6 +18,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.Inject
 import io.element.android.features.viewfolder.impl.model.Item
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.collections.immutable.toImmutableList
 
 @Inject
@@ -25,6 +26,7 @@ class ViewFolderPresenter(
     @Assisted val canGoUp: Boolean,
     @Assisted val path: String,
     private val folderExplorer: FolderExplorer,
+    private val buildMeta: BuildMeta,
 ) : Presenter<ViewFolderState> {
     @AssistedFactory
     interface Factory {
@@ -34,6 +36,14 @@ class ViewFolderPresenter(
     @Composable
     override fun present(): ViewFolderState {
         var content by remember { mutableStateOf(emptyList<Item>()) }
+        val title = remember {
+            buildString {
+                if (path.contains(buildMeta.applicationId)) {
+                    append("…")
+                }
+                append(path.substringAfter(buildMeta.applicationId))
+            }
+        }
         LaunchedEffect(Unit) {
             content = buildList {
                 if (canGoUp) add(Item.Parent)
@@ -41,7 +51,7 @@ class ViewFolderPresenter(
             }
         }
         return ViewFolderState(
-            path = path,
+            title = title,
             content = content.toImmutableList(),
         )
     }

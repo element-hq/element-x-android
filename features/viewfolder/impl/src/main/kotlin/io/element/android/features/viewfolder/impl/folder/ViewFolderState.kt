@@ -11,6 +11,6 @@ import io.element.android.features.viewfolder.impl.model.Item
 import kotlinx.collections.immutable.ImmutableList
 
 data class ViewFolderState(
-    val path: String,
+    val title: String,
     val content: ImmutableList<Item>,
 )
