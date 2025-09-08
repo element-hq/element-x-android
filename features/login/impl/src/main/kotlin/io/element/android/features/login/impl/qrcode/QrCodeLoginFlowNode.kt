@@ -21,11 +21,12 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import io.element.android.anvilannotations.ContributesNode
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.di.QrCodeLoginBindings
-import io.element.android.features.login.impl.di.QrCodeLoginComponent
+import io.element.android.features.login.impl.di.QrCodeLoginGraph
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationNode
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationStep
 import io.element.android.features.login.impl.screens.qrcode.error.QrCodeErrorNode
@@ -37,8 +38,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.DaggerComponentOwner
+import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
@@ -49,10 +49,11 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(AppScope::class)
-class QrCodeLoginFlowNode @AssistedInject constructor(
+@Inject
+class QrCodeLoginFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    qrCodeLoginComponentBuilder: QrCodeLoginComponent.Builder,
+    qrCodeLoginGraphFactory: QrCodeLoginGraph.Factory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : BaseFlowNode<QrCodeLoginFlowNode.NavTarget>(
     backstack = BackStack(
@@ -61,10 +62,10 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     ),
     buildContext = buildContext,
     plugins = plugins,
-), DaggerComponentOwner {
+), DependencyInjectionGraphOwner {
     private var authenticationJob: Job? = null
 
-    override val daggerComponent = qrCodeLoginComponentBuilder.build()
+    override val graph = qrCodeLoginGraphFactory.create()
     private val qrCodeLoginManager by lazy { bindings<QrCodeLoginBindings>().qrCodeLoginManager() }
 
     sealed interface NavTarget : Parcelable {

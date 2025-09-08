@@ -29,6 +29,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -217,7 +218,14 @@ class RoomMemberModerationPresenterTest {
 
     @Test
     fun `present - do kick user with success`() = runTest {
-        createRoomMemberModerationPresenter(room = aJoinedRoom()).test {
+        val room = aJoinedRoom()
+        room.baseRoom.givenUpdateMembersResult {
+            // Simulate the member list being updated
+            room.givenRoomMembersState(RoomMembersState.Ready(
+                persistentListOf(aRoomMember())
+            ))
+        }
+        createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
             initialState.eventSink(
                 RoomMemberModerationEvents.ProcessAction(
@@ -238,7 +246,14 @@ class RoomMemberModerationPresenterTest {
 
     @Test
     fun `present - do ban user with success`() = runTest {
-        createRoomMemberModerationPresenter(room = aJoinedRoom()).test {
+        val room = aJoinedRoom()
+        room.baseRoom.givenUpdateMembersResult {
+            // Simulate the member list being updated
+            room.givenRoomMembersState(RoomMembersState.Ready(
+                persistentListOf(aRoomMember())
+            ))
+        }
+        createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
             initialState.eventSink(
                 RoomMemberModerationEvents.ProcessAction(
@@ -259,7 +274,14 @@ class RoomMemberModerationPresenterTest {
 
     @Test
     fun `present - do unban user with success`() = runTest {
-        createRoomMemberModerationPresenter(room = aJoinedRoom()).test {
+        val room = aJoinedRoom()
+        room.baseRoom.givenUpdateMembersResult {
+            // Simulate the member list being updated
+            room.givenRoomMembersState(RoomMembersState.Ready(
+                persistentListOf(aRoomMember())
+            ))
+        }
+        createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
             initialState.eventSink(
                 RoomMemberModerationEvents.ProcessAction(
@@ -326,7 +348,7 @@ class RoomMemberModerationPresenterTest {
         banUserResult: Result<Unit> = Result.success(Unit),
         unBanUserResult: Result<Unit> = Result.success(Unit),
         targetRoomMember: RoomMember? = null,
-    ): JoinedRoom {
+    ): FakeJoinedRoom {
         return FakeJoinedRoom(
             kickUserResult = { _, _ -> kickUserResult },
             banUserResult = { _, _ -> banUserResult },
@@ -335,6 +357,7 @@ class RoomMemberModerationPresenterTest {
                 canBanResult = { _ -> Result.success(canBan) },
                 canKickResult = { _ -> Result.success(canKick) },
                 userRoleResult = { Result.success(myUserRole) },
+                updateMembersResult = { Result.success(Unit) }
             ),
         ).apply {
             val roomMembers = listOfNotNull(targetRoomMember).toPersistentList()

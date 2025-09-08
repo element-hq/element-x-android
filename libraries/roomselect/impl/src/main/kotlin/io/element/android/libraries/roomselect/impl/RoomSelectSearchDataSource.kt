@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomList
@@ -21,7 +22,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 private const val PAGE_SIZE = 30
 
@@ -29,7 +29,8 @@ private const val PAGE_SIZE = 30
  * DataSource for RoomSummaryDetails that can be filtered by a search query,
  * and which only includes rooms the user has joined.
  */
-class RoomSelectSearchDataSource @Inject constructor(
+@Inject
+class RoomSelectSearchDataSource(
     roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
 ) {

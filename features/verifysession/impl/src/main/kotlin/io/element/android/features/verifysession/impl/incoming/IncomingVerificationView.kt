@@ -147,7 +147,7 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
         Step.Failure -> R.string.screen_session_verification_request_failure_subtitle
     }
     val timeLimitMessage = if (step.isTimeLimited) {
-        stringResource(CommonStrings.a11y_time_limited_action_required)
+        stringResource(CommonStrings.a11y_session_verification_time_limited_action_required)
     } else {
         ""
     }

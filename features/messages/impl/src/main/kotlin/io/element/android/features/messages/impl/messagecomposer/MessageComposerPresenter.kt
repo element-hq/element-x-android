@@ -25,9 +25,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.media3.common.util.UnstableApi
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.location.api.LocationService
@@ -45,6 +45,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -54,12 +55,10 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.getDirectRoomMember
 import io.element.android.libraries.matrix.api.room.isDm
-import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
-import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -99,7 +98,8 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
-class MessageComposerPresenter @AssistedInject constructor(
+@Inject
+class MessageComposerPresenter(
     @Assisted private val navigator: MessagesNavigator,
     @Assisted private val timelineController: TimelineController,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
@@ -246,16 +246,23 @@ class MessageComposerPresenter @AssistedInject constructor(
                         richTextEditorState = richTextEditorState,
                     )
                 }
-                is MessageComposerEvents.SendUri -> sessionCoroutineScope.sendAttachment(
-                    attachment = Attachment.Media(
-                        localMedia = localMediaFactory.createFromUri(
-                            uri = event.uri,
-                            mimeType = null,
-                            name = null,
-                            formattedFileSize = null
+                is MessageComposerEvents.SendUri -> {
+                    val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
+                    sessionCoroutineScope.sendAttachment(
+                        attachment = Attachment.Media(
+                            localMedia = localMediaFactory.createFromUri(
+                                uri = event.uri,
+                                mimeType = null,
+                                name = null,
+                                formattedFileSize = null
+                            ),
                         ),
-                    ),
-                )
+                        inReplyToEventId = inReplyToEventId,
+                    )
+
+                    // Reset composer since the attachment has been sent
+                    messageComposerContext.composerMode = MessageComposerMode.Normal
+                }
                 is MessageComposerEvents.SetMode -> {
                     localCoroutineScope.setMode(event.composerMode, markdownTextEditorState, richTextEditorState)
                 }
@@ -496,12 +503,14 @@ class MessageComposerPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
+        inReplyToEventId: EventId?,
     ) = when (attachment) {
         is Attachment.Media -> {
             launch {
                 sendMedia(
                     uri = attachment.localMedia.uri,
                     mimeType = attachment.localMedia.info.mimeType,
+                    inReplyToEventId = inReplyToEventId,
                 )
             }
         }
@@ -520,17 +529,23 @@ class MessageComposerPresenter @AssistedInject constructor(
             formattedFileSize = null
         )
         val mediaAttachment = Attachment.Media(localMedia)
-        navigator.onPreviewAttachment(persistentListOf(mediaAttachment))
+        val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
+        navigator.onPreviewAttachment(persistentListOf(mediaAttachment), inReplyToEventId)
+
+        // Reset composer since the attachment will be sent in a separate flow
+        messageComposerContext.composerMode = MessageComposerMode.Normal
     }
 
     private suspend fun sendMedia(
         uri: Uri,
         mimeType: String,
+        inReplyToEventId: EventId?,
     ) = runCatchingExceptions {
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
             mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
+            inReplyToEventId = inReplyToEventId,
         ).getOrThrow()
     }
         .onFailure { cause ->

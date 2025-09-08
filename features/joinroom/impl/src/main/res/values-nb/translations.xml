@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Bli med i rommet"</string>
   <string name="screen_join_room_join_restricted_message">"Du må kanskje bli invitert eller være medlem av et område for å bli med."</string>
   <string name="screen_join_room_knock_action">"Send forespørsel om å bli med"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Tillatte tegn %1$d av %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Melding (valgfritt)"</string>
   <string name="screen_join_room_knock_sent_description">"Du vil motta en invitasjon til å bli med i rommet hvis forespørselen din blir akseptert."</string>
   <string name="screen_join_room_knock_sent_title">"Forespørsel om å bli med sendt"</string>

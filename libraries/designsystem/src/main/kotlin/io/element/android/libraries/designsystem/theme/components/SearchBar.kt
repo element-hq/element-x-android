@@ -23,7 +23,10 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -67,16 +70,19 @@ fun <T> SearchBar(
 ) {
     val focusManager = LocalFocusManager.current
 
-    if (!active) {
-        onQueryChange("")
-        focusManager.clearFocus()
+    val updatedOnQueryChange by rememberUpdatedState(onQueryChange)
+    LaunchedEffect(active) {
+        if (!active) {
+            updatedOnQueryChange("")
+            focusManager.clearFocus()
+        }
     }
 
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
                 query = query,
-                onQueryChange = onQueryChange,
+                onQueryChange = updatedOnQueryChange,
                 onSearch = { focusManager.clearFocus() },
                 expanded = active,
                 onExpandedChange = onActiveChange,

@@ -46,9 +46,9 @@
   <string name="a11y_remove_reaction_with">"Wedi dileu adwaith gyda %1$s"</string>
   <string name="a11y_room_avatar">"Afatar ystafell"</string>
   <string name="a11y_send_files">"Anfon ffeiliau"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Mae angen gweithredu â chyfyngiad amser"</string>
   <string name="a11y_show_password">"Dangos y cyfrinair"</string>
   <string name="a11y_start_call">"Cychwyn galwad"</string>
-  <string name="a11y_time_limited_action_required">"Mae angen gweithredu â chyfyngiad amser"</string>
   <string name="a11y_user_avatar">"Afatar defnyddiwr"</string>
   <string name="a11y_user_menu">"Dewislen defnyddiwr"</string>
   <string name="a11y_view_avatar">"Gweld afatar"</string>

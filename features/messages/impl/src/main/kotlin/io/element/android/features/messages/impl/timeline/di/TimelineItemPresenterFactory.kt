@@ -13,7 +13,7 @@ import io.element.android.libraries.architecture.Presenter
 /**
  * A factory for a [Presenter] associated with a timeline item.
  *
- * Implementations should be annotated with [AssistedFactory] to be created by Dagger.
+ * Implementations should be annotated with [dev.zacsweers.metro.AssistedFactory] to be created by the dependency injection library.
  *
  * @param C The timeline item's [TimelineItemEventContent] subtype.
  * @param S The [Presenter]'s state class.

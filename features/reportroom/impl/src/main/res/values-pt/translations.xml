@@ -3,6 +3,6 @@
   <string name="screen_report_room_leave_failed_alert_message">"O teu relatório foi submetido com sucesso, mas houve um problema ao tentar sair da sala. Por favor, tenta novamente."</string>
   <string name="screen_report_room_leave_failed_alert_title">"Não foi possível sair da sala"</string>
   <string name="screen_report_room_reason_footer">"Denuncia esta sala aos administradores. Se as mensagens estiverem cifradas, os administradores não as poderão ler."</string>
-  <string name="screen_report_room_reason_placeholder">"Descrever a razão de denúncia…"</string>
+  <string name="screen_report_room_reason_placeholder">"Descreve a razão para denunciar…"</string>
   <string name="screen_report_room_title">"Denunciar sala"</string>
 </resources>

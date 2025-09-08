@@ -7,9 +7,10 @@
 
 package io.element.android.libraries.matrix.impl.tracing
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingService
@@ -17,10 +18,10 @@ import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import org.matrix.rustcomponents.sdk.TracingFileConfiguration
 import org.matrix.rustcomponents.sdk.reloadTracingFileWriter
 import timber.log.Timber
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) : TracingService {
+@Inject
+class RustTracingService(private val buildMeta: BuildMeta) : TracingService {
     override fun createTimberTree(target: String): Timber.Tree {
         return RustTracingTree(target = target, retrieveFromStackTrace = buildMeta.isDebuggable)
     }

@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Entra nella stanza"</string>
   <string name="screen_join_room_join_restricted_message">"Potrebbe essere necessario essere invitati o essere membro di uno spazio per partecipare."</string>
   <string name="screen_join_room_knock_action">"Bussa per partecipare"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Caratteri consentiti: %1$d di %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Messaggio (opzionale)"</string>
   <string name="screen_join_room_knock_sent_description">"Riceverai un invito a entrare nella stanza se la tua richiesta viene accettata."</string>
   <string name="screen_join_room_knock_sent_title">"Richiesta di accesso inviata"</string>

@@ -7,14 +7,15 @@
 
 package io.element.android.libraries.matrix.impl.server
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.server.UserServerResolver
-import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultUserServerResolver @Inject constructor(
+@Inject
+class DefaultUserServerResolver(
     private val matrixClient: MatrixClient,
 ) : UserServerResolver {
     override fun resolve(): String {

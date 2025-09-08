@@ -13,20 +13,21 @@ import coil3.ImageLoader
 import coil3.gif.AnimatedImageDecoder
 import coil3.gif.GifDecoder
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provider
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import okhttp3.OkHttpClient
-import javax.inject.Inject
-import javax.inject.Provider
 
 interface LoggedInImageLoaderFactory {
     fun newImageLoader(matrixClient: MatrixClient): ImageLoader
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultLoggedInImageLoaderFactory @Inject constructor(
+@Inject
+class DefaultLoggedInImageLoaderFactory(
     @ApplicationContext private val context: Context,
     private val okHttpClient: Provider<OkHttpClient>,
 ) : LoggedInImageLoaderFactory {
@@ -37,7 +38,7 @@ class DefaultLoggedInImageLoaderFactory @Inject constructor(
                     OkHttpNetworkFetcherFactory(
                         callFactory = {
                             // Use newBuilder, see https://coil-kt.github.io/coil/network/#using-a-custom-okhttpclient
-                            okHttpClient.get().newBuilder().build()
+                            okHttpClient().newBuilder().build()
                         }
                     )
                 )
@@ -56,7 +57,8 @@ class DefaultLoggedInImageLoaderFactory @Inject constructor(
     }
 }
 
-class NotLoggedInImageLoaderFactory @Inject constructor(
+@Inject
+class NotLoggedInImageLoaderFactory(
     @ApplicationContext private val context: Context,
     private val okHttpClient: Provider<OkHttpClient>,
 ) {
@@ -67,7 +69,7 @@ class NotLoggedInImageLoaderFactory @Inject constructor(
                     OkHttpNetworkFetcherFactory(
                         callFactory = {
                             // Use newBuilder, see https://coil-kt.github.io/coil/network/#using-a-custom-okhttpclient
-                            okHttpClient.get().newBuilder().build()
+                            okHttpClient().newBuilder().build()
                         }
                     )
                 )

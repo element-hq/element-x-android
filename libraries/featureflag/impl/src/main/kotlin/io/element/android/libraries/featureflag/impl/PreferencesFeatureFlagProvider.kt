@@ -9,18 +9,19 @@ package io.element.android.libraries.featureflag.impl
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 /**
  * Note: this will be used only in the nightly and in the debug build.
  */
-class PreferencesFeatureFlagProvider @Inject constructor(
+@Inject
+class PreferencesFeatureFlagProvider(
     private val buildMeta: BuildMeta,
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : MutableFeatureFlagProvider {

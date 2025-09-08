@@ -13,9 +13,9 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import io.element.android.anvilannotations.ContributesNode
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.invitepeople.api.InvitePeoplePresenter
 import io.element.android.features.invitepeople.api.InvitePeopleRenderer
 import io.element.android.libraries.architecture.NodeInputs
@@ -24,7 +24,8 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
-class AddPeopleNode @AssistedInject constructor(
+@Inject
+class AddPeopleNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,

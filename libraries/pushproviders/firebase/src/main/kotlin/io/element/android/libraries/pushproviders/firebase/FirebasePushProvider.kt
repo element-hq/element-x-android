@@ -7,9 +7,10 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
@@ -17,12 +18,12 @@ import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import timber.log.Timber
-import javax.inject.Inject
 
 private val loggerTag = LoggerTag("FirebasePushProvider", LoggerTag.PushLoggerTag)
 
-@ContributesMultibinding(AppScope::class)
-class FirebasePushProvider @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class FirebasePushProvider(
     private val firebaseStore: FirebaseStore,
     private val pusherSubscriber: PusherSubscriber,
     private val isPlayServiceAvailable: IsPlayServiceAvailable,

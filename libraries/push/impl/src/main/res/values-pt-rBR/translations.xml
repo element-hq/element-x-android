@@ -31,7 +31,7 @@
     <item quantity="other">"%d novas mensagens"</item>
   </plurals>
   <string name="notification_reaction_body">"Reagiu com %1$s"</string>
-  <string name="notification_room_action_mark_as_read">"Marcar como lido"</string>
+  <string name="notification_room_action_mark_as_read">"Marcar como lida"</string>
   <string name="notification_room_action_quick_reply">"Resposta rápida"</string>
   <string name="notification_room_invite_body">"Convidou você para entrar na sala"</string>
   <string name="notification_room_invite_body_with_sender">"%1$s te convidou para entrar na sala"</string>
@@ -58,14 +58,14 @@
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nenhum provedor de push foi selecionado."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Provedor de push atual: %1$s."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Provedor de push atual"</string>
-  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Certifique-se de que o aplicativo seja compatível com pelo menos um provedor de push."</string>
-  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nenhum suporte de provedor de push foi encontrado."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Certifique-se de que o aplicativo tenha suporte a pelo menos um provedor de push."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nenhum provedor de push com suporte foi encontrado."</string>
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Encontrado %1$d provedor de push: %2$s"</item>
-    <item quantity="other">"Encontrados %1$d provedores de push: %2$s"</item>
+    <item quantity="one">"Foi encontrado %1$d provedor de push: %2$s"</item>
+    <item quantity="other">"Foram encontrados %1$d provedores de push: %2$s"</item>
   </plurals>
-  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"O aplicativo foi desenvolvido com suporte para: %1$s"</string>
-  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Suporte ao provedor de push"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"O aplicativo foi compilado com suporte para: %1$s"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Suporte a provedores de push"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Verifique se o aplicativo pode exibir a notificação."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"A notificação não foi clicada."</string>
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Não é possível exibir a notificação."</string>
@@ -77,6 +77,6 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Erro: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Erro, não é possível testar o push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Erro, tempo limite de espera pelo push."</string>
-  <string name="troubleshoot_notifications_test_push_loop_back_success">"O push loop back levou %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"O loopback do push levou %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Teste o loopback do push"</string>
 </resources>

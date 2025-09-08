@@ -7,12 +7,13 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
 
-class MediaItemsPostProcessor @Inject constructor() {
+@Inject
+class MediaItemsPostProcessor {
     fun process(
         mediaItems: List<MediaItem>,
     ): GroupedMediaItems {

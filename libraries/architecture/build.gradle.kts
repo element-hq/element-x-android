@@ -1,3 +1,5 @@
+import extension.setupDependencyInjection
+
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -13,10 +15,12 @@ android {
     namespace = "io.element.android.libraries.architecture"
 }
 
+setupDependencyInjection()
+
 dependencies {
     api(projects.libraries.di)
     api(projects.libraries.core)
-    api(libs.dagger)
+    api(libs.metro.runtime)
     api(libs.appyx.core)
     api(libs.androidx.lifecycle.runtime)
     api(libs.molecule.runtime)

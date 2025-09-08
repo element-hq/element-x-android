@@ -21,7 +21,7 @@ class FakeMessagesNavigator(
     private val onForwardEventClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
     private val onReportContentClickLambda: (eventId: EventId, senderId: UserId) -> Unit = { _, _ -> lambdaError() },
     private val onEditPollClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
-    private val onPreviewAttachmentLambda: (attachments: ImmutableList<Attachment>) -> Unit = { _ -> lambdaError() },
+    private val onPreviewAttachmentLambda: (attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) -> Unit = { _, _ -> lambdaError() },
     private val onNavigateToRoomLambda: (roomId: RoomId, serverNames: List<String>) -> Unit = { _, _ -> lambdaError() },
     private val onOpenThreadLambda: (threadRootId: ThreadId, focusedEventId: EventId?) -> Unit = { _, _ -> lambdaError() },
 ) : MessagesNavigator {
@@ -41,8 +41,8 @@ class FakeMessagesNavigator(
         onEditPollClickLambda(eventId)
     }
 
-    override fun onPreviewAttachment(attachments: ImmutableList<Attachment>) {
-        onPreviewAttachmentLambda(attachments)
+    override fun onPreviewAttachment(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
+        onPreviewAttachmentLambda(attachments, inReplyToEventId)
     }
 
     override fun onNavigateToRoom(roomId: RoomId, serverNames: List<String>) {

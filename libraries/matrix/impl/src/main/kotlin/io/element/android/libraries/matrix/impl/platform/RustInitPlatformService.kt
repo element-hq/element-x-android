@@ -7,16 +7,17 @@
 
 package io.element.android.libraries.matrix.impl.platform
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.platform.InitPlatformService
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.impl.tracing.map
 import org.matrix.rustcomponents.sdk.initPlatform
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class RustInitPlatformService @Inject constructor() : InitPlatformService {
+@Inject
+class RustInitPlatformService : InitPlatformService {
     override fun init(tracingConfiguration: TracingConfiguration) {
         initPlatform(
             config = tracingConfiguration.map(),

@@ -7,11 +7,12 @@
 
 package io.element.android.features.messages.impl.crypto.sendfailure
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import javax.inject.Inject
 
-class VerifiedUserSendFailureFactory @Inject constructor(
+@Inject
+class VerifiedUserSendFailureFactory(
     private val room: BaseRoom,
 ) {
     suspend fun create(

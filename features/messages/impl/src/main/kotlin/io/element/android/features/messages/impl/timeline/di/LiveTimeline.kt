@@ -7,7 +7,7 @@
 
 package io.element.android.features.messages.impl.timeline.di
 
-import javax.inject.Qualifier
+import dev.zacsweers.metro.Qualifier
 
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented

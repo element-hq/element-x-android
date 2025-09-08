@@ -618,6 +618,7 @@ class AttachmentsPreviewPresenterTest {
             dispatchers = testCoroutineDispatchers(),
             mediaOptimizationSelectorPresenterFactory = mediaOptimizationSelectorPresenterFactory,
             timelineMode = timelineMode,
+            inReplyToEventId = null,
         )
     }
 

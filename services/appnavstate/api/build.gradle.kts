@@ -1,3 +1,5 @@
+import extension.setupDependencyInjection
+
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
@@ -12,6 +14,8 @@ plugins {
 android {
     namespace = "io.element.android.services.appnavstate.api"
 }
+
+setupDependencyInjection()
 
 dependencies {
     implementation(libs.coroutines.core)

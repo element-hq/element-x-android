@@ -21,12 +21,12 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.shouldShowRationale
-import com.squareup.anvil.annotations.ContributesBinding
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
@@ -37,7 +37,8 @@ import timber.log.Timber
 
 private val loggerTag = LoggerTag("DefaultPermissionsPresenter")
 
-class DefaultPermissionsPresenter @AssistedInject constructor(
+@Inject
+class DefaultPermissionsPresenter(
     @Assisted val permission: String,
     private val permissionsStore: PermissionsStore,
     private val composablePermissionStateProvider: ComposablePermissionStateProvider,

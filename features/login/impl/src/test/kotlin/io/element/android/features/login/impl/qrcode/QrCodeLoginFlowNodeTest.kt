@@ -12,7 +12,7 @@ import com.bumble.appyx.core.modality.AncestryInfo
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectoryImpl
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.login.impl.di.FakeMergedQrCodeLoginComponent
+import io.element.android.features.login.impl.di.FakeQrCodeLoginGraph
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationStep
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
@@ -183,7 +183,7 @@ class QrCodeLoginFlowNodeTest {
         return QrCodeLoginFlowNode(
             buildContext = buildContext,
             plugins = emptyList(),
-            qrCodeLoginComponentBuilder = FakeMergedQrCodeLoginComponent.Builder(qrCodeLoginManager),
+            qrCodeLoginGraphFactory = FakeQrCodeLoginGraph.Builder(qrCodeLoginManager),
             coroutineDispatchers = coroutineDispatchers,
         )
     }

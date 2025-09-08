@@ -7,7 +7,8 @@
 
 package io.element.android.libraries.wellknown.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -16,10 +17,10 @@ import io.element.android.libraries.wellknown.api.SessionWellknownRetriever
 import io.element.android.libraries.wellknown.api.WellKnown
 import kotlinx.serialization.json.Json
 import timber.log.Timber
-import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultSessionWellknownRetriever @Inject constructor(
+@Inject
+class DefaultSessionWellknownRetriever(
     private val matrixClient: MatrixClient,
     private val parser: Json,
 ) : SessionWellknownRetriever {

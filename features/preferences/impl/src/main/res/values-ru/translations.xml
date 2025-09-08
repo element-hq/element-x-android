@@ -13,6 +13,10 @@
   <string name="screen_advanced_settings_media_compression_description">"Загружайте фотографии и видео быстрее и сокращайте потребление трафика"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимизировать качество мультимедиа"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерация и безопасность"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Высокое (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Низкое (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Среднее (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Качество загружаемого видео"</string>
   <string name="screen_advanced_settings_push_provider_android">"Поставщик push-уведомлений"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Уведомления о прочтении"</string>

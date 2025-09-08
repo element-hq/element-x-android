@@ -7,18 +7,19 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.network.RetrofitFactory
 import io.element.android.libraries.pushproviders.unifiedpush.network.UnifiedPushApi
-import javax.inject.Inject
 
 interface UnifiedPushApiFactory {
     fun create(baseUrl: String): UnifiedPushApi
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultUnifiedPushApiFactory @Inject constructor(
+@Inject
+class DefaultUnifiedPushApiFactory(
     private val retrofitFactory: RetrofitFactory,
 ) : UnifiedPushApiFactory {
     override fun create(baseUrl: String): UnifiedPushApi {

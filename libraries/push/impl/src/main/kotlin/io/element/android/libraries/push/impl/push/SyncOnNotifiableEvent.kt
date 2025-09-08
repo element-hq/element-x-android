@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.push.impl.push
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -16,10 +17,10 @@ import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-class SyncOnNotifiableEvent @Inject constructor(
+@Inject
+class SyncOnNotifiableEvent(
     private val matrixClientProvider: MatrixClientProvider,
     private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,

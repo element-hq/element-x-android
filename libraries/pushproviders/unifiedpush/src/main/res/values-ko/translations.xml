@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"UnifiedPush 배포자가 사용할 수 있는지 확인하세요."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"푸시 배포자가 발견되지 않았습니다."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="other">"%1$d 배포자 목록: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"UnifiedPush 확인하기"</string>
+</resources>

@@ -10,15 +10,16 @@ package io.element.android.features.home.impl.filters
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import dev.zacsweers.metro.Inject
 import io.element.android.features.home.impl.filters.selection.FilterSelectionStrategy
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as MatrixRoomListFilter
 
-class RoomListFiltersPresenter @Inject constructor(
+@Inject
+class RoomListFiltersPresenter(
     private val roomListService: RoomListService,
     private val filterSelectionStrategy: FilterSelectionStrategy,
 ) : Presenter<RoomListFiltersState> {

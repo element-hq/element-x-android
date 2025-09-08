@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -18,14 +18,13 @@ android {
     }
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     implementation(projects.libraries.di)
 
     implementation(projects.libraries.core)
     implementation(projects.services.toolbox.api)
-    implementation(libs.dagger)
     implementation(libs.timber)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.activity.activity)

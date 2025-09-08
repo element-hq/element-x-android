@@ -66,11 +66,12 @@ fun SpaceHeaderView(
                 textAlign = TextAlign.Center,
             )
         }
-        if (joinRule != null)
+        if (joinRule != null) {
             SpaceInfoRow(
                 joinRule = joinRule,
                 numberOfRooms = numberOfRooms,
             )
+        }
         SpaceMembersView(
             heroes = heroes,
             numberOfMembers = numberOfMembers,

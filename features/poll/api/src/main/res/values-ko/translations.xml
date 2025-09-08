@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="a11y_polls_percent_of_total">
+    <item quantity="other">"%1$d 총 투표율"</item>
+  </plurals>
+  <string name="a11y_polls_will_remove_selection">"이전 선택 항목을 제거합니다"</string>
+  <string name="a11y_polls_winning_answer">"이것이 승리의 답입니다"</string>
+</resources>

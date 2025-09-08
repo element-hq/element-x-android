@@ -8,10 +8,10 @@
 package io.element.android.libraries.pushproviders.firebase
 
 import com.google.firebase.messaging.FirebaseMessaging
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import timber.log.Timber
-import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -24,7 +24,8 @@ interface FirebaseTokenDeleter {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFirebaseTokenDeleter @Inject constructor(
+@Inject
+class DefaultFirebaseTokenDeleter(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
 ) : FirebaseTokenDeleter {
     override suspend fun delete() {

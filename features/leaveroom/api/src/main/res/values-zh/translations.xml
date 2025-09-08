@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"您确定要离开此对话吗？此对话不公开，未经邀请您将无法重新加入。"</string>
   <string name="leave_room_alert_empty_subtitle">"确定要离开此聊天室吗？此处只有你一个人。如果离开此聊天室，包括你在内的所有人都将无法进入。"</string>
   <string name="leave_room_alert_private_subtitle">"确定要离开此聊天室吗？此聊天室不公开，没有邀请你将无法重新加入。"</string>
+  <string name="leave_room_alert_select_new_owner_action">"选择所有者"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"您是本房间的唯一所有者。离开房间前，您需要将所有权转移给他人。"</string>
+  <string name="leave_room_alert_select_new_owner_title">"转让所有权"</string>
   <string name="leave_room_alert_subtitle">"确定要离开聊天室吗？"</string>
 </resources>

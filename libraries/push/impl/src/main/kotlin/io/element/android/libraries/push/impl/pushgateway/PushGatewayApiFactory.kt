@@ -7,17 +7,18 @@
 
 package io.element.android.libraries.push.impl.pushgateway
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.network.RetrofitFactory
-import javax.inject.Inject
 
 interface PushGatewayApiFactory {
     fun create(baseUrl: String): PushGatewayAPI
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultPushGatewayApiFactory @Inject constructor(
+@Inject
+class DefaultPushGatewayApiFactory(
     private val retrofitFactory: RetrofitFactory,
 ) : PushGatewayApiFactory {
     override fun create(baseUrl: String): PushGatewayAPI {

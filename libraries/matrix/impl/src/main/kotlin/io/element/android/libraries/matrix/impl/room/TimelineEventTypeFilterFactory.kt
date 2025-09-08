@@ -7,19 +7,20 @@
 
 package io.element.android.libraries.matrix.impl.room
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.room.StateEventType
 import org.matrix.rustcomponents.sdk.FilterTimelineEventType
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
-import javax.inject.Inject
 
 interface TimelineEventTypeFilterFactory {
     fun create(listStateEventType: List<StateEventType>): TimelineEventTypeFilter
 }
 
 @ContributesBinding(AppScope::class)
-class RustTimelineEventTypeFilterFactory @Inject constructor() : TimelineEventTypeFilterFactory {
+@Inject
+class RustTimelineEventTypeFilterFactory : TimelineEventTypeFilterFactory {
     override fun create(listStateEventType: List<StateEventType>): TimelineEventTypeFilter {
         return TimelineEventTypeFilter.exclude(
             listStateEventType.map { stateEventType ->

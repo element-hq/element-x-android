@@ -7,8 +7,9 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -33,7 +33,8 @@ import kotlin.time.Duration.Companion.milliseconds
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 @SingleIn(AppScope::class)
-class NotificationResolverQueue @Inject constructor(
+@Inject
+class NotificationResolverQueue(
     private val notifiableEventResolver: NotifiableEventResolver,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,

@@ -11,11 +11,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.provider.Settings
 import androidx.core.content.getSystemService
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Provides the proxy settings from the system.
@@ -29,7 +29,8 @@ import javax.inject.Inject
  * ```
  */
 @ContributesBinding(AppScope::class)
-class DefaultProxyProvider @Inject constructor(
+@Inject
+class DefaultProxyProvider(
     @ApplicationContext
     private val context: Context
 ) : ProxyProvider {

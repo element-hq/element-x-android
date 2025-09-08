@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Ajouter une réaction: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_collapse_message_text_field">"Réduire la taille du composeur"</string>
   <string name="a11y_delete">"Supprimer"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d chiffre saisi"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Modifier l’avatar"</string>
   <string name="a11y_edit_room_address_hint">"L’adresse complète sera %1$s"</string>
   <string name="a11y_encryption_details">"Détails du chiffrement"</string>
+  <string name="a11y_expand_message_text_field">"Augmenter la taille du composeur"</string>
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
   <string name="a11y_join_call">"Rejoindre l’appel"</string>
   <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
@@ -40,9 +42,9 @@
   <string name="a11y_remove_reaction_with">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_room_avatar">"Avatar du salon"</string>
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Action limitée dans le temps requise, vous avez une minute pour effectuer la vérification"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_start_call">"Démarrer un appel"</string>
-  <string name="a11y_time_limited_action_required">"Demande d’action qui expirera dans un instant"</string>
   <string name="a11y_tombstoned_room">"Salon clôturé"</string>
   <string name="a11y_user_avatar">"Avatar de l’utilisateur"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
@@ -163,6 +165,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Mise à niveau disponible"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d’utilisation acceptable"</string>
+  <string name="common_add_account">"Ajouter un compte"</string>
+  <string name="common_add_another_account">"Ajouter un autre compte"</string>
   <string name="common_adding_caption">"Ajout d’une légende"</string>
   <string name="common_advanced_settings">"Paramètres avancés"</string>
   <string name="common_an_image">"une image"</string>
@@ -292,6 +296,7 @@ Raison : %1$s."</string>
   <string name="common_search_results">"Résultats de la recherche"</string>
   <string name="common_security">"Sécurité"</string>
   <string name="common_seen_by">"Vu par"</string>
+  <string name="common_select_account">"Choisir un compte"</string>
   <string name="common_send_to">"Envoyer vers"</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_sending_failed">"Échec de l’envoi"</string>
@@ -374,6 +379,8 @@ Raison : %1$s."</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"La taille maximale de fichier autorisée est: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Sélectionnez la qualité des vidéos que vous souhaitez envoyer."</string>
   <string name="dialog_video_quality_selector_title">"Sélectionnez la qualité d’envoi des vidéos"</string>
+  <string name="emoji_picker_search_placeholder">"Chercher des emojis"</string>
+  <string name="error_account_already_logged_in">"Vous êtes déjà connecté sur cet appareil en tant que %1$s."</string>
   <string name="error_account_creation_not_possible">"Votre serveur d’accueil doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>

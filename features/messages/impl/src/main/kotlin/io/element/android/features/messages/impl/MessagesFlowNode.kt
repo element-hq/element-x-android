@@ -20,10 +20,10 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.Interaction
-import io.element.android.anvilannotations.ContributesNode
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
@@ -92,7 +92,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-class MessagesFlowNode @AssistedInject constructor(
+@Inject
+class MessagesFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val matrixClient: MatrixClient,
@@ -141,7 +142,7 @@ class MessagesFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
-        data class AttachmentPreview(val timelineMode: Timeline.Mode, val attachment: Attachment) : NavTarget
+        data class AttachmentPreview(val timelineMode: Timeline.Mode, val attachment: Attachment, val inReplyToEventId: EventId?) : NavTarget
 
         @Parcelize
         data class LocationViewer(val location: Location, val description: String?) : NavTarget
@@ -223,10 +224,11 @@ class MessagesFlowNode @AssistedInject constructor(
                         )
                     }
 
-                    override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
+                    override fun onPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
                         backstack.push(NavTarget.AttachmentPreview(
                             attachment = attachments.first(),
                             timelineMode = Timeline.Mode.Live,
+                            inReplyToEventId = inReplyToEventId,
                         ))
                     }
 
@@ -313,6 +315,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 val inputs = AttachmentsPreviewNode.Inputs(
                     attachment = navTarget.attachment,
                     timelineMode = navTarget.timelineMode,
+                    inReplyToEventId = navTarget.inReplyToEventId,
                 )
                 createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
@@ -415,10 +418,11 @@ class MessagesFlowNode @AssistedInject constructor(
                         )
                     }
 
-                    override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
+                    override fun onPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
                         backstack.push(NavTarget.AttachmentPreview(
                             attachment = attachments.first(),
-                            timelineMode = Timeline.Mode.Thread(navTarget.threadRootId)
+                            timelineMode = Timeline.Mode.Thread(navTarget.threadRootId),
+                            inReplyToEventId = inReplyToEventId,
                         ))
                     }
 

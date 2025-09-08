@@ -7,14 +7,15 @@
 
 package io.element.android.libraries.dateformatter.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultDateFormatter @Inject constructor(
+@Inject
+class DefaultDateFormatter(
     private val dateFormatterFull: DateFormatterFull,
     private val dateFormatterMonth: DateFormatterMonth,
     private val dateFormatterDay: DateFormatterDay,

@@ -7,18 +7,19 @@
 
 package io.element.android.features.joinroom.impl.di
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import javax.inject.Inject
 
 interface ForgetRoom {
     suspend operator fun invoke(roomId: RoomId): Result<Unit>
 }
 
 @ContributesBinding(SessionScope::class)
-class DefaultForgetRoom @Inject constructor(private val client: MatrixClient) : ForgetRoom {
+@Inject
+class DefaultForgetRoom(private val client: MatrixClient) : ForgetRoom {
     override suspend fun invoke(roomId: RoomId): Result<Unit> {
         return client.getRoom(roomId)?.use { it.forget() }
             ?: Result.failure(IllegalStateException("Room not found"))

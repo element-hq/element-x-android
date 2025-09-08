@@ -7,14 +7,15 @@
 
 package io.element.android.features.call.impl.utils
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.call.impl.BuildConfig
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsProvider
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultCallAnalyticCredentialsProvider @Inject constructor() : CallAnalyticCredentialsProvider {
+@Inject
+class DefaultCallAnalyticCredentialsProvider : CallAnalyticCredentialsProvider {
     override val posthogUserId: String? = BuildConfig.POSTHOG_USER_ID.takeIf { it.isNotBlank() }
     override val posthogApiHost: String? = BuildConfig.POSTHOG_API_HOST.takeIf { it.isNotBlank() }
     override val posthogApiKey: String? = BuildConfig.POSTHOG_API_KEY.takeIf { it.isNotBlank() }

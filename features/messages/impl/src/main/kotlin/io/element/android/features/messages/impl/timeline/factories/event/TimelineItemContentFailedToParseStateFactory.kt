@@ -7,12 +7,13 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
-import javax.inject.Inject
 
-class TimelineItemContentFailedToParseStateFactory @Inject constructor() {
+@Inject
+class TimelineItemContentFailedToParseStateFactory {
     @Suppress("UNUSED_PARAMETER")
     fun create(failedToParseState: FailedToParseStateContent): TimelineItemEventContent {
         return TimelineItemUnknownContent

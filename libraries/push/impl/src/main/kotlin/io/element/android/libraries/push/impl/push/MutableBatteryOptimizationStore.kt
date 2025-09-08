@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.push.impl.push
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
-import javax.inject.Inject
 
 interface MutableBatteryOptimizationStore {
     suspend fun showBatteryOptimizationBanner()
@@ -19,7 +19,8 @@ interface MutableBatteryOptimizationStore {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultMutableBatteryOptimizationStore @Inject constructor(
+@Inject
+class DefaultMutableBatteryOptimizationStore(
     private val defaultPushDataStore: DefaultPushDataStore,
 ) : MutableBatteryOptimizationStore {
     override suspend fun showBatteryOptimizationBanner() {

@@ -3,8 +3,15 @@
   <string name="banner_battery_optimization_content_android">"Ushbu ilova uchun quvvatni optimallashtirishni oʻchirib qoʻying, barcha xabarnomalar qabul qilinganligiga ishonch hosil qilish uchun."</string>
   <string name="banner_battery_optimization_submit_android">"Optimallashtirishni o\'chiring"</string>
   <string name="banner_battery_optimization_title_android">"Bildirishnoma kelmayaptimi?"</string>
+  <string name="banner_set_up_recovery_content">"Mavjud barcha qurilmalarni yoʻqotgan boʻlsangiz, kriptografik kimligingizni va xabarlar tarixini qayta tiklovchi kalit bilan saqlab qoʻying."</string>
   <string name="banner_set_up_recovery_submit">"Qayta tiklashni sozlang"</string>
   <string name="banner_set_up_recovery_title">"Hisobingizni himoya qilish uchun tiklashni sozlang"</string>
+  <string name="confirm_recovery_key_banner_message">"Kalit saqlash joyingiz va xabarlar tarixingizga kirishni saqlab qolish uchun tiklash kalitingizni tasdiqlang."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Qayta tiklash kalitingizni kiriting"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Tiklash kalitini unutdingizmi?"</string>
+  <string name="confirm_recovery_key_banner_title">"Kalit saqlash joyi sinxronlashmagan"</string>
+  <string name="full_screen_intent_banner_message">"Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring."</string>
+  <string name="full_screen_intent_banner_title">"Qoʻngʻiroq tajribangizni yaxshilang"</string>
   <string name="screen_home_tab_chats">"Suhbatlar"</string>
   <string name="screen_invites_decline_chat_message">"Haqiqatan ham qo\'shilish taklifini rad qilmoqchimisiz%1$s ?"</string>
   <string name="screen_invites_decline_chat_title">"Taklifni rad etish"</string>
@@ -17,9 +24,26 @@
   <string name="screen_roomlist_a11y_create_message">"Yangi suhbat yoki xona yarating"</string>
   <string name="screen_roomlist_empty_message">"Kimgadir xabar yuborishdan boshlang."</string>
   <string name="screen_roomlist_empty_title">"Hozircha chatlar yo‘q."</string>
+  <string name="screen_roomlist_filter_favourites">"Sevimlilar"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Siz chat sozlamalarida suhbatni sevimlilar ro‘yxatiga qo‘shishingiz mumkin. 
+Hozircha, boshqa suhbatlaringizni ko‘rish uchun filtrlarni bekor qilishingiz mumkin."</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Sizda hali sevimli chatlar yo‘q"</string>
   <string name="screen_roomlist_filter_invites">"Takliflar"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Sizda hech qanday kutilayotgan takliflar yoʻq."</string>
+  <string name="screen_roomlist_filter_low_priority">"Past darajali"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Boshqa suhbatlaringizni koʻrish uchun filtrlarni bekor qilishingiz mumkin"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Sizda bu tanlov uchun chatlar yo‘q"</string>
   <string name="screen_roomlist_filter_people">"Odamlar"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Sizda hali hech qanday shaxsiy xabarlar yo‘q"</string>
+  <string name="screen_roomlist_filter_rooms">"Xonalar"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Hali hech qaysi xonada emassiz"</string>
+  <string name="screen_roomlist_filter_unreads">"Oʻqilmaganlar"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Tabriklaymiz! 
+Sizda oʻqilmagan xabarlar yoʻq!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Qo‘shilish so‘rovi yuborildi"</string>
   <string name="screen_roomlist_main_space_title">"Suhbatlar"</string>
+  <string name="screen_roomlist_mark_as_read">"Oʻqilgan deb belgilash"</string>
+  <string name="screen_roomlist_mark_as_unread">"Oʻqilmagan deb belgilash"</string>
   <string name="session_verification_banner_message">"Siz yangi qurilmadan foydalanayotganga o‘xshaysiz. Shifrlangan xabarlaringizga kirish uchun boshqa qurilma bilan tasdiqlang."</string>
   <string name="session_verification_banner_title">"Siz ekanligingizni tasdiqlang"</string>
 </resources>

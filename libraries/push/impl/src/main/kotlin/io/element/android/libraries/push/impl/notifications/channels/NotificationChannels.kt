@@ -14,13 +14,13 @@ import android.provider.Settings
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.NotificationConfig
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider
-import javax.inject.Inject
 
 /* ==========================================================================================
  * IDs for channels
@@ -57,7 +57,8 @@ private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSI
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultNotificationChannels @Inject constructor(
+@Inject
+class DefaultNotificationChannels(
     private val notificationManager: NotificationManagerCompat,
     private val stringProvider: StringProvider,
 ) : NotificationChannels {

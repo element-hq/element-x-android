@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.ModerationActionState
@@ -38,12 +39,14 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
-class RoomMemberModerationPresenter @Inject constructor(
+@Inject
+class RoomMemberModerationPresenter(
     private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
@@ -82,6 +85,9 @@ class RoomMemberModerationPresenter @Inject constructor(
                     )
                 }
                 is RoomMemberModerationEvents.ProcessAction -> {
+                    // First, hide any list of existing actions that could be displayed
+                    moderationActions.value = persistentListOf()
+
                     when (event.action) {
                         is ModerationAction.DisplayProfile -> Unit
                         is ModerationAction.KickUser -> {
@@ -118,6 +124,7 @@ class RoomMemberModerationPresenter @Inject constructor(
                 }
                 is InternalRoomMemberModerationEvents.Reset -> {
                     selectedUser = null
+                    moderationActions.value = persistentListOf()
                     kickUserAsyncAction.value = AsyncAction.Uninitialized
                     banUserAsyncAction.value = AsyncAction.Uninitialized
                     unbanUserAsyncAction.value = AsyncAction.Uninitialized
@@ -204,7 +211,15 @@ class RoomMemberModerationPresenter @Inject constructor(
             action.runUpdatingState {
                 val result = block()
                 if (result.isSuccess) {
-                    room.membersStateFlow.drop(1).take(1)
+                    // We wait a bit to ensure the server has processed the membership change
+                    delay(50.milliseconds)
+
+                    // Update the members to ensure we have the latest state
+                    launch { room.updateMembers() }
+
+                    // Wait for the membership change to be processed and returned
+                    // We drop the first emission as it's the current state
+                    room.membersStateFlow.drop(1).first()
                 }
                 result
             }

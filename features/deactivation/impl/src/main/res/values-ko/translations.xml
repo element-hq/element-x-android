@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"계정을 비활성화하시겠습니까? 이 작업은 되돌릴 수 없습니다."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"모든 내 메시지 삭제"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"경고: 향후 사용자는 불완전한 대화 내용을 볼 수 있습니다."</string>
+  <string name="screen_deactivate_account_description">"계정을 비활성화하는 것은 %1$s 이며, 다음과 같은 조치를 취합니다:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"불가역적"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s 귀하의 계정 (로그인할 수 없으며, 귀하의 ID는 재사용할 수 없습니다)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"영구적으로 비활성화"</string>
+  <string name="screen_deactivate_account_list_item_2">"모든 채팅방에서 자신을 제거하세요."</string>
+  <string name="screen_deactivate_account_list_item_3">"당사의 신원 서버에서 귀하의 계정 정보를 삭제하세요."</string>
+  <string name="screen_deactivate_account_list_item_4">"메시지는 등록된 사용자에게는 계속 표시되지만, 삭제하면 신규 또는 미등록 사용자는 볼 수 없게 됩니다."</string>
+  <string name="screen_deactivate_account_title">"계정 비활성화"</string>
+</resources>

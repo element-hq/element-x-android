@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -20,7 +20,7 @@ android {
     }
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     api(projects.features.location.api)
@@ -37,8 +37,6 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(libs.accompanist.permission)
     implementation(projects.libraries.uiStrings)
-    implementation(libs.dagger)
-
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

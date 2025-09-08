@@ -15,12 +15,12 @@ import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
 import timber.log.Timber
-import javax.inject.Inject
 
 interface BatteryOptimization {
     /**
@@ -45,7 +45,8 @@ interface BatteryOptimization {
 }
 
 @ContributesBinding(AppScope::class)
-class AndroidBatteryOptimization @Inject constructor(
+@Inject
+class AndroidBatteryOptimization(
     @ApplicationContext
     private val context: Context,
     private val externalIntentLauncher: ExternalIntentLauncher,

@@ -9,11 +9,14 @@
   <string name="emoji_picker_category_places">"Viagens e Lugares"</string>
   <string name="emoji_picker_category_symbols">"Símbolos"</string>
   <string name="screen_media_upload_preview_caption_warning">"As legendas poderão não ser visíveis em versões mais antigas da aplicação."</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"Toca para alterar a qualidade de carregamento do vídeo"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Não foi possível enviar o ficheiro"</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Falha ao processar multimédia para carregamento, por favor tente novamente."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Falhar ao carregar multimédia, por favor tente novamente."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"O tamanho máximo permitido é %1$s."</string>
   <string name="screen_media_upload_preview_error_too_large_title">"O ficheiro é demasiado grande para enviar"</string>
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimiza a qualidade da imagem"</string>
+  <string name="screen_media_upload_preview_processing">"A processar…"</string>
   <string name="screen_report_content_block_user">"Bloquear utilizador"</string>
   <string name="screen_report_content_block_user_hint">"Ativar para ocultar todas as atuais e futuras mensagens deste utilizador"</string>
   <string name="screen_report_content_explanation">"Esta mensagem será denunciada ao administrador do teu servidor. Porém, não lhe será possível ler quaisquer mensagens cifradas."</string>

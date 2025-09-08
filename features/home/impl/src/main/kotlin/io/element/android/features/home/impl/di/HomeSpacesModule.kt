@@ -7,16 +7,16 @@
 
 package io.element.android.features.home.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.home.impl.spaces.HomeSpacesPresenter
 import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 
+@BindingContainer
 @ContributesTo(SessionScope::class)
-@Module
 interface HomeSpacesModule {
     @Binds
     fun bindHomeSpacesPresenter(presenter: HomeSpacesPresenter): Presenter<HomeSpacesState>

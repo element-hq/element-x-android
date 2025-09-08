@@ -7,8 +7,9 @@
 
 package io.element.android.libraries.push.impl.troubleshoot
 
-import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
@@ -22,11 +23,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import timber.log.Timber
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-@ContributesMultibinding(AppScope::class)
-class NotificationTest @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class NotificationTest(
     private val notificationCreator: NotificationCreator,
     private val notificationDisplayer: NotificationDisplayer,
     private val notificationClickHandler: NotificationClickHandler,

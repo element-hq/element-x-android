@@ -9,14 +9,15 @@ package io.element.android.features.poll.impl.history
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultPollHistoryEntryPoint @Inject constructor() : PollHistoryEntryPoint {
+@Inject
+class DefaultPollHistoryEntryPoint : PollHistoryEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
         return parentNode.createNode<PollHistoryFlowNode>(buildContext)
     }

@@ -7,16 +7,17 @@
 
 package io.element.android.libraries.pushstore.impl.clientsecret
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultPushClientSecret @Inject constructor(
+@Inject
+class DefaultPushClientSecret(
     private val pushClientSecretFactory: PushClientSecretFactory,
     private val pushClientSecretStore: PushClientSecretStore,
 ) : PushClientSecret {

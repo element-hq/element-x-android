@@ -9,16 +9,17 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 
 interface ReplyMessageExtractor {
     fun getReplyMessage(intent: Intent): String?
 }
 
 @ContributesBinding(AppScope::class)
-class AndroidReplyMessageExtractor @Inject constructor() : ReplyMessageExtractor {
+@Inject
+class AndroidReplyMessageExtractor : ReplyMessageExtractor {
     override fun getReplyMessage(intent: Intent): String? {
         return RemoteInput.getResultsFromIntent(intent)
             ?.getCharSequence(NotificationBroadcastReceiver.KEY_TEXT_REPLY)

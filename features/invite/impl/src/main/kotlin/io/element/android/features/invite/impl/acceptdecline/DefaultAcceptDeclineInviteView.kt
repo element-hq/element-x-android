@@ -9,15 +9,16 @@ package io.element.android.features.invite.impl.acceptdecline
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
-import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultAcceptDeclineInviteView @Inject constructor() : AcceptDeclineInviteView {
+@Inject
+class DefaultAcceptDeclineInviteView : AcceptDeclineInviteView {
     @Composable
     override fun Render(
         state: AcceptDeclineInviteState,

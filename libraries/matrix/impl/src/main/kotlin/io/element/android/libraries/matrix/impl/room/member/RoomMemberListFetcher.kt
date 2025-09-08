@@ -79,35 +79,35 @@ internal class RoomMemberListFetcher(
         Timber.i("Loading cached members for room $roomId")
         try {
             // Send current member list with pending state to notify the UI that we are loading new members
-            emit(pendingWithCurrentMembers())
+            value = pendingWithCurrentMembers()
             val members = parseAndEmitMembers(room.membersNoSync())
             val newState = if (asPendingState) {
                 RoomMembersState.Pending(prevRoomMembers = members)
             } else {
                 RoomMembersState.Ready(members)
             }
-            emit(newState)
+            value = newState
         } catch (exception: CancellationException) {
             Timber.d("Cancelled loading cached members for room $roomId")
             throw exception
         } catch (exception: Exception) {
             Timber.e(exception, "Failed to load cached members for room $roomId")
-            emit(RoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList()))
+            value = RoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList())
         }
     }
 
     private suspend fun MutableStateFlow<RoomMembersState>.fetchRemoteRoomMembers() {
         try {
             // Send current member list with pending state to notify the UI that we are loading new members
-            emit(pendingWithCurrentMembers())
+            value = pendingWithCurrentMembers()
             // Start loading new members
-            emit(RoomMembersState.Ready(parseAndEmitMembers(room.members())))
+            value = RoomMembersState.Ready(parseAndEmitMembers(room.members()))
         } catch (exception: CancellationException) {
             Timber.d("Cancelled loading updated members for room $roomId")
             throw exception
         } catch (exception: Exception) {
             Timber.e(exception, "Failed to load updated members for room $roomId")
-            emit(RoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList()))
+            value = RoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList())
         }
     }
 

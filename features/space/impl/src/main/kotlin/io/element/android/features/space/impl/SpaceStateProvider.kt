@@ -9,6 +9,7 @@ package io.element.android.features.space.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 
 open class SpaceStateProvider : PreviewParameterProvider<SpaceState> {
     override val values: Sequence<SpaceState>
@@ -21,5 +22,7 @@ open class SpaceStateProvider : PreviewParameterProvider<SpaceState> {
 fun aSpaceState() = SpaceState(
     parentSpace = null,
     children = persistentListOf(),
+    seenSpaceInvites = persistentSetOf(),
+    hideInvitesAvatar = false,
     eventSink = {}
 )

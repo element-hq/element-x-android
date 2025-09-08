@@ -10,18 +10,19 @@ package io.element.android.features.rageshake.impl.screenshot
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.bitmap.writeBitmap
 import io.element.android.libraries.androidutils.file.safeDelete
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.ApplicationContext
 import java.io.File
-import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultScreenshotHolder @Inject constructor(
+@Inject
+class DefaultScreenshotHolder(
     @ApplicationContext private val context: Context,
 ) : ScreenshotHolder {
     private val file = File(context.filesDir, "screenshot.png")

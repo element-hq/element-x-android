@@ -9,9 +9,9 @@ package io.element.android.libraries.voicerecorder.impl.di
 
 import android.media.AudioFormat
 import android.media.MediaRecorder
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
@@ -19,7 +19,7 @@ import io.element.android.libraries.voicerecorder.impl.audio.SampleRate
 import io.element.android.libraries.voicerecorder.impl.file.VoiceFileConfig
 import io.element.android.opusencoder.OggOpusEncoder
 
-@Module
+@BindingContainer
 @ContributesTo(RoomScope::class)
 object VoiceRecorderModule {
     @Provides
@@ -39,7 +39,7 @@ object VoiceRecorderModule {
     }
 
     @Provides
-    fun provideVoiceFileConfig(): VoiceFileConfig =
+    public fun provideVoiceFileConfig(): VoiceFileConfig =
         VoiceFileConfig(
             cacheSubdir = "voice_recordings",
             fileExt = "ogg",

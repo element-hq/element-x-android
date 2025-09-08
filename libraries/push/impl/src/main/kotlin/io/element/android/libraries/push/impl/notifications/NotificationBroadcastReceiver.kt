@@ -10,8 +10,8 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
-import javax.inject.Inject
 
 /**
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.).

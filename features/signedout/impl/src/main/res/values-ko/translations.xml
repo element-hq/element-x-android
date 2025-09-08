@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"다른 세션에서 비밀번호를 변경하셨습니다."</string>
+  <string name="screen_signed_out_reason_2">"다른 세션에서 세션을 삭제했습니다."</string>
+  <string name="screen_signed_out_reason_3">"귀하의 서버 관리자가 귀하의 액세스를 무효화했습니다."</string>
+  <string name="screen_signed_out_subtitle">"아래 나열된 이유 중 하나로 인해 로그아웃되었을 수 있습니다. 계속 사용하려면 다시 로그인하세요 %s ."</string>
+  <string name="screen_signed_out_title">"로그아웃 되었습니다"</string>
+</resources>

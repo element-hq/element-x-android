@@ -7,13 +7,15 @@
 
 package io.element.android.libraries.matrix.impl.paths
 
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.di.CacheDirectory
 import java.io.File
 import java.util.UUID
-import javax.inject.Inject
 
-class SessionPathsFactory @Inject constructor(
-    private val baseDirectory: File,
+@Inject
+class SessionPathsFactory(
+    @BaseDirectory private val baseDirectory: File,
     @CacheDirectory private val cacheDirectory: File,
 ) {
     fun create(): SessionPaths {

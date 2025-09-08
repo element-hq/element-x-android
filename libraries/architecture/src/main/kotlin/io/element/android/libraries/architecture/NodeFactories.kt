@@ -11,6 +11,8 @@ import android.content.Context
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import dev.zacsweers.metro.Multibinds
+import kotlin.reflect.KClass
 
 inline fun <reified N : Node> Node.createNode(
     buildContext: BuildContext,
@@ -32,11 +34,11 @@ inline fun <reified N : Node> NodeFactoriesBindings.createNode(
     buildContext: BuildContext,
     plugins: List<Plugin> = emptyList()
 ): N {
-    val nodeClass = N::class.java
+    val nodeClass = N::class
     val nodeFactoryMap = nodeFactories()
     // Note to developers: If you got the error below, make sure to build again after
-    // clearing the cache (sometimes several times) to let Dagger generate the NodeFactory.
-    val nodeFactory = nodeFactoryMap[nodeClass] ?: error("Cannot find NodeFactory for ${nodeClass.name}.")
+    // clearing the cache (sometimes several times) to let codegen generate the NodeFactory.
+    val nodeFactory = nodeFactoryMap[nodeClass] ?: error("Cannot find NodeFactory for ${nodeClass.java.name}.")
 
     @Suppress("UNCHECKED_CAST")
     val castedNodeFactory = nodeFactory as? AssistedNodeFactory<N>
@@ -44,6 +46,8 @@ inline fun <reified N : Node> NodeFactoriesBindings.createNode(
     return node as N
 }
 
+// @BindingContainer
 interface NodeFactoriesBindings {
-    fun nodeFactories(): Map<Class<out Node>, AssistedNodeFactory<*>>
+    @Multibinds
+    fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>>
 }

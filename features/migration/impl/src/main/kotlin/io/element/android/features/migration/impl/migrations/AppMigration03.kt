@@ -7,15 +7,16 @@
 
 package io.element.android.features.migration.impl.migrations
 
-import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 
 /**
  * This performs the same operation as [AppMigration01], since we need to clear the local logs again.
  */
-@ContributesMultibinding(AppScope::class)
-class AppMigration03 @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class AppMigration03(
     private val migration01: AppMigration01,
 ) : AppMigration {
     override val order: Int = 3

@@ -7,13 +7,14 @@
 
 package io.element.android.libraries.network.interceptors
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.network.headers.HttpHeaders
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import okhttp3.Interceptor
 import okhttp3.Response
-import javax.inject.Inject
 
-class UserAgentInterceptor @Inject constructor(
+@Inject
+class UserAgentInterceptor(
     private val userAgentProvider: UserAgentProvider,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
