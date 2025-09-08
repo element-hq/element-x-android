@@ -26,7 +26,7 @@ import io.element.android.libraries.architecture.inputs
 class ViewFolderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-//    presenterFactory: ViewFolderPresenter.Factory,
+    presenterFactory: ViewFolderPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(
         val canGoUp: Boolean,
@@ -40,10 +40,10 @@ class ViewFolderNode(
 
     private val inputs: Inputs = inputs()
 
-//    private val presenter = presenterFactory.create(
-//        canGoUp = inputs.canGoUp,
-//        path = inputs.path,
-//    )
+    private val presenter = presenterFactory.create(
+        canGoUp = inputs.canGoUp,
+        path = inputs.path,
+    )
 
     private fun onBackClick() {
         plugins<Callback>().forEach { it.onBackClick() }
@@ -55,12 +55,12 @@ class ViewFolderNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-//        val state = presenter.present()
-//        ViewFolderView(
-//            state = state,
-//            modifier = modifier,
-//            onNavigateTo = ::onNavigateTo,
-//            onBackClick = ::onBackClick,
-//        )
+        val state = presenter.present()
+        ViewFolderView(
+            state = state,
+            modifier = modifier,
+            onNavigateTo = ::onNavigateTo,
+            onBackClick = ::onBackClick,
+        )
     }
 }
