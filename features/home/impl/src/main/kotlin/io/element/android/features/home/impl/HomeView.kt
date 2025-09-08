@@ -194,7 +194,7 @@ private fun HomeScaffold(
             )
         },
         bottomBar = {
-            if (state.isSpaceFeatureEnabled) {
+            if (state.showNavigationBar) {
                 NavigationBar(
                     containerColor = Color.Transparent,
                     modifier = Modifier

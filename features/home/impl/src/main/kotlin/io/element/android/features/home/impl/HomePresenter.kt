@@ -74,6 +74,12 @@ class HomePresenter(
             }
         }
 
+        LaunchedEffect(homeSpacesState.spaceRooms.isEmpty()) {
+            // If the last space is left, ensure that the Chat view is rendered.
+            if (homeSpacesState.spaceRooms.isEmpty()) {
+                currentHomeNavigationBarItemOrdinal = HomeNavigationBarItem.Chats.ordinal
+            }
+        }
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         return HomeState(
             matrixUser = matrixUser.value,
