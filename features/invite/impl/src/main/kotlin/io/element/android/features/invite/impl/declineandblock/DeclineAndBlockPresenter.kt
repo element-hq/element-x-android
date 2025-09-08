@@ -29,11 +29,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Inject
- class DeclineAndBlockPresenter(
+class DeclineAndBlockPresenter(
     @Assisted private val inviteData: InviteData,
     private val declineInvite: DeclineInvite,
     private val snackbarDispatcher: SnackbarDispatcher,
- ) : Presenter<DeclineAndBlockState> {
+) : Presenter<DeclineAndBlockState> {
     @AssistedFactory
     interface Factory {
         fun create(inviteData: InviteData): DeclineAndBlockPresenter
@@ -90,4 +90,4 @@ import kotlinx.coroutines.launch
             }
         }
     }
- }
+}

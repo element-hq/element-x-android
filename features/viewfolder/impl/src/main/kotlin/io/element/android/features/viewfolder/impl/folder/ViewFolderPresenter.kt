@@ -21,11 +21,11 @@ import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableList
 
 @Inject
- class ViewFolderPresenter(
+class ViewFolderPresenter(
     @Assisted val canGoUp: Boolean,
     @Assisted val path: String,
     private val folderExplorer: FolderExplorer,
- ) : Presenter<ViewFolderState> {
+) : Presenter<ViewFolderState> {
     @AssistedFactory
     interface Factory {
         fun create(canGoUp: Boolean, path: String): ViewFolderPresenter
@@ -45,4 +45,4 @@ import kotlinx.collections.immutable.toImmutableList
             content = content.toImmutableList(),
         )
     }
- }
+}
