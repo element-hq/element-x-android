@@ -28,6 +28,9 @@ internal fun SpaceRoomListInterface.paginationStateFlow(): Flow<SpaceRoomListPag
             trySend(paginationState)
         }
     }
+    // Send the initial value
+    trySend(paginationState())
+    // Then subscribe to updates
     val result = subscribeToPaginationStateUpdates(listener)
     awaitClose {
         result.cancelAndDestroy()

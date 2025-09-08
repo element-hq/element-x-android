@@ -10,40 +10,52 @@ package io.element.android.libraries.matrix.impl.spaces
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import uniffi.matrix_sdk_ui.SpaceRoomListPaginationState
 import org.matrix.rustcomponents.sdk.SpaceRoomList as InnerSpaceRoomList
 
 class RustSpaceRoomList(
-    private val inner: InnerSpaceRoomList,
+    private val innerProvider: suspend () -> InnerSpaceRoomList,
     sessionCoroutineScope: CoroutineScope,
     spaceRoomMapper: SpaceRoomMapper,
 ) : SpaceRoomList {
+
+    private val inner = CompletableDeferred<InnerSpaceRoomList>()
     override val spaceRoomsFlow = MutableSharedFlow<List<SpaceRoom>>(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
-    override val paginationStatusFlow = MutableStateFlow(inner.paginationState().into())
+    override val paginationStatusFlow: MutableStateFlow<SpaceRoomList.PaginationStatus> =
+        MutableStateFlow(SpaceRoomList.PaginationStatus.Idle(hasMoreToLoad = false))
     private val spaceListUpdateProcessor = SpaceListUpdateProcessor(spaceRoomsFlow, spaceRoomMapper)
 
     init {
-        inner.paginationStateFlow()
-            .onEach { paginationStatus ->
-                paginationStatusFlow.emit(paginationStatus.into())
-            }
-            .launchIn(sessionCoroutineScope)
+        sessionCoroutineScope.launch {
+            inner.complete(innerProvider())
+        }
+        sessionCoroutineScope.launch {
+            inner.await().paginationStateFlow()
+                .onEach { paginationStatus ->
+                    paginationStatusFlow.emit(paginationStatus.into())
+                }
+                .collect()
+        }
 
-        inner.spaceListUpdateFlow()
-            .onEach { updates ->
-                spaceListUpdateProcessor.postUpdates(updates)
-            }
-            .launchIn(sessionCoroutineScope)
+        sessionCoroutineScope.launch {
+            inner.await().spaceListUpdateFlow()
+                .onEach { updates ->
+                    spaceListUpdateProcessor.postUpdates(updates)
+                }
+                .collect()
+        }
     }
 
     override suspend fun paginate(): Result<Unit> {
         return runCatchingExceptions {
-            inner.paginate()
+            inner.await().paginate()
         }
     }
 

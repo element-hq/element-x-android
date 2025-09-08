@@ -30,6 +30,13 @@ interface SpaceEntryPoint : FeatureEntryPoint {
     sealed interface Params : Plugin {
         data class Id(val roomId: RoomId) : Params
         data class Full(val spaceRoom: SpaceRoom) : Params
+
+        fun roomId(): RoomId {
+            return when (this) {
+                is Id -> roomId
+                is Full -> spaceRoom.roomId
+            }
+        }
     }
 
     interface Callback : Plugin {
