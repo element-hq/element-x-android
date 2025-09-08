@@ -24,7 +24,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.media3.common.util.UnstableApi
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.Inject
@@ -516,7 +515,6 @@ class MessageComposerPresenter(
         }
     }
 
-    @UnstableApi
     private fun handlePickedMedia(
         uri: Uri?,
         mimeType: String? = null,
