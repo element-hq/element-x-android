@@ -42,7 +42,7 @@
   <string name="a11y_remove_reaction_with">"Eemalda reageerimine: %1$s"</string>
   <string name="a11y_room_avatar">"Jututoa tunnuspilt"</string>
   <string name="a11y_send_files">"Saada faile"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Palun tee see ajapiiranguga toiming"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Palun tee see ajapiiranguga toiming, sul on aega üks minut"</string>
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
   <string name="a11y_tombstoned_room">"Lõpetatuks märgitud jututuba"</string>

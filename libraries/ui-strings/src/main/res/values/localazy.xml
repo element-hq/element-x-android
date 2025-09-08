@@ -187,6 +187,7 @@
   <string name="common_current_user_rejected_invite">"Invite declined"</string>
   <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
+  <string name="common_description">"Description"</string>
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_device_id">"Device ID"</string>
   <string name="common_direct_chat">"Direct chat"</string>
