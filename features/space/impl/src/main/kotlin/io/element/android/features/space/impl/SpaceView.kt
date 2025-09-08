@@ -132,7 +132,6 @@ private fun SpaceViewTopBar(
         },
         actions = {
         },
-        windowInsets = WindowInsets(0.dp)
     )
 }
 

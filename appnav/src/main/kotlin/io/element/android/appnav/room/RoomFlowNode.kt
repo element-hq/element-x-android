@@ -30,7 +30,9 @@ import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.appnav.room.joined.LoadingRoomNodeView
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
 import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
+import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint.Params
 import io.element.android.features.roomdirectory.api.RoomDescription
+import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
@@ -43,6 +45,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
@@ -72,6 +75,7 @@ class RoomFlowNode(
     private val roomAliasResolverEntryPoint: RoomAliasResolverEntryPoint,
     private val syncService: SyncService,
     private val membershipObserver: RoomMembershipObserver,
+    private val spaceEntryPoint: SpaceEntryPoint,
 ) : BaseFlowNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Loading,
@@ -106,6 +110,9 @@ class RoomFlowNode(
 
         @Parcelize
         data class JoinedRoom(val roomId: RoomId) : NavTarget
+
+        @Parcelize
+        data class Space(val spaceId: RoomId) : NavTarget
     }
 
     override fun onBuilt() {
@@ -146,17 +153,7 @@ class RoomFlowNode(
             when (membership) {
                 CurrentUserMembership.JOINED -> {
                     if (isSpace) {
-                        // It should not happen, but probably due to an issue in the sliding sync,
-                        // we can have a space here in case the space has just been joined.
-                        // So navigate to the JoinRoom target for now, which will
-                        // handle the space not supported screen
-                        backstack.newRoot(
-                            NavTarget.JoinRoom(
-                                roomId = roomId,
-                                serverNames = serverNames,
-                                trigger = inputs.trigger.getOrNull() ?: JoinedRoom.Trigger.Invite,
-                            )
-                        )
+                        backstack.newRoot(NavTarget.Space(spaceId = roomId))
                     } else {
                         backstack.newRoot(NavTarget.JoinedRoom(roomId))
                     }
@@ -194,7 +191,7 @@ class RoomFlowNode(
                         )
                     }
                 }
-                val params = RoomAliasResolverEntryPoint.Params(navTarget.roomAlias)
+                val params = Params(navTarget.roomAlias)
                 roomAliasResolverEntryPoint.nodeBuilder(this, buildContext)
                     .callback(callback)
                     .params(params)
@@ -217,6 +214,11 @@ class RoomFlowNode(
                     initialElement = inputs.initialElement
                 )
                 createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
+            }
+            is NavTarget.Space -> {
+                spaceEntryPoint.nodeBuilder(this, buildContext)
+                    .params(SpaceEntryPoint.Params.Id(navTarget.spaceId))
+                    .build()
             }
         }
     }

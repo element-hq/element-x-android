@@ -52,15 +52,15 @@ fun HomeSpacesView(
                 )
             }
         }
-        state.spaceRooms.forEach {
-            item(it.roomId) {
-                val isInvitation = it.state == CurrentUserMembership.INVITED
+        state.spaceRooms.forEach { spaceRoom ->
+            item(spaceRoom.roomId) {
+                val isInvitation = spaceRoom.state == CurrentUserMembership.INVITED
                 SpaceRoomItemView(
-                    spaceRoom = it,
-                    showUnreadIndicator = isInvitation && it.roomId !in state.seenSpaceInvites,
+                    spaceRoom = spaceRoom,
+                    showUnreadIndicator = isInvitation && spaceRoom.roomId !in state.seenSpaceInvites,
                     hideAvatars = isInvitation && state.hideInvitesAvatar,
                     onClick = {
-                        onSpaceClick(it.roomId)
+                        onSpaceClick(spaceRoom.roomId)
                     },
                     onLongClick = {
 

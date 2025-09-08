@@ -22,10 +22,11 @@ import io.element.android.libraries.di.SessionScope
 class SpaceNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: SpacePresenter,
+    private val presenterFactory: SpacePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
     val params = plugins.filterIsInstance<SpaceEntryPoint.Params>().single()
+    private val presenter = presenterFactory.create(params)
 
     @Composable
     override fun View(modifier: Modifier) {

@@ -51,10 +51,9 @@ class RustSpaceService(
         }
     }
 
-    override suspend fun spaceRoomList(id: RoomId): SpaceRoomList {
-        val innerSpaceRoomList = innerSpaceService.spaceRoomList(id.value)
+    override fun spaceRoomList(id: RoomId): SpaceRoomList {
         return RustSpaceRoomList(
-            inner = innerSpaceRoomList,
+            innerProvider = { innerSpaceService.spaceRoomList(id.value) },
             sessionCoroutineScope = sessionCoroutineScope,
             spaceRoomMapper = spaceRoomMapper
         )
