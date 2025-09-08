@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.spaces
 
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
@@ -50,8 +51,8 @@ class RustSpaceService(
         }
     }
 
-    override suspend fun spaceRoomList(spaceId: SpaceId): SpaceRoomList {
-        val innerSpaceRoomList = innerSpaceService.spaceRoomList(spaceId.value)
+    override suspend fun spaceRoomList(id: RoomId): SpaceRoomList {
+        val innerSpaceRoomList = innerSpaceService.spaceRoomList(id.value)
         return RustSpaceRoomList(
             inner = innerSpaceRoomList,
             sessionCoroutineScope = sessionCoroutineScope,
