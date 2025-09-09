@@ -52,7 +52,6 @@ import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
-import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
@@ -118,7 +117,6 @@ class LoggedInFlowNode(
     private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
     private val sendingQueue: SendQueues,
-    private val logoutEntryPoint: LogoutEntryPoint,
     private val incomingVerificationEntryPoint: IncomingVerificationEntryPoint,
     private val mediaPreviewConfigMigration: MediaPreviewConfigMigration,
     private val sessionEnterpriseService: SessionEnterpriseService,
@@ -277,9 +275,6 @@ class LoggedInFlowNode(
         data class IncomingShare(val intent: Intent) : NavTarget
 
         @Parcelize
-        data object LogoutForNativeSlidingSyncMigrationNeeded : NavTarget
-
-        @Parcelize
         data class IncomingVerificationRequest(val data: VerificationRequest.Incoming) : NavTarget
     }
 
@@ -322,10 +317,6 @@ class LoggedInFlowNode(
 
                     override fun onReportBugClick() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
-                    }
-
-                    override fun onLogoutForNativeSlidingSyncMigrationNeeded() {
-                        backstack.push(NavTarget.LogoutForNativeSlidingSyncMigrationNeeded)
                     }
                 }
                 homeEntryPoint
@@ -478,17 +469,6 @@ class LoggedInFlowNode(
                         }
                     })
                     .params(ShareEntryPoint.Params(intent = navTarget.intent))
-                    .build()
-            }
-            is NavTarget.LogoutForNativeSlidingSyncMigrationNeeded -> {
-                val callback = object : LogoutEntryPoint.Callback {
-                    override fun onChangeRecoveryKeyClick() {
-                        backstack.push(NavTarget.SecureBackup())
-                    }
-                }
-
-                logoutEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(callback)
                     .build()
             }
             is NavTarget.IncomingVerificationRequest -> {
