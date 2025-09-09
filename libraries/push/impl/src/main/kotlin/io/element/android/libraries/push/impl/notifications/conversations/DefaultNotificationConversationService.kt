@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.ui.media.InitialsAvatarBitmapGenerato
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.intent.IntentProvider
+import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -106,7 +107,7 @@ class DefaultNotificationConversationService(
                 .generateBitmap(defaultShortcutIconSize, AvatarData(id = roomId.value, name = roomName, size = AvatarSize.RoomHeader))
                 ?.let(IconCompat::createWithAdaptiveBitmap)
 
-        val shortcutInfo = ShortcutInfoCompat.Builder(context, "$sessionId-$roomId")
+        val shortcutInfo = ShortcutInfoCompat.Builder(context, createShortcutId(sessionId, roomId))
             .setShortLabel(roomName)
             .setIcon(icon)
             .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null))
@@ -127,7 +128,7 @@ class DefaultNotificationConversationService(
     }
 
     override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) {
-        val shortcutsToRemove = listOf("$sessionId-$roomId")
+        val shortcutsToRemove = listOf(createShortcutId(sessionId, roomId))
         runCatchingExceptions {
             ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)
             if (isRequestPinShortcutSupported) {
