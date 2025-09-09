@@ -20,8 +20,7 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultBugReporterUrlProvider(
+@Inject class DefaultBugReporterUrlProvider(
     private val bugReportAppNameProvider: BugReportAppNameProvider,
     private val enterpriseService: EnterpriseService,
 ) : BugReporterUrlProvider {

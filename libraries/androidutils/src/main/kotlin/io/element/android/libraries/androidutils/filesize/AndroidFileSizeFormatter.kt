@@ -17,8 +17,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 
 @ContributesBinding(AppScope::class)
-@Inject
-class AndroidFileSizeFormatter(
+@Inject class AndroidFileSizeFormatter(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) : FileSizeFormatter {

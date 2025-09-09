@@ -29,8 +29,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
-@Inject
-class TimelineItemsFactory(
+@Inject class TimelineItemsFactory(
     @Assisted config: TimelineItemsFactoryConfig,
     eventItemFactoryCreator: TimelineItemEventFactory.Creator,
     private val dispatchers: CoroutineDispatchers,

@@ -49,8 +49,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(AppScope::class)
-@Inject
-class QrCodeLoginFlowNode(
+@Inject class QrCodeLoginFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     qrCodeLoginGraphFactory: QrCodeLoginGraph.Factory,

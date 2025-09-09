@@ -27,8 +27,7 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(SessionScope::class)
-@Inject
-class StartChatNode(
+@Inject class StartChatNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: StartChatPresenter,

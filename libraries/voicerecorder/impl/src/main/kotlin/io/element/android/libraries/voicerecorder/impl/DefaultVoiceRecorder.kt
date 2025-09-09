@@ -43,8 +43,7 @@ import kotlin.time.TimeSource
 
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultVoiceRecorder(
+@Inject class DefaultVoiceRecorder(
     private val dispatchers: CoroutineDispatchers,
     private val timeSource: TimeSource,
     private val audioReaderFactory: AudioReader.Factory,

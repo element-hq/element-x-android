@@ -27,8 +27,7 @@ interface MentionSpanUpdater {
 }
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultMentionSpanUpdater(
+@Inject class DefaultMentionSpanUpdater(
     private val formatter: MentionSpanFormatter,
     private val theme: MentionSpanTheme,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,

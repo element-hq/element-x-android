@@ -22,8 +22,7 @@ import io.element.android.libraries.designsystem.showkase.getBrowserIntent
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class DeveloperSettingsNode(
+@Inject class DeveloperSettingsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: DeveloperSettingsPresenter,

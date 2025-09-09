@@ -28,8 +28,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class DeclineAndBlockPresenter(
+@Inject class DeclineAndBlockPresenter(
     @Assisted private val inviteData: InviteData,
     private val declineInvite: DeclineInvite,
     private val snackbarDispatcher: SnackbarDispatcher,

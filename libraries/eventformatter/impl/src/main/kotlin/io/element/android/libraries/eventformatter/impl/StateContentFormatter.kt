@@ -15,8 +15,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
 
-@Inject
-class StateContentFormatter(
+@Inject class StateContentFormatter(
     private val sp: StringProvider,
 ) {
     fun format(

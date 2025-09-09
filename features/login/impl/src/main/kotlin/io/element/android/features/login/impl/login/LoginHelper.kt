@@ -34,8 +34,7 @@ import kotlinx.coroutines.launch
  * It's a helper to avoid code duplication. It is used by [OnBoardingPresenter], [ConfirmAccountProviderPresenter]
  * and [ChooseAccountProviderPresenter].
  */
-@Inject
-class LoginHelper(
+@Inject class LoginHelper(
     private val oidcActionFlow: OidcActionFlow,
     private val authenticationService: MatrixAuthenticationService,
     private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,

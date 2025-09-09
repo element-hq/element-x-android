@@ -22,8 +22,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.meta.BuildMeta
 
 @ContributesNode(QrCodeLoginScope::class)
-@Inject
-class QrCodeErrorNode(
+@Inject class QrCodeErrorNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val buildMeta: BuildMeta,

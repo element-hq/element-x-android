@@ -27,8 +27,7 @@ import kotlinx.coroutines.launch
 
 private const val ACCEPT_ERROR_DISPLAY_DURATION = 1500L
 
-@Inject
-class KnockRequestsBannerPresenter(
+@Inject class KnockRequestsBannerPresenter(
     private val knockRequestsService: KnockRequestsService,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,

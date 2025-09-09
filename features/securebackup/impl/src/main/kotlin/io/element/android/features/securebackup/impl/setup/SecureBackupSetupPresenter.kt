@@ -32,8 +32,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
-class SecureBackupSetupPresenter(
+@Inject class SecureBackupSetupPresenter(
     @Assisted private val isChangeRecoveryKeyUserStory: Boolean,
     private val stateMachine: SecureBackupSetupStateMachine,
     private val encryptionService: EncryptionService,

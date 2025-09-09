@@ -46,8 +46,7 @@ import timber.log.Timber
 
 private val pusherTag = LoggerTag("Pusher", LoggerTag.PushLoggerTag)
 
-@Inject
-class LoggedInPresenter(
+@Inject class LoggedInPresenter(
     private val matrixClient: MatrixClient,
     private val syncService: SyncService,
     private val pushService: PushService,

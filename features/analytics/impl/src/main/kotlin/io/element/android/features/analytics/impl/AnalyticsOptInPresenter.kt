@@ -18,8 +18,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class AnalyticsOptInPresenter(
+@Inject class AnalyticsOptInPresenter(
     private val buildMeta: BuildMeta,
     private val analyticsService: AnalyticsService,
 ) : Presenter<AnalyticsOptInState> {

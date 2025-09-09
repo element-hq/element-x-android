@@ -117,8 +117,7 @@ class DefaultVoiceMessagePlayer(
     filename: String?,
 ) : VoiceMessagePlayer {
     @ContributesBinding(RoomScope::class) // Scoped types can't use @Inject.
-    @Inject
-class Factory(
+    @Inject class Factory(
         private val mediaPlayer: MediaPlayer,
         private val voiceMessageMediaRepoFactory: VoiceMessageMediaRepo.Factory,
     ) : VoiceMessagePlayer.Factory {

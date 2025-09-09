@@ -19,8 +19,7 @@ import io.element.android.features.roomdetails.impl.RoomDetailsFlowNode.NavTarge
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultRoomDetailsEntryPoint : RoomDetailsEntryPoint {
+@Inject class DefaultRoomDetailsEntryPoint : RoomDetailsEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDetailsEntryPoint.NodeBuilder {
         return object : RoomDetailsEntryPoint.NodeBuilder {
             val plugins = ArrayList<Plugin>()

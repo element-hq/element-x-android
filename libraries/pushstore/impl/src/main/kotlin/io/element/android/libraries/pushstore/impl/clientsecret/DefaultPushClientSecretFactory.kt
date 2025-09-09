@@ -14,8 +14,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretF
 import java.util.UUID
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPushClientSecretFactory : PushClientSecretFactory {
+@Inject class DefaultPushClientSecretFactory : PushClientSecretFactory {
     override fun create(): String {
         return UUID.randomUUID().toString()
     }

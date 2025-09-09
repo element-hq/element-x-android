@@ -12,8 +12,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.services.toolbox.api.strings.StringProvider
 
-@Inject
-class ProfileChangeContentFormatter(
+@Inject class ProfileChangeContentFormatter(
     private val sp: StringProvider,
 ) {
     fun format(

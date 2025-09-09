@@ -24,8 +24,7 @@ interface ImageLoaderHolder {
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class DefaultImageLoaderHolder(
+@Inject class DefaultImageLoaderHolder(
     private val loggedInImageLoaderFactory: LoggedInImageLoaderFactory,
     private val sessionObserver: SessionObserver,
 ) : ImageLoaderHolder {

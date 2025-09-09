@@ -32,8 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
-class SecureBackupRootPresenter(
+@Inject class SecureBackupRootPresenter(
     private val encryptionService: EncryptionService,
     private val buildMeta: BuildMeta,
     private val snackbarDispatcher: SnackbarDispatcher,

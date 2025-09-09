@@ -23,8 +23,7 @@ private val appHasCrashedKey = booleanPreferencesKey("appHasCrashed")
 private val crashDataKey = stringPreferencesKey("crashData")
 
 @ContributesBinding(AppScope::class)
-@Inject
-class PreferencesCrashDataStore(
+@Inject class PreferencesCrashDataStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : CrashDataStore {
     private val store = preferenceDataStoreFactory.create("elementx_crash")

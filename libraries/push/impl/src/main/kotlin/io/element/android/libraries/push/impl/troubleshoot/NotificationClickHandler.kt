@@ -14,8 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
 @SingleIn(AppScope::class)
-@Inject
-class NotificationClickHandler {
+@Inject class NotificationClickHandler {
     private val _state = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val state: SharedFlow<Unit> = _state
 

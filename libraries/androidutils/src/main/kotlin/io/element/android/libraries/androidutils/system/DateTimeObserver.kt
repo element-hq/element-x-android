@@ -32,8 +32,7 @@ interface DateTimeObserver {
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class DefaultDateTimeObserver(
+@Inject class DefaultDateTimeObserver(
     @ApplicationContext context: Context
 ) : DateTimeObserver {
     private val dateTimeReceiver = object : BroadcastReceiver() {

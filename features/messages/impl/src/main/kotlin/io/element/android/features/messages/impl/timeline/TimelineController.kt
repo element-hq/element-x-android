@@ -43,8 +43,7 @@ import java.util.Optional
  */
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class, binding = binding<TimelineProvider>())
-@Inject
-class TimelineController(
+@Inject class TimelineController(
     private val room: JoinedRoom,
     @LiveTimeline private val liveTimeline: Timeline,
 ) : Closeable, TimelineProvider {

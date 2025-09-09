@@ -14,8 +14,7 @@ import io.element.android.appnav.di.SessionGraphFactory
 import io.element.android.libraries.matrix.api.MatrixClient
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultSessionGraphFactory(
+@Inject class DefaultSessionGraphFactory(
     private val appGraph: AppGraph
 ) : SessionGraphFactory {
     override fun create(client: MatrixClient): Any {

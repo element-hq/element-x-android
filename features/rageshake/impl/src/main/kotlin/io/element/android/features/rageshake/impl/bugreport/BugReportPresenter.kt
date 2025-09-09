@@ -27,8 +27,7 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class BugReportPresenter(
+@Inject class BugReportPresenter(
     private val bugReporter: BugReporter,
     private val crashDataStore: CrashDataStore,
     private val screenshotHolder: ScreenshotHolder,

@@ -11,8 +11,7 @@ import androidx.compose.runtime.Composable
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 
-@Inject
-class AboutPresenter : Presenter<AboutState> {
+@Inject class AboutPresenter : Presenter<AboutState> {
     @Composable
     override fun present(): AboutState {
         return AboutState(

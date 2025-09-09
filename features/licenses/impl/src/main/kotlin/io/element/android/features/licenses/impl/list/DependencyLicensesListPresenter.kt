@@ -22,8 +22,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
-@Inject
-class DependencyLicensesListPresenter(
+@Inject class DependencyLicensesListPresenter(
     private val licensesProvider: LicensesProvider,
 ) : Presenter<DependencyLicensesListState> {
     @Composable

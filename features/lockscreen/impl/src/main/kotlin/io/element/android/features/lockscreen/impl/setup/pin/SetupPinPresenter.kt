@@ -28,8 +28,7 @@ import kotlinx.coroutines.delay
  */
 private const val DELAY_BEFORE_CONFIRMATION_STEP_IN_MILLIS = 100L
 
-@Inject
-class SetupPinPresenter(
+@Inject class SetupPinPresenter(
     private val lockScreenConfig: LockScreenConfig,
     private val pinValidator: PinValidator,
     private val buildMeta: BuildMeta,

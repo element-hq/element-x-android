@@ -20,8 +20,7 @@ import kotlin.math.sqrt
  * See: https://en.wikipedia.org/wiki/DBFS
  */
 @ContributesBinding(RoomScope::class)
-@Inject
-class DBovAudioLevelCalculator : AudioLevelCalculator {
+@Inject class DBovAudioLevelCalculator : AudioLevelCalculator {
     override fun calculateAudioLevel(buffer: ShortArray): Float {
         return buffer.rms().dBov().normalize().coerceIn(0f, 1f)
     }

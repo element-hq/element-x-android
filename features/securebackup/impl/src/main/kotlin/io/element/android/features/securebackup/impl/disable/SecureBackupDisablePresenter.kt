@@ -25,8 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
-class SecureBackupDisablePresenter(
+@Inject class SecureBackupDisablePresenter(
     private val encryptionService: EncryptionService,
     private val buildMeta: BuildMeta,
 ) : Presenter<SecureBackupDisableState> {

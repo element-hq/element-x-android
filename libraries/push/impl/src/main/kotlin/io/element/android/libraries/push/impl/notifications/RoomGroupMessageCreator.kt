@@ -33,8 +33,7 @@ interface RoomGroupMessageCreator {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultRoomGroupMessageCreator(
+@Inject class DefaultRoomGroupMessageCreator(
     private val bitmapLoader: NotificationBitmapLoader,
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,

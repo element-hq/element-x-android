@@ -21,8 +21,7 @@ interface UnifiedPushDistributorProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultUnifiedPushDistributorProvider(
+@Inject class DefaultUnifiedPushDistributorProvider(
     @ApplicationContext private val context: Context,
 ) : UnifiedPushDistributorProvider {
     override fun getDistributors(): List<Distributor> {

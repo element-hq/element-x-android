@@ -10,8 +10,7 @@ package io.element.android.libraries.dateformatter.impl
 import dev.zacsweers.metro.Inject
 import io.element.android.services.toolbox.api.strings.StringProvider
 
-@Inject
-class DateFormatterFull(
+@Inject class DateFormatterFull(
     private val stringProvider: StringProvider,
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,

@@ -15,8 +15,7 @@ import io.element.android.libraries.androidutils.system.startNotificationSetting
 import io.element.android.libraries.di.annotations.ApplicationContext
 
 @ContributesBinding(AppScope::class)
-@Inject
-class AndroidPermissionActions(
+@Inject class AndroidPermissionActions(
     @ApplicationContext private val context: Context
 ) : PermissionActions {
     override fun openSettings() {

@@ -97,8 +97,7 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
-@Inject
-class MessageComposerPresenter(
+@Inject class MessageComposerPresenter(
     @Assisted private val navigator: MessagesNavigator,
     @Assisted private val timelineController: TimelineController,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,

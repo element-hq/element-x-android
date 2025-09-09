@@ -36,8 +36,7 @@ interface SummaryGroupMessageCreator {
  * https://developer.android.com/training/notify-user/group
  */
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultSummaryGroupMessageCreator(
+@Inject class DefaultSummaryGroupMessageCreator(
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,
 ) : SummaryGroupMessageCreator {

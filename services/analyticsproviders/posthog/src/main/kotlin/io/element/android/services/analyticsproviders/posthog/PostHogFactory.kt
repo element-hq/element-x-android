@@ -15,8 +15,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.ApplicationContext
 
-@Inject
-class PostHogFactory(
+@Inject class PostHogFactory(
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
     private val posthogEndpointConfigProvider: PosthogEndpointConfigProvider,

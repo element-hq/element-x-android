@@ -26,8 +26,7 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class SecureBackupEnterRecoveryKeyPresenter(
+@Inject class SecureBackupEnterRecoveryKeyPresenter(
     private val encryptionService: EncryptionService,
     private val recoveryKeyTools: RecoveryKeyTools,
 ) : Presenter<SecureBackupEnterRecoveryKeyState> {

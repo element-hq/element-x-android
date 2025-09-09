@@ -20,8 +20,7 @@ import org.matrix.rustcomponents.sdk.reloadTracingFileWriter
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
-class RustTracingService(private val buildMeta: BuildMeta) : TracingService {
+@Inject class RustTracingService(private val buildMeta: BuildMeta) : TracingService {
     override fun createTimberTree(target: String): Timber.Tree {
         return RustTracingTree(target = target, retrieveFromStackTrace = buildMeta.isDebuggable)
     }

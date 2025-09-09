@@ -17,8 +17,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultNotificationTroubleShootEntryPoint : NotificationTroubleShootEntryPoint {
+@Inject class DefaultNotificationTroubleShootEntryPoint : NotificationTroubleShootEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NotificationTroubleShootEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

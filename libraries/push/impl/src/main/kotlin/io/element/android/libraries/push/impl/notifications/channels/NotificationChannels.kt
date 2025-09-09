@@ -57,8 +57,7 @@ private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSI
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultNotificationChannels(
+@Inject class DefaultNotificationChannels(
     private val notificationManager: NotificationManagerCompat,
     private val stringProvider: StringProvider,
 ) : NotificationChannels {

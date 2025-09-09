@@ -26,8 +26,7 @@ import java.util.Collections
 /**
  * Resolve homeserver base on search terms.
  */
-@Inject
-class HomeserverResolver(
+@Inject class HomeserverResolver(
     private val dispatchers: CoroutineDispatchers,
     private val wellknownRetriever: WellknownRetriever,
 ) {

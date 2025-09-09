@@ -14,8 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
 @SingleIn(AppScope::class)
-@Inject
-class DiagnosticPushHandler {
+@Inject class DiagnosticPushHandler {
     private val _state = MutableSharedFlow<Unit>()
     val state: SharedFlow<Unit> = _state
 

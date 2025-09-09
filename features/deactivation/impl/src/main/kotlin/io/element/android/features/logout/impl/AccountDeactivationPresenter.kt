@@ -20,8 +20,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class AccountDeactivationPresenter(
+@Inject class AccountDeactivationPresenter(
     private val matrixClient: MatrixClient,
 ) : Presenter<AccountDeactivationState> {
     @Composable

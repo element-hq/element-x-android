@@ -16,8 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import java.io.File
 
-@Inject
-class CreateRoomConfigStore(
+@Inject class CreateRoomConfigStore(
     private val roomAliasHelper: RoomAliasHelper,
 ) {
     private val createRoomConfigFlow: MutableStateFlow<CreateRoomConfig> = MutableStateFlow(CreateRoomConfig())

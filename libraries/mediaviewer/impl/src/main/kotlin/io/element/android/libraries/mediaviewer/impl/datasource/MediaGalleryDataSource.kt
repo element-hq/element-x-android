@@ -39,8 +39,7 @@ interface MediaGalleryDataSource {
 
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-@Inject
-class TimelineMediaGalleryDataSource(
+@Inject class TimelineMediaGalleryDataSource(
     private val room: BaseRoom,
     private val mediaTimeline: MediaTimeline,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,

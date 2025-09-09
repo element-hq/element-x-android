@@ -24,8 +24,7 @@ import io.element.android.libraries.architecture.runUpdatingState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class KnockRequestsListPresenter(
+@Inject class KnockRequestsListPresenter(
     private val knockRequestsService: KnockRequestsService,
 ) : Presenter<KnockRequestsListState> {
     @Composable

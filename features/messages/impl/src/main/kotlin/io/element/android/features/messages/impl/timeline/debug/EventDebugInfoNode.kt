@@ -22,8 +22,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
 @ContributesNode(RoomScope::class)
-@Inject
-class EventDebugInfoNode(
+@Inject class EventDebugInfoNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext, plugins = plugins) {

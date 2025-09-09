@@ -17,8 +17,7 @@ interface IncrementPushDataStore {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultIncrementPushDataStore(
+@Inject class DefaultIncrementPushDataStore(
     private val defaultPushDataStore: DefaultPushDataStore
 ) : IncrementPushDataStore {
     override suspend fun incrementPushCounter() {

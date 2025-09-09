@@ -39,8 +39,7 @@ interface MediaItemPresenterFactoriesModule {
  * goes out of the [LazyColumn] viewport.
  */
 @SingleIn(RoomScope::class)
-@Inject
-class MediaItemPresenterFactories(
+@Inject class MediaItemPresenterFactories(
     private val factories: @JvmSuppressWildcards Map<KClass<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>,
 ) {
     private val presenters: MutableMap<MediaItem.Event, Presenter<*>> = mutableMapOf()

@@ -31,8 +31,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@Inject
-class PinnedMessagesBannerPresenter(
+@Inject class PinnedMessagesBannerPresenter(
     private val room: BaseRoom,
     private val itemFactory: PinnedMessagesBannerItemFactory,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,

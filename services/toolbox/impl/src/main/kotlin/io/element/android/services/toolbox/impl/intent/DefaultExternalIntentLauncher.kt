@@ -16,8 +16,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultExternalIntentLauncher(
+@Inject class DefaultExternalIntentLauncher(
     @ApplicationContext private val context: Context,
 ) : ExternalIntentLauncher {
     override fun launch(intent: Intent) {

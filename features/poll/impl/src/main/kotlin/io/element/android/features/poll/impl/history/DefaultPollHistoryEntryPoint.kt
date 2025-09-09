@@ -16,8 +16,7 @@ import io.element.android.features.poll.api.history.PollHistoryEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPollHistoryEntryPoint : PollHistoryEntryPoint {
+@Inject class DefaultPollHistoryEntryPoint : PollHistoryEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
         return parentNode.createNode<PollHistoryFlowNode>(buildContext)
     }

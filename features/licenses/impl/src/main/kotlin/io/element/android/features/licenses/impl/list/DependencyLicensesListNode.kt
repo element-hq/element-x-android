@@ -20,8 +20,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.features.licenses.impl.model.DependencyLicenseItem
 
 @ContributesNode(AppScope::class)
-@Inject
-class DependencyLicensesListNode(
+@Inject class DependencyLicensesListNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: DependencyLicensesListPresenter,

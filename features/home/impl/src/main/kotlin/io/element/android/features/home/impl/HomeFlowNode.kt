@@ -56,8 +56,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class HomeFlowNode(
+@Inject class HomeFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val matrixClient: MatrixClient,

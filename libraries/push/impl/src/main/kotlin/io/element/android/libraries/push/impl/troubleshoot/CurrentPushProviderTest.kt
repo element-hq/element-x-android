@@ -20,8 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class CurrentPushProviderTest(
+@Inject class CurrentPushProviderTest(
     private val getCurrentPushProvider: GetCurrentPushProvider,
     private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {

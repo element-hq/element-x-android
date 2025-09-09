@@ -16,8 +16,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-@Inject
-class RetrofitFactory(
+@Inject class RetrofitFactory(
     private val okHttpClient: Provider<OkHttpClient>,
     private val json: Provider<Json>,
 ) {

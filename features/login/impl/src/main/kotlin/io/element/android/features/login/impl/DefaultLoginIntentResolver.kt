@@ -15,8 +15,7 @@ import io.element.android.features.login.api.LoginIntentResolver
 import io.element.android.features.login.api.LoginParams
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultLoginIntentResolver : LoginIntentResolver {
+@Inject class DefaultLoginIntentResolver : LoginIntentResolver {
     override fun parse(uriString: String): LoginParams? {
         val uri = uriString.toUri()
         if (uri.host != "mobile.element.io") return null

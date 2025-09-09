@@ -30,8 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Inject
-class LogoutPresenter(
+@Inject class LogoutPresenter(
     private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
 ) : Presenter<LogoutState> {

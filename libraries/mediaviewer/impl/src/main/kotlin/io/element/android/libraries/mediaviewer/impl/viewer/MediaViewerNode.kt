@@ -33,8 +33,7 @@ import io.element.android.libraries.mediaviewer.impl.model.hasEvent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 @ContributesNode(RoomScope::class)
-@Inject
-class MediaViewerNode(
+@Inject class MediaViewerNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: MediaViewerPresenter.Factory,

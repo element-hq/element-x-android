@@ -16,8 +16,7 @@ import java.security.SecureRandom
 private const val SECRET_SIZE = 256
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPassphraseGenerator : PassphraseGenerator {
+@Inject class DefaultPassphraseGenerator : PassphraseGenerator {
     override fun generatePassphrase(): String? {
         val key = ByteArray(size = SECRET_SIZE)
         SecureRandom().nextBytes(key)

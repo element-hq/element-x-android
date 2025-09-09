@@ -23,8 +23,7 @@ import timber.log.Timber
 // private val IGNORED_OPTIONS: Options? = null
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class PosthogAnalyticsProvider(
+@Inject class PosthogAnalyticsProvider(
     private val postHogFactory: PostHogFactory,
 ) : AnalyticsProvider {
     override val name = "Posthog"

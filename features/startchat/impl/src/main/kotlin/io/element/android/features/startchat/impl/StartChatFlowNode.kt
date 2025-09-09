@@ -36,8 +36,7 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class StartChatFlowNode(
+@Inject class StartChatFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val createRoomEntryPoint: CreateRoomEntryPoint,

@@ -20,8 +20,7 @@ interface FirebaseTokenRotator {
  * This class delete the Firebase token and generate a new one.
  */
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFirebaseTokenRotator(
+@Inject class DefaultFirebaseTokenRotator(
     private val firebaseTokenDeleter: FirebaseTokenDeleter,
     private val firebaseTokenGetter: FirebaseTokenGetter,
 ) : FirebaseTokenRotator {

@@ -22,8 +22,7 @@ import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class SecureBackupRootNode(
+@Inject class SecureBackupRootNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: SecureBackupRootPresenter,

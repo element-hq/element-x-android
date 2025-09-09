@@ -20,8 +20,7 @@ interface DateFormatterDay {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultDateFormatterDay(
+@Inject class DefaultDateFormatterDay(
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,
 ) : DateFormatterDay {

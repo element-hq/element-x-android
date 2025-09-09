@@ -51,8 +51,7 @@ import java.io.File
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-@Inject
-class DefaultVoiceMessageComposerPresenter(
+@Inject class DefaultVoiceMessageComposerPresenter(
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     @Assisted private val timelineMode: Timeline.Mode,
     private val voiceRecorder: VoiceRecorder,

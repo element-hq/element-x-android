@@ -42,8 +42,7 @@ private const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_BIOMETRIC"
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class DefaultBiometricAuthenticatorManager(
+@Inject class DefaultBiometricAuthenticatorManager(
     @ApplicationContext private val context: Context,
     private val lockScreenStore: LockScreenStore,
     private val lockScreenConfig: LockScreenConfig,

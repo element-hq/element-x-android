@@ -63,8 +63,7 @@ import java.util.Locale
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultBugReporter(
+@Inject class DefaultBugReporter(
     @ApplicationContext private val context: Context,
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,

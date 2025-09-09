@@ -19,8 +19,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class AndroidClipboardHelper(
+@Inject class AndroidClipboardHelper(
     @ApplicationContext private val context: Context,
 ) : ClipboardHelper {
     private val clipboardManager = requireNotNull(context.getSystemService<ClipboardManager>())

@@ -13,8 +13,7 @@ import io.element.android.libraries.core.extensions.isElement
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 
-@Inject
-class PosthogEndpointConfigProvider(
+@Inject class PosthogEndpointConfigProvider(
     private val buildMeta: BuildMeta,
     private val enterpriseService: EnterpriseService,
 ) {

@@ -20,8 +20,7 @@ import io.element.android.features.login.impl.di.QrCodeLoginScope
 import io.element.android.libraries.architecture.inputs
 
 @ContributesNode(QrCodeLoginScope::class)
-@Inject
-class QrCodeConfirmationNode(
+@Inject class QrCodeConfirmationNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext = buildContext, plugins = plugins) {

@@ -19,8 +19,7 @@ interface SystemNotificationsEnabledProvider {
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultSystemNotificationsEnabledProvider(
+@Inject class DefaultSystemNotificationsEnabledProvider(
     private val notificationManager: NotificationManagerCompat,
 ) : SystemNotificationsEnabledProvider {
     override fun notificationsEnabled(): Boolean {

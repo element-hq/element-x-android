@@ -74,8 +74,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @ContributesNode(RoomScope::class)
-@Inject
-class MessagesNode(
+@Inject class MessagesNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     @ApplicationContext private val context: Context,

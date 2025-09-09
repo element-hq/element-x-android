@@ -21,8 +21,7 @@ interface WebClientUrlForAuthenticationRetriever {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultWebClientUrlForAuthenticationRetriever(
+@Inject class DefaultWebClientUrlForAuthenticationRetriever(
     private val wellknownRetriever: WellknownRetriever,
 ) : WebClientUrlForAuthenticationRetriever {
     override suspend fun retrieve(homeServerUrl: String): String {

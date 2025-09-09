@@ -16,8 +16,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.wysiwyg.link.Link
 
-@Inject
-class LinkPresenter(
+@Inject class LinkPresenter(
     private val linkChecker: LinkChecker,
 ) : Presenter<LinkState> {
     @Composable

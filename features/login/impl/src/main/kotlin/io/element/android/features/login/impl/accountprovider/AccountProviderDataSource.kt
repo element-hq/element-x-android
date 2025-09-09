@@ -17,8 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 @SingleIn(AppScope::class)
-@Inject
-class AccountProviderDataSource(
+@Inject class AccountProviderDataSource(
     enterpriseService: EnterpriseService,
 ) {
     private val defaultAccountProvider =

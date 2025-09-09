@@ -24,8 +24,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
-@Inject
-class SendLocationNode(
+@Inject class SendLocationNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: SendLocationPresenter.Factory,

@@ -21,8 +21,7 @@ interface FolderExplorer {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFolderExplorer(
+@Inject class DefaultFolderExplorer(
     private val fileSizeFormatter: FileSizeFormatter,
     private val dispatchers: CoroutineDispatchers,
 ) : FolderExplorer {

@@ -20,8 +20,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 
-@Inject
-class QrCodeIntroPresenter(
+@Inject class QrCodeIntroPresenter(
     private val buildMeta: BuildMeta,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<QrCodeIntroState> {

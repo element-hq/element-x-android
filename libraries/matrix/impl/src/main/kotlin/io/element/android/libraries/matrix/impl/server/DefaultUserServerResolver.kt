@@ -14,8 +14,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.server.UserServerResolver
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultUserServerResolver(
+@Inject class DefaultUserServerResolver(
     private val matrixClient: MatrixClient,
 ) : UserServerResolver {
     override fun resolve(): String {

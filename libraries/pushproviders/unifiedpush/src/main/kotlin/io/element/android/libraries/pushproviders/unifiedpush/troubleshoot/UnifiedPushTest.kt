@@ -22,8 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class UnifiedPushTest(
+@Inject class UnifiedPushTest(
     private val unifiedPushDistributorProvider: UnifiedPushDistributorProvider,
     private val openDistributorWebPageAction: OpenDistributorWebPageAction,
     private val stringProvider: StringProvider,

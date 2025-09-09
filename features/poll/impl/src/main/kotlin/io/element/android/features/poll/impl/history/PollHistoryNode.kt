@@ -20,8 +20,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 
 @ContributesNode(RoomScope::class)
-@Inject
-class PollHistoryNode(
+@Inject class PollHistoryNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: PollHistoryPresenter,

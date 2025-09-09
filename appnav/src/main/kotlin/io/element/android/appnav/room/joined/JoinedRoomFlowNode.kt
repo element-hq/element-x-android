@@ -45,8 +45,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class JoinedRoomFlowNode(
+@Inject class JoinedRoomFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     loadingRoomStateFlowFactory: LoadingRoomStateFlowFactory,

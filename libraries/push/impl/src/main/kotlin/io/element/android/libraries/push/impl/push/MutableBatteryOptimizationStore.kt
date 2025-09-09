@@ -19,8 +19,7 @@ interface MutableBatteryOptimizationStore {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultMutableBatteryOptimizationStore(
+@Inject class DefaultMutableBatteryOptimizationStore(
     private val defaultPushDataStore: DefaultPushDataStore,
 ) : MutableBatteryOptimizationStore {
     override suspend fun showBatteryOptimizationBanner() {

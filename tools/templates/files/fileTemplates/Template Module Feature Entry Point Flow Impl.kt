@@ -10,8 +10,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 
 @ContributesBinding(AppScope::class)
-@Inject
-class Default${FEATURE_NAME}EntryPoint() : ${FEATURE_NAME}EntryPoint {
+@Inject class Default${FEATURE_NAME}EntryPoint() : ${FEATURE_NAME}EntryPoint {
 
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): ${FEATURE_NAME}EntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()

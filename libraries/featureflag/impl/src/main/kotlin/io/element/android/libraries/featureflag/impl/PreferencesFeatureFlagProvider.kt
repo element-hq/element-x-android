@@ -20,8 +20,7 @@ import kotlinx.coroutines.flow.map
 /**
  * Note: this will be used only in the nightly and in the debug build.
  */
-@Inject
-class PreferencesFeatureFlagProvider(
+@Inject class PreferencesFeatureFlagProvider(
     private val buildMeta: BuildMeta,
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : MutableFeatureFlagProvider {

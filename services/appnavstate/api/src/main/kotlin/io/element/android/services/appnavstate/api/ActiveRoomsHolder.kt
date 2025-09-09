@@ -19,8 +19,7 @@ import java.util.concurrent.ConcurrentHashMap
  * Holds the active rooms for a given session so they can be reused instead of instantiating new ones.
  */
 @SingleIn(AppScope::class)
-@Inject
-class ActiveRoomsHolder {
+@Inject class ActiveRoomsHolder {
     private val rooms = ConcurrentHashMap<SessionId, MutableSet<JoinedRoom>>()
 
     /**

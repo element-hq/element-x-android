@@ -22,8 +22,7 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import kotlinx.collections.immutable.toImmutableList
 
-@Inject
-class RoomListRoomSummaryFactory(
+@Inject class RoomListRoomSummaryFactory(
     private val dateFormatter: DateFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
 ) {

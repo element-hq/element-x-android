@@ -33,8 +33,7 @@ interface TextPillificationHelper {
 }
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultTextPillificationHelper(
+@Inject class DefaultTextPillificationHelper(
     private val mentionSpanProvider: MentionSpanProvider,
     private val permalinkParser: PermalinkParser,
     private val permalinkBuilder: PermalinkBuilder,

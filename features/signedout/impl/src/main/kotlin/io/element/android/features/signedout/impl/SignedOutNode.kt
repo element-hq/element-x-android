@@ -21,8 +21,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.matrix.api.core.SessionId
 
 @ContributesNode(AppScope::class)
-@Inject
-class SignedOutNode(
+@Inject class SignedOutNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: SignedOutPresenter.Factory,

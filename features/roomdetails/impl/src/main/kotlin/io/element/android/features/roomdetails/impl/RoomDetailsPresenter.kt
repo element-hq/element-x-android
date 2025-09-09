@@ -57,8 +57,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@Inject
-class RoomDetailsPresenter(
+@Inject class RoomDetailsPresenter(
     private val client: MatrixClient,
     private val room: JoinedRoom,
     private val featureFlagService: FeatureFlagService,

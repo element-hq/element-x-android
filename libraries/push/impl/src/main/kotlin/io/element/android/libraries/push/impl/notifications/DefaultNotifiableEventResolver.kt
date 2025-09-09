@@ -77,8 +77,7 @@ interface NotifiableEventResolver {
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class DefaultNotifiableEventResolver(
+@Inject class DefaultNotifiableEventResolver(
     private val stringProvider: StringProvider,
     private val matrixClientProvider: MatrixClientProvider,
     private val notificationMediaRepoFactory: NotificationMediaRepo.Factory,

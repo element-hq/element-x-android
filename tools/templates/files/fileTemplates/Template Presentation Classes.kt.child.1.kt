@@ -12,8 +12,7 @@ import dev.zacsweers.metro.AppScope
 
 // CHANGE THE SCOPE
 @ContributesNode(AppScope::class)
-@Inject
-class ${NAME}Node(
+@Inject class ${NAME}Node(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: ${NAME}Presenter,

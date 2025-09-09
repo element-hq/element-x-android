@@ -13,8 +13,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 /**
  * Provides the maximum upload size allowed by the Matrix server.
  */
-@Inject
-class MaxUploadSizeProvider(
+@Inject class MaxUploadSizeProvider(
     private val matrixClient: MatrixClient,
 ) {
     suspend fun getMaxUploadSize(): Result<Long> {

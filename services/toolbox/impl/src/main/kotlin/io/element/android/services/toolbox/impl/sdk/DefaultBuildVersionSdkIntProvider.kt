@@ -14,8 +14,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultBuildVersionSdkIntProvider :
+@Inject class DefaultBuildVersionSdkIntProvider :
     BuildVersionSdkIntProvider {
     override fun get() = Build.VERSION.SDK_INT
 }

@@ -21,8 +21,7 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
 /**
  * This class is responsible for processing suggestions when `@`, `/` or `#` are type in the composer.
  */
-@Inject
-class SuggestionsProcessor {
+@Inject class SuggestionsProcessor {
     /**
      *  Process the suggestion.
      *  @param suggestion The current suggestion input

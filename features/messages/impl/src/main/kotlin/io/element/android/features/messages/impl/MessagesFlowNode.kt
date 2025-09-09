@@ -92,8 +92,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-@Inject
-class MessagesFlowNode(
+@Inject class MessagesFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val matrixClient: MatrixClient,

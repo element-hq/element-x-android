@@ -26,8 +26,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class FirebaseTokenTest(
+@Inject class FirebaseTokenTest(
     private val firebaseStore: FirebaseStore,
     private val firebaseTroubleshooter: FirebaseTroubleshooter,
     private val stringProvider: StringProvider,

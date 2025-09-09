@@ -18,8 +18,7 @@ import io.element.android.features.viewfolder.impl.file.FileContent
 import kotlinx.collections.immutable.ImmutableList
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultTextFileViewer : TextFileViewer {
+@Inject class DefaultTextFileViewer : TextFileViewer {
     @Composable
     override fun Render(
         lines: ImmutableList<String>,

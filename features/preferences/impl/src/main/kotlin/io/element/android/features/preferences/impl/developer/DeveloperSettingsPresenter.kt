@@ -48,8 +48,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.net.URL
 
-@Inject
-class DeveloperSettingsPresenter(
+@Inject class DeveloperSettingsPresenter(
     private val featureFlagService: FeatureFlagService,
     private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,

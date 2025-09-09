@@ -34,8 +34,7 @@ import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import kotlin.math.roundToLong
 
-@Inject
-class DefaultMediaOptimizationSelectorPresenter(
+@Inject class DefaultMediaOptimizationSelectorPresenter(
     @Assisted private val localMedia: LocalMedia,
     private val maxUploadSizeProvider: MaxUploadSizeProvider,
     private val sessionPreferencesStore: SessionPreferencesStore,

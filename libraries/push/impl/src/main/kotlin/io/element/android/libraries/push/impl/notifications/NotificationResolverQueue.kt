@@ -33,8 +33,7 @@ import kotlin.time.Duration.Companion.milliseconds
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 @SingleIn(AppScope::class)
-@Inject
-class NotificationResolverQueue(
+@Inject class NotificationResolverQueue(
     private val notifiableEventResolver: NotifiableEventResolver,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,

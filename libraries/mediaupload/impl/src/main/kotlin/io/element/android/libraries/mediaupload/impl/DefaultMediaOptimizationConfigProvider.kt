@@ -16,8 +16,7 @@ import io.element.android.libraries.preferences.api.store.SessionPreferencesStor
 import kotlinx.coroutines.flow.first
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultMediaOptimizationConfigProvider(
+@Inject class DefaultMediaOptimizationConfigProvider(
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : MediaOptimizationConfigProvider {
     override suspend fun get(): MediaOptimizationConfig = MediaOptimizationConfig(

@@ -17,8 +17,7 @@ import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPo
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultRoomAliasResolverEntryPoint : RoomAliasResolverEntryPoint {
+@Inject class DefaultRoomAliasResolverEntryPoint : RoomAliasResolverEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomAliasResolverEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

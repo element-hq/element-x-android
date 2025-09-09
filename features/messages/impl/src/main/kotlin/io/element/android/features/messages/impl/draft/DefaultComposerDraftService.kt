@@ -15,8 +15,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultComposerDraftService(
+@Inject class DefaultComposerDraftService(
     private val volatileComposerDraftStore: VolatileComposerDraftStore,
     private val matrixComposerDraftStore: MatrixComposerDraftStore,
 ) : ComposerDraftService {

@@ -34,8 +34,7 @@ import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidityEf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class EditRoomAddressPresenter(
+@Inject class EditRoomAddressPresenter(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val client: MatrixClient,
     private val room: JoinedRoom,

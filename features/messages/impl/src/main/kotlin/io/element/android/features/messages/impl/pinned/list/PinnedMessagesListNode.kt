@@ -38,8 +38,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesNode(RoomScope::class)
-@Inject
-class PinnedMessagesListNode(
+@Inject class PinnedMessagesListNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: PinnedMessagesListPresenter.Factory,

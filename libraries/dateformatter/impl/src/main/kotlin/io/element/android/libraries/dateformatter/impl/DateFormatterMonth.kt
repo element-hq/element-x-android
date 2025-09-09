@@ -11,8 +11,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.safeCapitalize
 import io.element.android.services.toolbox.api.strings.StringProvider
 
-@Inject
-class DateFormatterMonth(
+@Inject class DateFormatterMonth(
     private val stringProvider: StringProvider,
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,

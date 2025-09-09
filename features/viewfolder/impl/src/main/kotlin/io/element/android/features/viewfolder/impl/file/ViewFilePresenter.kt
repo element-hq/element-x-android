@@ -22,8 +22,7 @@ import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class ViewFilePresenter(
+@Inject class ViewFilePresenter(
     @Assisted("path") val path: String,
     @Assisted("name") val name: String,
     private val fileContentReader: FileContentReader,

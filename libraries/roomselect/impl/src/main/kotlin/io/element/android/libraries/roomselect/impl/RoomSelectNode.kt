@@ -23,8 +23,7 @@ import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 
 @ContributesNode(SessionScope::class)
-@Inject
-class RoomSelectNode(
+@Inject class RoomSelectNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: RoomSelectPresenter.Factory,

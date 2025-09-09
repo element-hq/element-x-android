@@ -35,8 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Creates a notification for a ringing call.
  */
-@Inject
-class RingingCallNotificationCreator(
+@Inject class RingingCallNotificationCreator(
     @ApplicationContext private val context: Context,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,

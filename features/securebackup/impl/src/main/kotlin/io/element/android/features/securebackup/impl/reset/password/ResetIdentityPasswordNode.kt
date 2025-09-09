@@ -22,8 +22,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 
 @ContributesNode(SessionScope::class)
-@Inject
-class ResetIdentityPasswordNode(
+@Inject class ResetIdentityPasswordNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     coroutineDispatchers: CoroutineDispatchers,

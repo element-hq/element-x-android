@@ -31,8 +31,7 @@ import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-@Inject
-class ForwardMessagesNode(
+@Inject class ForwardMessagesNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: ForwardMessagesPresenter.Factory,

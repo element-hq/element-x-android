@@ -24,8 +24,7 @@ import java.io.File
  * Default implementation of [CacheCleaner].
  */
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultCacheCleaner(
+@Inject class DefaultCacheCleaner(
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,

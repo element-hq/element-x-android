@@ -47,8 +47,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@Inject
-class ChangeRolesPresenter(
+@Inject class ChangeRolesPresenter(
     @Assisted private val role: RoomMember.Role,
     private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,

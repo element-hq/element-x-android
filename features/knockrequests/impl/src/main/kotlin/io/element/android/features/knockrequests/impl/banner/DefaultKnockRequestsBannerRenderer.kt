@@ -15,8 +15,7 @@ import io.element.android.features.knockrequests.api.banner.KnockRequestsBannerR
 import io.element.android.libraries.di.RoomScope
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultKnockRequestsBannerRenderer(
+@Inject class DefaultKnockRequestsBannerRenderer(
     private val presenter: KnockRequestsBannerPresenter,
 ) : KnockRequestsBannerRenderer {
     @Composable

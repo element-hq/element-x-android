@@ -21,8 +21,7 @@ import io.element.android.libraries.matrix.impl.analytics.toAnalyticsJoinedRoom
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultJoinRoom(
+@Inject class DefaultJoinRoom(
     private val client: MatrixClient,
     private val analyticsService: AnalyticsService,
 ) : JoinRoom {

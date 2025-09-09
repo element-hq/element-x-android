@@ -15,8 +15,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import java.io.File
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class AppMigration05(
+@Inject class AppMigration05(
     private val sessionStore: SessionStore,
     @BaseDirectory private val baseDirectory: File,
 ) : AppMigration {

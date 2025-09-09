@@ -27,8 +27,7 @@ sealed interface ResolvedIntent {
     data class IncomingShare(val intent: Intent) : ResolvedIntent
 }
 
-@Inject
-class IntentResolver(
+@Inject class IntentResolver(
     private val deeplinkParser: DeeplinkParser,
     private val loginIntentResolver: LoginIntentResolver,
     private val oidcIntentResolver: OidcIntentResolver,

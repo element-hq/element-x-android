@@ -23,8 +23,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultStartDMAction(
+@Inject class DefaultStartDMAction(
     private val matrixClient: MatrixClient,
     private val analyticsService: AnalyticsService,
 ) : StartDMAction {

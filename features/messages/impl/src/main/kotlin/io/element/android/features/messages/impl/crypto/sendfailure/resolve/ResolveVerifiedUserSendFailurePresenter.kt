@@ -24,8 +24,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.coroutines.launch
 
-@Inject
-class ResolveVerifiedUserSendFailurePresenter(
+@Inject class ResolveVerifiedUserSendFailurePresenter(
     private val room: JoinedRoom,
     private val verifiedUserSendFailureFactory: VerifiedUserSendFailureFactory,
 ) : Presenter<ResolveVerifiedUserSendFailureState> {

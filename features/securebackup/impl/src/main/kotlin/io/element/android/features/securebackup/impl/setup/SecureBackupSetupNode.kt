@@ -23,8 +23,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class SecureBackupSetupNode(
+@Inject class SecureBackupSetupNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: SecureBackupSetupPresenter.Factory,

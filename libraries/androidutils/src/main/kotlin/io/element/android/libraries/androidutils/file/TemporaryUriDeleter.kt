@@ -23,8 +23,7 @@ interface TemporaryUriDeleter {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultTemporaryUriDeleter(
+@Inject class DefaultTemporaryUriDeleter(
     @ApplicationContext private val context: Context,
 ) : TemporaryUriDeleter {
     private val baseCacheUri = "content://${context.packageName}.fileprovider/cache"

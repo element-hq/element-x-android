@@ -17,8 +17,7 @@ import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultBugReportEntryPoint : BugReportEntryPoint {
+@Inject class DefaultBugReportEntryPoint : BugReportEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): BugReportEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

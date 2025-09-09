@@ -18,8 +18,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.libraries.architecture.Presenter
 
-@Inject
-class ConfirmAccountProviderPresenter(
+@Inject class ConfirmAccountProviderPresenter(
     @Assisted private val params: Params,
     private val accountProviderDataSource: AccountProviderDataSource,
     private val loginHelper: LoginHelper,

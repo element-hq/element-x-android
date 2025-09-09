@@ -24,8 +24,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 @ContributesNode(AppScope::class)
-@Inject
-class OnBoardingNode(
+@Inject class OnBoardingNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: OnBoardingPresenter.Factory,

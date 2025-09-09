@@ -34,8 +34,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@Inject
-class PreferencesRootPresenter(
+@Inject class PreferencesRootPresenter(
     private val matrixClient: MatrixClient,
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,

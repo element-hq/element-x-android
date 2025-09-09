@@ -27,8 +27,7 @@ import io.sentry.android.core.SentryAndroid
 import timber.log.Timber
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class SentryAnalyticsProvider(
+@Inject class SentryAnalyticsProvider(
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
 ) : AnalyticsProvider {

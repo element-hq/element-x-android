@@ -9,8 +9,7 @@ package io.element.android.libraries.dateformatter.impl
 
 import dev.zacsweers.metro.Inject
 
-@Inject
-class DateFormatterTimeOnly(
+@Inject class DateFormatterTimeOnly(
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,
 ) {

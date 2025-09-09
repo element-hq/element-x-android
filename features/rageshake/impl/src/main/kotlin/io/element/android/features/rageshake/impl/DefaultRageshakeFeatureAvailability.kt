@@ -16,8 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultRageshakeFeatureAvailability(
+@Inject class DefaultRageshakeFeatureAvailability(
     private val bugReporterUrlProvider: BugReporterUrlProvider,
 ) : RageshakeFeatureAvailability {
     override fun isAvailable(): Flow<Boolean> {

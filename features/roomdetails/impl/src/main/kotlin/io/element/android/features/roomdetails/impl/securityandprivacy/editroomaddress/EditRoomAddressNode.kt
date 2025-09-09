@@ -20,8 +20,7 @@ import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityA
 import io.element.android.libraries.di.RoomScope
 
 @ContributesNode(RoomScope::class)
-@Inject
-class EditRoomAddressNode(
+@Inject class EditRoomAddressNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: EditRoomAddressPresenter.Factory,

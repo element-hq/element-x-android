@@ -27,8 +27,7 @@ interface NotificationDisplayer {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultNotificationDisplayer(
+@Inject class DefaultNotificationDisplayer(
     @ApplicationContext private val context: Context,
     private val notificationManager: NotificationManagerCompat
 ) : NotificationDisplayer {

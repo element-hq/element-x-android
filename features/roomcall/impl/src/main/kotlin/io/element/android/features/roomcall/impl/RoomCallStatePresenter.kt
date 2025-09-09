@@ -22,8 +22,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.ui.room.canCall
 
-@Inject
-class RoomCallStatePresenter(
+@Inject class RoomCallStatePresenter(
     private val room: JoinedRoom,
     private val currentCallService: CurrentCallService,
     private val sessionEnterpriseService: SessionEnterpriseService,

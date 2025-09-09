@@ -21,8 +21,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.util.openLearnMorePage
 
 @ContributesNode(AppScope::class)
-@Inject
-class SearchAccountProviderNode(
+@Inject class SearchAccountProviderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: SearchAccountProviderPresenter,

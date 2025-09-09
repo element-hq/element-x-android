@@ -40,8 +40,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Inject
-class SecurityAndPrivacyPresenter(
+@Inject class SecurityAndPrivacyPresenter(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val matrixClient: MatrixClient,
     private val room: JoinedRoom,

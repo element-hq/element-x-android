@@ -29,8 +29,7 @@ interface ClearCacheUseCase {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultClearCacheUseCase(
+@Inject class DefaultClearCacheUseCase(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,

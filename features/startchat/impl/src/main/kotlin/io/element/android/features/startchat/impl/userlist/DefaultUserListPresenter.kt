@@ -31,8 +31,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@Inject
-class DefaultUserListPresenter(
+@Inject class DefaultUserListPresenter(
     @Assisted val args: UserListPresenterArgs,
     @Assisted val userRepository: UserRepository,
     @Assisted val userListDataStore: UserListDataStore,

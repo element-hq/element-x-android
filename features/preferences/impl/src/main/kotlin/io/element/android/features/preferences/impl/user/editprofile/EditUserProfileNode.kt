@@ -21,8 +21,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
 @ContributesNode(SessionScope::class)
-@Inject
-class EditUserProfileNode(
+@Inject class EditUserProfileNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: EditUserProfilePresenter.Factory,

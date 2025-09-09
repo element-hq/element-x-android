@@ -30,8 +30,7 @@ import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class JoinRoomFlowNode(
+@Inject class JoinRoomFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: JoinRoomPresenter.Factory,

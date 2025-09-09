@@ -15,8 +15,7 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultLogoutUseCase(
+@Inject class DefaultLogoutUseCase(
     private val authenticationService: MatrixAuthenticationService,
     private val matrixClientProvider: MatrixClientProvider,
 ) : LogoutUseCase {

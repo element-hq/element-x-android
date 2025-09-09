@@ -13,8 +13,7 @@ import io.element.android.libraries.di.CacheDirectory
 import java.io.File
 import java.util.UUID
 
-@Inject
-class SessionPathsFactory(
+@Inject class SessionPathsFactory(
     @BaseDirectory private val baseDirectory: File,
     @CacheDirectory private val cacheDirectory: File,
 ) {

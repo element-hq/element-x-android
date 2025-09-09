@@ -17,8 +17,7 @@ interface DefaultPushGatewayHttpUrlProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultDefaultPushGatewayHttpUrlProvider(
+@Inject class DefaultDefaultPushGatewayHttpUrlProvider(
     private val enterpriseService: EnterpriseService,
 ) : DefaultPushGatewayHttpUrlProvider {
     override fun provide(): String {

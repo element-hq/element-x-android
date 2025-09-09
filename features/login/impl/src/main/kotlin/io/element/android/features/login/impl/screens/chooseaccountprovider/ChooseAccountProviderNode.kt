@@ -22,8 +22,7 @@ import io.element.android.features.login.impl.util.openLearnMorePage
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 @ContributesNode(AppScope::class)
-@Inject
-class ChooseAccountProviderNode(
+@Inject class ChooseAccountProviderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: ChooseAccountProviderPresenter,

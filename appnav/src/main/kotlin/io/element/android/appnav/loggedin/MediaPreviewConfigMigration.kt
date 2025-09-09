@@ -20,8 +20,7 @@ import timber.log.Timber
  * This migration is temporary, will be safe to remove after some time.
  * The goal is to set the server config if it's not set, and remove the local data.
  */
-@Inject
-class MediaPreviewConfigMigration(
+@Inject class MediaPreviewConfigMigration(
     private val mediaPreviewService: MediaPreviewService,
     private val appPreferencesStore: AppPreferencesStore,
     @SessionCoroutineScope

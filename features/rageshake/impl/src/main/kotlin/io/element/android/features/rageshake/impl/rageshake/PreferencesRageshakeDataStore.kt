@@ -22,8 +22,7 @@ private val enabledKey = booleanPreferencesKey("enabled")
 private val sensitivityKey = floatPreferencesKey("sensitivity")
 
 @ContributesBinding(AppScope::class)
-@Inject
-class PreferencesRageshakeDataStore(
+@Inject class PreferencesRageshakeDataStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : RageshakeDataStore {
     private val store = preferenceDataStoreFactory.create("elementx_rageshake")

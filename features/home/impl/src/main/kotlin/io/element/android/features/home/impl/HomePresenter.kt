@@ -30,8 +30,7 @@ import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncService
 
-@Inject
-class HomePresenter(
+@Inject class HomePresenter(
     private val client: MatrixClient,
     private val syncService: SyncService,
     private val snackbarDispatcher: SnackbarDispatcher,

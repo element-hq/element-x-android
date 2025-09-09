@@ -67,8 +67,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-@Inject
-class RoomDetailsFlowNode(
+@Inject class RoomDetailsFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pollHistoryEntryPoint: PollHistoryEntryPoint,

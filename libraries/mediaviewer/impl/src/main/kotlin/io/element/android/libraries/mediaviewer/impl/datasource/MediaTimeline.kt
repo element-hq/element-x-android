@@ -36,8 +36,7 @@ interface MediaTimeline {
  */
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-@Inject
-class LiveMediaTimeline(
+@Inject class LiveMediaTimeline(
     private val room: JoinedRoom,
 ) : MediaTimeline {
     private var timeline: Timeline? = null

@@ -26,8 +26,7 @@ import timber.log.Timber
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DatabaseSessionStore(
+@Inject class DatabaseSessionStore(
     private val database: SessionDatabase,
     private val dispatchers: CoroutineDispatchers,
 ) : SessionStore {

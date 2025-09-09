@@ -21,8 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @SingleIn(QrCodeLoginScope::class)
 @ContributesBinding(QrCodeLoginScope::class)
-@Inject
-class DefaultQrCodeLoginManager(
+@Inject class DefaultQrCodeLoginManager(
     private val authenticationService: MatrixAuthenticationService,
 ) : QrCodeLoginManager {
     private val _currentLoginStep = MutableStateFlow<QrCodeLoginStep>(QrCodeLoginStep.Uninitialized)

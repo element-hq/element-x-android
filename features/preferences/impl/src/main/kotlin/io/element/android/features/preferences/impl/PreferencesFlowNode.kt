@@ -48,8 +48,7 @@ import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class PreferencesFlowNode(
+@Inject class PreferencesFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val lockScreenEntryPoint: LockScreenEntryPoint,

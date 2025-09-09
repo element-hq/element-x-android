@@ -20,8 +20,7 @@ interface OpenDistributorWebPageAction {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultOpenDistributorWebPageAction(
+@Inject class DefaultOpenDistributorWebPageAction(
     @ApplicationContext private val context: Context,
 ) : OpenDistributorWebPageAction {
     override fun execute() {

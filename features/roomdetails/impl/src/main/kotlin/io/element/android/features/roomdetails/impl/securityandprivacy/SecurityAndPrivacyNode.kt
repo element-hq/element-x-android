@@ -19,8 +19,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 
 @ContributesNode(RoomScope::class)
-@Inject
-class SecurityAndPrivacyNode(
+@Inject class SecurityAndPrivacyNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: SecurityAndPrivacyPresenter.Factory,

@@ -31,8 +31,7 @@ import kotlin.time.Duration.Companion.seconds
 
 private const val ADDRESS_RESOLVE_TIMEOUT_IN_SECONDS = 10
 
-@Inject
-class JoinRoomByAddressPresenter(
+@Inject class JoinRoomByAddressPresenter(
     @Assisted private val navigator: StartChatNavigator,
     private val client: MatrixClient,
     private val roomAliasHelper: RoomAliasHelper,

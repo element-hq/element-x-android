@@ -16,8 +16,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultDeepLinkCreator : DeepLinkCreator {
+@Inject class DefaultDeepLinkCreator : DeepLinkCreator {
     override fun create(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): String {
         return buildString {
             append("$SCHEME://$HOST/")

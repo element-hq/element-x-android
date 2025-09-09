@@ -35,8 +35,7 @@ import java.util.UUID
 
 private val loggerTag = LoggerTag("NotificationBroadcastReceiverHandler", LoggerTag.NotificationLoggerTag)
 
-@Inject
-class NotificationBroadcastReceiverHandler(
+@Inject class NotificationBroadcastReceiverHandler(
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,

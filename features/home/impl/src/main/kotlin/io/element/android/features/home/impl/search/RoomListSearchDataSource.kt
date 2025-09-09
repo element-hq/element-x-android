@@ -24,8 +24,7 @@ import kotlinx.coroutines.flow.map
 
 private const val PAGE_SIZE = 30
 
-@Inject
-class RoomListSearchDataSource(
+@Inject class RoomListSearchDataSource(
     roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
     private val roomSummaryFactory: RoomListRoomSummaryFactory,

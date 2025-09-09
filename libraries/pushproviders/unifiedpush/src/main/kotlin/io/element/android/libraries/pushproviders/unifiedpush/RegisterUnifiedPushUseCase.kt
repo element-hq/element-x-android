@@ -25,8 +25,7 @@ interface RegisterUnifiedPushUseCase {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultRegisterUnifiedPushUseCase(
+@Inject class DefaultRegisterUnifiedPushUseCase(
     @ApplicationContext private val context: Context,
     private val endpointRegistrationHandler: EndpointRegistrationHandler,
 ) : RegisterUnifiedPushUseCase {

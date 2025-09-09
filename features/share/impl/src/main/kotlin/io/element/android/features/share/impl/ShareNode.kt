@@ -31,8 +31,7 @@ import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class ShareNode(
+@Inject class ShareNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: SharePresenter.Factory,

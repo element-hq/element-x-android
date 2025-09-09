@@ -16,8 +16,7 @@ import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultShowLocationEntryPoint : ShowLocationEntryPoint {
+@Inject class DefaultShowLocationEntryPoint : ShowLocationEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext, inputs: ShowLocationEntryPoint.Inputs): Node {
         return parentNode.createNode<ShowLocationNode>(buildContext, listOf(inputs))
     }

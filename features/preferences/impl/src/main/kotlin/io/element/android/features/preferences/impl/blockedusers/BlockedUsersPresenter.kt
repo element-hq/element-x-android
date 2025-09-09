@@ -29,8 +29,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class BlockedUsersPresenter(
+@Inject class BlockedUsersPresenter(
     private val matrixClient: MatrixClient,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<BlockedUsersState> {

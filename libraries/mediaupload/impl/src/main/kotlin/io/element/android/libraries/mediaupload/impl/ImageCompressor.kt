@@ -23,8 +23,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
 
-@Inject
-class ImageCompressor(
+@Inject class ImageCompressor(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
 ) {

@@ -12,8 +12,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 import io.element.android.libraries.architecture.Presenter
 
-@Inject
-class AnalyticsSettingsPresenter(
+@Inject class AnalyticsSettingsPresenter(
     private val analyticsPreferencesPresenter: Presenter<AnalyticsPreferencesState>,
 ) : Presenter<AnalyticsSettingsState> {
     @Composable

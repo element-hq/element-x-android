@@ -21,8 +21,7 @@ import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.di.annotations.ApplicationContext
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultAudioFocus(
+@Inject class DefaultAudioFocus(
     @ApplicationContext private val context: Context,
 ) : AudioFocus {
     private val audioManager = requireNotNull(context.getSystemService<AudioManager>())

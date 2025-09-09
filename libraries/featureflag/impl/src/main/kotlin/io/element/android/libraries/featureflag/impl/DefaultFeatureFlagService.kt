@@ -19,8 +19,7 @@ import kotlinx.coroutines.flow.flowOf
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class DefaultFeatureFlagService(
+@Inject class DefaultFeatureFlagService(
     private val providers: Set<@JvmSuppressWildcards FeatureFlagProvider>,
     private val buildMeta: BuildMeta,
 ) : FeatureFlagService {

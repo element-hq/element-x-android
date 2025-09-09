@@ -19,8 +19,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.flowOf
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultEnterpriseService : EnterpriseService {
+@Inject class DefaultEnterpriseService : EnterpriseService {
     override val isEnterpriseBuild = false
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false

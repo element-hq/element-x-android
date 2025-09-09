@@ -25,8 +25,7 @@ import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class NotificationsOptInPresenter(
+@Inject class NotificationsOptInPresenter(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     @Assisted private val callback: NotificationsOptInNode.Callback,
     @AppCoroutineScope

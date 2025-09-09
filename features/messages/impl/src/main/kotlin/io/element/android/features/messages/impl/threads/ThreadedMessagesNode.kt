@@ -73,8 +73,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @ContributesNode(RoomScope::class)
-@Inject
-class ThreadedMessagesNode(
+@Inject class ThreadedMessagesNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     @ApplicationContext private val context: Context,

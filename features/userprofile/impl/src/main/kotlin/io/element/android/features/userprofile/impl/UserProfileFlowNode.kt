@@ -40,8 +40,7 @@ import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class UserProfileFlowNode(
+@Inject class UserProfileFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val elementCallEntryPoint: ElementCallEntryPoint,

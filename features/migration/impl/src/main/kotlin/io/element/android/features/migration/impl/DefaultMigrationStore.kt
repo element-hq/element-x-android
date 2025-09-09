@@ -19,8 +19,7 @@ import kotlinx.coroutines.flow.map
 private val applicationMigrationVersion = intPreferencesKey("applicationMigrationVersion")
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultMigrationStore(
+@Inject class DefaultMigrationStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : MigrationStore {
     private val store = preferenceDataStoreFactory.create("elementx_migration")

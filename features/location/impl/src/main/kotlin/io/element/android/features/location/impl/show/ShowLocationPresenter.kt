@@ -26,8 +26,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 
-@Inject
-class ShowLocationPresenter(
+@Inject class ShowLocationPresenter(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,

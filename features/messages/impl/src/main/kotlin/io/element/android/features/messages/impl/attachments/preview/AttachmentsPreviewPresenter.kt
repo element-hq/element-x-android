@@ -49,8 +49,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
-class AttachmentsPreviewPresenter(
+@Inject class AttachmentsPreviewPresenter(
     @Assisted private val attachment: Attachment,
     @Assisted private val onDoneListener: OnDoneListener,
     @Assisted private val timelineMode: Timeline.Mode,

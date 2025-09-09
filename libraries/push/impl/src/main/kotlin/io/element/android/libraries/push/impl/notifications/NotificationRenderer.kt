@@ -22,8 +22,7 @@ import timber.log.Timber
 
 private val loggerTag = LoggerTag("NotificationRenderer", LoggerTag.NotificationLoggerTag)
 
-@Inject
-class NotificationRenderer(
+@Inject class NotificationRenderer(
     private val notificationDisplayer: NotificationDisplayer,
     private val notificationDataFactory: NotificationDataFactory,
 ) {

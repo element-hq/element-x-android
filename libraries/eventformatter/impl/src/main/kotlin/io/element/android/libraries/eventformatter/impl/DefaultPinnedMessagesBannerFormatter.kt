@@ -38,8 +38,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultPinnedMessagesBannerFormatter(
+@Inject class DefaultPinnedMessagesBannerFormatter(
     private val sp: StringProvider,
     private val permalinkParser: PermalinkParser,
 ) : PinnedMessagesBannerFormatter {

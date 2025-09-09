@@ -40,8 +40,7 @@ import io.element.android.libraries.mediaviewer.impl.model.thumbnailSource
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-@Inject
-class MediaGalleryRootNode(
+@Inject class MediaGalleryRootNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint

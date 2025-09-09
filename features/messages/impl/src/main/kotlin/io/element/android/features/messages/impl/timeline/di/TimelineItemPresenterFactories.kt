@@ -39,8 +39,7 @@ interface TimelineItemPresenterFactoriesModule {
  * goes out of the [LazyColumn] viewport.
  */
 @SingleIn(RoomScope::class)
-@Inject
-class TimelineItemPresenterFactories(
+@Inject class TimelineItemPresenterFactories(
     private val factories: @JvmSuppressWildcards Map<KClass<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>,
 ) {
     private val presenters: MutableMap<TimelineItemEventContent, Presenter<*>> = mutableMapOf()

@@ -36,8 +36,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import java.util.Date
 
-@Inject
-class TimelineItemEventFactory(
+@Inject class TimelineItemEventFactory(
     @Assisted private val config: TimelineItemsFactoryConfig,
     private val contentFactory: TimelineItemContentFactory,
     private val matrixClient: MatrixClient,

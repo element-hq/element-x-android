@@ -17,8 +17,7 @@ import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultHomeEntryPoint : HomeEntryPoint {
+@Inject class DefaultHomeEntryPoint : HomeEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): HomeEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

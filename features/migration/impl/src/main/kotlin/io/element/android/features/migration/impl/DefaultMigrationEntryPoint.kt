@@ -16,8 +16,7 @@ import io.element.android.features.api.MigrationEntryPoint
 import io.element.android.features.api.MigrationState
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultMigrationEntryPoint(
+@Inject class DefaultMigrationEntryPoint(
     private val migrationPresenter: MigrationPresenter,
 ) : MigrationEntryPoint {
     @Composable

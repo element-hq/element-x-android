@@ -100,8 +100,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
 
 @ContributesNode(SessionScope::class)
-@Inject
-class LoggedInFlowNode(
+@Inject class LoggedInFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val homeEntryPoint: HomeEntryPoint,
@@ -564,8 +563,7 @@ class LoggedInFlowNode(
 }
 
 @ContributesNode(AppScope::class)
-@Inject
-class PlaceholderNode(
+@Inject class PlaceholderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext, plugins = plugins)

@@ -26,8 +26,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
-@Inject
-class RoomMemberListNode(
+@Inject class RoomMemberListNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomMemberListPresenter,

@@ -30,8 +30,7 @@ interface AcceptInvite {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultAcceptInvite(
+@Inject class DefaultAcceptInvite(
     private val client: MatrixClient,
     private val joinRoom: JoinRoom,
     private val notificationCleaner: NotificationCleaner,

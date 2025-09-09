@@ -17,8 +17,7 @@ import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFtueEntryPoint : FtueEntryPoint {
+@Inject class DefaultFtueEntryPoint : FtueEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): FtueEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

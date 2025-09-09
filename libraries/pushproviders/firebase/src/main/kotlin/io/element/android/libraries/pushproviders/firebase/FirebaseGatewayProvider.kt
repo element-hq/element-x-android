@@ -17,8 +17,7 @@ interface FirebaseGatewayProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFirebaseGatewayProvider(
+@Inject class DefaultFirebaseGatewayProvider(
     private val enterpriseService: EnterpriseService,
 ) : FirebaseGatewayProvider {
     override fun getFirebaseGateway(): String {

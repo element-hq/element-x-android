@@ -9,8 +9,7 @@ package io.element.android.libraries.matrix.api.mxc
 
 import dev.zacsweers.metro.Inject
 
-@Inject
-class MxcTools {
+@Inject class MxcTools {
     /**
      * Regex to match a Matrix Content (mxc://) URI.
      *

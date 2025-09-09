@@ -37,8 +37,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
-class CreatePollPresenter(
+@Inject class CreatePollPresenter(
     repositoryFactory: PollRepository.Factory,
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContext,

@@ -20,8 +20,7 @@ interface UnifiedPushCurrentUserPushConfigProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultUnifiedPushCurrentUserPushConfigProvider(
+@Inject class DefaultUnifiedPushCurrentUserPushConfigProvider(
     private val pushClientSecret: PushClientSecret,
     private val unifiedPushStore: UnifiedPushStore,
     private val appNavigationStateService: AppNavigationStateService,

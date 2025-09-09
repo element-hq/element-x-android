@@ -28,8 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultRageshakePreferencesPresenter(
+@Inject class DefaultRageshakePreferencesPresenter(
     private val rageshake: RageShake,
     private val rageshakeDataStore: RageshakeDataStore,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,

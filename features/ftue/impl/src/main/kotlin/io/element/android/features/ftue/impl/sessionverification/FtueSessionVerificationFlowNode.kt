@@ -37,8 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class FtueSessionVerificationFlowNode(
+@Inject class FtueSessionVerificationFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val outgoingVerificationEntryPoint: OutgoingVerificationEntryPoint,

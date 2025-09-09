@@ -19,8 +19,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPermissionsStore(
+@Inject class DefaultPermissionsStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : PermissionsStore {
     private val store = preferenceDataStoreFactory.create("permissions_store")

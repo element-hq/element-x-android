@@ -24,8 +24,7 @@ import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesNode(AppScope::class)
-@Inject
-class BugReportNode(
+@Inject class BugReportNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: BugReportPresenter,

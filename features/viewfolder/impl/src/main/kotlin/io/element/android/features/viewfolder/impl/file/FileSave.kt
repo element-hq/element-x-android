@@ -33,8 +33,7 @@ interface FileSave {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFileSave(
+@Inject class DefaultFileSave(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
 ) : FileSave {

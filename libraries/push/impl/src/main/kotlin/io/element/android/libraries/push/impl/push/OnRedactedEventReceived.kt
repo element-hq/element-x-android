@@ -34,8 +34,7 @@ interface OnRedactedEventReceived {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultOnRedactedEventReceived(
+@Inject class DefaultOnRedactedEventReceived(
     private val activeNotificationsProvider: ActiveNotificationsProvider,
     private val notificationDisplayer: NotificationDisplayer,
     @AppCoroutineScope

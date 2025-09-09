@@ -30,8 +30,7 @@ interface FileShare {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFileShare(
+@Inject class DefaultFileShare(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,

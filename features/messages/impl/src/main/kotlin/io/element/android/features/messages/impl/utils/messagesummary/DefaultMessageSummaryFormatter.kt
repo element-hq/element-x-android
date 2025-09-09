@@ -33,8 +33,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultMessageSummaryFormatter(
+@Inject class DefaultMessageSummaryFormatter(
     @ApplicationContext private val context: Context,
 ) : MessageSummaryFormatter {
     override fun format(event: TimelineItem.Event): String {

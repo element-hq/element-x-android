@@ -20,8 +20,7 @@ import kotlinx.parcelize.Parcelize
 
 // CHANGE THE SCOPE
 @ContributesNode(AppScope::class)
-@Inject
-class ${FEATURE_NAME}FlowNode(
+@Inject class ${FEATURE_NAME}FlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : BackstackNode<${FEATURE_NAME}FlowNode.NavTarget>(

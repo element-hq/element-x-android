@@ -17,8 +17,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.OnMissedCallNotificationHandler
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultOnMissedCallNotificationHandler(
+@Inject class DefaultOnMissedCallNotificationHandler(
     private val matrixClientProvider: MatrixClientProvider,
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     private val callNotificationEventResolver: CallNotificationEventResolver,

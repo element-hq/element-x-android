@@ -23,8 +23,7 @@ import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultScreenTracker(
+@Inject class DefaultScreenTracker(
     private val analyticsService: AnalyticsService,
     private val systemClock: SystemClock
 ) : ScreenTracker {

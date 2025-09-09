@@ -24,8 +24,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 
 @ContributesNode(AppScope::class)
-@Inject
-class CreateAccountNode(
+@Inject class CreateAccountNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: CreateAccountPresenter.Factory,

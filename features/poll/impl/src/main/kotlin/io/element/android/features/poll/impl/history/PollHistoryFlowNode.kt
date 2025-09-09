@@ -29,8 +29,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-@Inject
-class PollHistoryFlowNode(
+@Inject class PollHistoryFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val createPollEntryPoint: CreatePollEntryPoint,

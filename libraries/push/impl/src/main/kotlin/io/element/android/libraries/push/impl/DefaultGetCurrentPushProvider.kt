@@ -16,8 +16,7 @@ import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.currentSessionId
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultGetCurrentPushProvider(
+@Inject class DefaultGetCurrentPushProvider(
     private val pushStoreFactory: UserPushStoreFactory,
     private val appNavigationStateService: AppNavigationStateService,
 ) : GetCurrentPushProvider {

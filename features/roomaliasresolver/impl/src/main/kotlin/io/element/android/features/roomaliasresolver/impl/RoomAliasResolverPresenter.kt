@@ -25,8 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.jvm.optionals.getOrElse
 
-@Inject
-class RoomAliasResolverPresenter(
+@Inject class RoomAliasResolverPresenter(
     @Assisted private val roomAlias: RoomAlias,
     private val matrixClient: MatrixClient,
 ) : Presenter<RoomAliasResolverState> {

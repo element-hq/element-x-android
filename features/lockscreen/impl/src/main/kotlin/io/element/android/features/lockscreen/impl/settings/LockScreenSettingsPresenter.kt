@@ -25,8 +25,7 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class LockScreenSettingsPresenter(
+@Inject class LockScreenSettingsPresenter(
     private val lockScreenConfig: LockScreenConfig,
     private val pinCodeManager: PinCodeManager,
     private val lockScreenStore: LockScreenStore,

@@ -23,8 +23,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
-@Inject
-class AcceptInvitationActionFactory(
+@Inject class AcceptInvitationActionFactory(
     @ApplicationContext private val context: Context,
     private val actionIds: NotificationActionIds,
     private val stringProvider: StringProvider,

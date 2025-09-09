@@ -26,8 +26,7 @@ interface PushGatewayNotifyRequest {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPushGatewayNotifyRequest(
+@Inject class DefaultPushGatewayNotifyRequest(
     private val pushGatewayApiFactory: PushGatewayApiFactory,
 ) : PushGatewayNotifyRequest {
     override suspend fun execute(params: PushGatewayNotifyRequest.Params) {

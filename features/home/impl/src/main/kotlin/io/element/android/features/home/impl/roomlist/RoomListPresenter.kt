@@ -68,8 +68,7 @@ import kotlinx.coroutines.launch
 private const val EXTENDED_RANGE_SIZE = 40
 private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 300L
 
-@Inject
-class RoomListPresenter(
+@Inject class RoomListPresenter(
     private val client: MatrixClient,
     private val leaveRoomPresenter: Presenter<LeaveRoomState>,
     private val roomListDataSource: RoomListDataSource,

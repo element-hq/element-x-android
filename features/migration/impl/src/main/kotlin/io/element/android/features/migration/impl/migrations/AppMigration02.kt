@@ -20,8 +20,7 @@ import kotlinx.coroutines.coroutineScope
  * This way we don't force existing users to verify their session again.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
-class AppMigration02(
+@Inject class AppMigration02(
     private val sessionStore: SessionStore,
     private val sessionPreferenceStoreFactory: SessionPreferencesStoreFactory,
 ) : AppMigration {

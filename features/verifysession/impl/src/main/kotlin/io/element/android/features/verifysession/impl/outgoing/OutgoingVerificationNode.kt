@@ -21,8 +21,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class OutgoingVerificationNode(
+@Inject class OutgoingVerificationNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: OutgoingVerificationPresenter.Factory,

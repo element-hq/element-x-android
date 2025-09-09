@@ -22,8 +22,7 @@ import timber.log.Timber
 import io.element.android.libraries.androidutils.R as AndroidUtilsR
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultInviteFriendsUseCase(
+@Inject class DefaultInviteFriendsUseCase(
     private val stringProvider: StringProvider,
     private val matrixClient: MatrixClient,
     private val buildMeta: BuildMeta,

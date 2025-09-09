@@ -22,8 +22,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
-@Inject
-class EditDefaultNotificationSettingNode(
+@Inject class EditDefaultNotificationSettingNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: EditDefaultNotificationSettingPresenter.Factory

@@ -15,8 +15,7 @@ import dev.zacsweers.metro.Inject
  * This performs the same operation as [AppMigration01], since we need to clear the local logs again.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
-class AppMigration03(
+@Inject class AppMigration03(
     private val migration01: AppMigration01,
 ) : AppMigration {
     override val order: Int = 3

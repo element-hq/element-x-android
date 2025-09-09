@@ -29,8 +29,7 @@ import timber.log.Timber
  * ```
  */
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultProxyProvider(
+@Inject class DefaultProxyProvider(
     @ApplicationContext
     private val context: Context
 ) : ProxyProvider {

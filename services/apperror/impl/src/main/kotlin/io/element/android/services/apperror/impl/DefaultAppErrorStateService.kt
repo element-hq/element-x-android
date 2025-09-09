@@ -19,8 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class DefaultAppErrorStateService(
+@Inject class DefaultAppErrorStateService(
     private val stringProvider: StringProvider,
 ) : AppErrorStateService {
     private val currentAppErrorState = MutableStateFlow<AppErrorState>(AppErrorState.NoError)

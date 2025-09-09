@@ -50,8 +50,7 @@ private const val THUMB_MAX_HEIGHT = 600
  */
 private const val VIDEO_THUMB_FRAME = 0L
 
-@Inject
-class ThumbnailFactory(
+@Inject class ThumbnailFactory(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider
 ) {

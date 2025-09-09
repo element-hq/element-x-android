@@ -15,8 +15,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 
-@Inject
-class TimelineItemContentStickerFactory(
+@Inject class TimelineItemContentStickerFactory(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor
 ) {

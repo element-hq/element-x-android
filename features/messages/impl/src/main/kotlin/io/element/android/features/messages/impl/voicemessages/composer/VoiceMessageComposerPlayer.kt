@@ -29,8 +29,7 @@ import timber.log.Timber
  * @param mediaPlayer The [MediaPlayer] to use.
  * @param sessionCoroutineScope
  */
-@Inject
-class VoiceMessageComposerPlayer(
+@Inject class VoiceMessageComposerPlayer(
     private val mediaPlayer: MediaPlayer,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,

@@ -50,8 +50,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesBinding(AppScope::class)
-@Inject
-class AndroidMediaPreProcessor(
+@Inject class AndroidMediaPreProcessor(
     @ApplicationContext private val context: Context,
     private val thumbnailFactory: ThumbnailFactory,
     private val imageCompressor: ImageCompressor,

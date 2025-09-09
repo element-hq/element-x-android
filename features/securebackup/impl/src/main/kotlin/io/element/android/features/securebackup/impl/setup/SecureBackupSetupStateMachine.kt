@@ -15,8 +15,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import com.freeletics.flowredux.dsl.State as MachineState
 
-@Inject
-class SecureBackupSetupStateMachine : FlowReduxStateMachine<SecureBackupSetupStateMachine.State, SecureBackupSetupStateMachine.Event>(
+@Inject class SecureBackupSetupStateMachine : FlowReduxStateMachine<SecureBackupSetupStateMachine.State, SecureBackupSetupStateMachine.Event>(
     initialState = State.Initial
 ) {
     init {

@@ -18,8 +18,7 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.di.SessionScope
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultMessagesEntryPoint : MessagesEntryPoint {
+@Inject class DefaultMessagesEntryPoint : MessagesEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): MessagesEntryPoint.NodeBuilder {
         val nodeFactories = parentNode.bindings<NodeFactoriesBindings>().nodeFactories()
         val plugins = ArrayList<Plugin>()

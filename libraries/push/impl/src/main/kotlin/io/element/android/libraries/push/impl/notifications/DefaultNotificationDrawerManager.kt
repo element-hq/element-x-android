@@ -45,8 +45,7 @@ private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultNotificationDrawerManager(
+@Inject class DefaultNotificationDrawerManager(
     private val notificationManager: NotificationManagerCompat,
     private val notificationRenderer: NotificationRenderer,
     private val appNavigationStateService: AppNavigationStateService,

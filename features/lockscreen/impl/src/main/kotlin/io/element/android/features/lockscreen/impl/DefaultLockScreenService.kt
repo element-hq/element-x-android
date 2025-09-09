@@ -35,8 +35,7 @@ import kotlin.time.Duration
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultLockScreenService(
+@Inject class DefaultLockScreenService(
     private val lockScreenConfig: LockScreenConfig,
     private val lockScreenStore: LockScreenStore,
     private val pinCodeManager: PinCodeManager,

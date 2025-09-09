@@ -32,8 +32,7 @@ interface DeclineInvite {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultDeclineInvite(
+@Inject class DefaultDeclineInvite(
     private val client: MatrixClient,
     private val notificationCleaner: NotificationCleaner,
     private val seenInvitesStore: SeenInvitesStore,

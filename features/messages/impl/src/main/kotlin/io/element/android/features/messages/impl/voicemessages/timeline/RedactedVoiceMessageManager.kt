@@ -21,8 +21,7 @@ interface RedactedVoiceMessageManager {
 }
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultRedactedVoiceMessageManager(
+@Inject class DefaultRedactedVoiceMessageManager(
     private val dispatchers: CoroutineDispatchers,
     private val mediaPlayer: MediaPlayer,
 ) : RedactedVoiceMessageManager {

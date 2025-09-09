@@ -92,8 +92,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-@Inject
-class MessagesPresenter(
+@Inject class MessagesPresenter(
     @Assisted private val navigator: MessagesNavigator,
     private val room: JoinedRoom,
     @Assisted private val composerPresenter: Presenter<MessageComposerState>,

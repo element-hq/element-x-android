@@ -21,8 +21,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultUserPushStoreFactory(
+@Inject class DefaultUserPushStoreFactory(
     @ApplicationContext private val context: Context,
     private val preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : UserPushStoreFactory {

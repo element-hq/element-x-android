@@ -36,8 +36,7 @@ import io.element.android.libraries.matrix.ui.media.NotLoggedInImageLoaderFactor
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-@Inject
-class NotLoggedInFlowNode(
+@Inject class NotLoggedInFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val loginEntryPoint: LoginEntryPoint,

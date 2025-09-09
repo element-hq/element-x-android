@@ -28,8 +28,7 @@ interface RoomAliasSuggestionsDataSource {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultRoomAliasSuggestionsDataSource(
+@Inject class DefaultRoomAliasSuggestionsDataSource(
     private val roomListService: RoomListService,
 ) : RoomAliasSuggestionsDataSource {
     override fun getAllRoomAliasSuggestions(): Flow<List<RoomAliasSuggestion>> {

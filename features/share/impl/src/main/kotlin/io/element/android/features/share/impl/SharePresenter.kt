@@ -31,8 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
-@Inject
-class SharePresenter(
+@Inject class SharePresenter(
     @Assisted private val intent: Intent,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,

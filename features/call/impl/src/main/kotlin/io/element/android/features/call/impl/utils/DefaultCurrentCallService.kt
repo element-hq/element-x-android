@@ -17,8 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultCurrentCallService : CurrentCallService {
+@Inject class DefaultCurrentCallService : CurrentCallService {
     override val currentCall = MutableStateFlow<CurrentCall>(CurrentCall.None)
 
     fun onCallStarted(call: CurrentCall) {

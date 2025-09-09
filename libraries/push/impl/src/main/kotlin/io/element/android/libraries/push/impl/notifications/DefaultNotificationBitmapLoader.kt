@@ -28,8 +28,7 @@ import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultNotificationBitmapLoader(
+@Inject class DefaultNotificationBitmapLoader(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) : NotificationBitmapLoader {

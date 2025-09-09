@@ -37,8 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @ContributesBinding(scope = AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class DefaultNetworkMonitor(
+@Inject class DefaultNetworkMonitor(
     @ApplicationContext context: Context,
     @AppCoroutineScope
     appCoroutineScope: CoroutineScope,

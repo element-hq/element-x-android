@@ -23,8 +23,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
-@Inject
-class TimelineMediaItemsFactory(
+@Inject class TimelineMediaItemsFactory(
     private val dispatchers: CoroutineDispatchers,
     private val virtualItemFactory: VirtualItemFactory,
     private val eventItemFactory: EventItemFactory,

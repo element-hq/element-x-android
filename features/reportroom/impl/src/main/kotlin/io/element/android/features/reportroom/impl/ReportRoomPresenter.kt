@@ -25,8 +25,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class ReportRoomPresenter(
+@Inject class ReportRoomPresenter(
     @Assisted private val roomId: RoomId,
     private val reportRoom: ReportRoom,
 ) : Presenter<ReportRoomState> {

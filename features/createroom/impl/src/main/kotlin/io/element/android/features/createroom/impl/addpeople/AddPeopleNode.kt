@@ -24,8 +24,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
-@Inject
-class AddPeopleNode(
+@Inject class AddPeopleNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,

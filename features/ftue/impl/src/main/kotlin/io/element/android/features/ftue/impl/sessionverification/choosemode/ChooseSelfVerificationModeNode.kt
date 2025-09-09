@@ -21,8 +21,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class ChooseSelfVerificationModeNode(
+@Inject class ChooseSelfVerificationModeNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: Presenter<ChooseSelfVerificationModeState>,

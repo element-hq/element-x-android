@@ -53,8 +53,7 @@ import uniffi.matrix_sdk.OAuthAuthorizationData
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class RustMatrixAuthenticationService(
+@Inject class RustMatrixAuthenticationService(
     private val sessionPathsFactory: SessionPathsFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,

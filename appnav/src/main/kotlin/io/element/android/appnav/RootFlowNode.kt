@@ -61,8 +61,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(AppScope::class)
-@Inject
-class RootFlowNode(
+@Inject class RootFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val authenticationService: MatrixAuthenticationService,

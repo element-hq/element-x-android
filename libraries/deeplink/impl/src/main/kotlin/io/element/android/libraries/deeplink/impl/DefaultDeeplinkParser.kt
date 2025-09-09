@@ -19,8 +19,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultDeeplinkParser : DeeplinkParser {
+@Inject class DefaultDeeplinkParser : DeeplinkParser {
     override fun getFromIntent(intent: Intent): DeeplinkData? {
         return intent
             .takeIf { it.action == Intent.ACTION_VIEW }

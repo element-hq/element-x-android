@@ -49,8 +49,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
 
-@Inject
-class MediaViewerPresenter(
+@Inject class MediaViewerPresenter(
     @Assisted private val inputs: MediaViewerEntryPoint.Params,
     @Assisted private val navigator: MediaViewerNavigator,
     @Assisted private val dataSource: MediaViewerDataSource,

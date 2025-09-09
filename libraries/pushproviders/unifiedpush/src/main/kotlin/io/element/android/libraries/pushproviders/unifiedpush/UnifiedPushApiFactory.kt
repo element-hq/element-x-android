@@ -18,8 +18,7 @@ interface UnifiedPushApiFactory {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultUnifiedPushApiFactory(
+@Inject class DefaultUnifiedPushApiFactory(
     private val retrofitFactory: RetrofitFactory,
 ) : UnifiedPushApiFactory {
     override fun create(baseUrl: String): UnifiedPushApi {

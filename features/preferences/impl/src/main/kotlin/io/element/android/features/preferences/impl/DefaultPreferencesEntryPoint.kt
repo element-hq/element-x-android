@@ -17,8 +17,7 @@ import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPreferencesEntryPoint : PreferencesEntryPoint {
+@Inject class DefaultPreferencesEntryPoint : PreferencesEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): PreferencesEntryPoint.NodeBuilder {
         return object : PreferencesEntryPoint.NodeBuilder {
             val plugins = ArrayList<Plugin>()

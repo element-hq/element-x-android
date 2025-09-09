@@ -16,8 +16,7 @@ import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDat
 import org.matrix.rustcomponents.sdk.QrCodeData
 
 @ContributesBinding(AppScope::class)
-@Inject
-class RustQrCodeLoginDataFactory : MatrixQrCodeLoginDataFactory {
+@Inject class RustQrCodeLoginDataFactory : MatrixQrCodeLoginDataFactory {
     override fun parseQrCodeData(data: ByteArray): Result<MatrixQrCodeLoginData> {
         return runCatchingExceptions { SdkQrCodeLoginData(QrCodeData.fromBytes(data)) }
     }

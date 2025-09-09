@@ -18,8 +18,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import com.freeletics.flowredux.dsl.State as MachineState
 
-@Inject
-class IncomingVerificationStateMachine(
+@Inject class IncomingVerificationStateMachine(
     private val sessionVerificationService: SessionVerificationService,
 ) : FlowReduxStateMachine<IncomingVerificationStateMachine.State, IncomingVerificationStateMachine.Event>(
     initialState = State.Initial(isCancelled = false)

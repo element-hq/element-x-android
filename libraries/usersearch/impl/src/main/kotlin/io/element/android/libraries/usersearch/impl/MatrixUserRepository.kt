@@ -23,8 +23,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class MatrixUserRepository(
+@Inject class MatrixUserRepository(
     private val client: MatrixClient,
     private val dataSource: UserListDataSource
 ) : UserRepository {

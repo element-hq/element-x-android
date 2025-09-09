@@ -22,8 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
-class IdentityChangeStatePresenter(
+@Inject class IdentityChangeStatePresenter(
     private val room: JoinedRoom,
     private val encryptionService: EncryptionService,
 ) : Presenter<IdentityChangeState> {

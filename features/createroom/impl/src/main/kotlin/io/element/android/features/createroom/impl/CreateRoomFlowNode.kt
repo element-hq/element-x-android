@@ -30,8 +30,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class CreateRoomFlowNode(
+@Inject class CreateRoomFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<CreateRoomFlowNode.NavTarget>(

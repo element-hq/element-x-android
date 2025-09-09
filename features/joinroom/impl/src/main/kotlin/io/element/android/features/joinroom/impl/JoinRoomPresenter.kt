@@ -54,8 +54,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Optional
 
-@Inject
-class JoinRoomPresenter(
+@Inject class JoinRoomPresenter(
     @Assisted private val roomId: RoomId,
     @Assisted private val roomIdOrAlias: RoomIdOrAlias,
     @Assisted private val roomDescription: Optional<RoomDescription>,

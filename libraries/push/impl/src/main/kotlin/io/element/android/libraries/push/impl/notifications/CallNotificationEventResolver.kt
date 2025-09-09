@@ -47,8 +47,7 @@ interface CallNotificationEventResolver {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultCallNotificationEventResolver(
+@Inject class DefaultCallNotificationEventResolver(
     private val stringProvider: StringProvider,
     private val appForegroundStateService: AppForegroundStateService,
     private val clientProvider: MatrixClientProvider,

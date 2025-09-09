@@ -33,8 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-@Inject
-class RolesAndPermissionsFlowNode(
+@Inject class RolesAndPermissionsFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,

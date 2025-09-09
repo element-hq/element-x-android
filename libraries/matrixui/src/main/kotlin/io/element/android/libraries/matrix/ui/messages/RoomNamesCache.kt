@@ -19,8 +19,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.runningFold
 
 @SingleIn(RoomScope::class)
-@Inject
-class RoomNamesCache {
+@Inject class RoomNamesCache {
     private val cache = MutableStateFlow(mapOf<RoomIdOrAlias, String?>())
     val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
 

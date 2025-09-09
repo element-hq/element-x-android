@@ -33,8 +33,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @SingleIn(AppScope::class)
-@Inject
-class FullScreenIntentPermissionsPresenter(
+@Inject class FullScreenIntentPermissionsPresenter(
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val externalIntentLauncher: ExternalIntentLauncher,
     private val buildMeta: BuildMeta,

@@ -46,8 +46,7 @@ import timber.log.Timber
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultNotificationConversationService(
+@Inject class DefaultNotificationConversationService(
     @ApplicationContext private val context: Context,
     private val intentProvider: IntentProvider,
     private val bitmapLoader: NotificationBitmapLoader,

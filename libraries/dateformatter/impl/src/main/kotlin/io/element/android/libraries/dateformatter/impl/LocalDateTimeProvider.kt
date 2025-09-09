@@ -13,8 +13,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 import kotlin.time.Instant
 
-@Inject
-class LocalDateTimeProvider(
+@Inject class LocalDateTimeProvider(
     private val clock: Clock,
     private val timezoneProvider: TimezoneProvider,
 ) {

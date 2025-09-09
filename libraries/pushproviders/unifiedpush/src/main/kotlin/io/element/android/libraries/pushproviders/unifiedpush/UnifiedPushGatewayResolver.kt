@@ -33,8 +33,7 @@ interface UnifiedPushGatewayResolver {
 private val loggerTag = LoggerTag("DefaultUnifiedPushGatewayResolver")
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultUnifiedPushGatewayResolver(
+@Inject class DefaultUnifiedPushGatewayResolver(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : UnifiedPushGatewayResolver {

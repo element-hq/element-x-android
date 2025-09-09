@@ -25,8 +25,7 @@ interface FirebaseTokenGetter {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFirebaseTokenGetter(
+@Inject class DefaultFirebaseTokenGetter(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
 ) : FirebaseTokenGetter {
     override suspend fun get(): String {

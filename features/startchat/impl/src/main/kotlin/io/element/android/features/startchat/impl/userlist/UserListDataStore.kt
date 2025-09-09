@@ -12,8 +12,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-@Inject
-class UserListDataStore {
+@Inject class UserListDataStore {
     private val _selectedUsers: MutableStateFlow<List<MatrixUser>> = MutableStateFlow(emptyList())
 
     fun selectUser(user: MatrixUser) {

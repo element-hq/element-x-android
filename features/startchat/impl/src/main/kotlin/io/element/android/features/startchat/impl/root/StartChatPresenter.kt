@@ -29,8 +29,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.usersearch.api.UserRepository
 import kotlinx.coroutines.launch
 
-@Inject
-class StartChatPresenter(
+@Inject class StartChatPresenter(
     presenterFactory: UserListPresenter.Factory,
     userRepository: UserRepository,
     userListDataStore: UserListDataStore,

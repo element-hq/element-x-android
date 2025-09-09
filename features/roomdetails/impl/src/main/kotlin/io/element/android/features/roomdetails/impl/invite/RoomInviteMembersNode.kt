@@ -24,8 +24,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
-@Inject
-class RoomInviteMembersNode(
+@Inject class RoomInviteMembersNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val analyticsService: AnalyticsService,

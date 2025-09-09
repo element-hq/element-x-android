@@ -21,8 +21,7 @@ interface MarkAsFullyRead {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultMarkAsFullyRead(
+@Inject class DefaultMarkAsFullyRead(
     private val matrixClient: MatrixClient,
 ) : MarkAsFullyRead {
     override fun invoke(roomId: RoomId) {

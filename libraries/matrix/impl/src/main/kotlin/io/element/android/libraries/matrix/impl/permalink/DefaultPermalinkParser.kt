@@ -32,8 +32,7 @@ import org.matrix.rustcomponents.sdk.parseMatrixEntityFrom
  * or matrix: permalinks (e.g. matrix:u/chagai95:matrix.org)
  */
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPermalinkParser(
+@Inject class DefaultPermalinkParser(
     private val matrixToConverter: MatrixToConverter
 ) : PermalinkParser {
     /**

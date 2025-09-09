@@ -22,8 +22,7 @@ import io.element.android.libraries.di.RoomScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-@Inject
-class ChangeRoomPermissionsNode(
+@Inject class ChangeRoomPermissionsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: ChangeRoomPermissionsPresenter.Factory,

@@ -27,8 +27,7 @@ interface FirebaseStore {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class SharedPreferencesFirebaseStore(
+@Inject class SharedPreferencesFirebaseStore(
     private val sharedPreferences: SharedPreferences,
 ) : FirebaseStore {
     override fun getFcmToken(): String? {

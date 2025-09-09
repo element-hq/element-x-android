@@ -61,8 +61,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
-class PinnedMessagesListPresenter(
+@Inject class PinnedMessagesListPresenter(
     @Assisted private val navigator: PinnedMessagesListNavigator,
     private val room: JoinedRoom,
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,

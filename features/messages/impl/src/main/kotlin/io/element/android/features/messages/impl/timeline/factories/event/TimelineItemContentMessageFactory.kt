@@ -51,8 +51,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlin.time.Duration
 
-@Inject
-class TimelineItemContentMessageFactory(
+@Inject class TimelineItemContentMessageFactory(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
     private val htmlConverterProvider: HtmlConverterProvider,

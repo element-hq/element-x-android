@@ -41,8 +41,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
-class EditUserProfilePresenter(
+@Inject class EditUserProfilePresenter(
     @Assisted private val matrixUser: MatrixUser,
     private val matrixClient: MatrixClient,
     private val mediaPickerProvider: PickerProvider,

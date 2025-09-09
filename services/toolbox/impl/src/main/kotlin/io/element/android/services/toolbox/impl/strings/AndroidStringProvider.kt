@@ -16,8 +16,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 @ContributesBinding(AppScope::class)
-@Inject
-class AndroidStringProvider(private val resources: Resources) : StringProvider {
+@Inject class AndroidStringProvider(private val resources: Resources) : StringProvider {
     override fun getString(@StringRes resId: Int): String {
         return resources.getString(resId)
     }

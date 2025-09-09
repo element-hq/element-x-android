@@ -44,8 +44,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 
-@Inject
-class VideoCompressor(
+@Inject class VideoCompressor(
     @ApplicationContext private val context: Context,
 ) {
     @OptIn(UnstableApi::class)

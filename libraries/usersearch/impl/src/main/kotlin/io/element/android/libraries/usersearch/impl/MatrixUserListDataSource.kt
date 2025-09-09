@@ -16,8 +16,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserListDataSource
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class MatrixUserListDataSource(
+@Inject class MatrixUserListDataSource(
     private val client: MatrixClient
 ) : UserListDataSource {
     override suspend fun search(query: String, count: Long): List<MatrixUser> {

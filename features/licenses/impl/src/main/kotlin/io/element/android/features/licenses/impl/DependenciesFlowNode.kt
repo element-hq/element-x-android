@@ -28,8 +28,7 @@ import io.element.android.libraries.architecture.createNode
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-@Inject
-class DependenciesFlowNode(
+@Inject class DependenciesFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<DependenciesFlowNode.NavTarget>(

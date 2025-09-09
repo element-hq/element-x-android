@@ -17,8 +17,7 @@ import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBl
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultDeclineAndBlockEntryPoint : DeclineInviteAndBlockEntryPoint {
+@Inject class DefaultDeclineAndBlockEntryPoint : DeclineInviteAndBlockEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext, inviteData: InviteData): Node {
         val inputs = DeclineAndBlockNode.Inputs(inviteData)
         return parentNode.createNode<DeclineAndBlockNode>(buildContext, plugins = listOf(inputs))

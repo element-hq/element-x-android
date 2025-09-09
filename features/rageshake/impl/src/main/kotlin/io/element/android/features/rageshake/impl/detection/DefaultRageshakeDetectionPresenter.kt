@@ -30,8 +30,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultRageshakeDetectionPresenter(
+@Inject class DefaultRageshakeDetectionPresenter(
     private val screenshotHolder: ScreenshotHolder,
     private val rageShake: RageShake,
     private val preferencesPresenter: RageshakePreferencesPresenter,

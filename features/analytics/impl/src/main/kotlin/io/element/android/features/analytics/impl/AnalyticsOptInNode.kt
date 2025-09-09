@@ -23,8 +23,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 
 @ContributesNode(AppScope::class)
-@Inject
-class AnalyticsOptInNode(
+@Inject class AnalyticsOptInNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: AnalyticsOptInPresenter,

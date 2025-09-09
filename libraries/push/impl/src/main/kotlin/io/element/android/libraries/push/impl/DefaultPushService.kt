@@ -31,8 +31,7 @@ import timber.log.Timber
 
 @ContributesBinding(AppScope::class, binding = binding<PushService>())
 @SingleIn(AppScope::class)
-@Inject
-class DefaultPushService(
+@Inject class DefaultPushService(
     private val testPush: TestPush,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushProviders: Set<@JvmSuppressWildcards PushProvider>,

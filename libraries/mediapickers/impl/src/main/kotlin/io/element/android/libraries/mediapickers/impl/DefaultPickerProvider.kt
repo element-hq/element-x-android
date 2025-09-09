@@ -27,8 +27,7 @@ import io.element.android.libraries.mediapickers.api.PickerType
 import java.io.File
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPickerProvider(
+@Inject class DefaultPickerProvider(
     @ApplicationContext private val context: Context,
 ) : PickerProvider {
     /**

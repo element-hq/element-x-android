@@ -32,8 +32,7 @@ import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class LockScreenSetupFlowNode(
+@Inject class LockScreenSetupFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pinCodeManager: PinCodeManager,

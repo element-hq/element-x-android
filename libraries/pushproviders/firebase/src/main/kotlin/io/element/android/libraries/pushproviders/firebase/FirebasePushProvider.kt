@@ -22,8 +22,7 @@ import timber.log.Timber
 private val loggerTag = LoggerTag("FirebasePushProvider", LoggerTag.PushLoggerTag)
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class FirebasePushProvider(
+@Inject class FirebasePushProvider(
     private val firebaseStore: FirebaseStore,
     private val pusherSubscriber: PusherSubscriber,
     private val isPlayServiceAvailable: IsPlayServiceAvailable,

@@ -26,8 +26,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import java.util.concurrent.atomic.AtomicBoolean
 
 @ContributesNode(RoomScope::class)
-@Inject
-class CreatePollNode(
+@Inject class CreatePollNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: CreatePollPresenter.Factory,

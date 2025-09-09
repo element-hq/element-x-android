@@ -23,8 +23,7 @@ interface FocusedTimelineMediaGalleryDataSourceFactory {
 }
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultFocusedTimelineMediaGalleryDataSourceFactory(
+@Inject class DefaultFocusedTimelineMediaGalleryDataSourceFactory(
     private val room: JoinedRoom,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
     private val mediaItemsPostProcessor: MediaItemsPostProcessor,

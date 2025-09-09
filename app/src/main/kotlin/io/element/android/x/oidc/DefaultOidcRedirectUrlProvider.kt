@@ -15,8 +15,7 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.x.R
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultOidcRedirectUrlProvider(
+@Inject class DefaultOidcRedirectUrlProvider(
     private val stringProvider: StringProvider,
 ) : OidcRedirectUrlProvider {
     override fun provide() = buildString {

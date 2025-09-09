@@ -21,8 +21,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
-@Inject
-class ReportRoomNode(
+@Inject class ReportRoomNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: ReportRoomPresenter.Factory,

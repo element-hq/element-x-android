@@ -22,8 +22,7 @@ import timber.log.Timber
 
 private val loggerTag = LoggerTag("PiP")
 
-@Inject
-class PictureInPicturePresenter(
+@Inject class PictureInPicturePresenter(
     pipSupportProvider: PipSupportProvider,
 ) : Presenter<PictureInPictureState> {
     private val isPipSupported = pipSupportProvider.isPipSupported()

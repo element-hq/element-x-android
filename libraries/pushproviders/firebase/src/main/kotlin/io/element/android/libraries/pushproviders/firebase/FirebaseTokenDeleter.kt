@@ -24,8 +24,7 @@ interface FirebaseTokenDeleter {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFirebaseTokenDeleter(
+@Inject class DefaultFirebaseTokenDeleter(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
 ) : FirebaseTokenDeleter {
     override suspend fun delete() {

@@ -27,8 +27,7 @@ fun IsPlayServiceAvailable.checkAvailableOrThrow() {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultIsPlayServiceAvailable(
+@Inject class DefaultIsPlayServiceAvailable(
     @ApplicationContext private val context: Context,
 ) : IsPlayServiceAvailable {
     override fun isAvailable(): Boolean {

@@ -29,8 +29,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 @SingleIn(RoomScope::class)
-@Inject
-class PinnedEventsTimelineProvider(
+@Inject class PinnedEventsTimelineProvider(
     private val room: JoinedRoom,
     private val syncService: SyncService,
     private val dispatchers: CoroutineDispatchers,

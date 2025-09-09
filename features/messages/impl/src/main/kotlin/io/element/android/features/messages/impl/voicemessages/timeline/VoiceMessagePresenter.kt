@@ -32,8 +32,7 @@ interface VoiceMessagePresenterModule {
     fun bindVoiceMessagePresenterFactory(factory: VoiceMessagePresenter.Factory): TimelineItemPresenterFactory<*, *>
 }
 
-@Inject
-class VoiceMessagePresenter(
+@Inject class VoiceMessagePresenter(
     voiceMessagePresenterFactory: VoiceMessagePresenterFactory,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {

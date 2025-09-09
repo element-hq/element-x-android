@@ -67,8 +67,7 @@ import timber.log.Timber
 
 const val FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS = 200L
 
-@Inject
-class TimelinePresenter(
+@Inject class TimelinePresenter(
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
     private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,

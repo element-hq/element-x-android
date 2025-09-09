@@ -24,8 +24,7 @@ import io.element.android.libraries.mediaviewer.impl.gallery.di.MediaItemPresent
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 @ContributesNode(RoomScope::class)
-@Inject
-class MediaGalleryNode(
+@Inject class MediaGalleryNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: MediaGalleryPresenter.Factory,

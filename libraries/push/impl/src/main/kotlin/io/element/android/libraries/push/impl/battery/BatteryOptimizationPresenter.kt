@@ -23,8 +23,7 @@ import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationSto
 import io.element.android.libraries.push.impl.store.PushDataStore
 import kotlinx.coroutines.launch
 
-@Inject
-class BatteryOptimizationPresenter(
+@Inject class BatteryOptimizationPresenter(
     private val pushDataStore: PushDataStore,
     private val mutableBatteryOptimizationStore: MutableBatteryOptimizationStore,
     private val batteryOptimization: BatteryOptimization,

@@ -21,8 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlin.time.Duration
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultVoiceMessagePresenterFactory(
+@Inject class DefaultVoiceMessagePresenterFactory(
     private val analyticsService: AnalyticsService,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,

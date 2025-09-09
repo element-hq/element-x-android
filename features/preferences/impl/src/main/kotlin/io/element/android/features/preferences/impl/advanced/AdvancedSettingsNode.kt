@@ -18,8 +18,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class AdvancedSettingsNode(
+@Inject class AdvancedSettingsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: AdvancedSettingsPresenter,

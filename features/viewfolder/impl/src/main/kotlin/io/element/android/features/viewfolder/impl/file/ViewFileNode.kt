@@ -21,8 +21,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 
 @ContributesNode(AppScope::class)
-@Inject
-class ViewFileNode(
+@Inject class ViewFileNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: ViewFilePresenter.Factory,

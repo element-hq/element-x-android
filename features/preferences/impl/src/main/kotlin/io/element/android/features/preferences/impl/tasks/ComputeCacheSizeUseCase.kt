@@ -23,8 +23,7 @@ interface ComputeCacheSizeUseCase {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultComputeCacheSizeUseCase(
+@Inject class DefaultComputeCacheSizeUseCase(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,

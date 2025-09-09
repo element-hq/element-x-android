@@ -20,8 +20,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class AnalyticsPreferencesPresenter(
+@Inject class AnalyticsPreferencesPresenter(
     private val analyticsService: AnalyticsService,
     private val buildMeta: BuildMeta,
 ) : Presenter<AnalyticsPreferencesState> {

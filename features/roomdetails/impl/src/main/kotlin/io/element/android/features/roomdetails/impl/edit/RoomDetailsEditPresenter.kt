@@ -44,8 +44,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
-class RoomDetailsEditPresenter(
+@Inject class RoomDetailsEditPresenter(
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,

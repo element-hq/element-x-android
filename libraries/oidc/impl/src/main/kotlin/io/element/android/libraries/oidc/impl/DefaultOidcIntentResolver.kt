@@ -15,8 +15,7 @@ import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcIntentResolver
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultOidcIntentResolver(
+@Inject class DefaultOidcIntentResolver(
     private val oidcUrlParser: OidcUrlParser,
 ) : OidcIntentResolver {
     override fun resolve(intent: Intent): OidcAction? {

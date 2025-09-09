@@ -18,8 +18,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class SetupPinNode(
+@Inject class SetupPinNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: SetupPinPresenter,

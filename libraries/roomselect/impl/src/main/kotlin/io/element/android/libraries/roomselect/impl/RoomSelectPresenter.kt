@@ -27,8 +27,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
-@Inject
-class RoomSelectPresenter(
+@Inject class RoomSelectPresenter(
     @Assisted private val mode: RoomSelectMode,
     private val dataSource: RoomSelectSearchDataSource,
 ) : Presenter<RoomSelectState> {

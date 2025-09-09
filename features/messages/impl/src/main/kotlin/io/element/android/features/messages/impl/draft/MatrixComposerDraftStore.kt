@@ -18,8 +18,7 @@ import timber.log.Timber
  * A draft store that persists drafts in the room state.
  * It can be used to store drafts that should be persisted across app restarts.
  */
-@Inject
-class MatrixComposerDraftStore(
+@Inject class MatrixComposerDraftStore(
     private val client: MatrixClient,
 ) : ComposerDraftStore {
     override suspend fun loadDraft(roomId: RoomId, threadRoot: ThreadId?): ComposerDraft? {

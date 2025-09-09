@@ -18,8 +18,7 @@ import java.io.File
  * Create the cache directory for the existing sessions.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
-class AppMigration06(
+@Inject class AppMigration06(
     private val sessionStore: SessionStore,
     @CacheDirectory private val cacheDirectory: File,
 ) : AppMigration {

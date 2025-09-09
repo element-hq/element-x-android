@@ -21,8 +21,7 @@ import javax.crypto.spec.GCMParameterSpec
  * Default implementation of [EncryptionDecryptionService] using AES encryption.
  */
 @ContributesBinding(AppScope::class)
-@Inject
-class AESEncryptionDecryptionService : EncryptionDecryptionService {
+@Inject class AESEncryptionDecryptionService : EncryptionDecryptionService {
     override fun createEncryptionCipher(key: SecretKey): Cipher {
         return Cipher.getInstance(AESEncryptionSpecs.CIPHER_TRANSFORMATION).apply {
             init(Cipher.ENCRYPT_MODE, key)

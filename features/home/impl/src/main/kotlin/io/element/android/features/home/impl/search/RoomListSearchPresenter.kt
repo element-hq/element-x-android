@@ -18,8 +18,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.persistentListOf
 
-@Inject
-class RoomListSearchPresenter(
+@Inject class RoomListSearchPresenter(
     private val dataSource: RoomListSearchDataSource,
 ) : Presenter<RoomListSearchState> {
     @Composable

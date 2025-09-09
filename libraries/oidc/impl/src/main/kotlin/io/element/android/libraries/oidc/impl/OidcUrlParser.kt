@@ -22,8 +22,7 @@ fun interface OidcUrlParser {
  * TODO Find documentation about the format.
  */
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultOidcUrlParser(
+@Inject class DefaultOidcUrlParser(
     private val oidcRedirectUrlProvider: OidcRedirectUrlProvider,
 ) : OidcUrlParser {
     /**

@@ -22,8 +22,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
 @ContributesNode(RoomScope::class)
-@Inject
-class ReportMessageNode(
+@Inject class ReportMessageNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: ReportMessagePresenter.Factory,

@@ -27,8 +27,7 @@ import java.util.concurrent.CopyOnWriteArraySet
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultSessionObserver(
+@Inject class DefaultSessionObserver(
     private val sessionStore: SessionStore,
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,

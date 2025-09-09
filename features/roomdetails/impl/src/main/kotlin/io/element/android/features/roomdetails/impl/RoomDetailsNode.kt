@@ -36,8 +36,7 @@ import timber.log.Timber
 import io.element.android.libraries.androidutils.R as AndroidUtilsR
 
 @ContributesNode(RoomScope::class)
-@Inject
-class RoomDetailsNode(
+@Inject class RoomDetailsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDetailsPresenter,

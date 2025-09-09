@@ -19,8 +19,7 @@ interface UnifiedPushGatewayUrlResolver {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultUnifiedPushGatewayUrlResolver(
+@Inject class DefaultUnifiedPushGatewayUrlResolver(
     private val unifiedPushStore: UnifiedPushStore,
     private val defaultPushGatewayHttpUrlProvider: DefaultPushGatewayHttpUrlProvider,
 ) : UnifiedPushGatewayUrlResolver {

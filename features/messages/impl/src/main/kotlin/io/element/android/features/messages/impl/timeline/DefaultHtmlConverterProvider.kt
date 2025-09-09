@@ -29,8 +29,7 @@ import uniffi.wysiwyg_composer.newMentionDetector
 
 @ContributesBinding(RoomScope::class)
 @SingleIn(RoomScope::class)
-@Inject
-class DefaultHtmlConverterProvider(
+@Inject class DefaultHtmlConverterProvider(
     private val mentionSpanProvider: MentionSpanProvider,
 ) : HtmlConverterProvider {
     private val htmlConverter: MutableState<HtmlConverter?> = mutableStateOf(null)

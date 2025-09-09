@@ -44,8 +44,7 @@ import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import timber.log.Timber
 
-@Inject
-class EventItemFactory(
+@Inject class EventItemFactory(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
     private val dateFormatter: DateFormatter,

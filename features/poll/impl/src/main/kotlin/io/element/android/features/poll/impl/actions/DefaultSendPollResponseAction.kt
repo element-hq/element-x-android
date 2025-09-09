@@ -17,8 +17,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultSendPollResponseAction(
+@Inject class DefaultSendPollResponseAction(
     private val analyticsService: AnalyticsService,
 ) : SendPollResponseAction {
     override suspend fun execute(timeline: Timeline, pollStartId: EventId, answerId: String): Result<Unit> {

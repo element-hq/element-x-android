@@ -11,8 +11,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 
-@Inject
-class VerifiedUserSendFailureFactory(
+@Inject class VerifiedUserSendFailureFactory(
     private val room: BaseRoom,
 ) {
     suspend fun create(

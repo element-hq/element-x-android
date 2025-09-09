@@ -29,8 +29,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.ui.utils.MultipleTapToUnlock
 
-@Inject
-class OnBoardingPresenter(
+@Inject class OnBoardingPresenter(
     @Assisted private val params: OnBoardingNode.Params,
     private val buildMeta: BuildMeta,
     private val enterpriseService: EnterpriseService,

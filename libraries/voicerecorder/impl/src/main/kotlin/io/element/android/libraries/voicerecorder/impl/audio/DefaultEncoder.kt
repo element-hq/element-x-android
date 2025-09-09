@@ -19,8 +19,7 @@ import java.io.File
  * Safe wrapper for OggOpusEncoder.
  */
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultEncoder(
+@Inject class DefaultEncoder(
     private val encoderProvider: Provider<OggOpusEncoder>,
     config: AudioConfig,
 ) : Encoder {

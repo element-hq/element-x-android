@@ -35,8 +35,7 @@ private val loggerTag = LoggerTag("Navigation")
  */
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class DefaultAppNavigationStateService(
+@Inject class DefaultAppNavigationStateService(
     private val appForegroundStateService: AppForegroundStateService,
     @AppCoroutineScope
     coroutineScope: CoroutineScope,

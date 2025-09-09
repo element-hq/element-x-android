@@ -17,8 +17,7 @@ interface ClientBuilderProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class RustClientBuilderProvider : ClientBuilderProvider {
+@Inject class RustClientBuilderProvider : ClientBuilderProvider {
     override fun provide(): ClientBuilder {
         return ClientBuilder()
     }

@@ -4,8 +4,7 @@ import androidx.compose.runtime.Composable
 import io.element.android.libraries.architecture.Presenter
 import dev.zacsweers.metro.Inject
 
-@Inject
-class ${NAME}Presenter() : Presenter<${NAME}State> {
+@Inject class ${NAME}Presenter() : Presenter<${NAME}State> {
 
     @Composable
     override fun present(): ${NAME}State {

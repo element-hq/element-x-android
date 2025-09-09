@@ -20,8 +20,7 @@ interface FirebaseTroubleshooter {
  * This class force retrieving and storage of the Firebase token.
  */
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFirebaseTroubleshooter(
+@Inject class DefaultFirebaseTroubleshooter(
     private val newTokenHandler: FirebaseNewTokenHandler,
     private val firebaseTokenGetter: FirebaseTokenGetter,
 ) : FirebaseTroubleshooter {

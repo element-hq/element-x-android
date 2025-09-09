@@ -26,8 +26,7 @@ interface LoggedInImageLoaderFactory {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultLoggedInImageLoaderFactory(
+@Inject class DefaultLoggedInImageLoaderFactory(
     @ApplicationContext private val context: Context,
     private val okHttpClient: Provider<OkHttpClient>,
 ) : LoggedInImageLoaderFactory {
@@ -57,8 +56,7 @@ class DefaultLoggedInImageLoaderFactory(
     }
 }
 
-@Inject
-class NotLoggedInImageLoaderFactory(
+@Inject class NotLoggedInImageLoaderFactory(
     @ApplicationContext private val context: Context,
     private val okHttpClient: Provider<OkHttpClient>,
 ) {

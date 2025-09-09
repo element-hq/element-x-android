@@ -61,8 +61,7 @@ interface ActionListPresenter : Presenter<ActionListState> {
     }
 }
 
-@Inject
-class DefaultActionListPresenter(
+@Inject class DefaultActionListPresenter(
     @Assisted
     private val postProcessor: TimelineItemActionPostProcessor,
     @Assisted

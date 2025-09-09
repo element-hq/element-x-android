@@ -33,8 +33,7 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHold
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class MatrixSessionCache(
+@Inject class MatrixSessionCache(
     private val authenticationService: MatrixAuthenticationService,
     private val syncOrchestratorFactory: SyncOrchestrator.Factory,
 ) : MatrixClientProvider {

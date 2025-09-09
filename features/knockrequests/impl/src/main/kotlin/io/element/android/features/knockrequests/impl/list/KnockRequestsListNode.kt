@@ -18,8 +18,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 
 @ContributesNode(RoomScope::class)
-@Inject
-class KnockRequestsListNode(
+@Inject class KnockRequestsListNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: KnockRequestsListPresenter,

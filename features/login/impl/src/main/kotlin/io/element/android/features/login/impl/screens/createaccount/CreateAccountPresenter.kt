@@ -31,8 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
-class CreateAccountPresenter(
+@Inject class CreateAccountPresenter(
     @Assisted private val url: String,
     private val authenticationService: MatrixAuthenticationService,
     private val clientProvider: MatrixClientProvider,

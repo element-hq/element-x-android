@@ -49,8 +49,7 @@ private val loggerTag = LoggerTag("PushHandler", LoggerTag.PushLoggerTag)
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPushHandler(
+@Inject class DefaultPushHandler(
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
     private val onRedactedEventReceived: OnRedactedEventReceived,
     private val incrementPushDataStore: IncrementPushDataStore,

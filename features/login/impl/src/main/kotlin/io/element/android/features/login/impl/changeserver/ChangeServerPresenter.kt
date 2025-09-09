@@ -24,8 +24,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class ChangeServerPresenter(
+@Inject class ChangeServerPresenter(
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
     private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,

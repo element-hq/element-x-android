@@ -17,8 +17,7 @@ import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultSecureBackupEntryPoint : SecureBackupEntryPoint {
+@Inject class DefaultSecureBackupEntryPoint : SecureBackupEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): SecureBackupEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

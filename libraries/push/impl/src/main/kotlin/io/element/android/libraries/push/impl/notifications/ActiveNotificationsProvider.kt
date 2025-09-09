@@ -28,8 +28,7 @@ interface ActiveNotificationsProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultActiveNotificationsProvider(
+@Inject class DefaultActiveNotificationsProvider(
     private val notificationManager: NotificationManagerCompat,
 ) : ActiveNotificationsProvider {
     override fun getNotificationsForSession(sessionId: SessionId): List<StatusBarNotification> {

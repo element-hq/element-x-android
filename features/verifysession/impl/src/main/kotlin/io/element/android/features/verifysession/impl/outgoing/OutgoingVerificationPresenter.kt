@@ -34,8 +34,7 @@ import timber.log.Timber
 import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationStateMachine.Event as StateMachineEvent
 import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationStateMachine.State as StateMachineState
 
-@Inject
-class OutgoingVerificationPresenter(
+@Inject class OutgoingVerificationPresenter(
     @Assisted private val showDeviceVerifiedScreen: Boolean,
     @Assisted private val verificationRequest: VerificationRequest.Outgoing,
     private val sessionVerificationService: SessionVerificationService,

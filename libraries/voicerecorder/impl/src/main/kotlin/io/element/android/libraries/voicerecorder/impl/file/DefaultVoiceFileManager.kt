@@ -18,8 +18,7 @@ import java.io.File
 import java.util.UUID
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultVoiceFileManager(
+@Inject class DefaultVoiceFileManager(
     @CacheDirectory private val cacheDir: File,
     private val config: VoiceFileConfig,
     room: BaseRoom,

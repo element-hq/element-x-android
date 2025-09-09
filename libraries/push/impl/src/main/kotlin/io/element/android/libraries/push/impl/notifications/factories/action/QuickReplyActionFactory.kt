@@ -28,8 +28,7 @@ import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
-@Inject
-class QuickReplyActionFactory(
+@Inject class QuickReplyActionFactory(
     @ApplicationContext private val context: Context,
     private val actionIds: NotificationActionIds,
     private val stringProvider: StringProvider,

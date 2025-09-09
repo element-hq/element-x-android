@@ -18,8 +18,7 @@ interface CancelKnockRoom {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultCancelKnockRoom(private val client: MatrixClient) : CancelKnockRoom {
+@Inject class DefaultCancelKnockRoom(private val client: MatrixClient) : CancelKnockRoom {
     override suspend fun invoke(roomId: RoomId): Result<Unit> {
         return client
             .getRoom(roomId)

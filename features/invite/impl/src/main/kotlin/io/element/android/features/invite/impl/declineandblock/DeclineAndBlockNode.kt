@@ -21,8 +21,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class DeclineAndBlockNode(
+@Inject class DeclineAndBlockNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: DeclineAndBlockPresenter.Factory,

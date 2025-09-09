@@ -22,8 +22,7 @@ interface KnockRoom {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultKnockRoom(private val client: MatrixClient) : KnockRoom {
+@Inject class DefaultKnockRoom(private val client: MatrixClient) : KnockRoom {
     override suspend fun invoke(
         roomIdOrAlias: RoomIdOrAlias,
         message: String,

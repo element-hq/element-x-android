@@ -17,8 +17,7 @@ import io.element.android.features.verifysession.api.OutgoingVerificationEntryPo
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultOutgoingVerificationEntryPoint : OutgoingVerificationEntryPoint {
+@Inject class DefaultOutgoingVerificationEntryPoint : OutgoingVerificationEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): OutgoingVerificationEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

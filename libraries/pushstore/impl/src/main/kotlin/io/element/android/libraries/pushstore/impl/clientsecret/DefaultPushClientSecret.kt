@@ -16,8 +16,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretF
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPushClientSecret(
+@Inject class DefaultPushClientSecret(
     private val pushClientSecretFactory: PushClientSecretFactory,
     private val pushClientSecretStore: PushClientSecretStore,
 ) : PushClientSecret {

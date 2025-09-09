@@ -16,8 +16,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
 
-@Inject
-class TroubleshootNotificationsPresenter(
+@Inject class TroubleshootNotificationsPresenter(
     private val troubleshootTestSuite: TroubleshootTestSuite,
 ) : Presenter<TroubleshootNotificationsState> {
     @Composable

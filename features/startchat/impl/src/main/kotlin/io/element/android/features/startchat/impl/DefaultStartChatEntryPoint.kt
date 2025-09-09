@@ -17,8 +17,7 @@ import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultStartChatEntryPoint : StartChatEntryPoint {
+@Inject class DefaultStartChatEntryPoint : StartChatEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): StartChatEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

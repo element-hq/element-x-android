@@ -19,8 +19,7 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultSessionWellknownRetriever(
+@Inject class DefaultSessionWellknownRetriever(
     private val matrixClient: MatrixClient,
     private val parser: Json,
 ) : SessionWellknownRetriever {

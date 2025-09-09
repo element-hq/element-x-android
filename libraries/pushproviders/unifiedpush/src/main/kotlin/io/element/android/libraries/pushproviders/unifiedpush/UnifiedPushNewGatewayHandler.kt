@@ -28,8 +28,7 @@ interface UnifiedPushNewGatewayHandler {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultUnifiedPushNewGatewayHandler(
+@Inject class DefaultUnifiedPushNewGatewayHandler(
     private val pusherSubscriber: PusherSubscriber,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushClientSecret: PushClientSecret,

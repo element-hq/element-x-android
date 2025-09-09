@@ -20,8 +20,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@Inject
-class LoggedInEventProcessor(
+@Inject class LoggedInEventProcessor(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val roomMembershipObserver: RoomMembershipObserver,
 ) {

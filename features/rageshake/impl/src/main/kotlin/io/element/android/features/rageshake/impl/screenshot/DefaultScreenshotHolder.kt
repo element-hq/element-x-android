@@ -21,8 +21,7 @@ import java.io.File
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultScreenshotHolder(
+@Inject class DefaultScreenshotHolder(
     @ApplicationContext private val context: Context,
 ) : ScreenshotHolder {
     private val file = File(context.filesDir, "screenshot.png")

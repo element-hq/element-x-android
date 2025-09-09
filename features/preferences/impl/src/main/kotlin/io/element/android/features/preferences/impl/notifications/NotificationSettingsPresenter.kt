@@ -42,8 +42,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
-class NotificationSettingsPresenter(
+@Inject class NotificationSettingsPresenter(
     private val notificationSettingsService: NotificationSettingsService,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val matrixClient: MatrixClient,

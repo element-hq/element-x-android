@@ -32,8 +32,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultTimelineEventFormatter(
+@Inject class DefaultTimelineEventFormatter(
     private val sp: StringProvider,
     private val buildMeta: BuildMeta,
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,

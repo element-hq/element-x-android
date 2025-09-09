@@ -26,8 +26,7 @@ import javax.crypto.SecretKey
  * The generated key uses AES algorithm, with a key size of 128 bits, and the GCM block mode.
  */
 @ContributesBinding(AppScope::class)
-@Inject
-class KeyStoreSecretKeyRepository(
+@Inject class KeyStoreSecretKeyRepository(
     private val keyStore: KeyStore,
 ) : SecretKeyRepository {
     // False positive lint issue

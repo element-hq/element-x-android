@@ -45,8 +45,7 @@ interface MediaPreviewConfigStateStore {
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-@Inject
-class DefaultMediaPreviewConfigStateStore(
+@Inject class DefaultMediaPreviewConfigStateStore(
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
     private val mediaPreviewService: MediaPreviewService,

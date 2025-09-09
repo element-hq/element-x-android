@@ -24,8 +24,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class LoginPasswordPresenter(
+@Inject class LoginPasswordPresenter(
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
 ) : Presenter<LoginPasswordState> {

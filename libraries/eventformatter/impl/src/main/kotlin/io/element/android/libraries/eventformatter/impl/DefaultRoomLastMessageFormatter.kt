@@ -45,8 +45,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultRoomLastMessageFormatter(
+@Inject class DefaultRoomLastMessageFormatter(
     private val sp: StringProvider,
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,

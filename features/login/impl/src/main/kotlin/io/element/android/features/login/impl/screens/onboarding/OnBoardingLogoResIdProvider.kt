@@ -19,8 +19,7 @@ fun interface OnBoardingLogoResIdProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultOnBoardingLogoResIdProvider(
+@Inject class DefaultOnBoardingLogoResIdProvider(
     @ApplicationContext private val context: Context,
 ) : OnBoardingLogoResIdProvider {
     @SuppressLint("DiscouragedApi")

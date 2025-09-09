@@ -20,8 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class PushProvidersTest(
+@Inject class PushProvidersTest(
     pushProviders: Set<@JvmSuppressWildcards PushProvider>,
     private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {

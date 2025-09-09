@@ -29,8 +29,7 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 @ContributesNode(RoomScope::class)
-@Inject
-class RolesAndPermissionsNode(
+@Inject class RolesAndPermissionsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RolesAndPermissionsPresenter,

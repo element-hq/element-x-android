@@ -14,8 +14,7 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultDateFormatter(
+@Inject class DefaultDateFormatter(
     private val dateFormatterFull: DateFormatterFull,
     private val dateFormatterMonth: DateFormatterMonth,
     private val dateFormatterDay: DateFormatterDay,

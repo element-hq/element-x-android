@@ -21,8 +21,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 
 @SingleIn(AppScope::class)
 @ContributesBinding(scope = AppScope::class, binding = binding<RageShake>())
-@Inject
-class DefaultRageShake(
+@Inject class DefaultRageShake(
     @ApplicationContext context: Context,
 ) : ShakeDetector.Listener, RageShake {
     private var sensorManager = context.getSystemService<SensorManager>()

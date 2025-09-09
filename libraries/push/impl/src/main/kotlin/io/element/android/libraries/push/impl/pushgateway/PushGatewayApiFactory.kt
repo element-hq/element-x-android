@@ -17,8 +17,7 @@ interface PushGatewayApiFactory {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPushGatewayApiFactory(
+@Inject class DefaultPushGatewayApiFactory(
     private val retrofitFactory: RetrofitFactory,
 ) : PushGatewayApiFactory {
     override fun create(baseUrl: String): PushGatewayAPI {

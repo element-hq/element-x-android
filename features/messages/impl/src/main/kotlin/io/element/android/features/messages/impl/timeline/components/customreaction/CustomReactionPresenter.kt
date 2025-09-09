@@ -18,8 +18,7 @@ import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.launch
 
-@Inject
-class CustomReactionPresenter(
+@Inject class CustomReactionPresenter(
     private val emojibaseProvider: EmojibaseProvider
 ) : Presenter<CustomReactionState> {
     @Composable

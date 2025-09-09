@@ -32,8 +32,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
-class RoomListDataSource(
+@Inject class RoomListDataSource(
     private val roomListService: RoomListService,
     private val roomListRoomSummaryFactory: RoomListRoomSummaryFactory,
     private val coroutineDispatchers: CoroutineDispatchers,

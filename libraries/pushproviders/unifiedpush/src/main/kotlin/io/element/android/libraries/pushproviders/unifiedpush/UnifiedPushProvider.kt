@@ -18,8 +18,7 @@ import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class UnifiedPushProvider(
+@Inject class UnifiedPushProvider(
     private val unifiedPushDistributorProvider: UnifiedPushDistributorProvider,
     private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
     private val unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,

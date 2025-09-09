@@ -11,8 +11,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 
-@Inject
-class PinValidator(private val lockScreenConfig: LockScreenConfig) {
+@Inject class PinValidator(private val lockScreenConfig: LockScreenConfig) {
     sealed interface Result {
         data object Valid : Result
         data class Invalid(val failure: SetupPinFailure) : Result

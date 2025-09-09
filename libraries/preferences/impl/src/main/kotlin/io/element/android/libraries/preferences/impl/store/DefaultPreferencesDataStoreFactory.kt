@@ -22,8 +22,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPreferencesDataStoreFactory(
+@Inject class DefaultPreferencesDataStoreFactory(
     @ApplicationContext private val context: Context,
 ) : PreferenceDataStoreFactory {
     private val dataStoreHolders = ConcurrentHashMap<String, DataStoreHolder>()

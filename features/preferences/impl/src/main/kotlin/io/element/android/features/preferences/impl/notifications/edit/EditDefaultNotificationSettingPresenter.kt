@@ -37,8 +37,7 @@ import kotlinx.coroutines.launch
 import java.text.Collator
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
-class EditDefaultNotificationSettingPresenter(
+@Inject class EditDefaultNotificationSettingPresenter(
     private val notificationSettingsService: NotificationSettingsService,
     @Assisted private val isOneToOne: Boolean,
     private val roomListService: RoomListService,

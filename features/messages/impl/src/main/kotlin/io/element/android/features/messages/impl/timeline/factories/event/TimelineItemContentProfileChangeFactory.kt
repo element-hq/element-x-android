@@ -14,8 +14,7 @@ import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 
-@Inject
-class TimelineItemContentProfileChangeFactory(
+@Inject class TimelineItemContentProfileChangeFactory(
     private val timelineEventFormatter: TimelineEventFormatter,
 ) {
     fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {

@@ -36,8 +36,7 @@ interface AnalyticsStore {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultAnalyticsStore(
+@Inject class DefaultAnalyticsStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : AnalyticsStore {
     private val userConsent = booleanPreferencesKey("user_consent")

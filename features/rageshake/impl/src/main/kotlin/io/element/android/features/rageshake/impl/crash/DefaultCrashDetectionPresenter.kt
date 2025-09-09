@@ -29,8 +29,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultCrashDetectionPresenter(
+@Inject class DefaultCrashDetectionPresenter(
     private val buildMeta: BuildMeta,
     private val crashDataStore: CrashDataStore,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,

@@ -15,8 +15,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.services.analytics.api.ScreenTracker
 
 @ContributesBinding(AppScope::class)
-@Inject
-class NoopScreenTracker : ScreenTracker {
+@Inject class NoopScreenTracker : ScreenTracker {
     @Composable
     override fun TrackScreen(screen: MobileScreen.ScreenName) = Unit
 }

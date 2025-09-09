@@ -14,8 +14,7 @@ import io.element.android.libraries.eventformatter.api.PinnedMessagesBannerForma
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.coroutines.withContext
 
-@Inject
-class PinnedMessagesBannerItemFactory(
+@Inject class PinnedMessagesBannerItemFactory(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val formatter: PinnedMessagesBannerFormatter,
 ) {

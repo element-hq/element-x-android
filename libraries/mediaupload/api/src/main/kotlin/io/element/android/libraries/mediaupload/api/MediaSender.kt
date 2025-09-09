@@ -25,8 +25,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
-@Inject
-class MediaSender(
+@Inject class MediaSender(
     private val preProcessor: MediaPreProcessor,
     private val room: JoinedRoom,
     @Assisted private val timelineMode: Timeline.Mode,

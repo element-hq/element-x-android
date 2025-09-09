@@ -20,8 +20,7 @@ import io.element.android.features.startchat.StartChatNavigator
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class JoinRoomByAddressNode(
+@Inject class JoinRoomByAddressNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: JoinRoomByAddressPresenter.Factory,

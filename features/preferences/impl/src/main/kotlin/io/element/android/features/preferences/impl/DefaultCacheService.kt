@@ -18,8 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultCacheService : CacheService {
+@Inject class DefaultCacheService : CacheService {
     private val _clearedCacheEventFlow = MutableSharedFlow<SessionId>(0)
     override val clearedCacheEventFlow: Flow<SessionId> = _clearedCacheEventFlow
 

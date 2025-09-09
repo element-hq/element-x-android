@@ -30,8 +30,7 @@ interface FirebaseNewTokenHandler {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFirebaseNewTokenHandler(
+@Inject class DefaultFirebaseNewTokenHandler(
     private val pusherSubscriber: PusherSubscriber,
     private val sessionStore: SessionStore,
     private val userPushStoreFactory: UserPushStoreFactory,

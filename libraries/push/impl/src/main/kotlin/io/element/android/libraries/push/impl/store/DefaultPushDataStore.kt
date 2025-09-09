@@ -30,8 +30,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPushDataStore(
+@Inject class DefaultPushDataStore(
     private val pushDatabase: PushDatabase,
     private val dateFormatter: DateFormatter,
     private val dispatchers: CoroutineDispatchers,

@@ -21,8 +21,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.util.openLearnMorePage
 
 @ContributesNode(AppScope::class)
-@Inject
-class ChangeAccountProviderNode(
+@Inject class ChangeAccountProviderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: ChangeAccountProviderPresenter,

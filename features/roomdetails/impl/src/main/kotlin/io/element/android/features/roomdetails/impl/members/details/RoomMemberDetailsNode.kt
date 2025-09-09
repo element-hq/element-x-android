@@ -29,8 +29,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
-@Inject
-class RoomMemberDetailsNode(
+@Inject class RoomMemberDetailsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val analyticsService: AnalyticsService,

@@ -17,8 +17,7 @@ import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultAccountProviderAccessControl(
+@Inject class DefaultAccountProviderAccessControl(
     private val enterpriseService: EnterpriseService,
     private val wellknownRetriever: WellknownRetriever,
 ) : AccountProviderAccessControl {

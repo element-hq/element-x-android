@@ -23,8 +23,7 @@ import kotlinx.coroutines.flow.firstOrNull
 private const val EMBEDDED_CALL_WIDGET_BASE_URL = "https://appassets.androidplatform.net/element-call/index.html"
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultCallWidgetProvider(
+@Inject class DefaultCallWidgetProvider(
     private val matrixClientsProvider: MatrixClientProvider,
     private val appPreferencesStore: AppPreferencesStore,
     private val callWidgetSettingsProvider: CallWidgetSettingsProvider,

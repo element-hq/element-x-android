@@ -14,8 +14,7 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 
-@Inject
-class TimelineItemDaySeparatorFactory(
+@Inject class TimelineItemDaySeparatorFactory(
     private val dateFormatter: DateFormatter,
 ) {
     fun create(virtualItem: VirtualTimelineItem.DayDivider): TimelineItemVirtualModel {

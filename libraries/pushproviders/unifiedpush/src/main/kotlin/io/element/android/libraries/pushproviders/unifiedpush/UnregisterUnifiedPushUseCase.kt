@@ -30,8 +30,7 @@ interface UnregisterUnifiedPushUseCase {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultUnregisterUnifiedPushUseCase(
+@Inject class DefaultUnregisterUnifiedPushUseCase(
     @ApplicationContext private val context: Context,
     private val unifiedPushStore: UnifiedPushStore,
     private val pusherSubscriber: PusherSubscriber,

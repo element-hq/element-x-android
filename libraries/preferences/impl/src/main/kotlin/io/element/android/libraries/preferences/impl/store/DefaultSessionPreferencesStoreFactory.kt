@@ -23,8 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultSessionPreferencesStoreFactory(
+@Inject class DefaultSessionPreferencesStoreFactory(
     @ApplicationContext private val context: Context,
     sessionObserver: SessionObserver,
 ) : SessionPreferencesStoreFactory {

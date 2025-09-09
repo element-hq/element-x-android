@@ -21,8 +21,7 @@ import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class RoomDirectoryNode(
+@Inject class RoomDirectoryNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDirectoryPresenter,

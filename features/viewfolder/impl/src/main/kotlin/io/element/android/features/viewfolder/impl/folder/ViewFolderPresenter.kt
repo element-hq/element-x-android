@@ -22,8 +22,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 
-@Inject
-class ViewFolderPresenter(
+@Inject class ViewFolderPresenter(
     @Assisted val canGoUp: Boolean,
     @Assisted val path: String,
     private val folderExplorer: FolderExplorer,

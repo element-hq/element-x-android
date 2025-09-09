@@ -31,8 +31,7 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class PinUnlockPresenter(
+@Inject class PinUnlockPresenter(
     private val pinCodeManager: PinCodeManager,
     private val biometricAuthenticatorManager: BiometricAuthenticatorManager,
     private val logoutUseCase: LogoutUseCase,

@@ -29,8 +29,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class ChangeRoomPermissionsPresenter(
+@Inject class ChangeRoomPermissionsPresenter(
     @Assisted private val section: ChangeRoomPermissionsSection,
     private val room: JoinedRoom,
     private val analyticsService: AnalyticsService,

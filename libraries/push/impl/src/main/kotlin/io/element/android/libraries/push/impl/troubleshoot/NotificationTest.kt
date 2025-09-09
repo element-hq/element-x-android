@@ -26,8 +26,7 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class NotificationTest(
+@Inject class NotificationTest(
     private val notificationCreator: NotificationCreator,
     private val notificationDisplayer: NotificationDisplayer,
     private val notificationClickHandler: NotificationClickHandler,

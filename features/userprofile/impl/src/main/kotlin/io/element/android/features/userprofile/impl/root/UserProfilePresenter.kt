@@ -41,8 +41,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@Inject
-class UserProfilePresenter(
+@Inject class UserProfilePresenter(
     @Assisted private val userId: UserId,
     private val client: MatrixClient,
     private val startDMAction: StartDMAction,

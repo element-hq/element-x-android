@@ -33,8 +33,7 @@ import io.element.android.libraries.architecture.inputs
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-@Inject
-class ViewFolderRootNode(
+@Inject class ViewFolderRootNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<ViewFolderRootNode.NavTarget>(

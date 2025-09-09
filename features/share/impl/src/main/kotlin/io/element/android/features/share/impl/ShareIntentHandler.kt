@@ -49,8 +49,7 @@ interface ShareIntentHandler {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultShareIntentHandler(
+@Inject class DefaultShareIntentHandler(
     @ApplicationContext private val context: Context,
 ) : ShareIntentHandler {
     override suspend fun handleIncomingShareIntent(

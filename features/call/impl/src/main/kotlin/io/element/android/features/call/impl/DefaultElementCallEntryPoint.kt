@@ -21,8 +21,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultElementCallEntryPoint(
+@Inject class DefaultElementCallEntryPoint(
     @ApplicationContext private val context: Context,
     private val activeCallManager: ActiveCallManager,
 ) : ElementCallEntryPoint {

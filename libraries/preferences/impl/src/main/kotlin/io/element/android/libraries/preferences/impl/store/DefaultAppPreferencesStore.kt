@@ -32,8 +32,7 @@ private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultAppPreferencesStore(
+@Inject class DefaultAppPreferencesStore(
     private val buildMeta: BuildMeta,
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : AppPreferencesStore {

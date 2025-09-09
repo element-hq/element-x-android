@@ -16,8 +16,7 @@ import io.element.android.features.deactivation.api.AccountDeactivationEntryPoin
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultAccountDeactivationEntryPoint : AccountDeactivationEntryPoint {
+@Inject class DefaultAccountDeactivationEntryPoint : AccountDeactivationEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
         return parentNode.createNode<AccountDeactivationNode>(buildContext)
     }

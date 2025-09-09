@@ -54,8 +54,7 @@ interface NotificationDataFactory {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultNotificationDataFactory(
+@Inject class DefaultNotificationDataFactory(
     private val notificationCreator: NotificationCreator,
     private val roomGroupMessageCreator: RoomGroupMessageCreator,
     private val summaryGroupMessageCreator: SummaryGroupMessageCreator,

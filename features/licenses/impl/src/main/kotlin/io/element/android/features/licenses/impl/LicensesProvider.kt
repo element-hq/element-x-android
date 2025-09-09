@@ -24,8 +24,7 @@ interface LicensesProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class AssetLicensesProvider(
+@Inject class AssetLicensesProvider(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
 ) : LicensesProvider {

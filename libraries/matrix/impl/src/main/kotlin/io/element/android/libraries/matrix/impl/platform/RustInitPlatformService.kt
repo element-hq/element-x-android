@@ -16,8 +16,7 @@ import io.element.android.libraries.matrix.impl.tracing.map
 import org.matrix.rustcomponents.sdk.initPlatform
 
 @ContributesBinding(AppScope::class)
-@Inject
-class RustInitPlatformService : InitPlatformService {
+@Inject class RustInitPlatformService : InitPlatformService {
     override fun init(tracingConfiguration: TracingConfiguration) {
         initPlatform(
             config = tracingConfiguration.map(),

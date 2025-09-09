@@ -36,8 +36,7 @@ import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.launch
 
-@Inject
-class SendLocationPresenter(
+@Inject class SendLocationPresenter(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val room: JoinedRoom,
     @Assisted private val timelineMode: Timeline.Mode,

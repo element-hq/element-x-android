@@ -18,8 +18,7 @@ import io.element.android.libraries.wellknown.api.WellknownRetriever
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultWellknownRetriever(
+@Inject class DefaultWellknownRetriever(
     private val retrofitFactory: RetrofitFactory,
 ) : WellknownRetriever {
     override suspend fun getWellKnown(baseUrl: String): WellKnown? {

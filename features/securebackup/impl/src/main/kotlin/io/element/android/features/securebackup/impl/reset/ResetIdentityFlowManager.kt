@@ -22,8 +22,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-@Inject
-class ResetIdentityFlowManager(
+@Inject class ResetIdentityFlowManager(
     private val matrixClient: MatrixClient,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val sessionVerificationService: SessionVerificationService,

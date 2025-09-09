@@ -22,8 +22,7 @@ import io.element.android.libraries.matrix.api.media.isPreviewEnabled
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import kotlinx.collections.immutable.toImmutableSet
 
-@Inject
-class TimelineProtectionPresenter(
+@Inject class TimelineProtectionPresenter(
     private val mediaPreviewService: MediaPreviewService,
     private val room: BaseRoom,
 ) : Presenter<TimelineProtectionState> {

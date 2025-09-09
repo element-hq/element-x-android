@@ -16,8 +16,7 @@ import io.element.android.features.rageshake.api.logs.LogFilesRemover
  * Remove existing logs from the device to remove any leaks of sensitive data.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
-class AppMigration01(
+@Inject class AppMigration01(
     private val logFilesRemover: LogFilesRemover,
 ) : AppMigration {
     override val order: Int = 1

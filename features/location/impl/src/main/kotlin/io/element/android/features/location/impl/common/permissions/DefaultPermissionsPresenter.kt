@@ -18,8 +18,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 
 @Suppress("unused")
-@Inject
-class DefaultPermissionsPresenter(
+@Inject class DefaultPermissionsPresenter(
     @Assisted private val permissions: List<String>
 ) : PermissionsPresenter {
     @AssistedFactory

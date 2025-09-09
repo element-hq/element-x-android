@@ -20,8 +20,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toImmutableList
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultPollContentStateFactory(
+@Inject class DefaultPollContentStateFactory(
     private val matrixClient: MatrixClient,
 ) : PollContentStateFactory {
     override suspend fun create(

@@ -41,8 +41,7 @@ import kotlinx.parcelize.Parcelize
  * This allow to inject objects with SessionScope in the constructor of [LoggedInFlowNode].
  */
 @ContributesNode(AppScope::class)
-@Inject
-class LoggedInAppScopeFlowNode(
+@Inject class LoggedInAppScopeFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     sessionGraphFactory: SessionGraphFactory,

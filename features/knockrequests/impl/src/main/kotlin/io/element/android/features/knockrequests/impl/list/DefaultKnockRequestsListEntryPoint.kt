@@ -16,8 +16,7 @@ import io.element.android.features.knockrequests.api.list.KnockRequestsListEntry
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultKnockRequestsListEntryPoint : KnockRequestsListEntryPoint {
+@Inject class DefaultKnockRequestsListEntryPoint : KnockRequestsListEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
         return parentNode.createNode<KnockRequestsListNode>(buildContext)
     }

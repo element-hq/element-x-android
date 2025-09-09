@@ -47,8 +47,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
-@Inject
-class RoomMemberListPresenter(
+@Inject class RoomMemberListPresenter(
     private val room: JoinedRoom,
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,

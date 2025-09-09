@@ -20,8 +20,7 @@ import io.element.android.features.login.impl.di.QrCodeLoginScope
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 
 @ContributesNode(QrCodeLoginScope::class)
-@Inject
-class QrCodeScanNode(
+@Inject class QrCodeScanNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: QrCodeScanPresenter,

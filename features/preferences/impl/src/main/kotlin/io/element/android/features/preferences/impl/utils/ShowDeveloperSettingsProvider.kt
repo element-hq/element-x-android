@@ -15,8 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-@Inject
-class ShowDeveloperSettingsProvider(
+@Inject class ShowDeveloperSettingsProvider(
     buildMeta: BuildMeta,
 ) {
     companion object {

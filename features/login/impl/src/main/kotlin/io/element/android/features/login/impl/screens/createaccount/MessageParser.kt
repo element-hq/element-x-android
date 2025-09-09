@@ -23,8 +23,7 @@ interface MessageParser {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultMessageParser(
+@Inject class DefaultMessageParser(
     private val accountProviderDataSource: AccountProviderDataSource,
 ) : MessageParser {
     override fun parse(message: String): ExternalSession {

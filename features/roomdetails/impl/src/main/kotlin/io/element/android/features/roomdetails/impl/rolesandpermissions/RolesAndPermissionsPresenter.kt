@@ -32,8 +32,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class RolesAndPermissionsPresenter(
+@Inject class RolesAndPermissionsPresenter(
     private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,

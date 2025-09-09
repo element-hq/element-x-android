@@ -41,8 +41,7 @@ import kotlinx.coroutines.launch
  * Presenter for room member details screen.
  * Rely on UserProfilePresenter, but override some fields with room member info when available.
  */
-@Inject
-class RoomMemberDetailsPresenter(
+@Inject class RoomMemberDetailsPresenter(
     @Assisted private val roomMemberId: UserId,
     private val room: JoinedRoom,
     private val encryptionService: EncryptionService,

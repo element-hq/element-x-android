@@ -22,8 +22,7 @@ import kotlin.math.absoluteValue
 import kotlin.time.Clock
 
 @SingleIn(AppScope::class)
-@Inject
-class DateFormatters(
+@Inject class DateFormatters(
     localeChangeObserver: LocaleChangeObserver,
     private val clock: Clock,
     private val timeZoneProvider: TimezoneProvider,

@@ -18,8 +18,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.map
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as MatrixRoomListFilter
 
-@Inject
-class RoomListFiltersPresenter(
+@Inject class RoomListFiltersPresenter(
     private val roomListService: RoomListService,
     private val filterSelectionStrategy: FilterSelectionStrategy,
 ) : Presenter<RoomListFiltersState> {

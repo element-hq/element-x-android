@@ -23,8 +23,7 @@ import timber.log.Timber
 import java.util.Locale
 
 @ContributesBinding(AppScope::class)
-@Inject
-class AndroidLocationActions(
+@Inject class AndroidLocationActions(
     @ApplicationContext private val context: Context
 ) : LocationActions {
     override fun share(location: Location, label: String?) {

@@ -14,8 +14,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershi
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
 
-@Inject
-class RoomMembershipContentFormatter(
+@Inject class RoomMembershipContentFormatter(
     private val matrixClient: MatrixClient,
     private val sp: StringProvider,
 ) {

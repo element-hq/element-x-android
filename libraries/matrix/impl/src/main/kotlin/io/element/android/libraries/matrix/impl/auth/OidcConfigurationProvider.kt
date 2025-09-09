@@ -13,8 +13,7 @@ import io.element.android.libraries.matrix.api.auth.OidcConfig
 import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import org.matrix.rustcomponents.sdk.OidcConfiguration
 
-@Inject
-class OidcConfigurationProvider(
+@Inject class OidcConfigurationProvider(
     private val buildMeta: BuildMeta,
     private val oidcRedirectUrlProvider: OidcRedirectUrlProvider,
 ) {

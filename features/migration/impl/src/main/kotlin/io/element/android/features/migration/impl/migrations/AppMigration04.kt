@@ -18,8 +18,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
  * Remove notifications.bin file, used to store notification data locally.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
-class AppMigration04(
+@Inject class AppMigration04(
     @ApplicationContext private val context: Context,
 ) : AppMigration {
     companion object {

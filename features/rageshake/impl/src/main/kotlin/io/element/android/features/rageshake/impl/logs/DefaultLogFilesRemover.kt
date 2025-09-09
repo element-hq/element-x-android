@@ -15,8 +15,7 @@ import io.element.android.features.rageshake.impl.reporter.DefaultBugReporter
 import java.io.File
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultLogFilesRemover(
+@Inject class DefaultLogFilesRemover(
     private val bugReporter: DefaultBugReporter,
 ) : LogFilesRemover {
     override suspend fun perform(predicate: (File) -> Boolean) {

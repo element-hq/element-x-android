@@ -23,8 +23,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(SessionScope::class)
-@Inject
-class ConfigureRoomNode(
+@Inject class ConfigureRoomNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: ConfigureRoomPresenter,

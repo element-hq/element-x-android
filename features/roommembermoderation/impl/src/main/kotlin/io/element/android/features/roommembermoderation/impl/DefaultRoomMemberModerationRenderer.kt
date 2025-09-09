@@ -20,8 +20,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import timber.log.Timber
 
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultRoomMemberModerationRenderer : RoomMemberModerationRenderer {
+@Inject class DefaultRoomMemberModerationRenderer : RoomMemberModerationRenderer {
     @Composable
     override fun Render(
         state: RoomMemberModerationState,

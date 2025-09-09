@@ -15,8 +15,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 
-@Inject
-class TimelineItemIndexer {
+@Inject class TimelineItemIndexer {
     // This is a latch to wait for the first process call
     private val firstProcessLatch = CompletableDeferred<Unit>()
     private val timelineEventsIndexes = mutableMapOf<EventId, Int>()

@@ -37,8 +37,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
-class RoomNotificationSettingsPresenter(
+@Inject class RoomNotificationSettingsPresenter(
     private val room: JoinedRoom,
     private val notificationSettingsService: NotificationSettingsService,
     @Assisted private val showUserDefinedSettingStyle: Boolean,

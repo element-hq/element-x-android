@@ -19,8 +19,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class LoggedInNode(
+@Inject class LoggedInNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val loggedInPresenter: LoggedInPresenter,

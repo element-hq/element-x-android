@@ -28,8 +28,7 @@ interface LocaleChangeListener {
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultLocaleChangeObserver(
+@Inject class DefaultLocaleChangeObserver(
     @ApplicationContext private val context: Context,
 ) : LocaleChangeObserver {
     init {

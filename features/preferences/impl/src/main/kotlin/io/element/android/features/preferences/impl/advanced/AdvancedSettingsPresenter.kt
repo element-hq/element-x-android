@@ -27,8 +27,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-@Inject
-class AdvancedSettingsPresenter(
+@Inject class AdvancedSettingsPresenter(
     private val appPreferencesStore: AppPreferencesStore,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val mediaPreviewConfigStateStore: MediaPreviewConfigStateStore,

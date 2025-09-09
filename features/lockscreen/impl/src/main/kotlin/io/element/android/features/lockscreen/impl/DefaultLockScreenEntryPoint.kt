@@ -19,8 +19,7 @@ import io.element.android.features.lockscreen.impl.unlock.activity.PinUnlockActi
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultLockScreenEntryPoint : LockScreenEntryPoint {
+@Inject class DefaultLockScreenEntryPoint : LockScreenEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext, navTarget: LockScreenEntryPoint.Target): LockScreenEntryPoint.NodeBuilder {
         val callbacks = mutableListOf<LockScreenEntryPoint.Callback>()
 

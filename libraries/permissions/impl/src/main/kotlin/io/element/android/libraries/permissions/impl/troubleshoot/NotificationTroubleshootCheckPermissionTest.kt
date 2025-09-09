@@ -24,8 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class NotificationTroubleshootCheckPermissionTest(
+@Inject class NotificationTroubleshootCheckPermissionTest(
     private val permissionStateProvider: PermissionStateProvider,
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     private val permissionActions: PermissionActions,

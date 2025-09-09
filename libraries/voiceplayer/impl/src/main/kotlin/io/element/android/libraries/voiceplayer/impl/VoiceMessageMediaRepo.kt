@@ -56,8 +56,7 @@ interface VoiceMessageMediaRepo {
     suspend fun getMediaFile(): Result<File>
 }
 
-@Inject
-class DefaultVoiceMessageMediaRepo(
+@Inject class DefaultVoiceMessageMediaRepo(
     @CacheDirectory private val cacheDir: File,
     mxcTools: MxcTools,
     private val matrixMediaLoader: MatrixMediaLoader,

@@ -20,8 +20,7 @@ interface LinkChecker {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultLinkChecker : LinkChecker {
+@Inject class DefaultLinkChecker : LinkChecker {
     override fun isSafe(link: Link): Boolean {
         return if (link.url.containsRtLOverride()) {
             false

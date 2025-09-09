@@ -26,8 +26,7 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.RootNavStateFlowFact
  * This class is responsible for creating a flow of [RootNavState].
  * It gathers data from multiple datasource and creates a unique one.
  */
-@Inject
-class RootNavStateFlowFactory(
+@Inject class RootNavStateFlowFactory(
     private val authenticationService: MatrixAuthenticationService,
     private val cacheService: CacheService,
     private val matrixSessionCache: MatrixSessionCache,

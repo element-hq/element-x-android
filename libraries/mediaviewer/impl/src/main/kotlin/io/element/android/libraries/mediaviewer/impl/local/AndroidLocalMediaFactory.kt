@@ -28,8 +28,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 
 @ContributesBinding(AppScope::class)
-@Inject
-class AndroidLocalMediaFactory(
+@Inject class AndroidLocalMediaFactory(
     @ApplicationContext private val context: Context,
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,

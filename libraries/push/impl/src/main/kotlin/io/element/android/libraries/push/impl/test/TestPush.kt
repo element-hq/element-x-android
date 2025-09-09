@@ -21,8 +21,7 @@ interface TestPush {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultTestPush(
+@Inject class DefaultTestPush(
     private val pushGatewayNotifyRequest: PushGatewayNotifyRequest,
 ) : TestPush {
     override suspend fun execute(config: CurrentUserPushConfig) {

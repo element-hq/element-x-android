@@ -19,8 +19,7 @@ import io.element.android.libraries.textcomposer.model.MessageComposerMode
 
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultMessageComposerContext : MessageComposerContext {
+@Inject class DefaultMessageComposerContext : MessageComposerContext {
     override var composerMode: MessageComposerMode by mutableStateOf(MessageComposerMode.Normal)
         internal set
 }

@@ -24,8 +24,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
-@Inject
-class RoomNotificationSettingsNode(
+@Inject class RoomNotificationSettingsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: RoomNotificationSettingsPresenter.Factory,

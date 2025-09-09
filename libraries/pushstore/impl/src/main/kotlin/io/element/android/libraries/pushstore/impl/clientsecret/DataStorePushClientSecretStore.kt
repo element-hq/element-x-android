@@ -18,8 +18,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretS
 import kotlinx.coroutines.flow.first
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DataStorePushClientSecretStore(
+@Inject class DataStorePushClientSecretStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : PushClientSecretStore {
     private val dataStore = preferenceDataStoreFactory.create("push_client_secret_store")

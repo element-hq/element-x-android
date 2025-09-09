@@ -30,8 +30,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class ReportMessagePresenter(
+@Inject class ReportMessagePresenter(
     private val room: JoinedRoom,
     @Assisted private val inputs: Inputs,
     private val snackbarDispatcher: SnackbarDispatcher,

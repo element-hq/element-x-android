@@ -12,8 +12,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 
-@Inject
-class TimelineItemContentUTDFactory {
+@Inject class TimelineItemContentUTDFactory {
     fun create(content: UnableToDecryptContent): TimelineItemEventContent {
         return TimelineItemEncryptedContent(content.data)
     }

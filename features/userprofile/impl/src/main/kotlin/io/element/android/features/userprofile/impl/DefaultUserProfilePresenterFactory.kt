@@ -17,8 +17,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.UserId
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultUserProfilePresenterFactory(
+@Inject class DefaultUserProfilePresenterFactory(
     private val factory: UserProfilePresenter.Factory,
 ) : UserProfilePresenterFactory {
     override fun create(userId: UserId): Presenter<UserProfileState> = factory.create(userId)

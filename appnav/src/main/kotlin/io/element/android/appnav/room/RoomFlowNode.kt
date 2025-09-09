@@ -63,8 +63,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 @ContributesNode(SessionScope::class)
-@Inject
-class RoomFlowNode(
+@Inject class RoomFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val client: MatrixClient,

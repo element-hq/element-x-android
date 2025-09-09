@@ -45,8 +45,7 @@ interface BatteryOptimization {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class AndroidBatteryOptimization(
+@Inject class AndroidBatteryOptimization(
     @ApplicationContext
     private val context: Context,
     private val externalIntentLauncher: ExternalIntentLauncher,

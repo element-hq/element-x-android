@@ -22,8 +22,7 @@ import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultMediaViewerEntryPoint : MediaViewerEntryPoint {
+@Inject class DefaultMediaViewerEntryPoint : MediaViewerEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): MediaViewerEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

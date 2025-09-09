@@ -41,8 +41,7 @@ import uniffi.matrix_sdk_crypto.DecryptionSettings
 import uniffi.matrix_sdk_crypto.TrustRequirement
 import java.io.File
 
-@Inject
-class RustMatrixClientFactory(
+@Inject class RustMatrixClientFactory(
     @BaseDirectory private val baseDirectory: File,
     @CacheDirectory private val cacheDirectory: File,
     @AppCoroutineScope

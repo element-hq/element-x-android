@@ -18,8 +18,7 @@ import io.element.android.features.viewfolder.impl.root.ViewFolderRootNode
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultViewFolderEntryPoint : ViewFolderEntryPoint {
+@Inject class DefaultViewFolderEntryPoint : ViewFolderEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): ViewFolderEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

@@ -30,8 +30,7 @@ import kotlinx.coroutines.flow.map
 
 private const val SEARCH_BATCH_SIZE = 20
 
-@Inject
-class RoomDirectoryPresenter(
+@Inject class RoomDirectoryPresenter(
     private val dispatchers: CoroutineDispatchers,
     private val roomDirectoryService: RoomDirectoryService,
 ) : Presenter<RoomDirectoryState> {

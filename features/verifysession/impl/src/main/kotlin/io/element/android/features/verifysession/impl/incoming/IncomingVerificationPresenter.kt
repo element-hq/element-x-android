@@ -38,8 +38,7 @@ import timber.log.Timber
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationStateMachine.Event as StateMachineEvent
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationStateMachine.State as StateMachineState
 
-@Inject
-class IncomingVerificationPresenter(
+@Inject class IncomingVerificationPresenter(
     @Assisted private val verificationRequest: VerificationRequest.Incoming,
     @Assisted private val navigator: IncomingVerificationNavigator,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,

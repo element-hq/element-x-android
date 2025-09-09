@@ -23,8 +23,7 @@ interface PipSupportProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPipSupportProvider(
+@Inject class DefaultPipSupportProvider(
     @ApplicationContext private val context: Context,
 ) : PipSupportProvider {
     override fun isPipSupported(): Boolean {

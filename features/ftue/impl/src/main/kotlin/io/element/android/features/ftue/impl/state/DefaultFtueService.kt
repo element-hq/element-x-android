@@ -35,8 +35,7 @@ import kotlinx.coroutines.flow.onEach
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-@Inject
-class DefaultFtueService(
+@Inject class DefaultFtueService(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,

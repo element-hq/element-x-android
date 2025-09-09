@@ -26,8 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
-@Inject
-class PollRepository(
+@Inject class PollRepository(
     private val room: JoinedRoom,
     private val defaultTimelineProvider: TimelineProvider,
     @Assisted private val timelineMode: Timeline.Mode,

@@ -29,8 +29,7 @@ private const val PAGE_SIZE = 30
  * DataSource for RoomSummaryDetails that can be filtered by a search query,
  * and which only includes rooms the user has joined.
  */
-@Inject
-class RoomSelectSearchDataSource(
+@Inject class RoomSelectSearchDataSource(
     roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
 ) {

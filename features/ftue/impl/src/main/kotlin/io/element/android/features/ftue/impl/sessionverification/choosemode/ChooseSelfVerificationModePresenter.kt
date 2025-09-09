@@ -19,8 +19,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 
-@Inject
-class ChooseSelfVerificationModePresenter(
+@Inject class ChooseSelfVerificationModePresenter(
     private val encryptionService: EncryptionService,
     private val directLogoutPresenter: Presenter<DirectLogoutState>,
 ) : Presenter<ChooseSelfVerificationModeState> {

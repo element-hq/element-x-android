@@ -17,8 +17,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.withContext
 
-@Inject
-class PollHistoryItemsFactory(
+@Inject class PollHistoryItemsFactory(
     private val pollContentStateFactory: PollContentStateFactory,
     private val dateFormatter: DateFormatter,
     private val dispatchers: CoroutineDispatchers,

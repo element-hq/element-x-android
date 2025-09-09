@@ -19,8 +19,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
-class SyncOnNotifiableEvent(
+@Inject class SyncOnNotifiableEvent(
     private val matrixClientProvider: MatrixClientProvider,
     private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,

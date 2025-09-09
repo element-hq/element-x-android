@@ -22,8 +22,7 @@ private const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_PIN_CODE"
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
-class DefaultPinCodeManager(
+@Inject class DefaultPinCodeManager(
     private val secretKeyRepository: SecretKeyRepository,
     private val encryptionDecryptionService: EncryptionDecryptionService,
     private val lockScreenStore: LockScreenStore,

@@ -30,8 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
-class SyncOrchestrator(
+@Inject class SyncOrchestrator(
     @Assisted matrixClient: MatrixClient,
     private val appForegroundStateService: AppForegroundStateService,
     private val networkMonitor: NetworkMonitor,

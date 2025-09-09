@@ -25,8 +25,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
 
 @ContributesNode(RoomScope::class)
-@Inject
-class AttachmentsPreviewNode(
+@Inject class AttachmentsPreviewNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: AttachmentsPreviewPresenter.Factory,

@@ -20,8 +20,7 @@ interface FileContentReader {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultFileContentReader(
+@Inject class DefaultFileContentReader(
     private val dispatchers: CoroutineDispatchers,
 ) : FileContentReader {
     override suspend fun getLines(path: String): Result<List<String>> = withContext(dispatchers.io) {

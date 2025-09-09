@@ -49,8 +49,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Inject
-class DefaultInvitePeoplePresenter(
+@Inject class DefaultInvitePeoplePresenter(
     @Assisted private val joinedRoom: JoinedRoom?,
     @Assisted private val roomId: RoomId,
     private val userRepository: UserRepository,

@@ -13,8 +13,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultSystemClock : SystemClock {
+@Inject class DefaultSystemClock : SystemClock {
     /**
      * Provides a UTC epoch in milliseconds
      *

@@ -27,8 +27,7 @@ import timber.log.Timber
 const val SEND_QUEUES_RETRY_DELAY_MILLIS = 500L
 
 @SingleIn(SessionScope::class)
-@Inject
-class SendQueues(
+@Inject class SendQueues(
     private val matrixClient: MatrixClient,
     private val syncService: SyncService,
 ) {

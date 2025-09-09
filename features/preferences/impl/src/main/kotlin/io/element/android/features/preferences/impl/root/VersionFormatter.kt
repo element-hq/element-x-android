@@ -19,8 +19,7 @@ interface VersionFormatter {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultVersionFormatter(
+@Inject class DefaultVersionFormatter(
     private val stringProvider: StringProvider,
     private val buildMeta: BuildMeta,
 ) : VersionFormatter {

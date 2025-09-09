@@ -19,8 +19,7 @@ data class RegistrationResult(
 )
 
 @SingleIn(AppScope::class)
-@Inject
-class EndpointRegistrationHandler {
+@Inject class EndpointRegistrationHandler {
     private val _state = MutableSharedFlow<RegistrationResult>()
     val state: SharedFlow<RegistrationResult> = _state
 

@@ -86,8 +86,7 @@ interface ActiveCallManager {
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultActiveCallManager(
+@Inject class DefaultActiveCallManager(
     @ApplicationContext context: Context,
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,

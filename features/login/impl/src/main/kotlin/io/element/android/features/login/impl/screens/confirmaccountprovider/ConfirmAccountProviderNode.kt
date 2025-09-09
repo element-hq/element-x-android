@@ -24,8 +24,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 @ContributesNode(AppScope::class)
-@Inject
-class ConfirmAccountProviderNode(
+@Inject class ConfirmAccountProviderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: ConfirmAccountProviderPresenter.Factory,

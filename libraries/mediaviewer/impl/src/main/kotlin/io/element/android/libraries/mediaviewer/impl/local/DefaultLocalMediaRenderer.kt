@@ -22,8 +22,7 @@ import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultLocalMediaRenderer(
+@Inject class DefaultLocalMediaRenderer(
     private val textFileViewer: TextFileViewer,
     private val audioFocus: AudioFocus,
 ) : LocalMediaRenderer {

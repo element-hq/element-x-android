@@ -45,8 +45,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class FtueFlowNode(
+@Inject class FtueFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val ftueState: DefaultFtueService,
@@ -161,8 +160,7 @@ class FtueFlowNode(
 }
 
 @ContributesNode(AppScope::class)
-@Inject
-class PlaceholderNode(
+@Inject class PlaceholderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext, plugins = plugins) {

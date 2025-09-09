@@ -23,8 +23,7 @@ import io.element.android.libraries.push.impl.db.PushHistory
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPushHistoryService(
+@Inject class DefaultPushHistoryService(
     private val pushDatabase: PushDatabase,
     private val systemClock: SystemClock,
     @ApplicationContext context: Context,

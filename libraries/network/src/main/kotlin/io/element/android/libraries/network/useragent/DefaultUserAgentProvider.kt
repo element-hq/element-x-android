@@ -17,8 +17,7 @@ import io.element.android.libraries.matrix.api.SdkMetadata
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultUserAgentProvider(
+@Inject class DefaultUserAgentProvider(
     private val buildMeta: BuildMeta,
     private val sdkMeta: SdkMetadata,
 ) : UserAgentProvider {

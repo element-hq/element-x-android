@@ -24,8 +24,7 @@ import io.element.android.libraries.architecture.Presenter
 import timber.log.Timber
 
 @SingleIn(AppScope::class)
-@Inject
-class MigrationPresenter(
+@Inject class MigrationPresenter(
     private val migrationStore: MigrationStore,
     migrations: Set<@JvmSuppressWildcards AppMigration>,
 ) : Presenter<MigrationState> {

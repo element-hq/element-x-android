@@ -49,8 +49,7 @@ import timber.log.Timber
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
-class CallScreenPresenter(
+@Inject class CallScreenPresenter(
     @Assisted private val callType: CallType,
     @Assisted private val navigator: CallScreenNavigator,
     private val callWidgetProvider: CallWidgetProvider,

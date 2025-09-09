@@ -51,8 +51,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-@Inject
-class LoginFlowNode(
+@Inject class LoginFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val accountProviderDataSource: AccountProviderDataSource,

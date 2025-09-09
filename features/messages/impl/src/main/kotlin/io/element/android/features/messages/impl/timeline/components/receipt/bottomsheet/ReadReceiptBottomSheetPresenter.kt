@@ -16,8 +16,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
 
-@Inject
-class ReadReceiptBottomSheetPresenter : Presenter<ReadReceiptBottomSheetState> {
+@Inject class ReadReceiptBottomSheetPresenter : Presenter<ReadReceiptBottomSheetState> {
     @Composable
     override fun present(): ReadReceiptBottomSheetState {
         var selectedEvent: TimelineItem.Event? by remember { mutableStateOf(null) }

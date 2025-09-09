@@ -86,8 +86,7 @@ interface NotificationCreator {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultNotificationCreator(
+@Inject class DefaultNotificationCreator(
     @ApplicationContext private val context: Context,
     private val notificationChannels: NotificationChannels,
     private val stringProvider: StringProvider,

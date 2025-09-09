@@ -31,8 +31,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@Inject
-class TypingNotificationPresenter(
+@Inject class TypingNotificationPresenter(
     private val room: JoinedRoom,
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<TypingNotificationState> {

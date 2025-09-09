@@ -30,8 +30,7 @@ internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 private val loggerTag = LoggerTag("DefaultPusherSubscriber", LoggerTag.PushLoggerTag)
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPusherSubscriber(
+@Inject class DefaultPusherSubscriber(
     private val buildMeta: BuildMeta,
     private val pushClientSecret: PushClientSecret,
     private val userPushStoreFactory: UserPushStoreFactory,

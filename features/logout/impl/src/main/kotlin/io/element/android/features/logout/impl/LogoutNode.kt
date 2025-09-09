@@ -20,8 +20,7 @@ import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class LogoutNode(
+@Inject class LogoutNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: LogoutPresenter,

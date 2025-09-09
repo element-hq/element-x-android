@@ -22,8 +22,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-@Inject
-class PushHistoryPresenter(
+@Inject class PushHistoryPresenter(
     private val pushService: PushService,
 ) : Presenter<PushHistoryState> {
     @Composable

@@ -14,8 +14,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultRoomComponentFactory(
+@Inject class DefaultRoomComponentFactory(
     private val sessionGraph: SessionGraph,
 ) : RoomComponentFactory {
     override fun create(room: JoinedRoom): Any {

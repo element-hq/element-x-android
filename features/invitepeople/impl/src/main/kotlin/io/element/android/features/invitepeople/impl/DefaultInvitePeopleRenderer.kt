@@ -16,8 +16,7 @@ import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.libraries.di.SessionScope
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultInvitePeopleRenderer : InvitePeopleRenderer {
+@Inject class DefaultInvitePeopleRenderer : InvitePeopleRenderer {
     @Composable
     override fun Render(state: InvitePeopleState, modifier: Modifier) {
         if (state is DefaultInvitePeopleState) {

@@ -33,8 +33,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-@Inject
-class QrCodeScanPresenter(
+@Inject class QrCodeScanPresenter(
     private val qrCodeLoginDataFactory: MatrixQrCodeLoginDataFactory,
     private val qrCodeLoginManager: QrCodeLoginManager,
     private val coroutineDispatchers: CoroutineDispatchers,

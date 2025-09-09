@@ -25,8 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Inject
-class SearchAccountProviderPresenter(
+@Inject class SearchAccountProviderPresenter(
     private val homeserverResolver: HomeserverResolver,
     private val changeServerPresenter: Presenter<ChangeServerState>,
 ) : Presenter<SearchAccountProviderState> {

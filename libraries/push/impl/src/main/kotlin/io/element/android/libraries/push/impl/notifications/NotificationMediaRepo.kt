@@ -58,8 +58,7 @@ interface NotificationMediaRepo {
     ): Result<File>
 }
 
-@Inject
-class DefaultNotificationMediaRepo(
+@Inject class DefaultNotificationMediaRepo(
     @CacheDirectory private val cacheDir: File,
     private val mxcTools: MxcTools,
     @Assisted private val client: MatrixClient,

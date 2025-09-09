@@ -29,8 +29,7 @@ interface ReportRoom {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultReportRoom(
+@Inject class DefaultReportRoom(
     private val client: MatrixClient,
 ) : ReportRoom {
     override suspend operator fun invoke(

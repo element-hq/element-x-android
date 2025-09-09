@@ -21,8 +21,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
-@Inject
-class RoomDetailsEditNode(
+@Inject class RoomDetailsEditNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDetailsEditPresenter,

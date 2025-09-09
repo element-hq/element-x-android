@@ -44,8 +44,7 @@ import io.element.android.libraries.mediaviewer.impl.model.mediaSource
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
-@Inject
-class MediaGalleryPresenter(
+@Inject class MediaGalleryPresenter(
     @Assisted private val navigator: MediaGalleryNavigator,
     private val room: BaseRoom,
     private val mediaGalleryDataSource: MediaGalleryDataSource,

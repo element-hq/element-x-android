@@ -18,8 +18,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.annotations.ContributesNode
 
 @ContributesNode(AppScope::class)
-@Inject
-class LoginPasswordNode(
+@Inject class LoginPasswordNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: LoginPasswordPresenter,

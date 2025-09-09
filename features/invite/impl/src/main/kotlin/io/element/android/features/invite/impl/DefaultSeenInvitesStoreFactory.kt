@@ -21,8 +21,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultSeenInvitesStoreFactory(
+@Inject class DefaultSeenInvitesStoreFactory(
     @ApplicationContext private val context: Context,
     private val sessionObserver: SessionObserver,
 ) : SeenInvitesStoreFactory {

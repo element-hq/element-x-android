@@ -26,8 +26,7 @@ interface UnifiedPushStore {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class SharedPreferencesUnifiedPushStore(
+@Inject class SharedPreferencesUnifiedPushStore(
     @ApplicationContext val context: Context,
     private val sharedPreferences: SharedPreferences,
 ) : UnifiedPushStore {

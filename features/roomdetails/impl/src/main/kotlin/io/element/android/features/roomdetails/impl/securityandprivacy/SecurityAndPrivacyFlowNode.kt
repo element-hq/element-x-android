@@ -25,8 +25,7 @@ import io.element.android.libraries.di.RoomScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-@Inject
-class SecurityAndPrivacyFlowNode(
+@Inject class SecurityAndPrivacyFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<SecurityAndPrivacyFlowNode.NavTarget>(

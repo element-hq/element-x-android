@@ -45,8 +45,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
-@Inject
-class RoomMemberModerationPresenter(
+@Inject class RoomMemberModerationPresenter(
     private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,

@@ -21,8 +21,7 @@ import kotlinx.coroutines.flow.Flow
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultPermissionStateProvider(
+@Inject class DefaultPermissionStateProvider(
     @ApplicationContext private val context: Context,
     private val permissionsStore: PermissionsStore,
 ) : PermissionStateProvider {

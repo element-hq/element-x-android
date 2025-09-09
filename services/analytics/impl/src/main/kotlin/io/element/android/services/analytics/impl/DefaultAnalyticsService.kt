@@ -32,8 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class, binding = binding<AnalyticsService>())
-@Inject
-class DefaultAnalyticsService(
+@Inject class DefaultAnalyticsService(
     private val analyticsProviders: Set<@JvmSuppressWildcards AnalyticsProvider>,
     private val analyticsStore: AnalyticsStore,
 //    private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,

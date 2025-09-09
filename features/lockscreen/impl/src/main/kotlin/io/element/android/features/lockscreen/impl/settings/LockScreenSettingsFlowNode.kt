@@ -35,8 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
-class LockScreenSettingsFlowNode(
+@Inject class LockScreenSettingsFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pinCodeManager: PinCodeManager,

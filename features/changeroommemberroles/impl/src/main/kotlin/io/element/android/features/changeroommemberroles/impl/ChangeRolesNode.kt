@@ -26,8 +26,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.coroutines.flow.first
 
 @ContributesNode(RoomScope::class)
-@Inject
-class ChangeRolesNode(
+@Inject class ChangeRolesNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: ChangeRolesPresenter.Factory,

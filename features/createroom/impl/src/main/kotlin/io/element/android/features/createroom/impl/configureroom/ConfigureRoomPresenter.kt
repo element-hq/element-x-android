@@ -47,8 +47,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.jvm.optionals.getOrDefault
 
-@Inject
-class ConfigureRoomPresenter(
+@Inject class ConfigureRoomPresenter(
     private val dataStore: CreateRoomConfigStore,
     private val matrixClient: MatrixClient,
     private val mediaPickerProvider: PickerProvider,

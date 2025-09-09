@@ -14,8 +14,7 @@ import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 
-@Inject
-class TimelineItemContentPollFactory(
+@Inject class TimelineItemContentPollFactory(
     private val pollContentStateFactory: PollContentStateFactory,
 ) {
     suspend fun create(

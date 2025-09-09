@@ -23,8 +23,7 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultIndicatorService(
+@Inject class DefaultIndicatorService(
     private val sessionVerificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
 ) : IndicatorService {

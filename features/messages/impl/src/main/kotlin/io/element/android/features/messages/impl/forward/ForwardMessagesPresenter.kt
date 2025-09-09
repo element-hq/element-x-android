@@ -26,8 +26,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
-class ForwardMessagesPresenter(
+@Inject class ForwardMessagesPresenter(
     @Assisted eventId: String,
     @Assisted private val timelineProvider: TimelineProvider,
     @SessionCoroutineScope

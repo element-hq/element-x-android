@@ -22,8 +22,7 @@ interface OnNotifiableEventReceived {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultOnNotifiableEventReceived(
+@Inject class DefaultOnNotifiableEventReceived(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,

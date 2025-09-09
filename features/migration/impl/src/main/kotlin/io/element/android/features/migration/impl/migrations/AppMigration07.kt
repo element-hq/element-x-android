@@ -16,8 +16,7 @@ import io.element.android.features.rageshake.api.logs.LogFilesRemover
  * Delete the previous log files.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
-class AppMigration07(
+@Inject class AppMigration07(
     private val logFilesRemover: LogFilesRemover,
 ) : AppMigration {
     override val order: Int = 7

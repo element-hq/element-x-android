@@ -47,8 +47,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
-@Inject
-class ResetIdentityFlowNode(
+@Inject class ResetIdentityFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val resetIdentityFlowManager: ResetIdentityFlowManager,

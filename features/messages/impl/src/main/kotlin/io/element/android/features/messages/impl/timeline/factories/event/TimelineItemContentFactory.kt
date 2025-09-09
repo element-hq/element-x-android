@@ -28,8 +28,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 
-@Inject
-class TimelineItemContentFactory(
+@Inject class TimelineItemContentFactory(
     private val messageFactory: TimelineItemContentMessageFactory,
     private val redactedMessageFactory: TimelineItemContentRedactedFactory,
     private val stickerFactory: TimelineItemContentStickerFactory,

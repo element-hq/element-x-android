@@ -28,8 +28,7 @@ interface MentionSpanFormatter {
  * based on its MentionType and context.
  */
 @ContributesBinding(RoomScope::class)
-@Inject
-class DefaultMentionSpanFormatter(
+@Inject class DefaultMentionSpanFormatter(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val roomNamesCache: RoomNamesCache,
 ) : MentionSpanFormatter {

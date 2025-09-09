@@ -47,8 +47,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 @ContributesBinding(AppScope::class)
-@Inject
-class AndroidLocalMediaActions(
+@Inject class AndroidLocalMediaActions(
     @ApplicationContext private val context: Context,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,

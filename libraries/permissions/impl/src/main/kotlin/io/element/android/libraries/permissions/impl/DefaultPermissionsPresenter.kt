@@ -37,8 +37,7 @@ import timber.log.Timber
 
 private val loggerTag = LoggerTag("DefaultPermissionsPresenter")
 
-@Inject
-class DefaultPermissionsPresenter(
+@Inject class DefaultPermissionsPresenter(
     @Assisted val permission: String,
     private val permissionsStore: PermissionsStore,
     private val composablePermissionStateProvider: ComposablePermissionStateProvider,

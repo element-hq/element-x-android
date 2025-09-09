@@ -22,8 +22,7 @@ import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTa
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class AboutNode(
+@Inject class AboutNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: AboutPresenter,

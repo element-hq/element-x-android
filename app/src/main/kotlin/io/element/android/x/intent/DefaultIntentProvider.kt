@@ -22,8 +22,7 @@ import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.x.MainActivity
 
 @ContributesBinding(AppScope::class)
-@Inject
-class DefaultIntentProvider(
+@Inject class DefaultIntentProvider(
     @ApplicationContext private val context: Context,
     private val deepLinkCreator: DeepLinkCreator,
 ) : IntentProvider {

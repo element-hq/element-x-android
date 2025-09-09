@@ -21,8 +21,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.launch
 
-@Inject
-class SignedOutPresenter(
+@Inject class SignedOutPresenter(
     // Cannot inject SessionId
     @Assisted private val sessionId: String,
     private val sessionStore: SessionStore,

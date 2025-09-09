@@ -14,8 +14,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
-@Inject
-class VirtualItemFactory(
+@Inject class VirtualItemFactory(
     private val dateFormatter: DateFormatter,
 ) {
     fun create(timelineItem: MatrixTimelineItem.Virtual): MediaItem? {

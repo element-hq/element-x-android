@@ -22,8 +22,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 @ContributesBinding(AppScope::class)
-@Inject
-class PreferencesLockScreenStore(
+@Inject class PreferencesLockScreenStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
     private val lockScreenConfig: LockScreenConfig,
 ) : LockScreenStore {

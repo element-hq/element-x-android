@@ -33,8 +33,7 @@ interface VoiceMessagePresenterModule {
     fun bindVoiceMessagePresenterFactory(factory: VoiceMessagePresenter.Factory): MediaItemPresenterFactory<*, *>
 }
 
-@Inject
-class VoiceMessagePresenter(
+@Inject class VoiceMessagePresenter(
     voiceMessagePresenterFactory: VoiceMessagePresenterFactory,
     @Assisted private val item: MediaItem.Voice,
 ) : Presenter<VoiceMessageState> {

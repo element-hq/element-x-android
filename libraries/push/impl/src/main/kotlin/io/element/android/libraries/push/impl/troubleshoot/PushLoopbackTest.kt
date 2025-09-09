@@ -28,8 +28,7 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class PushLoopbackTest(
+@Inject class PushLoopbackTest(
     private val pushService: PushService,
     private val diagnosticPushHandler: DiagnosticPushHandler,
     private val clock: SystemClock,

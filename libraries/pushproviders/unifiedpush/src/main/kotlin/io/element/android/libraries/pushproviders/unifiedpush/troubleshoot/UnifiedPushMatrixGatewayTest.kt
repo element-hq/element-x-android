@@ -23,8 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @ContributesIntoSet(AppScope::class)
-@Inject
-class UnifiedPushMatrixGatewayTest(
+@Inject class UnifiedPushMatrixGatewayTest(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val unifiedPushCurrentUserPushConfigProvider: UnifiedPushCurrentUserPushConfigProvider,

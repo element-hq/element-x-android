@@ -20,8 +20,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-@Inject
-class PinUnlockNode(
+@Inject class PinUnlockNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: PinUnlockPresenter,

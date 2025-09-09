@@ -18,8 +18,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 @ContributesBinding(SessionScope::class)
-@Inject
-class DefaultChangeRoomMemberRolesEntyPoint : ChangeRoomMemberRolesEntryPoint {
+@Inject class DefaultChangeRoomMemberRolesEntyPoint : ChangeRoomMemberRolesEntryPoint {
     override fun builder(parentNode: Node, buildContext: BuildContext): ChangeRoomMemberRolesEntryPoint.Builder {
         return object : ChangeRoomMemberRolesEntryPoint.Builder {
             private lateinit var changeRoomMemberRolesListType: ChangeRoomMemberRolesListType

@@ -23,8 +23,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
-@Inject
-class ShowLocationNode(
+@Inject class ShowLocationNode(
     presenterFactory: ShowLocationPresenter.Factory,
     analyticsService: AnalyticsService,
     @Assisted buildContext: BuildContext,

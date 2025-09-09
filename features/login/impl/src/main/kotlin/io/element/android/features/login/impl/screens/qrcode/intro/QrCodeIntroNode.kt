@@ -19,8 +19,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.di.QrCodeLoginScope
 
 @ContributesNode(QrCodeLoginScope::class)
-@Inject
-class QrCodeIntroNode(
+@Inject class QrCodeIntroNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: QrCodeIntroPresenter,
