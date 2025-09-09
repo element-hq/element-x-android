@@ -88,13 +88,16 @@ class DefaultPickerProvider(
     @Composable
     override fun registerFilePicker(
         mimeType: String,
-        onResult: (Uri?) -> Unit,
+        onResult: (uri: Uri?, mimeType: String?) -> Unit,
     ): PickerLauncher<String, Uri?> {
         // Tests and UI preview can't handle Context or FileProviders, so we might as well disable the whole picker
         return if (LocalInspectionMode.current) {
-            NoOpPickerLauncher { onResult(null) }
+            NoOpPickerLauncher { onResult(null, null) }
         } else {
-            rememberPickerLauncher(type = PickerType.File(mimeType)) { uri -> onResult(uri) }
+            rememberPickerLauncher(type = PickerType.File(mimeType)) { uri ->
+                val pickedMimeType = uri?.let { context.contentResolver.getType(it) }
+                onResult(uri, pickedMimeType)
+            }
         }
     }
 
