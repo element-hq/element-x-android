@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring."</string>
+  <string name="full_screen_intent_banner_title">"Qoʻngʻiroq tajribangizni yaxshilang"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Bildirishnomalarni qanday qabul qilishni tanlang"</string>
   <string name="screen_advanced_settings_developer_mode">"Dasturchi rejimi"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Ishlab chiquvchilar uchun xususiyatlar va funksiyalarga kirishni yoqing."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Maxsus element qo‘ng‘iroqlar bazasi URL manzili"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Element qo\'ng\'irog\'iga maxsus asosiy url or\'natish"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL noto‘g‘ri, iltimos, protokol (http/https) va to‘g‘ri manzilni kiritganingizga ishonch hosil qiling."</string>
+  <string name="screen_advanced_settings_media_compression_description">"Rasm va videolarni tezroq yuklang va trafik sarfini kamaytiring"</string>
+  <string name="screen_advanced_settings_media_compression_title">"Media sifatini yaxshilash"</string>
+  <string name="screen_advanced_settings_push_provider_android">"Push bildirishnoma provayderi"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Boy matn muharriri o\'chiring Markdown bilan qo\'lda yozish uchun"</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Kvitansiyalarni oʻqish"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Agar oʻchirib qo‘yilsa, sizning oʻqilganlik bildirishnomangiz hech kimga yuborilmaydi. Siz boshqa foydalanuvchilardan oʻqilganlik bildirishnomalarini olishda davom etasiz."</string>
+  <string name="screen_advanced_settings_share_presence">"Mavjudligini ulashish"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Agar oʻchirib qoʻyilsa, siz oʻqilganlik haqidagi bildirishnomalarni yoki yozayotganingiz haqidagi xabarlarni yubora olmaysiz va qabul qila olmaysiz."</string>
+  <string name="screen_advanced_settings_view_source_description">"Xabar manbasini vaqt jadvalida ko‘rish imkoniyatini yoqing."</string>
+  <string name="screen_blocked_users_empty">"Sizda bloklangan foydalanuvchi yo‘q"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Blokdan chiqarish"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Ulardan kelgan barcha xabarlarni yana koʻrishingiz mumkin boʻladi."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Foydalanuvchini blokdan chiqarish"</string>
+  <string name="screen_blocked_users_unblocking">"Blokdan chiqarilmoqda…"</string>
   <string name="screen_edit_profile_display_name">"Ko\'rsatiladigan ism"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ismingizni ko\'rsating"</string>
   <string name="screen_edit_profile_error">"Noma\'lum xatolik yuz berdi va ma\'lumotni o\'zgartirib bo\'lmadi."</string>
@@ -32,6 +44,8 @@ Davom ettirsangiz, baʼzi sozlamalaringiz oʻzgarishi mumkin."</string>
   <string name="screen_notification_settings_enable_notifications">"Ushbu qurilmada bildirishnomalarni yoqing"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Konfiguratsiya tuzatilmadi, qayta urinib ko\'ring."</string>
   <string name="screen_notification_settings_group_chats">"Guruh suhbatlari"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Taklifnomalar"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Uy serveringiz shifrlangan xonalarda ushbu imkoniyatni qoʻllab-quvvatlamaydi, shuning uchun baʼzi xonalardagi xabarlarni olmasligingiz mumkin."</string>
   <string name="screen_notification_settings_mentions_section_title">"Eslatmalar"</string>
   <string name="screen_notification_settings_mode_all">"Hammasi"</string>
   <string name="screen_notification_settings_mode_mentions">"Eslatmalar"</string>
@@ -41,4 +55,6 @@ Davom ettirsangiz, baʼzi sozlamalaringiz oʻzgarishi mumkin."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"tizim sozlamalari"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Tizim bildirishnomalari o\'chirilgan"</string>
   <string name="screen_notification_settings_title">"Bildirishnomalar"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Muammolarni bartaraf etish"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Bildirishnomalar bilan bog‘liq muammolarni bartaraf etish"</string>
 </resources>

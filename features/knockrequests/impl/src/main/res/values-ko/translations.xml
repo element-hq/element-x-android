@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"네, 모두 수락합니다"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"모든 가입 요청을 정말로 수락하시겠습니까?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"모든 요청 수락"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"모두 수락"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"모든 요청을 처리할 수 없습니다. 다시 시도하시겠습니까?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"모든 요청을 수락하지 못했습니다."</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"모든 가입 요청 수락"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"이 요청을 수락할 수 없습니다. 다시 시도하시겠습니까?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"요청을 수락하지 못했습니다"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"가입 요청 수락"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"네, 거절하고 차단합니다"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"%1$s 을 거부하고 차단하시겠습니까? 이 사용자는 이 방에 다시 참여하기 위해 액세스를 요청할 수 없습니다."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"접근 거부 및 차단"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"접근 거부 및 차단"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"네, 거절합니다"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"%1$s 의 이 방에 대한 요청을 정말 거부하시겠습니까?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"접근 거부"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"거부 및 차단"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"이 요청을 거부할 수 없습니다. 다시 시도하시겠습니까?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"요청 거부에 실패했습니다"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"가입 요청 거부"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"누군가가 방에 참여 요청을 한다면, 여기에서 그 요청을 볼 수 있습니다."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"보류 중인 가입 요청이 없습니다."</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"가입 요청을 로딩 중…"</string>
+  <string name="screen_knock_requests_list_title">"참여 요청"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="other">"%1$s +%2$d 명이 이 방에 참여하고 싶어합니다."</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"모두 보기"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"수락"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s 이 방에 참여하고 싶습니다."</string>
+  <string name="screen_room_single_knock_request_view_button_title">"보기"</string>
+</resources>

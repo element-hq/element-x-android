@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Firebase를 사용할 수 있는지 확인하세요."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase는 사용할 수 없습니다."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase를 사용할 수 있습니다."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Firebase 확인"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Firebase 토큰을 사용할 수 있는지 확인하세요."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Firebase 토큰이 인식되지 않았습니다."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Firebase 토큰: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Firebase 토큰 확인"</string>
+</resources>

@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Er du sikker på at du vil forlate denne samtalen? Denne samtalen er ikke offentlig, og du vil ikke kunne bli med igjen uten en invitasjon."</string>
   <string name="leave_room_alert_empty_subtitle">"Er du sikker på at du vil forlate dette rommet? Du er den eneste personen her. Hvis du forlater, vil ingen kunne bli med i fremtiden, inkludert deg."</string>
   <string name="leave_room_alert_private_subtitle">"Er du sikker på at du vil forlate dette rommet? Dette rommet er ikke offentlig, og du vil ikke kunne bli med igjen uten en invitasjon."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Velg eiere"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Du er den eneste eieren av dette rommet. Du må overføre eierskapet til noen andre før du forlater rommet."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Overfør eierskap"</string>
   <string name="leave_room_alert_subtitle">"Er du sikker på at du vil forlate rommet?"</string>
 </resources>

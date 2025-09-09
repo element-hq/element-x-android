@@ -7,7 +7,8 @@
 
 package io.element.android.libraries.voiceplayer.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import java.io.File
-import javax.inject.Inject
 
 /**
  * A media player specialized in playing a single voice message.
@@ -116,8 +116,9 @@ class DefaultVoiceMessagePlayer(
     mimeType: String?,
     filename: String?,
 ) : VoiceMessagePlayer {
-    @ContributesBinding(RoomScope::class) // Scoped types can't use @AssistedInject.
-    class Factory @Inject constructor(
+    @ContributesBinding(RoomScope::class) // Scoped types can't use @Inject.
+    @Inject
+class Factory(
         private val mediaPlayer: MediaPlayer,
         private val voiceMessageMediaRepoFactory: VoiceMessageMediaRepo.Factory,
     ) : VoiceMessagePlayer.Factory {

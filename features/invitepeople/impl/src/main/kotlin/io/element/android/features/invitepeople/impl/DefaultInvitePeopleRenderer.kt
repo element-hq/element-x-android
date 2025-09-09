@@ -9,14 +9,15 @@ package io.element.android.features.invitepeople.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.invitepeople.api.InvitePeopleRenderer
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.libraries.di.SessionScope
-import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultInvitePeopleRenderer @Inject constructor() : InvitePeopleRenderer {
+@Inject
+class DefaultInvitePeopleRenderer : InvitePeopleRenderer {
     @Composable
     override fun Render(state: InvitePeopleState, modifier: Modifier) {
         if (state is DefaultInvitePeopleState) {

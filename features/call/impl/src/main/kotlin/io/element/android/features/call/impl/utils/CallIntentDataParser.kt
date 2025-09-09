@@ -9,9 +9,10 @@ package io.element.android.features.call.impl.utils
 
 import android.net.Uri
 import androidx.core.net.toUri
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class CallIntentDataParser @Inject constructor() {
+@Inject
+class CallIntentDataParser {
     private val validHttpSchemes = sequenceOf("https")
     private val knownHosts = sequenceOf(
         "call.element.io",

@@ -17,9 +17,10 @@ import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import io.element.android.anvilannotations.ContributesNode
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
 import io.element.android.features.viewfolder.impl.file.ViewFileNode
 import io.element.android.features.viewfolder.impl.folder.ViewFolderNode
@@ -29,11 +30,11 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.di.AppScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-class ViewFolderRootNode @AssistedInject constructor(
+@Inject
+class ViewFolderRootNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<ViewFolderRootNode.NavTarget>(

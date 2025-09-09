@@ -8,13 +8,13 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.services.toolbox.api.strings.StringProvider
-import javax.inject.Inject
 
 interface SummaryGroupMessageCreator {
     fun createSummaryNotification(
@@ -36,7 +36,8 @@ interface SummaryGroupMessageCreator {
  * https://developer.android.com/training/notify-user/group
  */
 @ContributesBinding(AppScope::class)
-class DefaultSummaryGroupMessageCreator @Inject constructor(
+@Inject
+class DefaultSummaryGroupMessageCreator(
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,
 ) : SummaryGroupMessageCreator {

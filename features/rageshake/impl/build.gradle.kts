@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -22,7 +22,7 @@ android {
     }
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     implementation(projects.appconfig)
@@ -54,7 +54,6 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.sessionStorage.implMemory)
     testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.libraries.preferences.test)

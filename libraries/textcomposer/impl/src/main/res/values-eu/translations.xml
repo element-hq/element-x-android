@@ -2,7 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Gehitu eranskina"</string>
   <string name="rich_text_editor_bullet_list">"Buleten zerrenda bai/ez"</string>
-  <string name="rich_text_editor_close_formatting_options">"Itxi formatu aukerak"</string>
+  <string name="rich_text_editor_close_formatting_options">"Baztertu eta itxi formatu aukerak"</string>
+  <string name="rich_text_editor_code_block">"Kode-blokea bai/ez"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Gehitu testua"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Zifratutako mezua…"</string>
   <string name="rich_text_editor_composer_placeholder">"Mezua…"</string>

@@ -17,12 +17,13 @@ import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.app.Person
 import androidx.core.content.res.ResourcesCompat
 import coil3.ImageLoader
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
@@ -40,8 +41,8 @@ import io.element.android.libraries.push.impl.notifications.model.FallbackNotifi
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.services.toolbox.api.strings.StringProvider
-import javax.inject.Inject
 
 interface NotificationCreator {
     /**
@@ -85,7 +86,8 @@ interface NotificationCreator {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultNotificationCreator @Inject constructor(
+@Inject
+class DefaultNotificationCreator(
     @ApplicationContext private val context: Context,
     private val notificationChannels: NotificationChannels,
     private val stringProvider: StringProvider,
@@ -136,7 +138,10 @@ class DefaultNotificationCreator @Inject constructor(
                 // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 // ID of the corresponding shortcut, for conversation features under API 30+
-                .setShortcutId(roomInfo.roomId.value)
+                // Must match those created in the ShortcutInfoCompat.Builder()
+                // for the notification to appear as a "Conversation":
+                // https://developer.android.com/develop/ui/views/notifications/conversations
+                .setShortcutId(createShortcutId(roomInfo.sessionId, roomInfo.roomId))
                 // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
                 // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
                 .setGroup(roomInfo.sessionId.value)

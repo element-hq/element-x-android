@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Add reaction: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_collapse_message_text_field">"Minimise message text field"</string>
   <string name="a11y_delete">"Delete"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d digit entered"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Edit avatar"</string>
   <string name="a11y_edit_room_address_hint">"The full address will be %1$s"</string>
   <string name="a11y_encryption_details">"Encryption details"</string>
+  <string name="a11y_expand_message_text_field">"Expand message text field"</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
@@ -40,9 +42,9 @@
   <string name="a11y_remove_reaction_with">"Remove reaction with %1$s"</string>
   <string name="a11y_room_avatar">"Room avatar"</string>
   <string name="a11y_send_files">"Send files"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Time limited action required, you have one minute to verify"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
-  <string name="a11y_time_limited_action_required">"Time limited action required"</string>
   <string name="a11y_tombstoned_room">"Tombstoned room"</string>
   <string name="a11y_user_avatar">"User avatar"</string>
   <string name="a11y_user_menu">"User menu"</string>
@@ -163,6 +165,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade available"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
+  <string name="common_add_account">"Add an account"</string>
+  <string name="common_add_another_account">"Add another account"</string>
   <string name="common_adding_caption">"Adding caption"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_an_image">"an image"</string>
@@ -183,6 +187,7 @@
   <string name="common_current_user_rejected_invite">"Invite declined"</string>
   <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
+  <string name="common_description">"Description"</string>
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_device_id">"Device ID"</string>
   <string name="common_direct_chat">"Direct chat"</string>
@@ -292,6 +297,7 @@ Reason: %1$s."</string>
   <string name="common_search_results">"Search results"</string>
   <string name="common_security">"Security"</string>
   <string name="common_seen_by">"Seen by"</string>
+  <string name="common_select_account">"Select an account"</string>
   <string name="common_send_to">"Send to"</string>
   <string name="common_sending">"Sending…"</string>
   <string name="common_sending_failed">"Sending failed"</string>
@@ -374,6 +380,8 @@ Are you sure you want to continue?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"The max file size allowed is: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Select the quality of the video you want to upload."</string>
   <string name="dialog_video_quality_selector_title">"Select video upload quality"</string>
+  <string name="emoji_picker_search_placeholder">"Search emojis"</string>
+  <string name="error_account_already_logged_in">"You\'re already logged in on this device as %1$s."</string>
   <string name="error_account_creation_not_possible">"Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation."</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>

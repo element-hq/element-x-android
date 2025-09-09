@@ -9,8 +9,11 @@
   <string name="emoji_picker_category_places">"Reising og steder"</string>
   <string name="emoji_picker_category_symbols">"Symboler"</string>
   <string name="screen_media_upload_preview_caption_warning">"Teksting er kanskje ikke synlig for personer som bruker eldre apper."</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Filen kunne ikke lastes opp."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Kunne ikke behandle medier for opplasting, vennligst prøv igjen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Opplasting av medier mislyktes, vennligst prøv igjen."</string>
+  <string name="screen_media_upload_preview_error_too_large_message">"Maksimal tillatt filstørrelse er %1$s."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"Filen er for stor til å lastes opp"</string>
   <string name="screen_report_content_block_user">"Blokker bruker"</string>
   <string name="screen_report_content_block_user_hint">"Kryss av for om du vil skjule alle nåværende og fremtidige meldinger fra denne brukeren"</string>
   <string name="screen_report_content_explanation">"Denne meldingen vil bli rapportert til hjemmeserverens administratorer. De vil ikke kunne lese noen krypterte meldinger."</string>

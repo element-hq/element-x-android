@@ -15,7 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.features.login.impl.DefaultLoginUserStory
+import dev.zacsweers.metro.Inject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -23,12 +23,11 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class LoginPasswordPresenter @Inject constructor(
+@Inject
+class LoginPasswordPresenter(
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : Presenter<LoginPasswordState> {
     @Composable
     override fun present(): LoginPasswordState {
@@ -69,8 +68,6 @@ class LoginPasswordPresenter @Inject constructor(
         loggedInState.value = AsyncData.Loading()
         authenticationService.login(formState.login.trim(), formState.password)
             .onSuccess { sessionId ->
-                // We will not navigate to the WaitList screen, so the login user story is done
-                defaultLoginUserStory.setLoginFlowIsDone(true)
                 loggedInState.value = AsyncData.Success(sessionId)
             }
             .onFailure { failure ->

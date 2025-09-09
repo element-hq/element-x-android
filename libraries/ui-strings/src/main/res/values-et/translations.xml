@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Reageeri: %1$s"</string>
   <string name="a11y_avatar">"Tunnuspilt"</string>
+  <string name="a11y_collapse_message_text_field">"Vähenda tekstivälja"</string>
   <string name="a11y_delete">"Kustuta"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d number sisestatud"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Muuda tunnuspilti"</string>
   <string name="a11y_edit_room_address_hint">"Täisaadress saab olema %1$s"</string>
   <string name="a11y_encryption_details">"Krüptimise üksikasjad"</string>
+  <string name="a11y_expand_message_text_field">"Laienda tekstivälja"</string>
   <string name="a11y_hide_password">"Peida salasõna"</string>
   <string name="a11y_join_call">"Liitu kõnega"</string>
   <string name="a11y_jump_to_bottom">"Mine lõppu"</string>
@@ -40,9 +42,9 @@
   <string name="a11y_remove_reaction_with">"Eemalda reageerimine: %1$s"</string>
   <string name="a11y_room_avatar">"Jututoa tunnuspilt"</string>
   <string name="a11y_send_files">"Saada faile"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Palun tee see ajapiiranguga toiming, sul on aega üks minut"</string>
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
-  <string name="a11y_time_limited_action_required">"Palun tee see ajapiiranguga toiming"</string>
   <string name="a11y_tombstoned_room">"Lõpetatuks märgitud jututuba"</string>
   <string name="a11y_user_avatar">"Kasutaja tunnuspilt"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
@@ -163,10 +165,14 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Saadaval on uuendus"</string>
   <string name="common_about">"Rakenduse teave"</string>
   <string name="common_acceptable_use_policy">"Vastuvõetava kasutamise põhimõtted"</string>
+  <string name="common_add_account">"Lisa kasutajakonto"</string>
+  <string name="common_add_another_account">"Lisa veel üks kasutajakonto"</string>
   <string name="common_adding_caption">"Lisame selgitust"</string>
   <string name="common_advanced_settings">"Täiendavad seadistused"</string>
   <string name="common_an_image">"pilt"</string>
   <string name="common_analytics">"Analüütika"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Sa oled jututoast lahkunud"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sa olid sessioonist väljaloginud"</string>
   <string name="common_appearance">"Välimus"</string>
   <string name="common_audio">"Heli"</string>
   <string name="common_blocked_users">"Blokeeritud kasutajad"</string>
@@ -290,6 +296,7 @@ Põhjus: %1$s."</string>
   <string name="common_search_results">"Otsingutulemused"</string>
   <string name="common_security">"Turvalisus"</string>
   <string name="common_seen_by">"Seda nägi(d)"</string>
+  <string name="common_select_account">"Vali kasutajakonto"</string>
   <string name="common_send_to">"Saada kasutajale"</string>
   <string name="common_sending">"Saadame…"</string>
   <string name="common_sending_failed">"Saatmine ei õnnestunud"</string>
@@ -372,6 +379,8 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Suurim lubatud failisuurus on: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vali üleslaaditava video kvaliteet."</string>
   <string name="dialog_video_quality_selector_title">"Vali video kvaliteet."</string>
+  <string name="emoji_picker_search_placeholder">"Otsi emojisid"</string>
+  <string name="error_account_already_logged_in">"Sa juba oled sellesse seadmesse sisseloginud kasutajana %1$s."</string>
   <string name="error_account_creation_not_possible">"Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Service\'i tugi, vajab sinu koduserver uuendamist."</string>
   <string name="error_failed_creating_the_permalink">"Püsilingi loomine ei õnnestumud"</string>
   <string name="error_failed_loading_map">"%1$s kaardi laadimine ei õnnestunud. Palun proovi hiljem uuesti."</string>
@@ -431,7 +440,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_room_permalink_same_room_android">"Sa juba vaatad seda jututuba!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s esiletõstetud sõnumit"</string>
-  <string name="screen_room_pinned_banner_loading_description">"Laadime sõnumit…"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Laadin sõnumit…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Näita kõiki"</string>
   <string name="screen_room_title">"Vestlus"</string>
   <string name="screen_share_location_title">"Jaga asukohta"</string>

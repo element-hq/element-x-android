@@ -116,9 +116,6 @@ class RoomMemberListPresenterTest {
                 }
             }
 
-            // Wait for the update to be processed
-            skipItems(1)
-
             // Update the room members state as `Room.updateMembers()` would have done with the actual implementation
             room.givenRoomMembersState(RoomMembersState.Ready(persistentListOf()))
             // Wait for another update

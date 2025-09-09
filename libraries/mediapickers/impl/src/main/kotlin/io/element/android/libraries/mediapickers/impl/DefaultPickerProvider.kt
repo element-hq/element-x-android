@@ -15,19 +15,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.core.content.FileProvider
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.mediapickers.api.ComposePickerLauncher
 import io.element.android.libraries.mediapickers.api.NoOpPickerLauncher
 import io.element.android.libraries.mediapickers.api.PickerLauncher
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.api.PickerType
 import java.io.File
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultPickerProvider @Inject constructor(
+@Inject
+class DefaultPickerProvider(
     @ApplicationContext private val context: Context,
 ) : PickerProvider {
     /**
@@ -87,13 +88,16 @@ class DefaultPickerProvider @Inject constructor(
     @Composable
     override fun registerFilePicker(
         mimeType: String,
-        onResult: (Uri?) -> Unit,
+        onResult: (uri: Uri?, mimeType: String?) -> Unit,
     ): PickerLauncher<String, Uri?> {
         // Tests and UI preview can't handle Context or FileProviders, so we might as well disable the whole picker
         return if (LocalInspectionMode.current) {
-            NoOpPickerLauncher { onResult(null) }
+            NoOpPickerLauncher { onResult(null, null) }
         } else {
-            rememberPickerLauncher(type = PickerType.File(mimeType)) { uri -> onResult(uri) }
+            rememberPickerLauncher(type = PickerType.File(mimeType)) { uri ->
+                val pickedMimeType = uri?.let { context.contentResolver.getType(it) }
+                onResult(uri, pickedMimeType)
+            }
         }
     }
 

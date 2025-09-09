@@ -13,10 +13,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import io.element.android.features.login.impl.DefaultLoginUserStory
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.tryOrNull
@@ -32,11 +31,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlin.time.Duration.Companion.seconds
 
-class CreateAccountPresenter @AssistedInject constructor(
+@Inject
+class CreateAccountPresenter(
     @Assisted private val url: String,
     private val authenticationService: MatrixAuthenticationService,
     private val clientProvider: MatrixClientProvider,
-    private val defaultLoginUserStory: DefaultLoginUserStory,
     private val messageParser: MessageParser,
     private val buildMeta: BuildMeta,
 ) : Presenter<CreateAccountState> {
@@ -86,8 +85,6 @@ class CreateAccountPresenter @AssistedInject constructor(
                 val sessionVerificationService = client.sessionVerificationService()
                 withTimeout(10.seconds) { sessionVerificationService.sessionVerifiedStatus.first { it.isVerified() } }
             }
-            // We will not navigate to the WaitList screen, so the login user story is done
-            defaultLoginUserStory.setLoginFlowIsDone(true)
             loggedInState.value = AsyncAction.Success(sessionId)
         }.onFailure { failure ->
             loggedInState.value = AsyncAction.Failure(failure)

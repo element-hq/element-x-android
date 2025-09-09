@@ -14,9 +14,9 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import io.element.android.anvilannotations.ContributesNode
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
+import io.element.android.annotations.ContributesNode
 import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.EditRoomAddressNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -25,7 +25,8 @@ import io.element.android.libraries.di.RoomScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-class SecurityAndPrivacyFlowNode @AssistedInject constructor(
+@Inject
+class SecurityAndPrivacyFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<SecurityAndPrivacyFlowNode.NavTarget>(

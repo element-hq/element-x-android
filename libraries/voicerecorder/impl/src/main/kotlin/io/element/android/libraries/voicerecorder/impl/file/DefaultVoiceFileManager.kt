@@ -7,7 +7,8 @@
 
 package io.element.android.libraries.voicerecorder.impl.file
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.hash.md5
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.RoomScope
@@ -15,10 +16,10 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import java.io.File
 import java.util.UUID
-import javax.inject.Inject
 
 @ContributesBinding(RoomScope::class)
-class DefaultVoiceFileManager @Inject constructor(
+@Inject
+class DefaultVoiceFileManager(
     @CacheDirectory private val cacheDir: File,
     private val config: VoiceFileConfig,
     room: BaseRoom,

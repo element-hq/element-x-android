@@ -15,7 +15,7 @@ jobs:
       pull-requests: read
     steps:
       - name: Add notice
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         if: contains(github.event.pull_request.labels.*.name, 'X-Blocked')
         with:
           script: |
@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN_READ_ORG }}
       - name: Add label
         if: steps.teams.outputs.isTeamMember == 'false'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             github.rest.issues.addLabels({
@@ -58,7 +58,7 @@ jobs:
       github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - name: Close pull request
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             github.rest.issues.createComment({

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"활동"</string>
+  <string name="emoji_picker_category_flags">"깃발"</string>
+  <string name="emoji_picker_category_foods">"음식 &amp; 음료"</string>
+  <string name="emoji_picker_category_nature">"동물 &amp; 자연"</string>
+  <string name="emoji_picker_category_objects">"사물"</string>
+  <string name="emoji_picker_category_people">"표정 &amp; 사람"</string>
+  <string name="emoji_picker_category_places">"여행 &amp; 장소"</string>
+  <string name="emoji_picker_category_symbols">"상징"</string>
+  <string name="screen_media_upload_preview_caption_warning">"캡션은 오래된 앱을 사용하는 사용자에게 표시되지 않을 수 있습니다."</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"비디오 업로드 품질을 변경하려면 탭하세요"</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"파일을 업로드할 수 없습니다."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"미디어 업로드 처리가 실패했습니다. 다시 시도해 주세요."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"미디어 파일 업로드에 실패했습니다. 다시 시도해 주세요."</string>
+  <string name="screen_media_upload_preview_error_too_large_message">"허용되는 최대 파일 크기는 %1$s 입니다."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"파일 크기가 너무 커서 업로드할 수 없습니다."</string>
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"이미지 품질 최적화"</string>
+  <string name="screen_media_upload_preview_processing">"처리 중…"</string>
+  <string name="screen_report_content_block_user">"사용자 차단하기"</string>
+  <string name="screen_report_content_block_user_hint">"이 사용자의 현재 및 향후 모든 메시지를 숨기려면 확인하세요."</string>
+  <string name="screen_report_content_explanation">"이 메시지는 홈서버의 관리자에게 보고되었습니다. 암호화된 메시지는 읽을 수 없습니다."</string>
+  <string name="screen_report_content_hint">"이 콘텐츠를 신고하는 이유"</string>
+  <string name="screen_room_attachment_source_camera">"카메라"</string>
+  <string name="screen_room_attachment_source_camera_photo">"사진 찍기"</string>
+  <string name="screen_room_attachment_source_camera_video">"동영상 녹화"</string>
+  <string name="screen_room_attachment_source_files">"첨부 파일"</string>
+  <string name="screen_room_attachment_source_gallery">"사진 &amp; 동영상 라이브러리"</string>
+  <string name="screen_room_attachment_source_location">"위치"</string>
+  <string name="screen_room_attachment_source_poll">"투표"</string>
+  <string name="screen_room_attachment_text_formatting">"텍스트 서식"</string>
+  <string name="screen_room_encrypted_history_banner">"메시지 기록은 현재 사용할 수 없습니다."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"이 룸에서는 메시지 기록을 사용할 수 없습니다. 이 기기를 확인하여 메시지 기록을 확인하세요."</string>
+  <string name="screen_room_invite_again_alert_message">"그들을 다시 초대하시겠습니까?"</string>
+  <string name="screen_room_invite_again_alert_title">"이 채팅에는 귀하만 있습니다."</string>
+  <string name="screen_room_mentions_at_room_subtitle">"방 전체에 알림"</string>
+  <string name="screen_room_mentions_at_room_title">"모두"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"다시 보내기"</string>
+  <string name="screen_room_retry_send_menu_title">"메시지 전송에 실패했습니다."</string>
+  <string name="screen_room_timeline_add_reaction">"반응 추가"</string>
+  <string name="screen_room_timeline_beginning_of_room">"%1$s의 시작입니다."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"대화의 시작입니다."</string>
+  <string name="screen_room_timeline_legacy_call">"지원되지 않는 통화입니다. 발신자에게 새로운 Element X 앱을 사용할 수 있는지 문의하시기 바랍니다."</string>
+  <string name="screen_room_timeline_less_reactions">"덜 보기"</string>
+  <string name="screen_room_timeline_message_copied">"메시지 복사됨"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"이 방에 게시할 수 있는 권한이 없습니다."</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="other">"%1$d 회원들이 반응했습니다: %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="other">"당신과 %1$d 멤버들은 다음과 같이 반응했습니다 %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"당신은 다음과 같이 반응했습니다 %1$s"</string>
+  <string name="screen_room_timeline_reactions_show_less">"덜 보기"</string>
+  <string name="screen_room_timeline_reactions_show_more">"더 보기"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"반응 요약 표시"</string>
+  <string name="screen_room_timeline_read_marker_title">"신규"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="other">"%1$d 방 변경"</item>
+  </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"새로운 방으로 이동"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"이 방은 대체되어 더 이상 활성화되어 있지 않습니다"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"이전 메시지 보기"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"이 방은 다른 방의 연속입니다."</string>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="other">"%1$s, %2$s 및 %3$d 기타"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="other">"%1$s 입력 중입니다"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s 그리고 %2$s"</string>
+</resources>

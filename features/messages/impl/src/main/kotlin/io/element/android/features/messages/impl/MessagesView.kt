@@ -39,7 +39,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -81,6 +84,7 @@ import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayout
+import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayoutState
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
@@ -288,7 +292,25 @@ fun MessagesView(
             )
         },
         sheetDragHandle = if (state.composerState.showTextFormatting) {
-            @Composable { BottomSheetDragHandle() }
+            @Composable { toggleAction ->
+                val expandA11yLabel = stringResource(CommonStrings.a11y_expand_message_text_field)
+                val collapseA11yLabel = stringResource(CommonStrings.a11y_collapse_message_text_field)
+                BottomSheetDragHandle(
+                    modifier = Modifier.semantics {
+                        role = Role.Button
+
+                        // Accessibility action to toggle the bottom sheet state
+                        val label = when (expandableState.position) {
+                            ExpandableBottomSheetLayoutState.Position.COLLAPSED, ExpandableBottomSheetLayoutState.Position.DRAGGING -> expandA11yLabel
+                            ExpandableBottomSheetLayoutState.Position.EXPANDED -> collapseA11yLabel
+                        }
+                        onClick(label) {
+                            toggleAction()
+                            true
+                        }
+                    }
+                )
+            }
         } else {
             @Composable {}
         },

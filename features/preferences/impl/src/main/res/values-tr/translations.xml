@@ -8,8 +8,11 @@
   <string name="screen_advanced_settings_element_call_base_url">"Özel Element Call temel URL\'si"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Element Call için özel bir temel URL ayarlayın."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Geçersiz URL, lütfen protokolü (http/https) ve doğru adresi eklediğinizden emin olun."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Oda davet isteklerinde avatarları gizle"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Zaman çizelgesinde medya ön izlemelerini kapat"</string>
   <string name="screen_advanced_settings_media_compression_description">"Fotoğraf ve videoları daha hızlı yükleyin ve veri kullanımını azaltın"</string>
   <string name="screen_advanced_settings_media_compression_title">"Medya kalitesini optimize edin"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Yönetim ve Güvenlik"</string>
   <string name="screen_advanced_settings_push_provider_android">"Anlık bildirim sağlayıcısı"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Markdown\'ı manuel olarak yazmak için zengin metin düzenleyicisini devre dışı bırakın."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Okundu bilgisi"</string>

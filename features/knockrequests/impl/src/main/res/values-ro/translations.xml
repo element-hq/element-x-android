@@ -1,4 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Da, acceptati tot"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Sunteți sigur că doriți să acceptați toate cererile de alăturare?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Acceptați toate cererile"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Acceptați tot"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Nu am putut accepta toate cererile. Doriți să încercați din nou?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Nu s-au putut accepta toate cererile"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Se acceptă toate cererile de alăturare"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Nu am putut accepta această cerere. Doriți să încercați din nou?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Nu s-a putut accepta cererea"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Se acceptă cererea de alăturare"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Da, refuzați și interziceți"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Sunteți sigur că doriți să refuzați și să interziceți accesul lui %1$s? Acest utilizator nu va mai putea cere accesul pentru a se alătura acestei camere."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Refuzați și interziceți accesul"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Se refuză și interzice accesul"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Da, refuzați"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Sunteți sigur că doriți să refuzați cererea %1$s de a vă alătura acestei camere?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Refuzați accesul"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Refuzați și interziceți"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Nu am putut refuza această cerere. Doriți să încercați din nou?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Cererea nu a putut fi respinsă"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Se refuza cererea de alăturare"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Când cineva va cere să se alăture camerei, veți putea vedea cererea aici."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Nu există cereri de alăturare în așteptare"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Se încarcă cererile de alăturare…"</string>
+  <string name="screen_knock_requests_list_title">"Cereri de alăturare"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d utilizator doresc să se alăture acestei camere"</item>
+    <item quantity="few">"%1$s +%2$d utilizatori doresc să se alăture acestei camere"</item>
+    <item quantity="other">"%1$s +%2$d utilizatori doresc să se alăture acestei camere"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Vizualizați tot"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Acceptați"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s dorește să se alăture acestei camere"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Vizualizați"</string>
 </resources>

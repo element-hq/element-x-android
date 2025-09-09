@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"푸시 기록"</string>
+  <string name="troubleshoot_notifications_screen_action">"테스트 실행"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"테스트를 다시 실행하세요"</string>
+  <string name="troubleshoot_notifications_screen_failure">"일부 테스트가 실패했습니다. 자세한 내용을 확인해 주세요."</string>
+  <string name="troubleshoot_notifications_screen_notice">"구성에서 알림이 예상대로 작동하지 않게 하는 문제가 있는지 감지하기 위해 테스트를 실행하세요."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"수정을 시도하다"</string>
+  <string name="troubleshoot_notifications_screen_success">"모든 테스트를 성공적으로 통과했습니다."</string>
+  <string name="troubleshoot_notifications_screen_title">"문제 해결 알림"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"일부 테스트는 귀하의 주의가 필요합니다. 자세한 내용을 확인해 주시기 바랍니다."</string>
+</resources>

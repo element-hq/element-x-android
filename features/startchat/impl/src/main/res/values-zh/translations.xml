@@ -6,6 +6,7 @@
   <string name="screen_start_chat_join_room_by_address_action">"输入地址加入房间"</string>
   <string name="screen_start_chat_join_room_by_address_invalid_address">"地址无效"</string>
   <string name="screen_start_chat_join_room_by_address_placeholder">"输入…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"找到匹配的房间"</string>
   <string name="screen_start_chat_join_room_by_address_room_not_found">"未找到房间"</string>
   <string name="screen_start_chat_join_room_by_address_supporting_text">"例如 #room-name:matrix.org"</string>
 </resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"생체 인식 인증"</string>
+  <string name="screen_app_lock_biometric_unlock">"생체 인식 잠금 해제"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"생체 인증으로 잠금 해제"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"생체 인식 확인"</string>
+  <string name="screen_app_lock_forgot_pin">"PIN을 잊으셨나요?"</string>
+  <string name="screen_app_lock_settings_change_pin">"PIN 코드 변경"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"생체 인식 잠금 해제 허용"</string>
+  <string name="screen_app_lock_settings_remove_pin">"PIN 제거"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"PIN을 제거하시겠습니까?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"PIN을 제거하시겠습니까?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"%1$s 허용"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"나는 PIN을 사용하고 싶습니다"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"시간을 절약하려면 %1$s 를 사용하여 앱을 매번 잠금 해제하세요."</string>
+  <string name="screen_app_lock_setup_choose_pin">"PIN을 선택하세요"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"PIN 확인"</string>
+  <string name="screen_app_lock_setup_pin_context">"%1$s 를 잠그면 채팅에 추가 보안이 적용됩니다.
+
+기억하기 쉬운 것을 선택하세요. 이 PIN을 잊어버리면 앱에서 로그아웃됩니다."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"보안상의 이유로 이 코드를 PIN 코드로 선택할 수 없습니다."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"다른 PIN을 선택하세요"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"PIN을 두 번 입력하세요."</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN이 일치하지 않습니다"</string>
+  <string name="screen_app_lock_signout_alert_message">"계속하려면 다시 로그인하고 새로운 PIN을 생성해야 합니다"</string>
+  <string name="screen_app_lock_signout_alert_title">"로그아웃 중입니다"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="other">"당신은 %1$d 회 잠금 해제 시도를 가지고 있습니다"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="other">"PIN이 잘못되었습니다. %1$d 번 남았습니다"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"생체 인증 사용"</string>
+  <string name="screen_app_lock_use_pin_android">"PIN 사용"</string>
+  <string name="screen_signout_in_progress_dialog_content">"로그아웃 중…"</string>
+</resources>

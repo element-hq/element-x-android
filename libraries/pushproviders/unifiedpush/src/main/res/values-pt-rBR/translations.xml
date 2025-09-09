@@ -4,7 +4,7 @@
   <string name="troubleshoot_notifications_test_unified_push_failure">"Nenhum distribuidor push encontrado."</string>
   <plurals name="troubleshoot_notifications_test_unified_push_success">
     <item quantity="one">"%1$d distribuidor encontrado: %2$s."</item>
-    <item quantity="other">"%1$d Distribuidores encontrados: %2$s."</item>
+    <item quantity="other">"%1$d distribuidores encontrados: %2$s."</item>
   </plurals>
-  <string name="troubleshoot_notifications_test_unified_push_title">"Verifique o UnifiedPush"</string>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Verificar o UnifiedPush"</string>
 </resources>

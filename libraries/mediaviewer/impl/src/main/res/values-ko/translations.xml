@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"이 파일은 방에서 삭제되며, 회원들은 더 이상 액세스할 수 없습니다."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"파일을 삭제하시겠습니까?"</string>
+  <string name="screen_media_browser_download_error_message">"인터넷 연결을 확인하고 다시 시도해 주세요."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"이 방에 업로드된 문서, 오디오 파일 및 음성 메시지가 여기에 표시됩니다."</string>
+  <string name="screen_media_browser_files_empty_state_title">"아직 업로드된 파일이 없습니다."</string>
+  <string name="screen_media_browser_list_loading_files">"파일 로딩 중…"</string>
+  <string name="screen_media_browser_list_loading_media">"미디어 로딩 중…"</string>
+  <string name="screen_media_browser_list_mode_files">"파일"</string>
+  <string name="screen_media_browser_list_mode_media">"미디어"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"이 방에 업로드된 이미지와 동영상은 여기에 표시됩니다."</string>
+  <string name="screen_media_browser_media_empty_state_title">"아직 미디어가 업로드되지 않았습니다."</string>
+  <string name="screen_media_browser_title">"미디어 및 파일"</string>
+  <string name="screen_media_details_file_format">"파일 형식"</string>
+  <string name="screen_media_details_filename">"파일 명"</string>
+  <string name="screen_media_details_no_more_files_to_show">"더 이상 표시할 파일이 없습니다"</string>
+  <string name="screen_media_details_no_more_media_to_show">"더 이상 보여줄 미디어가 없습니다"</string>
+  <string name="screen_media_details_uploaded_by">"에 의해 업로드됨"</string>
+  <string name="screen_media_details_uploaded_on">"에 업로드됨"</string>
+</resources>

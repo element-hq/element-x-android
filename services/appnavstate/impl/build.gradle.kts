@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -11,14 +11,13 @@ plugins {
     id("io.element.android-library")
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 android {
     namespace = "io.element.android.services.appnavstate.impl"
 }
 
 dependencies {
-    implementation(libs.dagger)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)

@@ -10,6 +10,7 @@
   <string name="screen_bug_report_error_description_too_short">"Descrierea este prea scurtă, vă rugăm să oferiți mai multe detalii despre ceea ce s-a întâmplat. Vă mulțumim!"</string>
   <string name="screen_bug_report_include_crash_logs">"Trimiteți log-uri"</string>
   <string name="screen_bug_report_include_logs">"Permiteți log-uri"</string>
+  <string name="screen_bug_report_include_logs_error">"Jurnalele dumneavoastră sunt prea mari și nu pot fi incluse în acest raport. Vă rugăm să ni le trimiteți prin altă metodă."</string>
   <string name="screen_bug_report_include_screenshot">"Trimiteți captură de ecran"</string>
   <string name="screen_bug_report_logs_description">"Pentru a verifica că lucrurile funcționează conform așteptărilor, log-uri vor fi trimise împreună cu mesajul. Acestea vor fi private. Pentru a trimite doar mesajul, dezactivați această setare."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?"</string>

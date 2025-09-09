@@ -13,6 +13,7 @@
     <item quantity="one">"%d bildirim"</item>
     <item quantity="other">"%d bildirim"</item>
   </plurals>
+  <string name="notification_fallback_content">"Yeni mesajlarınız var"</string>
   <string name="notification_incoming_call">"📹 Gelen çağrı"</string>
   <string name="notification_inline_reply_failed">"** Gönderilemedi - lütfen odayı açın"</string>
   <string name="notification_invitation_action_join">"Katıl"</string>

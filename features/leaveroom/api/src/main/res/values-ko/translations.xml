@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"이 대화를 나가시겠습니까? 이 대화는 공개되지 않았으므로 초대 없이는 다시 참여할 수 없습니다."</string>
+  <string name="leave_room_alert_empty_subtitle">"정말로 이 방을 떠나시겠어요? 이 방에서 유일하게 남은 사용자입니다. 나간 이후부터는 당신을 포함해서 아무도 다시 참여할 수 없어요."</string>
+  <string name="leave_room_alert_private_subtitle">"정말로 이 방을 떠나시겠어요? 이 방은 공개가 아니기 때문에 초대 없이는 다시 참여할 수 없습니다."</string>
+  <string name="leave_room_alert_select_new_owner_action">"소유자 선택"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"이 방의 유일한 소유자는 귀하입니다. 방을 떠나기 전에 다른 사람에게 소유권을 양도해야 합니다."</string>
+  <string name="leave_room_alert_select_new_owner_title">"소유권 이전"</string>
+  <string name="leave_room_alert_subtitle">"정말로 이 방을 떠나시겠어요?"</string>
+</resources>

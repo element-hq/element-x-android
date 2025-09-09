@@ -63,6 +63,7 @@ Saiatu saioa eskuz hasten, edo eskaneatu QR kodea beste gailu batean."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Saiatu berriro"</string>
   <string name="screen_qr_code_login_invalid_scan_state_subtitle">"QR kode okerra"</string>
   <string name="screen_qr_code_login_no_camera_permission_button">"Joan kameraren ezarpenetara"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"Baimendu kameraren sarbidea QR kodea eskaneatzeko"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Eskaneatu QR kodea"</string>
   <string name="screen_qr_code_login_start_over_button">"Hasi berriro"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Ustekabeko errore bat gertatu da. Saiatu berriro."</string>

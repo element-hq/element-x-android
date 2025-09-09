@@ -7,9 +7,9 @@
 
 package io.element.android.libraries.mediaviewer.impl.viewer
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.impl.model.eventId
-import javax.inject.Inject
 
 /**
  * x and y are loading items.
@@ -35,7 +35,8 @@ import javax.inject.Inject
  *  -1  0  1  2  3  4  5  6
  * (keyOffset = -1)
  */
-class PagerKeysHandler @Inject constructor() {
+@Inject
+class PagerKeysHandler {
     private data class Data(
         val mediaItems: List<MediaItem>,
         val keyOffset: Long,

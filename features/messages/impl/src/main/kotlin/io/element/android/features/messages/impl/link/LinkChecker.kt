@@ -7,20 +7,21 @@
 
 package io.element.android.features.messages.impl.link
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.containsRtLOverride
-import io.element.android.libraries.di.AppScope
 import io.element.android.wysiwyg.link.Link
 import java.net.URI
-import javax.inject.Inject
 
 interface LinkChecker {
     fun isSafe(link: Link): Boolean
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultLinkChecker @Inject constructor() : LinkChecker {
+@Inject
+class DefaultLinkChecker : LinkChecker {
     override fun isSafe(link: Link): Boolean {
         return if (link.url.containsRtLOverride()) {
             false

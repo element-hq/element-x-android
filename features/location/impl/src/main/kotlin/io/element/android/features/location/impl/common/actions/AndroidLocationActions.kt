@@ -12,18 +12,19 @@ import android.content.Intent
 import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.location.api.Location
 import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
 import java.util.Locale
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class AndroidLocationActions @Inject constructor(
+@Inject
+class AndroidLocationActions(
     @ApplicationContext private val context: Context
 ) : LocationActions {
     override fun share(location: Location, label: String?) {

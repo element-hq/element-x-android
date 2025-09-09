@@ -7,13 +7,13 @@
 
 package io.element.android.features.messages.impl.timeline.di
 
-import dagger.MapKey
+import dev.zacsweers.metro.MapKey
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import kotlin.reflect.KClass
 
 /**
  * Annotation to add a factory of type [TimelineItemPresenterFactory] to a
- * Dagger map multi binding keyed with a subclass of [TimelineItemEventContent].
+ * dependency injection map multi binding keyed with a subclass of [TimelineItemEventContent].
  */
 @Retention(AnnotationRetention.RUNTIME)
 @MapKey

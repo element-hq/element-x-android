@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_cancel_knock_action">"Anulați solicitarea"</string>
+  <string name="screen_join_room_ban_by_message">"Ai fost exclus din această cameră de către %1$s."</string>
+  <string name="screen_join_room_ban_message">"Ați fost exclus din această cameră."</string>
+  <string name="screen_join_room_ban_reason">"Motiv: %1$s."</string>
+  <string name="screen_join_room_cancel_knock_action">"Anulați cererea"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Da, anulați"</string>
-  <string name="screen_join_room_cancel_knock_alert_description">"Sunteți sigur că doriți să anulați solicitarea de a vă alătura acestei camere?"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Sunteți sigur că doriți să anulați cererea de a vă alătura acestei camere?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Anulați cererea de alăturare"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Da, refuzați și blocați"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Sunteți sigur că doriți să refuzați invitația de a vă alătura acestei camere? Acest lucru va împiedica, de asemenea, %1$s să vă contacteze sau să vă invite în camere."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Refuzați invitația și blocați"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Refuzați și blocați"</string>
+  <string name="screen_join_room_fail_message">"Alăturarea la cameră a eșuat."</string>
+  <string name="screen_join_room_fail_reason">"Această cameră este fie accesibilă numai pe bază de invitație, fie exista restricții de acces la nivel de spațiu."</string>
+  <string name="screen_join_room_forget_action">"Uitați această cameră"</string>
+  <string name="screen_join_room_invite_required_message">"Aveți nevoie de o invitație pentru a vă alătura acestei camere."</string>
   <string name="screen_join_room_join_action">"Alăturați-vă camerei"</string>
-  <string name="screen_join_room_knock_action">"Bateți pentru a vă alătura"</string>
+  <string name="screen_join_room_join_restricted_message">"Este posibil să fie necesar să fiți invitat sau să fiți membru al unui spațiu pentru a vă alătura."</string>
+  <string name="screen_join_room_knock_action">"Trimiteți o cerere de alăturare"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Caractere permise %1$d din %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Mesaj (opțional)"</string>
   <string name="screen_join_room_knock_sent_description">"Veți primi o invitație de a vă alătura camerei dacă cererea dumneavoastră este acceptată."</string>
   <string name="screen_join_room_knock_sent_title">"Cererea de alăturare a fost trimisă"</string>
+  <string name="screen_join_room_loading_alert_message">"Nu am putut afișa previzualizarea camerei. Este posibil ca acest lucru să se datoreze unor probleme de rețea sau de server."</string>
+  <string name="screen_join_room_loading_alert_title">"Nu am putut afișa previzualizarea acestei camere."</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s nu suporta încă spații. Puteți accesa spațiile pe web."</string>
   <string name="screen_join_room_space_not_supported_title">"Spațiile nu sunt încă suportate"</string>
   <string name="screen_join_room_subtitle_knock">"Faceți clic pe butonul de mai jos și un administrator de cameră va fi notificat. Veți putea să vă alăturați conversației odată aprobată."</string>
-  <string name="screen_join_room_subtitle_no_preview">"Trebuie să fiți membru al acestei camere pentru a vizualiza istoricul mesajelor."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Trebuie să fiți membru al acestei camere pentru a vizualiza mesajele anterioare."</string>
   <string name="screen_join_room_title_knock">"Doriți să vă alăturați acestei camere?"</string>
   <string name="screen_join_room_title_no_preview">"Previzualizare indisponibilă"</string>
 </resources>

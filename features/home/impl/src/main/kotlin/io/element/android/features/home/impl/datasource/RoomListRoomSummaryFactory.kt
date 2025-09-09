@@ -7,6 +7,7 @@
 
 package io.element.android.features.home.impl.datasource
 
+import dev.zacsweers.metro.Inject
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
@@ -20,9 +21,9 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
 
-class RoomListRoomSummaryFactory @Inject constructor(
+@Inject
+class RoomListRoomSummaryFactory(
     private val dateFormatter: DateFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
 ) {

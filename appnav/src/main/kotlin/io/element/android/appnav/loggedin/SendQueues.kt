@@ -8,9 +8,10 @@
 package io.element.android.appnav.loggedin
 
 import androidx.annotation.VisibleForTesting
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
@@ -21,13 +22,13 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import javax.inject.Inject
 
 @VisibleForTesting
 const val SEND_QUEUES_RETRY_DELAY_MILLIS = 500L
 
 @SingleIn(SessionScope::class)
-class SendQueues @Inject constructor(
+@Inject
+class SendQueues(
     private val matrixClient: MatrixClient,
     private val syncService: SyncService,
 ) {

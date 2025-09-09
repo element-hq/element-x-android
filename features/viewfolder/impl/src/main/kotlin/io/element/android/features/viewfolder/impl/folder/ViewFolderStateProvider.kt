@@ -26,9 +26,9 @@ open class ViewFolderStateProvider : PreviewParameterProvider<ViewFolderState> {
 }
 
 fun aViewFolderState(
-    path: String = "aPath",
+    title: String = "aPath",
     content: List<Item> = emptyList(),
 ) = ViewFolderState(
-    path = path,
+    title = title,
     content = content.toImmutableList(),
 )

@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -14,13 +14,12 @@ android {
     namespace = "io.element.android.libraries.mediaplayer.impl"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
     api(projects.libraries.mediaplayer.api)
     implementation(libs.androidx.media3.exoplayer)
 
-    implementation(libs.dagger)
     implementation(projects.libraries.audio.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"이 사용자로부터 메시지나 방 초대장이 표시되지 않습니다."</string>
+  <string name="screen_decline_and_block_block_user_option_title">"사용자 차단하기"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"이 room 계정 제공자에게 신고하세요."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"신고 사유를 설명하세요…"</string>
+  <string name="screen_decline_and_block_title">"거부 및 차단"</string>
+  <string name="screen_invites_decline_chat_message">"정말로 %1$s 에 참가하지 않고 초대를 거절하시겠어요?"</string>
+  <string name="screen_invites_decline_chat_title">"초대 거절"</string>
+  <string name="screen_invites_decline_direct_chat_message">"%1$s 와의 비공개 채팅을 정말 거부하시겠습니까?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"채팅 거절"</string>
+  <string name="screen_invites_empty_list">"초대 없음"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) 당신을 초대했습니다"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"예, 거부 및 차단"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"이 방에 대한 초대 거부를 정말로 확인하시겠습니까? 이 경우 %1$s 에서 귀하에게 연락하거나 방에 초대할 수 없게 됩니다."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"초대 거부 및 차단"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"거부 및 차단"</string>
+</resources>

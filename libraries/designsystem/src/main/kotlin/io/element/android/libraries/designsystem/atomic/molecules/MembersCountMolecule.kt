@@ -26,7 +26,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun MembersCountMolecule(
-    memberCount: Long,
+    memberCount: Int,
     modifier: Modifier = Modifier,
 ) {
     Row(

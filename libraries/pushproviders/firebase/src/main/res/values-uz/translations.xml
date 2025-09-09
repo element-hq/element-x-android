@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Firebase mavjudligiga ishonch hosil qiling."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase mavjud emas."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase mavjud."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Firebase-ni tekshiring"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Firebase tokeni mavjudligiga ishonch hosil qiling."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Firebase mavjudligiga ishonch hosil qiling."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Firebase tokeni: %1$s ."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Firebase tokenini tekshiring"</string>
+</resources>

@@ -3,4 +3,9 @@
   <string name="screen_create_room_action_create_room">"Yeni oda"</string>
   <string name="screen_room_directory_search_title">"Oda dizini"</string>
   <string name="screen_start_chat_error_starting_chat">"Sohbet başlatmaya çalışırken bir hata oluştu"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Bir adres ile odaya katılın"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Geçerli bir adres değil"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Eşleşen oda bulundu"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Oda bulunamadı"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"örn. #room-isim:matrix.org"</string>
 </resources>

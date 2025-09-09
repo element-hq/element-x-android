@@ -1,4 +1,4 @@
-import extension.setupAnvil
+import extension.setupDependencyInjection
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -15,10 +15,9 @@ android {
     namespace = "io.element.android.libraries.pushproviders.unifiedpush"
 }
 
-setupAnvil()
+setupDependencyInjection()
 
 dependencies {
-    implementation(libs.dagger)
     implementation(projects.features.enterprise.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
@@ -42,7 +41,7 @@ dependencies {
     implementation(libs.serialization.json)
 
     // UnifiedPush library
-    implementation(libs.unifiedpush)
+    api(libs.unifiedpush)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)

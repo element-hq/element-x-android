@@ -7,11 +7,11 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush.registration
 
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import javax.inject.Inject
 
 data class RegistrationResult(
     val clientSecret: String,
@@ -19,7 +19,8 @@ data class RegistrationResult(
 )
 
 @SingleIn(AppScope::class)
-class EndpointRegistrationHandler @Inject constructor() {
+@Inject
+class EndpointRegistrationHandler {
     private val _state = MutableSharedFlow<RegistrationResult>()
     val state: SharedFlow<RegistrationResult> = _state
 

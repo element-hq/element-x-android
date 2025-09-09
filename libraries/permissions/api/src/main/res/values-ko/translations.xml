@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"애플리케이션이 카메라를 사용할 수 있도록 시스템 설정에서 권한을 허용해주세요."</string>
+  <string name="dialog_permission_generic">"시스템 설정에서 권한을 허용해주세요."</string>
+  <string name="dialog_permission_microphone">"애플리케이션이 마이크를 사용할 수 있도록 시스템 설정에서 권한을 허용해주세요."</string>
+  <string name="dialog_permission_notification">"애플리케이션이 알림을 표시할 수 있도록 시스템 설정에서 권한을 허용해주세요."</string>
+</resources>

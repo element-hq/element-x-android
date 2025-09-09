@@ -4,9 +4,9 @@
   <string name="troubleshoot_notifications_screen_action">"Tests durchführen"</string>
   <string name="troubleshoot_notifications_screen_action_again">"Tests erneut durchführen"</string>
   <string name="troubleshoot_notifications_screen_failure">"Einige Tests sind fehlgeschlagen. Bitte überprüfe die Details."</string>
-  <string name="troubleshoot_notifications_screen_notice">"Führen Sie Tests durch, um Probleme in Ihren Einstellungen zu erkennen, die zu fehlerhaften Benachrichtigungen führen könnten."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Führe die Tests durch, um Probleme zu erkennen, die dazu führen können, dass sich die Benachrichtigungen nicht wie erwartet verhalten."</string>
   <string name="troubleshoot_notifications_screen_quick_fix_action">"Problem beheben"</string>
   <string name="troubleshoot_notifications_screen_success">"Alle Tests wurden erfolgreich bestanden."</string>
-  <string name="troubleshoot_notifications_screen_title">"Beheben Sie die Fehler bei Benachrichtigungen"</string>
-  <string name="troubleshoot_notifications_screen_waiting">"Einige Tests erfordern Ihre Aufmerksamkeit. Bitte überprüfen Sie die Angaben."</string>
+  <string name="troubleshoot_notifications_screen_title">"Fehlerbehebung für Benachrichtigungen"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Einige Tests erfordern deine Aufmerksamkeit. Bitte überprüfe die Details."</string>
 </resources>

@@ -8,8 +8,9 @@
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
 import io.element.android.emojibasebindings.EmojibaseStore
+import kotlinx.collections.immutable.persistentMapOf
 
 class FakeEmojibaseProvider : EmojibaseProvider {
     override val emojibaseStore: EmojibaseStore
-        get() = EmojibaseStore(mapOf())
+        get() = EmojibaseStore(persistentMapOf())
 }

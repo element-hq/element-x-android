@@ -7,14 +7,14 @@
 
 package io.element.android.features.messages.impl.messagecomposer.suggestions
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 data class RoomAliasSuggestion(
     val roomAlias: RoomAlias,
@@ -28,7 +28,8 @@ interface RoomAliasSuggestionsDataSource {
 }
 
 @ContributesBinding(SessionScope::class)
-class DefaultRoomAliasSuggestionsDataSource @Inject constructor(
+@Inject
+class DefaultRoomAliasSuggestionsDataSource(
     private val roomListService: RoomListService,
 ) : RoomAliasSuggestionsDataSource {
     override fun getAllRoomAliasSuggestions(): Flow<List<RoomAliasSuggestion>> {

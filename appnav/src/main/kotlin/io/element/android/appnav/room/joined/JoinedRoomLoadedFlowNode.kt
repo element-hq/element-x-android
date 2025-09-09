@@ -17,9 +17,9 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import io.element.android.anvilannotations.ContributesNode
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
+import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.di.RoomComponentFactory
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -28,7 +28,7 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.di.DaggerComponentOwner
+import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -45,7 +45,8 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
-class JoinedRoomLoadedFlowNode @AssistedInject constructor(
+@Inject
+class JoinedRoomLoadedFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val messagesEntryPoint: MessagesEntryPoint,
@@ -67,7 +68,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     ),
     buildContext = buildContext,
     plugins = plugins,
-), DaggerComponentOwner {
+), DependencyInjectionGraphOwner {
     interface Callback : Plugin {
         fun onOpenRoom(roomId: RoomId, serverNames: List<String>)
         fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
@@ -82,7 +83,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 
     private val inputs: Inputs = inputs()
     private val callbacks = plugins.filterIsInstance<Callback>()
-    override val daggerComponent = roomComponentFactory.create(inputs.room)
+    override val graph = roomComponentFactory.create(inputs.room)
 
     init {
         lifecycle.subscribe(

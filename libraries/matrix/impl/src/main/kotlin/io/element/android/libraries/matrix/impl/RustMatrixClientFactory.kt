@@ -7,7 +7,9 @@
 
 package io.element.android.libraries.matrix.impl
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -28,6 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
@@ -37,10 +40,10 @@ import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.DecryptionSettings
 import uniffi.matrix_sdk_crypto.TrustRequirement
 import java.io.File
-import javax.inject.Inject
 
-class RustMatrixClientFactory @Inject constructor(
-    private val baseDirectory: File,
+@Inject
+class RustMatrixClientFactory(
+    @BaseDirectory private val baseDirectory: File,
     @CacheDirectory private val cacheDirectory: File,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
@@ -133,6 +136,13 @@ class RustMatrixClientFactory @Inject constructor(
             )
             .enableShareHistoryOnInvite(featureFlagService.isFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite))
             .threadsEnabled(featureFlagService.isFeatureEnabled(FeatureFlags.Threads), threadSubscriptions = false)
+            .requestConfig(RequestConfig(
+                timeout = 30_000uL,
+                retryLimit = 0u,
+                // Use default values for the rest
+                maxConcurrentRequests = null,
+                maxRetryTime = null,
+            ))
             .run {
                 // Apply sliding sync version settings
                 when (slidingSyncType) {

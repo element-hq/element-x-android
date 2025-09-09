@@ -12,11 +12,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class TroubleshootNotificationsPresenter @Inject constructor(
+@Inject
+class TroubleshootNotificationsPresenter(
     private val troubleshootTestSuite: TroubleshootTestSuite,
 ) : Presenter<TroubleshootNotificationsState> {
     @Composable

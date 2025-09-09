@@ -7,21 +7,22 @@
 
 package io.element.android.libraries.push.impl.test
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.PushConfig
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
-import javax.inject.Inject
 
 interface TestPush {
     suspend fun execute(config: CurrentUserPushConfig)
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultTestPush @Inject constructor(
+@Inject
+class DefaultTestPush(
     private val pushGatewayNotifyRequest: PushGatewayNotifyRequest,
 ) : TestPush {
     override suspend fun execute(config: CurrentUserPushConfig) {

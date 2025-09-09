@@ -8,22 +8,23 @@
 package io.element.android.services.analyticsproviders.posthog
 
 import com.posthog.PostHogInterface
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
-import io.element.android.libraries.di.AppScope
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.services.analyticsproviders.posthog.log.analyticsTag
 import timber.log.Timber
-import javax.inject.Inject
 
 // private val REUSE_EXISTING_ID: String? = null
 // private val IGNORED_OPTIONS: Options? = null
 
-@ContributesMultibinding(AppScope::class)
-class PosthogAnalyticsProvider @Inject constructor(
+@ContributesIntoSet(AppScope::class)
+@Inject
+class PosthogAnalyticsProvider(
     private val postHogFactory: PostHogFactory,
 ) : AnalyticsProvider {
     override val name = "Posthog"

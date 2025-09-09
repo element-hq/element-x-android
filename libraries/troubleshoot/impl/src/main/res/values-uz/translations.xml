@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Testlarni ishga tushirish"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Testlarni qayta ishga tushirish"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Ba’zi testlar muvaffaqiyatsiz tugadi. Iltimos, tafsilotlarni tekshirib chiqing."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Sozlamalaringizdagi bildirishnomalarning kutilganidek ishlamasligi mumkin bo‘lgan har qanday muammoni aniqlash uchun testlarni o‘tkazing."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Tuzatishga urinish"</string>
+  <string name="troubleshoot_notifications_screen_success">"Barcha testlar muvaffaqiyatli yakunlandi."</string>
+  <string name="troubleshoot_notifications_screen_title">"Bildirishnomalar bilan bog‘liq muammolarni bartaraf etish"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Baʼzi testlar sizning eʼtiboringizni talab etadi. Iltimos, tafsilotlarni tekshirib chiqing."</string>
+</resources>

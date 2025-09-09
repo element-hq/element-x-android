@@ -13,7 +13,7 @@ import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 /**
  * A factory for a [Presenter] associated with a timeline item.
  *
- * Implementations should be annotated with [AssistedFactory] to be created by Dagger.
+ * Implementations should be annotated with [dev.zacsweers.metro.AssistedFactory] to be created.
  *
  * @param C The timeline item's [MediaItem.Event] subtype.
  * @param S The [Presenter]'s state class.

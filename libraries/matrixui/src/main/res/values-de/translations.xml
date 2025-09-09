@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Einladung senden"</string>
-  <string name="screen_bottom_sheet_create_dm_message">"Möchten Sie einen Chat mit %1$s starten?"</string>
+  <string name="screen_bottom_sheet_create_dm_message">"Möchtest du einen Chat mit %1$s starten?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Einladung senden?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) hat dich eingeladen"</string>
 </resources>

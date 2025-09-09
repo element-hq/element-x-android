@@ -14,16 +14,17 @@ import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -32,6 +33,8 @@ import io.element.android.libraries.matrix.ui.media.InitialsAvatarBitmapGenerato
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.intent.IntentProvider
+import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
+import io.element.android.libraries.push.impl.notifications.shortcut.filterBySession
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -40,11 +43,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultNotificationConversationService @Inject constructor(
+@Inject
+class DefaultNotificationConversationService(
     @ApplicationContext private val context: Context,
     private val intentProvider: IntentProvider,
     private val bitmapLoader: NotificationBitmapLoader,
@@ -105,7 +108,7 @@ class DefaultNotificationConversationService @Inject constructor(
                 .generateBitmap(defaultShortcutIconSize, AvatarData(id = roomId.value, name = roomName, size = AvatarSize.RoomHeader))
                 ?.let(IconCompat::createWithAdaptiveBitmap)
 
-        val shortcutInfo = ShortcutInfoCompat.Builder(context, "$sessionId-$roomId")
+        val shortcutInfo = ShortcutInfoCompat.Builder(context, createShortcutId(sessionId, roomId))
             .setShortLabel(roomName)
             .setIcon(icon)
             .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null))
@@ -126,7 +129,7 @@ class DefaultNotificationConversationService @Inject constructor(
     }
 
     override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) {
-        val shortcutsToRemove = listOf("$sessionId-$roomId")
+        val shortcutsToRemove = listOf(createShortcutId(sessionId, roomId))
         runCatchingExceptions {
             ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)
             if (isRequestPinShortcutSupported) {
@@ -180,7 +183,7 @@ class DefaultNotificationConversationService @Inject constructor(
     private fun onSessionLogOut(sessionId: SessionId) {
         runCatchingExceptions {
             val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
-            val shortcutIdsToRemove = shortcuts.filter { it.id.startsWith(sessionId.value) }.map { it.id }
+            val shortcutIdsToRemove = shortcuts.filterBySession(sessionId).map { it.id }
             ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutIdsToRemove)
 
             if (isRequestPinShortcutSupported) {

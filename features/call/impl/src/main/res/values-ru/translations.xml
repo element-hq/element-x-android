@@ -3,5 +3,6 @@
   <string name="call_foreground_service_channel_title_android">"Текущий вызов"</string>
   <string name="call_foreground_service_message_android">"Коснитесь, чтобы вернуться к вызову"</string>
   <string name="call_foreground_service_title_android">"☎️ Идёт вызов"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Функция Element Call не поддерживает использование аудиоустройств Bluetooth в данной версии Android. Пожалуйста, выберите другое аудиоустройство."</string>
   <string name="screen_incoming_call_subtitle_android">"Входящий вызов Element"</string>
 </resources>

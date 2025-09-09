@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_room_change_permissions_administrators">"Kun admins"</string>
-  <string name="screen_room_change_permissions_ban_people">"Spær personer"</string>
+  <string name="screen_room_change_permissions_ban_people">"Spær brugere"</string>
   <string name="screen_room_change_permissions_delete_messages">"Fjern beskeder"</string>
   <string name="screen_room_change_permissions_everyone">"Alle"</string>
   <string name="screen_room_change_permissions_invite_people">"Invitér personer og acceptér anmodninger om at deltage"</string>

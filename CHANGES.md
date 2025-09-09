@@ -1,3 +1,19 @@
+Changes in Element X v25.09.0
+=============================
+
+This release is the same as `25.08.4` but it includes performance fixes for the timeline load times, included in the Rust SDK version upgrade and internal changes for Element Call.
+
+## What's Changed
+### 🧱 Build
+* Revert "Try following KSP incremental best practices on `anvilcodegen`" by @bmarty in https://github.com/element-hq/element-x-android/pull/5233
+### Dependency upgrades
+* Update dependency io.element.android:element-call-embedded to v0.15.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5229
+* Update dependency org.matrix.rustcomponents:sdk-android to v25.8.26 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5230
+* Downgrade sonar scanner gradle plugin to `v6.2.0.5505` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5234
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.08.4...v25.09.0
+
 Changes in Element X v25.08.4
 =============================
 

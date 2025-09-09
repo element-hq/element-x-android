@@ -42,9 +42,9 @@
   <string name="a11y_remove_reaction_with">"Usuń reakcję z %1$s"</string>
   <string name="a11y_room_avatar">"Awatar pokoju"</string>
   <string name="a11y_send_files">"Wyślij pliki"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Wymagane jest działanie ograniczone czasowo"</string>
   <string name="a11y_show_password">"Pokaż hasło"</string>
   <string name="a11y_start_call">"Rozpocznij rozmowę"</string>
-  <string name="a11y_time_limited_action_required">"Wymagane jest działanie ograniczone czasowo"</string>
   <string name="a11y_tombstoned_room">"Pokój nagrobkowy"</string>
   <string name="a11y_user_avatar">"Awatar użytkownika"</string>
   <string name="a11y_user_menu">"Menu użytkownika"</string>

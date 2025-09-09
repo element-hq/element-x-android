@@ -7,16 +7,16 @@
 
 package io.element.android.libraries.cryptography.impl
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import java.security.KeyStore
 
 internal const val ANDROID_KEYSTORE = "AndroidKeyStore"
 
 @ContributesTo(AppScope::class)
-@Module
+@BindingContainer
 object CryptographyModule {
     @Provides
     fun providesAndroidKeyStore(): KeyStore {

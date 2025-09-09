@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
@@ -42,9 +43,9 @@ import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import timber.log.Timber
-import javax.inject.Inject
 
-class EventItemFactory @Inject constructor(
+@Inject
+class EventItemFactory(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
     private val dateFormatter: DateFormatter,

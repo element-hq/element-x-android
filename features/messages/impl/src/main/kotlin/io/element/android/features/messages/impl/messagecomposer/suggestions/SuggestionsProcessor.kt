@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl.messagecomposer.suggestions
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.data.filterUpTo
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -16,12 +17,12 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
-import javax.inject.Inject
 
 /**
  * This class is responsible for processing suggestions when `@`, `/` or `#` are type in the composer.
  */
-class SuggestionsProcessor @Inject constructor() {
+@Inject
+class SuggestionsProcessor {
     /**
      *  Process the suggestion.
      *  @param suggestion The current suggestion input

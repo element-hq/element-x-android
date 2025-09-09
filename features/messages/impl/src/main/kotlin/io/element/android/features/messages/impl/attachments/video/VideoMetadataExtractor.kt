@@ -11,13 +11,13 @@ import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.util.Size
-import com.squareup.anvil.annotations.ContributesBinding
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -30,7 +30,8 @@ interface VideoMetadataExtractor : AutoCloseable {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultVideoMetadataExtractor @AssistedInject constructor(
+@Inject
+class DefaultVideoMetadataExtractor(
     @ApplicationContext private val context: Context,
     @Assisted private val uri: Uri,
 ) : VideoMetadataExtractor {

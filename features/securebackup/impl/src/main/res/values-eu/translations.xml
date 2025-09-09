@@ -17,6 +17,8 @@
   <string name="screen_create_new_recovery_key_title">"Berrezarri zure kontuaren enkriptazioa beste gailu bat erabiliz"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Jarraitu berrezarpenarekin"</string>
   <string name="screen_encryption_reset_bullet_1">"Zure kontuaren xehetasunak, kontaktuak, hobespenak eta txat-zerrenda gordeko dira"</string>
+  <string name="screen_encryption_reset_bullet_2">"Zerbitzarian soilik gordeta dagoen mezuen historia galduko duzu"</string>
+  <string name="screen_encryption_reset_bullet_3">"Zure gailu eta kontaktu guztiak berriro egiaztatu beharko dituzu"</string>
   <string name="screen_encryption_reset_title">"Ezin duzu baieztatu? Zure identitatea berrezarri beharko duzu."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Desaktibatu"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Enkriptatutako mezuak galduko dituzu gailu guztietan saioa amaitzen baduzu."</string>

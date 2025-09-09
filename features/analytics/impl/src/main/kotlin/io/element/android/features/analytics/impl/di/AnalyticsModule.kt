@@ -7,16 +7,16 @@
 
 package io.element.android.features.analytics.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 import io.element.android.features.analytics.impl.preferences.AnalyticsPreferencesPresenter
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.AppScope
 
 @ContributesTo(AppScope::class)
-@Module
+@BindingContainer
 interface AnalyticsModule {
     @Binds
     fun bindAnalyticsPreferencesPresenter(presenter: AnalyticsPreferencesPresenter): Presenter<AnalyticsPreferencesState>

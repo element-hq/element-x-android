@@ -7,13 +7,13 @@
 
 package io.element.android.services.toolbox.impl.systemclock
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import kotlin.time.TimeSource
 
-@Module
+@BindingContainer
 @ContributesTo(AppScope::class)
 object TimeModule {
     @Provides

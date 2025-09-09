@@ -40,9 +40,9 @@
   <string name="a11y_remove_reaction_with">"Ta bort reaktion med %1$s"</string>
   <string name="a11y_room_avatar">"Rumsavatar"</string>
   <string name="a11y_send_files">"Skicka filer"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Tidsbegränsad åtgärd krävs"</string>
   <string name="a11y_show_password">"Visa lösenord"</string>
   <string name="a11y_start_call">"Starta ett samtal"</string>
-  <string name="a11y_time_limited_action_required">"Tidsbegränsad åtgärd krävs"</string>
   <string name="a11y_tombstoned_room">"Gravstensmärkt rum"</string>
   <string name="a11y_user_avatar">"Användaravatar"</string>
   <string name="a11y_user_menu">"Användarmeny"</string>

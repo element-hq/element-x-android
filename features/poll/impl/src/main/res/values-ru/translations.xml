@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Скрыть голоса"</string>
   <string name="screen_create_poll_answer_hint">"Вариант %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Изменения не сохранены. Вы действительно хотите вернуться?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Удалить опцию %1$s"</string>
   <string name="screen_create_poll_question_desc">"Вопрос или тема"</string>
   <string name="screen_create_poll_question_hint">"О чём будет опрос?"</string>
   <string name="screen_create_poll_title">"Создать опрос"</string>

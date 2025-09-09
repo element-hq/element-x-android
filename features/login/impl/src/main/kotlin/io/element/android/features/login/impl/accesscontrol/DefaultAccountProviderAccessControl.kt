@@ -7,17 +7,18 @@
 
 package io.element.android.features.login.impl.accesscontrol
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.libraries.core.uri.ensureProtocol
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.wellknown.api.WellknownRetriever
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultAccountProviderAccessControl @Inject constructor(
+@Inject
+class DefaultAccountProviderAccessControl(
     private val enterpriseService: EnterpriseService,
     private val wellknownRetriever: WellknownRetriever,
 ) : AccountProviderAccessControl {

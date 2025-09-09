@@ -10,11 +10,12 @@ package io.element.android.libraries.mediaplayer.impl
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +29,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -36,7 +36,8 @@ import kotlin.time.Duration.Companion.seconds
  */
 @ContributesBinding(RoomScope::class)
 @SingleIn(RoomScope::class)
-class DefaultMediaPlayer @Inject constructor(
+@Inject
+class DefaultMediaPlayer(
     private val player: SimplePlayer,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,

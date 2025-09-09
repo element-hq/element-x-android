@@ -8,16 +8,17 @@
 package io.element.android.libraries.network.useragent
 
 import android.os.Build
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.SdkMetadata
-import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultUserAgentProvider @Inject constructor(
+@Inject
+class DefaultUserAgentProvider(
     private val buildMeta: BuildMeta,
     private val sdkMeta: SdkMetadata,
 ) : UserAgentProvider {

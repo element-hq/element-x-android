@@ -249,8 +249,7 @@ Main libraries and frameworks used in this application:
 
 - Navigation state with [Appyx](https://bumble-tech.github.io/appyx/). Please
   watch [this video](https://www.droidcon.com/2022/11/15/model-driven-navigation-with-appyx-from-zero-to-hero/) to learn more about Appyx!
-- DI: [Dagger](https://dagger.dev/) and [Anvil](https://github.com/square/anvil). Please
-  watch [this video](https://www.droidcon.com/2022/06/28/dagger-anvil-learning-to-love-dependency-injection/) to learn more about Anvil!
+- Dependency injection: [Metro](https://zacsweers.github.io/metro/latest/)
 - Reactive State management with Compose runtime and [Molecule](https://github.com/cashapp/molecule)
 
 Some patterns are inspired by [Circuit](https://slackhq.github.io/circuit/)
@@ -261,7 +260,7 @@ Here are the main points:
 2. Views are compose first
 3. Presenters are also compose first, and have a single `present(): State` method. It's using the power of compose-runtime/compiler.
 4. The point of connection between a `View` and a `Presenter` is a `Node`.
-5. A `Node` is also responsible for managing Dagger components if any.
+5. A `Node` is also responsible for managing DI graph if any, see for instance `LoggedInAppScopeFlowNode`.
 6. A `ParentNode` has some children `Node` and only know about them.
 7. This is a single activity full compose application. The `MainActivity` is responsible for holding and configuring the `RootNode`.
 8. There is no more needs for Android Architecture Component ViewModel as configuration change should be handled by Composable if needed.
@@ -423,7 +422,7 @@ Rageshake can be very useful to get logs from a release version of the applicati
 - When this is possible, prefer using `sealed interface` instead of `sealed class`;
 - When writing temporary code, using the string "DO NOT COMMIT" in a comment can help to avoid committing things by mistake. If committed and pushed, the CI
   will detect this String and will warn the user about it. (TODO Not supported yet!)
-- Very occasionally the gradle cache misbehaves and causes problems with Dagger. Try building with `--no-build-cache` if Dagger isn't behaving how you expect.
+- Very occasionally the gradle cache misbehaves and causes problems with code generation. Adding `--no-build-cache` to the `gradlew` command line can help to fix compilation issue.
 
 ## Happy coding!
 

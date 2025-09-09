@@ -10,14 +10,15 @@ package io.element.android.libraries.troubleshoot.impl
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultNotificationTroubleShootEntryPoint @Inject constructor() : NotificationTroubleShootEntryPoint {
+@Inject
+class DefaultNotificationTroubleShootEntryPoint : NotificationTroubleShootEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NotificationTroubleShootEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 

@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Прикрепить файл"</string>
   <string name="rich_text_editor_bullet_list">"Переключить список маркеров"</string>
-  <string name="rich_text_editor_close_formatting_options">"Закрыть параметры форматирования"</string>
+  <string name="rich_text_editor_close_formatting_options">"Отменить и закрыть параметры форматирования"</string>
   <string name="rich_text_editor_code_block">"Переключить блок кода"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Необязательный заголовок…"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Зашифрованное сообщение…"</string>
@@ -10,8 +10,12 @@
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Незашифрованное сообщение…"</string>
   <string name="rich_text_editor_create_link">"Создать ссылку"</string>
   <string name="rich_text_editor_edit_link">"Редактировать ссылку"</string>
+  <string name="rich_text_editor_format_action">"%1$s, состояние: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Применить жирный шрифт"</string>
   <string name="rich_text_editor_format_italic">"Применить курсивный формат"</string>
+  <string name="rich_text_editor_format_state_disabled">"отключено"</string>
+  <string name="rich_text_editor_format_state_off">"ОТКЛ."</string>
+  <string name="rich_text_editor_format_state_on">"ВКЛ"</string>
   <string name="rich_text_editor_format_strikethrough">"Применить формат зачеркивания"</string>
   <string name="rich_text_editor_format_underline">"Применить формат подчеркивания"</string>
   <string name="rich_text_editor_full_screen_toggle">"Переключение полноэкранного режима"</string>

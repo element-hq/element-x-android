@@ -9,16 +9,17 @@ package io.element.android.libraries.pushstore.impl.clientsecret
 
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DataStorePushClientSecretStore @Inject constructor(
+@Inject
+class DataStorePushClientSecretStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : PushClientSecretStore {
     private val dataStore = preferenceDataStoreFactory.create("push_client_secret_store")

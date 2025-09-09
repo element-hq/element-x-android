@@ -10,8 +10,9 @@ package io.element.android.libraries.push.impl.notifications
 import android.app.Notification
 import android.graphics.Bitmap
 import coil3.ImageLoader
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
@@ -20,7 +21,6 @@ import io.element.android.libraries.push.impl.notifications.factories.Notificati
 import io.element.android.libraries.push.impl.notifications.factories.isSmartReplyError
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
-import javax.inject.Inject
 
 interface RoomGroupMessageCreator {
     suspend fun createRoomMessage(
@@ -33,7 +33,8 @@ interface RoomGroupMessageCreator {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultRoomGroupMessageCreator @Inject constructor(
+@Inject
+class DefaultRoomGroupMessageCreator(
     private val bitmapLoader: NotificationBitmapLoader,
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,

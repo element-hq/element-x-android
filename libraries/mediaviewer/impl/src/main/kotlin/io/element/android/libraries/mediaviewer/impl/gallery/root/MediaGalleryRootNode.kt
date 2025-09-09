@@ -15,9 +15,9 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import io.element.android.anvilannotations.ContributesNode
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
+import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -40,7 +40,8 @@ import io.element.android.libraries.mediaviewer.impl.model.thumbnailSource
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-class MediaGalleryRootNode @AssistedInject constructor(
+@Inject
+class MediaGalleryRootNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint

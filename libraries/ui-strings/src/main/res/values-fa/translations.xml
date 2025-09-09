@@ -36,9 +36,9 @@
   <string name="a11y_remove_reaction_with">"برداشتن واکنش با %1$s"</string>
   <string name="a11y_room_avatar">"چهرک اتاق"</string>
   <string name="a11y_send_files">"ارسال پرونده‌ها"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"نیازمند کنش محدود به زمان"</string>
   <string name="a11y_show_password">"نمایش گذرواژه"</string>
   <string name="a11y_start_call">"آغاز یک تماس"</string>
-  <string name="a11y_time_limited_action_required">"نیازمند کنش محدود به زمان"</string>
   <string name="a11y_user_avatar">"چهرک کاربر"</string>
   <string name="a11y_user_menu">"فهرست کاربر"</string>
   <string name="a11y_view_avatar">"دیدن چهرک"</string>

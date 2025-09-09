@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Baieztatu zure kontua desaktibatu nahi duzula. Ekintza hau ezin da desegin."</string>
   <string name="screen_deactivate_account_delete_all_messages">"Ezabatu nire mezu guztiak"</string>
   <string name="screen_deactivate_account_description">"Kontuaren desaktibazioa %1$s, honakoa eragingo du:"</string>
   <string name="screen_deactivate_account_description_bold_part">"ezin da desegin"</string>
   <string name="screen_deactivate_account_list_item_1_bold_part">"Ezgaitu betiko"</string>
   <string name="screen_deactivate_account_list_item_2">"Kendu zure burua txat gela guztietatik."</string>
+  <string name="screen_deactivate_account_list_item_3">"Ezabatu zure kontuaren informazioa gure identitate-zerbitzaritik."</string>
+  <string name="screen_deactivate_account_list_item_4">"Zure mezuak erregistratutako erabiltzaileentzat ikusgai egongo dira oraindik, baina ezabatzen badituzu, ez dira eskuragarri egongo erabiltzaile berri edo erregistratu gabeentzat."</string>
   <string name="screen_deactivate_account_title">"Desaktibatu kontua"</string>
 </resources>

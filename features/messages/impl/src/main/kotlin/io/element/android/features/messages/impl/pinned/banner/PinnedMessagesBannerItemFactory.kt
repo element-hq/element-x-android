@@ -8,13 +8,14 @@
 package io.element.android.features.messages.impl.pinned.banner
 
 import androidx.compose.ui.text.AnnotatedString
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.eventformatter.api.PinnedMessagesBannerFormatter
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class PinnedMessagesBannerItemFactory @Inject constructor(
+@Inject
+class PinnedMessagesBannerItemFactory(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val formatter: PinnedMessagesBannerFormatter,
 ) {

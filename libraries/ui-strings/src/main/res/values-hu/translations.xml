@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Reakció hozzáadása: %1$s"</string>
   <string name="a11y_avatar">"Profilkép"</string>
+  <string name="a11y_collapse_message_text_field">"Üzenet szövegmezőjének minimalizálása"</string>
   <string name="a11y_delete">"Törlés"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d megadott számjegy"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Profilkép szerkesztése"</string>
   <string name="a11y_edit_room_address_hint">"A teljes cím ez lesz: %1$s"</string>
   <string name="a11y_encryption_details">"Titkosítás részletei"</string>
+  <string name="a11y_expand_message_text_field">"Üzenet szövegmezőjének kibontása"</string>
   <string name="a11y_hide_password">"Jelszó elrejtése"</string>
   <string name="a11y_join_call">"Csatlakozás a híváshoz"</string>
   <string name="a11y_jump_to_bottom">"Ugrás az aljára"</string>
@@ -40,9 +42,9 @@
   <string name="a11y_remove_reaction_with">"Reakció eltávolítása: %1$s"</string>
   <string name="a11y_room_avatar">"Szoba profilképe"</string>
   <string name="a11y_send_files">"Fájlküldés"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Időkorlátos művelet szükséges"</string>
   <string name="a11y_show_password">"Jelszó megjelenítése"</string>
   <string name="a11y_start_call">"Hanghívás indítása"</string>
-  <string name="a11y_time_limited_action_required">"Időkorlátos művelet szükséges"</string>
   <string name="a11y_tombstoned_room">"Elévült szoba"</string>
   <string name="a11y_user_avatar">"Felhasználói profilkép"</string>
   <string name="a11y_user_menu">"Felhasználói menü"</string>
@@ -167,6 +169,8 @@
   <string name="common_advanced_settings">"Speciális beállítások"</string>
   <string name="common_an_image">"egy kép"</string>
   <string name="common_analytics">"Elemzések"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Elhagyta a szobát"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Ki lett jelentkeztetve a munkamenetből"</string>
   <string name="common_appearance">"Megjelenítés"</string>
   <string name="common_audio">"Hang"</string>
   <string name="common_blocked_users">"Letiltott felhasználók"</string>

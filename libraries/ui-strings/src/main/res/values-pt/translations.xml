@@ -40,9 +40,9 @@
   <string name="a11y_remove_reaction_with">"Remover reação com %1$s"</string>
   <string name="a11y_room_avatar">"Ícone da sala"</string>
   <string name="a11y_send_files">"Enviar ficheiros"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Necessária ação em tempo limitado"</string>
   <string name="a11y_show_password">"Mostrar palavra-passe"</string>
   <string name="a11y_start_call">"Iniciar chamada"</string>
-  <string name="a11y_time_limited_action_required">"Necessária ação em tempo limitado"</string>
   <string name="a11y_tombstoned_room">"Sala antiga"</string>
   <string name="a11y_user_avatar">"Avatar do utilizador"</string>
   <string name="a11y_user_menu">"Menu de utilizador"</string>
@@ -245,7 +245,7 @@ Razão: %1$s."</string>
   <string name="common_permalink">"Ligação permanente"</string>
   <string name="common_permission">"Permissão"</string>
   <string name="common_pinned">"Afixado"</string>
-  <string name="common_please_check_internet_connection">"Por favor, verifica a tua ligação à Internet"</string>
+  <string name="common_please_check_internet_connection">"Por favor, verifica a tua ligação à internet"</string>
   <string name="common_please_wait">"Por favor, aguarde…"</string>
   <string name="common_poll_end_confirmation">"Tens a certeza que queres concluir esta sondagem?"</string>
   <string name="common_poll_summary">"Sondagem: %1$s"</string>
@@ -300,7 +300,7 @@ Razão: %1$s."</string>
   <string name="common_shared_location">"Localização partilhada"</string>
   <string name="common_signing_out">"A terminar sessão"</string>
   <string name="common_something_went_wrong">"Algo correu mal"</string>
-  <string name="common_something_went_wrong_message">"Encontrámos um erro. Por favor, tenta novamente."</string>
+  <string name="common_something_went_wrong_message">"Encontramos um erro. Por favor, tenta novamente."</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d espaço"</item>
     <item quantity="other">"%1$d espaços"</item>
@@ -335,6 +335,12 @@ Razão: %1$s."</string>
   <string name="common_verify_identity">"Verifica a identidade"</string>
   <string name="common_verify_user">"Verificar utilizador"</string>
   <string name="common_video">"Vídeo"</string>
+  <string name="common_video_quality_high">"Alta qualidade"</string>
+  <string name="common_video_quality_high_description">"Melhor qualidade, mas maior tamanho de ficheiro"</string>
+  <string name="common_video_quality_low">"Baixa qualidade"</string>
+  <string name="common_video_quality_low_description">"A velocidade de carregamento mais rápida e o tamanho de ficheiro mais pequeno"</string>
+  <string name="common_video_quality_standard">"Qualidade padrão"</string>
+  <string name="common_video_quality_standard_description">"Equilíbrio entre qualidade e velocidade de carregamento"</string>
   <string name="common_voice_message">"Mensagem de voz"</string>
   <string name="common_waiting">"A aguardar…"</string>
   <string name="common_waiting_for_decryption_key">"À espera desta mensagem"</string>
@@ -349,14 +355,21 @@ Razão: %1$s."</string>
 
 Tens a certeza de que queres continuar?"</string>
   <string name="dialog_confirm_link_title">"Verifica novamente esta ligação"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Seleciona a qualidade predefinida dos vídeos que carregas."</string>
+  <string name="dialog_default_video_quality_selector_title">"Qualidade de carregamento do vídeo"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"O tamanho máximo de ficheiro permitido é: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"O tamanho do ficheiro é demasiado grande para ser carregado"</string>
   <string name="dialog_room_reported">"Sala denunciada"</string>
-  <string name="dialog_room_reported_and_left">"Sala denunciada e abandonada"</string>
+  <string name="dialog_room_reported_and_left">"Reportaste e saíste da sala"</string>
   <string name="dialog_title_confirmation">"Confirmação"</string>
   <string name="dialog_title_error">"Erro"</string>
   <string name="dialog_title_success">"Sucesso"</string>
   <string name="dialog_title_warning">"Aviso"</string>
   <string name="dialog_unsaved_changes_description_android">"As tuas alterações não foram guardadas. Tens a certeza que queres voltar atrás?"</string>
   <string name="dialog_unsaved_changes_title">"Guardar alterações?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"O tamanho máximo de ficheiro permitido é: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Seleciona a qualidade do vídeo que pretendes carregar."</string>
+  <string name="dialog_video_quality_selector_title">"Seleciona a qualidade de carregamento do vídeo"</string>
   <string name="error_account_creation_not_possible">"Seu homeserver precisa ser atualizado para suportar o Matrix Authentication Service e a criação de conta."</string>
   <string name="error_failed_creating_the_permalink">"Falha ao criar ligação permanente"</string>
   <string name="error_failed_loading_map">"%1$s não foi possível carregar o mapa. Por favor, tente novamente mais tarde."</string>
@@ -407,6 +420,7 @@ Tens a certeza de que queres continuar?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"A sua mensagem não foi enviada porque %1$s não verificou todos os dispositivos"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Um ou mais dos teus dispositivos não foram verificados. Podes enviar a mensagem na mesma, ou podes cancelar por agora e tentar novamente mais tarde, depois de teres verificado todos os teus dispositivos."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"A sua mensagem não foi enviada porque não verificou um ou mais dos seus dispositivos"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Editar administradores ou proprietários"</string>
   <string name="screen_room_error_failed_processing_media">"Falha ao processar multimédia para carregamento, por favor tente novamente."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Não foi possível obter os detalhes de utilizador."</string>
   <string name="screen_room_event_pill">"Mensagem em %1$s"</string>

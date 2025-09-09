@@ -7,19 +7,20 @@
 
 package io.element.android.libraries.featureflag.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class DefaultFeatureFlagService @Inject constructor(
+@Inject
+class DefaultFeatureFlagService(
     private val providers: Set<@JvmSuppressWildcards FeatureFlagProvider>,
     private val buildMeta: BuildMeta,
 ) : FeatureFlagService {

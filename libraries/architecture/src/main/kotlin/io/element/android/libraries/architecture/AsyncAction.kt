@@ -10,6 +10,7 @@ package io.element.android.libraries.architecture
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -159,16 +160,19 @@ suspend inline fun <T> runUpdatingState(
         callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
     }
     state.value = AsyncAction.Loading
-    return resultBlock().fold(
+    return try {
+        resultBlock()
+    } catch (e: TimeoutCancellationException) {
+        state.value = AsyncAction.Failure(errorTransform(e))
+        throw e
+    }.fold(
         onSuccess = {
             state.value = AsyncAction.Success(it)
             Result.success(it)
         },
         onFailure = {
             val error = errorTransform(it)
-            state.value = AsyncAction.Failure(
-                error = error,
-            )
+            state.value = AsyncAction.Failure(error)
             Result.failure(error)
         }
     )
