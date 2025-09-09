@@ -186,6 +186,15 @@ class DefaultActiveCallManager(
         }
 
         Timber.tag(tag).d("Hung up call: $callType")
+        if (activeCall.value?.callState is CallState.Ringing) {
+            val ringing = activeCall.value!!.callState as CallState.Ringing
+            // Decline the call
+            matrixClientProvider.getOrRestore(ringing.notificationData.sessionId).getOrNull()?.let { client ->
+                client.getRoom(ringing.notificationData.roomId)?.let { room ->
+                    room.declineCall(ringing.notificationData.eventId)
+                }
+            }
+        }
 
         cancelIncomingCallNotification()
         if (activeWakeLock?.isHeld == true) {
@@ -256,6 +265,42 @@ class DefaultActiveCallManager(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeRingingCall() {
+        activeCall
+            .filterNotNull()
+            .filter { it.callState is CallState.Ringing && it.callType is CallType.RoomCall }
+            .flatMapLatest { activeCall ->
+                val callType = activeCall.callType as CallType.RoomCall
+                val ringingInfo = activeCall.callState as CallState.Ringing
+                val client = matrixClientProvider.getOrRestore(callType.sessionId).getOrNull() ?: run {
+                    Timber.tag(tag).d("Couldn't find room for incoming call: $activeCall")
+                    return@flatMapLatest flowOf()
+                }
+                val room = client.getRoom(callType.roomId) ?: run {
+                    Timber.tag(tag).d("Couldn't find room for incoming call: $activeCall")
+                    return@flatMapLatest flowOf()
+                }
+
+                Timber.tag(tag).d("Found room for rining call: ${room.roomId}")
+
+                // If we have declined from another phone we want to stop ringing.
+                room.subscribeToCallDecline(ringingInfo.notificationData.eventId)
+                    .filter { decliner ->
+                        Timber.tag(tag).d("Call: $activeCall was declined by $decliner")
+                        // only want to listen if the call was declined from another of my sessions,
+                        // (we are ringing for an incoming call in a DM)
+                        decliner == client.sessionId
+                    }
+            }.onEach { decliner ->
+                Timber.tag(tag).d("Call: $activeCall was declined by from another session")
+                // decline
+                activeCall.value = null
+                if (activeWakeLock?.isHeld == true) {
+                    Timber.tag(tag).d("Releasing partial wakelock after timeout")
+                    activeWakeLock.release()
+                }
+                cancelIncomingCallNotification()
+            }
+            .launchIn(coroutineScope)
         // This will observe ringing calls and ensure they're terminated if the room call is cancelled or if the user
         // has joined the call from another session.
         activeCall
