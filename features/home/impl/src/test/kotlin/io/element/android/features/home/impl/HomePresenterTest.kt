@@ -12,9 +12,11 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.impl.roomlist.aRoomListState
+import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.home.impl.spaces.aHomeSpacesState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -30,10 +32,10 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
+import io.element.android.tests.testutils.MutablePresenter
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -65,6 +67,7 @@ class HomePresenterTest {
             assertThat(withUserState.matrixUser.avatarUrl).isEqualTo(AN_AVATAR_URL)
             assertThat(withUserState.showAvatarIndicator).isFalse()
             assertThat(withUserState.isSpaceFeatureEnabled).isFalse()
+            assertThat(withUserState.showNavigationBar).isFalse()
         }
     }
 
@@ -145,13 +148,42 @@ class HomePresenterTest {
         }
     }
 
-    private fun TestScope.createHomePresenter(
+    @Test
+    fun `present - NavigationBar is hidden when the last space is left`() = runTest {
+        val homeSpacesPresenter = MutablePresenter(aHomeSpacesState())
+        val presenter = createHomePresenter(
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.Space.key to true),
+            ),
+            homeSpacesPresenter = homeSpacesPresenter,
+        )
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Chats)
+            assertThat(initialState.showNavigationBar).isTrue()
+            // User navigate to Spaces
+            initialState.eventSink(HomeEvents.SelectHomeNavigationBarItem(HomeNavigationBarItem.Spaces))
+            val spaceState = awaitItem()
+            assertThat(spaceState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Spaces)
+            // The last space is left
+            homeSpacesPresenter.updateState(aHomeSpacesState(spaceRooms = emptyList()))
+            skipItems(1)
+            val finalState = awaitItem()
+            // We are back to Chats
+            assertThat(finalState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Chats)
+            assertThat(finalState.showNavigationBar).isFalse()
+        }
+    }
+
+    private fun createHomePresenter(
         client: MatrixClient = FakeMatrixClient(),
         syncService: SyncService = FakeSyncService(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { flowOf(false) },
         indicatorService: IndicatorService = FakeIndicatorService(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService()
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+        homeSpacesPresenter: Presenter<HomeSpacesState> = Presenter { aHomeSpacesState() },
     ) = HomePresenter(
         client = client,
         syncService = syncService,
@@ -159,7 +191,7 @@ class HomePresenterTest {
         indicatorService = indicatorService,
         logoutPresenter = { aDirectLogoutState() },
         roomListPresenter = { aRoomListState() },
-        homeSpacesPresenter = { aHomeSpacesState() },
+        homeSpacesPresenter = homeSpacesPresenter,
         rageshakeFeatureAvailability = rageshakeFeatureAvailability,
         featureFlagService = featureFlagService,
     )
