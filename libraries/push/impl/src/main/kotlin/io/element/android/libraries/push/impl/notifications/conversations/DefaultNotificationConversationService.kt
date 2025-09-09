@@ -34,6 +34,7 @@ import io.element.android.libraries.push.api.notifications.NotificationBitmapLoa
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
+import io.element.android.libraries.push.impl.notifications.shortcut.filterBySession
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -182,7 +183,7 @@ class DefaultNotificationConversationService(
     private fun onSessionLogOut(sessionId: SessionId) {
         runCatchingExceptions {
             val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
-            val shortcutIdsToRemove = shortcuts.filter { it.id.startsWith(sessionId.value) }.map { it.id }
+            val shortcutIdsToRemove = shortcuts.filterBySession(sessionId).map { it.id }
             ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutIdsToRemove)
 
             if (isRequestPinShortcutSupported) {
