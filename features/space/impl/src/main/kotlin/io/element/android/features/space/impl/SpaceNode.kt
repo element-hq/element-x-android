@@ -22,11 +22,12 @@ import io.element.android.libraries.di.SessionScope
 class SpaceNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenterFactory: SpacePresenter.Factory,
+    presenterFactory: SpacePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
-    val params = plugins.filterIsInstance<SpaceEntryPoint.Params>().single()
-    private val presenter = presenterFactory.create(params)
+    val inputs = plugins.filterIsInstance<SpaceEntryPoint.Inputs>().single()
+    val callback = plugins.filterIsInstance<SpaceEntryPoint.Callback>().single()
+    private val presenter = presenterFactory.create(inputs)
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -34,6 +35,9 @@ class SpaceNode @AssistedInject constructor(
         SpaceView(
             state = state,
             onBackClick = ::navigateUp,
+            onRoomClick = { roomId ->
+                callback.onOpenRoom(roomId)
+            },
             modifier = modifier
         )
     }

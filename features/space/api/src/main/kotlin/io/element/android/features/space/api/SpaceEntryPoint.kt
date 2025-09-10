@@ -12,8 +12,6 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
-import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 
 interface SpaceEntryPoint : FeatureEntryPoint {
     fun nodeBuilder(
@@ -22,24 +20,16 @@ interface SpaceEntryPoint : FeatureEntryPoint {
     ): NodeBuilder
 
     interface NodeBuilder {
-        fun params(params: Params): NodeBuilder
+        fun inputs(inputs: Inputs): NodeBuilder
         fun callback(callback: Callback): NodeBuilder
         fun build(): Node
     }
 
-    sealed interface Params : Plugin {
-        data class Id(val roomId: RoomId) : Params
-        data class Full(val spaceRoom: SpaceRoom) : Params
-
-        fun roomId(): RoomId {
-            return when (this) {
-                is Id -> roomId
-                is Full -> spaceRoom.roomId
-            }
-        }
-    }
+    data class Inputs(
+        val roomId: RoomId
+    ) : Plugin
 
     interface Callback : Plugin {
-        fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>)
+        fun onOpenRoom(roomId: RoomId)
     }
 }

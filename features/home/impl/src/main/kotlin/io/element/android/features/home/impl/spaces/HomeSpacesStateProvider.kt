@@ -10,6 +10,7 @@ package io.element.android.features.home.impl.spaces
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
+import io.element.android.libraries.previewutils.room.aSpaceRoom
 import kotlinx.collections.immutable.toImmutableSet
 
 open class HomeSpacesStateProvider : PreviewParameterProvider<HomeSpacesState> {

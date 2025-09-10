@@ -13,9 +13,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 
 data class SpaceState(
-    val parentSpace: SpaceRoom?,
+    val currentSpace: SpaceRoom?,
     val children: ImmutableList<SpaceRoom>,
     val seenSpaceInvites: ImmutableSet<RoomId>,
     val hideInvitesAvatar: Boolean,
+    val hasMoreToLoad: Boolean,
     val eventSink: (SpaceEvents) -> Unit
 )
