@@ -13,9 +13,9 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
  * Max versionCode allowed by the PlayStore (for information):
  * 2_100_000_000
  *
- * Also note that the versionCode is multiplied by 10 in app/build.gradle.kts#L168:
+ * Also note that the versionCode is multiplied by 10 in app/build.gradle.kts:
  * ```
- * output.versionCode.set((output.versionCode.get() ?: 0) * 10 + abiCode))
+ * output.versionCode.set((output.versionCode.orNull ?: 0) * 10 + abiCode)
  * ```
  * We are using a CalVer-like approach to version the application. The version code is calculated as follows:
  * - 2 digits for the year
@@ -28,27 +28,80 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
  * - the version code: 20250100a (202_501_00a) where `a` stands for the architecture code
  */
 
+/**
+ * Year of the version on 2 digits.
+ * Do not update this value. it is updated by the release script.
+ */
 private const val versionYear = 25
+
+/**
+ * Month of the version on 2 digits. Value must be in [1,12].
+ * Do not update this value. it is updated by the release script.
+ */
 private const val versionMonth = 9
 
-// Note: must be in [0,99]
+/**
+ * Release number in the month. Value must be in [0,99].
+ * Do not update this value. it is updated by the release script.
+ */
 private const val versionReleaseNumber = 1
 
 object Versions {
+    /**
+     * Base version code that will be set in the Android Manifest.
+     * The value will be modified at build time to add the ABI code when APK are build.
+     * AAB will have a ABI code of 0.
+     * See comment above for the calculation method.
+     */
     const val VERSION_CODE = (2000 + versionYear) * 10_000 + versionMonth * 100 + versionReleaseNumber
     val VERSION_NAME = "$versionYear.${versionMonth.toString().padStart(2, '0')}.$versionReleaseNumber"
 
-    // When updating COMPILE_SDK, please do not forget to update the value for `buildToolsVersion`
-    // in the file `tools/release/release.sh`
+    /**
+     * Compile SDK version. Must be updated when a new Android version is released.
+     * When updating COMPILE_SDK, please also update BUILD_TOOLS_VERSION.
+     */
     const val COMPILE_SDK = 36
+
+    /**
+     * Build tools version. Must be kept in sync with COMPILE_SDK.
+     * The value is used by the release script.
+     */
+    @Suppress("unused")
+    private const val BUILD_TOOLS_VERSION = "36.0.0"
+
+    /**
+     * Target SDK version. Should be kept up to date with COMPILE_SDK.
+     */
     const val TARGET_SDK = 36
 
-    // When updating the `minSdk`, make sure to update the value of `minSdkVersion` in the file `tools/release/release.sh`
+    /**
+     * Minimum SDK version for FOSS builds.
+     */
     private const val MIN_SDK_FOSS = 24
+
+    /**
+     * Minimum SDK version for Enterprise builds.
+     */
     private const val MIN_SDK_ENTERPRISE = 33
+
+    /**
+     * minSdkVersion that will be set in the Android Manifest.
+     */
     val minSdk = if (isEnterpriseBuild) MIN_SDK_ENTERPRISE else MIN_SDK_FOSS
 
+    /**
+     * Java version used for compilation.
+     * Update this value when you want to use a newer Java version.
+     */
     private const val JAVA_VERSION = 21
+
     val javaVersion: JavaVersion = JavaVersion.toVersion(JAVA_VERSION)
     val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(JAVA_VERSION)
+
+    // Perform some checks on the values to avoid releasing with bad values
+    init {
+        require(versionMonth in 1..12) { "versionMonth must be in [1,12]" }
+        require(versionReleaseNumber in 0..99) { "versionReleaseNumber must be in [0,99]" }
+        require(BUILD_TOOLS_VERSION.startsWith(COMPILE_SDK.toString())) { "When updating COMPILE_SDK, please also update BUILD_TOOLS_VERSION" }
+    }
 }
