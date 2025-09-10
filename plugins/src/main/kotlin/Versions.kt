@@ -44,7 +44,6 @@ object Versions {
     private const val BUILD_TOOLS_VERSION = "36.0.0"
     const val TARGET_SDK = 36
 
-    // When updating the `minSdk`, make sure to update the value of `minSdkVersion` in the file `tools/release/release.sh`
     private const val MIN_SDK_FOSS = 24
     private const val MIN_SDK_ENTERPRISE = 33
     val minSdk = if (isEnterpriseBuild) MIN_SDK_ENTERPRISE else MIN_SDK_FOSS
