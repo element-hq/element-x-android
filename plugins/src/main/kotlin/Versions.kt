@@ -40,6 +40,7 @@ object Versions {
 
     // When updating COMPILE_SDK, please also update BUILD_TOOLS_VERSION
     const val COMPILE_SDK = 36
+
     @Suppress("unused")
     private const val BUILD_TOOLS_VERSION = "36.0.0"
     const val TARGET_SDK = 36
@@ -51,4 +52,11 @@ object Versions {
     private const val JAVA_VERSION = 21
     val javaVersion: JavaVersion = JavaVersion.toVersion(JAVA_VERSION)
     val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(JAVA_VERSION)
+
+    // Perform some checks on the values to avoid releasing with bad values
+    init {
+        require(versionMonth in 1..12) { "versionMonth must be in [1,12]" }
+        require(versionReleaseNumber in 0..99) { "versionReleaseNumber must be in [0,99]" }
+        require(BUILD_TOOLS_VERSION.startsWith(COMPILE_SDK.toString())) { "When updating COMPILE_SDK, please also update BUILD_TOOLS_VERSION" }
+    }
 }
