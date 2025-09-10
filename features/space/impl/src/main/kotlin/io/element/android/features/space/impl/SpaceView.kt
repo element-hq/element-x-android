@@ -58,7 +58,7 @@ fun SpaceView(
     Scaffold(
         modifier = modifier,
         topBar = {
-            SpaceViewTopBar(spaceRoom = null, onBackClick = onBackClick)
+            SpaceViewTopBar(currentSpace = state.currentSpace, onBackClick = onBackClick)
         },
         content = { padding ->
             Box(
@@ -141,7 +141,7 @@ private fun LoadingMoreIndicator(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SpaceViewTopBar(
-    spaceRoom: SpaceRoom?,
+    currentSpace: SpaceRoom?,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -151,10 +151,10 @@ private fun SpaceViewTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
-            if (spaceRoom != null) {
+            if (currentSpace != null) {
                 SpaceAvatarAndNameRow(
-                    name = spaceRoom.name,
-                    avatarData = spaceRoom.getAvatarData(AvatarSize.TimelineRoom),
+                    name = currentSpace.name,
+                    avatarData = currentSpace.getAvatarData(AvatarSize.TimelineRoom),
                 )
             }
         },
