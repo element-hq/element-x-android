@@ -39,19 +39,10 @@ class DefaultFilterSelectionStrategy @Inject constructor() : FilterSelectionStra
     }
 
     private fun buildFilters(): Set<FilterSelectionState> {
-        val selectedFilterStates = selectedFilters.map {
-            FilterSelectionState(
-                filter = it,
-                isSelected = true
-            )
-        }
-        val unselectedFilters = RoomListFilter.entries - selectedFilters - selectedFilters.flatMap { it.incompatibleFilters }.toSet()
-        val unselectedFilterStates = unselectedFilters.map {
-            FilterSelectionState(
-                filter = it,
-                isSelected = false
-            )
-        }
-        return (selectedFilterStates + unselectedFilterStates).toSet()
+        val rest = (RoomListFilter.entries - RoomListFilter.All).map { FilterSelectionState(filter = it, isSelected = selectedFilters.contains(it)) }
+        val noneSelected = !rest.any { it.isSelected }
+        val all = FilterSelectionState(filter = RoomListFilter.All, isSelected = noneSelected)
+
+        return setOf(all) + rest.toSet()
     }
 }

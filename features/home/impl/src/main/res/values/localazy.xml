@@ -39,6 +39,7 @@ For now, you can deselect filters in order to see your other chats"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"You don’t have any DMs yet"</string>
   <string name="screen_roomlist_filter_rooms">"Rooms"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"You’re not in any room yet"</string>
+  <string name="screen_roomlist_filter_all">"All"</string>
   <string name="screen_roomlist_filter_unreads">"Unreads"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Congrats!
 You don’t have any unread messages!"</string>
