@@ -22,6 +22,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
+import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentSet
@@ -47,12 +48,7 @@ class SpacePresenter(
         LaunchedEffect(Unit) {
             paginate()
         }
-        val hideInvitesAvatar by remember {
-            client
-                .mediaPreviewService()
-                .mediaPreviewConfigFlow
-                .mapState { config -> config.hideInviteAvatar }
-        }.collectAsState()
+        val hideInvitesAvatar by client.rememberHideInvitesAvatar()
         val seenSpaceInvites by remember {
             seenInvitesStore.seenRoomIds().map { it.toPersistentSet() }
         }.collectAsState(persistentSetOf())
