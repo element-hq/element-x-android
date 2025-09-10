@@ -35,7 +35,6 @@ class SpacePresenter(
     private val client: MatrixClient,
     private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<SpaceState> {
-
     @AssistedFactory
     interface Factory {
         fun create(inputs: SpaceEntryPoint.Inputs): SpacePresenter
@@ -45,11 +44,9 @@ class SpacePresenter(
 
     @Composable
     override fun present(): SpaceState {
-
         LaunchedEffect(Unit) {
             paginate()
         }
-
         val hideInvitesAvatar by remember {
             client
                 .mediaPreviewService()

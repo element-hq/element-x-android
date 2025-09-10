@@ -24,9 +24,8 @@ class SpaceNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: SpacePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
-    val inputs = plugins.filterIsInstance<SpaceEntryPoint.Inputs>().single()
-    val callback = plugins.filterIsInstance<SpaceEntryPoint.Callback>().single()
+    private val inputs = plugins.filterIsInstance<SpaceEntryPoint.Inputs>().single()
+    private val callback = plugins.filterIsInstance<SpaceEntryPoint.Callback>().single()
     private val presenter = presenterFactory.create(inputs)
 
     @Composable

@@ -8,10 +8,7 @@
 package io.element.android.features.invite.api
 
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SpaceId
-import io.element.android.libraries.matrix.api.core.toSpaceId
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 interface SeenInvitesStore {
     /**

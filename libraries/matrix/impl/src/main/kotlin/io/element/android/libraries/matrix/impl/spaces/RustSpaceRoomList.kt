@@ -29,7 +29,6 @@ class RustSpaceRoomList(
     spaceRoomMapper: SpaceRoomMapper,
     private val spaceRoomCache: SpaceRoomCache,
 ) : SpaceRoomList {
-
     private val inner = CompletableDeferred<InnerSpaceRoomList>()
 
     override fun currentSpaceFlow(): Flow<SpaceRoom?> {

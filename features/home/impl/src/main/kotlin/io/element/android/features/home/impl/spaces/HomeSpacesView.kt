@@ -63,7 +63,7 @@ fun HomeSpacesView(
                         onSpaceClick(spaceRoom.roomId)
                     },
                     onLongClick = {
-
+                        // TODO
                     }
                 )
             }

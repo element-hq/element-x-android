@@ -44,9 +44,7 @@ internal class SpaceListUpdateProcessor(
     private fun MutableList<SpaceRoom>.applyUpdate(update: SpaceListUpdate) {
         when (update) {
             is SpaceListUpdate.Append -> {
-                val newSpaces = update.values.map { it ->
-                    it.let(mapper::map)
-                }
+                val newSpaces = update.values.map(mapper::map)
                 addAll(newSpaces)
             }
             SpaceListUpdate.Clear -> clear()

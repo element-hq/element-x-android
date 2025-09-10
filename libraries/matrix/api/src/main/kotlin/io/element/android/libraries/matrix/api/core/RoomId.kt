@@ -20,5 +20,3 @@ value class RoomId(val value: String) : Serializable {
 
     override fun toString(): String = value
 }
-
-fun RoomId.toSpaceId(): SpaceId = SpaceId(this.value)

@@ -105,7 +105,7 @@ private fun SpaceViewContent(
                         onRoomClick(spaceRoom.roomId)
                     },
                     onLongClick = {
-
+                        // TODO
                     }
                 )
             }
