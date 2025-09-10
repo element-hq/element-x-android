@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.features.invite.api)
+    implementation(projects.libraries.previewutils)
     api(projects.features.space.api)
 
     testImplementation(libs.test.junit)

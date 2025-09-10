@@ -45,7 +45,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
-import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
@@ -216,8 +215,10 @@ class RoomFlowNode(
                 createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
             }
             is NavTarget.Space -> {
+                val spaceCallback = plugins<SpaceEntryPoint.Callback>().single()
                 spaceEntryPoint.nodeBuilder(this, buildContext)
-                    .params(SpaceEntryPoint.Params.Id(navTarget.spaceId))
+                    .inputs(SpaceEntryPoint.Inputs(roomId = navTarget.spaceId))
+                    .callback(spaceCallback)
                     .build()
             }
         }

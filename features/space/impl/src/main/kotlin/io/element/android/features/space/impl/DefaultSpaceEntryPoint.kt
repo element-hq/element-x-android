@@ -22,8 +22,8 @@ class DefaultSpaceEntryPoint : SpaceEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): SpaceEntryPoint.NodeBuilder {
         val plugins = mutableSetOf<Plugin>()
         return object : SpaceEntryPoint.NodeBuilder {
-            override fun params(params: SpaceEntryPoint.Params): SpaceEntryPoint.NodeBuilder {
-                plugins.add(params)
+            override fun inputs(inputs: SpaceEntryPoint.Inputs): SpaceEntryPoint.NodeBuilder {
+                plugins.add(inputs)
                 return this
             }
 

@@ -9,13 +9,15 @@ package io.element.android.features.space.impl
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,12 +35,13 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
-import io.element.android.libraries.matrix.ui.components.SpaceHeaderRootView
 import io.element.android.libraries.matrix.ui.components.SpaceHeaderView
 import io.element.android.libraries.matrix.ui.components.SpaceRoomItemView
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -49,56 +52,57 @@ import kotlinx.collections.immutable.toImmutableList
 fun SpaceView(
     state: SpaceState,
     onBackClick: () -> Unit,
+    onRoomClick: (roomId: RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets.statusBars,
         topBar = {
             SpaceViewTopBar(spaceRoom = null, onBackClick = onBackClick)
         },
         content = { padding ->
             Box(
-                modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
+                modifier = Modifier.padding(padding)
             ) {
-                SpaceViewContent(state)
+                SpaceViewContent(
+                    state = state,
+                    onRoomClick = onRoomClick
+                )
             }
         },
     )
 }
 
-
 @Composable
 private fun SpaceViewContent(
     state: SpaceState,
+    onRoomClick: (roomId: RoomId) -> Unit,
     modifier: Modifier = Modifier,
-){
-    LazyColumn(modifier) {
-        val parentSpace = state.parentSpace
-        if (parentSpace != null) {
+) {
+    LazyColumn(modifier.fillMaxSize()) {
+        val currentSpace = state.currentSpace
+        if (currentSpace != null) {
             item {
                 SpaceHeaderView(
-                    avatarData = parentSpace.getAvatarData(AvatarSize.SpaceHeader),
-                    name = parentSpace.name,
-                    topic = parentSpace.topic,
-                    joinRule = parentSpace.joinRule,
-                    heroes = parentSpace.heroes.toImmutableList(),
-                    numberOfMembers = parentSpace.numJoinedMembers,
-                    numberOfRooms = parentSpace.childrenCount,
+                    avatarData = currentSpace.getAvatarData(AvatarSize.SpaceHeader),
+                    name = currentSpace.name,
+                    topic = currentSpace.topic,
+                    joinRule = currentSpace.joinRule,
+                    heroes = currentSpace.heroes.toImmutableList(),
+                    numberOfMembers = currentSpace.numJoinedMembers,
+                    numberOfRooms = currentSpace.childrenCount,
                 )
             }
         }
-        state.children.forEach {
-            item(it.roomId) {
-                val isInvitation = it.state == CurrentUserMembership.INVITED
+        state.children.forEach { spaceRoom ->
+            item {
+                val isInvitation = spaceRoom.state == CurrentUserMembership.INVITED
                 SpaceRoomItemView(
-                    spaceRoom = it,
-                    showUnreadIndicator = isInvitation && it.roomId !in state.seenSpaceInvites,
+                    spaceRoom = spaceRoom,
+                    showUnreadIndicator = isInvitation && spaceRoom.roomId !in state.seenSpaceInvites,
                     hideAvatars = isInvitation && state.hideInvitesAvatar,
                     onClick = {
-
+                        onRoomClick(spaceRoom.roomId)
                     },
                     onLongClick = {
 
@@ -106,9 +110,33 @@ private fun SpaceViewContent(
                 )
             }
         }
+        if (state.hasMoreToLoad) {
+            item {
+                LoadingMoreIndicator(eventSink = state.eventSink)
+            }
+        }
     }
 }
 
+@Composable
+private fun LoadingMoreIndicator(
+    eventSink: (SpaceEvents) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(
+            strokeWidth = 2.dp,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+        val latestEventSink by rememberUpdatedState(eventSink)
+        LaunchedEffect(Unit) {
+            latestEventSink(SpaceEvents.LoadMore)
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -171,6 +199,7 @@ internal fun SpaceViewPreview(
 ) = ElementPreview {
     SpaceView(
         state = state,
+        onRoomClick = {},
         onBackClick = {},
     )
 }
