@@ -29,7 +29,7 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * This class manages the audio devices for a WebView.
@@ -246,7 +246,6 @@ class WebViewAudioManager(
     private fun registerWebViewDeviceSelectedCallback() {
         val webViewAudioDeviceSelectedCallback = AndroidWebViewAudioBridge(
             onAudioDeviceSelected = { selectedDeviceId ->
-                Timber.d("Audio device selected in webview, id: $selectedDeviceId")
                 previousSelectedDevice = listAudioDevices().find { it.id.toString() == selectedDeviceId }
                 audioManager.selectAudioDevice(selectedDeviceId)
             },
@@ -254,7 +253,7 @@ class WebViewAudioManager(
                 coroutineScope.launch(Dispatchers.Main) {
                     // Even with the callback, it seems like starting the audio takes a bit on the webview side,
                     // so we add an extra delay here to make sure it's ready
-                    delay(500.milliseconds)
+                    delay(2.seconds)
 
                     // Calling this ahead of time makes the default audio device to not use the right audio stream
                     setAvailableAudioDevices()
