@@ -7,36 +7,29 @@
 
 package io.element.android.libraries.matrix.impl.spaces
 
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import java.util.concurrent.ConcurrentHashMap
+import kotlinx.coroutines.flow.update
 
 /**
  * An in memory cache of space rooms.
  * Only caches Rooms with roomType [io.element.android.libraries.matrix.api.room.RoomType.Space].
  */
 class SpaceRoomCache {
-    private val inMemoryCache = ConcurrentHashMap<RoomId, MutableStateFlow<SpaceRoom?>>()
-    private val mutex = Mutex()
-
+    private val inMemoryCache = MutableStateFlow<Map<RoomId, SpaceRoom?>>(emptyMap())
     fun getSpaceRoomFlow(roomId: RoomId): Flow<SpaceRoom?> {
-        return getMutableFlow(roomId).asStateFlow()
+        return inMemoryCache.mapState { it[roomId] }
     }
 
-    suspend fun update(spaceRooms: List<SpaceRoom>) = mutex.withLock {
-        spaceRooms
-            .filter { it.isSpace }
-            .forEach { spaceRoom ->
-                getMutableFlow(spaceRoom.roomId).value = spaceRoom
-            }
-    }
-
-    private fun getMutableFlow(roomId: RoomId): MutableStateFlow<SpaceRoom?> {
-        return inMemoryCache.getOrPut(roomId, { MutableStateFlow(null) })
+    fun update(spaceRooms: List<SpaceRoom>) {
+        inMemoryCache.update { currentValues ->
+            val newValues = spaceRooms
+                .filter { it.isSpace }
+                .associateBy { it.roomId }
+            currentValues + newValues
+        }
     }
 }
