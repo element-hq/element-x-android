@@ -9,6 +9,7 @@
 package io.element.android.libraries.maplibre.compose
 
 import android.content.ComponentCallbacks
+import android.content.ComponentCallbacks2
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
@@ -235,11 +236,16 @@ private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Even
         previousState.value = event
     }
 
-private fun MapView.componentCallbacks(): ComponentCallbacks =
-    object : ComponentCallbacks {
-        override fun onConfigurationChanged(config: Configuration) {}
+private fun MapView.componentCallbacks(): ComponentCallbacks2 =
+    object : ComponentCallbacks2 {
+        override fun onConfigurationChanged(config: Configuration) = Unit
 
-        override fun onLowMemory() {
+        // We need to override this method, even if it's deprecated
+        @Suppress("DEPRECATION")
+        override fun onLowMemory() = Unit
+
+        override fun onTrimMemory(level: Int) {
+            // We call the `MapView.onLowMemory` method for any memory trim level
             this@componentCallbacks.onLowMemory()
         }
     }
