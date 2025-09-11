@@ -142,7 +142,6 @@ internal fun SimpleAlertDialogContent(
                 Text(
                     text = titleText,
                     style = ElementTheme.typography.fontHeadingSmMedium,
-                    textAlign = TextAlign.Center,
                 )
             }
         },
