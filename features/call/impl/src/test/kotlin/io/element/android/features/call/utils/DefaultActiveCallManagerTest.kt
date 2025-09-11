@@ -41,6 +41,7 @@ import io.element.android.libraries.push.test.notifications.push.FakeNotificatio
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.plantTestTimber
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
@@ -53,7 +54,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
-import timber.log.Timber
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultActiveCallManagerTest {
@@ -233,12 +233,7 @@ class DefaultActiveCallManagerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `Decline event - Should ignore decline for other notification events`() = runTest {
-        Timber.plant(object : Timber.Tree() {
-            override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-                println("$tag: $message")
-            }
-        })
-
+        plantTestTimber()
         setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
 
