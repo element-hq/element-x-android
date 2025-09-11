@@ -183,7 +183,7 @@ sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", ver
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:sqlcipher-android:4.10.0"
-sqlite = "androidx.sqlite:sqlite-ktx:2.5.2"
+sqlite = "androidx.sqlite:sqlite-ktx:2.6.0"
 unifiedpush = "org.unifiedpush.android:connector:3.0.10"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
