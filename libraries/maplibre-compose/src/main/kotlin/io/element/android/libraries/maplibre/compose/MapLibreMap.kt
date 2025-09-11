@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.maplibre.compose
 
-import android.content.ComponentCallbacks
 import android.content.ComponentCallbacks2
 import android.content.Context
 import android.content.res.Configuration
@@ -240,8 +239,7 @@ private fun MapView.componentCallbacks(): ComponentCallbacks2 =
     object : ComponentCallbacks2 {
         override fun onConfigurationChanged(config: Configuration) = Unit
 
-        // We need to override this method, even if it's deprecated
-        @Suppress("DEPRECATION")
+        @Suppress("OVERRIDE_DEPRECATION")
         override fun onLowMemory() = Unit
 
         override fun onTrimMemory(level: Int) {
