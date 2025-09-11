@@ -25,7 +25,6 @@ object RoomMemberMapper {
             membership = mapMembership(roomMember.membership),
             isNameAmbiguous = roomMember.isNameAmbiguous,
             powerLevel = powerLevel,
-            normalizedPowerLevel = roomMember.normalizedPowerLevel.into(),
             isIgnored = roomMember.isIgnored,
             role = mapRole(roomMember.suggestedRoleForPowerLevel, powerLevel),
             membershipChangeReason = roomMember.membershipChangeReason

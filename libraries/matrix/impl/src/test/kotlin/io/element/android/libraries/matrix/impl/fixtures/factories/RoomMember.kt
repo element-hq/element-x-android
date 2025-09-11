@@ -30,7 +30,6 @@ fun aRustRoomMember(
     membership = membership,
     isNameAmbiguous = isNameAmbiguous,
     powerLevel = powerLevel,
-    normalizedPowerLevel = powerLevel,
     isIgnored = isIgnored,
     suggestedRoleForPowerLevel = role,
     membershipChangeReason = membershipChangeReason,
