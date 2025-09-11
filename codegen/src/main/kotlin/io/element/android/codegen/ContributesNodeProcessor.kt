@@ -35,6 +35,7 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoMap
+import dev.zacsweers.metro.Origin
 import io.element.android.annotations.ContributesNode
 import org.jetbrains.kotlin.name.FqName
 
@@ -71,12 +72,14 @@ class ContributesNodeProcessor(
         val scope = annotation.arguments.find { it.name?.asString() == "scope" }!!.value as KSType
         val modulePackage = ksClass.packageName.asString()
         val moduleClassName = "${ksClass.simpleName.asString()}_Module"
+        val nodeClassName = ClassName.bestGuess(ksClass.qualifiedName!!.asString())
         val content = FileSpec.builder(
             packageName = modulePackage,
             fileName = moduleClassName,
         )
             .addType(
                 TypeSpec.interfaceBuilder(moduleClassName)
+                    .addAnnotation(AnnotationSpec.builder(Origin::class).addMember("%T::class", nodeClassName).build())
                     .addAnnotation(BindingContainer::class)
                     .addAnnotation(AnnotationSpec.builder(ContributesTo::class).addMember("%T::class", scope.toTypeName()).build())
                     .addFunction(
@@ -138,6 +141,7 @@ class ContributesNodeProcessor(
             .addType(
                 TypeSpec.interfaceBuilder(assistedFactoryClassName)
                     .addSuperinterface(ClassName.bestGuess(assistedNodeFactoryFqName.asString()).parameterizedBy(nodeClassName))
+                    .addAnnotation(AnnotationSpec.builder(Origin::class).addMember("%T::class", nodeClassName).build())
                     .addAnnotation(AssistedFactory::class)
                     .addFunction(
                         FunSpec.builder("create")
