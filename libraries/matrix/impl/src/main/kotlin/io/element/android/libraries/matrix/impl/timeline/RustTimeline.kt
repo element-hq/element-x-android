@@ -437,6 +437,7 @@ class RustTimeline(
                 key = emoji,
                 itemId = eventOrTransactionId.toRustEventOrTransactionId(),
             )
+            Unit
         }
     }
 
