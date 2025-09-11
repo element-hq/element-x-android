@@ -305,13 +305,13 @@ class RustBaseRoom(
 
     override suspend fun declineCall(notificationEventId: EventId): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.declineCall(notificationEventId.toString())
+            innerRoom.declineCall(notificationEventId.value)
         }
     }
 
     override suspend fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId> = withContext(roomDispatcher) {
         mxCallbackFlow {
-            innerRoom.subscribeToCallDeclineEvents(notificationEventId.toString(), object : CallDeclineListener {
+            innerRoom.subscribeToCallDeclineEvents(notificationEventId.value, object : CallDeclineListener {
                 override fun call(declinerUserId: String) {
                     trySend(UserId(declinerUserId))
                 }
