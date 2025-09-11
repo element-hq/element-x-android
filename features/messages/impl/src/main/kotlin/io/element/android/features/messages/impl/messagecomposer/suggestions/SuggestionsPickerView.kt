@@ -155,7 +155,6 @@ internal fun SuggestionsPickerViewPreview() {
             membership = RoomMembershipState.JOIN,
             isNameAmbiguous = false,
             powerLevel = 0L,
-            normalizedPowerLevel = 0L,
             isIgnored = false,
             role = RoomMember.Role.User,
             membershipChangeReason = null,
