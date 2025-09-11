@@ -32,7 +32,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun RoomInviteMembersView(
     state: InvitePeopleState,
     onBackClick: () -> Unit,
-    onDone: () -> Unit,
     modifier: Modifier = Modifier,
     invitePeopleView: @Composable () -> Unit,
 ) {
@@ -49,7 +48,6 @@ fun RoomInviteMembersView(
                 },
                 onSubmitClick = {
                     state.eventSink(InvitePeopleEvents.SendInvites)
-                    onDone()
                 },
                 canSend = state.canInvite,
             )
@@ -93,6 +91,5 @@ internal fun RoomInviteMembersViewPreview(@PreviewParameter(InvitePeopleStatePro
         state = state,
         invitePeopleView = {},
         onBackClick = {},
-        onDone = {},
     )
 }

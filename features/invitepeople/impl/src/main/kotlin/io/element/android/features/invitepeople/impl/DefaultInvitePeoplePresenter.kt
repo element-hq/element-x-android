@@ -132,7 +132,7 @@ class DefaultInvitePeoplePresenter(
 
         return DefaultInvitePeopleState(
             room = room.map { },
-            canInvite = selectedUsers.value.isNotEmpty(),
+            canInvite = selectedUsers.value.isNotEmpty() && !sendInvitesAction.value.isLoading(),
             selectedUsers = selectedUsers.value,
             searchQuery = searchQuery,
             isSearchActive = searchActive,
