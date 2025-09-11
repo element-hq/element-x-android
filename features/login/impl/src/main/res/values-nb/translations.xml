@@ -13,6 +13,8 @@
   <string name="screen_change_account_provider_other">"Annet"</string>
   <string name="screen_change_account_provider_subtitle">"Bruk en annen kontotilbyder, for eksempel din egen private server eller en arbeidskonto."</string>
   <string name="screen_change_account_provider_title">"Bytt kontotilbyder"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"Element Pro-appen er nødvendig på %1$s. Last den ned fra butikken."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Element Pro kreves"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Vi kunne ikke nå denne hjemmeserveren. Kontroller at du har skrevet inn hjemmeserverens URL riktig. Hvis URL-en er riktig, kontakt administratoren for hjemmeserveren din for å få mer hjelp."</string>
   <string name="screen_change_server_error_invalid_well_known">"Serveren er ikke tilgjengelig på grunn av et problem i den velkjente filen:
 %1$s"</string>

@@ -30,8 +30,8 @@ class FakePickerProvider : PickerProvider {
     }
 
     @Composable
-    override fun registerFilePicker(mimeType: String, onResult: (Uri?) -> Unit): PickerLauncher<String, Uri?> {
-        return NoOpPickerLauncher { onResult(result) }
+    override fun registerFilePicker(mimeType: String, onResult: (Uri?, String?) -> Unit): PickerLauncher<String, Uri?> {
+        return NoOpPickerLauncher { onResult(result, this.mimeType) }
     }
 
     @Composable

@@ -42,6 +42,7 @@
   <string name="a11y_remove_reaction_with">"Entferne Reaktionen mit %1$s"</string>
   <string name="a11y_room_avatar">"Avatar"</string>
   <string name="a11y_send_files">"Dateien senden"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Zeitlich begrenzte Handlung erforderlich, du hast eine Minute Zeit zur Verifizierung"</string>
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_start_call">"Anruf starten"</string>
   <string name="a11y_tombstoned_room">"Stillgelegter Chat"</string>
@@ -164,6 +165,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Aktualisierung verfügbar"</string>
   <string name="common_about">"Über"</string>
   <string name="common_acceptable_use_policy">"Nutzungsrichtlinie"</string>
+  <string name="common_add_account">"Konto hinzufügen"</string>
+  <string name="common_add_another_account">"Weiteres Konto hinzufügen"</string>
   <string name="common_adding_caption">"Hinzufügen einer Bildunterschrift"</string>
   <string name="common_advanced_settings">"Erweiterte Einstellungen"</string>
   <string name="common_an_image">"ein Bild"</string>
@@ -293,6 +296,7 @@ Grund: %1$s."</string>
   <string name="common_search_results">"Suchergebnisse"</string>
   <string name="common_security">"Sicherheit"</string>
   <string name="common_seen_by">"Gesehen von"</string>
+  <string name="common_select_account">"Konto auswählen"</string>
   <string name="common_send_to">"Senden an"</string>
   <string name="common_sending">"Wird gesendet…"</string>
   <string name="common_sending_failed">"Senden fehlgeschlagen"</string>
@@ -375,6 +379,8 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Die maximal erlaubte Dateigröße ist: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Wähle die Qualität des Videos, das du hochladen möchtest."</string>
   <string name="dialog_video_quality_selector_title">"Wähle die Video-Upload-Qualität"</string>
+  <string name="emoji_picker_search_placeholder">"Emojis suchen"</string>
+  <string name="error_account_already_logged_in">"Du bist auf diesem Gerät bereits als %1$s angemeldet."</string>
   <string name="error_account_creation_not_possible">"Dein Homeserver muss aktualisiert werden, um den Matrix Authentication Services und die Erstellung von Konten zu unterstützen."</string>
   <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Permalinks"</string>
   <string name="error_failed_loading_map">"%1$s konnte die Karte nicht laden. Bitte versuche es später erneut."</string>

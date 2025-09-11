@@ -25,7 +25,7 @@ interface PickerProvider {
     @Composable
     fun registerFilePicker(
         mimeType: String,
-        onResult: (Uri?) -> Unit
+        onResult: (uri: Uri?, mimeType: String?) -> Unit,
     ): PickerLauncher<String, Uri?>
 
     @Composable

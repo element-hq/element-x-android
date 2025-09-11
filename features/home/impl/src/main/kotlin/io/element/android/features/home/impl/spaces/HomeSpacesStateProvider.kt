@@ -8,8 +8,9 @@
 package io.element.android.features.home.impl.spaces
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.core.SpaceId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
+import io.element.android.libraries.previewutils.room.aSpaceRoom
 import kotlinx.collections.immutable.toImmutableSet
 
 open class HomeSpacesStateProvider : PreviewParameterProvider<HomeSpacesState> {
@@ -18,12 +19,12 @@ open class HomeSpacesStateProvider : PreviewParameterProvider<HomeSpacesState> {
             aHomeSpacesState(
                 spaceRooms = SpaceRoomProvider().values.toList(),
                 seenSpaceInvites = setOf(
-                    SpaceId("!spaceId3:example.com"),
+                    RoomId("!spaceId3:example.com"),
                 ),
             ),
             aHomeSpacesState(
                 space = CurrentSpace.Space(
-                    spaceRoom = aSpaceRooms(spaceId = SpaceId("!mySpace:example.com"))
+                    spaceRoom = aSpaceRoom(roomId = RoomId("!mySpace:example.com"))
                 ),
                 spaceRooms = aListOfSpaceRooms(),
             ),
@@ -33,7 +34,7 @@ open class HomeSpacesStateProvider : PreviewParameterProvider<HomeSpacesState> {
 internal fun aHomeSpacesState(
     space: CurrentSpace = CurrentSpace.Root,
     spaceRooms: List<SpaceRoom> = aListOfSpaceRooms(),
-    seenSpaceInvites: Set<SpaceId> = emptySet(),
+    seenSpaceInvites: Set<RoomId> = emptySet(),
     hideInvitesAvatar: Boolean = false,
     eventSink: (HomeSpacesEvents) -> Unit = {},
 ) = HomeSpacesState(
@@ -46,8 +47,8 @@ internal fun aHomeSpacesState(
 
 fun aListOfSpaceRooms(): List<SpaceRoom> {
     return listOf(
-        aSpaceRooms(spaceId = SpaceId("!spaceId0:example.com")),
-        aSpaceRooms(spaceId = SpaceId("!spaceId1:example.com")),
-        aSpaceRooms(spaceId = SpaceId("!spaceId2:example.com")),
+        aSpaceRoom(roomId = RoomId("!spaceId0:example.com")),
+        aSpaceRoom(roomId = RoomId("!spaceId1:example.com")),
+        aSpaceRoom(roomId = RoomId("!spaceId2:example.com")),
     )
 }

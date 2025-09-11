@@ -12,7 +12,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 
 fun SpaceRoom.getAvatarData(size: AvatarSize) = AvatarData(
-    id = spaceId.value,
+    id = roomId.value,
     name = name,
     url = avatarUrl,
     size = size,

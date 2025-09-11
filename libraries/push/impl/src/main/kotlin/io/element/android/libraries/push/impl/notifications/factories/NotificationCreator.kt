@@ -41,6 +41,7 @@ import io.element.android.libraries.push.impl.notifications.model.FallbackNotifi
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 interface NotificationCreator {
@@ -137,7 +138,10 @@ class DefaultNotificationCreator(
                 // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 // ID of the corresponding shortcut, for conversation features under API 30+
-                .setShortcutId(roomInfo.roomId.value)
+                // Must match those created in the ShortcutInfoCompat.Builder()
+                // for the notification to appear as a "Conversation":
+                // https://developer.android.com/develop/ui/views/notifications/conversations
+                .setShortcutId(createShortcutId(roomInfo.sessionId, roomInfo.roomId))
                 // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
                 // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
                 .setGroup(roomInfo.sessionId.value)

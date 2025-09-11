@@ -1,3 +1,61 @@
+Changes in Element X v25.09.1
+=============================
+
+## What's Changed
+
+We have migrated our DI libraries from Dagger and Anvil to Metro. If you need more details on the migration steps, please read the [documentation](https://github.com/element-hq/element-x-android/blob/develop/docs/migration_to_metro.md).
+
+### ✨ Features
+* Allow replying to a message with an attachment by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5261
+* Add emoji search to the reaction emoji picker by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5255
+### 🙌 Improvements
+* Spelling correction in Update FeatureFlags.kt by @escix in https://github.com/element-hq/element-x-android/pull/5232
+* [a11y] Add content descriptions to room list item indicators by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5236
+* [a11y] Add click action to the message bottom sheet handle by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5228
+### 🐛 Bugfixes
+* Reload member list after moderation actions by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5268
+* Restore view log code by @bmarty in https://github.com/element-hq/element-x-android/pull/5294
+* Detect mime type when picking a file by @bmarty in https://github.com/element-hq/element-x-android/pull/5291
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/5249
+* Sync Strings - new translations to Korean by @ElementBot in https://github.com/element-hq/element-x-android/pull/5286
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/5290
+### 🧱 Build
+* Iterate on build chain by @bmarty in https://github.com/element-hq/element-x-android/pull/5272
+* Cleanup our DI solution and add documentation about the migration to Metro by @bmarty in https://github.com/element-hq/element-x-android/pull/5287
+* Revert agp to 8.11 by @bmarty in https://github.com/element-hq/element-x-android/pull/5311
+### 🚧 In development 🚧
+* Space: add content in home screen by @bmarty in https://github.com/element-hq/element-x-android/pull/5273
+* Hide the home navigation bar if the user is not a member of any Space. by @bmarty in https://github.com/element-hq/element-x-android/pull/5292
+### Dependency upgrades
+* Update dependency org.maplibre.gl:android-sdk to v11.13.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5239
+* Update dependency com.google.firebase:firebase-bom to v34.2.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5245
+* Update dependency com.posthog:posthog-android to v3.21.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5238
+* Update dependency org.matrix.rustcomponents:sdk-android to v25.9.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5251
+* Update plugin sonarqube to v6.3.1.5724 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5235
+* Update android.gradle.plugin to v8.12.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5244
+* Update dependency io.element.android:emojibase-bindings to v1.4.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5250
+* Update actions/setup-python action to v6 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5270
+* Update dependency com.posthog:posthog-android to v3.21.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5275
+* Migrate Anvil KSP to Metro by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5253
+* Update actions/github-script action to v8 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5284
+* Update codecov/codecov-action action to v5.5.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5274
+* Update dependency io.sentry:sentry-android to v8.21.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5293
+### Others
+* Remove LoginUserStory. by @bmarty in https://github.com/element-hq/element-x-android/pull/5237
+* Update state in runUpdatingState when CancellationException occurs by @jbrenorv in https://github.com/element-hq/element-x-android/pull/5243
+* Refactor: Move InMemorySessionStore to test module by @bmarty in https://github.com/element-hq/element-x-android/pull/5252
+* Enable `largeHeap` option to have a larger max heap size by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5258
+* Set a custom request config for the Client by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5266
+* Set shortcut ID on received notifications to make them appear as a Conversation by @frebib in https://github.com/element-hq/element-x-android/pull/5192
+* Improve management of shortcut ids. by @bmarty in https://github.com/element-hq/element-x-android/pull/5303
+
+## New Contributors
+* @escix made their first contribution in https://github.com/element-hq/element-x-android/pull/5232
+* @jbrenorv made their first contribution in https://github.com/element-hq/element-x-android/pull/5243
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.09.0...v25.09.1
+
 Changes in Element X v25.09.0
 =============================
 

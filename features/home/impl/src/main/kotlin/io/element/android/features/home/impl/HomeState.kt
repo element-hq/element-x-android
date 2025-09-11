@@ -34,4 +34,5 @@ data class HomeState(
     val eventSink: (HomeEvents) -> Unit,
 ) {
     val displayActions = currentHomeNavigationBarItem == HomeNavigationBarItem.Chats
+    val showNavigationBar = isSpaceFeatureEnabled && homeSpacesState.spaceRooms.isNotEmpty()
 }

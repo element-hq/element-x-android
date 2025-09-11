@@ -3,7 +3,8 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.12.2"
+# We cannot use 8.12.+ since it breaks F-Droid build (see https://github.com/element-hq/element-x-android/issues/3420#issuecomment-3199571010)
+android_gradle_plugin = "8.11.1"
 # When updateing this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.2.10"
 kotlinpoet = "2.2.0"
@@ -16,9 +17,9 @@ datastore = "1.1.7"
 constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.9.2"
-activity = "1.10.1"
+activity = "1.11.0"
 media3 = "1.8.0"
-camera = "1.4.2"
+camera = "1.5.0"
 
 # Compose
 compose_bom = "2025.07.00"
@@ -151,7 +152,7 @@ test_runner = "androidx.test:runner:1.7.0"
 test_mockk = "io.mockk:mockk:1.14.5"
 test_konsist = "com.lemonappdev:konsist:0.17.3"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
-test_truth = "com.google.truth:truth:1.4.4"
+test_truth = "com.google.truth:truth:1.4.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
 test_robolectric = "org.robolectric:robolectric:4.15.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
@@ -175,14 +176,14 @@ jsoup = "org.jsoup:jsoup:1.21.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.1.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.9.1"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.9.10"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:sqlcipher-android:4.10.0"
-sqlite = "androidx.sqlite:sqlite-ktx:2.5.2"
+sqlite = "androidx.sqlite:sqlite-ktx:2.6.0"
 unifiedpush = "org.unifiedpush.android:connector:3.0.10"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
@@ -197,8 +198,8 @@ haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.21.1"
-sentry = "io.sentry:sentry-android:8.20.0"
+posthog = "com.posthog:posthog-android:3.21.2"
+sentry = "io.sentry:sentry-android:8.21.1"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 

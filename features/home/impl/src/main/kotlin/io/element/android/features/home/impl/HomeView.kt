@@ -197,7 +197,7 @@ private fun HomeScaffold(
             )
         },
         bottomBar = {
-            if (state.isSpaceFeatureEnabled) {
+            if (state.showNavigationBar) {
                 NavigationBar(
                     containerColor = Color.Transparent,
                     modifier = Modifier
@@ -272,7 +272,7 @@ private fun HomeScaffold(
                             .hazeSource(state = hazeState),
                         state = state.homeSpacesState,
                         onSpaceClick = { spaceId ->
-                            // TODO
+                            onRoomClick(spaceId)
                         }
                     )
                 }
