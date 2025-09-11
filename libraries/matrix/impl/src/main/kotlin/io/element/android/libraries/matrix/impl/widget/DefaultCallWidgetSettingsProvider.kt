@@ -52,6 +52,7 @@ class DefaultCallWidgetSettingsProvider(
             preload = null,
             appPrompt = false,
             confineToRoom = true,
+            // TODO We probably want to provide different values for this field.
             intent = CallIntent.START_CALL,
             hideScreensharing = false,
             // For backwards compatibility, it'll be ignored in recent versions of Element Call
