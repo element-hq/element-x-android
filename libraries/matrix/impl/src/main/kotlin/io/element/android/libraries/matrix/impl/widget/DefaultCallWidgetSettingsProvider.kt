@@ -21,7 +21,8 @@ import org.matrix.rustcomponents.sdk.newVirtualElementCallWidget
 import uniffi.matrix_sdk.EncryptionSystem
 import uniffi.matrix_sdk.HeaderStyle
 import uniffi.matrix_sdk.NotificationType
-import uniffi.matrix_sdk.VirtualElementCallWidgetOptions
+import uniffi.matrix_sdk.VirtualElementCallWidgetConfig
+import uniffi.matrix_sdk.VirtualElementCallWidgetProperties
 import uniffi.matrix_sdk.Intent as CallIntent
 
 @ContributesBinding(AppScope::class)
@@ -33,17 +34,12 @@ class DefaultCallWidgetSettingsProvider(
 ) : CallWidgetSettingsProvider {
     override suspend fun provide(baseUrl: String, widgetId: String, encrypted: Boolean, direct: Boolean): MatrixWidgetSettings {
         val isAnalyticsEnabled = analyticsService.userConsentFlow.first()
-        val options = VirtualElementCallWidgetOptions(
+        val properties = VirtualElementCallWidgetProperties(
             elementCallUrl = baseUrl,
             widgetId = widgetId,
-            preload = null,
             fontScale = null,
-            appPrompt = false,
-            confineToRoom = true,
             font = null,
             encryption = if (encrypted) EncryptionSystem.PerParticipantKeys else EncryptionSystem.Unencrypted,
-            intent = CallIntent.START_CALL,
-            hideScreensharing = false,
             posthogUserId = callAnalyticsCredentialsProvider.posthogUserId.takeIf { isAnalyticsEnabled },
             posthogApiHost = callAnalyticsCredentialsProvider.posthogApiHost.takeIf { isAnalyticsEnabled },
             posthogApiKey = callAnalyticsCredentialsProvider.posthogApiKey.takeIf { isAnalyticsEnabled },
@@ -51,13 +47,24 @@ class DefaultCallWidgetSettingsProvider(
             sentryDsn = callAnalyticsCredentialsProvider.sentryDsn.takeIf { isAnalyticsEnabled },
             sentryEnvironment = if (buildMeta.buildType == BuildType.RELEASE) "RELEASE" else "DEBUG",
             parentUrl = null,
+        )
+        val config = VirtualElementCallWidgetConfig(
+            preload = null,
+            appPrompt = false,
+            confineToRoom = true,
+            intent = CallIntent.START_CALL,
+            hideScreensharing = false,
             // For backwards compatibility, it'll be ignored in recent versions of Element Call
             hideHeader = true,
-            controlledMediaDevices = true,
+            controlledAudioDevices = true,
             header = HeaderStyle.APP_BAR,
             sendNotificationType = if (direct) NotificationType.RING else NotificationType.NOTIFICATION,
+            skipLobby = null,
         )
-        val rustWidgetSettings = newVirtualElementCallWidget(options)
+        val rustWidgetSettings = newVirtualElementCallWidget(
+            props = properties,
+            config = config,
+        )
         return MatrixWidgetSettings.fromRustWidgetSettings(rustWidgetSettings)
     }
 }
