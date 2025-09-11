@@ -290,7 +290,8 @@ class DefaultActiveCallManager(
                         // (we are ringing for an incoming call in a DM)
                         decliner == client.sessionId
                     }
-            }.onEach { decliner ->
+            }
+            .onEach { decliner ->
                 Timber.tag(tag).d("Call: $activeCall was declined by from another session")
                 // decline
                 activeCall.value = null
