@@ -180,20 +180,21 @@ class DefaultActiveCallManager(
     }
 
     override suspend fun hungUpCall(callType: CallType) = mutex.withLock {
-        if (activeCall.value?.callType != callType) {
+        Timber.tag(tag).d("Hung up call: $callType")
+        val currentActiveCall = activeCall.value ?: run {
+            Timber.tag(tag).w("No active call, ignoring hang up")
+            return
+        }
+        if (currentActiveCall.callType != callType) {
             Timber.tag(tag).w("Call type $callType does not match the active call type, ignoring")
             return
         }
-
-        Timber.tag(tag).d("Hung up call: $callType")
-        if (activeCall.value?.callState is CallState.Ringing) {
-            val ringing = activeCall.value!!.callState as CallState.Ringing
+        if (currentActiveCall.callState is CallState.Ringing) {
             // Decline the call
-            matrixClientProvider.getOrRestore(ringing.notificationData.sessionId).getOrNull()?.let { client ->
-                client.getRoom(ringing.notificationData.roomId)?.let { room ->
-                    room.declineCall(ringing.notificationData.eventId)
-                }
-            }
+            val notificationData = currentActiveCall.callState.notificationData
+            matrixClientProvider.getOrRestore(notificationData.sessionId).getOrNull()
+                ?.getRoom(notificationData.roomId)
+                ?.declineCall(notificationData.eventId)
         }
 
         cancelIncomingCallNotification()
