@@ -79,9 +79,9 @@ class ContributesNodeProcessor(
         )
             .addType(
                 TypeSpec.interfaceBuilder(moduleClassName)
-                    .addAnnotation(AnnotationSpec.builder(Origin::class).addMember("%T::class", nodeClassName).build())
+                    .addAnnotation(AnnotationSpec.builder(Origin::class).addMember(CLASS_PLACEHOLDER, nodeClassName).build())
                     .addAnnotation(BindingContainer::class)
-                    .addAnnotation(AnnotationSpec.builder(ContributesTo::class).addMember("%T::class", scope.toTypeName()).build())
+                    .addAnnotation(AnnotationSpec.builder(ContributesTo::class).addMember(CLASS_PLACEHOLDER, scope.toTypeName()).build())
                     .addFunction(
                         FunSpec.builder("bind${ksClass.simpleName.asString()}Factory")
                             .addModifiers(KModifier.ABSTRACT)
@@ -91,7 +91,7 @@ class ContributesNodeProcessor(
                             .addAnnotation(IntoMap::class)
                             .addAnnotation(
                                 AnnotationSpec.Companion.builder(ClassName.bestGuess(nodeKeyFqName.asString())).addMember(
-                                    "%T::class",
+                                    CLASS_PLACEHOLDER,
                                     ClassName.bestGuess(ksClass.qualifiedName!!.asString())
                                 ).build()
                             )
@@ -165,6 +165,7 @@ class ContributesNodeProcessor(
     }
 
     companion object {
+        private const val CLASS_PLACEHOLDER = "%T::class"
         private val assistedNodeFactoryFqName = FqName("io.element.android.libraries.architecture.AssistedNodeFactory")
         private val nodeKeyFqName = FqName("io.element.android.libraries.architecture.NodeKey")
     }
