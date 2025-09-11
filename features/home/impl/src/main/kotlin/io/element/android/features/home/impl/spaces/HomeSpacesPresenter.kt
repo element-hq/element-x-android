@@ -13,10 +13,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.seenSpaceIds
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.map
@@ -28,15 +27,10 @@ class HomeSpacesPresenter(
 ) : Presenter<HomeSpacesState> {
     @Composable
     override fun present(): HomeSpacesState {
-        val hideInvitesAvatar by remember {
-            client
-                .mediaPreviewService()
-                .mediaPreviewConfigFlow
-                .mapState { config -> config.hideInviteAvatar }
-        }.collectAsState()
-        val spaceRooms by client.spaceService.spaceRooms.collectAsState(emptyList())
+        val hideInvitesAvatar by client.rememberHideInvitesAvatar()
+        val spaceRooms by client.spaceService.spaceRoomsFlow.collectAsState(emptyList())
         val seenSpaceInvites by remember {
-            seenInvitesStore.seenSpaceIds().map { it.toPersistentSet() }
+            seenInvitesStore.seenRoomIds().map { it.toPersistentSet() }
         }.collectAsState(persistentSetOf())
 
         fun handleEvents(event: HomeSpacesEvents) {
