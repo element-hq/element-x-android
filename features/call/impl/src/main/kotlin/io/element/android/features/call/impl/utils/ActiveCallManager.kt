@@ -273,7 +273,7 @@ class DefaultActiveCallManager(
                 val callType = activeCall.callType as CallType.RoomCall
                 val ringingInfo = activeCall.callState as CallState.Ringing
                 val client = matrixClientProvider.getOrRestore(callType.sessionId).getOrNull() ?: run {
-                    Timber.tag(tag).d("Couldn't find room for incoming call: $activeCall")
+                    Timber.tag(tag).d("Couldn't find session for incoming call: $activeCall")
                     return@flatMapLatest flowOf()
                 }
                 val room = client.getRoom(callType.roomId) ?: run {
@@ -281,7 +281,7 @@ class DefaultActiveCallManager(
                     return@flatMapLatest flowOf()
                 }
 
-                Timber.tag(tag).d("Found room for rining call: ${room.roomId}")
+                Timber.tag(tag).d("Found room for ringing call: ${room.roomId}")
 
                 // If we have declined from another phone we want to stop ringing.
                 room.subscribeToCallDecline(ringingInfo.notificationData.eventId)
@@ -293,11 +293,11 @@ class DefaultActiveCallManager(
                     }
             }
             .onEach { decliner ->
-                Timber.tag(tag).d("Call: $activeCall was declined by from another session")
-                // decline
+                Timber.tag(tag).d("Call: $activeCall was declined by user from another session")
+                // Remove the active call and cancel the notification
                 activeCall.value = null
                 if (activeWakeLock?.isHeld == true) {
-                    Timber.tag(tag).d("Releasing partial wakelock after timeout")
+                    Timber.tag(tag).d("Releasing partial wakelock after call declined from another session")
                     activeWakeLock.release()
                 }
                 cancelIncomingCallNotification()
