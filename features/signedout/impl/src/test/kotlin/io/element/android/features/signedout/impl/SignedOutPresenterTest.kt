@@ -12,6 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.AN_APPLICATION_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -21,8 +22,6 @@ import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-
-private const val appName = "AppName"
 
 class SignedOutPresenterTest {
     @get:Rule
@@ -40,7 +39,7 @@ class SignedOutPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.appName).isEqualTo(appName)
+            assertThat(initialState.appName).isEqualTo(AN_APPLICATION_NAME)
             assertThat(initialState.signedOutSession).isEqualTo(aSessionData)
         }
     }
@@ -73,6 +72,6 @@ internal fun createSignedOutPresenter(
     return SignedOutPresenter(
         sessionId = sessionId.value,
         sessionStore = sessionStore,
-        buildMeta = aBuildMeta(applicationName = appName),
+        buildMeta = aBuildMeta(applicationName = AN_APPLICATION_NAME),
     )
 }
