@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.space.impl
+package io.element.android.features.space.impl.root
 
 sealed interface SpaceEvents {
     data object LoadMore : SpaceEvents

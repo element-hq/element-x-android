@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.space.impl
+package io.element.android.features.space.impl.leave
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,24 +21,20 @@ import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
-class SpaceNode(
+class LeaveSpaceNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenterFactory: SpacePresenter.Factory,
+    presenterFactory: LeaveSpacePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     private val inputs: SpaceEntryPoint.Inputs = inputs()
-    private val callback = plugins.filterIsInstance<SpaceEntryPoint.Callback>().single()
     private val presenter = presenterFactory.create(inputs)
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        SpaceView(
+        LeaveSpaceView(
             state = state,
-            onBackClick = ::navigateUp,
-            onRoomClick = { spaceRoom ->
-                callback.onOpenRoom(spaceRoom.roomId, spaceRoom.via)
-            },
+            onCancel = ::navigateUp,
             modifier = modifier
         )
     }

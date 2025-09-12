@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.space.impl
+package io.element.android.features.space.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -34,7 +34,7 @@ open class SpaceStateProvider : PreviewParameterProvider<SpaceState> {
             aSpaceState(
                 hasMoreToLoad = false,
                 children = aListOfSpaceRooms()
-            )
+            ),
             // Add other states here
         )
 }
