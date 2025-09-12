@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.architecture
 
-import android.content.Context
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -22,17 +21,9 @@ inline fun <reified N : Node> Node.createNode(
     return bindings.createNode(buildContext, plugins)
 }
 
-inline fun <reified N : Node> Context.createNode(
-    buildContext: BuildContext,
-    plugins: List<Plugin> = emptyList()
-): N {
-    val bindings: NodeFactoriesBindings = bindings()
-    return bindings.createNode(buildContext, plugins)
-}
-
 inline fun <reified N : Node> NodeFactoriesBindings.createNode(
     buildContext: BuildContext,
-    plugins: List<Plugin> = emptyList()
+    plugins: List<Plugin>,
 ): N {
     val nodeClass = N::class
     val nodeFactoryMap = nodeFactories()
