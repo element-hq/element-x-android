@@ -142,7 +142,7 @@ internal fun SimpleAlertDialogContent(
                 Text(
                     text = titleText,
                     style = ElementTheme.typography.fontHeadingSmMedium,
-                    textAlign = TextAlign.Center,
+                    textAlign = if (icon != null) TextAlign.Center else TextAlign.Start,
                 )
             }
         },
@@ -505,6 +505,46 @@ internal fun DialogWithThirdButtonPreview() {
                 cancelText = "Cancel",
                 submitText = "Delete",
                 thirdButtonText = "Other",
+                onSubmitClick = {},
+            )
+        }
+    }
+}
+
+@Preview(group = PreviewGroup.Dialogs, name = "Dialog with a very long title")
+@Composable
+@Suppress("MaxLineLength")
+internal fun DialogWithVeryLongTitlePreview() {
+    ElementThemedPreview(showBackground = false) {
+        DialogPreview {
+            SimpleAlertDialogContent(
+                title = "Dialog Title that takes more than one line",
+                content = "A dialog is a type of modal window that appears in front of app content to provide critical information," +
+                    " or prompt for a decision to be made. Learn more",
+                submitText = "OK",
+                onSubmitClick = {},
+            )
+        }
+    }
+}
+
+@Preview(group = PreviewGroup.Dialogs, name = "Dialog with a very long title and icon")
+@Composable
+@Suppress("MaxLineLength")
+internal fun DialogWithVeryLongTitleAndIconPreview() {
+    ElementThemedPreview(showBackground = false) {
+        DialogPreview {
+            SimpleAlertDialogContent(
+                icon = {
+                    Icon(
+                        imageVector = CompoundIcons.NotificationsSolid(),
+                        contentDescription = null
+                    )
+                },
+                title = "Dialog Title that takes more than one line",
+                content = "A dialog is a type of modal window that appears in front of app content to provide critical information," +
+                    " or prompt for a decision to be made. Learn more",
+                submitText = "OK",
                 onSubmitClick = {},
             )
         }
