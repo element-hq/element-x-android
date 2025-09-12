@@ -19,6 +19,7 @@ import org.gradle.kotlin.dsl.closureOf
 import org.gradle.kotlin.dsl.project
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
+private fun DependencyHandlerScope.testImplementation(dependency: Any) = dependencies.add("testImplementation", dependency)
 internal fun DependencyHandler.implementation(dependency: Any) = add("implementation", dependency)
 
 // Implementation + config block
@@ -31,6 +32,21 @@ private fun DependencyHandlerScope.androidTestImplementation(dependency: Any) = 
 
 private fun DependencyHandlerScope.debugImplementation(dependency: Any) = dependencies.add("debugImplementation", dependency)
 private fun DependencyHandlerScope.releaseImplementation(dependency: Any) = dependencies.add("releaseImplementation", dependency)
+
+/**
+ * Dependencies used for unit tests.
+ */
+fun DependencyHandlerScope.testCommonDependencies(libs: LibrariesForLibs) {
+    testImplementation(libs.androidx.test.ext.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.robolectric)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
+    testImplementation(project(":tests:testutils"))
+}
 
 /**
  * Dependencies used by all the modules
