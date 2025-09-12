@@ -202,6 +202,9 @@ class HomePresenterTest {
     fun `present - NavigationBar is hidden when the last space is left`() = runTest {
         val homeSpacesPresenter = MutablePresenter(aHomeSpacesState())
         val presenter = createHomePresenter(
+            sessionStore = InMemorySessionStore(
+                updateUserProfileResult = { _, _, _ -> },
+            ),
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.Space.key to true),
             ),
