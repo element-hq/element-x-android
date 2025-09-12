@@ -22,11 +22,11 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+private val appName = "AppName"
+
 class SignedOutPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
-
-    private val appName = "AppName"
 
     @Test
     fun `present - initial state`() = runTest {
@@ -64,15 +64,15 @@ class SignedOutPresenterTest {
             assertThat(sessionStore.getAllSessions()).isEmpty()
         }
     }
+}
 
-    private fun createSignedOutPresenter(
-        sessionId: SessionId = A_SESSION_ID,
-        sessionStore: SessionStore = InMemorySessionStore(),
-    ): SignedOutPresenter {
-        return SignedOutPresenter(
-            sessionId = sessionId.value,
-            sessionStore = sessionStore,
-            buildMeta = aBuildMeta(applicationName = appName),
-        )
-    }
+internal fun createSignedOutPresenter(
+    sessionId: SessionId = A_SESSION_ID,
+    sessionStore: SessionStore = InMemorySessionStore(),
+): SignedOutPresenter {
+    return SignedOutPresenter(
+        sessionId = sessionId.value,
+        sessionStore = sessionStore,
+        buildMeta = aBuildMeta(applicationName = appName),
+    )
 }

@@ -10,7 +10,7 @@ package io.element.android.features.location.test
 import io.element.android.features.location.api.LocationService
 
 class FakeLocationService(
-    private val isServiceAvailable: Boolean,
+    private val isServiceAvailable: Boolean = false,
 ) : LocationService {
     override fun isServiceAvailable() = isServiceAvailable
 }

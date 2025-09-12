@@ -79,15 +79,15 @@ class RoomAliasHelperPresenterTest {
             assertThat(retryState.resolveState.errorOrNull()).isEqualTo(AN_EXCEPTION)
         }
     }
-
-    private fun createPresenter(
-        roomAlias: RoomAlias = A_ROOM_ALIAS,
-        matrixClient: MatrixClient = FakeMatrixClient(),
-    ) = RoomAliasResolverPresenter(
-        roomAlias = roomAlias,
-        matrixClient = matrixClient,
-    )
 }
+
+internal fun createPresenter(
+    roomAlias: RoomAlias = A_ROOM_ALIAS,
+    matrixClient: MatrixClient = FakeMatrixClient(),
+) = RoomAliasResolverPresenter(
+    roomAlias = roomAlias,
+    matrixClient = matrixClient,
+)
 
 internal fun aResolvedRoomAlias(
     roomId: RoomId = A_ROOM_ID,

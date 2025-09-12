@@ -149,9 +149,10 @@ class AccountDeactivationPresenterTest {
         }
     }
 
-    private fun createPresenter(
-        matrixClient: MatrixClient = FakeMatrixClient(),
-    ) = AccountDeactivationPresenter(
-        matrixClient = matrixClient,
-    )
 }
+
+internal fun createPresenter(
+    matrixClient: MatrixClient = FakeMatrixClient(),
+) = AccountDeactivationPresenter(
+    matrixClient = matrixClient,
+)

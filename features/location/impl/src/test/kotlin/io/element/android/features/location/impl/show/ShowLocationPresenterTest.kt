@@ -37,10 +37,10 @@ class ShowLocationPresenterTest {
         permissionsPresenterFactory = object : PermissionsPresenter.Factory {
             override fun create(permissions: List<String>): PermissionsPresenter = fakePermissionsPresenter
         },
-        fakeLocationActions,
-        fakeBuildMeta,
-        location,
-        A_DESCRIPTION,
+        locationActions = fakeLocationActions,
+        buildMeta = fakeBuildMeta,
+        location = location,
+        description = A_DESCRIPTION,
     )
 
     @Test

@@ -178,10 +178,9 @@ class PinnedMessagesBannerPresenterTest {
         ),
         syncService: SyncService = FakeSyncService(),
     ): PinnedMessagesBannerPresenter {
-        val timelineProvider = PinnedEventsTimelineProvider(
+        val timelineProvider = createPinnedEventsTimelineProvider(
             room = room,
             syncService = syncService,
-            dispatchers = testCoroutineDispatchers(),
         )
         timelineProvider.launchIn(backgroundScope)
 
@@ -192,3 +191,12 @@ class PinnedMessagesBannerPresenterTest {
         )
     }
 }
+
+internal fun TestScope.createPinnedEventsTimelineProvider(
+    room: JoinedRoom = FakeJoinedRoom(),
+    syncService: SyncService = FakeSyncService(),
+) = PinnedEventsTimelineProvider(
+    room = room,
+    syncService = syncService,
+    dispatchers = testCoroutineDispatchers(),
+)
