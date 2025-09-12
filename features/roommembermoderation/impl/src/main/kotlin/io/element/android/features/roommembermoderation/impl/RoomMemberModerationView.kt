@@ -242,7 +242,7 @@ private fun RoomMemberActionsBottomSheet(
                 )
             }
             Text(
-                text = user.userId.toString(),
+                text = user.userId.value,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textSecondary,
                 maxLines = 1,

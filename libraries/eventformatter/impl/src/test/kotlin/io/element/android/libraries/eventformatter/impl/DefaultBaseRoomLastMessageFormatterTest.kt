@@ -102,7 +102,7 @@ class DefaultBaseRoomLastMessageFormatterTest {
         val info = ImageInfo(null, null, null, null, null, null, null)
         val message = createRoomEvent(false, null, aStickerContent(body, info, aMediaSource(url = "url")))
         val result = formatter.format(message, false)
-        val expectedBody = someoneElseId.toString() + ": Sticker (a sticker body)"
+        val expectedBody = someoneElseId.value + ": Sticker (a sticker body)"
         assertThat(result.toString()).isEqualTo(expectedBody)
     }
 
