@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -52,21 +53,11 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
 
+    testCommonDependencies(libs, true)
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.mediaviewer.test)
     testImplementation(projects.services.toolbox.test)
-    testImplementation(projects.tests.testutils)
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.mockk)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.test.turbine)
     testImplementation(libs.coroutines.core)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.androidx.compose.ui.test.junit)
-    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

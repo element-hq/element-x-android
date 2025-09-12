@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -44,21 +45,12 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.biometric)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.androidx.compose.ui.test.junit)
-    testImplementation(libs.androidx.test.ext.junit)
+    testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.tests.testutils)
     testImplementation(projects.libraries.cryptography.test)
     testImplementation(projects.libraries.cryptography.impl)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.features.logout.test)
-    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

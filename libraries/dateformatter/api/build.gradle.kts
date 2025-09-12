@@ -1,3 +1,5 @@
+import extension.testCommonDependencies
+
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
@@ -13,7 +15,6 @@ android {
     namespace = "io.element.android.libraries.dateformatter.api"
 
     dependencies {
-        testImplementation(libs.test.junit)
-        testImplementation(libs.test.truth)
+        testCommonDependencies(libs)
     }
 }

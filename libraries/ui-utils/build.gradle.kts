@@ -1,3 +1,5 @@
+import extension.testCommonDependencies
+
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -16,9 +18,6 @@ android {
         implementation(projects.libraries.androidutils)
         implementation(projects.services.toolbox.impl)
 
-        testImplementation(libs.test.junit)
-        testImplementation(libs.test.truth)
-        testImplementation(libs.coroutines.test)
-        testImplementation(libs.test.truth)
+        testCommonDependencies(libs)
     }
 }

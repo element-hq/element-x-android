@@ -6,6 +6,7 @@
  */
 
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 plugins {
     id("io.element.android-compose-library")
@@ -33,15 +34,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
+    testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.tests.testutils)
-    testImplementation(libs.androidx.compose.ui.test.junit)
     testImplementation(projects.libraries.featureflag.test)
-    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

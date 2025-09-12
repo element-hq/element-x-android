@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -26,11 +27,7 @@ dependencies {
     api(projects.libraries.usersearch.api)
     implementation(libs.kotlinx.collections.immutable)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
+    testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.usersearch.test)
 }

@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -30,10 +31,7 @@ dependencies {
     api(projects.services.analytics.api)
     implementation(libs.androidx.datastore.preferences)
 
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
+    testCommonDependencies(libs)
     testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.services.analyticsproviders.test)
-    testImplementation(projects.tests.testutils)
 }
