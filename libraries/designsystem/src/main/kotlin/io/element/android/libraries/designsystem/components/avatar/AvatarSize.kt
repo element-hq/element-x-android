@@ -69,4 +69,5 @@ enum class AvatarSize(val dp: Dp) {
     OrganizationHeader(64.dp),
     SpaceHeader(64.dp),
     SpaceMember(24.dp),
+    LeaveSpaceRoom(32.dp),
 }

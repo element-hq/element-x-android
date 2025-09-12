@@ -8,6 +8,8 @@
 package io.element.android.features.space.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.space.impl.leave.LeaveSpaceBottomSheetState
+import io.element.android.features.space.impl.leave.aLeaveSpaceBottomSheetStateShown
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.previewutils.room.aSpaceRoom
@@ -26,7 +28,11 @@ open class SpaceStateProvider : PreviewParameterProvider<SpaceState> {
             aSpaceState(
                 hasMoreToLoad = false,
                 children = aListOfSpaceRooms()
-            )
+            ),
+            aSpaceState(
+                hasMoreToLoad = false,
+                leaveSpaceBottomSheetState = aLeaveSpaceBottomSheetStateShown(),
+            ),
             // Add other states here
         )
 }
@@ -42,12 +48,14 @@ fun aSpaceState(
     seenSpaceInvites: Set<RoomId> = emptySet(),
     hideInvitesAvatar: Boolean = false,
     hasMoreToLoad: Boolean = false,
+    leaveSpaceBottomSheetState: LeaveSpaceBottomSheetState = LeaveSpaceBottomSheetState.Hidden,
 ) = SpaceState(
     currentSpace = parentSpace,
     children = children.toImmutableList(),
     seenSpaceInvites = seenSpaceInvites.toImmutableSet(),
     hideInvitesAvatar = hideInvitesAvatar,
     hasMoreToLoad = hasMoreToLoad,
+    leaveSpaceBottomSheetState = leaveSpaceBottomSheetState,
     eventSink = {}
 )
 
