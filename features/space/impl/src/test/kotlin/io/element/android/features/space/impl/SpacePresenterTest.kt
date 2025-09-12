@@ -13,10 +13,13 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.space.api.SpaceEntryPoint
+import io.element.android.features.space.impl.leave.LeaveSpaceBottomSheetState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceRoomList
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
 import io.element.android.libraries.previewutils.room.aSpaceRoom
@@ -51,6 +54,7 @@ class SpacePresenterTest {
             assertThat(state.seenSpaceInvites).isEmpty()
             assertThat(state.hideInvitesAvatar).isFalse()
             assertThat(state.hasMoreToLoad).isTrue()
+            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
             advanceUntilIdle()
             paginateResult.assertions().isCalledOnce()
         }
@@ -150,6 +154,80 @@ class SpacePresenterTest {
             val aSpace = aSpaceRoom()
             fakeSpaceRoomList.emitSpaceRooms(listOf(aSpace))
             assertThat(awaitItem().children).containsExactly(aSpace)
+        }
+    }
+
+    @Test
+    fun `present - leave space and cancel`() = runTest {
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) },
+        )
+        val presenter = createSpacePresenter(
+            client = FakeMatrixClient(
+                spaceService = FakeSpaceService(
+                    spaceRoomListResult = { fakeSpaceRoomList },
+                ),
+            ),
+        )
+        presenter.test {
+            val state = awaitItem()
+            advanceUntilIdle()
+            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
+            state.eventSink(SpaceEvents.StartLeaveSpace)
+            val stateAfterStarting = awaitItem()
+            assertThat(stateAfterStarting.leaveSpaceBottomSheetState).isInstanceOf(LeaveSpaceBottomSheetState.Shown::class.java)
+            val shown = stateAfterStarting.leaveSpaceBottomSheetState as LeaveSpaceBottomSheetState.Shown
+            assertThat(shown.spaceName).isNull()
+            assertThat(shown.roomsWhereUserIsTheOnlyAdmin).isInstanceOf(AsyncData.Loading::class.java)
+            val stateAfterLoading = awaitItem()
+            val shownLoaded = stateAfterLoading.leaveSpaceBottomSheetState as LeaveSpaceBottomSheetState.Shown
+            assertThat(shownLoaded.roomsWhereUserIsTheOnlyAdmin.dataOrNull()!!).isEmpty()
+            stateAfterLoading.eventSink(SpaceEvents.CancelLeaveSpace)
+            val stateAfterCancel = awaitItem()
+            assertThat(stateAfterCancel.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
+        }
+    }
+
+    @Test
+    fun `present - leave space and confirm`() = runTest {
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) },
+        )
+        val leaveRoomLambda = lambdaRecorder<Result<Unit>> {
+            Result.success(Unit)
+        }
+        val presenter = createSpacePresenter(
+            client = FakeMatrixClient(
+                spaceService = FakeSpaceService(
+                    spaceRoomListResult = { fakeSpaceRoomList },
+                ),
+            ).apply {
+                givenGetRoomResult(
+                    roomId = A_ROOM_ID,
+                    result = FakeBaseRoom(
+                        leaveRoomLambda = leaveRoomLambda,
+                    )
+                )
+            },
+        )
+        presenter.test {
+            val state = awaitItem()
+            advanceUntilIdle()
+            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
+            state.eventSink(SpaceEvents.StartLeaveSpace)
+            val stateAfterStarting = awaitItem()
+            assertThat(stateAfterStarting.leaveSpaceBottomSheetState).isInstanceOf(LeaveSpaceBottomSheetState.Shown::class.java)
+            val shown = stateAfterStarting.leaveSpaceBottomSheetState as LeaveSpaceBottomSheetState.Shown
+            assertThat(shown.spaceName).isNull()
+            assertThat(shown.roomsWhereUserIsTheOnlyAdmin).isInstanceOf(AsyncData.Loading::class.java)
+            val stateAfterLoading = awaitItem()
+            val shownLoaded = stateAfterLoading.leaveSpaceBottomSheetState as LeaveSpaceBottomSheetState.Shown
+            assertThat(shownLoaded.roomsWhereUserIsTheOnlyAdmin.dataOrNull()!!).isEmpty()
+            stateAfterLoading.eventSink(SpaceEvents.LeaveSpace)
+            val stateAfterCancel = awaitItem()
+            assertThat(stateAfterCancel.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
+            advanceUntilIdle()
+            leaveRoomLambda.assertions().isCalledOnce()
         }
     }
 
