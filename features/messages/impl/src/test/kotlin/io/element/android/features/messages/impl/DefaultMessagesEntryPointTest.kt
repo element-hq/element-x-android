@@ -118,4 +118,12 @@ class DefaultMessagesEntryPointTest {
         assertThat(result.plugins).contains(MessagesEntryPoint.Params(initialTarget))
         assertThat(result.plugins).contains(callback)
     }
+
+    @Test
+    fun `test initial target to nav target mapping`() {
+        assertThat(MessagesEntryPoint.InitialTarget.Messages(focusedEventId = AN_EVENT_ID).toNavTarget())
+            .isEqualTo(MessagesFlowNode.NavTarget.Messages(AN_EVENT_ID))
+        assertThat(MessagesEntryPoint.InitialTarget.PinnedMessages.toNavTarget())
+            .isEqualTo(MessagesFlowNode.NavTarget.PinnedMessagesList)
+    }
 }

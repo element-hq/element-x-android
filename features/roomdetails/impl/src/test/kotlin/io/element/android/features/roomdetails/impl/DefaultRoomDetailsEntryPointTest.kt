@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
@@ -101,5 +102,15 @@ class DefaultRoomDetailsEntryPointTest {
         assertThat(result).isInstanceOf(RoomDetailsFlowNode::class.java)
         assertThat(result.plugins).contains(params)
         assertThat(result.plugins).contains(callback)
+    }
+
+    @Test
+    fun `test initial target to nav target mapping`() {
+        assertThat(RoomDetailsEntryPoint.InitialTarget.RoomDetails.toNavTarget())
+            .isEqualTo(RoomDetailsFlowNode.NavTarget.RoomDetails)
+        assertThat(RoomDetailsEntryPoint.InitialTarget.RoomMemberDetails(A_USER_ID).toNavTarget())
+            .isEqualTo(RoomDetailsFlowNode.NavTarget.RoomMemberDetails(A_USER_ID))
+        assertThat(RoomDetailsEntryPoint.InitialTarget.RoomNotificationSettings.toNavTarget())
+            .isEqualTo(RoomDetailsFlowNode.NavTarget.RoomNotificationSettings(showUserDefinedSettingStyle = true))
     }
 }

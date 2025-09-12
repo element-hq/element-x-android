@@ -74,4 +74,11 @@ class DefaultPreferencesEntryPointTest {
         assertThat(result.plugins).contains(params)
         assertThat(result.plugins).contains(callback)
     }
+
+    @Test
+    fun `test initial target to nav target mapping`() {
+        assertThat(PreferencesEntryPoint.InitialTarget.Root.toNavTarget()).isEqualTo(PreferencesFlowNode.NavTarget.Root)
+        assertThat(PreferencesEntryPoint.InitialTarget.NotificationSettings.toNavTarget()).isEqualTo(PreferencesFlowNode.NavTarget.NotificationSettings)
+        assertThat(PreferencesEntryPoint.InitialTarget.NotificationTroubleshoot.toNavTarget()).isEqualTo(PreferencesFlowNode.NavTarget.TroubleshootNotifications)
+    }
 }
