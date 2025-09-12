@@ -518,7 +518,7 @@ internal fun DialogWithVeryLongTitlePreview() {
     ElementThemedPreview(showBackground = false) {
         DialogPreview {
             SimpleAlertDialogContent(
-                title = "Dialog Title that takes more than one line to be displayed",
+                title = "Dialog Title that takes more than one line",
                 content = "A dialog is a type of modal window that appears in front of app content to provide critical information," +
                     " or prompt for a decision to be made. Learn more",
                 submitText = "OK",
@@ -541,7 +541,7 @@ internal fun DialogWithVeryLongTitleAndIconPreview() {
                         contentDescription = null
                     )
                 },
-                title = "Dialog Title that takes more than one line to be displayed",
+                title = "Dialog Title that takes more than one line",
                 content = "A dialog is a type of modal window that appears in front of app content to provide critical information," +
                     " or prompt for a decision to be made. Learn more",
                 submitText = "OK",
