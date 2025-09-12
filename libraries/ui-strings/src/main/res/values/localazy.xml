@@ -185,6 +185,7 @@
   <string name="common_creating_room">"Creating room…"</string>
   <string name="common_current_user_canceled_knock">"Request canceled"</string>
   <string name="common_current_user_left_room">"Left room"</string>
+  <string name="common_current_user_left_space">"Left space"</string>
   <string name="common_current_user_rejected_invite">"Invite declined"</string>
   <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>

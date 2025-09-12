@@ -138,7 +138,7 @@ class RoomFlowNode(
 
         // This observes the local membership changes for the room
         val membershipUpdateFlow = membershipObserver.updates
-            .filter { it.roomId == roomId }
+            .filter { it.roomInfo.id == roomId }
             .distinctUntilChanged()
             // We add a replay so we can check the last local membership update
             .shareIn(lifecycleScope, started = SharingStarted.Eagerly, replay = 1)
