@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -26,12 +27,7 @@ dependencies {
 
     implementation(libs.coroutines.core)
 
-    testImplementation(projects.tests.testutils)
+    testCommonDependencies(libs)
     testImplementation(projects.libraries.audio.test)
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.mockk)
-    testImplementation(libs.test.turbine)
     testImplementation(libs.coroutines.core)
-    testImplementation(libs.coroutines.test)
 }
