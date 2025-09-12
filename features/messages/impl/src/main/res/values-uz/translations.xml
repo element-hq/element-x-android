@@ -4,13 +4,15 @@
   <string name="emoji_picker_category_flags">"Bayroqlar"</string>
   <string name="emoji_picker_category_foods">"Oziq-ovqat va ichimliklar"</string>
   <string name="emoji_picker_category_nature">"Hayvonlar va tabiat"</string>
-  <string name="emoji_picker_category_objects">"Ob\'ektlar"</string>
+  <string name="emoji_picker_category_objects">"Obʻektlar"</string>
   <string name="emoji_picker_category_people">"Smayllar va odamlar"</string>
   <string name="emoji_picker_category_places">"Sayohat va Joylar"</string>
   <string name="emoji_picker_category_symbols">"Belgilar"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Mediani yuklab bo‘lmadi, qayta urinib ko‘ring."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Media yuklanmadi, qayta urinib ko‘ring."</string>
   <string name="screen_report_content_block_user">"Foydalanuvchini bloklash"</string>
   <string name="screen_report_content_block_user_hint">"Ushbu foydalanuvchidan barcha joriy va kelajakdagi xabarlarni yashirishni xohlayotganingizni tekshiring"</string>
-  <string name="screen_report_content_explanation">"Bu xabar uy serveringiz administratoriga xabar qilinadi. Ular hech qanday shifrlangan xabarlarni o\'qiy olmaydi."</string>
+  <string name="screen_report_content_explanation">"Bu xabar uy serveringiz administratoriga xabar qilinadi. Ular hech qanday shifrlangan xabarlarni oʻqiy olmaydi."</string>
   <string name="screen_report_content_hint">"Ushbu kontent haqida xabar berish sababi"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Rasmga olmoq"</string>
@@ -18,25 +20,36 @@
   <string name="screen_room_attachment_source_files">"Biriktirma"</string>
   <string name="screen_room_attachment_source_gallery">"Fotosurat va video kutubxonasi"</string>
   <string name="screen_room_attachment_source_location">"Joylashuv"</string>
-  <string name="screen_room_attachment_source_poll">"So\'ro\'vnoma"</string>
+  <string name="screen_room_attachment_source_poll">"Soʻroʻvnoma"</string>
   <string name="screen_room_attachment_text_formatting">"Matnni formatlash"</string>
   <string name="screen_room_encrypted_history_banner">"Xabarlar tarixi hozirda mavjud emas."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Xabar tarixi ushbu xonada mavjud emas. Xabar tarixini koʻrish uchun ushbu qurilmani tasdiqlang."</string>
   <string name="screen_room_invite_again_alert_message">"Ularni yana taklif qilmoqchimisiz?"</string>
-  <string name="screen_room_invite_again_alert_title">"Siz bu chatda yolg\'izsiz"</string>
+  <string name="screen_room_invite_again_alert_title">"Siz bu chatda yolgʻizsiz"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Butun xonani xabardor qiling"</string>
   <string name="screen_room_mentions_at_room_title">"Har kim"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Yana yuboring"</string>
   <string name="screen_room_retry_send_menu_title">"Xabaringiz yuborilmadi"</string>
-  <string name="screen_room_timeline_add_reaction">"Emoji qo\'shmoq"</string>
+  <string name="screen_room_timeline_add_reaction">"Emoji qoʻshmoq"</string>
   <string name="screen_room_timeline_beginning_of_room">"Bu %1$sni boshlanishi"</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Bu suhbatning boshlanishi."</string>
-  <string name="screen_room_timeline_less_reactions">"Kamroq ko\'rsatish"</string>
+  <string name="screen_room_timeline_less_reactions">"Kamroq koʻrsatish"</string>
   <string name="screen_room_timeline_message_copied">"Xabar nusxalandi"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Sizda bu xonaga post yozishga ruxsat yo‘q"</string>
-  <string name="screen_room_timeline_reactions_show_less">"Kamroq ko\'rsatish"</string>
-  <string name="screen_room_timeline_reactions_show_more">"Ko\'proq ko\'rsatish"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Kamroq koʻrsatish"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Koʻproq koʻrsatish"</string>
   <string name="screen_room_timeline_read_marker_title">"Yangi"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$dxonani almashtirish"</item>
-    <item quantity="other">"%1$dxona o\'zgarishi"</item>
+    <item quantity="other">"%1$dxona oʻzgarishi"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s va %3$d boshqalar"</item>
+    <item quantity="other">"%1$s, %2$s va %3$d boshqalar"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%s yozmoqda…"</item>
+    <item quantity="other">"%s yozmoqda…"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s va %2$s"</string>
 </resources>
