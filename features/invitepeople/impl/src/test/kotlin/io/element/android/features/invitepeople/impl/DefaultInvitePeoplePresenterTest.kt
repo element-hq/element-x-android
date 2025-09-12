@@ -10,6 +10,7 @@ package io.element.android.features.invitepeople.impl
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -409,10 +410,23 @@ internal class DefaultInvitePeoplePresenterTest {
             assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             // Send invites
             initialState.eventSink(InvitePeopleEvents.SendInvites)
+
+            // Can't invite in the loading state
+            awaitItem().run {
+                assertThat(sendInvitesAction.isLoading()).isTrue()
+                assertThat(canInvite).isFalse()
+            }
+
             delay(1_000)
             inviteUserResult.assertions().isCalledOnce().with(
                 value(selectedUser.userId)
             )
+
+            // Can invite again once the action is finished
+            awaitItem().run {
+                assertThat(sendInvitesAction.isReady()).isTrue()
+                assertThat(canInvite).isTrue()
+            }
         }
     }
 
@@ -445,6 +459,13 @@ internal class DefaultInvitePeoplePresenterTest {
             assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             // Send invites
             initialState.eventSink(InvitePeopleEvents.SendInvites)
+
+            // Can't invite in the loading state
+            awaitItem().run {
+                assertThat(sendInvitesAction.isLoading()).isTrue()
+                assertThat(canInvite).isFalse()
+            }
+
             delay(1_000)
             inviteUserResult.assertions().isCalledOnce().with(
                 value(selectedUser.userId)
@@ -455,6 +476,12 @@ internal class DefaultInvitePeoplePresenterTest {
                     value(CommonStrings.common_unable_to_invite_title),
                     value(CommonStrings.common_unable_to_invite_message)
                 )
+
+            // Can invite again once the action is finished
+            awaitItem().run {
+                assertThat(sendInvitesAction.isReady()).isTrue()
+                assertThat(canInvite).isTrue()
+            }
         }
     }
 
