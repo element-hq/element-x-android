@@ -28,14 +28,14 @@ import io.element.android.libraries.core.meta.BuildMeta
 
 @Inject
 class ShowLocationPresenter(
+    @Assisted private val location: Location,
+    @Assisted private val description: String?,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
-    @Assisted private val location: Location,
-    @Assisted private val description: String?
 ) : Presenter<ShowLocationState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(location: Location, description: String?): ShowLocationPresenter
     }
 

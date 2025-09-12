@@ -1042,39 +1042,6 @@ class JoinRoomPresenterTest {
         }
     }
 
-    private fun createJoinRoomPresenter(
-        roomId: RoomId = A_ROOM_ID,
-        roomDescription: Optional<RoomDescription> = Optional.empty(),
-        serverNames: List<String> = emptyList(),
-        trigger: JoinedRoom.Trigger = JoinedRoom.Trigger.Invite,
-        matrixClient: MatrixClient = FakeMatrixClient(),
-        joinRoomLambda: (RoomIdOrAlias, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
-            Result.success(Unit)
-        },
-        knockRoom: KnockRoom = FakeKnockRoom(),
-        cancelKnockRoom: CancelKnockRoom = FakeCancelKnockRoom(),
-        forgetRoom: ForgetRoom = FakeForgetRoom(),
-        buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
-        acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
-        seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
-    ): JoinRoomPresenter {
-        return JoinRoomPresenter(
-            roomId = roomId,
-            roomIdOrAlias = roomId.toRoomIdOrAlias(),
-            roomDescription = roomDescription,
-            serverNames = serverNames,
-            trigger = trigger,
-            matrixClient = matrixClient,
-            joinRoom = FakeJoinRoom(joinRoomLambda),
-            knockRoom = knockRoom,
-            cancelKnockRoom = cancelKnockRoom,
-            forgetRoom = forgetRoom,
-            buildMeta = buildMeta,
-            acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
-            seenInvitesStore = seenInvitesStore,
-        )
-    }
-
     private fun aRoomDescription(
         roomId: RoomId = A_ROOM_ID,
         name: String? = A_ROOM_NAME,
@@ -1094,4 +1061,37 @@ class JoinRoomPresenterTest {
             numberOfMembers = numberOfMembers
         )
     }
+}
+
+internal fun createJoinRoomPresenter(
+    roomId: RoomId = A_ROOM_ID,
+    roomDescription: Optional<RoomDescription> = Optional.empty(),
+    serverNames: List<String> = emptyList(),
+    trigger: JoinedRoom.Trigger = JoinedRoom.Trigger.Invite,
+    matrixClient: MatrixClient = FakeMatrixClient(),
+    joinRoomLambda: (RoomIdOrAlias, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
+        Result.success(Unit)
+    },
+    knockRoom: KnockRoom = FakeKnockRoom(),
+    cancelKnockRoom: CancelKnockRoom = FakeCancelKnockRoom(),
+    forgetRoom: ForgetRoom = FakeForgetRoom(),
+    buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
+    acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
+    seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
+): JoinRoomPresenter {
+    return JoinRoomPresenter(
+        roomId = roomId,
+        roomIdOrAlias = roomId.toRoomIdOrAlias(),
+        roomDescription = roomDescription,
+        serverNames = serverNames,
+        trigger = trigger,
+        matrixClient = matrixClient,
+        joinRoom = FakeJoinRoom(joinRoomLambda),
+        knockRoom = knockRoom,
+        cancelKnockRoom = cancelKnockRoom,
+        forgetRoom = forgetRoom,
+        buildMeta = buildMeta,
+        acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
+        seenInvitesStore = seenInvitesStore,
+    )
 }

@@ -286,19 +286,19 @@ class KnockRequestsListPresenterTest {
         assert(acceptFailureLambda).isCalledOnce()
         assert(acceptSuccessLambda).isCalledOnce()
     }
+}
 
-    private fun TestScope.createKnockRequestsListPresenter(
-        canAccept: Boolean = true,
-        canDecline: Boolean = true,
-        canBan: Boolean = true,
-        knockRequestsFlow: Flow<List<KnockRequest>> = flowOf(emptyList())
-    ): KnockRequestsListPresenter {
-        val knockRequestsService = KnockRequestsService(
-            knockRequestsFlow = knockRequestsFlow,
-            coroutineScope = backgroundScope,
-            isKnockFeatureEnabledFlow = flowOf(true),
-            permissionsFlow = flowOf(KnockRequestPermissions(canAccept, canDecline, canBan)),
-        )
-        return KnockRequestsListPresenter(knockRequestsService = knockRequestsService)
-    }
+internal fun TestScope.createKnockRequestsListPresenter(
+    canAccept: Boolean = true,
+    canDecline: Boolean = true,
+    canBan: Boolean = true,
+    knockRequestsFlow: Flow<List<KnockRequest>> = flowOf(emptyList())
+): KnockRequestsListPresenter {
+    val knockRequestsService = KnockRequestsService(
+        knockRequestsFlow = knockRequestsFlow,
+        coroutineScope = backgroundScope,
+        isKnockFeatureEnabledFlow = flowOf(true),
+        permissionsFlow = flowOf(KnockRequestPermissions(canAccept, canDecline, canBan)),
+    )
+    return KnockRequestsListPresenter(knockRequestsService = knockRequestsService)
 }

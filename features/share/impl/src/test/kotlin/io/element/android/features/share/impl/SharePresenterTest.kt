@@ -158,23 +158,23 @@ class SharePresenterTest {
             sendFileResult.assertions().isCalledOnce()
         }
     }
+}
 
-    private fun TestScope.createSharePresenter(
-        intent: Intent = Intent(),
-        shareIntentHandler: ShareIntentHandler = FakeShareIntentHandler(),
-        matrixClient: MatrixClient = FakeMatrixClient(),
-        mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
-        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
-        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
-    ): SharePresenter {
-        return SharePresenter(
-            intent = intent,
-            sessionCoroutineScope = this,
-            shareIntentHandler = shareIntentHandler,
-            matrixClient = matrixClient,
-            mediaPreProcessor = mediaPreProcessor,
-            activeRoomsHolder = activeRoomsHolder,
-            mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
-        )
-    }
+internal fun TestScope.createSharePresenter(
+    intent: Intent = Intent(),
+    shareIntentHandler: ShareIntentHandler = FakeShareIntentHandler(),
+    matrixClient: MatrixClient = FakeMatrixClient(),
+    mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
+    activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
+    mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+): SharePresenter {
+    return SharePresenter(
+        intent = intent,
+        sessionCoroutineScope = this,
+        shareIntentHandler = shareIntentHandler,
+        matrixClient = matrixClient,
+        mediaPreProcessor = mediaPreProcessor,
+        activeRoomsHolder = activeRoomsHolder,
+        mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
+    )
 }

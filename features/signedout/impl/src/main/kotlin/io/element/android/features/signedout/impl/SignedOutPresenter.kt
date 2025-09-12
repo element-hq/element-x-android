@@ -29,7 +29,7 @@ class SignedOutPresenter(
     private val buildMeta: BuildMeta,
 ) : Presenter<SignedOutState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(sessionId: String): SignedOutPresenter
     }
 

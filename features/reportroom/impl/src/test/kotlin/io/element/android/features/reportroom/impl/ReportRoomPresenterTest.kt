@@ -141,11 +141,11 @@ class ReportRoomPresenterTest {
                 )
         }
     }
+}
 
-    fun createReportRoomPresenter(
-        roomId: RoomId = A_ROOM_ID,
-        reportRoom: ReportRoom = FakeReportRoom()
-    ): ReportRoomPresenter {
-        return ReportRoomPresenter(roomId, reportRoom)
-    }
+internal fun createReportRoomPresenter(
+    roomId: RoomId = A_ROOM_ID,
+    reportRoom: ReportRoom = FakeReportRoom()
+): ReportRoomPresenter {
+    return ReportRoomPresenter(roomId, reportRoom)
 }

@@ -12,6 +12,6 @@ import com.bumble.appyx.core.node.Node
 import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.architecture.FeatureEntryPoint
 
-interface DeclineInviteAndBlockEntryPoint : FeatureEntryPoint {
+fun interface DeclineInviteAndBlockEntryPoint : FeatureEntryPoint {
     fun createNode(parentNode: Node, buildContext: BuildContext, inviteData: InviteData): Node
 }

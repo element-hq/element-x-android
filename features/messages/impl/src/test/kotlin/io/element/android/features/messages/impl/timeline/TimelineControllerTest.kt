@@ -217,3 +217,13 @@ class TimelineControllerTest {
         }
     }
 }
+
+internal fun createTimelineController(
+    room: FakeJoinedRoom = FakeJoinedRoom(liveTimeline = FakeTimeline()),
+    liveTimeline: Timeline = FakeTimeline(name = "live"),
+): TimelineController {
+    return TimelineController(
+        room = room,
+        liveTimeline = liveTimeline
+    )
+}

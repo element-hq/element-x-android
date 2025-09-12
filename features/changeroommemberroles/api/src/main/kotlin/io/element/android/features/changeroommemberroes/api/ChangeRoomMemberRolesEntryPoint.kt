@@ -14,7 +14,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
-interface ChangeRoomMemberRolesEntryPoint : FeatureEntryPoint {
+fun interface ChangeRoomMemberRolesEntryPoint : FeatureEntryPoint {
     fun builder(parentNode: Node, buildContext: BuildContext): Builder
 
     interface Builder {

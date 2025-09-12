@@ -9,4 +9,4 @@ package io.element.android.features.analytics.api
 
 import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
 
-interface AnalyticsEntryPoint : SimpleFeatureEntryPoint
+fun interface AnalyticsEntryPoint : SimpleFeatureEntryPoint

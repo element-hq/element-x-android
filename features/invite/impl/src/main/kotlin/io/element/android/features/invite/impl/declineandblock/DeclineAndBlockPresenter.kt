@@ -35,7 +35,7 @@ class DeclineAndBlockPresenter(
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<DeclineAndBlockState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(inviteData: InviteData): DeclineAndBlockPresenter
     }
 

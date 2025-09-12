@@ -25,7 +25,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class DefaultSpaceEntryPointTest {
     @Test
-    fun `test DefaultSpaceEntryPoint`() {
+    fun `test node builder`() {
         val entryPoint = DefaultSpaceEntryPoint()
         val nodeInputs = SpaceEntryPoint.Inputs(A_ROOM_ID)
         val parentNode = TestParentNode.create { buildContext, plugins ->

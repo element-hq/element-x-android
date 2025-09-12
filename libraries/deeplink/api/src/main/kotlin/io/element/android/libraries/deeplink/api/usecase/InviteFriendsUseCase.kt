@@ -9,6 +9,6 @@ package io.element.android.libraries.deeplink.api.usecase
 
 import android.app.Activity
 
-interface InviteFriendsUseCase {
+fun interface InviteFriendsUseCase {
     fun execute(activity: Activity)
 }

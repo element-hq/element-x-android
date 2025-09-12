@@ -175,24 +175,24 @@ class HomePresenterTest {
             assertThat(finalState.showNavigationBar).isFalse()
         }
     }
-
-    private fun createHomePresenter(
-        client: MatrixClient = FakeMatrixClient(),
-        syncService: SyncService = FakeSyncService(),
-        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
-        rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { flowOf(false) },
-        indicatorService: IndicatorService = FakeIndicatorService(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
-        homeSpacesPresenter: Presenter<HomeSpacesState> = Presenter { aHomeSpacesState() },
-    ) = HomePresenter(
-        client = client,
-        syncService = syncService,
-        snackbarDispatcher = snackbarDispatcher,
-        indicatorService = indicatorService,
-        logoutPresenter = { aDirectLogoutState() },
-        roomListPresenter = { aRoomListState() },
-        homeSpacesPresenter = homeSpacesPresenter,
-        rageshakeFeatureAvailability = rageshakeFeatureAvailability,
-        featureFlagService = featureFlagService,
-    )
 }
+
+internal fun createHomePresenter(
+    client: MatrixClient = FakeMatrixClient(),
+    syncService: SyncService = FakeSyncService(),
+    snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
+    rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { flowOf(false) },
+    indicatorService: IndicatorService = FakeIndicatorService(),
+    featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+    homeSpacesPresenter: Presenter<HomeSpacesState> = Presenter { aHomeSpacesState() },
+) = HomePresenter(
+    client = client,
+    syncService = syncService,
+    snackbarDispatcher = snackbarDispatcher,
+    indicatorService = indicatorService,
+    logoutPresenter = { aDirectLogoutState() },
+    roomListPresenter = { aRoomListState() },
+    homeSpacesPresenter = homeSpacesPresenter,
+    rageshakeFeatureAvailability = rageshakeFeatureAvailability,
+    featureFlagService = featureFlagService,
+)

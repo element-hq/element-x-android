@@ -168,7 +168,7 @@ class SingleMediaGalleryDataSourceTest {
         assertThat(resultData.fileItems).isEmpty()
     }
 
-    private fun aMediaViewerEntryPointParams(
+    internal fun aMediaViewerEntryPointParams(
         mediaInfo: MediaInfo,
     ) = MediaViewerEntryPoint.Params(
         mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
