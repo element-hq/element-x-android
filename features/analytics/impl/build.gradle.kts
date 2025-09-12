@@ -1,5 +1,5 @@
-import extension.testCommonDependencies
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.

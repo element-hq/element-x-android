@@ -33,7 +33,6 @@ class DefaultRoomAliasResolverEntryPointTest {
                         alias,
                     )
                 }
-
             )
         }
         val callback = object : RoomAliasResolverEntryPoint.Callback {

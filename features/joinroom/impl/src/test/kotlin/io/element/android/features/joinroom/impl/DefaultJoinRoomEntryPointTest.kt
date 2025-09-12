@@ -37,7 +37,6 @@ class DefaultJoinRoomEntryPointTest {
                 declineAndBlockEntryPoint = object : DeclineInviteAndBlockEntryPoint {
                     override fun createNode(parentNode: Node, buildContext: BuildContext, inviteData: InviteData) = lambdaError()
                 }
-
             )
         }
         val inputs = JoinRoomEntryPoint.Inputs(
