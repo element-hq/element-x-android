@@ -111,15 +111,15 @@ class RoomSelectPresenterTest {
             cancel()
         }
     }
-
-    private fun TestScope.createRoomSelectPresenter(
-        mode: RoomSelectMode = RoomSelectMode.Forward,
-        roomListService: RoomListService = FakeRoomListService(),
-    ) = RoomSelectPresenter(
-        mode = mode,
-        dataSource = RoomSelectSearchDataSource(
-            roomListService = roomListService,
-            coroutineDispatchers = testCoroutineDispatchers(),
-        ),
-    )
 }
+
+internal fun TestScope.createRoomSelectPresenter(
+    mode: RoomSelectMode = RoomSelectMode.Forward,
+    roomListService: RoomListService = FakeRoomListService(),
+) = RoomSelectPresenter(
+    mode = mode,
+    dataSource = RoomSelectSearchDataSource(
+        roomListService = roomListService,
+        coroutineDispatchers = testCoroutineDispatchers(),
+    ),
+)

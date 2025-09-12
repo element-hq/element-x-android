@@ -58,7 +58,7 @@ class MediaViewerPresenter(
     private val localMediaActions: LocalMediaActions,
 ) : Presenter<MediaViewerState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             inputs: MediaViewerEntryPoint.Params,
             navigator: MediaViewerNavigator,

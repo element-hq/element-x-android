@@ -148,10 +148,10 @@ class AccountDeactivationPresenterTest {
             assertThat(finalState2.accountDeactivationAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
-
-    private fun createPresenter(
-        matrixClient: MatrixClient = FakeMatrixClient(),
-    ) = AccountDeactivationPresenter(
-        matrixClient = matrixClient,
-    )
 }
+
+internal fun createPresenter(
+    matrixClient: MatrixClient = FakeMatrixClient(),
+) = AccountDeactivationPresenter(
+    matrixClient = matrixClient,
+)

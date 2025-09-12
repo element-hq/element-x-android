@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -40,13 +41,8 @@ android {
         api(projects.libraries.dateformatter.api)
         api(libs.datetime)
 
-        testImplementation(libs.test.junit)
-        testImplementation(libs.test.truth)
-        testImplementation(libs.test.turbine)
-        testImplementation(libs.test.robolectric)
+        testCommonDependencies(libs, true)
         testImplementation(projects.libraries.dateformatter.test)
         testImplementation(projects.services.toolbox.test)
-        testImplementation(projects.tests.testutils)
-        testImplementation(libs.androidx.compose.ui.test.junit)
     }
 }

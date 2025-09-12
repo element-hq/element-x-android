@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.libraries.matrix.api.core.RoomId
 
-interface LeaveRoomRenderer {
+fun interface LeaveRoomRenderer {
     @Composable
     fun Render(
         state: LeaveRoomState,

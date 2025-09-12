@@ -24,6 +24,7 @@ import extension.koverDependencies
 import extension.locales
 import extension.setupDependencyInjection
 import extension.setupKover
+import extension.testCommonDependencies
 import java.util.Locale
 
 plugins {
@@ -290,15 +291,9 @@ dependencies {
 
     implementation(libs.matrix.emojibase.bindings)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
+    testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.toolbox.test)
-    testImplementation(projects.tests.testutils)
 
     koverDependencies()
 }

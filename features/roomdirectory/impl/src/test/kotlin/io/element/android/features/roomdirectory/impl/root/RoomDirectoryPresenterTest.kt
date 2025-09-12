@@ -122,15 +122,15 @@ class RoomDirectoryPresenterTest {
             .isCalledOnce()
             .withNoParameter()
     }
+}
 
-    private fun TestScope.createRoomDirectoryPresenter(
-        roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(
-            createRoomDirectoryListFactory = { FakeRoomDirectoryList() }
-        ),
-    ): RoomDirectoryPresenter {
-        return RoomDirectoryPresenter(
-            dispatchers = testCoroutineDispatchers(),
-            roomDirectoryService = roomDirectoryService,
-        )
-    }
+internal fun TestScope.createRoomDirectoryPresenter(
+    roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(
+        createRoomDirectoryListFactory = { FakeRoomDirectoryList() }
+    ),
+): RoomDirectoryPresenter {
+    return RoomDirectoryPresenter(
+        dispatchers = testCoroutineDispatchers(),
+        roomDirectoryService = roomDirectoryService,
+    )
 }

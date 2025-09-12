@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -39,10 +40,6 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.vanniktech.blurhash)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.truth)
-    testImplementation(projects.tests.testutils)
+    testCommonDependencies(libs)
     testImplementation(projects.services.toolbox.test)
 }

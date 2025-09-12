@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -27,12 +28,8 @@ dependencies {
     implementation(libs.inject)
     implementation(libs.coroutines.core)
 
+    testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.mediaupload.test)
-    testImplementation(projects.tests.testutils)
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.robolectric)
 }

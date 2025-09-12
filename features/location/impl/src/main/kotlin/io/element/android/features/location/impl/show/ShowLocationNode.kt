@@ -25,10 +25,10 @@ import io.element.android.services.analytics.api.AnalyticsService
 @ContributesNode(RoomScope::class)
 @Inject
 class ShowLocationNode(
-    presenterFactory: ShowLocationPresenter.Factory,
-    analyticsService: AnalyticsService,
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    presenterFactory: ShowLocationPresenter.Factory,
+    analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
     init {
         lifecycle.subscribe(

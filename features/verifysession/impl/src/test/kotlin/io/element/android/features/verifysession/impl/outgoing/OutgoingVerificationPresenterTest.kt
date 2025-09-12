@@ -321,18 +321,18 @@ class OutgoingVerificationPresenterTest {
             emitVerifiedStatus(SessionVerifiedStatus.NotVerified)
         }
     }
+}
 
-    private fun createOutgoingVerificationPresenter(
-        service: SessionVerificationService,
-        verificationRequest: VerificationRequest.Outgoing = anOutgoingSessionVerificationRequest(),
-        encryptionService: EncryptionService = FakeEncryptionService(),
-        showDeviceVerifiedScreen: Boolean = false,
-    ): OutgoingVerificationPresenter {
-        return OutgoingVerificationPresenter(
-            showDeviceVerifiedScreen = showDeviceVerifiedScreen,
-            verificationRequest = verificationRequest,
-            sessionVerificationService = service,
-            encryptionService = encryptionService,
-        )
-    }
+internal fun createOutgoingVerificationPresenter(
+    service: SessionVerificationService = FakeSessionVerificationService(),
+    verificationRequest: VerificationRequest.Outgoing = anOutgoingSessionVerificationRequest(),
+    encryptionService: EncryptionService = FakeEncryptionService(),
+    showDeviceVerifiedScreen: Boolean = false,
+): OutgoingVerificationPresenter {
+    return OutgoingVerificationPresenter(
+        showDeviceVerifiedScreen = showDeviceVerifiedScreen,
+        verificationRequest = verificationRequest,
+        sessionVerificationService = service,
+        encryptionService = encryptionService,
+    )
 }

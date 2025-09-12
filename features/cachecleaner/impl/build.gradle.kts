@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -22,8 +23,5 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.truth)
-    testImplementation(projects.tests.testutils)
+    testCommonDependencies(libs)
 }

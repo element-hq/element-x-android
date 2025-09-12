@@ -30,7 +30,7 @@ class RoomAliasResolverPresenter(
     @Assisted private val roomAlias: RoomAlias,
     private val matrixClient: MatrixClient,
 ) : Presenter<RoomAliasResolverState> {
-    interface Factory {
+    fun interface Factory {
         fun create(
             roomAlias: RoomAlias,
         ): RoomAliasResolverPresenter

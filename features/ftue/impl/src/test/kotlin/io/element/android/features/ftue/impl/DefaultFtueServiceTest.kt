@@ -226,22 +226,22 @@ class DefaultFtueServiceTest {
         resetPermissionLambda.assertions().isCalledOnce()
             .with(value("android.permission.POST_NOTIFICATIONS"))
     }
-
-    private fun TestScope.createDefaultFtueService(
-        sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
-        analyticsService: AnalyticsService = FakeAnalyticsService(),
-        permissionStateProvider: PermissionStateProvider = FakePermissionStateProvider(permissionGranted = false),
-        lockScreenService: LockScreenService = FakeLockScreenService(),
-        sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
-        // First version where notification permission is required
-        sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU,
-    ) = DefaultFtueService(
-        sessionCoroutineScope = backgroundScope,
-        sessionVerificationService = sessionVerificationService,
-        sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkIntVersion),
-        analyticsService = analyticsService,
-        permissionStateProvider = permissionStateProvider,
-        lockScreenService = lockScreenService,
-        sessionPreferencesStore = sessionPreferencesStore,
-    )
 }
+
+internal fun TestScope.createDefaultFtueService(
+    sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
+    analyticsService: AnalyticsService = FakeAnalyticsService(),
+    permissionStateProvider: PermissionStateProvider = FakePermissionStateProvider(permissionGranted = false),
+    lockScreenService: LockScreenService = FakeLockScreenService(),
+    sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
+    // First version where notification permission is required
+    sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU,
+) = DefaultFtueService(
+    sessionCoroutineScope = backgroundScope,
+    sessionVerificationService = sessionVerificationService,
+    sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkIntVersion),
+    analyticsService = analyticsService,
+    permissionStateProvider = permissionStateProvider,
+    lockScreenService = lockScreenService,
+    sessionPreferencesStore = sessionPreferencesStore,
+)

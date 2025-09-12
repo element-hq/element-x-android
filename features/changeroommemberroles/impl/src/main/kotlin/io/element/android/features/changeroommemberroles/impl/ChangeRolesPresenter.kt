@@ -55,7 +55,7 @@ class ChangeRolesPresenter(
     private val analyticsService: AnalyticsService,
 ) : Presenter<ChangeRolesState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(role: RoomMember.Role): ChangeRolesPresenter
     }
 

@@ -177,23 +177,23 @@ class StartChatPresenterTest {
             }
         }
     }
+}
 
-    private fun createStartChatPresenter(
-        startDMAction: StartDMAction = FakeStartDMAction(),
-        isRoomDirectorySearchEnabled: Boolean = false,
-    ): StartChatPresenter {
-        val featureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(
-                FeatureFlags.RoomDirectorySearch.key to isRoomDirectorySearchEnabled,
-            ),
-        )
-        return StartChatPresenter(
-            presenterFactory = FakeUserListPresenterFactory(FakeUserListPresenter()),
-            userRepository = FakeUserRepository(),
-            userListDataStore = UserListDataStore(),
-            startDMAction = startDMAction,
-            featureFlagService = featureFlagService,
-            buildMeta = aBuildMeta(),
-        )
-    }
+internal fun createStartChatPresenter(
+    startDMAction: StartDMAction = FakeStartDMAction(),
+    isRoomDirectorySearchEnabled: Boolean = false,
+): StartChatPresenter {
+    val featureFlagService = FakeFeatureFlagService(
+        initialState = mapOf(
+            FeatureFlags.RoomDirectorySearch.key to isRoomDirectorySearchEnabled,
+        ),
+    )
+    return StartChatPresenter(
+        presenterFactory = FakeUserListPresenterFactory(FakeUserListPresenter()),
+        userRepository = FakeUserRepository(),
+        userListDataStore = UserListDataStore(),
+        startDMAction = startDMAction,
+        featureFlagService = featureFlagService,
+        buildMeta = aBuildMeta(),
+    )
 }

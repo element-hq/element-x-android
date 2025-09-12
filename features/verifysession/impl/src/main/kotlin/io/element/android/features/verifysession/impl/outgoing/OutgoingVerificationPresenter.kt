@@ -42,7 +42,7 @@ class OutgoingVerificationPresenter(
     private val encryptionService: EncryptionService,
 ) : Presenter<OutgoingVerificationState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             verificationRequest: VerificationRequest.Outgoing,
             showDeviceVerifiedScreen: Boolean,
