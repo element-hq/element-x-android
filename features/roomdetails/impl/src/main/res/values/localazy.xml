@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"An error occurred when loading notification settings."</string>
   <string name="screen_room_details_error_muting">"Failed muting this room, please try again."</string>
   <string name="screen_room_details_error_unmuting">"Failed unmuting this room, please try again."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Don\'t close the app until finished."</string>
+  <string name="screen_room_details_invite_people_preparing">"Preparing invitations…"</string>
   <string name="screen_room_details_invite_people_title">"Invite people"</string>
   <string name="screen_room_details_leave_conversation_title">"Leave conversation"</string>
   <string name="screen_room_details_leave_room_title">"Leave room"</string>

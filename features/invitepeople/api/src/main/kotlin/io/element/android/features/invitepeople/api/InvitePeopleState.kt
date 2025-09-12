@@ -7,8 +7,11 @@
 
 package io.element.android.features.invitepeople.api
 
+import io.element.android.libraries.architecture.AsyncAction
+
 interface InvitePeopleState {
     val canInvite: Boolean
     val isSearchActive: Boolean
+    val sendInvitesAction: AsyncAction<Unit>
     val eventSink: (InvitePeopleEvents) -> Unit
 }

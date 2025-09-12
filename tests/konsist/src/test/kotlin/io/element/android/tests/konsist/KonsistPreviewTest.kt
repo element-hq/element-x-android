@@ -114,6 +114,8 @@ class KonsistPreviewTest {
         "PollContentViewDisclosedPreview",
         "PollContentViewEndedPreview",
         "PollContentViewUndisclosedPreview",
+        "ProgressDialogWithContentPreview",
+        "ProgressDialogWithTextAndContentPreview",
         "ReadReceiptBottomSheetPreview",
         "RoomMemberListViewBannedPreview",
         "SasEmojisPreview",
