@@ -16,7 +16,6 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder

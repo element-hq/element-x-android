@@ -22,7 +22,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-private val appName = "AppName"
+private const val appName = "AppName"
 
 class SignedOutPresenterTest {
     @get:Rule

@@ -148,7 +148,6 @@ class AccountDeactivationPresenterTest {
             assertThat(finalState2.accountDeactivationAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
-
 }
 
 internal fun createPresenter(

@@ -30,7 +30,6 @@ class TestParentNode<Child : Node>(
         plugins = emptyList(),
         view = EmptyNodeView,
     ) {
-
     override val graph: NodeFactoriesBindings = NodeFactoriesBindings {
         mapOf(
             childNodeClass to AssistedNodeFactory { buildContext, plugins ->
