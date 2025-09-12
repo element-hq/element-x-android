@@ -37,7 +37,7 @@ class SpacePresenter(
     private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<SpaceState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(inputs: SpaceEntryPoint.Inputs): SpacePresenter
     }
 

@@ -46,8 +46,7 @@ inline fun <reified N : Node> NodeFactoriesBindings.createNode(
     return node as N
 }
 
-// @BindingContainer
-interface NodeFactoriesBindings {
+fun interface NodeFactoriesBindings {
     @Multibinds
     fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>>
 }
