@@ -689,12 +689,6 @@ class RustMatrixClient(
         })
     }.buffer(Channel.UNLIMITED)
 
-    override suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>> = withContext(sessionDispatcher) {
-        runCatchingExceptions {
-            innerClient.availableSlidingSyncVersions().map { it.map() }
-        }
-    }
-
     override suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.session().slidingSyncVersion.map()
