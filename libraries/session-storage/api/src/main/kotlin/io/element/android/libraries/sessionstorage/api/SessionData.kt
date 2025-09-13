@@ -39,4 +39,12 @@ data class SessionData(
     val sessionPath: String,
     /** The path to the cache data stored for the session in the filesystem. */
     val cachePath: String,
+    /** The position, to be able to order account. */
+    val position: Long,
+    /** The index of the last date of session usage. */
+    val lastUsageIndex: Long,
+    /** The optional display name of the user. */
+    val userDisplayName: String?,
+    /** The optional avatar URL of the user. */
+    val userAvatarUrl: String?,
 )

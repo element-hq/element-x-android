@@ -25,6 +25,7 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import io.element.android.tests.testutils.pressBack
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -47,6 +48,21 @@ class OnboardingViewTest {
                 onCreateAccount = callback,
             )
             rule.clickOn(R.string.screen_onboarding_sign_up)
+        }
+    }
+
+    @Test
+    fun `when can go back - clicking on back calls the expected callback`() {
+        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            rule.setOnboardingView(
+                state = anOnBoardingState(
+                    isAddingAccount = true,
+                    eventSink = eventSink,
+                ),
+                onBackClick = callback,
+            )
+            rule.pressBack()
         }
     }
 
@@ -235,6 +251,7 @@ class OnboardingViewTest {
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setOnboardingView(
         state: OnBoardingState,
+        onBackClick: () -> Unit = EnsureNeverCalled(),
         onSignInWithQrCode: () -> Unit = EnsureNeverCalled(),
         onSignIn: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
         onCreateAccount: () -> Unit = EnsureNeverCalled(),
@@ -247,6 +264,7 @@ class OnboardingViewTest {
         setContent {
             OnBoardingView(
                 state = state,
+                onBackClick = onBackClick,
                 onSignInWithQrCode = onSignInWithQrCode,
                 onSignIn = onSignIn,
                 onCreateAccount = onCreateAccount,
