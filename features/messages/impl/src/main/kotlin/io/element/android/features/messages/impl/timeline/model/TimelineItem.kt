@@ -17,10 +17,11 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SendHandle
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
+import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
@@ -82,7 +83,7 @@ sealed interface TimelineItem {
         val readReceiptState: TimelineItemReadReceipts,
         val localSendState: LocalEventSendState?,
         val inReplyTo: InReplyToDetails?,
-        val threadInfo: EventThreadInfo,
+        val threadInfo: TimelineItemThreadInfo,
         val origin: TimelineItemEventOrigin?,
         val timelineItemDebugInfoProvider: TimelineItemDebugInfoProvider,
         val messageShieldProvider: MessageShieldProvider,
@@ -130,3 +131,9 @@ sealed interface TimelineItem {
         val aggregatedReadReceipts: ImmutableList<ReadReceiptData>,
     ) : TimelineItem
 }
+
+data class TimelineItemThreadInfo(
+    val threadRootId: ThreadId?,
+    val latestEventText: String?,
+    val threadSummary: ThreadSummary?,
+)

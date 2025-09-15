@@ -19,6 +19,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
+import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
@@ -28,7 +30,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.messages.reply.map
@@ -43,6 +44,7 @@ class TimelineItemEventFactory(
     private val matrixClient: MatrixClient,
     private val dateFormatter: DateFormatter,
     private val permalinkParser: PermalinkParser,
+    private val summaryFormatter: MessageSummaryFormatter,
 ) {
     @AssistedFactory
     interface Creator {
@@ -69,6 +71,27 @@ class TimelineItemEventFactory(
             url = senderProfile.getAvatarUrl(),
             size = AvatarSize.TimelineSender
         )
+
+        val threadInfo = currentTimelineItem.event.threadInfo()
+        val threadSummaryText = threadInfo?.threadSummary?.let { (latestEvent, numberOfReplies) ->
+            val latestEventData = latestEvent.dataOrNull() ?: return@let null
+            val threadSummaryContent = contentFactory.create(
+                itemContent = latestEventData.content,
+                eventId = latestEventData.eventOrTransactionId.eventId,
+                isEditable = false,
+                sender = latestEventData.senderId,
+                senderProfile = latestEventData.senderProfile,
+            )
+            summaryFormatter.format(threadSummaryContent)
+        }
+        val mappedThreadInfo = threadInfo?.let {
+            TimelineItemThreadInfo(
+                threadRootId = it.threadRootId,
+                latestEventText = threadSummaryText,
+                threadSummary = it.threadSummary,
+            )
+        }
+
         return TimelineItem.Event(
             id = currentTimelineItem.uniqueId,
             eventId = currentTimelineItem.eventId,
@@ -87,7 +110,7 @@ class TimelineItemEventFactory(
             readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers),
             localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo()?.map(permalinkParser = permalinkParser),
-            threadInfo = currentTimelineItem.event.threadInfo() ?: EventThreadInfo(threadRootId = null, threadSummary = null),
+            threadInfo = mappedThreadInfo ?: TimelineItemThreadInfo(threadRootId = null, threadSummary = null, latestEventText = null),
             origin = currentTimelineItem.event.origin,
             timelineItemDebugInfoProvider = currentTimelineItem.event.timelineItemDebugInfoProvider,
             messageShieldProvider = currentTimelineItem.event.messageShieldProvider,

@@ -14,6 +14,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
@@ -42,7 +43,7 @@ class TimelineItemGrouperTest {
         isEditable = false,
         canBeRepliedTo = false,
         inReplyTo = null,
-        threadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
+        threadInfo = TimelineItemThreadInfo(threadRootId = null, latestEventText = null, threadSummary = null),
         origin = null,
         timelineItemDebugInfoProvider = { aTimelineItemDebugInfo() },
         messageShieldProvider = { null },

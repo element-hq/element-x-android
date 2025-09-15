@@ -12,6 +12,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -19,7 +20,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
@@ -41,7 +41,7 @@ internal fun aMessageEvent(
     canBeRepliedTo: Boolean = true,
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, formattedBody = A_MESSAGE, isEdited = false),
     inReplyTo: InReplyToDetails? = null,
-    threadInfo: EventThreadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
+    threadInfo: TimelineItemThreadInfo = TimelineItemThreadInfo(threadRootId = null, latestEventText = null, threadSummary = null),
     sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),
     debugInfoProvider: TimelineItemDebugInfoProvider = TimelineItemDebugInfoProvider { aTimelineItemDebugInfo() },
     messageShieldProvider: MessageShieldProvider = MessageShieldProvider { null },
