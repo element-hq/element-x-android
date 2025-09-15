@@ -7,13 +7,15 @@
 
 package io.element.android.libraries.matrix.api.room
 
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class RoomMembershipObserver {
     data class RoomMembershipUpdate(
-        val roomInfo: RoomInfo,
+        val roomId: RoomId,
+        val isSpace: Boolean,
         val isUserInRoom: Boolean,
         val change: MembershipChange,
     )
@@ -21,7 +23,11 @@ class RoomMembershipObserver {
     private val _updates = MutableSharedFlow<RoomMembershipUpdate>(extraBufferCapacity = 10)
     val updates = _updates.asSharedFlow()
 
-    suspend fun notifyUserLeftRoom(roomInfo: RoomInfo, membershipBeforeLeft: CurrentUserMembership) {
+    suspend fun notifyUserLeftRoom(
+        roomId: RoomId,
+        isSpace: Boolean,
+        membershipBeforeLeft: CurrentUserMembership,
+    ) {
         val membershipChange = when (membershipBeforeLeft) {
             CurrentUserMembership.INVITED -> MembershipChange.INVITATION_REJECTED
             CurrentUserMembership.KNOCKED -> MembershipChange.KNOCK_RETRACTED
@@ -29,7 +35,8 @@ class RoomMembershipObserver {
         }
         _updates.emit(
             RoomMembershipUpdate(
-                roomInfo = roomInfo,
+                roomId = roomId,
+                isSpace = isSpace,
                 isUserInRoom = false,
                 change = membershipChange,
             )

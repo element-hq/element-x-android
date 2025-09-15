@@ -56,8 +56,8 @@ class RustBaseRoomTest {
         )
         leaveRoomAndObserveMembershipChange(roomMembershipObserver, rustBaseRoom) {
             val membershipUpdate = awaitItem()
-            assertThat(membershipUpdate.roomInfo.id).isEqualTo(rustBaseRoom.roomId)
-            assertThat(membershipUpdate.roomInfo.isSpace).isFalse()
+            assertThat(membershipUpdate.roomId).isEqualTo(rustBaseRoom.roomId)
+            assertThat(membershipUpdate.isSpace).isFalse()
             assertThat(membershipUpdate.isUserInRoom).isFalse()
             assertThat(membershipUpdate.change).isEqualTo(MembershipChange.LEFT)
         }
@@ -77,8 +77,8 @@ class RustBaseRoomTest {
         )
         leaveRoomAndObserveMembershipChange(roomMembershipObserver, rustBaseRoom) {
             val membershipUpdate = awaitItem()
-            assertThat(membershipUpdate.roomInfo.id).isEqualTo(rustBaseRoom.roomId)
-            assertThat(membershipUpdate.roomInfo.isSpace).isFalse()
+            assertThat(membershipUpdate.roomId).isEqualTo(rustBaseRoom.roomId)
+            assertThat(membershipUpdate.isSpace).isFalse()
             assertThat(membershipUpdate.isUserInRoom).isFalse()
             assertThat(membershipUpdate.change).isEqualTo(MembershipChange.KNOCK_RETRACTED)
         }
@@ -98,8 +98,8 @@ class RustBaseRoomTest {
         )
         leaveRoomAndObserveMembershipChange(roomMembershipObserver, rustBaseRoom) {
             val membershipUpdate = awaitItem()
-            assertThat(membershipUpdate.roomInfo.id).isEqualTo(rustBaseRoom.roomId)
-            assertThat(membershipUpdate.roomInfo.isSpace).isFalse()
+            assertThat(membershipUpdate.roomId).isEqualTo(rustBaseRoom.roomId)
+            assertThat(membershipUpdate.isSpace).isFalse()
             assertThat(membershipUpdate.isUserInRoom).isFalse()
             assertThat(membershipUpdate.change).isEqualTo(MembershipChange.INVITATION_REJECTED)
         }

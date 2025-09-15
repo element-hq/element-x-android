@@ -35,7 +35,7 @@ class LoggedInEventProcessor(
                 when (roomMemberShipUpdate.change) {
                     MembershipChange.LEFT -> {
                         displayMessage(
-                            if (roomMemberShipUpdate.roomInfo.isSpace) {
+                            if (roomMemberShipUpdate.isSpace) {
                                 CommonStrings.common_current_user_left_space
                             } else {
                                 CommonStrings.common_current_user_left_room

@@ -155,7 +155,11 @@ class RustBaseRoom(
         runCatchingExceptions {
             innerRoom.leave()
         }.onSuccess {
-            roomMembershipObserver.notifyUserLeftRoom(roomInfoFlow.value, membershipBeforeLeft)
+            roomMembershipObserver.notifyUserLeftRoom(
+                roomId = roomId,
+                isSpace = roomInfoFlow.value.isSpace,
+                membershipBeforeLeft = membershipBeforeLeft,
+            )
         }
     }
 
