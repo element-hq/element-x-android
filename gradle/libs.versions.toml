@@ -22,7 +22,7 @@ media3 = "1.8.0"
 camera = "1.5.0"
 
 # Compose
-compose_bom = "2025.07.00"
+compose_bom = "2025.08.00"
 
 # Coroutines
 coroutines = "1.10.2"
