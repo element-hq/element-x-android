@@ -105,6 +105,7 @@
   <string name="action_leave">"Leave"</string>
   <string name="action_leave_conversation">"Leave conversation"</string>
   <string name="action_leave_room">"Leave room"</string>
+  <string name="action_leave_space">"Leave space"</string>
   <string name="action_load_more">"Load more"</string>
   <string name="action_manage_account">"Manage account"</string>
   <string name="action_manage_devices">"Manage devices"</string>
@@ -184,6 +185,7 @@
   <string name="common_creating_room">"Creating room…"</string>
   <string name="common_current_user_canceled_knock">"Request canceled"</string>
   <string name="common_current_user_left_room">"Left room"</string>
+  <string name="common_current_user_left_space">"Left space"</string>
   <string name="common_current_user_rejected_invite">"Invite declined"</string>
   <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
@@ -410,6 +412,9 @@ Are you sure you want to continue?"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle">"This will also remove you from all rooms in this space."</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle_admin">"This will also remove you from all rooms in this space, including those you’re the only administrator for:"</string>
+  <string name="screen_bottom_sheet_leave_space_title">"Leave %1$s?"</string>
   <string name="screen_bug_report_a11y_screenshot">"Screenshot"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
