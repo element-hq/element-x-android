@@ -45,8 +45,14 @@ class DefaultCallWidgetProvider(
         val customBaseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
         val baseUrl = customBaseUrl ?: EMBEDDED_CALL_WIDGET_BASE_URL
 
-        val isEncrypted = room.info().isEncrypted ?: room.getUpdatedIsEncrypted().getOrThrow()
-        val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = isEncrypted, direct = room.isDm())
+        val roomInfo = room.info()
+        val isEncrypted = roomInfo.isEncrypted ?: room.getUpdatedIsEncrypted().getOrThrow()
+        val widgetSettings = callWidgetSettingsProvider.provide(
+            baseUrl = baseUrl,
+            encrypted = isEncrypted,
+            direct = room.isDm(),
+            hasActiveCall = roomInfo.hasRoomCall,
+        )
         val callUrl = room.generateWidgetWebViewUrl(
             widgetSettings = widgetSettings,
             clientId = clientId,

@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.newVirtualElementCallWidget
+import timber.log.Timber
 import uniffi.matrix_sdk.EncryptionSystem
 import uniffi.matrix_sdk.HeaderStyle
 import uniffi.matrix_sdk.NotificationType
@@ -32,7 +33,7 @@ class DefaultCallWidgetSettingsProvider(
     private val callAnalyticsCredentialsProvider: CallAnalyticCredentialsProvider,
     private val analyticsService: AnalyticsService,
 ) : CallWidgetSettingsProvider {
-    override suspend fun provide(baseUrl: String, widgetId: String, encrypted: Boolean, direct: Boolean): MatrixWidgetSettings {
+    override suspend fun provide(baseUrl: String, widgetId: String, encrypted: Boolean, direct: Boolean, hasActiveCall: Boolean): MatrixWidgetSettings {
         val isAnalyticsEnabled = analyticsService.userConsentFlow.first()
         val properties = VirtualElementCallWidgetProperties(
             elementCallUrl = baseUrl,
@@ -49,18 +50,18 @@ class DefaultCallWidgetSettingsProvider(
             parentUrl = null,
         )
         val config = VirtualElementCallWidgetConfig(
-            preload = null,
-            appPrompt = false,
-            confineToRoom = true,
-            // TODO We probably want to provide different values for this field.
-            intent = CallIntent.START_CALL,
-            hideScreensharing = false,
-            // For backwards compatibility, it'll be ignored in recent versions of Element Call
-            hideHeader = true,
-            controlledAudioDevices = true,
-            header = HeaderStyle.APP_BAR,
-            sendNotificationType = if (direct) NotificationType.RING else NotificationType.NOTIFICATION,
+            // TODO remove this once we have the next EC version
+            preload = false,
+            // TODO remove this once we have the next EC version
             skipLobby = null,
+            intent = when {
+                direct && hasActiveCall -> CallIntent.JOIN_EXISTING_DM
+                hasActiveCall -> CallIntent.JOIN_EXISTING
+                direct -> CallIntent.START_CALL_DM
+                else -> CallIntent.START_CALL
+            }.also {
+                Timber.d("Starting/joining call with intent: $it")
+            }
         )
         val rustWidgetSettings = newVirtualElementCallWidget(
             props = properties,
