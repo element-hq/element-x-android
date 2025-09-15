@@ -20,8 +20,6 @@ import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.newVirtualElementCallWidget
 import timber.log.Timber
 import uniffi.matrix_sdk.EncryptionSystem
-import uniffi.matrix_sdk.HeaderStyle
-import uniffi.matrix_sdk.NotificationType
 import uniffi.matrix_sdk.VirtualElementCallWidgetConfig
 import uniffi.matrix_sdk.VirtualElementCallWidgetProperties
 import uniffi.matrix_sdk.Intent as CallIntent
