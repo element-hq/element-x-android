@@ -56,7 +56,7 @@ class DefaultPreferencesEntryPointTest {
                     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext) = lambdaError()
                 },
                 openSourceLicensesEntryPoint = object : OpenSourceLicensesEntryPoint {
-                    override fun getNode(node: Node, buildContext: BuildContext) = lambdaError()
+                    override fun createNode(parentNode: Node, buildContext: BuildContext) = lambdaError()
                 },
                 accountDeactivationEntryPoint = object : AccountDeactivationEntryPoint {
                     override fun createNode(parentNode: Node, buildContext: BuildContext) = lambdaError()

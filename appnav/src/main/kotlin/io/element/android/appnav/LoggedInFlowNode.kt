@@ -454,8 +454,7 @@ class LoggedInFlowNode(
                     .build()
             }
             NavTarget.Ftue -> {
-                ftueEntryPoint.nodeBuilder(this, buildContext)
-                    .build()
+                ftueEntryPoint.createNode(this, buildContext)
             }
             NavTarget.RoomDirectorySearch -> {
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)

@@ -53,8 +53,7 @@ class DefaultFtueEntryPointTest {
                 },
             )
         }
-        val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
-            .build()
+        val result = entryPoint.createNode(parentNode, BuildContext.root(null))
         assertThat(result).isInstanceOf(FtueFlowNode::class.java)
     }
 }

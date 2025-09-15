@@ -7,10 +7,6 @@
 
 package io.element.android.features.poll.api.history
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
 
-interface PollHistoryEntryPoint : FeatureEntryPoint {
-    fun createNode(parentNode: Node, buildContext: BuildContext): Node
-}
+interface PollHistoryEntryPoint : SimpleFeatureEntryPoint
