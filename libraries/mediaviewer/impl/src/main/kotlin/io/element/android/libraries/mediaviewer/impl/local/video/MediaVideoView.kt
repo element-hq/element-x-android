@@ -281,6 +281,7 @@ private fun ExoPlayerLifecycleHelper(
         onDispose {
             Timber.d("Disposing exoplayer")
             if (!exoPlayer.isReleased) {
+                exoPlayer.removeListener(playerListener)
                 exoPlayer.release()
             }
         }
