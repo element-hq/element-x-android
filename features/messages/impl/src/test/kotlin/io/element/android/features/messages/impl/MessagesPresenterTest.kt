@@ -160,9 +160,9 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle toggling a reaction`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val toggleReactionSuccess = lambdaRecorder { _: String, _: EventOrTransactionId -> Result.success(Unit) }
+        val toggleReactionSuccess = lambdaRecorder { _: String, _: EventOrTransactionId -> Result.success(true) }
         val toggleReactionFailure =
-            lambdaRecorder { _: String, _: EventOrTransactionId -> Result.failure<Unit>(IllegalStateException("Failed to send reaction")) }
+            lambdaRecorder { _: String, _: EventOrTransactionId -> Result.failure<Boolean>(IllegalStateException("Failed to send reaction")) }
 
         val timeline = FakeTimeline().apply {
             this.toggleReactionLambda = toggleReactionSuccess
@@ -200,7 +200,11 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle toggling a reaction twice`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val toggleReactionSuccess = lambdaRecorder { _: String, _: EventOrTransactionId -> Result.success(Unit) }
+        var toggle = false
+        val toggleReactionSuccess = lambdaRecorder { _: String, _: EventOrTransactionId ->
+            toggle = !toggle
+            Result.success(toggle)
+        }
 
         val timeline = FakeTimeline().apply {
             this.toggleReactionLambda = toggleReactionSuccess
