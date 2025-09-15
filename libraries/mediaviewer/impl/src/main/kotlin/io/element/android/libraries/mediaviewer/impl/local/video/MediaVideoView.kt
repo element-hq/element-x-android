@@ -10,12 +10,14 @@ package io.element.android.libraries.mediaviewer.impl.local.video
 import android.annotation.SuppressLint
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
+import androidx.annotation.OptIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -33,6 +35,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.common.Timeline
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
@@ -55,6 +58,7 @@ import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.zoomable
+import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @SuppressLint("UnsafeOptInUsageError")
@@ -165,35 +169,6 @@ private fun ExoPlayerMediaVideoView(
         }
     }
 
-    LaunchedEffect(exoPlayer.isPlaying) {
-        if (exoPlayer.isPlaying) {
-            while (true) {
-                mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                    progressInMillis = exoPlayer.currentPosition,
-                )
-                delay(200)
-            }
-        } else {
-            // Ensure we render the final state
-            mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                progressInMillis = exoPlayer.currentPosition,
-            )
-        }
-    }
-
-    var needsAutoPlay by remember { mutableStateOf(autoplay) }
-
-    LaunchedEffect(needsAutoPlay, isDisplayed, mediaPlayerControllerState.isReady) {
-        val isReadyAndNotPlaying = mediaPlayerControllerState.isReady && !mediaPlayerControllerState.isPlaying
-        if (needsAutoPlay && isDisplayed && isReadyAndNotPlaying) {
-            // When displayed, start autoplaying
-            exoPlayer.play()
-            needsAutoPlay = false
-        } else if (!isDisplayed && mediaPlayerControllerState.isPlaying) {
-            // If not displayed, make sure to pause the video
-            exoPlayer.pause()
-        }
-    }
     if (localMedia?.uri != null) {
         LaunchedEffect(localMedia.uri) {
             val mediaItem = MediaItem.fromUri(localMedia.uri)
@@ -263,16 +238,71 @@ private fun ExoPlayerMediaVideoView(
         )
     }
 
-    OnLifecycleEvent { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_CREATE -> exoPlayer.addListener(playerListener)
-            Lifecycle.Event.ON_RESUME -> exoPlayer.prepare()
-            Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
-            Lifecycle.Event.ON_DESTROY -> {
-                exoPlayer.release()
-                exoPlayer.removeListener(playerListener)
+    LaunchedEffect(exoPlayer.isPlaying) {
+        if (exoPlayer.isPlaying) {
+            while (true) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    progressInMillis = exoPlayer.currentPosition,
+                )
+                delay(200)
             }
-            else -> Unit
+        } else {
+            // Ensure we render the final state
+            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                progressInMillis = exoPlayer.currentPosition,
+            )
+        }
+    }
+
+    ExoPlayerLifecycleHelper(
+        exoPlayer = exoPlayer,
+        autoplay = autoplay,
+        isDisplayed = isDisplayed,
+        playerListener = playerListener,
+        mediaPlayerControllerState = mediaPlayerControllerState,
+    )
+}
+
+@OptIn(UnstableApi::class)
+@Composable
+private fun ExoPlayerLifecycleHelper(
+    exoPlayer: ExoPlayer,
+    autoplay: Boolean,
+    isDisplayed: Boolean,
+    playerListener: Player.Listener,
+    mediaPlayerControllerState: MediaPlayerControllerState,
+) {
+    // Prepare and release the exoPlayer with the composable lifecycle
+    DisposableEffect(Unit) {
+        Timber.d("ExoPlayerMediaVideoView DisposableEffect: initializing exoPlayer")
+        exoPlayer.addListener(playerListener)
+        exoPlayer.prepare()
+
+        onDispose {
+            Timber.d("Disposing exoplayer")
+            if (!exoPlayer.isReleased) {
+                exoPlayer.release()
+            }
+        }
+    }
+
+    var needsAutoPlay by remember { mutableStateOf(autoplay) }
+    LaunchedEffect(needsAutoPlay, isDisplayed, mediaPlayerControllerState.isReady) {
+        val isReadyAndNotPlaying = mediaPlayerControllerState.isReady && !mediaPlayerControllerState.isPlaying
+        if (needsAutoPlay && isDisplayed && isReadyAndNotPlaying) {
+            // When displayed, start autoplaying
+            exoPlayer.play()
+            needsAutoPlay = false
+        } else if (!isDisplayed && mediaPlayerControllerState.isPlaying) {
+            // If not displayed, make sure to pause the video
+            exoPlayer.pause()
+        }
+    }
+
+    // Pause playback when lifecycle is paused
+    OnLifecycleEvent { _, event ->
+        if (event == Lifecycle.Event.ON_PAUSE && exoPlayer.isPlaying) {
+            exoPlayer.pause()
         }
     }
 }
