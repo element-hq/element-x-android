@@ -61,6 +61,4 @@ dependencies {
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
-    testImplementation(libs.test.appyx.junit)
-    testImplementation(libs.test.arch.core)
 }

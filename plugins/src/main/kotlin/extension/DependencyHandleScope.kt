@@ -44,6 +44,8 @@ fun DependencyHandlerScope.testCommonDependencies(
     testImplementation(libs.androidx.test.ext.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
+    testImplementation(libs.test.appyx.junit)
+    testImplementation(libs.test.arch.core)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.robolectric)

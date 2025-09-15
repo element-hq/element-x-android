@@ -7,16 +7,18 @@
 
 package io.element.android.features.invite.impl.declineandblock
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.test.anInviteData
 import io.element.android.tests.testutils.node.TestParentNode
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class DefaultDeclineAndBlockEntryPointTest {
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
     @Test
     fun `test node builder`() {
         val entryPoint = DefaultDeclineAndBlockEntryPoint()
