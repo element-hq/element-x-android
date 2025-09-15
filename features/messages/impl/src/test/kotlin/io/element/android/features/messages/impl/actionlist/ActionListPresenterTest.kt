@@ -18,6 +18,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailureFactory
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
@@ -198,7 +199,7 @@ class ActionListPresenterTest {
             val messageEvent = aMessageEvent(
                 isMine = false,
                 isEditable = false,
-                threadInfo = EventThreadInfo(threadRootId = A_THREAD_ID, threadSummary = null),
+                threadInfo = TimelineItemThreadInfo(threadRootId = A_THREAD_ID, latestEventText = null, threadSummary = null),
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = A_MESSAGE)
             )
             initialState.eventSink.invoke(
@@ -432,7 +433,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                threadInfo = EventThreadInfo(threadRootId = A_THREAD_ID, threadSummary = null),
+                threadInfo = TimelineItemThreadInfo(threadRootId = A_THREAD_ID, latestEventText = null, threadSummary = null),
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = A_MESSAGE)
             )
             initialState.eventSink.invoke(
@@ -1264,7 +1265,7 @@ class ActionListPresenterTest {
                 content = aTimelineItemVoiceContent(
                     caption = null,
                 ),
-                threadInfo = EventThreadInfo(A_THREAD_ID, null)
+                threadInfo = TimelineItemThreadInfo(threadRootId = A_THREAD_ID, latestEventText = null, threadSummary = null)
             )
             initialState.eventSink.invoke(
                 ActionListEvents.ComputeForMessage(
@@ -1368,7 +1369,7 @@ class ActionListPresenterTest {
                 content = aTimelineItemVoiceContent(
                     caption = null,
                 ),
-                threadInfo = EventThreadInfo(A_THREAD_ID, null),
+                threadInfo = TimelineItemThreadInfo(threadRootId = A_THREAD_ID, latestEventText = null, threadSummary = null),
             )
 
             assertThat(messageEvent.isRemote).isTrue()

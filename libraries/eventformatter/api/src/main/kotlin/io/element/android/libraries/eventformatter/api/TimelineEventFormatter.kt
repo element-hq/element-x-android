@@ -7,8 +7,19 @@
 
 package io.element.android.libraries.eventformatter.api
 
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 
 interface TimelineEventFormatter {
-    fun format(event: EventTimelineItem): CharSequence?
+    fun format(event: EventTimelineItem): CharSequence? {
+        return format(
+            content = event.content,
+            isOutgoing = event.isOwn,
+            sender = event.sender,
+            senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
+        )
+    }
+    fun format(content: EventContent, isOutgoing: Boolean, sender: UserId, senderDisambiguatedDisplayName: String): CharSequence?
 }

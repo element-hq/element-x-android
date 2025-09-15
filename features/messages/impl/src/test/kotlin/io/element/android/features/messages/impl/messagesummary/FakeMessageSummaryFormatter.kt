@@ -7,13 +7,13 @@
 
 package io.element.android.features.messages.impl.messagesummary
 
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 
 class FakeMessageSummaryFormatter : MessageSummaryFormatter {
     private var result = "A message"
 
-    override fun format(event: TimelineItem.Event): String = result
+    override fun format(content: TimelineItemEventContent): String  = result
 
     fun givenMessageResult(value: String) {
         result = value

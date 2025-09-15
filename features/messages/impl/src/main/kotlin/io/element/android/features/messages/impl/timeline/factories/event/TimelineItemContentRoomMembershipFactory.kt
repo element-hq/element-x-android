@@ -12,14 +12,15 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRoomMembershipContent
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 
 @Inject
 class TimelineItemContentRoomMembershipFactory(
     private val timelineEventFormatter: TimelineEventFormatter,
 ) {
-    fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
-        val text = timelineEventFormatter.format(eventTimelineItem)
+    fun create(eventContent: EventContent, isOutgoing: Boolean, sender: UserId, senderDisambiguatedDisplayName: String): TimelineItemEventContent {
+        val text = timelineEventFormatter.format(eventContent, isOutgoing, sender, senderDisambiguatedDisplayName)
         return TimelineItemRoomMembershipContent(text.orEmpty().toString())
     }
 }

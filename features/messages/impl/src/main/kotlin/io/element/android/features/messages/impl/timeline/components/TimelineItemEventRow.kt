@@ -15,6 +15,7 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +37,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.pluralStringResource
@@ -43,6 +47,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -61,6 +66,7 @@ import io.element.android.features.messages.impl.timeline.components.receipt.Rea
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -78,14 +84,14 @@ import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
@@ -93,9 +99,13 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -258,18 +268,20 @@ fun TimelineItemEventRow(
 
         if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread) {
             event.threadInfo.threadSummary?.let { threadSummary ->
-                val threadPart = stringResource(CommonStrings.common_thread)
-                val numberOfReplies = threadSummary.numberOfReplies.toInt().let { replies ->
-                    pluralStringResource(CommonPlurals.common_replies, replies, replies)
-                }
-                Button(
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 2.dp)
-                        .align(if (event.isMine) Alignment.End else Alignment.Start),
-                    text = "$threadPart - $numberOfReplies",
-                    size = ButtonSize.Small,
+                ThreadSummaryView(
+                    modifier = if (event.isMine) {
+                        Modifier.align(Alignment.End).padding(end = 16.dp)
+                    } else {
+                        if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
+                    }.padding(top = 2.dp),
+                    threadSummary = threadSummary,
+                    latestEventText = event.threadInfo.latestEventText,
+                    isOutgoing = event.isMine,
                     onClick = {
-                        eventSink(TimelineEvents.OpenThread(event.eventId!!.toThreadId(), null))
-                    },
+                        event.eventId?.let {
+                            eventSink(TimelineEvents.OpenThread(it.toThreadId(), null))
+                        }
+                    }
                 )
             }
         }
@@ -285,6 +297,79 @@ fun TimelineItemEventRow(
             onReadReceiptsClick = { onReadReceiptClick(event) },
             modifier = Modifier.padding(top = 4.dp)
         )
+    }
+}
+
+@Composable
+private fun ThreadSummaryView(
+    threadSummary: ThreadSummary,
+    latestEventText: String?,
+    isOutgoing: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val bubbleShape = MessageEventBubbleDefaults.shape(false, TimelineItemGroupPosition.None, isOutgoing)
+    BoxWithConstraints(modifier = modifier) {
+        Row(
+            modifier = Modifier
+                .then(if (!isOutgoing) Modifier.padding(start = 16.dp) else Modifier)
+                .graphicsLayer {
+                    shape = bubbleShape
+                    clip = true
+                }
+                .background(MessageEventBubbleDefaults.backgroundBubbleColor(isOutgoing))
+                .niceClickable(onClick)
+                .padding(horizontal = 12.dp, vertical = 10.dp)
+                .widthIn(max = (maxWidth - 24.dp) * MessageEventBubbleDefaults.BUBBLE_WIDTH_RATIO),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = CompoundIcons.ThreadsSolid(),
+                contentDescription = null,
+                tint = ElementTheme.colors.iconSecondary,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = pluralStringResource(CommonPlurals.common_replies, threadSummary.numberOfReplies.toInt(), threadSummary.numberOfReplies),
+                style = ElementTheme.typography.fontBodySmMedium,
+                color = ElementTheme.colors.textSecondary,
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            threadSummary.latestEvent.dataOrNull()?.let { latestEvent ->
+                val avatarData = AvatarData(
+                    id = latestEvent.senderId.value,
+                    name = latestEvent.senderProfile.getDisplayName(),
+                    url = latestEvent.senderProfile.getAvatarUrl(),
+                    size = AvatarSize.TimelineThreadLatestEventSender,
+                )
+                Avatar(
+                    avatarData = avatarData,
+                    avatarType = AvatarType.User,
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = latestEvent.senderProfile.getDisplayName() ?: latestEvent.senderId.value,
+                    style = ElementTheme.typography.fontBodySmMedium,
+                    color = ElementTheme.colors.textSecondary,
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
+                latestEventText?.let {
+                    Text(
+                        text = it,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        color = ElementTheme.colors.textSecondary,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -746,13 +831,69 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                             " hopefully can be manually adjusted to test different behaviors."
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
-                    threadInfo = EventThreadInfo(
+                    threadInfo = TimelineItemThreadInfo(
                         threadRootId = ThreadId("\$thread-root-id"),
-                        threadSummary = ThreadSummary(AsyncData.Uninitialized, numberOfReplies = 20L)
+                        latestEventText = "This is the latest message in the thread",
+                        threadSummary = ThreadSummary(AsyncData.Success(
+                            EmbeddedEventInfo(
+                                eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
+                                content = MessageContent(
+                                    body = "This is the latest message in the thread",
+                                    inReplyTo = null,
+                                    isEdited = false,
+                                    threadInfo = EventThreadInfo(null, null),
+                                    type = TextMessageType("This is the latest message in the thread", null)
+                                ),
+                                senderId = UserId("@user:id"),
+                                senderProfile = ProfileTimelineDetails.Ready(
+                                    displayName = "Alice",
+                                    avatarUrl = null,
+                                    displayNameAmbiguous = true,
+                                ),
+                                timestamp = 0L,
+                            )
+                        ), numberOfReplies = 20L)
                     )
                 ),
                 displayThreadSummaries = true,
             )
         }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ThreadSummaryViewPreview() {
+    ElementPreview {
+        val body = "This is the latest message in the thread"
+        val threadSummary = ThreadSummary(
+            AsyncData.Success(
+                EmbeddedEventInfo(
+                    eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
+                    content = MessageContent(
+                        body = body,
+                        inReplyTo = null,
+                        isEdited = false,
+                        threadInfo = EventThreadInfo(null, null),
+                        type = TextMessageType(body, null)
+                    ),
+                    senderId = UserId("@user:id"),
+                    senderProfile = ProfileTimelineDetails.Ready(
+                        displayName = "Alice",
+                        avatarUrl = null,
+                        displayNameAmbiguous = true,
+                    ),
+                    timestamp = 0L,
+                )
+            ),
+            numberOfReplies = 12,
+        )
+
+        ThreadSummaryView(
+            threadSummary = threadSummary,
+            latestEventText = "Some event with a very long text that should get clipped",
+            isOutgoing = true,
+            onClick = {},
+        )
     }
 }

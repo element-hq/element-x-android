@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl.fixtures
 
+import io.element.android.features.messages.impl.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
@@ -30,7 +31,10 @@ import io.element.android.features.poll.test.pollcontent.FakePollContentStateFac
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
@@ -75,11 +79,13 @@ internal fun TestScope.aTimelineItemsFactory(
                         stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
                         failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
                         failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
+                        currentSessionIdHolder = CurrentSessionIdHolder(matrixClient),
                     ),
                     matrixClient = matrixClient,
                     dateFormatter = FakeDateFormatter(),
                     permalinkParser = FakePermalinkParser(),
-                    config = config
+                    config = config,
+                    summaryFormatter = FakeMessageSummaryFormatter(),
                 )
             }
         },
@@ -95,7 +101,7 @@ internal fun TestScope.aTimelineItemsFactory(
 
 internal fun aTimelineEventFormatter(): TimelineEventFormatter {
     return object : TimelineEventFormatter {
-        override fun format(event: EventTimelineItem): CharSequence {
+        override fun format(content: EventContent, isOutgoing: Boolean, sender: UserId, senderDisambiguatedDisplayName: String): CharSequence? {
             return ""
         }
     }

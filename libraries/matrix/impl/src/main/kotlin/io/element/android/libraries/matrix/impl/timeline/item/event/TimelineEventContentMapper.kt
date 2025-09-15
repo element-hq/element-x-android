@@ -79,7 +79,7 @@ class TimelineEventContentMapper(
                                                 content = map(latestEvent.content),
                                                 senderId = UserId(latestEvent.sender),
                                                 senderProfile = latestEvent.senderProfile.map(),
-                                                timestamp = latestEvent.timestamp.toLong()
+                                                timestamp = latestEvent.timestamp.toLong(),
                                             )
                                         )
                                     }
