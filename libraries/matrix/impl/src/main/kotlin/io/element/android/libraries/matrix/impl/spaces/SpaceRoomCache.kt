@@ -12,7 +12,9 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import java.util.Optional
 
 /**
  * An in memory cache of space rooms.
@@ -20,8 +22,8 @@ import kotlinx.coroutines.flow.update
  */
 class SpaceRoomCache {
     private val inMemoryCache = MutableStateFlow<Map<RoomId, SpaceRoom?>>(emptyMap())
-    fun getSpaceRoomFlow(roomId: RoomId): Flow<SpaceRoom?> {
-        return inMemoryCache.mapState { it[roomId] }
+    fun getSpaceRoomFlow(roomId: RoomId): StateFlow<Optional<SpaceRoom>> {
+        return inMemoryCache.mapState { Optional.ofNullable(it[roomId]) }
     }
 
     fun update(spaceRooms: List<SpaceRoom>) {

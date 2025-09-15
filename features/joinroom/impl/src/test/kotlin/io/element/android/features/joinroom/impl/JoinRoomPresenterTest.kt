@@ -964,7 +964,7 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsSpace("AppName"))
+                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.UnsupportedSpace("AppName"))
             }
         }
     }

@@ -21,7 +21,7 @@ class SpaceRoomCacheTest {
     fun `getSpaceRoomFlow emits items`() = runTest {
         val sut = SpaceRoomCache()
         sut.getSpaceRoomFlow(A_ROOM_ID).test {
-            assertThat(awaitItem()).isNull()
+            assertThat(awaitItem().isEmpty).isTrue()
             val room = aSpaceRoom(
                 roomId = A_ROOM_ID,
                 roomType = RoomType.Room,
@@ -34,7 +34,7 @@ class SpaceRoomCacheTest {
                 roomType = RoomType.Space,
             )
             sut.update(listOf(space))
-            assertThat(awaitItem()).isEqualTo(space)
+            assertThat(awaitItem().get()).isEqualTo(space)
             val spaceOther = aSpaceRoom(
                 roomId = A_ROOM_ID_2,
                 roomType = RoomType.Space,

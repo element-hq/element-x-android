@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.Optional
 
 class FakeSpaceRoomList(
     initialSpaceFlowValue: SpaceRoom? = null,
@@ -22,11 +23,11 @@ class FakeSpaceRoomList(
     initialSpaceRoomList: SpaceRoomList.PaginationStatus = SpaceRoomList.PaginationStatus.Loading,
     private val paginateResult: () -> Result<Unit> = { lambdaError() },
 ) : SpaceRoomList {
-    private val _currentSpaceFlow: MutableStateFlow<SpaceRoom?> = MutableStateFlow(initialSpaceFlowValue)
-    override fun currentSpaceFlow(): Flow<SpaceRoom?> = _currentSpaceFlow.asStateFlow()
+    private val _currentSpaceFlow: MutableStateFlow<Optional<SpaceRoom>> = MutableStateFlow(Optional.ofNullable(initialSpaceFlowValue))
+    override fun currentSpaceFlow() = _currentSpaceFlow.asStateFlow()
 
     fun emitCurrentSpace(value: SpaceRoom?) {
-        _currentSpaceFlow.value = value
+        _currentSpaceFlow.value = Optional.ofNullable(value)
     }
 
     private val _spaceRoomsFlow: MutableStateFlow<List<SpaceRoom>> = MutableStateFlow(initialSpaceRoomsValue)

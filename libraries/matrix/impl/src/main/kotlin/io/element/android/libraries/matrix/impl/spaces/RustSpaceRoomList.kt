@@ -16,10 +16,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import uniffi.matrix_sdk_ui.SpaceRoomListPaginationState
+import java.util.Optional
 import org.matrix.rustcomponents.sdk.SpaceRoomList as InnerSpaceRoomList
 
 class RustSpaceRoomList(
@@ -31,7 +33,7 @@ class RustSpaceRoomList(
 ) : SpaceRoomList {
     private val inner = CompletableDeferred<InnerSpaceRoomList>()
 
-    override fun currentSpaceFlow(): Flow<SpaceRoom?> {
+    override fun currentSpaceFlow(): StateFlow<Optional<SpaceRoom>> {
         return spaceRoomCache.getSpaceRoomFlow(roomId)
     }
 
