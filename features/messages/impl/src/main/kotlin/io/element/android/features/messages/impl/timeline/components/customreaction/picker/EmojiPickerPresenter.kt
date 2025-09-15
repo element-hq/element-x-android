@@ -71,6 +71,7 @@ class EmojiPickerPresenter(
 
         return EmojiPickerState(
             categories = categories,
+            allEmojis = emojibaseStore.allEmojis,
             searchQuery = searchQuery,
             isSearchActive = isSearchActive,
             searchResults = emojiResults,

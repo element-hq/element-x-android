@@ -14,6 +14,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 
 class EmojiPickerStateProvider : PreviewParameterProvider<EmojiPickerState> {
@@ -70,12 +71,14 @@ internal fun anEmojiPickerState(
             ),
         )
     }.toImmutableMap(),
+    allEmojis: ImmutableList<Emoji> = categories.values.flatten().toImmutableList(),
     searchQuery: String = "",
     isSearchActive: Boolean = false,
     searchResults: SearchBarResultState<ImmutableList<Emoji>> = SearchBarResultState.Initial(),
     eventSink: (EmojiPickerEvents) -> Unit = {},
 ) = EmojiPickerState(
     categories = categories,
+    allEmojis = allEmojis,
     searchQuery = searchQuery,
     isSearchActive = isSearchActive,
     searchResults = searchResults,

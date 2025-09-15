@@ -15,6 +15,7 @@ import kotlinx.collections.immutable.ImmutableMap
 
 data class EmojiPickerState(
     val categories: ImmutableMap<EmojibaseCategory, ImmutableList<Emoji>>,
+    val allEmojis: ImmutableList<Emoji>,
     val searchQuery: String,
     val isSearchActive: Boolean,
     val searchResults: SearchBarResultState<ImmutableList<Emoji>>,
