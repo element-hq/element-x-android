@@ -7,14 +7,12 @@
 
 package io.element.android.features.space.impl.leave
 
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.collections.immutable.ImmutableList
 
-sealed interface LeaveSpaceBottomSheetState {
-    data object Hidden : LeaveSpaceBottomSheetState
-    data class Shown(
-        val spaceName: String?,
-        val roomsWhereUserIsTheOnlyAdmin: AsyncData<ImmutableList<SpaceRoom>>,
-    ) : LeaveSpaceBottomSheetState
-}
+data class ConfirmingLeavingSpace(
+    val spaceName: String?,
+    val roomsWhereUserIsTheOnlyAdmin: AsyncData<ImmutableList<SpaceRoom>>,
+) : AsyncAction.Confirming

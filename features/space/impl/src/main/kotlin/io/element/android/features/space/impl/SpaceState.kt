@@ -7,7 +7,7 @@
 
 package io.element.android.features.space.impl
 
-import io.element.android.features.space.impl.leave.LeaveSpaceBottomSheetState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.collections.immutable.ImmutableList
@@ -19,6 +19,6 @@ data class SpaceState(
     val seenSpaceInvites: ImmutableSet<RoomId>,
     val hideInvitesAvatar: Boolean,
     val hasMoreToLoad: Boolean,
-    val leaveSpaceBottomSheetState: LeaveSpaceBottomSheetState,
+    val leaveSpaceBottomSheetState: AsyncAction<Unit>,
     val eventSink: (SpaceEvents) -> Unit
 )

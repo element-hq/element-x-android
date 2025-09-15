@@ -32,13 +32,16 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.space.impl.leave.ConfirmingLeavingSpace
 import io.element.android.features.space.impl.leave.LeaveSpaceBottomSheet
-import io.element.android.features.space.impl.leave.LeaveSpaceBottomSheetState
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -84,9 +87,9 @@ fun SpaceView(
         },
     )
 
-    if (state.leaveSpaceBottomSheetState is LeaveSpaceBottomSheetState.Shown) {
-        LeaveSpaceBottomSheet(
-            state = state.leaveSpaceBottomSheetState,
+    when (state.leaveSpaceBottomSheetState) {
+        is AsyncAction.Confirming -> LeaveSpaceBottomSheet(
+            state = state.leaveSpaceBottomSheetState as ConfirmingLeavingSpace,
             onLeaveSpace = {
                 state.eventSink(SpaceEvents.LeaveSpace)
             },
@@ -94,6 +97,13 @@ fun SpaceView(
                 state.eventSink(SpaceEvents.CancelLeaveSpace)
             }
         )
+        is AsyncAction.Failure -> ErrorDialog(
+            content = stringResource(CommonStrings.error_unknown),
+            onSubmit = { state.eventSink(SpaceEvents.CancelLeaveSpace) },
+        )
+        AsyncAction.Loading -> ProgressDialog()
+        is AsyncAction.Success,
+        AsyncAction.Uninitialized -> Unit
     }
 }
 
@@ -200,7 +210,7 @@ private fun SpaceViewTopBar(
                 DropdownMenuItem(
                     onClick = {
                         showMenu = false
-                        state.eventSink(SpaceEvents.StartLeaveSpace)
+                        state.eventSink(SpaceEvents.LeaveSpace)
                     },
                     text = { Text(stringResource(id = CommonStrings.action_leave)) },
                     leadingIcon = {

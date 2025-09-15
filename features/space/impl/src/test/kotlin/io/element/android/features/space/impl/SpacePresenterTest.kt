@@ -13,10 +13,12 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.space.api.SpaceEntryPoint
-import io.element.android.features.space.impl.leave.LeaveSpaceBottomSheetState
+import io.element.android.features.space.impl.leave.ConfirmingLeavingSpace
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
@@ -54,7 +56,7 @@ class SpacePresenterTest {
             assertThat(state.seenSpaceInvites).isEmpty()
             assertThat(state.hideInvitesAvatar).isFalse()
             assertThat(state.hasMoreToLoad).isTrue()
-            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
+            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Uninitialized)
             advanceUntilIdle()
             paginateResult.assertions().isCalledOnce()
         }
@@ -172,19 +174,19 @@ class SpacePresenterTest {
         presenter.test {
             val state = awaitItem()
             advanceUntilIdle()
-            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
-            state.eventSink(SpaceEvents.StartLeaveSpace)
+            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Uninitialized)
+            state.eventSink(SpaceEvents.LeaveSpace)
             val stateAfterStarting = awaitItem()
-            assertThat(stateAfterStarting.leaveSpaceBottomSheetState).isInstanceOf(LeaveSpaceBottomSheetState.Shown::class.java)
-            val shown = stateAfterStarting.leaveSpaceBottomSheetState as LeaveSpaceBottomSheetState.Shown
+            assertThat(stateAfterStarting.leaveSpaceBottomSheetState).isInstanceOf(ConfirmingLeavingSpace::class.java)
+            val shown = stateAfterStarting.leaveSpaceBottomSheetState as ConfirmingLeavingSpace
             assertThat(shown.spaceName).isNull()
             assertThat(shown.roomsWhereUserIsTheOnlyAdmin).isInstanceOf(AsyncData.Loading::class.java)
             val stateAfterLoading = awaitItem()
-            val shownLoaded = stateAfterLoading.leaveSpaceBottomSheetState as LeaveSpaceBottomSheetState.Shown
+            val shownLoaded = stateAfterLoading.leaveSpaceBottomSheetState as ConfirmingLeavingSpace
             assertThat(shownLoaded.roomsWhereUserIsTheOnlyAdmin.dataOrNull()!!).isEmpty()
             stateAfterLoading.eventSink(SpaceEvents.CancelLeaveSpace)
             val stateAfterCancel = awaitItem()
-            assertThat(stateAfterCancel.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
+            assertThat(stateAfterCancel.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Uninitialized)
         }
     }
 
@@ -213,21 +215,70 @@ class SpacePresenterTest {
         presenter.test {
             val state = awaitItem()
             advanceUntilIdle()
-            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
-            state.eventSink(SpaceEvents.StartLeaveSpace)
+            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Uninitialized)
+            state.eventSink(SpaceEvents.LeaveSpace)
             val stateAfterStarting = awaitItem()
-            assertThat(stateAfterStarting.leaveSpaceBottomSheetState).isInstanceOf(LeaveSpaceBottomSheetState.Shown::class.java)
-            val shown = stateAfterStarting.leaveSpaceBottomSheetState as LeaveSpaceBottomSheetState.Shown
+            assertThat(stateAfterStarting.leaveSpaceBottomSheetState).isInstanceOf(ConfirmingLeavingSpace::class.java)
+            val shown = stateAfterStarting.leaveSpaceBottomSheetState as ConfirmingLeavingSpace
             assertThat(shown.spaceName).isNull()
             assertThat(shown.roomsWhereUserIsTheOnlyAdmin).isInstanceOf(AsyncData.Loading::class.java)
             val stateAfterLoading = awaitItem()
-            val shownLoaded = stateAfterLoading.leaveSpaceBottomSheetState as LeaveSpaceBottomSheetState.Shown
+            val shownLoaded = stateAfterLoading.leaveSpaceBottomSheetState as ConfirmingLeavingSpace
             assertThat(shownLoaded.roomsWhereUserIsTheOnlyAdmin.dataOrNull()!!).isEmpty()
             stateAfterLoading.eventSink(SpaceEvents.LeaveSpace)
-            val stateAfterCancel = awaitItem()
-            assertThat(stateAfterCancel.leaveSpaceBottomSheetState).isEqualTo(LeaveSpaceBottomSheetState.Hidden)
-            advanceUntilIdle()
+            val stateLoading = awaitItem()
+            assertThat(stateLoading.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Loading)
+            val stateFinal = awaitItem()
+            assertThat(stateFinal.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Success(Unit))
             leaveRoomLambda.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - leave space, confirm then failure`() = runTest {
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) },
+        )
+        val leaveRoomLambda = lambdaRecorder<Result<Unit>> {
+            Result.failure(AN_EXCEPTION)
+        }
+        val presenter = createSpacePresenter(
+            client = FakeMatrixClient(
+                spaceService = FakeSpaceService(
+                    spaceRoomListResult = { fakeSpaceRoomList },
+                ),
+            ).apply {
+                givenGetRoomResult(
+                    roomId = A_ROOM_ID,
+                    result = FakeBaseRoom(
+                        leaveRoomLambda = leaveRoomLambda,
+                    )
+                )
+            },
+        )
+        presenter.test {
+            val state = awaitItem()
+            advanceUntilIdle()
+            assertThat(state.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Uninitialized)
+            state.eventSink(SpaceEvents.LeaveSpace)
+            val stateAfterStarting = awaitItem()
+            assertThat(stateAfterStarting.leaveSpaceBottomSheetState).isInstanceOf(ConfirmingLeavingSpace::class.java)
+            val shown = stateAfterStarting.leaveSpaceBottomSheetState as ConfirmingLeavingSpace
+            assertThat(shown.spaceName).isNull()
+            assertThat(shown.roomsWhereUserIsTheOnlyAdmin).isInstanceOf(AsyncData.Loading::class.java)
+            val stateAfterLoading = awaitItem()
+            val shownLoaded = stateAfterLoading.leaveSpaceBottomSheetState as ConfirmingLeavingSpace
+            assertThat(shownLoaded.roomsWhereUserIsTheOnlyAdmin.dataOrNull()!!).isEmpty()
+            stateAfterLoading.eventSink(SpaceEvents.LeaveSpace)
+            val stateLoading = awaitItem()
+            assertThat(stateLoading.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Loading)
+            val stateError = awaitItem()
+            assertThat(stateError.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
+            leaveRoomLambda.assertions().isCalledOnce()
+            // Close error
+            stateError.eventSink(SpaceEvents.CancelLeaveSpace)
+            val stateFinal = awaitItem()
+            assertThat(stateFinal.leaveSpaceBottomSheetState).isEqualTo(AsyncAction.Uninitialized)
         }
     }
 

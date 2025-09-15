@@ -15,14 +15,14 @@ import io.element.android.libraries.previewutils.room.aSpaceRoom
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-class LeaveSpaceBottomSheetStateShownProvider : PreviewParameterProvider<LeaveSpaceBottomSheetState.Shown> {
-    override val values: Sequence<LeaveSpaceBottomSheetState.Shown>
+class ConfirmingLeavingSpaceProvider : PreviewParameterProvider<ConfirmingLeavingSpace> {
+    override val values: Sequence<ConfirmingLeavingSpace>
         get() = sequenceOf(
-            aLeaveSpaceBottomSheetStateShown(),
-            aLeaveSpaceBottomSheetStateShown(
+            aConfirmingLeavingSpace(),
+            aConfirmingLeavingSpace(
                 roomsWhereUserIsTheOnlyAdmin = AsyncData.Success(persistentListOf()),
             ),
-            aLeaveSpaceBottomSheetStateShown(
+            aConfirmingLeavingSpace(
                 spaceName = null,
                 roomsWhereUserIsTheOnlyAdmin = AsyncData.Success(
                     persistentListOf(
@@ -39,10 +39,10 @@ class LeaveSpaceBottomSheetStateShownProvider : PreviewParameterProvider<LeaveSp
         )
 }
 
-fun aLeaveSpaceBottomSheetStateShown(
+fun aConfirmingLeavingSpace(
     spaceName: String? = "Element Space",
     roomsWhereUserIsTheOnlyAdmin: AsyncData<ImmutableList<SpaceRoom>> = AsyncData.Uninitialized,
-) = LeaveSpaceBottomSheetState.Shown(
+) = ConfirmingLeavingSpace(
     spaceName = spaceName,
     roomsWhereUserIsTheOnlyAdmin = roomsWhereUserIsTheOnlyAdmin,
 )

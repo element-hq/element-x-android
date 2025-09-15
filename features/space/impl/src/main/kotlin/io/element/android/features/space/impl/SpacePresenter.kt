@@ -20,7 +20,8 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.space.api.SpaceEntryPoint
-import io.element.android.features.space.impl.leave.LeaveSpaceBottomSheetState
+import io.element.android.features.space.impl.leave.ConfirmingLeavingSpace
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
@@ -71,22 +72,33 @@ class SpacePresenter(
         }.collectAsState()
 
         val currentSpace by remember { spaceRoomList.currentSpaceFlow() }.collectAsState(null)
-        val leaveSpaceBottomSheetState = remember { mutableStateOf<LeaveSpaceBottomSheetState>(LeaveSpaceBottomSheetState.Hidden) }
+        val leaveSpaceBottomSheetState = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: SpaceEvents) {
             when (event) {
                 SpaceEvents.LoadMore -> coroutineScope.paginate()
                 SpaceEvents.CancelLeaveSpace -> {
-                    leaveSpaceBottomSheetState.value = LeaveSpaceBottomSheetState.Hidden
+                    leaveSpaceBottomSheetState.value = AsyncAction.Uninitialized
                 }
-                SpaceEvents.LeaveSpace -> coroutineScope.launch {
-                    leaveSpaceBottomSheetState.value = LeaveSpaceBottomSheetState.Hidden
-                    client.getRoom(inputs.roomId)?.leave()
+                SpaceEvents.LeaveSpace -> if (leaveSpaceBottomSheetState.value is AsyncAction.Confirming) {
+                    coroutineScope.launch {
+                        leaveSpaceBottomSheetState.value = AsyncAction.Loading
+                        client.getRoom(inputs.roomId)?.leave()?.fold(
+                            onSuccess = {
+                                // Successfully left the space, nothing more to do, the screen will be closed automatically
+                                leaveSpaceBottomSheetState.value = AsyncAction.Success(Unit)
+                            },
+                            onFailure = {
+                                leaveSpaceBottomSheetState.value = AsyncAction.Failure(it)
+                            }
+                        )
+                    }
+                } else {
+                    coroutineScope.startLeaveSpace(
+                        spaceName = currentSpace?.name,
+                        leaveSpaceBottomSheetState,
+                    )
                 }
-                SpaceEvents.StartLeaveSpace -> coroutineScope.startLeaveSpace(
-                    spaceName = currentSpace?.name,
-                    leaveSpaceBottomSheetState,
-                )
             }
         }
         return SpaceState(
@@ -106,17 +118,17 @@ class SpacePresenter(
 
     private fun CoroutineScope.startLeaveSpace(
         spaceName: String?,
-        leaveSpaceBottomSheetState: MutableState<LeaveSpaceBottomSheetState>,
+        leaveSpaceBottomSheetState: MutableState<AsyncAction<Unit>>,
     ) = launch {
-        leaveSpaceBottomSheetState.value = LeaveSpaceBottomSheetState.Shown(
+        leaveSpaceBottomSheetState.value = ConfirmingLeavingSpace(
             spaceName = spaceName,
             roomsWhereUserIsTheOnlyAdmin = AsyncData.Loading(),
         )
         // TODO Fetch the actual list of rooms where the user is the only admin
         delay(1000)
         // Update state only if not cancelled by the user
-        if (leaveSpaceBottomSheetState.value is LeaveSpaceBottomSheetState.Shown) {
-            leaveSpaceBottomSheetState.value = LeaveSpaceBottomSheetState.Shown(
+        if (leaveSpaceBottomSheetState.value is ConfirmingLeavingSpace) {
+            leaveSpaceBottomSheetState.value = ConfirmingLeavingSpace(
                 spaceName = spaceName,
                 roomsWhereUserIsTheOnlyAdmin = AsyncData.Success(persistentListOf()),
             )

@@ -52,7 +52,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LeaveSpaceBottomSheet(
-    state: LeaveSpaceBottomSheetState.Shown,
+    state: ConfirmingLeavingSpace,
     onLeaveSpace: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -98,7 +98,7 @@ fun LeaveSpaceBottomSheet(
 }
 
 @Composable
-private fun LeaveSpaceBottomSheetHeader(state: LeaveSpaceBottomSheetState.Shown) {
+private fun LeaveSpaceBottomSheetHeader(state: ConfirmingLeavingSpace) {
     IconTitleSubtitleMolecule(
         modifier = Modifier.padding(top = 24.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
         iconStyle = BigIcon.Style.AlertSolid,
@@ -214,7 +214,7 @@ private fun SpaceItem(room: SpaceRoom) {
 @PreviewsDayNight
 @Composable
 internal fun LeaveSpaceBottomSheetPreview(
-    @PreviewParameter(LeaveSpaceBottomSheetStateShownProvider::class) state: LeaveSpaceBottomSheetState.Shown,
+    @PreviewParameter(ConfirmingLeavingSpaceProvider::class) state: ConfirmingLeavingSpace,
 ) = ElementPreview {
     LeaveSpaceBottomSheet(
         state = state,
