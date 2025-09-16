@@ -14,7 +14,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
-import io.element.android.features.viewfolder.impl.root.ViewFolderRootNode
+import io.element.android.features.viewfolder.impl.root.ViewFolderFlowNode
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
@@ -25,7 +25,7 @@ class DefaultViewFolderEntryPoint : ViewFolderEntryPoint {
 
         return object : ViewFolderEntryPoint.NodeBuilder {
             override fun params(params: ViewFolderEntryPoint.Params): ViewFolderEntryPoint.NodeBuilder {
-                plugins += ViewFolderRootNode.Inputs(params.rootPath)
+                plugins += ViewFolderFlowNode.Inputs(params.rootPath)
                 return this
             }
 
@@ -35,7 +35,7 @@ class DefaultViewFolderEntryPoint : ViewFolderEntryPoint {
             }
 
             override fun build(): Node {
-                return parentNode.createNode<ViewFolderRootNode>(buildContext, plugins)
+                return parentNode.createNode<ViewFolderFlowNode>(buildContext, plugins)
             }
         }
     }
