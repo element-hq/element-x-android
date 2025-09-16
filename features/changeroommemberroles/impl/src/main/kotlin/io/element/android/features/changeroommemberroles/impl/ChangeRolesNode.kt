@@ -55,7 +55,7 @@ class ChangeRolesNode(
     }
 }
 
-private fun ChangeRoomMemberRolesListType.toRoomMemberRole() = when (this) {
+internal fun ChangeRoomMemberRolesListType.toRoomMemberRole() = when (this) {
     ChangeRoomMemberRolesListType.Admins -> RoomMember.Role.Admin
     ChangeRoomMemberRolesListType.Moderators -> RoomMember.Role.Moderator
     ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving -> RoomMember.Role.Owner(isCreator = false)
