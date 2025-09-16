@@ -47,6 +47,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -660,6 +661,28 @@ private fun SuccessorRoomBanner(
 internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) = ElementPreview {
     MessagesView(
         state = state,
+        onBackClick = {},
+        onRoomDetailsClick = {},
+        onEventContentClick = { _, _ -> false },
+        onUserDataClick = {},
+        onLinkClick = { _, _ -> },
+        onSendLocationClick = {},
+        onCreatePollClick = {},
+        onJoinCallClick = {},
+        onViewAllPinnedMessagesClick = { },
+        forceJumpToBottomVisibility = true,
+        knockRequestsBannerView = {},
+    )
+}
+
+@Preview
+@Composable
+internal fun MessagesViewA11yPreview() = ElementPreview {
+    MessagesView(
+        state = aMessagesState(
+            roomName = "A DM with a very looong name",
+            dmUserVerificationState = IdentityState.VerificationViolation,
+        ),
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },

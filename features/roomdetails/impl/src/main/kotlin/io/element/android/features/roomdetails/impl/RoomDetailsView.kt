@@ -58,6 +58,7 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.modifiers.niceClickable
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
@@ -749,6 +750,14 @@ internal fun RoomDetailsPreview(@PreviewParameter(RoomDetailsStateProvider::clas
 @Composable
 internal fun RoomDetailsDarkPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }
+
+@PreviewWithLargeHeight
+@Composable
+internal fun RoomDetailsA11yPreview() = ElementPreview {
+    ContentToPreview(
+        state = aRoomDetailsState(displayAdminSettings = true)
+    )
+}
 
 @ExcludeFromCoverage
 @Composable
