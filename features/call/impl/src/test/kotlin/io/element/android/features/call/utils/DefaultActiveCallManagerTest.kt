@@ -22,13 +22,16 @@ import io.element.android.features.call.test.aCallNotificationData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
@@ -38,6 +41,8 @@ import io.element.android.libraries.push.test.notifications.push.FakeNotificatio
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.plantTestTimber
+import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -162,6 +167,102 @@ class DefaultActiveCallManagerTest {
         assertThat(manager.activeWakeLock?.isHeld).isFalse()
 
         verify { notificationManagerCompat.cancel(notificationId) }
+    }
+
+    @Test
+    fun `Decline event - Hangup on a ringing call should send a decline event`() = runTest {
+        setupShadowPowerManager()
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+
+        val room = mockk<JoinedRoom>(relaxed = true)
+
+        val matrixClient = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val clientProvider = FakeMatrixClientProvider({ Result.success(matrixClient) })
+
+        val manager = createActiveCallManager(
+            matrixClientProvider = clientProvider,
+            notificationManagerCompat = notificationManagerCompat
+        )
+
+        val notificationData = aCallNotificationData(roomId = A_ROOM_ID)
+        manager.registerIncomingCall(notificationData)
+
+        manager.hungUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
+
+        coVerify {
+            room.declineCall(notificationEventId = notificationData.eventId)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `Decline event - Declining from another session should stop ringing`() = runTest {
+        setupShadowPowerManager()
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+
+        val room = FakeJoinedRoom()
+
+        val matrixClient = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val clientProvider = FakeMatrixClientProvider({ Result.success(matrixClient) })
+
+        val manager = createActiveCallManager(
+            matrixClientProvider = clientProvider,
+            notificationManagerCompat = notificationManagerCompat
+        )
+
+        val notificationData = aCallNotificationData(roomId = A_ROOM_ID)
+        manager.registerIncomingCall(notificationData)
+
+        runCurrent()
+
+        // Simulate declined from other session
+        room.baseRoom.givenDecliner(matrixClient.sessionId, notificationData.eventId)
+
+        runCurrent()
+
+        assertThat(manager.activeCall.value).isNull()
+        assertThat(manager.activeWakeLock?.isHeld).isFalse()
+
+        verify { notificationManagerCompat.cancel(notificationId) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `Decline event - Should ignore decline for other notification events`() = runTest {
+        plantTestTimber()
+        setupShadowPowerManager()
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+
+        val room = FakeJoinedRoom()
+
+        val matrixClient = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val clientProvider = FakeMatrixClientProvider({ Result.success(matrixClient) })
+
+        val manager = createActiveCallManager(
+            matrixClientProvider = clientProvider,
+            notificationManagerCompat = notificationManagerCompat
+        )
+
+        val notificationData = aCallNotificationData(roomId = A_ROOM_ID)
+        manager.registerIncomingCall(notificationData)
+
+        runCurrent()
+
+        // Simulate declined for another notification event
+        room.baseRoom.givenDecliner(matrixClient.sessionId, AN_EVENT_ID_2)
+
+        runCurrent()
+
+        assertThat(manager.activeCall.value).isNotNull()
+        assertThat(manager.activeWakeLock?.isHeld).isTrue()
+
+        verify(exactly = 0) { notificationManagerCompat.cancel(notificationId) }
     }
 
     @Test

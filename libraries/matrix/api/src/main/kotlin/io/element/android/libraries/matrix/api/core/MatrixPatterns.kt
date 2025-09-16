@@ -151,7 +151,7 @@ object MatrixPatterns {
                 val urlMatch = match.groupValues[1]
                 when (val permalink = permalinkParser.parse(urlMatch)) {
                     is PermalinkData.UserLink -> {
-                        add(MatrixPatternResult(MatrixPatternType.USER_ID, permalink.userId.toString(), match.range.first, match.range.last + 1))
+                        add(MatrixPatternResult(MatrixPatternType.USER_ID, permalink.userId.value, match.range.first, match.range.last + 1))
                     }
                     is PermalinkData.RoomLink -> {
                         when (permalink.roomIdOrAlias) {
