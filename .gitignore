@@ -62,6 +62,7 @@ captures/
 # Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/copilot
+.idea/copilot.*
 .idea/inspectionProfiles
 # Shelved changes in the IDE
 .idea/shelf
