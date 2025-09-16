@@ -13,6 +13,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -353,7 +354,7 @@ private fun EmojiReactionsRow(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+        modifier = modifier.padding(end = 16.dp, top = 16.dp, bottom = 16.dp),
     ) {
         val backgroundColor = ElementTheme.colors.bgCanvasDefault
 
@@ -384,6 +385,7 @@ private fun EmojiReactionsRow(
                         size = Size(gradientWidth, size.height)
                     )
                 },
+            contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(emojis) { emoji ->

@@ -162,7 +162,7 @@ class DefaultActionListPresenter(
         }
     }
 
-    private suspend fun buildActions(
+    private fun buildActions(
         timelineItem: TimelineItem.Event,
         usersEventPermissions: UserEventPermissions,
         isDeveloperModeEnabled: Boolean,

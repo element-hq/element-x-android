@@ -7,12 +7,13 @@
 
 package io.element.android.libraries.matrix.api.recentemojis
 
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class AddRecentEmoji @Inject constructor(
+@Inject
+class AddRecentEmoji(
     private val client: MatrixClient,
     private val dispatchers: CoroutineDispatchers,
 ) {

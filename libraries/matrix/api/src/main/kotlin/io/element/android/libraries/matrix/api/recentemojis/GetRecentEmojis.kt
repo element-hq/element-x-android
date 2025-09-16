@@ -7,16 +7,24 @@
 
 package io.element.android.libraries.matrix.api.recentemojis
 
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class GetRecentEmojis @Inject constructor(
+fun interface GetRecentEmojis {
+    suspend operator fun invoke(): Result<List<String>>
+}
+
+@ContributesBinding(SessionScope::class)
+@Inject
+class DefaultGetRecentEmojis(
     private val client: MatrixClient,
     private val dispatchers: CoroutineDispatchers,
-) {
-    suspend operator fun invoke(): Result<List<String>> = withContext(dispatchers.io) {
+) : GetRecentEmojis {
+    override suspend operator fun invoke(): Result<List<String>> = withContext(dispatchers.io) {
         client.getRecentEmojis()
     }
 }

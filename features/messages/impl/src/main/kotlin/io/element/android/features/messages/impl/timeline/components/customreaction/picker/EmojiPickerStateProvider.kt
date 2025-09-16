@@ -10,12 +10,12 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseCategory
+import io.element.android.features.messages.impl.timeline.components.customreaction.icon
+import io.element.android.features.messages.impl.timeline.components.customreaction.title
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableMap
 
 class EmojiPickerStateProvider : PreviewParameterProvider<EmojiPickerState> {
     override val values: Sequence<EmojiPickerState>
@@ -51,27 +51,31 @@ class EmojiPickerStateProvider : PreviewParameterProvider<EmojiPickerState> {
 }
 
 internal fun anEmojiPickerState(
-    categories: ImmutableMap<EmojibaseCategory, ImmutableList<Emoji>> = EmojibaseCategory.entries.associateWith {
-        persistentListOf(
-            Emoji(
-                "0x00",
-                "grinning face",
-                persistentListOf("grinning"),
-                persistentListOf("smile, grin"),
-                "😀",
-                null
-            ),
-            Emoji(
-                "0x01",
-                "crying face",
-                persistentListOf("crying"),
-                persistentListOf("smile, crying"),
-                "\uD83E\uDD72",
-                null
-            ),
+    categories: ImmutableList<EmojiCategory> = EmojibaseCategory.entries.map {
+        EmojiCategory(
+            it.title,
+            it.icon,
+            persistentListOf(
+                Emoji(
+                    "0x00",
+                    "grinning face",
+                    persistentListOf("grinning"),
+                    persistentListOf("smile, grin"),
+                    "😀",
+                    null
+                ),
+                Emoji(
+                    "0x01",
+                    "crying face",
+                    persistentListOf("crying"),
+                    persistentListOf("smile, crying"),
+                    "\uD83E\uDD72",
+                    null
+                ),
+            )
         )
-    }.toImmutableMap(),
-    allEmojis: ImmutableList<Emoji> = categories.values.flatten().toImmutableList(),
+    }.toImmutableList(),
+    allEmojis: ImmutableList<Emoji> = categories.flatMap { it.emojis }.toImmutableList(),
     searchQuery: String = "",
     isSearchActive: Boolean = false,
     searchResults: SearchBarResultState<ImmutableList<Emoji>> = SearchBarResultState.Initial(),

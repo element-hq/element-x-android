@@ -14,8 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalInspectionMode
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseStore
+import io.element.android.features.messages.impl.R
+import io.element.android.features.messages.impl.timeline.components.customreaction.icon
+import io.element.android.features.messages.impl.timeline.components.customreaction.title
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import kotlinx.collections.immutable.ImmutableList
@@ -27,13 +31,25 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class EmojiPickerPresenter(
     private val emojibaseStore: EmojibaseStore,
+    private val recentEmojis: ImmutableList<String>,
 ) : Presenter<EmojiPickerState> {
     @Composable
     override fun present(): EmojiPickerState {
         var searchQuery by remember { mutableStateOf("") }
         var isSearchActive by remember { mutableStateOf(false) }
         var emojiResults by remember { mutableStateOf<SearchBarResultState<ImmutableList<Emoji>>>(SearchBarResultState.Initial()) }
-        val categories = remember { emojibaseStore.categories }
+
+        val recentEmojiIcon = CompoundIcons.History()
+        val categories = remember {
+            val providedCategories = emojibaseStore.categories.map { (category, emojis) -> EmojiCategory(category.title, category.icon, emojis) }
+            if (recentEmojis.isNotEmpty()) {
+                val recentEmojis = emojibaseStore.allEmojis.filter { recentEmojis.contains(it.unicode) }.toImmutableList()
+                val recentCategory = EmojiCategory(titleId = R.string.emoji_picker_category_recent, icon = recentEmojiIcon, emojis = recentEmojis)
+                (listOf(recentCategory) + providedCategories).toImmutableList()
+            } else {
+                providedCategories.toImmutableList()
+            }
+        }
 
         LaunchedEffect(searchQuery) {
             emojiResults = if (searchQuery.isEmpty()) {

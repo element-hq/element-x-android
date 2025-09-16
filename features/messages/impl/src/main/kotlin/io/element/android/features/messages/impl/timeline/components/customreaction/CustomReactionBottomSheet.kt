@@ -50,12 +50,11 @@ fun CustomReactionBottomSheet(
             sheetState = sheetState,
             modifier = modifier
         ) {
-            val presenter = remember { EmojiPickerPresenter(target.emojibaseStore) }
+            val presenter = remember { EmojiPickerPresenter(target.emojibaseStore, state.recentEmojis) }
             EmojiPicker(
                 onSelectEmoji = ::onEmojiSelectedDismiss,
                 state = presenter.present(),
                 selectedEmojis = state.selectedEmoji,
-                recentEmojis = state.recentEmojis,
                 modifier = Modifier.fillMaxSize(),
             )
         }

@@ -7,6 +7,7 @@
   <string name="emoji_picker_category_objects">"Objects"</string>
   <string name="emoji_picker_category_people">"Smileys &amp; People"</string>
   <string name="emoji_picker_category_places">"Travel &amp; Places"</string>
+  <string name="emoji_picker_category_recent">"Recent emojis"</string>
   <string name="emoji_picker_category_symbols">"Symbols"</string>
   <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tap to change the video upload quality"</string>
