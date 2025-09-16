@@ -15,14 +15,18 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
-fun RoomPreviewDescriptionAtom(description: String, modifier: Modifier = Modifier) {
+fun RoomPreviewDescriptionAtom(
+    description: String,
+    modifier: Modifier = Modifier,
+    maxLines: Int = Int.MAX_VALUE,
+) {
     Text(
         modifier = modifier,
         text = description,
-        style = ElementTheme.typography.fontBodySmRegular,
+        style = ElementTheme.typography.fontBodyMdRegular,
         textAlign = TextAlign.Center,
-        color = ElementTheme.colors.textSecondary,
-        maxLines = 3,
+        color = ElementTheme.colors.textPrimary,
+        maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
     )
 }

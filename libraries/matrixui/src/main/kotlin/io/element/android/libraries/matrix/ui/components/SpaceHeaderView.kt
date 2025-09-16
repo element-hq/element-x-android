@@ -7,19 +7,14 @@
 
 package io.element.android.libraries.matrix.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
+import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
+import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -47,47 +42,40 @@ fun SpaceHeaderView(
     modifier: Modifier = Modifier,
     topicMaxLines: Int = Int.MAX_VALUE,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 32.dp, bottom = 24.dp, start = 16.dp, end = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Avatar(
-            avatarData = avatarData,
-            avatarType = AvatarType.Space(false),
-        )
-        name?.let {
-            Text(
-                text = name,
-                style = ElementTheme.typography.fontHeadingLgBold,
-                color = ElementTheme.colors.textPrimary,
-                textAlign = TextAlign.Center,
+    RoomPreviewOrganism(
+        modifier = modifier.padding(24.dp),
+        avatar = {
+            Avatar(
+                avatarData = avatarData,
+                avatarType = AvatarType.Space(),
             )
-        }
-        if (joinRule != null) {
-            SpaceInfoRow(
-                joinRule = joinRule,
-                numberOfRooms = numberOfRooms,
+        },
+        title = {
+            name?.let {
+                RoomPreviewTitleAtom(title = name)
+            }
+        },
+        subtitle = {
+            if (joinRule != null) {
+                SpaceInfoRow(
+                    joinRule = joinRule,
+                    numberOfRooms = numberOfRooms,
+                )
+            }
+        },
+        description = if (topic != null) {
+            { RoomPreviewDescriptionAtom(description = topic, maxLines = topicMaxLines) }
+        } else {
+            null
+        },
+        memberCount = {
+            SpaceMembersView(
+                heroes = heroes,
+                numberOfMembers = numberOfMembers,
+                modifier = Modifier.padding(horizontal = 32.dp),
             )
-        }
-        SpaceMembersView(
-            heroes = heroes,
-            numberOfMembers = numberOfMembers,
-            modifier = Modifier.padding(horizontal = 32.dp),
-        )
-        topic?.let {
-            Text(
-                text = topic,
-                style = ElementTheme.typography.fontBodyMdRegular,
-                color = ElementTheme.colors.textPrimary,
-                textAlign = TextAlign.Center,
-                maxLines = topicMaxLines,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-    }
+        },
+    )
 }
 
 @PreviewsDayNight

@@ -655,7 +655,10 @@ class JoinRoomPresenterTest {
                         isDm = false,
                         roomType = RoomType.Room,
                         roomAvatarUrl = "avatarUrl",
-                        joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin
+                        joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin,
+                        joinRule = JoinRule.Public,
+                        childrenCount = null,
+                        heroes = persistentListOf()
                     )
                 )
             }
@@ -724,7 +727,10 @@ class JoinRoomPresenterTest {
                                 ),
                                 membershipChangeReason = null,
                             ),
-                        )
+                        ),
+                        joinRule = JoinRule.Public,
+                        childrenCount = null,
+                        heroes = persistentListOf()
                     )
                 )
             }
@@ -789,7 +795,10 @@ class JoinRoomPresenterTest {
                                 membershipChangeReason = null,
                             ),
                             reason = null,
-                        )
+                        ),
+                        joinRule = JoinRule.Public,
+                        childrenCount = null,
+                        heroes = persistentListOf()
                     )
                 )
             }
@@ -842,7 +851,10 @@ class JoinRoomPresenterTest {
                         isDm = false,
                         roomType = RoomType.Room,
                         roomAvatarUrl = "avatarUrl",
-                        joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked
+                        joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked,
+                        joinRule = JoinRule.Public,
+                        childrenCount = null,
+                        heroes = persistentListOf()
                     )
                 )
             }
@@ -945,26 +957,6 @@ class JoinRoomPresenterTest {
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.Restricted)
-            }
-        }
-    }
-
-    @Test
-    fun `present - when room is not known RoomPreview is loaded as Space`() = runTest {
-        val client = FakeMatrixClient(
-            getNotJoinedRoomResult = { _, _ ->
-                Result.success(
-                    aRoomPreview(info = aRoomPreviewInfo(isSpace = true))
-                )
-            }
-        )
-        val presenter = createJoinRoomPresenter(
-            matrixClient = client
-        )
-        presenter.test {
-            skipItems(1)
-            awaitItem().also { state ->
-                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.UnsupportedSpace("AppName"))
             }
         }
     }

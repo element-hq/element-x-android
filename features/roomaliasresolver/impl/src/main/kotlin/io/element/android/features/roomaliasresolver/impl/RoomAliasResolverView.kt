@@ -117,7 +117,7 @@ private fun RoomAliasResolverContent(
     RoomPreviewOrganism(
         modifier = modifier,
         avatar = {
-            PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
+            PlaceholderAtom(width = AvatarSize.RoomPreviewHeader.dp, height = AvatarSize.RoomPreviewHeader.dp)
         },
         title = {
             RoomPreviewSubtitleAtom(roomAlias.value)
