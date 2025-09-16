@@ -164,7 +164,7 @@ class HomeFlowNode(
         stateFlow.value.roomListState.eventSink(RoomListEvents.LeaveRoom(roomId, needsConfirmation = false))
     }
 
-    fun rootNode(buildContext: BuildContext): Node {
+    private fun rootNode(buildContext: BuildContext): Node {
         return node(buildContext) { modifier ->
             val state by stateFlow.collectAsState()
             val activity = requireNotNull(LocalActivity.current)

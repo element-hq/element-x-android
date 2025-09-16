@@ -15,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
@@ -126,9 +125,6 @@ class MessagesFlowNode(
     plugins = plugins
 ) {
     sealed interface NavTarget : Parcelable {
-        @Parcelize
-        data object Empty : NavTarget
-
         @Parcelize
         data class Messages(val focusedEventId: EventId?) : NavTarget
 
@@ -398,9 +394,6 @@ class MessagesFlowNode(
                     }
                 }
                 createNode<PinnedMessagesListNode>(buildContext, plugins = listOf(callback))
-            }
-            NavTarget.Empty -> {
-                node(buildContext) {}
             }
             NavTarget.KnockRequestsList -> {
                 knockRequestsListEntryPoint.createNode(this, buildContext)

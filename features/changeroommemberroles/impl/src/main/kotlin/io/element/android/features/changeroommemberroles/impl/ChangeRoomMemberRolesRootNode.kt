@@ -39,16 +39,13 @@ class ChangeRoomMemberRolesRootNode(
     roomComponentFactory: RoomComponentFactory,
 ) : ParentNode<ChangeRoomMemberRolesRootNode.NavTarget>(
     navModel = PermanentNavModel(
-        navTargets = setOf(NavTarget.Root),
+        navTargets = setOf(NavTarget),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
     plugins = plugins,
 ), DependencyInjectionGraphOwner, ChangeRoomMemberRolesEntryPoint.NodeProxy {
-    sealed interface NavTarget : Parcelable {
-        @Parcelize
-        object Root : NavTarget
-    }
+    @Parcelize object NavTarget : Parcelable
 
     data class Inputs(
         val joinedRoom: JoinedRoom,
@@ -60,14 +57,10 @@ class ChangeRoomMemberRolesRootNode(
     override val graph = roomComponentFactory.create(inputs.joinedRoom)
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
-        return when (navTarget) {
-            NavTarget.Root -> {
-                createNode<ChangeRolesNode>(
-                    buildContext = buildContext,
-                    plugins = listOf(ChangeRolesNode.Inputs(listType = inputs.listType)),
-                )
-            }
-        }
+        return createNode<ChangeRolesNode>(
+            buildContext = buildContext,
+            plugins = listOf(ChangeRolesNode.Inputs(listType = inputs.listType)),
+        )
     }
 
     @Composable
