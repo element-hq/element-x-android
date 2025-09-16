@@ -15,7 +15,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
-import io.element.android.libraries.mediaviewer.impl.gallery.root.MediaGalleryRootNode
+import io.element.android.libraries.mediaviewer.impl.gallery.root.MediaGalleryFlowNode
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import org.junit.Rule
@@ -32,7 +32,7 @@ class DefaultMediaGalleryEntryPointTest {
     fun `test node builder`() {
         val entryPoint = DefaultMediaGalleryEntryPoint()
         val parentNode = TestParentNode.create { buildContext, plugins ->
-            MediaGalleryRootNode(
+            MediaGalleryFlowNode(
                 buildContext = buildContext,
                 plugins = plugins,
                 mediaViewerEntryPoint = object : MediaViewerEntryPoint {
@@ -47,7 +47,7 @@ class DefaultMediaGalleryEntryPointTest {
         val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
             .callback(callback)
             .build()
-        assertThat(result).isInstanceOf(MediaGalleryRootNode::class.java)
+        assertThat(result).isInstanceOf(MediaGalleryFlowNode::class.java)
         assertThat(result.plugins).contains(callback)
     }
 }
