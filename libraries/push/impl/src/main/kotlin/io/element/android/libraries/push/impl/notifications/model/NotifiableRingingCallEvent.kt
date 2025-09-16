@@ -29,4 +29,5 @@ data class NotifiableRingingCallEvent(
     val roomAvatarUrl: String? = null,
     val callNotifyType: CallNotifyType,
     val timestamp: Long,
+    val expirationTimestamp: Long,
 ) : NotifiableEvent

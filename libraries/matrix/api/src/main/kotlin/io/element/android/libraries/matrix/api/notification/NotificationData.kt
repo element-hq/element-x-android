@@ -52,6 +52,7 @@ sealed interface NotificationContent {
         data class CallNotify(
             val senderId: UserId,
             val type: CallNotifyType,
+            val expirationTimestampMillis: Long
         ) : MessageLike
 
         data object CallHangup : MessageLike

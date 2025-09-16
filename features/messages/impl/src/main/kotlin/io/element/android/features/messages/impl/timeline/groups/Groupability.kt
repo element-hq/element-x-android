@@ -9,7 +9,6 @@ package io.element.android.features.messages.impl.timeline.groups
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -19,6 +18,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRoomMembershipContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -60,7 +60,7 @@ internal fun TimelineItem.Event.canBeGrouped(): Boolean {
         TimelineItemRedactedContent,
         TimelineItemUnknownContent,
         is TimelineItemLegacyCallInviteContent,
-        is TimelineItemCallNotifyContent -> false
+        is TimelineItemRtcNotificationContent -> false
         is TimelineItemProfileChangeContent,
         is TimelineItemRoomMembershipContent,
         is TimelineItemStateEventContent -> true

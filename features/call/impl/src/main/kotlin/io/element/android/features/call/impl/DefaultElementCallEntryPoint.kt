@@ -43,6 +43,7 @@ class DefaultElementCallEntryPoint(
         senderName: String?,
         avatarUrl: String?,
         timestamp: Long,
+        expirationTimestamp: Long,
         notificationChannelId: String,
         textContent: String?,
     ) {
@@ -55,6 +56,7 @@ class DefaultElementCallEntryPoint(
             senderName = senderName,
             avatarUrl = avatarUrl,
             timestamp = timestamp,
+            expirationTimestamp = expirationTimestamp,
             notificationChannelId = notificationChannelId,
             textContent = textContent,
         )

@@ -8,9 +8,9 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import dev.zacsweers.metro.Inject
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -61,7 +61,7 @@ class TimelineItemContentFactory(
             is StickerContent -> stickerFactory.create(itemContent)
             is PollContent -> pollFactory.create(eventTimelineItem, itemContent)
             is UnableToDecryptContent -> utdFactory.create(itemContent)
-            is CallNotifyContent -> TimelineItemCallNotifyContent()
+            is CallNotifyContent -> TimelineItemRtcNotificationContent()
             is UnknownContent -> TimelineItemUnknownContent
         }
     }

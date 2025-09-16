@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
-import kotlin.time.Duration.Companion.seconds
+import kotlin.math.min
 
 /**
  * Manages the active call state.
@@ -118,8 +118,20 @@ class DefaultActiveCallManager(
 
     override suspend fun registerIncomingCall(notificationData: CallNotificationData) {
         mutex.withLock {
+            val ringDuration =
+                min(
+                    notificationData.expirationTimestamp - System.currentTimeMillis(),
+                    ElementCallConfig.RINGING_CALL_DURATION_SECONDS * 1000L
+                )
+
+            if (ringDuration < 0) {
+                // Should already have stopped ringing, ignore.
+                Timber.tag(tag).d("Received timed-out incoming ringing call for room id: ${notificationData.roomId}, cancel ringing")
+                return
+            }
+
             appForegroundStateService.updateHasRingingCall(true)
-            Timber.tag(tag).d("Received incoming call for room id: ${notificationData.roomId}")
+            Timber.tag(tag).d("Received incoming call for room id: ${notificationData.roomId}, ringDuration: $ringDuration")
             if (activeCall.value != null) {
                 displayMissedCallNotification(notificationData)
                 Timber.tag(tag).w("Already have an active call, ignoring incoming call: $notificationData")
@@ -138,14 +150,14 @@ class DefaultActiveCallManager(
                 showIncomingCallNotification(notificationData)
 
                 // Wait for the ringing call to time out
-                delay(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds)
+                delay(timeMillis = ringDuration)
                 incomingCallTimedOut(displayMissedCallNotification = true)
             }
 
             // Acquire a wake lock to keep the device awake during the incoming call, so we can process the room info data
             if (activeWakeLock?.isHeld == false) {
                 Timber.tag(tag).d("Acquiring partial wakelock")
-                activeWakeLock.acquire(ElementCallConfig.RINGING_CALL_DURATION_SECONDS * 1000L)
+                activeWakeLock.acquire(ringDuration)
             }
         }
     }
@@ -236,6 +248,7 @@ class DefaultActiveCallManager(
             notificationChannelId = notificationData.notificationChannelId,
             timestamp = notificationData.timestamp,
             textContent = notificationData.textContent,
+            expirationTimestamp = notificationData.expirationTimestamp,
         ) ?: return
         runCatchingExceptions {
             notificationManagerCompat.notify(

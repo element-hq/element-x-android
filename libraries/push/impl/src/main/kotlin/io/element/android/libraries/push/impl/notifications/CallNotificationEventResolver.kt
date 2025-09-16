@@ -107,6 +107,7 @@ class DefaultCallNotificationEventResolver(
                     callNotifyType = content.type,
                     senderId = content.senderId,
                     senderAvatarUrl = senderAvatarUrl,
+                    expirationTimestamp = content.expirationTimestampMillis,
                 )
             } else {
                 Timber.d("Event $eventId is call notify but should not ring: $isRoomCallActive, notify: ${content.type}")
@@ -124,7 +125,7 @@ class DefaultCallNotificationEventResolver(
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
-                    type = EventType.CALL_NOTIFY,
+                    type = EventType.RTC_NOTIFICATION,
                 )
             }
         }
