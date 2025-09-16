@@ -21,10 +21,10 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.components.customreaction.icon
 import io.element.android.features.messages.impl.timeline.components.customreaction.title
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
@@ -32,6 +32,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class EmojiPickerPresenter(
     private val emojibaseStore: EmojibaseStore,
     private val recentEmojis: ImmutableList<String>,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<EmojiPickerState> {
     @Composable
     override fun present(): EmojiPickerState {
@@ -59,7 +60,7 @@ class EmojiPickerPresenter(
                 delay(100.milliseconds)
 
                 val lowercaseQuery = searchQuery.lowercase()
-                val results = withContext(Dispatchers.Default) {
+                val results = withContext(coroutineDispatchers.computation) {
                     emojibaseStore.allEmojis
                         .asSequence()
                         .filter { emoji ->
