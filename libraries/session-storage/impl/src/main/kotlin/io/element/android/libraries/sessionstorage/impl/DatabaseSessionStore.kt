@@ -112,7 +112,7 @@ class DatabaseSessionStore(
             // Already the latest session
             return
         }
-        val lastUsageIndex = getLatestSession()?.lastUsageIndex ?: 0
+        val lastUsageIndex = latestSession?.lastUsageIndex ?: 0
         val result = database.sessionDataQueries.selectByUserId(sessionId)
             .executeAsOneOrNull()
             ?.toApiModel()
