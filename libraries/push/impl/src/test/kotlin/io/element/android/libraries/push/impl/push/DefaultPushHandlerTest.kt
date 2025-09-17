@@ -440,7 +440,7 @@ class DefaultPushHandlerTest {
             onNotifiableEventsReceived = onNotifiableEventsReceived,
             notifiableEventsResult = { _, _ ->
                 val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
-                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent(type = EventType.CALL_NOTIFY)))))
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent(type = EventType.RTC_NOTIFICATION)))))
             },
             incrementPushCounterResult = {},
             pushClientSecret = FakePushClientSecret(

@@ -695,7 +695,8 @@ class DefaultNotifiableEventResolverTest {
                     AN_EVENT_ID to Result.success(aNotificationData(
                         content = NotificationContent.MessageLike.CallNotify(
                             A_USER_ID_2,
-                            CallNotifyType.NOTIFY
+                            CallNotifyType.NOTIFY,
+                            0
                         ),
                     ))
                 )
@@ -719,7 +720,7 @@ class DefaultNotifiableEventResolverTest {
                 isRedacted = false,
                 imageUriString = null,
                 imageMimeType = null,
-                type = EventType.CALL_NOTIFY,
+                type = EventType.RTC_NOTIFICATION,
             )
         )
         callNotificationEventResolver.resolveEventLambda = { _, _, _ -> Result.success(expectedResult.notifiableEvent) }

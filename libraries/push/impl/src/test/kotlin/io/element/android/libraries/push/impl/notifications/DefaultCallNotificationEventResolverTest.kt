@@ -61,11 +61,12 @@ class DefaultCallNotificationEventResolverTest {
             isUpdated = false,
             senderDisambiguatedDisplayName = A_USER_NAME_2,
             senderAvatarUrl = null,
+            expirationTimestamp = 1567L,
             callNotifyType = CallNotifyType.RING,
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.RING)
+            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.RING, 1567)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
@@ -109,7 +110,7 @@ class DefaultCallNotificationEventResolverTest {
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.NOTIFY)
+            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.NOTIFY, 0)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
@@ -153,7 +154,7 @@ class DefaultCallNotificationEventResolverTest {
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.RING)
+            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.RING, 0)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)

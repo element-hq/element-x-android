@@ -121,6 +121,7 @@ fun aNotifiableCallEvent(
     senderAvatarUrl: String? = AN_AVATAR_URL,
     callNotifyType: CallNotifyType = CallNotifyType.NOTIFY,
     timestamp: Long = 0L,
+    expirationTimestamp: Long = 0L,
 ) = NotifiableRingingCallEvent(
     sessionId = sessionId,
     eventId = eventId,
@@ -129,6 +130,7 @@ fun aNotifiableCallEvent(
     editedEventId = null,
     description = "description",
     timestamp = timestamp,
+    expirationTimestamp = expirationTimestamp,
     canBeReplaced = false,
     isRedacted = false,
     isUpdated = false,
