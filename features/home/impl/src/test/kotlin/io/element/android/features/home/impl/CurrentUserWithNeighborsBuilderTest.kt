@@ -17,17 +17,19 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import org.junit.Test
 
-class AccountNeighborsTest {
+class CurrentUserWithNeighborsBuilderTest {
     @Test
-    fun `takeCurrentUserWithNeighbors on empty list returns current user`() {
+    fun `build on empty list returns current user`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser()
         val list = listOf<SessionData>()
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result).containsExactly(matrixUser)
     }
 
     @Test
     fun `ensure that account are sorted by position`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser(id = A_USER_ID.value)
         val list = listOf(
             aSessionData(
@@ -43,7 +45,7 @@ class AccountNeighborsTest {
                 position = 1,
             ),
         )
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result.map { it.userId }).containsExactly(
             A_USER_ID_3,
             A_USER_ID_2,
@@ -53,6 +55,7 @@ class AccountNeighborsTest {
 
     @Test
     fun `if current user is not found, return a singleton with current user`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser(id = A_USER_ID.value)
         val list = listOf(
             aSessionData(
@@ -62,7 +65,7 @@ class AccountNeighborsTest {
                 sessionId = A_USER_ID_3.value,
             ),
         )
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result.map { it.userId }).containsExactly(
             A_USER_ID,
         )
@@ -70,13 +73,14 @@ class AccountNeighborsTest {
 
     @Test
     fun `one account, will return a singleton`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser(id = A_USER_ID.value)
         val list = listOf(
             aSessionData(
                 sessionId = A_USER_ID.value,
             ),
         )
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result.map { it.userId }).containsExactly(
             A_USER_ID,
         )
@@ -84,6 +88,7 @@ class AccountNeighborsTest {
 
     @Test
     fun `two accounts, first is current, will return 3 items`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser(id = A_USER_ID.value)
         val list = listOf(
             aSessionData(
@@ -93,7 +98,7 @@ class AccountNeighborsTest {
                 sessionId = A_USER_ID_2.value,
             ),
         )
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result.map { it.userId }).containsExactly(
             A_USER_ID_2,
             A_USER_ID,
@@ -103,6 +108,7 @@ class AccountNeighborsTest {
 
     @Test
     fun `two accounts, second is current, will return 3 items`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser(id = A_USER_ID_2.value)
         val list = listOf(
             aSessionData(
@@ -112,7 +118,7 @@ class AccountNeighborsTest {
                 sessionId = A_USER_ID_2.value,
             ),
         )
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result.map { it.userId }).containsExactly(
             A_USER_ID,
             A_USER_ID_2,
@@ -122,6 +128,7 @@ class AccountNeighborsTest {
 
     @Test
     fun `three accounts, first is current, will return last current and next`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser(id = A_USER_ID.value)
         val list = listOf(
             aSessionData(
@@ -134,7 +141,7 @@ class AccountNeighborsTest {
                 sessionId = A_USER_ID_3.value,
             ),
         )
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result.map { it.userId }).containsExactly(
             A_USER_ID_3,
             A_USER_ID,
@@ -144,6 +151,7 @@ class AccountNeighborsTest {
 
     @Test
     fun `three accounts, second is current, will return first current and last`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser(id = A_USER_ID_2.value)
         val list = listOf(
             aSessionData(
@@ -156,7 +164,7 @@ class AccountNeighborsTest {
                 sessionId = A_USER_ID_3.value,
             ),
         )
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result.map { it.userId }).containsExactly(
             A_USER_ID,
             A_USER_ID_2,
@@ -166,6 +174,7 @@ class AccountNeighborsTest {
 
     @Test
     fun `three accounts, current is last, will return middle, current and first`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser(id = A_USER_ID_3.value)
         val list = listOf(
             aSessionData(
@@ -178,7 +187,7 @@ class AccountNeighborsTest {
                 sessionId = A_USER_ID.value,
             ),
         )
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result.map { it.userId }).containsExactly(
             A_USER_ID,
             A_USER_ID_2,
@@ -188,6 +197,7 @@ class AccountNeighborsTest {
 
     @Test
     fun `one account, will return data from matrix user and not from db`() {
+        val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser(
             id = A_USER_ID.value,
             displayName = "Bob",
@@ -200,7 +210,7 @@ class AccountNeighborsTest {
                 userAvatarUrl = "outdatedAvatarUrl",
             ),
         )
-        val result = list.takeCurrentUserWithNeighbors(matrixUser)
+        val result = sut.build(matrixUser, list)
         assertThat(result).containsExactly(
             MatrixUser(
                 userId = A_USER_ID,
