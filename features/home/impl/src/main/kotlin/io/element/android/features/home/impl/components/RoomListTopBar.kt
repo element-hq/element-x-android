@@ -78,7 +78,7 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun RoomListTopBar(
     title: String,
-    matrixUserAndNeighbors: ImmutableList<MatrixUser>,
+    currentUserAndNeighbors: ImmutableList<MatrixUser>,
     showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
     onToggleSearch: () -> Unit,
@@ -94,7 +94,7 @@ fun RoomListTopBar(
 ) {
     DefaultRoomListTopBar(
         title = title,
-        matrixUserAndNeighbors = matrixUserAndNeighbors,
+        currentUserAndNeighbors = currentUserAndNeighbors,
         showAvatarIndicator = showAvatarIndicator,
         areSearchResultsDisplayed = areSearchResultsDisplayed,
         onOpenSettings = onOpenSettings,
@@ -114,7 +114,7 @@ fun RoomListTopBar(
 @Composable
 private fun DefaultRoomListTopBar(
     title: String,
-    matrixUserAndNeighbors: ImmutableList<MatrixUser>,
+    currentUserAndNeighbors: ImmutableList<MatrixUser>,
     showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
     scrollBehavior: TopAppBarScrollBehavior,
@@ -165,7 +165,7 @@ private fun DefaultRoomListTopBar(
                     },
                     navigationIcon = {
                         NavigationIcon(
-                            matrixUserAndNeighbors = matrixUserAndNeighbors,
+                            currentUserAndNeighbors = currentUserAndNeighbors,
                             showAvatarIndicator = showAvatarIndicator,
                             onAccountSwitch = onAccountSwitch,
                             onClick = onOpenSettings,
@@ -255,26 +255,26 @@ private fun DefaultRoomListTopBar(
 
 @Composable
 private fun NavigationIcon(
-    matrixUserAndNeighbors: ImmutableList<MatrixUser>,
+    currentUserAndNeighbors: ImmutableList<MatrixUser>,
     showAvatarIndicator: Boolean,
     onAccountSwitch: (SessionId) -> Unit,
     onClick: () -> Unit,
 ) {
-    if (matrixUserAndNeighbors.size == 1) {
+    if (currentUserAndNeighbors.size == 1) {
         AccountIcon(
-            matrixUser = matrixUserAndNeighbors.single(),
+            matrixUser = currentUserAndNeighbors.single(),
             isCurrentAccount = true,
             showAvatarIndicator = showAvatarIndicator,
             onClick = onClick,
         )
     } else {
         // Render a vertical pager
-        val pagerState = rememberPagerState(initialPage = 1) { matrixUserAndNeighbors.size }
+        val pagerState = rememberPagerState(initialPage = 1) { currentUserAndNeighbors.size }
         // Listen to page changes and switch account if needed
         val latestOnAccountSwitch by rememberUpdatedState(onAccountSwitch)
         LaunchedEffect(pagerState) {
             snapshotFlow { pagerState.settledPage }.collect { page ->
-                latestOnAccountSwitch(SessionId(matrixUserAndNeighbors[page].userId.value))
+                latestOnAccountSwitch(SessionId(currentUserAndNeighbors[page].userId.value))
             }
         }
         VerticalPager(
@@ -282,7 +282,7 @@ private fun NavigationIcon(
             modifier = Modifier.height(48.dp),
         ) { page ->
             AccountIcon(
-                matrixUser = matrixUserAndNeighbors[page],
+                matrixUser = currentUserAndNeighbors[page],
                 isCurrentAccount = page == 1,
                 showAvatarIndicator = page == 1 && showAvatarIndicator,
                 onClick = if (page == 1) {
@@ -332,7 +332,7 @@ private fun AccountIcon(
 internal fun DefaultRoomListTopBarPreview() = ElementPreview {
     DefaultRoomListTopBar(
         title = stringResource(R.string.screen_roomlist_main_space_title),
-        matrixUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
+        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
@@ -353,7 +353,7 @@ internal fun DefaultRoomListTopBarPreview() = ElementPreview {
 internal fun DefaultRoomListTopBarWithIndicatorPreview() = ElementPreview {
     DefaultRoomListTopBar(
         title = stringResource(R.string.screen_roomlist_main_space_title),
-        matrixUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
+        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = true,
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
@@ -374,7 +374,7 @@ internal fun DefaultRoomListTopBarWithIndicatorPreview() = ElementPreview {
 internal fun DefaultRoomListTopBarMultiAccountPreview() = ElementPreview {
     DefaultRoomListTopBar(
         title = stringResource(R.string.screen_roomlist_main_space_title),
-        matrixUserAndNeighbors = aMatrixUserList().take(3).toPersistentList(),
+        currentUserAndNeighbors = aMatrixUserList().take(3).toPersistentList(),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),

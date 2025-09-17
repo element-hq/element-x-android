@@ -58,7 +58,7 @@ class HomePresenter(
     override fun present(): HomeState {
         val coroutineState = rememberCoroutineScope()
         val matrixUser by client.userProfile.collectAsState()
-        val matrixUserAndNeighbors by remember {
+        val currentUserAndNeighbors by remember {
             combine(
                 client.userProfile.onEach { user ->
                     // Ensure that the profile is always up to date in our
@@ -114,7 +114,7 @@ class HomePresenter(
         }
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         return HomeState(
-            matrixUserAndNeighbors = matrixUserAndNeighbors,
+            currentUserAndNeighbors = currentUserAndNeighbors,
             showAvatarIndicator = showAvatarIndicator,
             hasNetworkConnection = isOnline,
             currentHomeNavigationBarItem = currentHomeNavigationBarItem,

@@ -21,7 +21,7 @@ data class HomeState(
      * The current user of this session, in case of multiple accounts, will contains 3 items, with the
      * current user in the middle.
      */
-    val matrixUserAndNeighbors: ImmutableList<MatrixUser>,
+    val currentUserAndNeighbors: ImmutableList<MatrixUser>,
     val showAvatarIndicator: Boolean,
     val hasNetworkConnection: Boolean,
     val currentHomeNavigationBarItem: HomeNavigationBarItem,

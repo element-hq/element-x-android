@@ -75,13 +75,13 @@ class HomePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.matrixUserAndNeighbors.first()).isEqualTo(
+            assertThat(initialState.currentUserAndNeighbors.first()).isEqualTo(
                 MatrixUser(A_USER_ID, null, null)
             )
             assertThat(initialState.canReportBug).isFalse()
             skipItems(1)
             val withUserState = awaitItem()
-            assertThat(withUserState.matrixUserAndNeighbors.first()).isEqualTo(
+            assertThat(withUserState.currentUserAndNeighbors.first()).isEqualTo(
                 MatrixUser(A_USER_ID, A_USER_NAME, AN_AVATAR_URL)
             )
             assertThat(withUserState.showAvatarIndicator).isFalse()
@@ -175,7 +175,7 @@ class HomePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.matrixUserAndNeighbors.first()).isEqualTo(MatrixUser(matrixClient.sessionId))
+            assertThat(initialState.currentUserAndNeighbors.first()).isEqualTo(MatrixUser(matrixClient.sessionId))
             // No new state is coming
         }
     }

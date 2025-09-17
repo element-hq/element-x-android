@@ -171,7 +171,7 @@ private fun HomeScaffold(
         topBar = {
             RoomListTopBar(
                 title = stringResource(state.currentHomeNavigationBarItem.labelRes),
-                matrixUserAndNeighbors = state.matrixUserAndNeighbors,
+                currentUserAndNeighbors = state.currentUserAndNeighbors,
                 showAvatarIndicator = state.showAvatarIndicator,
                 areSearchResultsDisplayed = roomListState.searchState.isSearchActive,
                 onToggleSearch = { roomListState.eventSink(RoomListEvents.ToggleSearchResults) },

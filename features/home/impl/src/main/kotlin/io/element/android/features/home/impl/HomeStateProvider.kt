@@ -51,7 +51,7 @@ open class HomeStateProvider : PreviewParameterProvider<HomeState> {
 
 internal fun aHomeState(
     matrixUser: MatrixUser = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
-    matrixUserAndNeighbors: List<MatrixUser> = listOf(matrixUser),
+    currentUserAndNeighbors: List<MatrixUser> = listOf(matrixUser),
     showAvatarIndicator: Boolean = false,
     hasNetworkConnection: Boolean = true,
     snackbarMessage: SnackbarMessage? = null,
@@ -63,7 +63,7 @@ internal fun aHomeState(
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
     eventSink: (HomeEvents) -> Unit = {}
 ) = HomeState(
-    matrixUserAndNeighbors = matrixUserAndNeighbors.toPersistentList(),
+    currentUserAndNeighbors = currentUserAndNeighbors.toPersistentList(),
     showAvatarIndicator = showAvatarIndicator,
     hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = snackbarMessage,
