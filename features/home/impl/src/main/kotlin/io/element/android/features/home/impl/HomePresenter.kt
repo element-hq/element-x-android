@@ -33,7 +33,6 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @Inject
@@ -57,15 +56,7 @@ class HomePresenter(
         val matrixUser by client.userProfile.collectAsState()
         val currentUserAndNeighbors by remember {
             combine(
-                client.userProfile.onEach { user ->
-                    // Ensure that the profile is always up to date in our
-                    // session storage when it changes
-                    sessionStore.updateUserProfile(
-                        sessionId = user.userId.value,
-                        displayName = user.displayName,
-                        avatarUrl = user.avatarUrl,
-                    )
-                },
+                client.userProfile,
                 sessionStore.sessionsFlow(),
                 currentUserWithNeighborsBuilder::build,
             )

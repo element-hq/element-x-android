@@ -37,8 +37,6 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.MutablePresenter
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -56,7 +54,6 @@ class HomePresenterTest {
             userAvatarUrl = null,
         )
         matrixClient.givenGetProfileResult(matrixClient.sessionId, Result.success(MatrixUser(matrixClient.sessionId, A_USER_NAME, AN_AVATAR_URL)))
-        val updateUserProfileResult = lambdaRecorder<String, String?, String?, Unit> { _, _, _ -> }
         val presenter = createHomePresenter(
             client = matrixClient,
             rageshakeFeatureAvailability = { flowOf(false) },
@@ -68,7 +65,6 @@ class HomePresenterTest {
                         userAvatarUrl = null,
                     )
                 ),
-                updateUserProfileResult = updateUserProfileResult,
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -87,19 +83,6 @@ class HomePresenterTest {
             assertThat(withUserState.showAvatarIndicator).isFalse()
             assertThat(withUserState.isSpaceFeatureEnabled).isFalse()
             assertThat(withUserState.showNavigationBar).isFalse()
-            updateUserProfileResult.assertions().isCalledExactly(2)
-                .withSequence(
-                    listOf(
-                        value(matrixClient.sessionId.value),
-                        value(null),
-                        value(null),
-                    ),
-                    listOf(
-                        value(matrixClient.sessionId.value),
-                        value(A_USER_NAME),
-                        value(AN_AVATAR_URL),
-                    ),
-                )
         }
     }
 

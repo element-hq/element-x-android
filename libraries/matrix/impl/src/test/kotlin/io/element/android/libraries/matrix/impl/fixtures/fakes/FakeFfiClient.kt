@@ -41,6 +41,7 @@ class FakeFfiClient(
     private val session: Session = aRustSession(),
     private val clearCachesResult: () -> Unit = { lambdaError() },
     private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
+    private val getProfileResult: (String) -> UserProfile = { UserProfile(userId = userId, displayName = null, avatarUrl = null) },
     private val closeResult: () -> Unit = {},
 ) : Client(NoPointer) {
     override fun userId(): String = userId
@@ -76,7 +77,7 @@ class FakeFfiClient(
     }
 
     override suspend fun getProfile(userId: String): UserProfile {
-        return UserProfile(userId = userId, displayName = null, avatarUrl = null)
+        return getProfileResult(userId)
     }
     override fun close() = closeResult()
 }
