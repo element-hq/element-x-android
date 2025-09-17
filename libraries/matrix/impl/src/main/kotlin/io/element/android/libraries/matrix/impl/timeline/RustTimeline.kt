@@ -437,7 +437,6 @@ class RustTimeline(
                 key = emoji,
                 itemId = eventOrTransactionId.toRustEventOrTransactionId(),
             )
-            return@runCatchingExceptions Unit
         }
     }
 

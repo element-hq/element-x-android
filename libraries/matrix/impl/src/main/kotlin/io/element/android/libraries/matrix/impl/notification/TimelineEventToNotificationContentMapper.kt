@@ -106,6 +106,6 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
 }
 
 private fun RtcNotificationType.map(): CallNotifyType = when (this) {
-    RtcNotificationType.NOTIFY -> CallNotifyType.NOTIFY
+    RtcNotificationType.NOTIFICATION -> CallNotifyType.NOTIFY
     RtcNotificationType.RING -> CallNotifyType.RING
 }
