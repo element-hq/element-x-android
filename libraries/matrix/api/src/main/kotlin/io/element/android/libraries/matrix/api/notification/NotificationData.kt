@@ -120,5 +120,5 @@ sealed interface NotificationContent {
 
 enum class CallNotifyType {
     RING,
-    NOTIFY
+    NOTIFICATION
 }

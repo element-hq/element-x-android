@@ -15,6 +15,7 @@ fun TraceLogPack.map(): RustTraceLogPack = when (this) {
     TraceLogPack.EVENT_CACHE -> RustTraceLogPack.EVENT_CACHE
     TraceLogPack.TIMELINE -> RustTraceLogPack.TIMELINE
     TraceLogPack.NOTIFICATION_CLIENT -> RustTraceLogPack.NOTIFICATION_CLIENT
+    TraceLogPack.SYNC_PROFILING -> RustTraceLogPack.SYNC_PROFILING
 }
 
 fun Collection<TraceLogPack>.map(): List<RustTraceLogPack> {

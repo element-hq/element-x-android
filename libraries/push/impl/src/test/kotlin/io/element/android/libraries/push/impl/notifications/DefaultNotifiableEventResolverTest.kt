@@ -695,7 +695,7 @@ class DefaultNotifiableEventResolverTest {
                     AN_EVENT_ID to Result.success(aNotificationData(
                         content = NotificationContent.MessageLike.CallNotify(
                             A_USER_ID_2,
-                            CallNotifyType.NOTIFY
+                            CallNotifyType.NOTIFICATION
                         ),
                     ))
                 )

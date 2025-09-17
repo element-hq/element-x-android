@@ -19,6 +19,9 @@ enum class TraceLogPack(val key: String) {
     },
     NOTIFICATION_CLIENT("notification_client") {
         override val title: String = "Notification Client"
+    },
+    SYNC_PROFILING("sync_profiling") {
+        override val title: String = "Sync Profiling"
     };
 
     abstract val title: String

@@ -15,7 +15,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
-import org.matrix.rustcomponents.sdk.NotifyType
+import org.matrix.rustcomponents.sdk.RtcNotificationType
 import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventType
@@ -78,7 +78,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             MessageLikeEventContent.CallCandidates -> NotificationContent.MessageLike.CallCandidates
             MessageLikeEventContent.CallHangup -> NotificationContent.MessageLike.CallHangup
             MessageLikeEventContent.CallInvite -> NotificationContent.MessageLike.CallInvite(senderId)
-            is MessageLikeEventContent.CallNotify -> NotificationContent.MessageLike.CallNotify(senderId, notifyType.map())
+            is MessageLikeEventContent.RtcNotification -> NotificationContent.MessageLike.CallNotify(senderId, notificationType.map())
             MessageLikeEventContent.KeyVerificationAccept -> NotificationContent.MessageLike.KeyVerificationAccept
             MessageLikeEventContent.KeyVerificationCancel -> NotificationContent.MessageLike.KeyVerificationCancel
             MessageLikeEventContent.KeyVerificationDone -> NotificationContent.MessageLike.KeyVerificationDone
@@ -101,7 +101,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
     }
 }
 
-private fun NotifyType.map(): CallNotifyType = when (this) {
-    NotifyType.NOTIFY -> CallNotifyType.NOTIFY
-    NotifyType.RING -> CallNotifyType.RING
+private fun RtcNotificationType.map(): CallNotifyType = when (this) {
+    RtcNotificationType.NOTIFICATION -> CallNotifyType.NOTIFICATION
+    RtcNotificationType.RING -> CallNotifyType.RING
 }

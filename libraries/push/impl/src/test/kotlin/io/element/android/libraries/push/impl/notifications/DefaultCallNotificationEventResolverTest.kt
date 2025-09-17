@@ -109,7 +109,7 @@ class DefaultCallNotificationEventResolverTest {
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.NOTIFY)
+            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.NOTIFICATION)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)

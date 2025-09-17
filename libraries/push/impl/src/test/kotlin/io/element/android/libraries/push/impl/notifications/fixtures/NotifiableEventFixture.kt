@@ -119,7 +119,7 @@ fun aNotifiableCallEvent(
     senderName: String? = null,
     roomAvatarUrl: String? = AN_AVATAR_URL,
     senderAvatarUrl: String? = AN_AVATAR_URL,
-    callNotifyType: CallNotifyType = CallNotifyType.NOTIFY,
+    callNotifyType: CallNotifyType = CallNotifyType.NOTIFICATION,
     timestamp: Long = 0L,
 ) = NotifiableRingingCallEvent(
     sessionId = sessionId,
