@@ -14,6 +14,11 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 class CurrentUserWithNeighborsBuilder {
+    /**
+     * Build a list of [MatrixUser] containing the current user. If there are other sessions, the list
+     * will contain 3 users, with the current user in the middle.
+     * If there is only one other session, the list will contain twice the other user, to allow cycling.
+     */
     fun build(
         matrixUser: MatrixUser,
         sessions: List<SessionData>,
@@ -45,6 +50,8 @@ class CurrentUserWithNeighborsBuilder {
                         // If the current user is B, we want to return [A, B, C]
                         // If the current user is C, we want to return [B, C, D]
                         // If the current user is D, we want to return [C, D, A]
+                        // Special case: if there are only two users, we want to return [B, A, B] or [A, B, A] to allows cycling
+                        // between the two users.
                         val currentUserIndex = sessionList.indexOfFirst { it.userId == matrixUser.userId }
                         when (currentUserIndex) {
                             // This can happen when the user signs out.
