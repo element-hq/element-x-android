@@ -44,6 +44,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.isDm
@@ -258,8 +259,22 @@ class TimelinePresenter(
                 is FocusRequestState.Loading -> {
                     val eventId = currentFocusRequestState.eventId
                     timelineController.focusOnEvent(eventId)
-                        .onSuccess {
-                            focusRequestState = FocusRequestState.Success(eventId = eventId)
+                        .onSuccess { result ->
+                            when (result) {
+                                is EventFocusResult.FocusedOnLive -> {
+                                    focusRequestState = FocusRequestState.Success(eventId = eventId)
+                                }
+                                is EventFocusResult.IsInThread -> {
+                                    if (timelineController.mainTimelineMode() is Timeline.Mode.Thread) {
+                                        focusRequestState = FocusRequestState.Success(eventId = eventId)
+                                    } else {
+                                        focusRequestState = FocusRequestState.Success(eventId = result.threadId.asEventId())
+                                        // It's part of a thread, let's open it in another timeline
+                                        navigator.onOpenThread(result.threadId, eventId)
+                                    }
+                                }
+                            }
+
                         }
                         .onFailure {
                             focusRequestState = FocusRequestState.Failure(it)
@@ -341,7 +356,7 @@ class TimelinePresenter(
             newMostRecentItemId != prevMostRecentItemIdValue
 
         if (hasNewEvent) {
-            val newMostRecentEvent = newMostRecentItem as? TimelineItem.Event
+            val newMostRecentEvent = newMostRecentItem
             // Scroll to bottom if the new event is from me, even if sent from another device
             val fromMe = newMostRecentEvent?.isMine == true
             newEventState.value = if (fromMe) {

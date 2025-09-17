@@ -28,12 +28,14 @@ import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsV
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.impl.room.draft.into
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsValuesMapper
 import io.element.android.libraries.matrix.impl.room.tombstone.map
 import io.element.android.libraries.matrix.impl.roomdirectory.map
+import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.CoroutineScope
@@ -316,6 +318,14 @@ class RustBaseRoom(
                     trySend(UserId(declinerUserId))
                 }
             })
+        }
+    }
+
+    override suspend fun threadRootIdForEvent(eventId: EventId): Result<ThreadId?> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.loadOrFetchEvent(eventId.value).use {
+                it.threadRootEventId()?.let(::ThreadId)
+            }
         }
     }
 }
