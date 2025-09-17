@@ -160,6 +160,14 @@ test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScan
 test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
 test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 
+# Matrix SDK
+# When upgrading the library, you may want to check what's new in the FFI layer by having a look to the
+# latest commits from the history of this file:
+# https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
+# All new features should not be implemented in the pull request that upgrades the version, developers should
+# only fix API breaks and may add some TODOs.
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.9.16"
+
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil_network_okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
@@ -176,7 +184,6 @@ jsoup = "org.jsoup:jsoup:1.21.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.1.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.9.16"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
