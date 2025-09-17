@@ -235,7 +235,6 @@ class RustMatrixClient(
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
             userId = sessionId,
-            // TODO cache for displayName?
             displayName = null,
             avatarUrl = null,
         )
@@ -264,6 +263,16 @@ class RustMatrixClient(
             // Start notification settings
             notificationSettingsService.start()
 
+            // Update the user profile in the session store if needed
+            sessionStore.getSession(sessionId.value)?.let { sessionData ->
+                _userProfile.emit(
+                    MatrixUser(
+                        userId = sessionId,
+                        displayName = sessionData.userDisplayName,
+                        avatarUrl = sessionData.userAvatarUrl,
+                    )
+                )
+            }
             // Force a refresh of the profile
             getUserProfile()
         }
