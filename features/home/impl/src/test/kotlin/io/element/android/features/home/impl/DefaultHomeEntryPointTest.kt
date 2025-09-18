@@ -48,7 +48,6 @@ class DefaultHomeEntryPointTest {
             override fun onSessionConfirmRecoveryKeyClick() = lambdaError()
             override fun onRoomSettingsClick(roomId: RoomId) = lambdaError()
             override fun onReportBugClick() = lambdaError()
-            override fun onLogoutForNativeSlidingSyncMigrationNeeded() = lambdaError()
         }
         val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
             .callback(callback)
