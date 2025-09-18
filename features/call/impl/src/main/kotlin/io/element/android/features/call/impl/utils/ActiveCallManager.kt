@@ -34,6 +34,7 @@ import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.api.notifications.OnMissedCallNotificationHandler
 import io.element.android.services.appnavstate.api.AppForegroundStateService
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -98,6 +99,7 @@ class DefaultActiveCallManager(
     private val defaultCurrentCallService: DefaultCurrentCallService,
     private val appForegroundStateService: AppForegroundStateService,
     private val imageLoaderHolder: ImageLoaderHolder,
+    private val systemClock: SystemClock,
 ) : ActiveCallManager {
     private val tag = "DefaultActiveCallManager"
     private var timedOutCallJob: Job? = null
@@ -120,7 +122,7 @@ class DefaultActiveCallManager(
         mutex.withLock {
             val ringDuration =
                 min(
-                    notificationData.expirationTimestamp - System.currentTimeMillis(),
+                    notificationData.expirationTimestamp - systemClock.epochMillis(),
                     ElementCallConfig.RINGING_CALL_DURATION_SECONDS * 1000L
                 )
 
