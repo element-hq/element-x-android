@@ -16,8 +16,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.StateFlow
 
 interface MatrixAuthenticationService {
-    suspend fun getLatestSessionId(): SessionId?
-
     /**
      * Restore a session from a [sessionId].
      * Do not restore anything it the access token is not valid anymore.

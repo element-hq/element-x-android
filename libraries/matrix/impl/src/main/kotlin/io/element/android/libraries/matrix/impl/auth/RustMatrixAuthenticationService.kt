@@ -81,10 +81,6 @@ class RustMatrixAuthenticationService(
             .also { sessionPaths = it }
     }
 
-    override suspend fun getLatestSessionId(): SessionId? = withContext(coroutineDispatchers.io) {
-        sessionStore.getLatestSession()?.userId?.let { SessionId(it) }
-    }
-
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> = withContext(coroutineDispatchers.io) {
         runCatchingExceptions {
             val sessionData = sessionStore.getSession(sessionId.value)
