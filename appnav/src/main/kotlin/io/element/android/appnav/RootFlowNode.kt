@@ -46,13 +46,13 @@ import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
 import io.element.android.libraries.sessionstorage.api.LoggedInState
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -64,7 +64,7 @@ import timber.log.Timber
 class RootFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val authenticationService: MatrixAuthenticationService,
+    private val sessionStore: SessionStore,
     private val accountProviderAccessControl: AccountProviderAccessControl,
     private val navStateFlowFactory: RootNavStateFlowFactory,
     private val matrixSessionCache: MatrixSessionCache,
@@ -152,7 +152,7 @@ class RootFlowNode(
         onSuccess: (SessionId) -> Unit,
         onFailure: () -> Unit
     ) {
-        val latestSessionId = authenticationService.getLatestSessionId()
+        val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             onFailure()
             return
@@ -268,7 +268,7 @@ class RootFlowNode(
 
     private suspend fun onLoginLink(params: LoginParams) {
         // Is there a session already?
-        val latestSessionId = authenticationService.getLatestSessionId()
+        val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             // No session, open login
             if (accountProviderAccessControl.isAllowedToConnectToAccountProvider(params.accountProvider.ensureProtocol())) {
@@ -285,7 +285,7 @@ class RootFlowNode(
 
     private suspend fun onIncomingShare(intent: Intent) {
         // Is there a session already?
-        val latestSessionId = authenticationService.getLatestSessionId()
+        val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             // No session, open login
             switchToNotLoggedInFlow(null)
@@ -342,3 +342,5 @@ class RootFlowNode(
             .attachSession()
     }
 }
+
+private suspend fun SessionStore.getLatestSessionId() = getLatestSession()?.userId?.let(::SessionId)
