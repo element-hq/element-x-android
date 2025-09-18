@@ -13,12 +13,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.ThreadId
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
 
@@ -58,8 +58,9 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(
                     ),
                     inReplyTo = inReplyToDetails,
                     displayNameAmbiguous = displayNameAmbiguous,
-                    threadInfo = EventThreadInfo(
+                    threadInfo = TimelineItemThreadInfo(
                         threadRootId = ThreadId("\$thread-root-id"),
+                        latestEventText = null,
                         threadSummary = null,
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,

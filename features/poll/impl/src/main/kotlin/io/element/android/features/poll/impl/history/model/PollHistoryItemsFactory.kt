@@ -45,7 +45,12 @@ class PollHistoryItemsFactory(
         return when (timelineItem) {
             is MatrixTimelineItem.Event -> {
                 val pollContent = timelineItem.event.content as? PollContent ?: return null
-                val pollContentState = pollContentStateFactory.create(timelineItem.event, pollContent)
+                val pollContentState = pollContentStateFactory.create(
+                    eventId = timelineItem.eventId,
+                    isEditable = timelineItem.event.isEditable,
+                    isOwn = timelineItem.event.isOwn,
+                    content = pollContent,
+                )
                 PollHistoryItem(
                     formattedDate = dateFormatter.format(
                         timestamp = timelineItem.event.timestamp,

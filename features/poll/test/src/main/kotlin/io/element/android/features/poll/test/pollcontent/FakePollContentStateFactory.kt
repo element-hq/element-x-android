@@ -10,20 +10,20 @@ package io.element.android.features.poll.test.pollcontent
 import io.element.android.features.poll.api.pollcontent.PollAnswerItem
 import io.element.android.features.poll.api.pollcontent.PollContentState
 import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toImmutableList
 
 class FakePollContentStateFactory : PollContentStateFactory {
-    override suspend fun create(event: EventTimelineItem, content: PollContent): PollContentState {
+    override suspend fun create(eventId: EventId?, isEditable: Boolean, isOwn: Boolean, content: PollContent): PollContentState {
         return PollContentState(
-            eventId = event.eventId,
+            eventId = eventId,
             question = content.question,
             answerItems = emptyList<PollAnswerItem>().toImmutableList(),
             pollKind = content.kind,
-            isPollEditable = event.isEditable,
+            isPollEditable = isEditable,
             isPollEnded = content.endTime != null,
-            isMine = event.isOwn
+            isMine = isOwn,
         )
     }
 }
