@@ -501,22 +501,16 @@ class LoggedInPresenterTest {
 
     @Test
     fun `present - CheckSlidingSyncProxyAvailability forces the sliding sync migration under the right circumstances`() = runTest {
-        // The migration will be forced if:
-        // - The user is not using the native sliding sync
-        // - The sliding sync proxy is no longer supported
-        // - The native sliding sync is supported
+        // The migration will be forced if the user is not using the native sliding sync
         val matrixClient = FakeMatrixClient(
             currentSlidingSyncVersionLambda = { Result.success(SlidingSyncVersion.Proxy) },
-            availableSlidingSyncVersionsLambda = { Result.success(listOf(SlidingSyncVersion.Native)) },
         )
         createLoggedInPresenter(
             matrixClient = matrixClient,
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.forceNativeSlidingSyncMigration).isFalse()
-
             initialState.eventSink(LoggedInEvents.CheckSlidingSyncProxyAvailability)
-
             assertThat(awaitItem().forceNativeSlidingSyncMigration).isTrue()
         }
     }
