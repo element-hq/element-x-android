@@ -34,10 +34,11 @@ data class PushDataFirebase(
 fun PushDataFirebase.toPushData(): PushData? {
     val safeEventId = eventId?.let(::EventId) ?: return null
     val safeRoomId = roomId?.let(::RoomId) ?: return null
+    val safeClientSecret = clientSecret ?: return null
     return PushData(
         eventId = safeEventId,
         roomId = safeRoomId,
         unread = unread,
-        clientSecret = clientSecret,
+        clientSecret = safeClientSecret,
     )
 }

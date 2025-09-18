@@ -14,7 +14,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -28,7 +27,6 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.push.impl.history.FakePushHistoryService
 import io.element.android.libraries.push.impl.history.PushHistoryService
@@ -181,7 +179,7 @@ class DefaultPushHandlerTest {
         }
 
     @Test
-    fun `when PushData is received, but client secret is not known, fallback the latest session`() =
+    fun `when PushData is received, but client secret is not known, nothing happen`() =
         runTest {
             val aNotifiableMessageEvent = aNotifiableMessageEvent()
             val notifiableEventResult =
@@ -207,58 +205,6 @@ class DefaultPushHandlerTest {
                 pushClientSecret = FakePushClientSecret(
                     getUserIdFromSecretResult = { null }
                 ),
-                matrixAuthenticationService = FakeMatrixAuthenticationService().apply {
-                    getLatestSessionIdLambda = { A_USER_ID }
-                },
-                incrementPushCounterResult = incrementPushCounterResult,
-                pushHistoryService = pushHistoryService,
-            )
-            defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
-
-            advanceTimeBy(300.milliseconds)
-
-            incrementPushCounterResult.assertions()
-                .isCalledOnce()
-            notifiableEventResult.assertions()
-                .isCalledOnce()
-                .with(value(A_USER_ID), any())
-            onNotifiableEventsReceived.assertions()
-                .isCalledOnce()
-                .with(value(listOf(aNotifiableMessageEvent)))
-            onPushReceivedResult.assertions()
-                .isCalledOnce()
-        }
-
-    @Test
-    fun `when PushData is received, but client secret is not known, and there is no latest session, nothing happen`() =
-        runTest {
-            val aNotifiableMessageEvent = aNotifiableMessageEvent()
-            val notifiableEventResult =
-                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
-                    val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
-                    Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
-                }
-            val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
-            val incrementPushCounterResult = lambdaRecorder<Unit> {}
-            val aPushData = PushData(
-                eventId = AN_EVENT_ID,
-                roomId = A_ROOM_ID,
-                unread = 0,
-                clientSecret = A_SECRET,
-            )
-            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
-            val pushHistoryService = FakePushHistoryService(
-                onPushReceivedResult = onPushReceivedResult,
-            )
-            val defaultPushHandler = createDefaultPushHandler(
-                onNotifiableEventsReceived = onNotifiableEventsReceived,
-                notifiableEventsResult = notifiableEventResult,
-                pushClientSecret = FakePushClientSecret(
-                    getUserIdFromSecretResult = { null }
-                ),
-                matrixAuthenticationService = FakeMatrixAuthenticationService().apply {
-                    getLatestSessionIdLambda = { null }
-                },
                 incrementPushCounterResult = incrementPushCounterResult,
                 pushHistoryService = pushHistoryService,
             )
@@ -655,8 +601,8 @@ class DefaultPushHandlerTest {
         var receivedFallbackEvent = false
         val onPushReceivedResult =
             lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, isResolved, _, comment ->
-            receivedFallbackEvent = !isResolved && comment == "Unable to resolve event: ${aNotifiableFallbackEvent.cause}"
-        }
+                receivedFallbackEvent = !isResolved && comment == "Unable to resolve event: ${aNotifiableFallbackEvent.cause}"
+            }
         val pushHistoryService = FakePushHistoryService(
             onPushReceivedResult = onPushReceivedResult,
         )
@@ -694,7 +640,6 @@ class DefaultPushHandlerTest {
         userPushStore: UserPushStore = FakeUserPushStore(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
         buildMeta: BuildMeta = aBuildMeta(),
-        matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         diagnosticPushHandler: DiagnosticPushHandler = DiagnosticPushHandler(),
         elementCallEntryPoint: FakeElementCallEntryPoint = FakeElementCallEntryPoint(),
         notificationChannels: FakeNotificationChannels = FakeNotificationChannels(),
@@ -712,7 +657,6 @@ class DefaultPushHandlerTest {
             userPushStoreFactory = FakeUserPushStoreFactory { userPushStore },
             pushClientSecret = pushClientSecret,
             buildMeta = buildMeta,
-            matrixAuthenticationService = matrixAuthenticationService,
             diagnosticPushHandler = diagnosticPushHandler,
             elementCallEntryPoint = elementCallEntryPoint,
             notificationChannels = notificationChannels,
