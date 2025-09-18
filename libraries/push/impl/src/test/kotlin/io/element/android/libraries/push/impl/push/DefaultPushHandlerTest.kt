@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
-import io.element.android.libraries.matrix.api.notification.CallNotifyType
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
@@ -388,7 +388,7 @@ class DefaultPushHandlerTest {
                     mapOf(
                         request to Result.success(
                             ResolvedPushEvent.Event(
-                                aNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().toEpochMilli())
+                                aNotifiableCallEvent(rtcNotificationType = RtcNotificationType.RING, timestamp = Instant.now().toEpochMilli())
                             )
                         )
                     )
@@ -440,7 +440,7 @@ class DefaultPushHandlerTest {
             onNotifiableEventsReceived = onNotifiableEventsReceived,
             notifiableEventsResult = { _, _ ->
                 val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
-                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent(type = EventType.CALL_NOTIFY)))))
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent(type = EventType.RTC_NOTIFICATION)))))
             },
             incrementPushCounterResult = {},
             pushClientSecret = FakePushClientSecret(

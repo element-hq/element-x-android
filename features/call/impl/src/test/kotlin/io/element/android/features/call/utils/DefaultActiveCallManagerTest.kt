@@ -39,6 +39,8 @@ import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolde
 import io.element.android.libraries.push.test.notifications.FakeOnMissedCallNotificationHandler
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
+import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
+import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.plantTestTimber
@@ -368,6 +370,83 @@ class DefaultActiveCallManagerTest {
         assertThat(manager.activeCall.value).isNotNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `IncomingCall - rings no longer than expiration time`() = runTest {
+        setupShadowPowerManager()
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+        val clock = FakeSystemClock()
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat, systemClock = clock)
+
+        assertThat(manager.activeWakeLock?.isHeld).isFalse()
+        assertThat(manager.activeCall.value).isNull()
+
+        val eventTimestamp = A_FAKE_TIMESTAMP
+        // The call should not ring more than 30 seconds after the initial event was sent
+        val expirationTimestamp = eventTimestamp + 30_000
+
+        val callNotificationData = aCallNotificationData(
+            timestamp = eventTimestamp,
+            expirationTimestamp = expirationTimestamp,
+        )
+
+        // suppose it took 10s to be notified
+        clock.epochMillisResult = eventTimestamp + 10_000
+        manager.registerIncomingCall(callNotificationData)
+
+        assertThat(manager.activeCall.value).isEqualTo(
+            ActiveCall(
+                callType = CallType.RoomCall(
+                    sessionId = callNotificationData.sessionId,
+                    roomId = callNotificationData.roomId,
+                ),
+                callState = CallState.Ringing(callNotificationData)
+            )
+        )
+
+        runCurrent()
+
+        assertThat(manager.activeWakeLock?.isHeld).isTrue()
+        verify { notificationManagerCompat.notify(notificationId, any()) }
+
+        // advance by 21s it should have stopped ringing
+        advanceTimeBy(21_000)
+        runCurrent()
+
+        verify { notificationManagerCompat.cancel(any()) }
+    }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `IncomingCall - ignore expired ring lifetime`() = runTest {
+        setupShadowPowerManager()
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+        val clock = FakeSystemClock()
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat, systemClock = clock)
+
+        assertThat(manager.activeWakeLock?.isHeld).isFalse()
+        assertThat(manager.activeCall.value).isNull()
+
+        val eventTimestamp = A_FAKE_TIMESTAMP
+        // The call should not ring more than 30 seconds after the initial event was sent
+        val expirationTimestamp = eventTimestamp + 30_000
+
+        val callNotificationData = aCallNotificationData(
+            timestamp = eventTimestamp,
+            expirationTimestamp = expirationTimestamp,
+        )
+
+        // suppose it took 35s to be notified
+        clock.epochMillisResult = eventTimestamp + 35_000
+        manager.registerIncomingCall(callNotificationData)
+
+        assertThat(manager.activeCall.value).isNull()
+
+        runCurrent()
+
+        assertThat(manager.activeWakeLock?.isHeld).isFalse()
+        verify(exactly = 0) { notificationManagerCompat.notify(notificationId, any()) }
+    }
+
     private fun setupShadowPowerManager() {
         shadowOf(InstrumentationRegistry.getInstrumentation().targetContext.getSystemService<PowerManager>()).apply {
             setIsWakeLockLevelSupported(PowerManager.PARTIAL_WAKE_LOCK, true)
@@ -378,6 +457,7 @@ class DefaultActiveCallManagerTest {
         matrixClientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
         onMissedCallNotificationHandler: FakeOnMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(),
         notificationManagerCompat: NotificationManagerCompat = mockk(relaxed = true),
+        systemClock: FakeSystemClock = FakeSystemClock(),
     ) = DefaultActiveCallManager(
         context = InstrumentationRegistry.getInstrumentation().targetContext,
         coroutineScope = backgroundScope,
@@ -393,5 +473,6 @@ class DefaultActiveCallManagerTest {
         defaultCurrentCallService = DefaultCurrentCallService(),
         appForegroundStateService = FakeAppForegroundStateService(),
         imageLoaderHolder = FakeImageLoaderHolder(),
+        systemClock = systemClock,
     )
 }

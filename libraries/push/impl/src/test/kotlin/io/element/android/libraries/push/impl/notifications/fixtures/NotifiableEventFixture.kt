@@ -12,7 +12,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.notification.CallNotifyType
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -119,8 +119,9 @@ fun aNotifiableCallEvent(
     senderName: String? = null,
     roomAvatarUrl: String? = AN_AVATAR_URL,
     senderAvatarUrl: String? = AN_AVATAR_URL,
-    callNotifyType: CallNotifyType = CallNotifyType.NOTIFY,
+    rtcNotificationType: RtcNotificationType = RtcNotificationType.NOTIFY,
     timestamp: Long = 0L,
+    expirationTimestamp: Long = 0L,
 ) = NotifiableRingingCallEvent(
     sessionId = sessionId,
     eventId = eventId,
@@ -129,6 +130,7 @@ fun aNotifiableCallEvent(
     editedEventId = null,
     description = "description",
     timestamp = timestamp,
+    expirationTimestamp = expirationTimestamp,
     canBeReplaced = false,
     isRedacted = false,
     isUpdated = false,
@@ -136,5 +138,5 @@ fun aNotifiableCallEvent(
     senderId = senderId,
     roomAvatarUrl = roomAvatarUrl,
     senderAvatarUrl = senderAvatarUrl,
-    callNotifyType = callNotifyType,
+    rtcNotificationType = rtcNotificationType,
 )

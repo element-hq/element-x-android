@@ -10,16 +10,16 @@ package io.element.android.libraries.matrix.impl.notification
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
-import org.matrix.rustcomponents.sdk.NotifyType
 import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventType
 import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.RtcNotificationType as SdkRtcNotificationType
 
 class TimelineEventToNotificationContentMapper {
     fun map(timelineEvent: TimelineEvent): Result<NotificationContent> {
@@ -78,7 +78,11 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             MessageLikeEventContent.CallCandidates -> NotificationContent.MessageLike.CallCandidates
             MessageLikeEventContent.CallHangup -> NotificationContent.MessageLike.CallHangup
             MessageLikeEventContent.CallInvite -> NotificationContent.MessageLike.CallInvite(senderId)
-            is MessageLikeEventContent.CallNotify -> NotificationContent.MessageLike.CallNotify(senderId, notifyType.map())
+            is MessageLikeEventContent.RtcNotification -> NotificationContent.MessageLike.RtcNotification(
+                senderId = senderId,
+                type = notificationType.map(),
+                expirationTimestampMillis = expirationTs.toLong()
+            )
             MessageLikeEventContent.KeyVerificationAccept -> NotificationContent.MessageLike.KeyVerificationAccept
             MessageLikeEventContent.KeyVerificationCancel -> NotificationContent.MessageLike.KeyVerificationCancel
             MessageLikeEventContent.KeyVerificationDone -> NotificationContent.MessageLike.KeyVerificationDone
@@ -101,7 +105,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
     }
 }
 
-private fun NotifyType.map(): CallNotifyType = when (this) {
-    NotifyType.NOTIFY -> CallNotifyType.NOTIFY
-    NotifyType.RING -> CallNotifyType.RING
+private fun SdkRtcNotificationType.map(): RtcNotificationType = when (this) {
+    SdkRtcNotificationType.NOTIFICATION -> RtcNotificationType.NOTIFY
+    SdkRtcNotificationType.RING -> RtcNotificationType.RING
 }

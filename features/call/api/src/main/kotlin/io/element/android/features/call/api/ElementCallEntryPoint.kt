@@ -29,6 +29,7 @@ interface ElementCallEntryPoint {
      * @param senderName The name of the sender of the event that started the call.
      * @param avatarUrl The avatar url of the room or DM.
      * @param timestamp The timestamp of the event that started the call.
+     * @param expirationTimestamp The timestamp at which the call should stop ringing.
      * @param notificationChannelId The id of the notification channel to use for the call notification.
      * @param textContent The text content of the notification. If null the default content from the system will be used.
      */
@@ -40,6 +41,7 @@ interface ElementCallEntryPoint {
         senderName: String?,
         avatarUrl: String?,
         timestamp: Long,
+        expirationTimestamp: Long,
         notificationChannelId: String,
         textContent: String?,
     )
