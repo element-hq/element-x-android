@@ -9,7 +9,7 @@ package io.element.android.features.logout.api.direct
 
 import androidx.compose.runtime.Composable
 
-interface DirectLogoutView {
+fun interface DirectLogoutView {
     @Composable
     fun Render(state: DirectLogoutState)
 }

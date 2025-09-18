@@ -6,7 +6,6 @@ import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 
 interface ${FEATURE_NAME}EntryPoint : FeatureEntryPoint {
-
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface NodeBuilder {

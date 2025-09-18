@@ -1,3 +1,5 @@
+import extension.testCommonDependencies
+
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -19,6 +21,5 @@ dependencies {
     implementation(projects.tests.testutils)
     implementation(projects.libraries.matrix.api)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
+    testCommonDependencies(libs)
 }

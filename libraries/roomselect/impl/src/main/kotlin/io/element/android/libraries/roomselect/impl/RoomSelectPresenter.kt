@@ -33,7 +33,7 @@ class RoomSelectPresenter(
     private val dataSource: RoomSelectSearchDataSource,
 ) : Presenter<RoomSelectState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(mode: RoomSelectMode): RoomSelectPresenter
     }
 

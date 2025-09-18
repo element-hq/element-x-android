@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -48,14 +49,7 @@ dependencies {
     implementation(libs.serialization.json)
     api(projects.features.login.api)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.androidx.compose.ui.test.junit)
-    testImplementation(libs.androidx.test.ext.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
+    testCommonDependencies(libs, true)
     testImplementation(projects.features.login.test)
     testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.featureflag.test)
@@ -63,6 +57,4 @@ dependencies {
     testImplementation(projects.libraries.oidc.test)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.wellknown.test)
-    testImplementation(projects.tests.testutils)
-    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

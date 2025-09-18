@@ -37,7 +37,6 @@ import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import kotlin.collections.plus
 
 class ChangeRolesPresenterTest {
     @Test
@@ -556,18 +555,18 @@ class ChangeRolesPresenterTest {
             users = pairs.associate { (userId, role) -> userId to role.powerLevel }.toPersistentMap()
         )
     }
+}
 
-    private fun TestScope.createChangeRolesPresenter(
-        role: RoomMember.Role = RoomMember.Role.Admin,
-        room: FakeJoinedRoom = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {})),
-        dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
-        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
-    ): ChangeRolesPresenter {
-        return ChangeRolesPresenter(
-            role = role,
-            room = room,
-            dispatchers = dispatchers,
-            analyticsService = analyticsService,
-        )
-    }
+internal fun TestScope.createChangeRolesPresenter(
+    role: RoomMember.Role = RoomMember.Role.Admin,
+    room: FakeJoinedRoom = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {})),
+    dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+    analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+): ChangeRolesPresenter {
+    return ChangeRolesPresenter(
+        role = role,
+        room = room,
+        dispatchers = dispatchers,
+        analyticsService = analyticsService,
+    )
 }

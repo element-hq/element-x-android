@@ -11,12 +11,9 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.SessionId
 
 @SingleIn(SessionScope::class)
 @Inject
 class CurrentSessionIdHolder(matrixClient: MatrixClient) {
     val current = matrixClient.sessionId
-
-    fun isCurrentSession(sessionId: SessionId?): Boolean = current == sessionId
 }

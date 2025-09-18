@@ -225,15 +225,15 @@ class BugReportPresenterTest {
             assertThat(awaitItem().sending).isEqualTo(AsyncAction.Uninitialized)
         }
     }
-
-    private fun TestScope.createPresenter(
-        bugReporter: BugReporter = FakeBugReporter(),
-        crashDataStore: CrashDataStore = FakeCrashDataStore(),
-        screenshotHolder: ScreenshotHolder = FakeScreenshotHolder(),
-    ) = BugReportPresenter(
-        bugReporter = bugReporter,
-        crashDataStore = crashDataStore,
-        screenshotHolder = screenshotHolder,
-        appCoroutineScope = this,
-    )
 }
+
+internal fun TestScope.createPresenter(
+    bugReporter: BugReporter = FakeBugReporter(),
+    crashDataStore: CrashDataStore = FakeCrashDataStore(),
+    screenshotHolder: ScreenshotHolder = FakeScreenshotHolder(),
+) = BugReportPresenter(
+    bugReporter = bugReporter,
+    crashDataStore = crashDataStore,
+    screenshotHolder = screenshotHolder,
+    appCoroutineScope = this,
+)
