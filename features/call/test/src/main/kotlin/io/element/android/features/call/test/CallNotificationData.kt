@@ -30,7 +30,7 @@ fun aCallNotificationData(
     avatarUrl: String? = AN_AVATAR_URL,
     notificationChannelId: String = "channel_id",
     timestamp: Long = 0L,
-    expirationTimestamp: Long = 0L,
+    expirationTimestamp: Long = 30_000L,
     textContent: String? = null,
 ): CallNotificationData = CallNotificationData(
     sessionId = sessionId,
