@@ -26,4 +26,6 @@ data class CallNotificationData(
     val notificationChannelId: String,
     val timestamp: Long,
     val textContent: String?,
+    // Expiration timestamp in millis since epoch
+    val expirationTimestamp: Long,
 ) : Parcelable

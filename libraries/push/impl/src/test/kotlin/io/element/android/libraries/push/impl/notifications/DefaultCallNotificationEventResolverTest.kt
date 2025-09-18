@@ -8,8 +8,8 @@
 package io.element.android.libraries.push.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -61,11 +61,12 @@ class DefaultCallNotificationEventResolverTest {
             isUpdated = false,
             senderDisambiguatedDisplayName = A_USER_NAME_2,
             senderAvatarUrl = null,
-            callNotifyType = CallNotifyType.RING,
+            expirationTimestamp = 1567L,
+            rtcNotificationType = RtcNotificationType.RING,
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.RING)
+            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.RING, 1567)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
@@ -105,11 +106,11 @@ class DefaultCallNotificationEventResolverTest {
             imageUriString = null,
             imageMimeType = null,
             threadId = null,
-            type = "m.call.notify",
+            type = "org.matrix.msc4075.rtc.notification",
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.NOTIFY)
+            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.NOTIFY, 0)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
@@ -149,11 +150,11 @@ class DefaultCallNotificationEventResolverTest {
             imageUriString = null,
             imageMimeType = null,
             threadId = null,
-            type = "m.call.notify",
+            type = "org.matrix.msc4075.rtc.notification",
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.CallNotify(A_USER_ID_2, CallNotifyType.RING)
+            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.RING, 0)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
