@@ -45,5 +45,6 @@ dependencies {
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.featureflag.test)
+    testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.tests.testutils)
 }

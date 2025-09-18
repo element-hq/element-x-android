@@ -174,7 +174,7 @@ class PinUnlockPresenter(
 
     private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncAction<Unit>>) = launch {
         suspend {
-            logoutUseCase.logout(ignoreSdkError = true)
+            logoutUseCase.logoutAll(ignoreSdkError = true)
         }.runCatchingUpdatingState(signOutAction)
     }
 }
