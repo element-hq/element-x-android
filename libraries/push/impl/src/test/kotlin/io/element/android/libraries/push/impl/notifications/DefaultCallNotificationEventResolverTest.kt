@@ -106,7 +106,7 @@ class DefaultCallNotificationEventResolverTest {
             imageUriString = null,
             imageMimeType = null,
             threadId = null,
-            type = "m.call.notify",
+            type = "org.matrix.msc4075.rtc.notification",
         )
 
         val notificationData = aNotificationData(
@@ -150,7 +150,7 @@ class DefaultCallNotificationEventResolverTest {
             imageUriString = null,
             imageMimeType = null,
             threadId = null,
-            type = "m.call.notify",
+            type = "org.matrix.msc4075.rtc.notification",
         )
 
         val notificationData = aNotificationData(
