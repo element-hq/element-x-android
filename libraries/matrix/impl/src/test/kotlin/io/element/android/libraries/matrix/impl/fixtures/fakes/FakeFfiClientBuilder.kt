@@ -17,7 +17,9 @@ import uniffi.matrix_sdk.BackupDownloadStrategy
 import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.DecryptionSettings
 
-class FakeFfiClientBuilder : ClientBuilder(NoPointer) {
+class FakeFfiClientBuilder(
+    val buildResult: () -> Client = { FakeFfiClient(withUtdHook = {}) }
+) : ClientBuilder(NoPointer) {
     override fun addRootCertificates(certificates: List<ByteArray>) = this
     override fun autoEnableBackups(autoEnableBackups: Boolean) = this
     override fun autoEnableCrossSigning(autoEnableCrossSigning: Boolean) = this
@@ -42,6 +44,6 @@ class FakeFfiClientBuilder : ClientBuilder(NoPointer) {
     override fun threadsEnabled(enabled: Boolean, threadSubscriptions: Boolean): ClientBuilder = this
 
     override suspend fun build(): Client {
-        return FakeFfiClient(withUtdHook = {})
+        return buildResult()
     }
 }

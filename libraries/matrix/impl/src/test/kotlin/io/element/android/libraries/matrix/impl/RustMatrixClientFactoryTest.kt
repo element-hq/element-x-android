@@ -41,6 +41,7 @@ fun TestScope.createRustMatrixClientFactory(
     sessionStore: SessionStore = InMemorySessionStore(
         updateUserProfileResult = { _, _, _ -> },
     ),
+    clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
 ) = RustMatrixClientFactory(
     baseDirectory = baseDirectory,
     cacheDirectory = cacheDirectory,
@@ -54,5 +55,5 @@ fun TestScope.createRustMatrixClientFactory(
     analyticsService = FakeAnalyticsService(),
     featureFlagService = FakeFeatureFlagService(),
     timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
-    clientBuilderProvider = FakeClientBuilderProvider(),
+    clientBuilderProvider = clientBuilderProvider,
 )
