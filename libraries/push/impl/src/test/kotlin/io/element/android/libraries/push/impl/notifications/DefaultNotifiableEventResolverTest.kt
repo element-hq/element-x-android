@@ -12,7 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.notification.CallNotifyType
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -693,9 +693,9 @@ class DefaultNotifiableEventResolverTest {
             notificationResult = Result.success(
                 mapOf(
                     AN_EVENT_ID to Result.success(aNotificationData(
-                        content = NotificationContent.MessageLike.CallNotify(
+                        content = NotificationContent.MessageLike.RtcNotification(
                             A_USER_ID_2,
-                            CallNotifyType.NOTIFY,
+                            RtcNotificationType.NOTIFY,
                             0
                         ),
                     ))

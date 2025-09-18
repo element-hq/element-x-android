@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.notification
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.notification.CallNotifyType
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
@@ -78,7 +78,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             MessageLikeEventContent.CallCandidates -> NotificationContent.MessageLike.CallCandidates
             MessageLikeEventContent.CallHangup -> NotificationContent.MessageLike.CallHangup
             MessageLikeEventContent.CallInvite -> NotificationContent.MessageLike.CallInvite(senderId)
-            is MessageLikeEventContent.RtcNotification -> NotificationContent.MessageLike.CallNotify(
+            is MessageLikeEventContent.RtcNotification -> NotificationContent.MessageLike.RtcNotification(
                 senderId = senderId,
                 type = notificationType.map(),
                 expirationTimestampMillis = expirationTs.toLong()
@@ -105,7 +105,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
     }
 }
 
-private fun RtcNotificationType.map(): CallNotifyType = when (this) {
-    RtcNotificationType.NOTIFICATION -> CallNotifyType.NOTIFY
-    RtcNotificationType.RING -> CallNotifyType.RING
+private fun RtcNotificationType.map(): RtcNotificationType = when (this) {
+    RtcNotificationType.NOTIFICATION -> RtcNotificationType.NOTIFY
+    RtcNotificationType.RING -> RtcNotificationType.RING
 }

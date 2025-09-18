@@ -133,7 +133,7 @@ class DefaultActiveCallManager(
             }
 
             appForegroundStateService.updateHasRingingCall(true)
-            Timber.tag(tag).d("Received incoming call for room id: ${notificationData.roomId}, ringDuration: $ringDuration")
+            Timber.tag(tag).d("Received incoming call for room id: ${notificationData.roomId}, ringDuration(ms): $ringDuration")
             if (activeCall.value != null) {
                 displayMissedCallNotification(notificationData)
                 Timber.tag(tag).w("Already have an active call, ignoring incoming call: $notificationData")
