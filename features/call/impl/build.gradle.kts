@@ -96,4 +96,5 @@ dependencies {
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.appnavstate.test)
+    testImplementation(projects.services.toolbox.test)
 }

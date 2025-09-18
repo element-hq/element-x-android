@@ -59,6 +59,7 @@ class DefaultElementCallEntryPointTest {
             senderName = "senderName",
             avatarUrl = "avatarUrl",
             timestamp = 0,
+            expirationTimestamp = 0,
             notificationChannelId = "notificationChannelId",
             textContent = "textContent",
         )

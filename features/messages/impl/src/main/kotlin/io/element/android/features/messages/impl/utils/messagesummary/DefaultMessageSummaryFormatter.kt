@@ -12,7 +12,6 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -21,6 +20,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -54,7 +54,7 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
             is TimelineItemLegacyCallInviteContent -> context.getString(CommonStrings.common_unsupported_call)
-            is TimelineItemCallNotifyContent -> context.getString(CommonStrings.common_call_started)
+            is TimelineItemRtcNotificationContent -> context.getString(CommonStrings.common_call_started)
         }
             // Truncate the message to a safe length to avoid crashes in Compose
             .toSafeLength()

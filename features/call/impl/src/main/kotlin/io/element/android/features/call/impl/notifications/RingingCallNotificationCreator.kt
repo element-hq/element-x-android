@@ -64,6 +64,7 @@ class RingingCallNotificationCreator(
         roomAvatarUrl: String?,
         notificationChannelId: String,
         timestamp: Long,
+        expirationTimestamp: Long,
         textContent: String?,
     ): Notification? {
         val matrixClient = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
@@ -88,6 +89,7 @@ class RingingCallNotificationCreator(
             notificationChannelId = notificationChannelId,
             timestamp = timestamp,
             textContent = textContent,
+            expirationTimestamp = expirationTimestamp,
         )
 
         val declineIntent = PendingIntentCompat.getBroadcast(

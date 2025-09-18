@@ -156,11 +156,6 @@ interface MatrixClient {
      */
     suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion>
 
-    /**
-     * Returns the available sliding sync versions for the current user.
-     */
-    suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>>
-
     fun canDeactivateAccount(): Boolean
     suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit>
 

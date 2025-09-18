@@ -7,6 +7,6 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-class TimelineItemCallNotifyContent : TimelineItemEventContent {
-    override val type: String = "m.call.notify"
+class TimelineItemRtcNotificationContent : TimelineItemEventContent {
+    override val type: String = "org.matrix.msc4075.rtc.notification"
 }

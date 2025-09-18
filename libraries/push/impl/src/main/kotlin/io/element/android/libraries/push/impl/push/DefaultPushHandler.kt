@@ -296,6 +296,7 @@ class DefaultPushHandler(
             senderName = notifiableEvent.senderDisambiguatedDisplayName,
             avatarUrl = notifiableEvent.roomAvatarUrl,
             timestamp = notifiableEvent.timestamp,
+            expirationTimestamp = notifiableEvent.expirationTimestamp,
             notificationChannelId = notificationChannels.getChannelForIncomingCall(ring = true),
             textContent = notifiableEvent.description,
         )

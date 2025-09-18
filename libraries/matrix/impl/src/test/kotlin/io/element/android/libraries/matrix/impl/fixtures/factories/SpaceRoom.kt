@@ -43,4 +43,5 @@ fun aRustSpaceRoom(
     childrenCount = childrenCount,
     state = state,
     heroes = heroes,
+    via = emptyList()
 )

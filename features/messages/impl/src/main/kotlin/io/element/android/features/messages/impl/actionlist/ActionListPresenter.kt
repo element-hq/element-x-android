@@ -25,12 +25,12 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailureFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.features.messages.impl.timeline.model.event.canBeForwarded
@@ -242,7 +242,7 @@ class DefaultActionListPresenter(
 private fun Iterable<TimelineItemAction>.postFilter(content: TimelineItemEventContent): Iterable<TimelineItemAction> {
     return filter { action ->
         when (content) {
-            is TimelineItemCallNotifyContent,
+            is TimelineItemRtcNotificationContent,
             is TimelineItemLegacyCallInviteContent,
             is TimelineItemStateContent -> action == TimelineItemAction.ViewSource
             is TimelineItemRedactedContent -> {
