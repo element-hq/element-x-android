@@ -41,10 +41,6 @@ class FakeMatrixAuthenticationService(
     private var matrixClient: MatrixClient? = null
     private var onAuthenticationListener: ((MatrixClient) -> Unit)? = null
 
-    var getLatestSessionIdLambda: (() -> SessionId?) = { null }
-
-    override suspend fun getLatestSessionId(): SessionId? = getLatestSessionIdLambda()
-
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> {
         matrixClientResult?.let {
             return it.invoke(sessionId)
