@@ -50,7 +50,6 @@ import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -70,7 +69,6 @@ import timber.log.Timber
 class RootFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val authenticationService: MatrixAuthenticationService,
     private val accountProviderAccessControl: AccountProviderAccessControl,
     private val navStateFlowFactory: RootNavStateFlowFactory,
     private val matrixSessionCache: MatrixSessionCache,
@@ -162,7 +160,7 @@ class RootFlowNode(
         onSuccess: (SessionId) -> Unit,
         onFailure: () -> Unit
     ) {
-        val latestSessionId = authenticationService.getLatestSessionId()
+        val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             onFailure()
             return
@@ -368,7 +366,7 @@ class RootFlowNode(
 
     private suspend fun onIncomingShare(intent: Intent) {
         // Is there a session already?
-        val latestSessionId = authenticationService.getLatestSessionId()
+        val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             // No session, open login
             switchToNotLoggedInFlow(null)
@@ -394,7 +392,7 @@ class RootFlowNode(
     private suspend fun navigateTo(permalinkData: PermalinkData) {
         Timber.d("Navigating to $permalinkData")
         // Is there a session already?
-        val latestSessionId = authenticationService.getLatestSessionId()
+        val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             // No session, open login
             switchToNotLoggedInFlow(null)
@@ -466,3 +464,5 @@ class RootFlowNode(
             .attachSession()
     }
 }
+
+private suspend fun SessionStore.getLatestSessionId() = getLatestSession()?.userId?.let(::SessionId)
