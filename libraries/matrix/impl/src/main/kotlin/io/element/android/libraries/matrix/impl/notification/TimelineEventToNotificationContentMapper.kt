@@ -10,16 +10,16 @@ package io.element.android.libraries.matrix.impl.notification
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
-import org.matrix.rustcomponents.sdk.RtcNotificationType
 import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventType
 import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.RtcNotificationType as SdkRtcNotificationType
 
 class TimelineEventToNotificationContentMapper {
     fun map(timelineEvent: TimelineEvent): Result<NotificationContent> {
@@ -105,7 +105,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
     }
 }
 
-private fun RtcNotificationType.map(): RtcNotificationType = when (this) {
-    RtcNotificationType.NOTIFICATION -> RtcNotificationType.NOTIFY
-    RtcNotificationType.RING -> RtcNotificationType.RING
+private fun SdkRtcNotificationType.map(): RtcNotificationType = when (this) {
+    SdkRtcNotificationType.NOTIFICATION -> RtcNotificationType.NOTIFY
+    SdkRtcNotificationType.RING -> RtcNotificationType.RING
 }

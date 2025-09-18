@@ -12,9 +12,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType

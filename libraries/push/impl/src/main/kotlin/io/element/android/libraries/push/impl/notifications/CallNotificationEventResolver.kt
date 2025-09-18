@@ -14,9 +14,9 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
-import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent

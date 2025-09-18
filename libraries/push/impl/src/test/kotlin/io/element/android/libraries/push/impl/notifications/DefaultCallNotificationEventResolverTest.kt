@@ -8,8 +8,8 @@
 package io.element.android.libraries.push.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
