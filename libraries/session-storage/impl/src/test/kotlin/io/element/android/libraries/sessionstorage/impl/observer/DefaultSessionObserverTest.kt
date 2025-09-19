@@ -51,7 +51,7 @@ import org.junit.Test
         runCurrent()
         val listener = TestSessionListener()
         sut.addListener(listener)
-        databaseSessionStore.storeData(sessionData.toApiModel())
+        databaseSessionStore.addSession(sessionData.toApiModel())
         listener.assertEvents(TestSessionListener.Event.Created(sessionData.userId))
         sut.removeListener(listener)
         coroutineContext.cancelChildren()
@@ -64,7 +64,7 @@ import org.junit.Test
         runCurrent()
         val listener = TestSessionListener()
         sut.addListener(listener)
-        databaseSessionStore.storeData(sessionData.toApiModel())
+        databaseSessionStore.addSession(sessionData.toApiModel())
         listener.assertEvents(TestSessionListener.Event.Created(sessionData.userId))
         databaseSessionStore.removeSession(sessionData.userId)
         listener.assertEvents(

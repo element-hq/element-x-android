@@ -10,7 +10,9 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 import android.net.Uri
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -29,6 +31,7 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetSta
 import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -147,8 +150,8 @@ class MediaGalleryPresenterTest {
         val presenter = createMediaGalleryPresenter(
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
-                sessionId = A_USER_ID,
-                initialRoomInfo = aRoomInfo(name = A_ROOM_NAME),
+                    sessionId = A_USER_ID,
+                    initialRoomInfo = aRoomInfo(name = A_ROOM_NAME),
                     canRedactOtherResult = { Result.success(canDeleteOther) },
                 ),
                 createTimelineResult = { Result.success(FakeTimeline()) }
@@ -223,23 +226,122 @@ class MediaGalleryPresenterTest {
     }
 
     @Test
-    fun `present - share item`() = runTest {
+    fun `present - share item - item not found`() = runTest {
         val presenter = createMediaGalleryPresenter()
         presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MediaGalleryEvents.Share(AN_EVENT_ID))
         }
-        // TODO Add more test on this part
     }
 
     @Test
-    fun `present - save on disk`() = runTest {
+    fun `present - share item - item found`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        mediaGalleryDataSource.emitGroupedMediaItems(
+            AsyncData.Success(
+                aGroupedMediaItems(
+                    imageAndVideoItems = listOf(aMediaItemImage(eventId = AN_EVENT_ID)),
+                    fileItems = emptyList(),
+                )
+            )
+        )
+        val presenter = createMediaGalleryPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MediaGalleryEvents.Share(AN_EVENT_ID))
+            val finalState = awaitItem()
+            assertThat(finalState.snackbarMessage).isNull()
+        }
+    }
+
+    @Test
+    fun `present - share item - item found - download error`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        mediaGalleryDataSource.emitGroupedMediaItems(
+            AsyncData.Success(
+                aGroupedMediaItems(
+                    imageAndVideoItems = listOf(aMediaItemImage(eventId = AN_EVENT_ID)),
+                    fileItems = emptyList(),
+                )
+            )
+        )
+        val presenter = createMediaGalleryPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+            matrixMediaLoader = FakeMatrixMediaLoader().apply { shouldFail = true },
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MediaGalleryEvents.Share(AN_EVENT_ID))
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.snackbarMessage).isInstanceOf(SnackbarMessage::class.java)
+        }
+    }
+
+    @Test
+    fun `present - save on disk - item not found`() = runTest {
         val presenter = createMediaGalleryPresenter()
         presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MediaGalleryEvents.SaveOnDisk(AN_EVENT_ID))
         }
-        // TODO Add more test on this part
+    }
+
+    @Test
+    fun `present - save on disk - item found`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        mediaGalleryDataSource.emitGroupedMediaItems(
+            AsyncData.Success(
+                aGroupedMediaItems(
+                    imageAndVideoItems = listOf(aMediaItemImage(eventId = AN_EVENT_ID)),
+                    fileItems = emptyList(),
+                )
+            )
+        )
+        val presenter = createMediaGalleryPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MediaGalleryEvents.SaveOnDisk(AN_EVENT_ID))
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.snackbarMessage?.messageResId).isEqualTo(CommonStrings.common_file_saved_on_disk_android)
+        }
+    }
+
+    @Test
+    fun `present - save on disk - item found - download error`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        mediaGalleryDataSource.emitGroupedMediaItems(
+            AsyncData.Success(
+                aGroupedMediaItems(
+                    imageAndVideoItems = listOf(aMediaItemImage(eventId = AN_EVENT_ID)),
+                    fileItems = emptyList(),
+                )
+            )
+        )
+        val presenter = createMediaGalleryPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+            matrixMediaLoader = FakeMatrixMediaLoader().apply { shouldFail = true },
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MediaGalleryEvents.SaveOnDisk(AN_EVENT_ID))
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.snackbarMessage).isInstanceOf(SnackbarMessage::class.java)
+        }
     }
 
     @Test

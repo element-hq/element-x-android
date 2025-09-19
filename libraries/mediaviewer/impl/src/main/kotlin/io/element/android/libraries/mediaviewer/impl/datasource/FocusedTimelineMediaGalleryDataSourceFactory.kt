@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
-interface FocusedTimelineMediaGalleryDataSourceFactory {
+fun interface FocusedTimelineMediaGalleryDataSourceFactory {
     fun createFor(
         eventId: EventId,
         mediaItem: MediaItem.Event,

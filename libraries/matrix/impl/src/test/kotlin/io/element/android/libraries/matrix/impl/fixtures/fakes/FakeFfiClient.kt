@@ -15,6 +15,7 @@ import io.element.android.tests.testutils.simulateLongTask
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.Encryption
+import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.NotificationClient
@@ -41,6 +42,7 @@ class FakeFfiClient(
     private val session: Session = aRustSession(),
     private val clearCachesResult: () -> Unit = { lambdaError() },
     private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
+    private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoPointer) {
     override fun userId(): String = userId
@@ -71,6 +73,7 @@ class FakeFfiClient(
     override suspend fun ignoredUsers(): List<String> {
         return emptyList()
     }
+
     override fun subscribeToIgnoredUsers(listener: IgnoredUsersListener): TaskHandle {
         return FakeFfiTaskHandle()
     }
@@ -78,5 +81,10 @@ class FakeFfiClient(
     override suspend fun getProfile(userId: String): UserProfile {
         return UserProfile(userId = userId, displayName = null, avatarUrl = null)
     }
+
+    override suspend fun homeserverLoginDetails(): HomeserverLoginDetails {
+        return homeserverLoginDetailsResult()
+    }
+
     override fun close() = closeResult()
 }

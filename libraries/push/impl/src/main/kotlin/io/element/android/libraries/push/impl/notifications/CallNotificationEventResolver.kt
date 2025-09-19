@@ -14,9 +14,9 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
-import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
+import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -58,13 +58,13 @@ class DefaultCallNotificationEventResolver(
         notificationData: NotificationData,
         forceNotify: Boolean
     ): Result<NotifiableEvent> = runCatchingExceptions {
-        val content = notificationData.content as? NotificationContent.MessageLike.CallNotify
+        val content = notificationData.content as? NotificationContent.MessageLike.RtcNotification
             ?: throw NotificationResolverException.UnknownError("content is not a call notify")
 
         val previousRingingCallStatus = appForegroundStateService.hasRingingCall.value
         // We need the sync service working to get the updated room info
         val isRoomCallActive = runCatchingExceptions {
-            if (content.type == CallNotifyType.RING) {
+            if (content.type == RtcNotificationType.RING) {
                 appForegroundStateService.updateHasRingingCall(true)
 
                 val client = clientProvider.getOrRestore(
@@ -90,7 +90,7 @@ class DefaultCallNotificationEventResolver(
         }.getOrDefault(false)
 
         notificationData.run {
-            if (content.type == CallNotifyType.RING && isRoomCallActive && !forceNotify) {
+            if (content.type == RtcNotificationType.RING && isRoomCallActive && !forceNotify) {
                 NotifiableRingingCallEvent(
                     sessionId = sessionId,
                     roomId = roomId,
@@ -104,9 +104,10 @@ class DefaultCallNotificationEventResolver(
                     description = stringProvider.getString(R.string.notification_incoming_call),
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
                     roomAvatarUrl = roomAvatarUrl,
-                    callNotifyType = content.type,
+                    rtcNotificationType = content.type,
                     senderId = content.senderId,
                     senderAvatarUrl = senderAvatarUrl,
+                    expirationTimestamp = content.expirationTimestampMillis,
                 )
             } else {
                 Timber.d("Event $eventId is call notify but should not ring: $isRoomCallActive, notify: ${content.type}")
@@ -124,7 +125,7 @@ class DefaultCallNotificationEventResolver(
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
-                    type = EventType.CALL_NOTIFY,
+                    type = EventType.RTC_NOTIFICATION,
                 )
             }
         }

@@ -76,7 +76,7 @@ class JoinRoomPresenter(
     private val buildMeta: BuildMeta,
     private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<JoinRoomState> {
-    interface Factory {
+    fun interface Factory {
         fun create(
             roomId: RoomId,
             roomIdOrAlias: RoomIdOrAlias,

@@ -38,6 +38,7 @@ class FakeElementCallEntryPoint(
         senderName: String?,
         avatarUrl: String?,
         timestamp: Long,
+        expirationTimestamp: Long,
         notificationChannelId: String,
         textContent: String?,
     ) {

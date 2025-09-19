@@ -9,6 +9,7 @@
 
 import extension.allFeaturesApi
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 plugins {
     id("io.element.android-compose-library")
@@ -42,18 +43,12 @@ dependencies {
 
     implementation(projects.features.ftue.api)
     implementation(projects.features.share.api)
-    implementation(projects.features.viewfolder.api)
 
     implementation(projects.services.apperror.impl)
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.analytics.api)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
+    testCommonDependencies(libs)
     testImplementation(projects.features.login.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.oidc.test)
@@ -61,11 +56,8 @@ dependencies {
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.features.networkmonitor.test)
-    testImplementation(projects.tests.testutils)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
-    testImplementation(libs.test.appyx.junit)
-    testImplementation(libs.test.arch.core)
 }

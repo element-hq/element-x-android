@@ -11,6 +11,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.RoomId
 
 interface SpaceEntryPoint : FeatureEntryPoint {
@@ -27,7 +28,7 @@ interface SpaceEntryPoint : FeatureEntryPoint {
 
     data class Inputs(
         val roomId: RoomId
-    ) : Plugin
+    ) : NodeInputs
 
     interface Callback : Plugin {
         fun onOpenRoom(roomId: RoomId)

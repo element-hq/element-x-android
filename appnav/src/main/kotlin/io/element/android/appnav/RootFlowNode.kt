@@ -39,7 +39,6 @@ import io.element.android.features.login.api.accesscontrol.AccountProviderAccess
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.signedout.api.SignedOutEntryPoint
-import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -47,13 +46,13 @@ import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
 import io.element.android.libraries.sessionstorage.api.LoggedInState
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -65,13 +64,12 @@ import timber.log.Timber
 class RootFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val authenticationService: MatrixAuthenticationService,
+    private val sessionStore: SessionStore,
     private val accountProviderAccessControl: AccountProviderAccessControl,
     private val navStateFlowFactory: RootNavStateFlowFactory,
     private val matrixSessionCache: MatrixSessionCache,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
-    private val viewFolderEntryPoint: ViewFolderEntryPoint,
     private val signedOutEntryPoint: SignedOutEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
@@ -154,7 +152,7 @@ class RootFlowNode(
         onSuccess: (SessionId) -> Unit,
         onFailure: () -> Unit
     ) {
-        val latestSessionId = authenticationService.getLatestSessionId()
+        val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             onFailure()
             return
@@ -200,11 +198,6 @@ class RootFlowNode(
 
         @Parcelize
         data object BugReport : NavTarget
-
-        @Parcelize
-        data class ViewLogs(
-            val rootPath: String,
-        ) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -244,31 +237,12 @@ class RootFlowNode(
             NavTarget.SplashScreen -> splashNode(buildContext)
             NavTarget.BugReport -> {
                 val callback = object : BugReportEntryPoint.Callback {
-                    override fun onBugReportSent() {
-                        backstack.pop()
-                    }
-
-                    override fun onViewLogs(basePath: String) {
-                        backstack.push(NavTarget.ViewLogs(rootPath = basePath))
-                    }
-                }
-                bugReportEntryPoint
-                    .nodeBuilder(this, buildContext)
-                    .callback(callback)
-                    .build()
-            }
-            is NavTarget.ViewLogs -> {
-                val callback = object : ViewFolderEntryPoint.Callback {
                     override fun onDone() {
                         backstack.pop()
                     }
                 }
-                val params = ViewFolderEntryPoint.Params(
-                    rootPath = navTarget.rootPath,
-                )
-                viewFolderEntryPoint
+                bugReportEntryPoint
                     .nodeBuilder(this, buildContext)
-                    .params(params)
                     .callback(callback)
                     .build()
             }
@@ -294,7 +268,7 @@ class RootFlowNode(
 
     private suspend fun onLoginLink(params: LoginParams) {
         // Is there a session already?
-        val latestSessionId = authenticationService.getLatestSessionId()
+        val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             // No session, open login
             if (accountProviderAccessControl.isAllowedToConnectToAccountProvider(params.accountProvider.ensureProtocol())) {
@@ -311,7 +285,7 @@ class RootFlowNode(
 
     private suspend fun onIncomingShare(intent: Intent) {
         // Is there a session already?
-        val latestSessionId = authenticationService.getLatestSessionId()
+        val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             // No session, open login
             switchToNotLoggedInFlow(null)
@@ -368,3 +342,5 @@ class RootFlowNode(
             .attachSession()
     }
 }
+
+private suspend fun SessionStore.getLatestSessionId() = getLatestSession()?.userId?.let(::SessionId)

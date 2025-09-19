@@ -7,9 +7,6 @@
 
 package io.element.android.features.licenses.api
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
 
-interface OpenSourceLicensesEntryPoint {
-    fun getNode(node: Node, buildContext: BuildContext): Node
-}
+interface OpenSourceLicensesEntryPoint : SimpleFeatureEntryPoint

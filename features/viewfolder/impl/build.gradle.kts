@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2024 New Vector Ltd.
@@ -26,12 +27,6 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     api(projects.features.viewfolder.api)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(projects.tests.testutils)
+    testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
 }

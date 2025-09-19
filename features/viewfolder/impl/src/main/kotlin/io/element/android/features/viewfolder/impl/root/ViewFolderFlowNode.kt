@@ -34,10 +34,10 @@ import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
 @Inject
-class ViewFolderRootNode(
+class ViewFolderFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : BaseFlowNode<ViewFolderRootNode.NavTarget>(
+) : BaseFlowNode<ViewFolderFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,

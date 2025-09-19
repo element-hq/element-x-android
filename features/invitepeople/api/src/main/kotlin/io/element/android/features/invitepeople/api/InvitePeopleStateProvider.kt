@@ -8,28 +8,33 @@
 package io.element.android.features.invitepeople.api
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 
 class InvitePeopleStateProvider : PreviewParameterProvider<InvitePeopleState> {
     override val values: Sequence<InvitePeopleState>
         get() = sequenceOf(
             aPreviewInvitePeopleState(),
             aPreviewInvitePeopleState(canInvite = true),
-            aPreviewInvitePeopleState(isSearchActive = true)
+            aPreviewInvitePeopleState(isSearchActive = true),
+            aPreviewInvitePeopleState(sendInvitesAction = AsyncAction.Loading),
         )
 }
 
 private data class PreviewInvitePeopleState(
     override val canInvite: Boolean,
     override val isSearchActive: Boolean,
+    override val sendInvitesAction: AsyncAction<Unit>,
     override val eventSink: (InvitePeopleEvents) -> Unit,
 ) : InvitePeopleState
 
 private fun aPreviewInvitePeopleState(
     canInvite: Boolean = false,
     isSearchActive: Boolean = false,
+    sendInvitesAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (InvitePeopleEvents) -> Unit = {},
 ) = PreviewInvitePeopleState(
     canInvite = canInvite,
     isSearchActive = isSearchActive,
+    sendInvitesAction = sendInvitesAction,
     eventSink = eventSink
 )

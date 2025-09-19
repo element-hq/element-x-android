@@ -67,7 +67,6 @@ fun aDmRoomMember(
     membership: RoomMembershipState = RoomMembershipState.JOIN,
     isNameAmbiguous: Boolean = false,
     powerLevel: Long = 0,
-    normalizedPowerLevel: Long = powerLevel,
     isIgnored: Boolean = false,
     role: RoomMember.Role = RoomMember.Role.User,
     membershipChangeReason: String? = null,
@@ -78,7 +77,6 @@ fun aDmRoomMember(
     membership = membership,
     isNameAmbiguous = isNameAmbiguous,
     powerLevel = powerLevel,
-    normalizedPowerLevel = normalizedPowerLevel,
     isIgnored = isIgnored,
     role = role,
     membershipChangeReason = membershipChangeReason

@@ -13,6 +13,10 @@
   <string name="screen_advanced_settings_media_compression_description">"Lähetä valokuvia ja videoita nopeammin ja vähennä datan käyttöä."</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimoi median laatu"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderointi ja Turvallisuus"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimoi kuvat automaattisesti nopeampia lähetysnopeuksia ja pienempiä tiedostokokoja varten."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimoi kuvien lähetyslaatu"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Napauta tästä vaihtaaksesi."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Videon lähetyslaatu"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push-ilmoitusten tarjoaja"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Ota rikastettu tekstieditori pois käytöstä, jotta voit kirjoittaa Markdownia manuaalisesti."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Lukukuittaukset"</string>

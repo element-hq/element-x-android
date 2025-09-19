@@ -1,6 +1,7 @@
 import config.BuildTimeConfig
 import extension.buildConfigFieldStr
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -42,9 +43,5 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(projects.services.analyticsproviders.api)
 
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.junit)
-    testImplementation(projects.tests.testutils)
-    testImplementation(libs.test.mockk)
+    testCommonDependencies(libs)
 }

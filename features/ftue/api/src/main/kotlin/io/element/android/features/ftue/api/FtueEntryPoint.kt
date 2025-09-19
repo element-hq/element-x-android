@@ -7,14 +7,6 @@
 
 package io.element.android.features.ftue.api
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
 
-interface FtueEntryPoint : FeatureEntryPoint {
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
-
-    interface NodeBuilder {
-        fun build(): Node
-    }
-}
+interface FtueEntryPoint : SimpleFeatureEntryPoint

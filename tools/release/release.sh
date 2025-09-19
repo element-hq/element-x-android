@@ -64,7 +64,8 @@ fi
 
 # Read minSdkVersion from file plugins/src/main/kotlin/Versions.kt
 minSdkVersion=$(grep "MIN_SDK_FOSS =" ./plugins/src/main/kotlin/Versions.kt |cut -d '=' -f 2 |xargs)
-buildToolsVersion="36.0.0"
+# Read buildToolsVersion from file plugins/src/main/kotlin/Versions.kt
+buildToolsVersion=$(grep "BUILD_TOOLS_VERSION =" ./plugins/src/main/kotlin/Versions.kt |cut -d '=' -f 2 |xargs)
 buildToolsPath="${androidHome}/build-tools/${buildToolsVersion}"
 
 if [[ ! -d ${buildToolsPath} ]]; then

@@ -287,7 +287,6 @@ class RustMatrixClient(
     }
 
     override suspend fun getRoom(roomId: RoomId): BaseRoom? = withContext(sessionDispatcher) {
-        innerClient.rooms()
         roomFactory.getBaseRoom(roomId)
     }
 
@@ -688,12 +687,6 @@ class RustMatrixClient(
             }
         })
     }.buffer(Channel.UNLIMITED)
-
-    override suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>> = withContext(sessionDispatcher) {
-        runCatchingExceptions {
-            innerClient.availableSlidingSyncVersions().map { it.map() }
-        }
-    }
 
     override suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion> = withContext(sessionDispatcher) {
         runCatchingExceptions {

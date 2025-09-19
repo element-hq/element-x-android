@@ -123,7 +123,7 @@ class DefaultNotificationCreator(
 
         val smallIcon = CommonDrawables.ic_notification
 
-        val containsMissedCall = events.any { it.type == EventType.CALL_NOTIFY }
+        val containsMissedCall = events.any { it.type == EventType.RTC_NOTIFICATION }
         val channelId = if (containsMissedCall) {
             notificationChannels.getChannelForIncomingCall(false)
         } else {
@@ -213,8 +213,8 @@ class DefaultNotificationCreator(
                 }
                 setDeleteIntent(pendingIntentFactory.createDismissRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId))
 
-                // If any of the events are of call notify type it means a missed call, set the category to the right value
-                if (events.any { it.type == EventType.CALL_NOTIFY }) {
+                // If any of the events are of rtc notification type it means a missed call, set the category to the right value
+                if (events.any { it.type == EventType.RTC_NOTIFICATION }) {
                     setCategory(NotificationCompat.CATEGORY_MISSED_CALL)
                 }
             }

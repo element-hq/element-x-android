@@ -31,7 +31,7 @@ class ReportRoomPresenter(
     private val reportRoom: ReportRoom,
 ) : Presenter<ReportRoomState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(roomId: RoomId): ReportRoomPresenter
     }
 

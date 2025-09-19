@@ -34,10 +34,7 @@ class ChangeRoomPermissionsNode(
     ) : NodeInputs, Parcelable
 
     private val inputs: Inputs = inputs()
-
-    private val presenter = presenterFactory.run {
-        create(inputs.section)
-    }
+    private val presenter = presenterFactory.create(inputs.section)
 
     @Composable
     override fun View(modifier: Modifier) {

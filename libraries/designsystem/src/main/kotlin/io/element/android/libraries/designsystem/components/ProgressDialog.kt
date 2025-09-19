@@ -38,6 +38,18 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
 
+/**
+ * A progress dialog, with a spinner, and optional text content.
+ *
+ * @param modifier
+ * @param text Optional text to show under the spinner.
+ * @param type
+ * @param properties
+ * @param showCancelButton
+ * @param onDismissRequest
+ * @param content Optional additional content to show under the spinner, and above the cancel button (if shown). If both `text` and `content` are supplied,
+ *    `text` is shown above `content`.
+ */
 @Composable
 fun ProgressDialog(
     modifier: Modifier = Modifier,
@@ -46,6 +58,7 @@ fun ProgressDialog(
     properties: DialogProperties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
     showCancelButton: Boolean = false,
     onDismissRequest: () -> Unit = {},
+    content: @Composable () -> Unit = {},
 ) {
     DisposableEffect(Unit) {
         onDispose {
@@ -75,7 +88,8 @@ fun ProgressDialog(
                         )
                     }
                 }
-            }
+            },
+            content,
         )
     }
 }
@@ -96,7 +110,8 @@ private fun ProgressDialogContent(
         CircularProgressIndicator(
             color = ElementTheme.colors.iconPrimary
         )
-    }
+    },
+    content: @Composable () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -118,6 +133,7 @@ private fun ProgressDialogContent(
                     color = ElementTheme.colors.textPrimary,
                 )
             }
+            content()
             if (showCancelButton) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Box(
@@ -138,7 +154,7 @@ private fun ProgressDialogContent(
 @Composable
 internal fun ProgressDialogContentPreview() = ElementThemedPreview {
     DialogPreview {
-        ProgressDialogContent(text = "test dialog content", showCancelButton = true)
+        ProgressDialogContent(text = "test dialog content", showCancelButton = true, content = {})
     }
 }
 
@@ -146,4 +162,35 @@ internal fun ProgressDialogContentPreview() = ElementThemedPreview {
 @Composable
 internal fun ProgressDialogPreview() = ElementPreview {
     ProgressDialog(text = "test dialog content", showCancelButton = true)
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ProgressDialogWithContentPreview() = ElementPreview {
+    ProgressDialog(showCancelButton = true) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Heading",
+            color = ElementTheme.colors.textPrimary,
+            style = ElementTheme.typography.fontHeadingSmMedium,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Subtext",
+            color = ElementTheme.colors.textSecondary,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ProgressDialogWithTextAndContentPreview() = ElementPreview {
+    ProgressDialog(text = "Text Content") {
+        Text(
+            text = "blah blah",
+            color = ElementTheme.colors.textPrimary,
+            style = ElementTheme.typography.fontHeadingSmMedium,
+        )
+    }
 }

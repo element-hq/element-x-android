@@ -29,6 +29,8 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.TestScope
@@ -75,6 +77,12 @@ class FakeBaseRoom(
 
     fun givenRoomInfo(roomInfo: RoomInfo) {
         _roomInfoFlow.tryEmit(roomInfo)
+    }
+
+    private val declineCallFlowMap: MutableMap<EventId, MutableSharedFlow<UserId>> = mutableMapOf()
+
+    suspend fun givenDecliner(userId: UserId, forNotificationEventId: EventId) {
+        declineCallFlowMap[forNotificationEventId]?.emit(userId)
     }
 
     override val membersStateFlow: MutableStateFlow<RoomMembersState> = MutableStateFlow(RoomMembersState.Unknown)
@@ -221,6 +229,15 @@ class FakeBaseRoom(
     }
 
     override suspend fun reportRoom(reason: String?) = reportRoomResult(reason)
+
+    override suspend fun declineCall(notificationEventId: EventId): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId> {
+        val flow = declineCallFlowMap.getOrPut(notificationEventId, { MutableSharedFlow() })
+        return flow
+    }
 
     override fun predecessorRoom(): PredecessorRoom? = predecessorRoomResult()
 
