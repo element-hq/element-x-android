@@ -103,27 +103,32 @@ class RoomListDataSource(
     }
 
     private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>, useCache: Boolean = true) {
-        val cachingResults = mutableMapOf<RoomId, MutableList<Pair<Int, Boolean>>>()
+        // Used to detect duplicates in the room list summaries - see comment below
+        data class CacheResult(val index: Int, val fromCache: Boolean)
+        val cachingResults = mutableMapOf<RoomId, MutableList<CacheResult>>()
+
         val roomListRoomSummaries = diffCache.indices().mapNotNull { index ->
             if (useCache) {
-                diffCache.get(index).also {
-                    if (it != null) {
-                        val pairs = cachingResults.getOrDefault(it.roomId, mutableListOf())
-                        pairs.add(index to true)
-                        cachingResults[it.roomId] = pairs
-                    }
+                diffCache.get(index)?.let { cachedItem ->
+                    // Add the cached item to the caching results
+                    val pairs = cachingResults.getOrDefault(cachedItem.roomId, mutableListOf())
+                    pairs.add(CacheResult(index, fromCache = true))
+                    cachingResults[cachedItem.roomId] = pairs
+                    cachedItem
                 } ?: run {
                     roomSummaries.getOrNull(index)?.roomId?.let {
+                        // Add the non-cached item to the caching results
                         val pairs = cachingResults.getOrDefault(it, mutableListOf())
-                        pairs.add(index to false)
+                        pairs.add(CacheResult(index, fromCache = false))
                         cachingResults[it] = pairs
                     }
                     buildAndCacheItem(roomSummaries, index)
                 }
             } else {
                 roomSummaries.getOrNull(index)?.roomId?.let {
+                    // Add the non-cached item to the caching results
                     val pairs = cachingResults.getOrDefault(it, mutableListOf())
-                    pairs.add(index to false)
+                    pairs.add(CacheResult(index, fromCache = false))
                     cachingResults[it] = pairs
                 }
                 buildAndCacheItem(roomSummaries, index)
