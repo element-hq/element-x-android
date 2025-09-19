@@ -14,6 +14,7 @@ import org.matrix.rustcomponents.sdk.OidcException
 fun Throwable.mapAuthenticationException(): AuthenticationException {
     val message = this.message ?: "Unknown error"
     return when (this) {
+        is AuthenticationException -> this
         is ClientBuildException -> when (this) {
             is ClientBuildException.Generic -> AuthenticationException.Generic(message)
             is ClientBuildException.InvalidServerName -> AuthenticationException.InvalidServerName(message)

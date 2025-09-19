@@ -71,6 +71,7 @@ dependencies {
     testImplementation(projects.libraries.permissions.noop)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)

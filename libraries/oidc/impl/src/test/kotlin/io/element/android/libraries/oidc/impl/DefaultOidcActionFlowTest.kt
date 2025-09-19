@@ -24,10 +24,10 @@ class DefaultOidcActionFlowTest {
                 data.add(action)
             }
         }
-        sut.post(OidcAction.GoBack)
+        sut.post(OidcAction.GoBack())
         delay(1)
         sut.reset()
         delay(1)
-        assertThat(data).containsExactly(OidcAction.GoBack, null)
+        assertThat(data).containsExactly(OidcAction.GoBack(), null)
     }
 }

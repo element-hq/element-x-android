@@ -1,0 +1,9 @@
+-- Migrate DB from version 9
+-- Add position to be able to sort account by session creation date
+-- Add lastUsageIndex so we can restore the last session and switch to another one
+-- Add display name and avatar url of the user so that we can display a list of accounts.
+
+ALTER TABLE SessionData ADD COLUMN position INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE SessionData ADD COLUMN lastUsageIndex INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE SessionData ADD COLUMN userDisplayName TEXT;
+ALTER TABLE SessionData ADD COLUMN userAvatarUrl TEXT;

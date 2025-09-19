@@ -82,6 +82,7 @@ class KonsistPreviewTest {
         "BackgroundVerticalGradientEnterprisePreview",
         "BackgroundVerticalGradientPreview",
         "ColorAliasesPreview",
+        "DefaultRoomListTopBarMultiAccountPreview",
         "DefaultRoomListTopBarWithIndicatorPreview",
         "FocusedEventEnterprisePreview",
         "FocusedEventPreview",
