@@ -182,7 +182,7 @@ class RootFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.LoggedInFlow -> {
-                val callback = object : LoggedInAccountSwitcherNode.Callback {
+                val callback = object : LoggedInAccountSwitcherFlowNode.Callback {
                     override fun onOpenBugReport() {
                         backstack.push(NavTarget.BugReport)
                     }
@@ -191,7 +191,7 @@ class RootFlowNode(
                         backstack.push(NavTarget.NotLoggedInFlow(null))
                     }
                 }
-                createNode<LoggedInAccountSwitcherNode>(buildContext, plugins = listOf(callback))
+                createNode<LoggedInAccountSwitcherFlowNode>(buildContext, plugins = listOf(callback))
             }
             is NavTarget.NotLoggedInFlow -> {
                 val callback = object : NotLoggedInFlowNode.Callback {
@@ -390,7 +390,7 @@ class RootFlowNode(
     private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
         // Ensure that the session is the latest one
         sessionStore.setLatestSession(sessionId.value)
-        return waitForChildAttached<LoggedInAccountSwitcherNode>()
+        return waitForChildAttached<LoggedInAccountSwitcherFlowNode>()
             .attachSession(sessionId)
     }
 }

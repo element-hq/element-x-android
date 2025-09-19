@@ -40,13 +40,13 @@ import timber.log.Timber
 
 @ContributesNode(AppScope::class)
 @Inject
-class LoggedInAccountSwitcherNode(
+class LoggedInAccountSwitcherFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val navStateFlowFactory: RootNavStateFlowFactory,
     private val sessionStore: SessionStore,
     private val matrixSessionCache: MatrixSessionCache,
-) : BaseFlowNode<LoggedInAccountSwitcherNode.NavTarget>(
+) : BaseFlowNode<LoggedInAccountSwitcherFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
