@@ -183,7 +183,7 @@ private fun SpaceAvatarAndNameRow(
                 .semantics {
                     heading()
                 },
-            text = name ?: stringResource(CommonStrings.common_no_room_name),
+            text = name ?: stringResource(CommonStrings.common_no_space_name),
             style = ElementTheme.typography.fontBodyLgMedium,
             fontStyle = FontStyle.Italic.takeIf { name == null },
             maxLines = 1,

@@ -69,6 +69,7 @@ fun SpaceRoomItemView(
         onLongClick = onLongClick,
     ) {
         NameAndIndicatorRow(
+            isSpace = spaceRoom.isSpace,
             name = spaceRoom.name,
             showIndicator = showUnreadIndicator
         )
@@ -130,6 +131,7 @@ private fun SubtitleRow(
 
 @Composable
 private fun NameAndIndicatorRow(
+    isSpace: Boolean,
     name: String?,
     showIndicator: Boolean,
     modifier: Modifier = Modifier,
@@ -142,7 +144,7 @@ private fun NameAndIndicatorRow(
         Text(
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyLgMedium,
-            text = name ?: stringResource(id = CommonStrings.common_no_room_name),
+            text = name ?: stringResource(id = if(isSpace) CommonStrings.common_no_space_name  else CommonStrings.common_no_room_name),
             fontStyle = FontStyle.Italic.takeIf { name == null },
             color = ElementTheme.colors.textPrimary,
             maxLines = 1,

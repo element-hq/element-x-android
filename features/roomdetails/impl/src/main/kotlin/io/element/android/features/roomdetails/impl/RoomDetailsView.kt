@@ -396,10 +396,10 @@ private fun RoomHeaderSection(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Avatar(
-            avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomHeader),
+            avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomDetailsHeader),
             avatarType = AvatarType.Room(
                 heroes = heroes.map { user ->
-                    user.getAvatarData(size = AvatarSize.RoomHeader)
+                    user.getAvatarData(size = AvatarSize.RoomDetailsHeader)
                 }.toPersistentList(),
                 isTombstoned = isTombstoned,
             ),

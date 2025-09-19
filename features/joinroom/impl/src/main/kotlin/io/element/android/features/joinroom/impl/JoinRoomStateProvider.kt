@@ -22,7 +22,10 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
+import io.element.android.libraries.matrix.api.room.join.JoinRule
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.InviteSender
+import kotlinx.collections.immutable.toPersistentList
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
@@ -78,6 +81,7 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                     alias = null,
                     topic = "This is the topic of a space",
                     roomType = RoomType.Space,
+                    childrenCount = 42,
                 )
             ),
             aJoinRoomState(
@@ -160,6 +164,9 @@ fun aLoadedContentState(
     roomType: RoomType = RoomType.Room,
     roomAvatarUrl: String? = null,
     joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown,
+    childrenCount: Int? = null,
+    joinRule : JoinRule? = null,
+    heroes: List<MatrixUser> = emptyList()
 ) = ContentState.Loaded(
     roomId = roomId,
     name = name,
@@ -169,7 +176,10 @@ fun aLoadedContentState(
     isDm = isDm,
     roomType = roomType,
     roomAvatarUrl = roomAvatarUrl,
-    joinAuthorisationStatus = joinAuthorisationStatus
+    joinAuthorisationStatus = joinAuthorisationStatus,
+    childrenCount = childrenCount,
+    joinRule = joinRule,
+    heroes = heroes.toPersistentList()
 )
 
 fun aJoinRoomState(

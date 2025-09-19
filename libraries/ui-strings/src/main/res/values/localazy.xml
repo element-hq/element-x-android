@@ -246,6 +246,7 @@ Reason: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"No results"</string>
   <string name="common_no_room_name">"No room name"</string>
+  <string name="common_no_space_name">"No space name"</string>
   <string name="common_not_encrypted">"Not encrypted"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Open source licenses"</string>
