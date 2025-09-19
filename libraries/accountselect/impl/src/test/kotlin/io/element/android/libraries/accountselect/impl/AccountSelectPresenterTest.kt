@@ -69,10 +69,10 @@ class AccountSelectPresenterTest {
             )
         }
     }
-
-    private fun createAccountSelectPresenter(
-        sessionStore: SessionStore = InMemorySessionStore(),
-    ) = AccountSelectPresenter(
-        sessionStore = sessionStore,
-    )
 }
+
+internal fun createAccountSelectPresenter(
+    sessionStore: SessionStore = InMemorySessionStore(),
+) = AccountSelectPresenter(
+    sessionStore = sessionStore,
+)
