@@ -34,6 +34,7 @@ import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
+import io.element.android.appnav.store.getLatestSessionId
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
@@ -43,7 +44,6 @@ import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -108,10 +108,7 @@ class RootFlowNode(
                 when (navState.loggedInState) {
                     is LoggedInState.LoggedIn -> {
                         if (navState.loggedInState.isTokenValid) {
-                            tryToRestoreLatestSession(
-                                onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
-                                onFailure = { switchToNotLoggedInFlow(null) }
-                            )
+                            switchToLoggedInFlow()
                         } else {
                             switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
                         }
@@ -124,8 +121,8 @@ class RootFlowNode(
             .launchIn(lifecycleScope)
     }
 
-    private fun switchToLoggedInFlow(sessionId: SessionId, navId: Int) {
-        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId, navId))
+    private fun switchToLoggedInFlow() {
+        backstack.safeRoot(NavTarget.LoggedInFlow)
     }
 
     private fun switchToNotLoggedInFlow(params: LoginParams?) {
@@ -136,34 +133,6 @@ class RootFlowNode(
 
     private fun switchToSignedOutFlow(sessionId: SessionId) {
         backstack.safeRoot(NavTarget.SignedOutFlow(sessionId))
-    }
-
-    private suspend fun restoreSessionIfNeeded(
-        sessionId: SessionId,
-        onFailure: () -> Unit,
-        onSuccess: (SessionId) -> Unit,
-    ) {
-        matrixSessionCache.getOrRestore(sessionId)
-            .onSuccess {
-                Timber.v("Succeed to restore session $sessionId")
-                onSuccess(sessionId)
-            }
-            .onFailure {
-                Timber.e(it, "Failed to restore session $sessionId")
-                onFailure()
-            }
-    }
-
-    private suspend fun tryToRestoreLatestSession(
-        onSuccess: (SessionId) -> Unit,
-        onFailure: () -> Unit
-    ) {
-        val latestSessionId = sessionStore.getLatestSessionId()
-        if (latestSessionId == null) {
-            onFailure()
-            return
-        }
-        restoreSessionIfNeeded(latestSessionId, onFailure, onSuccess)
     }
 
     private fun onOpenBugReport() {
@@ -199,10 +168,7 @@ class RootFlowNode(
         ) : NavTarget
 
         @Parcelize
-        data class LoggedInFlow(
-            val sessionId: SessionId,
-            val navId: Int
-        ) : NavTarget
+        data object LoggedInFlow : NavTarget
 
         @Parcelize
         data class SignedOutFlow(
@@ -216,11 +182,7 @@ class RootFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.LoggedInFlow -> {
-                val matrixClient = matrixSessionCache.getOrNull(navTarget.sessionId) ?: return splashNode(buildContext).also {
-                    Timber.w("Couldn't find any session, go through SplashScreen")
-                }
-                val inputs = LoggedInAppScopeFlowNode.Inputs(matrixClient)
-                val callback = object : LoggedInAppScopeFlowNode.Callback {
+                val callback = object : LoggedInAccountSwitcherNode.Callback {
                     override fun onOpenBugReport() {
                         backstack.push(NavTarget.BugReport)
                     }
@@ -229,7 +191,7 @@ class RootFlowNode(
                         backstack.push(NavTarget.NotLoggedInFlow(null))
                     }
                 }
-                createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
+                createNode<LoggedInAccountSwitcherNode>(buildContext, plugins = listOf(callback))
             }
             is NavTarget.NotLoggedInFlow -> {
                 val callback = object : NotLoggedInFlowNode.Callback {
@@ -267,11 +229,7 @@ class RootFlowNode(
                 val callback: AccountSelectEntryPoint.Callback = object : AccountSelectEntryPoint.Callback {
                     override fun onSelectAccount(sessionId: SessionId) {
                         lifecycleScope.launch {
-                            if (sessionId == navTarget.currentSessionId) {
-                                // Ensure that the account selection Node is removed from the backstack
-                                // Do not pop when the account is changed to avoid a UI flicker.
-                                backstack.pop()
-                            }
+                            backstack.pop()
                             attachSession(sessionId).apply {
                                 if (navTarget.intent != null) {
                                     attachIncomingShare(navTarget.intent)
@@ -432,11 +390,7 @@ class RootFlowNode(
     private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
         // Ensure that the session is the latest one
         sessionStore.setLatestSession(sessionId.value)
-        return waitForChildAttached<LoggedInAppScopeFlowNode, NavTarget> { navTarget ->
-            navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == sessionId
-        }
-            .attachSession()
+        return waitForChildAttached<LoggedInAccountSwitcherNode>()
+            .attachSession(sessionId)
     }
 }
-
-private suspend fun SessionStore.getLatestSessionId() = getLatestSession()?.userId?.let(::SessionId)
