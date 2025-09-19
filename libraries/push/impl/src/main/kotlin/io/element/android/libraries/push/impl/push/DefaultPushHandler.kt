@@ -16,7 +16,6 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.history.onDiagnosticPush
@@ -58,7 +57,6 @@ class DefaultPushHandler(
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushClientSecret: PushClientSecret,
     private val buildMeta: BuildMeta,
-    private val matrixAuthenticationService: MatrixAuthenticationService,
     private val diagnosticPushHandler: DiagnosticPushHandler,
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val notificationChannels: NotificationChannels,
@@ -241,32 +239,15 @@ class DefaultPushHandler(
             } else {
                 Timber.tag(loggerTag.value).d("## handleInternal()")
             }
-            val clientSecret = pushData.clientSecret
-            // clientSecret should not be null. If this happens, restore default session
-            var reason = if (clientSecret == null) "No client secret" else ""
-            val userId = clientSecret?.let {
-                // Get userId from client secret
-                pushClientSecret.getUserIdFromSecret(clientSecret).also {
-                    if (it == null) {
-                        reason = "Unable to get userId from client secret"
-                    }
-                }
-            }
-                ?: run {
-                    matrixAuthenticationService.getLatestSessionId().also {
-                        if (it == null) {
-                            if (reason.isNotEmpty()) reason += " - "
-                            reason += "Unable to get latest sessionId"
-                        }
-                    }
-                }
+            // Get userId from client secret
+            val userId = pushClientSecret.getUserIdFromSecret(pushData.clientSecret)
             if (userId == null) {
-                Timber.w("Unable to get a session")
+                Timber.w("Unable to get userId from client secret")
                 pushHistoryService.onUnableToRetrieveSession(
                     providerInfo = providerInfo,
                     eventId = pushData.eventId,
                     roomId = pushData.roomId,
-                    reason = reason,
+                    reason = "Unable to get userId from client secret",
                 )
                 return
             }
