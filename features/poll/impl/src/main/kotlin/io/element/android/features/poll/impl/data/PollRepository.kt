@@ -33,7 +33,7 @@ class PollRepository(
     @Assisted private val timelineMode: Timeline.Mode,
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             timelineMode: Timeline.Mode,
         ): PollRepository

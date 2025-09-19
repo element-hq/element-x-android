@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Adicionar reação: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_collapse_message_text_field">"Minimizar campo de texto da mensagem"</string>
   <string name="a11y_delete">"Eliminar"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d dígito inserido"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Editar avatar"</string>
   <string name="a11y_edit_room_address_hint">"O endereço completo será %1$s"</string>
   <string name="a11y_encryption_details">"Detalhes de cifragem"</string>
+  <string name="a11y_expand_message_text_field">"Expandir campo de texto da mensagem"</string>
   <string name="a11y_hide_password">"Ocultar palavra-passe"</string>
   <string name="a11y_join_call">"Juntar-se à chamada"</string>
   <string name="a11y_jump_to_bottom">"Saltar para o fundo"</string>
@@ -40,7 +42,7 @@
   <string name="a11y_remove_reaction_with">"Remover reação com %1$s"</string>
   <string name="a11y_room_avatar">"Ícone da sala"</string>
   <string name="a11y_send_files">"Enviar ficheiros"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Necessária ação em tempo limitado"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Necessária ação em tempo limitado, tens um minuto para verificares"</string>
   <string name="a11y_show_password">"Mostrar palavra-passe"</string>
   <string name="a11y_start_call">"Iniciar chamada"</string>
   <string name="a11y_tombstoned_room">"Sala antiga"</string>
@@ -88,6 +90,7 @@
   <string name="action_enable">"Ativar"</string>
   <string name="action_end_poll">"Fim da sondagem"</string>
   <string name="action_enter_pin">"Inserir PIN"</string>
+  <string name="action_finish">"Concluir"</string>
   <string name="action_forgot_password">"Esqueceu-se da palavra-passe?"</string>
   <string name="action_forward">"Reencaminhar"</string>
   <string name="action_go_back">"Voltar"</string>
@@ -162,10 +165,14 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Atualização disponível"</string>
   <string name="common_about">"Sobre"</string>
   <string name="common_acceptable_use_policy">"Política de utilização aceitável"</string>
+  <string name="common_add_account">"Adicionar conta"</string>
+  <string name="common_add_another_account">"Adicionar outra conta"</string>
   <string name="common_adding_caption">"A adicionar legenda"</string>
   <string name="common_advanced_settings">"Configurações avançadas"</string>
   <string name="common_an_image">"uma imagem"</string>
   <string name="common_analytics">"Recolha e análise de dados"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Saíste da sala"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"A tua sessão foi terminada"</string>
   <string name="common_appearance">"Aparência"</string>
   <string name="common_audio">"Áudio"</string>
   <string name="common_blocked_users">"Utilizadores bloqueados"</string>
@@ -180,6 +187,7 @@
   <string name="common_current_user_rejected_invite">"Convite rejeitado"</string>
   <string name="common_dark">"Escuro"</string>
   <string name="common_decryption_error">"Erro de decifragem"</string>
+  <string name="common_description">"Descrição"</string>
   <string name="common_developer_options">"Opções de programador"</string>
   <string name="common_device_id">"ID do dispositivo"</string>
   <string name="common_direct_chat">"Conversa direta"</string>
@@ -246,7 +254,7 @@ Razão: %1$s."</string>
   <string name="common_permission">"Permissão"</string>
   <string name="common_pinned">"Afixado"</string>
   <string name="common_please_check_internet_connection">"Por favor, verifica a tua ligação à internet"</string>
-  <string name="common_please_wait">"Por favor, aguarde…"</string>
+  <string name="common_please_wait">"Por favor, aguarda…"</string>
   <string name="common_poll_end_confirmation">"Tens a certeza que queres concluir esta sondagem?"</string>
   <string name="common_poll_summary">"Sondagem: %1$s"</string>
   <string name="common_poll_total_votes">"Total de votos: %1$s"</string>
@@ -289,18 +297,21 @@ Razão: %1$s."</string>
   <string name="common_search_results">"Resultados da pesquisa"</string>
   <string name="common_security">"Segurança"</string>
   <string name="common_seen_by">"Vista por"</string>
+  <string name="common_select_account">"Selecionar conta"</string>
   <string name="common_send_to">"Enviar para"</string>
   <string name="common_sending">"A enviar…"</string>
   <string name="common_sending_failed">"Falha no envio"</string>
   <string name="common_sent">"Enviada"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Servidor não suportado"</string>
+  <string name="common_server_unreachable">"Servidor indisponível"</string>
   <string name="common_server_url">"URL do servidor"</string>
   <string name="common_settings">"Configurações"</string>
   <string name="common_shared_location">"Localização partilhada"</string>
   <string name="common_signing_out">"A terminar sessão"</string>
   <string name="common_something_went_wrong">"Algo correu mal"</string>
   <string name="common_something_went_wrong_message">"Encontramos um erro. Por favor, tenta novamente."</string>
+  <string name="common_space">"Espaço"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d espaço"</item>
     <item quantity="other">"%1$d espaços"</item>
@@ -370,6 +381,8 @@ Tens a certeza de que queres continuar?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"O tamanho máximo de ficheiro permitido é: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Seleciona a qualidade do vídeo que pretendes carregar."</string>
   <string name="dialog_video_quality_selector_title">"Seleciona a qualidade de carregamento do vídeo"</string>
+  <string name="emoji_picker_search_placeholder">"Pesquisar emojis"</string>
+  <string name="error_account_already_logged_in">"Já tens sessão iniciada como %1$s neste dispositivo."</string>
   <string name="error_account_creation_not_possible">"Seu homeserver precisa ser atualizado para suportar o Matrix Authentication Service e a criação de conta."</string>
   <string name="error_failed_creating_the_permalink">"Falha ao criar ligação permanente"</string>
   <string name="error_failed_loading_map">"%1$s não foi possível carregar o mapa. Por favor, tente novamente mais tarde."</string>
@@ -385,7 +398,7 @@ Tens a certeza de que queres continuar?"</string>
   <string name="error_room_address_already_exists">"Este endereço de sala já existe, tente editar o campo de endereço da sala ou altere o nome da sala"</string>
   <string name="error_room_address_invalid_symbols">"Alguns caracteres não são permitidos. Apenas letras, dígitos e os seguintes símbolos são suportados! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Algumas mensagens não foram enviadas"</string>
-  <string name="error_unknown">"Desculpe, ocorreu um erro"</string>
+  <string name="error_unknown">"Pedimos desculpa, ocorreu um erro desconhecido"</string>
   <string name="event_shield_mismatched_sender">"O remetente deste evento não é o dono do dispositivo que o enviou."</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo."</string>
   <string name="event_shield_reason_previously_verified">"Criptografado por um usuário verificado anteriormente."</string>

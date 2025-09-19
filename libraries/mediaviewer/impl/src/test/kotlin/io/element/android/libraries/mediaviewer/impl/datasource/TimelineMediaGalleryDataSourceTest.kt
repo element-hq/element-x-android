@@ -255,19 +255,19 @@ class TimelineMediaGalleryDataSourceTest {
             )
         }
     }
+}
 
-    private fun TestScope.createTimelineMediaGalleryDataSource(
-        room: JoinedRoom = FakeJoinedRoom(
-            liveTimeline = FakeTimeline(),
-        ),
-    ): TimelineMediaGalleryDataSource {
-        return TimelineMediaGalleryDataSource(
-            room = room,
-            mediaTimeline = LiveMediaTimeline(room),
-            timelineMediaItemsFactory = createTimelineMediaItemsFactory(),
-            mediaItemsPostProcessor = MediaItemsPostProcessor(),
-        )
-    }
+internal fun TestScope.createTimelineMediaGalleryDataSource(
+    room: JoinedRoom = FakeJoinedRoom(
+        liveTimeline = FakeTimeline(),
+    ),
+): TimelineMediaGalleryDataSource {
+    return TimelineMediaGalleryDataSource(
+        room = room,
+        mediaTimeline = LiveMediaTimeline(room),
+        timelineMediaItemsFactory = createTimelineMediaItemsFactory(),
+        mediaItemsPostProcessor = MediaItemsPostProcessor(),
+    )
 }
 
 fun TestScope.createTimelineMediaItemsFactory() = TimelineMediaItemsFactory(

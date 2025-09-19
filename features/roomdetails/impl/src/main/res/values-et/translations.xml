@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Teavituste seadistuste laadimisel tekkis viga."</string>
   <string name="screen_room_details_error_muting">"Selle jututoa summutamine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_details_error_unmuting">"Selle jututoa summutamise eemaldamine ei õnnestunud. Palun proovi uuesti."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Ära sulge rakendust enne, kui tegevus on lõppenud."</string>
+  <string name="screen_room_details_invite_people_preparing">"Valmistan kutseid ette…"</string>
   <string name="screen_room_details_invite_people_title">"Kutsu osalejaid"</string>
   <string name="screen_room_details_leave_conversation_title">"Lahku vestlusest"</string>
   <string name="screen_room_details_leave_room_title">"Lahku jututoast"</string>

@@ -8,6 +8,7 @@
 package io.element.android.features.roomdetails.impl.invite
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -49,11 +50,18 @@ class RoomInviteMembersNode(
     @Composable
     override fun View(modifier: Modifier) {
         val state = invitePeoplePresenter.present()
+
+        // Once invites have been sent successfully, close the Invite view.
+        LaunchedEffect(state.sendInvitesAction) {
+            if (state.sendInvitesAction.isReady()) {
+                navigateUp()
+            }
+        }
+
         RoomInviteMembersView(
             state = state,
             modifier = modifier,
-            onBackClick = { navigateUp() },
-            onDone = { navigateUp() }
+            onBackClick = { navigateUp() }
         ) {
             invitePeopleRenderer.Render(state, Modifier)
         }

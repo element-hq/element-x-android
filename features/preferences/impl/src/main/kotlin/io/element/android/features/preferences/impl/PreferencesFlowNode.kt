@@ -264,7 +264,7 @@ class PreferencesFlowNode(
                     .build()
             }
             is NavTarget.OssLicenses -> {
-                openSourceLicensesEntryPoint.getNode(this, buildContext)
+                openSourceLicensesEntryPoint.createNode(this, buildContext)
             }
             NavTarget.AccountDeactivation -> {
                 accountDeactivationEntryPoint.createNode(this, buildContext)

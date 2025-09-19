@@ -1,3 +1,5 @@
+import extension.testCommonDependencies
+
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -18,7 +20,6 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(libs.androidx.datastore.preferences)
 
+    testCommonDependencies(libs)
     testImplementation(projects.libraries.preferences.test)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.coroutines.test)
 }

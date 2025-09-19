@@ -90,7 +90,6 @@ class FakeMatrixClient(
     private val canDeactivateAccountResult: () -> Boolean = { lambdaError() },
     private val deactivateAccountResult: (String, Boolean) -> Result<Unit> = { _, _ -> lambdaError() },
     private val currentSlidingSyncVersionLambda: () -> Result<SlidingSyncVersion> = { lambdaError() },
-    private val availableSlidingSyncVersionsLambda: () -> Result<List<SlidingSyncVersion>> = { lambdaError() },
     private val ignoreUserResult: (UserId) -> Result<Unit> = { lambdaError() },
     private var unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
     private val canReportRoomLambda: () -> Boolean = { false },
@@ -337,10 +336,6 @@ class FakeMatrixClient(
 
     override suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion> {
         return currentSlidingSyncVersionLambda()
-    }
-
-    override suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>> {
-        return availableSlidingSyncVersionsLambda()
     }
 
     override suspend fun canReportRoom(): Boolean {

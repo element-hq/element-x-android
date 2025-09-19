@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
 
@@ -239,7 +240,11 @@ interface BaseRoom : Closeable {
      */
     suspend fun reportRoom(reason: String?): Result<Unit>
 
-    /**
+    suspend fun declineCall(notificationEventId: EventId): Result<Unit>
+
+    suspend fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId>
+
+        /**
      * Destroy the room and release all resources associated to it.
      */
     fun destroy()

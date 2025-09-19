@@ -29,7 +29,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.RoomCallStateProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -119,7 +119,7 @@ internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
             .filter { it !is RoomCallState.Unavailable }
             .forEach { roomCallState ->
                 TimelineItemCallNotifyView(
-                    event = aTimelineItemEvent(content = TimelineItemCallNotifyContent()),
+                    event = aTimelineItemEvent(content = TimelineItemRtcNotificationContent()),
                     roomCallState = roomCallState,
                     onLongClick = {},
                     onJoinCallClick = {},

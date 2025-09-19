@@ -97,23 +97,23 @@ class TroubleshootNotificationsPresenterTest {
             assertThat(stateAfterStart.testSuiteState.mainState).isEqualTo(AsyncAction.Loading)
         }
     }
+}
 
-    private fun createTroubleshootTestSuite(
-        tests: Set<NotificationTroubleshootTest> = emptySet(),
-        currentPushProvider: String? = null,
-    ): TroubleshootTestSuite {
-        return TroubleshootTestSuite(
-            notificationTroubleshootTests = tests,
-            getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider),
-            analyticsService = FakeAnalyticsService(),
-        )
-    }
+private fun createTroubleshootTestSuite(
+    tests: Set<NotificationTroubleshootTest> = emptySet(),
+    currentPushProvider: String? = null,
+): TroubleshootTestSuite {
+    return TroubleshootTestSuite(
+        notificationTroubleshootTests = tests,
+        getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider),
+        analyticsService = FakeAnalyticsService(),
+    )
+}
 
-    private fun createTroubleshootNotificationsPresenter(
-        troubleshootTestSuite: TroubleshootTestSuite = createTroubleshootTestSuite(),
-    ): TroubleshootNotificationsPresenter {
-        return TroubleshootNotificationsPresenter(
-            troubleshootTestSuite = troubleshootTestSuite,
-        )
-    }
+internal fun createTroubleshootNotificationsPresenter(
+    troubleshootTestSuite: TroubleshootTestSuite = createTroubleshootTestSuite(),
+): TroubleshootNotificationsPresenter {
+    return TroubleshootNotificationsPresenter(
+        troubleshootTestSuite = troubleshootTestSuite,
+    )
 }

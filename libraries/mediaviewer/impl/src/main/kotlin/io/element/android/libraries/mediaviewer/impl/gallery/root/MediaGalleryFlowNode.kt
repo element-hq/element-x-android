@@ -41,11 +41,11 @@ import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
 @Inject
-class MediaGalleryRootNode(
+class MediaGalleryFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint
-) : BaseFlowNode<MediaGalleryRootNode.NavTarget>(
+) : BaseFlowNode<MediaGalleryFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
@@ -87,11 +87,11 @@ class MediaGalleryRootNode(
             NavTarget.Root -> {
                 val callback = object : MediaGalleryNode.Callback {
                     override fun onBackClick() {
-                        this@MediaGalleryRootNode.onBackClick()
+                        this@MediaGalleryFlowNode.onBackClick()
                     }
 
                     override fun onViewInTimeline(eventId: EventId) {
-                        this@MediaGalleryRootNode.onViewInTimeline(eventId)
+                        this@MediaGalleryFlowNode.onViewInTimeline(eventId)
                     }
 
                     override fun onItemClick(item: MediaItem.Event) {
@@ -122,7 +122,7 @@ class MediaGalleryRootNode(
                     }
 
                     override fun onViewInTimeline(eventId: EventId) {
-                        this@MediaGalleryRootNode.onViewInTimeline(eventId)
+                        this@MediaGalleryFlowNode.onViewInTimeline(eventId)
                     }
                 }
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)

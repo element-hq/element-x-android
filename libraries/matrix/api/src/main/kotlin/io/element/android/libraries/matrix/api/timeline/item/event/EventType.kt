@@ -15,5 +15,6 @@ object EventType {
 
     // Call Events
     const val CALL_INVITE = "m.call.invite"
-    const val CALL_NOTIFY = "m.call.notify"
+
+    const val RTC_NOTIFICATION = "org.matrix.msc4075.rtc.notification"
 }

@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -28,12 +29,8 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(libs.sqldelight.coroutines)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.coroutines.test)
+    testCommonDependencies(libs)
     testImplementation(libs.sqldelight.driver.jvm)
-    testImplementation(projects.tests.testutils)
 }
 
 sqldelight {

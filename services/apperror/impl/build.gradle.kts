@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -29,9 +30,6 @@ dependencies {
 
     api(projects.services.apperror.api)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.test.truth)
+    testCommonDependencies(libs)
     testImplementation(projects.services.toolbox.test)
 }

@@ -40,7 +40,7 @@
   <string name="a11y_remove_reaction_with">"Poista reaktio: %1$s"</string>
   <string name="a11y_room_avatar">"Huoneen avatar"</string>
   <string name="a11y_send_files">"Lähetä tiedostoja"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Aikarajoitettu toimenpide vaaditaan"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Aikarajoitettu toimenpide vaaditaan, sinulla on yksi minuutti aikaa vahvistaa"</string>
   <string name="a11y_show_password">"Näytä salasana"</string>
   <string name="a11y_start_call">"Aloita puhelu"</string>
   <string name="a11y_tombstoned_room">"Haudattu huone"</string>
@@ -335,6 +335,12 @@ Syy: %1$s."</string>
   <string name="common_verify_identity">"Vahvista identiteetti"</string>
   <string name="common_verify_user">"Vahvista käyttäjä"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Korkea laatu"</string>
+  <string name="common_video_quality_high_description">"Paras laatu, mutta suurempi tiedostokoko"</string>
+  <string name="common_video_quality_low">"Heikko laatu"</string>
+  <string name="common_video_quality_low_description">"Nopein lähetysnopeus ja pienin tiedostokoko"</string>
+  <string name="common_video_quality_standard">"Normaali laatu"</string>
+  <string name="common_video_quality_standard_description">"Tasapainotettu laatu ja lähetysnopeus"</string>
   <string name="common_voice_message">"Ääniviesti"</string>
   <string name="common_waiting">"Odotetaan…"</string>
   <string name="common_waiting_for_decryption_key">"Odotetaan viestiä"</string>
@@ -349,6 +355,8 @@ Syy: %1$s."</string>
 
 Haluatko varmasti jatkaa?"</string>
   <string name="dialog_confirm_link_title">"Tarkista tämä linkki"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Suurin sallittu tiedostokoko on: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Tiedostokoko on liian suuri lähetettäväksi"</string>
   <string name="dialog_room_reported">"Huone ilmoitettu"</string>
   <string name="dialog_room_reported_and_left">"Ilmoitettu ja poistuttu huoneesta"</string>
   <string name="dialog_title_confirmation">"Vahvistus"</string>
@@ -357,6 +365,9 @@ Haluatko varmasti jatkaa?"</string>
   <string name="dialog_title_warning">"Varoitus"</string>
   <string name="dialog_unsaved_changes_description_android">"Muutoksiasi ei ole tallennettu. Haluatko varmasti palata takaisin?"</string>
   <string name="dialog_unsaved_changes_title">"Tallenna muutokset?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Suurin sallittu tiedostokoko on: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Valitse lähetettävän videon laatu."</string>
+  <string name="dialog_video_quality_selector_title">"Valitse videon lähetyslaatu"</string>
   <string name="error_account_creation_not_possible">"Kotipalvelimesi on päivitettävä tukemaan Matrix Authentication Serviceä ja tilin luomista."</string>
   <string name="error_failed_creating_the_permalink">"Pysyvän linkin luominen epäonnistui"</string>
   <string name="error_failed_loading_map">"%1$s ei pystynyt lataamaan karttaa. Yritä myöhemmin uudelleen."</string>

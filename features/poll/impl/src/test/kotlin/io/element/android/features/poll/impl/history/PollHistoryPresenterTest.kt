@@ -151,23 +151,23 @@ class PollHistoryPresenterTest {
             assert(paginateLambda).isCalledExactly(2)
         }
     }
+}
 
-    private fun TestScope.createPollHistoryPresenter(
-        room: FakeJoinedRoom = FakeJoinedRoom(),
-        endPollAction: EndPollAction = FakeEndPollAction(),
-        sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
-        pollHistoryItemFactory: PollHistoryItemsFactory = PollHistoryItemsFactory(
-            pollContentStateFactory = DefaultPollContentStateFactory(FakeMatrixClient()),
-            dateFormatter = FakeDateFormatter(),
-            dispatchers = testCoroutineDispatchers(),
-        ),
-    ): PollHistoryPresenter {
-        return PollHistoryPresenter(
-            sessionCoroutineScope = this,
-            sendPollResponseAction = sendPollResponseAction,
-            endPollAction = endPollAction,
-            pollHistoryItemFactory = pollHistoryItemFactory,
-            room = room,
-        )
-    }
+internal fun TestScope.createPollHistoryPresenter(
+    room: FakeJoinedRoom = FakeJoinedRoom(),
+    endPollAction: EndPollAction = FakeEndPollAction(),
+    sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
+    pollHistoryItemFactory: PollHistoryItemsFactory = PollHistoryItemsFactory(
+        pollContentStateFactory = DefaultPollContentStateFactory(FakeMatrixClient()),
+        dateFormatter = FakeDateFormatter(),
+        dispatchers = testCoroutineDispatchers(),
+    ),
+): PollHistoryPresenter {
+    return PollHistoryPresenter(
+        sessionCoroutineScope = this,
+        sendPollResponseAction = sendPollResponseAction,
+        endPollAction = endPollAction,
+        pollHistoryItemFactory = pollHistoryItemFactory,
+        room = room,
+    )
 }

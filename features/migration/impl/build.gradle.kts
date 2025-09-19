@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2024 New Vector Ltd.
@@ -29,15 +30,9 @@ dependencies {
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiStrings)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
+    testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.libraries.preferences.test)
-    testImplementation(projects.tests.testutils)
     testImplementation(projects.features.rageshake.test)
 }

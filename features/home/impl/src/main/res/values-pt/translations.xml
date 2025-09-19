@@ -16,7 +16,7 @@
   <string name="screen_home_tab_spaces">"Espaços"</string>
   <string name="screen_invites_decline_chat_message">"Tens a certeza que queres rejeitar o convite para entra em %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Rejeitar convite"</string>
-  <string name="screen_invites_decline_direct_chat_message">"Tem a certeza que queres rejeitar esta conversa privada com %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Tens a certeza que queres rejeitar esta conversa privada com %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Rejeitar conversa"</string>
   <string name="screen_invites_empty_list">"Sem convites"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) convidou-te"</string>
@@ -33,6 +33,7 @@ Por enquanto, podes anular a seleção dos filtros para veres as tuas outras con
   <string name="screen_roomlist_filter_invites">"Convites"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Não tens nenhum convite pendente."</string>
   <string name="screen_roomlist_filter_low_priority">"Prioridade baixa"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Ainda não tens conversas de prioridade baixa"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Podes anular a seleção dos filtros para veres as tuas outras conversas"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Não tens nenhuma conversa selecionada"</string>
   <string name="screen_roomlist_filter_people">"Pessoas"</string>

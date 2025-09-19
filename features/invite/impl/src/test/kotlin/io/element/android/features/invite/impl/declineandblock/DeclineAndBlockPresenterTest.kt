@@ -11,11 +11,11 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.impl.DeclineInvite
 import io.element.android.features.invite.impl.fake.FakeDeclineInvite
+import io.element.android.features.invite.test.anInviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -148,28 +148,16 @@ class DeclineAndBlockPresenterTest {
             .isCalledOnce()
             .with(value(A_ROOM_ID), value(true), value(false), value(""))
     }
+}
 
-    private fun anInviteData(
-        roomId: RoomId = A_ROOM_ID,
-        name: String = A_ROOM_NAME,
-        isDm: Boolean = false,
-    ): InviteData {
-        return InviteData(
-            roomId = roomId,
-            roomName = name,
-            isDm = isDm,
-        )
-    }
-
-    private fun createDeclineAndBlockPresenter(
-        inviteData: InviteData = anInviteData(),
-        declineInvite: DeclineInvite = FakeDeclineInvite(),
-        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
-    ): DeclineAndBlockPresenter {
-        return DeclineAndBlockPresenter(
-            inviteData = inviteData,
-            declineInvite = declineInvite,
-            snackbarDispatcher = snackbarDispatcher,
-        )
-    }
+internal fun createDeclineAndBlockPresenter(
+    inviteData: InviteData = anInviteData(),
+    declineInvite: DeclineInvite = FakeDeclineInvite(),
+    snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
+): DeclineAndBlockPresenter {
+    return DeclineAndBlockPresenter(
+        inviteData = inviteData,
+        declineInvite = declineInvite,
+        snackbarDispatcher = snackbarDispatcher,
+    )
 }

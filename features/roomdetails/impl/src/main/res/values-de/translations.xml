@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Beim Laden der Benachrichtigungseinstellungen ist ein Fehler aufgetreten."</string>
   <string name="screen_room_details_error_muting">"Die Stummschaltung ist fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_room_details_error_unmuting">"Die Deaktivierung der Stummschaltung ist fehlgeschlagen, bitte versuche es erneut."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Schließ die App erst, wenn du fertig bist."</string>
+  <string name="screen_room_details_invite_people_preparing">"Einladungen werden vorbereitet…"</string>
   <string name="screen_room_details_invite_people_title">"Nutzer einladen"</string>
   <string name="screen_room_details_leave_conversation_title">"Unterhaltung verlassen"</string>
   <string name="screen_room_details_leave_room_title">"Verlassen"</string>

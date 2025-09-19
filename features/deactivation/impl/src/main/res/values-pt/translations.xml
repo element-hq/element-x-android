@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_deactivate_account_confirmation_dialog_content">"Confirme que pretende desativar a sua conta. Esta ação não pode ser desfeita."</string>
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Confirma que pretendes desativar a tua conta. Esta ação não pode ser desfeita."</string>
   <string name="screen_deactivate_account_delete_all_messages">"Eliminar todas as minhas mensagens"</string>
   <string name="screen_deactivate_account_delete_all_messages_notice">"Aviso: futuros usuários podem ver conversas incompletas."</string>
   <string name="screen_deactivate_account_description">"A desativação da sua conta é %1$s, irá:"</string>

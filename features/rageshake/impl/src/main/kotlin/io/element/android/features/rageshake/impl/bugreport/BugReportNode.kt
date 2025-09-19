@@ -18,7 +18,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import io.element.android.annotations.ContributesNode
-import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -31,8 +30,17 @@ class BugReportNode(
     private val presenter: BugReportPresenter,
     private val bugReporter: BugReporter,
 ) : Node(buildContext, plugins = plugins) {
+    interface Callback : Plugin {
+        fun onDone()
+        fun onViewLogs(basePath: String)
+    }
+
     private fun onViewLogs(basePath: String) {
-        plugins<BugReportEntryPoint.Callback>().forEach { it.onViewLogs(basePath) }
+        plugins<Callback>().forEach { it.onViewLogs(basePath) }
+    }
+
+    private fun onDone() {
+        plugins<Callback>().forEach { it.onDone() }
     }
 
     @Composable
@@ -53,9 +61,5 @@ class BugReportNode(
                 onViewLogs(bugReporter.logDirectory().absolutePath)
             }
         )
-    }
-
-    private fun onDone() {
-        plugins<BugReportEntryPoint.Callback>().forEach { it.onBugReportSent() }
     }
 }

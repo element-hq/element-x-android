@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2024 New Vector Ltd.
@@ -27,19 +28,10 @@ dependencies {
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.datastore.preferences)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(projects.tests.testutils)
+    testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.testtags)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.test.mockk)
-    testImplementation(libs.androidx.compose.ui.test.junit)
     testImplementation(projects.services.toolbox.test)
-    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

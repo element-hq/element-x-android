@@ -225,12 +225,12 @@ class LogoutPresenterTest {
         skipItems(2)
         return awaitItem()
     }
-
-    private fun createLogoutPresenter(
-        matrixClient: MatrixClient = FakeMatrixClient(),
-        encryptionService: EncryptionService = FakeEncryptionService(),
-    ): LogoutPresenter = LogoutPresenter(
-        matrixClient = matrixClient,
-        encryptionService = encryptionService,
-    )
 }
+
+internal fun createLogoutPresenter(
+    matrixClient: MatrixClient = FakeMatrixClient(),
+    encryptionService: EncryptionService = FakeEncryptionService(),
+): LogoutPresenter = LogoutPresenter(
+    matrixClient = matrixClient,
+    encryptionService = encryptionService,
+)

@@ -40,7 +40,7 @@
   <string name="a11y_remove_reaction_with">"移除表情符号%1$s"</string>
   <string name="a11y_room_avatar">"房间头像"</string>
   <string name="a11y_send_files">"发送文件"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"时限内必须完成的任务"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"限时操作，您有一分钟的时间来验证"</string>
   <string name="a11y_show_password">"显示密码"</string>
   <string name="a11y_start_call">"开始通话"</string>
   <string name="a11y_tombstoned_room">"墓碑聊天室"</string>
@@ -163,6 +163,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"有可用升级"</string>
   <string name="common_about">"关于"</string>
   <string name="common_acceptable_use_policy">"可接受的使用政策"</string>
+  <string name="common_add_account">"添加账户"</string>
+  <string name="common_add_another_account">"添加另一个账户"</string>
   <string name="common_adding_caption">"添加标题"</string>
   <string name="common_advanced_settings">"高级设置"</string>
   <string name="common_an_image">"一张图片"</string>
@@ -183,6 +185,7 @@
   <string name="common_current_user_rejected_invite">"邀请已拒绝"</string>
   <string name="common_dark">"深色"</string>
   <string name="common_decryption_error">"解密错误"</string>
+  <string name="common_description">"描述"</string>
   <string name="common_developer_options">"开发者选项"</string>
   <string name="common_device_id">"设备 ID"</string>
   <string name="common_direct_chat">"私聊"</string>
@@ -287,6 +290,7 @@
   <string name="common_search_results">"搜索结果"</string>
   <string name="common_security">"安全"</string>
   <string name="common_seen_by">"已读"</string>
+  <string name="common_select_account">"选择账户"</string>
   <string name="common_send_to">"发送至"</string>
   <string name="common_sending">"正在发送…"</string>
   <string name="common_sending_failed">"发送失败"</string>
@@ -368,6 +372,8 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"允许的最大文件大小为：%1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"选择您要上传的视频的质量。"</string>
   <string name="dialog_video_quality_selector_title">"选择视频上传质量"</string>
+  <string name="emoji_picker_search_placeholder">"搜索表情符号"</string>
+  <string name="error_account_already_logged_in">"您已在此设备以%1$s 身份登录。"</string>
   <string name="error_account_creation_not_possible">"您的服务器需要升级，以支持 Matrix 鉴权服务和账户创建。"</string>
   <string name="error_failed_creating_the_permalink">"创建固定链接失败"</string>
   <string name="error_failed_loading_map">"%1$s 无法加载地图，请稍后再试。"</string>

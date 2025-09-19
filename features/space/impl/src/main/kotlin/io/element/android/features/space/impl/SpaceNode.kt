@@ -16,6 +16,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.Inject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.space.api.SpaceEntryPoint
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
@@ -25,7 +26,7 @@ class SpaceNode(
     @Assisted plugins: List<Plugin>,
     presenterFactory: SpacePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-    private val inputs = plugins.filterIsInstance<SpaceEntryPoint.Inputs>().single()
+    private val inputs: SpaceEntryPoint.Inputs = inputs()
     private val callback = plugins.filterIsInstance<SpaceEntryPoint.Callback>().single()
     private val presenter = presenterFactory.create(inputs)
 

@@ -149,7 +149,7 @@ class TimelineEventContentMapper(
                     )
                 }
                 is TimelineItemContent.CallInvite -> LegacyCallInviteContent
-                is TimelineItemContent.CallNotify -> CallNotifyContent
+                is TimelineItemContent.RtcNotification -> CallNotifyContent
             }
         }
     }

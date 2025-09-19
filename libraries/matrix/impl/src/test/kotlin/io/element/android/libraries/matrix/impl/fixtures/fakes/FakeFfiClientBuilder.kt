@@ -42,8 +42,5 @@ class FakeFfiClientBuilder(
     override fun username(username: String) = this
     override fun enableShareHistoryOnInvite(enableShareHistoryOnInvite: Boolean): ClientBuilder = this
     override fun threadsEnabled(enabled: Boolean, threadSubscriptions: Boolean): ClientBuilder = this
-
-    override suspend fun build(): Client {
-        return buildResult()
-    }
+    override suspend fun build() = buildResult()
 }

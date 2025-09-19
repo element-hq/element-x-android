@@ -30,7 +30,7 @@
   <string name="screen_session_verification_request_details_timestamp">"Sessão iniciada"</string>
   <string name="screen_session_verification_request_failure_subtitle">"O pedido expirou, o pedido foi recusado ou houve um erro de verificação."</string>
   <string name="screen_session_verification_request_failure_title">"A verificação falhou"</string>
-  <string name="screen_session_verification_request_footer">"Continue apenas se tiver iniciado esta verificação."</string>
+  <string name="screen_session_verification_request_footer">"Continua apenas se tiveres iniciado esta verificação."</string>
   <string name="screen_session_verification_request_subtitle">"Verifique o outro dispositivo para manter o histórico de mensagens seguro."</string>
   <string name="screen_session_verification_request_success_subtitle">"Agora podes ler ou enviar mensagens de forma segura no teu outro dispositivo."</string>
   <string name="screen_session_verification_request_success_title">"Dispositivo verificado"</string>
