@@ -87,6 +87,7 @@ import io.element.android.libraries.designsystem.components.ExpandableBottomShee
 import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayoutState
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -95,6 +96,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -111,10 +113,15 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.matrix.ui.components.aSelectRoomInfo
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -202,7 +209,13 @@ fun MessagesView(
                     Column {
                         ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
                         if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
-                            ThreadTopBar(onBackClick = onBackClick)
+                            ThreadTopBar(
+                                roomName = state.roomName,
+                                roomAvatarData = state.roomAvatar,
+                                heroes = state.heroes,
+                                isTombstoned = state.isTombstoned,
+                                onBackClick = onBackClick,
+                            )
                         } else {
                             MessagesViewTopBar(
                                 roomName = state.roomName,
@@ -573,14 +586,48 @@ private fun MessagesViewTopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ThreadTopBar(
+    roomName: String?,
+    roomAvatarData: AvatarData,
+    heroes: ImmutableList<AvatarData>,
+    isTombstoned: Boolean,
     onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
+        modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackClick)
         },
         title = {
-            Text(stringResource(CommonStrings.common_thread))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Avatar(
+                    avatarData = roomAvatarData,
+                    avatarType = AvatarType.Room(
+                        heroes = heroes,
+                        isTombstoned = isTombstoned,
+                    ),
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                        .semantics {
+                            heading()
+                        },
+                ) {
+                    Text(
+                        text = stringResource(CommonStrings.common_thread),
+                        style = ElementTheme.typography.fontBodyLgMedium,
+                    )
+                    Text(
+                        text = roomName ?: stringResource(CommonStrings.common_no_room_name),
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        fontStyle = FontStyle.Italic.takeIf { roomName == null },
+                        color = ElementTheme.colors.textSecondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
         }
     )
 }
@@ -672,4 +719,59 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ThreadTopBarPreview() {
+    ElementPreview {
+        val name = "Room name"
+        val initialsAvatarData = AvatarData(
+            id = "id",
+            name = name,
+            url = null,
+            size = AvatarSize.TimelineRoom,
+        )
+        Column {
+            ThreadTopBar(
+                roomName = name,
+                roomAvatarData = initialsAvatarData,
+                heroes = persistentListOf(),
+                isTombstoned = false,
+                onBackClick = {},
+            )
+            HorizontalDivider()
+            ThreadTopBar(
+                roomName = name,
+                roomAvatarData = initialsAvatarData,
+                heroes = aMatrixUserList().map { it.getAvatarData(AvatarSize.TimelineRoom) }.toImmutableList(),
+                isTombstoned = false,
+                onBackClick = {},
+            )
+            HorizontalDivider()
+            ThreadTopBar(
+                roomName = null,
+                roomAvatarData = initialsAvatarData,
+                heroes = persistentListOf(),
+                isTombstoned = false,
+                onBackClick = {},
+            )
+            HorizontalDivider()
+            ThreadTopBar(
+                roomName = name,
+                roomAvatarData = initialsAvatarData.copy(url = "https://some-avatar.jpg"),
+                heroes = persistentListOf(),
+                isTombstoned = false,
+                onBackClick = {},
+            )
+            HorizontalDivider()
+            ThreadTopBar(
+                roomName = name,
+                roomAvatarData = initialsAvatarData,
+                heroes = persistentListOf(),
+                isTombstoned = true,
+                onBackClick = {},
+            )
+        }
+    }
 }
