@@ -39,6 +39,7 @@ fun TestScope.createRustMatrixClientFactory(
     baseDirectory: File = File("/base"),
     cacheDirectory: File = File("/cache"),
     sessionStore: SessionStore = InMemorySessionStore(),
+    clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
 ) = RustMatrixClientFactory(
     baseDirectory = baseDirectory,
     cacheDirectory = cacheDirectory,
@@ -52,5 +53,5 @@ fun TestScope.createRustMatrixClientFactory(
     analyticsService = FakeAnalyticsService(),
     featureFlagService = FakeFeatureFlagService(),
     timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
-    clientBuilderProvider = FakeClientBuilderProvider(),
+    clientBuilderProvider = clientBuilderProvider,
 )

@@ -8,14 +8,17 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.impl.ClientBuilderProvider
+import io.element.android.libraries.matrix.impl.FakeClientBuilderProvider
 import io.element.android.libraries.matrix.impl.createRustMatrixClientFactory
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuilder
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiHomeserverLoginDetails
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 import io.element.android.libraries.matrix.test.auth.FakeOidcRedirectUrlProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
-import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -24,18 +27,28 @@ import java.io.File
 
 class RustMatrixAuthenticationServiceTest {
     @Test
-    fun `getLatestSessionId should return the value from the store`() = runTest {
-        val sessionStore = InMemorySessionStore()
+    fun `setHomeserver is successful`() = runTest {
         val sut = createRustMatrixAuthenticationService(
-            sessionStore = sessionStore,
+            clientBuilderProvider = FakeClientBuilderProvider(
+                provideResult = {
+                    FakeFfiClientBuilder(
+                        buildResult = {
+                            FakeFfiClient(
+                                homeserverLoginDetailsResult = {
+                                    FakeFfiHomeserverLoginDetails()
+                                }
+                            )
+                        }
+                    )
+                }
+            ),
         )
-        assertThat(sut.getLatestSessionId()).isNull()
-        sessionStore.storeData(aSessionData(sessionId = "@alice:server.org"))
-        assertThat(sut.getLatestSessionId()).isEqualTo(SessionId("@alice:server.org"))
+        assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
     }
 
     private fun TestScope.createRustMatrixAuthenticationService(
         sessionStore: SessionStore = InMemorySessionStore(),
+        clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
     ): RustMatrixAuthenticationService {
         val baseDirectory = File("/base")
         val cacheDirectory = File("/cache")
@@ -43,6 +56,7 @@ class RustMatrixAuthenticationServiceTest {
             baseDirectory = baseDirectory,
             cacheDirectory = cacheDirectory,
             sessionStore = sessionStore,
+            clientBuilderProvider = clientBuilderProvider,
         )
         return RustMatrixAuthenticationService(
             sessionPathsFactory = SessionPathsFactory(baseDirectory, cacheDirectory),
