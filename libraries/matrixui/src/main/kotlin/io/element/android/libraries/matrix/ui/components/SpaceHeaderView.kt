@@ -10,6 +10,8 @@ package io.element.android.libraries.matrix.ui.components
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
@@ -24,6 +26,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -51,8 +54,13 @@ fun SpaceHeaderView(
             )
         },
         title = {
-            name?.let {
+            if (name != null) {
                 RoomPreviewTitleAtom(title = name)
+            } else {
+                RoomPreviewTitleAtom(
+                    title = stringResource(id = CommonStrings.common_no_space_name),
+                    fontStyle = FontStyle.Italic
+                )
             }
         },
         subtitle = {
@@ -63,10 +71,10 @@ fun SpaceHeaderView(
                 )
             }
         },
-        description = if (topic != null) {
-            { RoomPreviewDescriptionAtom(description = topic, maxLines = topicMaxLines) }
-        } else {
+        description = if (topic.isNullOrBlank()) {
             null
+        } else {
+            { RoomPreviewDescriptionAtom(description = topic, maxLines = topicMaxLines) }
         },
         memberCount = {
             SpaceMembersView(
