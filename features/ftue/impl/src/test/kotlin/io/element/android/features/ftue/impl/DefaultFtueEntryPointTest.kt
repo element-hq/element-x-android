@@ -14,7 +14,6 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
-import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import kotlinx.coroutines.test.runTest
@@ -37,7 +36,6 @@ class DefaultFtueEntryPointTest {
                 plugins = plugins,
                 analyticsEntryPoint = { _, _ -> lambdaError() },
                 defaultFtueService = createDefaultFtueService(),
-                analyticsService = FakeAnalyticsService(),
                 lockScreenEntryPoint = object : LockScreenEntryPoint {
                     override fun nodeBuilder(
                         parentNode: com.bumble.appyx.core.node.Node,
