@@ -38,7 +38,7 @@ class PushHistoryPresenter(
     matrixClient: MatrixClient,
 ) : Presenter<PushHistoryState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(pushHistoryNavigator: PushHistoryNavigator): PushHistoryPresenter
     }
 
