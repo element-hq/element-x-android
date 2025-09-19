@@ -166,7 +166,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.9.18"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.9.19"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
