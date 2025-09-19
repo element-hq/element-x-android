@@ -49,7 +49,7 @@ import kotlinx.parcelize.Parcelize
 class FtueFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val ftueState: DefaultFtueService,
+    private val defaultFtueService: DefaultFtueService,
     private val analyticsEntryPoint: AnalyticsEntryPoint,
     private val analyticsService: AnalyticsService,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
@@ -90,7 +90,7 @@ class FtueFlowNode(
             .onEach { moveToNextStepIfNeeded() }
             .launchIn(lifecycleScope)
 
-        ftueState.isVerificationStatusKnown
+        defaultFtueService.isVerificationStatusKnown
             .filter { it }
             .onEach { moveToNextStepIfNeeded() }
             .launchIn(lifecycleScope)
@@ -134,7 +134,7 @@ class FtueFlowNode(
     }
 
     private fun moveToNextStepIfNeeded() = lifecycleScope.launch {
-        when (ftueState.getNextStep()) {
+        when (defaultFtueService.getNextStep()) {
             FtueStep.WaitingForInitialState -> {
                 backstack.newRoot(NavTarget.Placeholder)
             }

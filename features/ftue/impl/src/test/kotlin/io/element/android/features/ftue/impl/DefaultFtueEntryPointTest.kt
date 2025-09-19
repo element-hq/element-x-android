@@ -36,7 +36,7 @@ class DefaultFtueEntryPointTest {
                 buildContext = buildContext,
                 plugins = plugins,
                 analyticsEntryPoint = { _, _ -> lambdaError() },
-                ftueState = createDefaultFtueService(),
+                defaultFtueService = createDefaultFtueService(),
                 analyticsService = FakeAnalyticsService(),
                 lockScreenEntryPoint = object : LockScreenEntryPoint {
                     override fun nodeBuilder(
