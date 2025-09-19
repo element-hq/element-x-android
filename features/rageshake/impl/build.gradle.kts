@@ -28,6 +28,7 @@ setupDependencyInjection()
 dependencies {
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
+    implementation(projects.features.viewfolder.api)
     implementation(projects.services.toolbox.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
