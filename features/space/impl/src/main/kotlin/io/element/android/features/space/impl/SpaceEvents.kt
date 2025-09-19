@@ -9,4 +9,6 @@ package io.element.android.features.space.impl
 
 sealed interface SpaceEvents {
     data object LoadMore : SpaceEvents
+    data object LeaveSpace : SpaceEvents
+    data object CancelLeaveSpace : SpaceEvents
 }

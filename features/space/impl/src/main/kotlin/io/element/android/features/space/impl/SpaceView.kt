@@ -17,7 +17,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,20 +31,29 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.space.impl.leave.ConfirmingLeavingSpace
+import io.element.android.features.space.impl.leave.LeaveSpaceBottomSheet
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.DropdownMenu
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.ui.components.SpaceHeaderView
 import io.element.android.libraries.matrix.ui.components.SpaceRoomItemView
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -58,7 +70,10 @@ fun SpaceView(
     Scaffold(
         modifier = modifier,
         topBar = {
-            SpaceViewTopBar(currentSpace = state.currentSpace, onBackClick = onBackClick)
+            SpaceViewTopBar(
+                state = state,
+                onBackClick = onBackClick,
+            )
         },
         content = { padding ->
             Box(
@@ -71,6 +86,25 @@ fun SpaceView(
             }
         },
     )
+
+    when (state.leaveSpaceBottomSheetState) {
+        is AsyncAction.Confirming -> LeaveSpaceBottomSheet(
+            state = state.leaveSpaceBottomSheetState as ConfirmingLeavingSpace,
+            onLeaveSpace = {
+                state.eventSink(SpaceEvents.LeaveSpace)
+            },
+            onDismiss = {
+                state.eventSink(SpaceEvents.CancelLeaveSpace)
+            }
+        )
+        is AsyncAction.Failure -> ErrorDialog(
+            content = stringResource(CommonStrings.error_unknown),
+            onSubmit = { state.eventSink(SpaceEvents.CancelLeaveSpace) },
+        )
+        AsyncAction.Loading -> ProgressDialog()
+        is AsyncAction.Success,
+        AsyncAction.Uninitialized -> Unit
+    }
 }
 
 @Composable
@@ -141,10 +175,11 @@ private fun LoadingMoreIndicator(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SpaceViewTopBar(
-    currentSpace: SpaceRoom?,
+    state: SpaceState,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val currentSpace = state.currentSpace
     TopAppBar(
         modifier = modifier,
         navigationIcon = {
@@ -159,6 +194,34 @@ private fun SpaceViewTopBar(
             }
         },
         actions = {
+            var showMenu by remember { mutableStateOf(false) }
+            IconButton(
+                onClick = { showMenu = !showMenu }
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.OverflowVertical(),
+                    contentDescription = null,
+                )
+            }
+            DropdownMenu(
+                expanded = showMenu,
+                onDismissRequest = { showMenu = false }
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        showMenu = false
+                        state.eventSink(SpaceEvents.LeaveSpace)
+                    },
+                    text = { Text(stringResource(id = CommonStrings.action_leave)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = CompoundIcons.Leave(),
+                            tint = ElementTheme.colors.iconSecondary,
+                            contentDescription = null,
+                        )
+                    }
+                )
+            }
         },
     )
 }
