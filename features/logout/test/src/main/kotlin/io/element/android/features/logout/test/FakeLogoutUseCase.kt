@@ -14,7 +14,7 @@ import io.element.android.tests.testutils.simulateLongTask
 class FakeLogoutUseCase(
     var logoutLambda: (Boolean) -> Unit = { lambdaError() }
 ) : LogoutUseCase {
-    override suspend fun logout(ignoreSdkError: Boolean) = simulateLongTask {
+    override suspend fun logoutAll(ignoreSdkError: Boolean) = simulateLongTask {
         logoutLambda(ignoreSdkError)
     }
 }
