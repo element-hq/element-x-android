@@ -54,7 +54,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
@@ -111,7 +110,7 @@ class RoomFlowNode(
         data class JoinedRoom(val roomId: RoomId) : NavTarget
 
         @Parcelize
-        data class Space(val spaceId: RoomId) : NavTarget
+        data class JoinedSpace(val spaceId: RoomId) : NavTarget
     }
 
     override fun onBuilt() {
@@ -149,30 +148,28 @@ class RoomFlowNode(
             .withPreviousValue()
         combine(currentMembershipFlow, isSpaceFlow) { (previousMembership, membership), isSpace ->
             Timber.d("Room membership: $membership")
-            when (membership) {
-                CurrentUserMembership.JOINED -> {
-                    if (isSpace) {
-                        backstack.newRoot(NavTarget.Space(spaceId = roomId))
-                    } else {
-                        backstack.newRoot(NavTarget.JoinedRoom(roomId))
-                    }
+            if (membership == CurrentUserMembership.JOINED) {
+                if (isSpace) {
+                    backstack.newRoot(NavTarget.JoinedSpace(spaceId = roomId))
+                } else {
+                    backstack.newRoot(NavTarget.JoinedRoom(roomId))
                 }
-                else -> {
-                    if (membership == CurrentUserMembership.LEFT && previousMembership == CurrentUserMembership.JOINED) {
-                        // The user left the room in this device, remove the room from the backstack
-                        if (!membershipUpdateFlow.first().isUserInRoom) {
-                            navigateUp()
-                        }
-                    } else {
-                        // Was invited or the room is not known, display the join room screen
-                        backstack.newRoot(
-                            NavTarget.JoinRoom(
-                                roomId = roomId,
-                                serverNames = serverNames,
-                                trigger = inputs.trigger.getOrNull() ?: JoinedRoom.Trigger.Invite,
-                            )
+            } else {
+                val leavingFromCurrentDevice =
+                    membership == CurrentUserMembership.LEFT &&
+                        previousMembership == CurrentUserMembership.JOINED &&
+                        membershipUpdateFlow.replayCache.lastOrNull()?.isUserInRoom == false
+
+                if (leavingFromCurrentDevice) {
+                    navigateUp()
+                } else {
+                    backstack.newRoot(
+                        NavTarget.JoinRoom(
+                            roomId = roomId,
+                            serverNames = serverNames,
+                            trigger = inputs.trigger.getOrNull() ?: JoinedRoom.Trigger.Invite,
                         )
-                    }
+                    )
                 }
             }
         }.launchIn(lifecycleScope)
@@ -214,7 +211,7 @@ class RoomFlowNode(
                 )
                 createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
             }
-            is NavTarget.Space -> {
+            is NavTarget.JoinedSpace -> {
                 val spaceCallback = plugins<SpaceEntryPoint.Callback>().single()
                 spaceEntryPoint.nodeBuilder(this, buildContext)
                     .inputs(SpaceEntryPoint.Inputs(roomId = navTarget.spaceId))
