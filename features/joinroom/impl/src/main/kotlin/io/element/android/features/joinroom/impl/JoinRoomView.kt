@@ -367,28 +367,6 @@ private fun JoinRestrictedFooter(
 }
 
 @Composable
-private fun UnsupportedSpaceFooter(
-    applicationName: String,
-    onGoBack: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier) {
-        Announcement(
-            title = stringResource(R.string.screen_join_room_space_not_supported_title),
-            description = stringResource(R.string.screen_join_room_space_not_supported_description, applicationName),
-            type = AnnouncementType.Informative(),
-        )
-        Spacer(Modifier.height(24.dp))
-        Button(
-            text = stringResource(CommonStrings.action_ok),
-            onClick = onGoBack,
-            modifier = Modifier.fillMaxWidth(),
-            size = ButtonSize.Large,
-        )
-    }
-}
-
-@Composable
 private fun JoinRoomContent(
     roomIdOrAlias: RoomIdOrAlias,
     contentState: ContentState,
@@ -498,7 +476,7 @@ private fun UnknownRoomContent(
         modifier = modifier,
         avatar = {
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .size(AvatarSize.RoomPreviewHeader.dp)
                     .background(
                         color = ElementTheme.colors.placeholderBackground,

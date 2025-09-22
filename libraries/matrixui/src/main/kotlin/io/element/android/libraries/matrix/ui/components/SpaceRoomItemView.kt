@@ -144,7 +144,7 @@ private fun NameAndIndicatorRow(
         Text(
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyLgMedium,
-            text = name ?: stringResource(id = if(isSpace) CommonStrings.common_no_space_name  else CommonStrings.common_no_room_name),
+            text = name ?: stringResource(id = if (isSpace) CommonStrings.common_no_space_name else CommonStrings.common_no_room_name),
             fontStyle = FontStyle.Italic.takeIf { name == null },
             color = ElementTheme.colors.textPrimary,
             maxLines = 1,

@@ -42,7 +42,6 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.RoomType
@@ -217,15 +216,6 @@ class JoinRoomPresenter(
                 serverNames = serverNames,
                 trigger = trigger
             )
-        }
-    }
-
-    private suspend fun getRoomPreviewIfKnown(membership: CurrentUserMembership?): NotJoinedRoom? {
-        return when (membership) {
-            CurrentUserMembership.INVITED,
-            CurrentUserMembership.KNOCKED,
-            CurrentUserMembership.BANNED -> matrixClient.getRoomPreview(roomIdOrAlias, serverNames).getOrNull()
-            else -> null
         }
     }
 

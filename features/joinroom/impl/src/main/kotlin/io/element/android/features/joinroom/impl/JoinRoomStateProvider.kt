@@ -165,7 +165,7 @@ fun aLoadedContentState(
     roomAvatarUrl: String? = null,
     joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown,
     childrenCount: Int? = null,
-    joinRule : JoinRule? = null,
+    joinRule: JoinRule? = null,
     heroes: List<MatrixUser> = emptyList()
 ) = ContentState.Loaded(
     roomId = roomId,
