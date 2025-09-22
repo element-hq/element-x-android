@@ -19,7 +19,6 @@ import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
-import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import io.element.android.services.analytics.impl.store.AnalyticsStore
 import io.element.android.services.analytics.impl.store.FakeAnalyticsStore
