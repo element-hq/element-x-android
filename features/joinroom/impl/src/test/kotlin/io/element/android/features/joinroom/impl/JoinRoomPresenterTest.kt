@@ -33,7 +33,6 @@ import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
-import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -111,7 +110,7 @@ class JoinRoomPresenterTest {
                 assertThat(contentState.topic).isEqualTo(roomInfo.topic)
                 assertThat(contentState.alias).isEqualTo(roomInfo.canonicalAlias)
                 assertThat(contentState.numberOfMembers).isEqualTo(roomInfo.joinedMembersCount)
-                assertThat(contentState.isDm).isEqualTo(roomInfo.isDirect)
+                assertThat(contentState.details).isEqualTo(aLoadedDetailsRoom(isDm = roomInfo.isDirect))
                 assertThat(contentState.roomAvatarUrl).isEqualTo(roomInfo.avatarUrl)
             }
         }
@@ -464,7 +463,7 @@ class JoinRoomPresenterTest {
                 assertThat(contentState.topic).isEqualTo(roomDescription.topic)
                 assertThat(contentState.alias).isEqualTo(roomDescription.alias)
                 assertThat(contentState.numberOfMembers).isEqualTo(roomDescription.numberOfMembers)
-                assertThat(contentState.isDm).isFalse()
+                assertThat(contentState.details).isEqualTo(aLoadedDetailsRoom(isDm = false))
                 assertThat(contentState.roomAvatarUrl).isEqualTo(roomDescription.avatarUrl)
             }
         }
@@ -708,13 +707,10 @@ class JoinRoomPresenterTest {
                         topic = "Room topic",
                         alias = RoomAlias("#alias:matrix.org"),
                         numberOfMembers = 2,
-                        isDm = false,
-                        roomType = RoomType.Room,
                         roomAvatarUrl = "avatarUrl",
                         joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin,
                         joinRule = JoinRule.Public,
-                        childrenCount = null,
-                        heroes = persistentListOf()
+                        details = aLoadedDetailsRoom(isDm = false),
                     )
                 )
             }
@@ -762,8 +758,6 @@ class JoinRoomPresenterTest {
                         topic = "Room topic",
                         alias = RoomAlias("#alias:matrix.org"),
                         numberOfMembers = 2,
-                        isDm = false,
-                        roomType = RoomType.Room,
                         roomAvatarUrl = "avatarUrl",
                         joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(
                             inviteData = InviteData(
@@ -783,8 +777,7 @@ class JoinRoomPresenterTest {
                             ),
                         ),
                         joinRule = JoinRule.Public,
-                        childrenCount = null,
-                        heroes = persistentListOf()
+                        details = aLoadedDetailsRoom(isDm = false),
                     )
                 )
             }
@@ -834,8 +827,6 @@ class JoinRoomPresenterTest {
                         topic = "Room topic",
                         alias = RoomAlias("#alias:matrix.org"),
                         numberOfMembers = 2,
-                        isDm = false,
-                        roomType = RoomType.Room,
                         roomAvatarUrl = "avatarUrl",
                         joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(
                             banSender = InviteSender(
@@ -851,8 +842,7 @@ class JoinRoomPresenterTest {
                             reason = null,
                         ),
                         joinRule = JoinRule.Public,
-                        childrenCount = null,
-                        heroes = persistentListOf()
+                        details = aLoadedDetailsRoom(isDm = false),
                     )
                 )
             }
@@ -900,13 +890,10 @@ class JoinRoomPresenterTest {
                         topic = "Room topic",
                         alias = RoomAlias("#alias:matrix.org"),
                         numberOfMembers = 2,
-                        isDm = false,
-                        roomType = RoomType.Room,
                         roomAvatarUrl = "avatarUrl",
                         joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked,
                         joinRule = JoinRule.Public,
-                        childrenCount = null,
-                        heroes = persistentListOf()
+                        details = aLoadedDetailsRoom(isDm = false),
                     )
                 )
             }

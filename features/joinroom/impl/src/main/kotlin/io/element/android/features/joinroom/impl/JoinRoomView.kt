@@ -566,10 +566,10 @@ private fun DefaultLoadedContent(
         },
         subtitle = {
             when {
-                contentState.isSpace -> {
+                contentState.details is LoadedDetails.Space -> {
                     SpaceInfoRow(
                         joinRule = contentState.joinRule ?: JoinRule.Public,
-                        numberOfRooms = contentState.childrenCount ?: 0,
+                        numberOfRooms = contentState.details.childrenCount,
                     )
                 }
                 contentState.alias != null -> {

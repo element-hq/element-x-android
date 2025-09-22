@@ -255,8 +255,6 @@ private fun RoomPreviewInfo.toContentState(membershipDetails: RoomMembershipDeta
         topic = topic,
         alias = canonicalAlias,
         numberOfMembers = numberOfJoinedMembers,
-        isDm = false,
-        roomType = roomType,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = computeJoinAuthorisationStatus(
             membership,
@@ -265,8 +263,16 @@ private fun RoomPreviewInfo.toContentState(membershipDetails: RoomMembershipDeta
             { toInviteData() }
         ),
         joinRule = joinRule,
-        childrenCount = null,
-        heroes = persistentListOf(),
+        details = when (roomType) {
+            is RoomType.Other,
+            RoomType.Room -> LoadedDetails.Room(
+                isDm = false,
+            )
+            RoomType.Space -> LoadedDetails.Space(
+                childrenCount = 0,
+                heroes = persistentListOf(),
+            )
+        }
     )
 }
 
@@ -277,8 +283,6 @@ private fun SpaceRoom.toContentState(): ContentState {
         topic = topic,
         alias = canonicalAlias,
         numberOfMembers = numJoinedMembers.toLong(),
-        isDm = false,
-        roomType = roomType,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = computeJoinAuthorisationStatus(
             membership = state,
@@ -286,9 +290,11 @@ private fun SpaceRoom.toContentState(): ContentState {
             joinRule = joinRule,
             inviteData = { toInviteData() }
         ),
-        childrenCount = childrenCount,
         joinRule = joinRule,
-        heroes = heroes.toPersistentList(),
+        details = LoadedDetails.Space(
+            childrenCount = childrenCount,
+            heroes = heroes.toPersistentList(),
+        )
     )
 }
 
@@ -300,15 +306,12 @@ internal fun RoomDescription.toContentState(): ContentState {
         topic = topic,
         alias = alias,
         numberOfMembers = numberOfMembers,
-        isDm = false,
-        roomType = RoomType.Room,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when (joinRule) {
             RoomDescription.JoinRule.KNOCK -> JoinAuthorisationStatus.CanKnock
             RoomDescription.JoinRule.PUBLIC -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
         },
-        childrenCount = null,
         joinRule = when (joinRule) {
             RoomDescription.JoinRule.KNOCK -> JoinRule.Knock
             RoomDescription.JoinRule.PUBLIC -> JoinRule.Public
@@ -317,7 +320,7 @@ internal fun RoomDescription.toContentState(): ContentState {
             RoomDescription.JoinRule.INVITE -> JoinRule.Invite
             RoomDescription.JoinRule.UNKNOWN -> null
         },
-        heroes = persistentListOf()
+        details = LoadedDetails.Room(isDm = false)
     )
 }
 
@@ -333,8 +336,6 @@ internal fun RoomInfo.toContentState(
         topic = topic,
         alias = canonicalAlias,
         numberOfMembers = joinedMembersCountOverride ?: joinedMembersCount,
-        isDm = isDm,
-        roomType = if (isSpace) RoomType.Space else RoomType.Room,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = computeJoinAuthorisationStatus(
             membership = currentUserMembership,
@@ -343,8 +344,16 @@ internal fun RoomInfo.toContentState(
             inviteData = { toInviteData() }
         ),
         joinRule = joinRule,
-        childrenCount = childrenCount,
-        heroes = heroes
+        details = if (isSpace) {
+            LoadedDetails.Space(
+                childrenCount = childrenCount ?: 0,
+                heroes = heroes,
+            )
+        } else {
+            LoadedDetails.Room(
+                isDm = isDm,
+            )
+        },
     )
 }
 
