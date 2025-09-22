@@ -14,6 +14,7 @@ import io.element.android.libraries.pushproviders.firebase.FirebaseConfig
 import io.element.android.libraries.pushproviders.firebase.FirebaseStore
 import io.element.android.libraries.pushproviders.firebase.FirebaseTroubleshooter
 import io.element.android.libraries.pushproviders.firebase.R
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
@@ -71,7 +72,10 @@ class FirebaseTokenTest(
 
     override suspend fun reset() = delegate.reset()
 
-    override suspend fun quickFix(coroutineScope: CoroutineScope) {
+    override suspend fun quickFix(
+        coroutineScope: CoroutineScope,
+        navigator: NotificationTroubleshootNavigator,
+    ) {
         delegate.start()
         firebaseTroubleshooter.troubleshoot()
         run(coroutineScope)

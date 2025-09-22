@@ -13,9 +13,11 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.push.test.FakeGetCurrentPushProvider
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -111,9 +113,13 @@ private fun createTroubleshootTestSuite(
 }
 
 internal fun createTroubleshootNotificationsPresenter(
+    navigator: NotificationTroubleshootNavigator = object : NotificationTroubleshootNavigator {
+        override fun openIgnoredUsers() = lambdaError()
+    },
     troubleshootTestSuite: TroubleshootTestSuite = createTroubleshootTestSuite(),
 ): TroubleshootNotificationsPresenter {
     return TroubleshootNotificationsPresenter(
+        navigator = navigator,
         troubleshootTestSuite = troubleshootTestSuite,
     )
 }

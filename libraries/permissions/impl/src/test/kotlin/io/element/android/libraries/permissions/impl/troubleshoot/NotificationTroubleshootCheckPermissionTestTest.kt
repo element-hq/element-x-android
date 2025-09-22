@@ -13,6 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.permissions.impl.action.FakePermissionActions
 import io.element.android.libraries.permissions.test.FakePermissionStateProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
+import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleshootNavigator
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
@@ -84,7 +85,7 @@ class NotificationTroubleshootCheckPermissionTestTest {
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
             // Quick fix
             launch {
-                sut.quickFix(this)
+                sut.quickFix(this, FakeNotificationTroubleshootNavigator())
                 // Run the test again (IRL it will be done thanks to the resuming of the application)
                 sut.run(this)
             }

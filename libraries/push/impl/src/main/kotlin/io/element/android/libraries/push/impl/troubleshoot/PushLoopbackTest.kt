@@ -13,6 +13,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
@@ -99,7 +100,10 @@ class PushLoopbackTest(
         )
     }
 
-    override suspend fun quickFix(coroutineScope: CoroutineScope) {
+    override suspend fun quickFix(
+        coroutineScope: CoroutineScope,
+        navigator: NotificationTroubleshootNavigator,
+    ) {
         delegate.start()
         pushService.getCurrentPushProvider()?.rotateToken()
         run(coroutineScope)

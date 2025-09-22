@@ -43,5 +43,6 @@ dependencies {
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.permissions.test)
+    testImplementation(projects.libraries.troubleshoot.test)
     testImplementation(projects.services.toolbox.test)
 }

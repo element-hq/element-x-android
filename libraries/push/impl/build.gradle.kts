@@ -72,6 +72,7 @@ dependencies {
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.libraries.pushstore.test)
+    testImplementation(projects.libraries.troubleshoot.test)
     testImplementation(projects.features.call.test)
     testImplementation(projects.features.lockscreen.test)
     testImplementation(projects.services.appnavstate.test)

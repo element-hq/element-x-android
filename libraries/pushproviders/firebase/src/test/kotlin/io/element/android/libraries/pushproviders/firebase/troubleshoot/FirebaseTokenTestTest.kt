@@ -14,6 +14,7 @@ import io.element.android.libraries.pushproviders.firebase.FirebaseConfig
 import io.element.android.libraries.pushproviders.firebase.InMemoryFirebaseStore
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.libraries.troubleshoot.api.test.TestFilterData
+import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleshootNavigator
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
@@ -62,7 +63,7 @@ class FirebaseTokenTestTest {
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
             // Quick fix
-            sut.quickFix(this)
+            sut.quickFix(this, FakeNotificationTroubleshootNavigator())
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Success)
         }

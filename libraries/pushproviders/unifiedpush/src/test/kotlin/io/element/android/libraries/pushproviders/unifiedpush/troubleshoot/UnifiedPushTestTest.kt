@@ -13,6 +13,7 @@ import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.libraries.troubleshoot.api.test.TestFilterData
+import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleshootNavigator
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
@@ -67,7 +68,7 @@ class UnifiedPushTestTest {
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
             // Quick fix
             launch {
-                sut.quickFix(this)
+                sut.quickFix(this, FakeNotificationTroubleshootNavigator())
                 sut.run(this)
             }
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)

@@ -15,6 +15,7 @@ import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import io.element.android.libraries.push.test.FakePushService
 import io.element.android.libraries.pushproviders.test.FakePushProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
+import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleshootNavigator
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -97,7 +98,7 @@ class PushLoopbackTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
-            sut.quickFix(this)
+            sut.quickFix(this, FakeNotificationTroubleshootNavigator())
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
             rotateTokenLambda.assertions().isCalledOnce()
