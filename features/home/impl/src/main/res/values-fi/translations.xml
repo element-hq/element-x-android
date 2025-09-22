@@ -33,6 +33,7 @@ Toistaiseksi voit poistaa suodattimien valinnan, jotta näet muut keskustelut."<
   <string name="screen_roomlist_filter_invites">"Kutsut"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Sinulla ei ole yhtään odottavaa kutsua."</string>
   <string name="screen_roomlist_filter_low_priority">"Matala prioriteetti"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Sinulla ei ole vielä yhtään matalan prioriteetin keskustelua"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Voit poistaa suodattimien valinnan nähdäksesi muut keskustelusi."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Sinulla ei ole sopivia keskusteluja tähän valintaan"</string>
   <string name="screen_roomlist_filter_people">"Ihmiset"</string>

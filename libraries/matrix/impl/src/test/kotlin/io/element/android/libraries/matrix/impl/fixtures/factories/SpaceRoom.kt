@@ -17,6 +17,7 @@ import org.matrix.rustcomponents.sdk.SpaceRoom
 
 fun aRustSpaceRoom(
     roomId: RoomId = A_ROOM_ID,
+    isDirect: Boolean = false,
     canonicalAlias: String? = null,
     name: String? = null,
     topic: String? = null,
@@ -31,6 +32,7 @@ fun aRustSpaceRoom(
     heroes: List<RoomHero> = emptyList(),
 ) = SpaceRoom(
     roomId = roomId.value,
+    isDirect = isDirect,
     canonicalAlias = canonicalAlias,
     name = name,
     topic = topic,

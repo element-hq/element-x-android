@@ -47,9 +47,4 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
      * Update analyticsId from the AccountData.
      */
     suspend fun setAnalyticsId(analyticsId: String)
-
-    /**
-     * Reset the analytics service (will ask for user consent again).
-     */
-    suspend fun reset()
 }

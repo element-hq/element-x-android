@@ -33,6 +33,12 @@ class RoomSummaryListProcessor(
             updates.forEach { update ->
                 applyUpdate(update)
             }
+
+            // TODO remove once https://github.com/element-hq/element-x-android/issues/5031 has been confirmed as fixed
+            val duplicates = groupingBy { it.roomId }.eachCount().filter { it.value > 1 }
+            if (duplicates.isNotEmpty()) {
+                Timber.e("Found duplicates in room summaries after a list update from the SDK: $duplicates. Updates: $updates")
+            }
         }
     }
 

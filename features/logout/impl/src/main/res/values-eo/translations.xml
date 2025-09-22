@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_key_backup_offline_subtitle">"Your messages were still being backed up when you went offline. Reconnect so that your messages can be backed up before signing out."</string>
+  <string name="screen_signout_key_backup_offline_title">"Your messages are still being backed up"</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Your messages are still being backed up"</string>
+  <string name="screen_signout_recovery_disabled_title">"Backup not set up"</string>
+  <string name="screen_signout_save_recovery_key_title">"Have you saved your backup password?"</string>
+</resources>

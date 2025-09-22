@@ -72,10 +72,6 @@ class DefaultAnalyticsService(
         analyticsStore.setDidAskUserConsent()
     }
 
-    override suspend fun reset() {
-        analyticsStore.setDidAskUserConsent(false)
-    }
-
     override suspend fun setAnalyticsId(analyticsId: String) {
         Timber.tag(analyticsTag.value).d("setAnalyticsId($analyticsId)")
         analyticsStore.setAnalyticsId(analyticsId)

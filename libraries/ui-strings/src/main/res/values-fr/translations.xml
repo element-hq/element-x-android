@@ -187,6 +187,7 @@
   <string name="common_current_user_rejected_invite">"Invitation refusée"</string>
   <string name="common_dark">"Sombre"</string>
   <string name="common_decryption_error">"Erreur de déchiffrement"</string>
+  <string name="common_description">"Description"</string>
   <string name="common_developer_options">"Options pour les développeurs"</string>
   <string name="common_device_id">"Identifiant de session"</string>
   <string name="common_direct_chat">"Discussion à deux"</string>
@@ -303,6 +304,7 @@ Raison : %1$s."</string>
   <string name="common_sent">"Envoyé"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Serveur non pris en charge"</string>
+  <string name="common_server_unreachable">"Serveur inaccessible"</string>
   <string name="common_server_url">"URL du serveur"</string>
   <string name="common_settings">"Paramètres"</string>
   <string name="common_shared_location">"Position partagée"</string>

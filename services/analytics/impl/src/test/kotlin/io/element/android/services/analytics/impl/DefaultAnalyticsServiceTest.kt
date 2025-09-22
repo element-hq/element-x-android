@@ -184,37 +184,6 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when a session is deleted, the store is not reset`() = runTest {
-        val resetLambda = lambdaRecorder<Unit> { }
-        val store = FakeAnalyticsStore(
-            resetLambda = resetLambda,
-        )
-        val sut = createDefaultAnalyticsService(
-            coroutineScope = backgroundScope,
-            analyticsStore = store,
-            sessionStore = InMemorySessionStore(
-                initialList = listOf(aSessionData()),
-            )
-        )
-        sut.onSessionDeleted("userId")
-        resetLambda.assertions().isNeverCalled()
-    }
-
-    @Test
-    fun `when reset is invoked, the user consent is reset`() = runTest {
-        val store = FakeAnalyticsStore(
-            defaultDidAskUserConsent = true,
-        )
-        val sut = createDefaultAnalyticsService(
-            coroutineScope = backgroundScope,
-            analyticsStore = store,
-        )
-        assertThat(store.didAskUserConsentFlow.first()).isTrue()
-        sut.reset()
-        assertThat(store.didAskUserConsentFlow.first()).isFalse()
-    }
-
-    @Test
     fun `when a session is added, nothing happen`() = runTest {
         val sut = createDefaultAnalyticsService(
             coroutineScope = backgroundScope,

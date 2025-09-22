@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Restore your account security and message history with a backup password if you have lost all your existing devices."</string>
+  <string name="banner_set_up_recovery_submit">"Set up backup"</string>
+  <string name="banner_set_up_recovery_title">"Set up backup to protect your account"</string>
+  <string name="confirm_recovery_key_banner_message">"Confirm your backup password to maintain access to your message backup and message history."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Enter your backup password"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Forgot your backup password?"</string>
+  <string name="confirm_recovery_key_banner_title">"Your message backup is out of sync"</string>
+  <string name="session_verification_banner_message">"Looks like you\'re using a new device. Confirm it with another connected device to access your encrypted messages."</string>
+</resources>
