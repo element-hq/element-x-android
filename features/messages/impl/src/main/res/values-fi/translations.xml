@@ -7,6 +7,7 @@
   <string name="emoji_picker_category_objects">"Esineet"</string>
   <string name="emoji_picker_category_people">"Hymiöt ja ihmiset"</string>
   <string name="emoji_picker_category_places">"Matkustaminen ja paikat"</string>
+  <string name="emoji_picker_category_recent">"Viimeaikaiset emojit"</string>
   <string name="emoji_picker_category_symbols">"Symbolit"</string>
   <string name="screen_media_upload_preview_caption_warning">"Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Napauta muuttaaksesi videon lähetyslaatua"</string>

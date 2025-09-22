@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Ychwanegu adwaith: %1$s"</string>
   <string name="a11y_avatar">"Afatar"</string>
+  <string name="a11y_collapse_message_text_field">"Lleihau maes testun neges"</string>
   <string name="a11y_delete">"Dileu"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="zero">"%1$d nodau wedi eu cynnig"</item>
@@ -12,10 +13,13 @@
     <item quantity="other">"%1$d nod wedi eu cynnig"</item>
   </plurals>
   <string name="a11y_edit_avatar">"Golygu afatar"</string>
+  <string name="a11y_edit_room_address_hint">"Bydd y cyfeiriad llawn yn%1$s"</string>
   <string name="a11y_encryption_details">"Manylion amgryptio"</string>
+  <string name="a11y_expand_message_text_field">"Ehangu maes testun neges"</string>
   <string name="a11y_hide_password">"Cuddio cyfrinair"</string>
   <string name="a11y_join_call">"Ymuno â galwad"</string>
   <string name="a11y_jump_to_bottom">"Symud i\'r gwaelod"</string>
+  <string name="a11y_move_the_map_to_my_location">"Symud y map i\'m lleoliad"</string>
   <string name="a11y_notifications_mentions_only">"Crybwylliadau\'n unig"</string>
   <string name="a11y_notifications_muted">"Wedi\'i Dewi"</string>
   <string name="a11y_notifications_new_mentions">"Crybwylliadau newydd"</string>
@@ -46,9 +50,10 @@
   <string name="a11y_remove_reaction_with">"Wedi dileu adwaith gyda %1$s"</string>
   <string name="a11y_room_avatar">"Afatar ystafell"</string>
   <string name="a11y_send_files">"Anfon ffeiliau"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Mae angen gweithredu â chyfyngiad amser"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Mae angen gweithredu o fewn amser cyfyngedig, mae gennych un funud i wirio"</string>
   <string name="a11y_show_password">"Dangos y cyfrinair"</string>
   <string name="a11y_start_call">"Cychwyn galwad"</string>
+  <string name="a11y_tombstoned_room">"Ystafell Tombstoned"</string>
   <string name="a11y_user_avatar">"Afatar defnyddiwr"</string>
   <string name="a11y_user_menu">"Dewislen defnyddiwr"</string>
   <string name="a11y_view_avatar">"Gweld afatar"</string>
@@ -93,6 +98,7 @@
   <string name="action_enable">"Galluogi"</string>
   <string name="action_end_poll">"Gorffen pleidlais"</string>
   <string name="action_enter_pin">"Rhoi\'r PIN"</string>
+  <string name="action_finish">"Gorffen"</string>
   <string name="action_forgot_password">"Wedi anghofio\'ch cyfrinair?"</string>
   <string name="action_forward">"Ymlaen"</string>
   <string name="action_go_back">"Mynd nôl"</string>
@@ -107,6 +113,7 @@
   <string name="action_leave">"Gadael"</string>
   <string name="action_leave_conversation">"Gadael y sgwrs"</string>
   <string name="action_leave_room">"Gadael yr ystafell"</string>
+  <string name="action_leave_space">"Gadael y gofod"</string>
   <string name="action_load_more">"Llwytho rhagor"</string>
   <string name="action_manage_account">"Rheoli cyfrif"</string>
   <string name="action_manage_devices">"Rheoli dyfeisiau"</string>
@@ -124,8 +131,8 @@
   <string name="action_react">"Ymateb"</string>
   <string name="action_reject">"Gwrthod"</string>
   <string name="action_remove">"Tynnu"</string>
-  <string name="action_remove_caption">"Dileu capsiwn"</string>
-  <string name="action_remove_message">"Dileu neges"</string>
+  <string name="action_remove_caption">"Tynnu capsiwn"</string>
+  <string name="action_remove_message">"Tynnu neges"</string>
   <string name="action_reply">"Ateb"</string>
   <string name="action_reply_in_thread">"Ateb mewn edefyn"</string>
   <string name="action_report">"Adroddiadau"</string>
@@ -167,10 +174,14 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Uwchraddiad ar gael"</string>
   <string name="common_about">"Ynghylch"</string>
   <string name="common_acceptable_use_policy">"Polisi defnydd derbyniol"</string>
+  <string name="common_add_account">"Ychwanegu cyfrif"</string>
+  <string name="common_add_another_account">"Ychwanegu cyfrif arall"</string>
   <string name="common_adding_caption">"Ychwanegu capsiwn"</string>
   <string name="common_advanced_settings">"Gosodiadau uwch"</string>
   <string name="common_an_image">"delwedd"</string>
   <string name="common_analytics">"Dadansoddeg"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Rydych wedi gadael yr ystafell"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Rydych wedi\'ch allgofnodi o\'r sesiwn"</string>
   <string name="common_appearance">"Gwedd"</string>
   <string name="common_audio">"Sain"</string>
   <string name="common_blocked_users">"Defnyddwyr wedi\'u rhwystro"</string>
@@ -182,9 +193,11 @@
   <string name="common_creating_room">"Wrthi\'n creu ystafell…"</string>
   <string name="common_current_user_canceled_knock">"Cais wedi\'i ddiddymu"</string>
   <string name="common_current_user_left_room">"Wedi gadael yr ystafell"</string>
+  <string name="common_current_user_left_space">"Gofod chwith"</string>
   <string name="common_current_user_rejected_invite">"Wedi gwrthod y gwahoddiad"</string>
   <string name="common_dark">"Tywyll"</string>
   <string name="common_decryption_error">"Gwall dadgryptio"</string>
+  <string name="common_description">"Disgrifiad"</string>
   <string name="common_developer_options">"Dewisiadau datblygwr"</string>
   <string name="common_device_id">"ID dyfais"</string>
   <string name="common_direct_chat">"Sgwrs uniongyrchol"</string>
@@ -233,12 +246,12 @@ Rheswm: %1$s."</string>
     <item quantity="other">"%d arall"</item>
   </plurals>
   <plurals name="common_member_count">
-    <item quantity="zero">"%1$d aelodau"</item>
-    <item quantity="one">"%1$d aelod"</item>
-    <item quantity="two">"%1$d aelod"</item>
-    <item quantity="few">"%1$d aelod"</item>
-    <item quantity="many">"%1$d aelod"</item>
-    <item quantity="other">"%1$d aelod"</item>
+    <item quantity="zero">"%1$d Aelodau"</item>
+    <item quantity="one">"%1$d Aelod"</item>
+    <item quantity="two">"%1$d Aelod"</item>
+    <item quantity="few">"%1$d Aelod"</item>
+    <item quantity="many">"%1$d Aelod"</item>
+    <item quantity="other">"%1$d Aelod"</item>
   </plurals>
   <string name="common_message">"Neges"</string>
   <string name="common_message_actions">"Gweithredoedd neges"</string>
@@ -272,14 +285,25 @@ Rheswm: %1$s."</string>
     <item quantity="many">"%d pleidlais"</item>
     <item quantity="other">"%d pleidlais"</item>
   </plurals>
+  <string name="common_preparing">"Yn paratoi…"</string>
   <string name="common_privacy_policy">"Polisi preifatrwydd"</string>
   <string name="common_private_room">"Ystafell breifat"</string>
+  <string name="common_private_space">"Gofod preifat"</string>
   <string name="common_public_room">"Ystafell gyhoeddus"</string>
+  <string name="common_public_space">"Gofod cyhoeddus"</string>
   <string name="common_reaction">"Adwaith"</string>
   <string name="common_reactions">"Adweithiau"</string>
   <string name="common_reason">"Rheswm"</string>
   <string name="common_recovery_key">"Allwedd adfer"</string>
   <string name="common_refreshing">"Wrthi\'n adnewyddu…"</string>
+  <plurals name="common_replies">
+    <item quantity="zero">"%1$d atebion"</item>
+    <item quantity="one">"%1$d ateb"</item>
+    <item quantity="two">"%1$d ateb"</item>
+    <item quantity="few">"%1$d ateb"</item>
+    <item quantity="many">"%1$d ateb"</item>
+    <item quantity="other">"%1$d ateb"</item>
+  </plurals>
   <string name="common_replying_to">"Yn ymateb i %1$s"</string>
   <string name="common_report_a_bug">"Adrodd ar wall"</string>
   <string name="common_report_a_problem">"Adrodd am broblem"</string>
@@ -288,6 +312,14 @@ Rheswm: %1$s."</string>
   <string name="common_room">"Ystafell"</string>
   <string name="common_room_name">"Enw\'r ystafell"</string>
   <string name="common_room_name_placeholder">"e.e. enw eich project"</string>
+  <plurals name="common_rooms">
+    <item quantity="zero">"%1$d Ystafelloedd"</item>
+    <item quantity="one">"%1$d Ystafell"</item>
+    <item quantity="two">"%1$d Ystafell"</item>
+    <item quantity="few">"%1$d Ystafell"</item>
+    <item quantity="many">"%1$d Ystafell"</item>
+    <item quantity="other">"%1$d Ystafell"</item>
+  </plurals>
   <string name="common_saved_changes">"Newidiadau wedi\'u cadw"</string>
   <string name="common_saving">"Cadw"</string>
   <string name="common_screen_lock">"Clo sgrin"</string>
@@ -295,18 +327,30 @@ Rheswm: %1$s."</string>
   <string name="common_search_results">"Canlyniadau chwilio"</string>
   <string name="common_security">"Diogelwch"</string>
   <string name="common_seen_by">"Wedi\'i weld gan"</string>
+  <string name="common_select_account">"Dewis cyfrif"</string>
   <string name="common_send_to">"Anfon at"</string>
   <string name="common_sending">"Yn anfon…"</string>
   <string name="common_sending_failed">"Methodd anfon"</string>
   <string name="common_sent">"Anfonwyd"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Nid yw\'r gweinydd yn cael ei gynnal"</string>
+  <string name="common_server_unreachable">"Gweinydd yn anghyraeddadwy"</string>
   <string name="common_server_url">"URL gweinydd"</string>
   <string name="common_settings">"Gosodiadau"</string>
+  <string name="common_share_space">"Rhannu gofod"</string>
   <string name="common_shared_location">"Lleoliad yn cael ei rannu"</string>
   <string name="common_signing_out">"Allgofnodi"</string>
   <string name="common_something_went_wrong">"Aeth rhywbeth o\'i le"</string>
   <string name="common_something_went_wrong_message">"Wedi canfod mater. Ceisiwch eto."</string>
+  <string name="common_space">"Gofod"</string>
+  <plurals name="common_spaces">
+    <item quantity="zero">"%1$d Gofodau"</item>
+    <item quantity="one">"%1$d Gofod"</item>
+    <item quantity="two">"%1$d Ofod"</item>
+    <item quantity="few">"%1$d Gofod"</item>
+    <item quantity="many">"%1$d Gofod"</item>
+    <item quantity="other">"%1$d Gofod"</item>
+  </plurals>
   <string name="common_starting_chat">"Dechrau sgwrs…"</string>
   <string name="common_sticker">"Sticer"</string>
   <string name="common_success">"Llwyddiant"</string>
@@ -337,6 +381,12 @@ Rheswm: %1$s."</string>
   <string name="common_verify_identity">"Gwirio hunaniaeth"</string>
   <string name="common_verify_user">"Gwirio defnyddiwr"</string>
   <string name="common_video">"Fideo"</string>
+  <string name="common_video_quality_high">"Ansawdd uchel"</string>
+  <string name="common_video_quality_high_description">"Yr ansawdd gorau ond maint ffeil mwy"</string>
+  <string name="common_video_quality_low">"Ansawdd isel"</string>
+  <string name="common_video_quality_low_description">"Y cyflymder llwytho cyflymaf a\'r maint ffeil lleiaf"</string>
+  <string name="common_video_quality_standard">"Ansawdd safonol"</string>
+  <string name="common_video_quality_standard_description">"Cydbwysedd ansawdd a chyflymder llwytho"</string>
   <string name="common_voice_message">"Neges llais"</string>
   <string name="common_waiting">"Yn aros…"</string>
   <string name="common_waiting_for_decryption_key">"Yn aros am y neges hon"</string>
@@ -351,6 +401,10 @@ Rheswm: %1$s."</string>
 
 Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="dialog_confirm_link_title">"Gwnewch yn siŵr fod y ddolen hon yn iawn"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Dewiswch ansawdd rhagosodedig y fideos rydych chi\'n eu llwytho."</string>
+  <string name="dialog_default_video_quality_selector_title">"Ansawdd llwytho fideo"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw:%1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Mae maint y ffeil yn rhy fawr i\'w llwytho"</string>
   <string name="dialog_room_reported">"Adroddwyd am yr ystafell"</string>
   <string name="dialog_room_reported_and_left">"Adroddwyd a gadael yr ystafell"</string>
   <string name="dialog_title_confirmation">"Cadarnhad"</string>
@@ -359,6 +413,11 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="dialog_title_warning">"Rhybudd"</string>
   <string name="dialog_unsaved_changes_description_android">"Dyw eich newidiadau heb gael eu cadw. Ydych chi\'n siŵr eich bod am fynd nôl?"</string>
   <string name="dialog_unsaved_changes_title">"Cadw\'r newidiadau?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Dewiswch ansawdd y fideo rydych chi am ei llwytho."</string>
+  <string name="dialog_video_quality_selector_title">"Dewiswch ansawdd llwytho fideo"</string>
+  <string name="emoji_picker_search_placeholder">"Chwilio emojis"</string>
+  <string name="error_account_already_logged_in">"Rydych chi eisoes wedi mewngofnodi ar y ddyfais hon fel %1$s ."</string>
   <string name="error_account_creation_not_possible">"Mae angen uwchraddio eich gweinydd cartref i gefnogi Gwasanaeth Dilysu Matrix a chreu cyfrif."</string>
   <string name="error_failed_creating_the_permalink">"Wedi methu creu\'r ddolen barhaol"</string>
   <string name="error_failed_loading_map">"Methodd %1$s â llwytho\'r map. Ceisiwch eto yn nes ymlaen."</string>
@@ -386,6 +445,10 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="invite_friends_text">"Hei, siaradwch â mi ar %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"Android %1$s"</string>
   <string name="preference_rageshake">"Rageshake i adrodd gwall"</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle">"Bydd hyn hefyd yn eich tynnu o bob ystafell yn y gofod hwn."</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle_admin">"Bydd hyn hefyd yn eich tynnu o bob ystafell yn y gofod hwn, gan gynnwys y rhai rydych chi\'n unig weinyddwr ar eu cyfer:"</string>
+  <string name="screen_bottom_sheet_leave_space_title">"Gadael %1$s ?"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Llun sgrin"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Dewisiadau"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Tynnu %1$s"</string>
@@ -412,6 +475,7 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Dyw eich neges heb ei hanfon oherwydd nid yw %1$s wedi gwirio pob dyfais"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Mae un neu fwy o\'ch dyfeisiau heb eu gwirio. Gallwch anfon y neges beth bynnag, neu gallwch ei diddymu am y tro a cheisio eto yn nes ymlaen ar ôl i chi ddilysu eich holl ddyfeisiau."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Nid yw eich neges wedi\'i hanfon oherwydd nad ydych wedi gwirio un neu fwy o\'ch dyfeisiau"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Golygu Gweinyddwyr neu Berchnogion"</string>
   <string name="screen_room_error_failed_processing_media">"Wedi methu â phrosesu cyfryngau i\'w llwytho, ceisiwch eto."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Methu â nôl manylion defnyddiwr"</string>
   <string name="screen_room_event_pill">"Neges yn %1$s"</string>
@@ -429,6 +493,9 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_share_open_google_maps">"Agor yn Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Agor yn OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Rhannu\'r lleoliad hwn"</string>
+  <string name="screen_space_list_description">"Gofodau rydych wedi\'u creu neu wedi ymuno â nhw."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Gofodau"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Heb anfon y neges oherwydd bod hunaniaeth wedi \'i ddilysu %1$s wedi\'i ailosod."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Heb anfon y neges oherwydd nid yw %1$s wedi gwirio pob dyfais."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Heb anfon y neges oherwydd nad ydych wedi gwirio un neu fwy o\'ch dyfeisiau."</string>
