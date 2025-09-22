@@ -442,7 +442,7 @@ private fun InvitedByView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Invited by",
+            text = stringResource(R.string.screen_join_room_invited_by),
             style = ElementTheme.typography.fontBodyMdRegular,
             color = ElementTheme.colors.textSecondary
         )
