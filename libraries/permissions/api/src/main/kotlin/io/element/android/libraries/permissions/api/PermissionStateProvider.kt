@@ -16,6 +16,4 @@ interface PermissionStateProvider {
 
     suspend fun setPermissionAsked(permission: String, value: Boolean)
     fun isPermissionAsked(permission: String): Flow<Boolean>
-
-    suspend fun resetPermission(permission: String)
 }

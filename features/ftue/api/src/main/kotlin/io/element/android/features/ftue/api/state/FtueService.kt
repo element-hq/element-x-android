@@ -15,9 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 interface FtueService {
     /** The current state of the FTUE. */
     val state: StateFlow<FtueState>
-
-    /** Reset the FTUE state. */
-    suspend fun reset()
 }
 
 /** The state of the FTUE. */

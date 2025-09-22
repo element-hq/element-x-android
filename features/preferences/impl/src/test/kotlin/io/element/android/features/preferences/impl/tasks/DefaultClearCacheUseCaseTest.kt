@@ -10,7 +10,6 @@ package io.element.android.features.preferences.impl.tasks
 import androidx.test.platform.app.InstrumentationRegistry
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.ftue.test.FakeFtueService
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -41,10 +40,6 @@ class DefaultClearCacheUseCaseTest {
             clearCacheLambda = clearCacheLambda,
         )
         val defaultCacheService = DefaultCacheService()
-        val resetFtueLambda = lambdaRecorder<Unit> { }
-        val ftueService = FakeFtueService(
-            resetLambda = resetFtueLambda,
-        )
         val setIgnoreRegistrationErrorLambda = lambdaRecorder<SessionId, Boolean, Unit> { _, _ -> }
         val resetBatteryOptimizationStateResult = lambdaRecorder<Unit> { }
         val pushService = FakePushService(
@@ -59,7 +54,6 @@ class DefaultClearCacheUseCaseTest {
             coroutineDispatchers = testCoroutineDispatchers(),
             defaultCacheService = defaultCacheService,
             okHttpClient = { OkHttpClient.Builder().build() },
-            ftueService = ftueService,
             pushService = pushService,
             seenInvitesStore = seenInvitesStore,
             activeRoomsHolder = activeRoomsHolder,
@@ -67,7 +61,6 @@ class DefaultClearCacheUseCaseTest {
         defaultCacheService.clearedCacheEventFlow.test {
             sut.invoke()
             clearCacheLambda.assertions().isCalledOnce()
-            resetFtueLambda.assertions().isCalledOnce()
             setIgnoreRegistrationErrorLambda.assertions().isCalledOnce()
                 .with(value(matrixClient.sessionId), value(false))
             resetBatteryOptimizationStateResult.assertions().isCalledOnce()
