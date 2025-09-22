@@ -18,6 +18,7 @@
   <string name="screen_join_room_join_action">"Ymuno â\'r ystafell"</string>
   <string name="screen_join_room_join_restricted_message">"Efallai y bydd angen i chi gael eich gwahodd neu fod yn aelod o ofod er mwyn ymuno."</string>
   <string name="screen_join_room_knock_action">"Anfon cais i ymuno"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Nodau a ganiateir %1$d o %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Neges (dewisol)"</string>
   <string name="screen_join_room_knock_sent_description">"Byddwch yn derbyn gwahoddiad i ymuno â\'r ystafell os caiff eich cais ei dderbyn."</string>
   <string name="screen_join_room_knock_sent_title">"Anfonwyd y cais i ymuno"</string>

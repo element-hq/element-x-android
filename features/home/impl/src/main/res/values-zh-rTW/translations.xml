@@ -33,6 +33,7 @@
   <string name="screen_roomlist_filter_invites">"邀請"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"您沒有任何擱置中的邀請。"</string>
   <string name="screen_roomlist_filter_low_priority">"低優先度"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"您尚無任何低優先程度聊天"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"您可以取消選取篩選條件以檢視其他聊天"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"您並無此選擇的聊天"</string>
   <string name="screen_roomlist_filter_people">"夥伴"</string>

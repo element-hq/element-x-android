@@ -37,7 +37,7 @@
   <string name="screen_recovery_key_change_generate_key">"Luo uusi palautusavain"</string>
   <string name="screen_recovery_key_change_generate_key_description">"Älä jaa tätä kenenkään kanssa!"</string>
   <string name="screen_recovery_key_change_success">"Palautusavain vaihdettu"</string>
-  <string name="screen_recovery_key_change_title">"Vaihda palautusavain?"</string>
+  <string name="screen_recovery_key_change_title">"Vaihdetaanko palautusavain?"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Luo uusi palautusavain"</string>
   <string name="screen_recovery_key_confirm_description">"Varmista, ettei kukaan näe tätä ruutua!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Yritä uudelleen vahvistaaksesi pääsyn avainten säilytykseen."</string>

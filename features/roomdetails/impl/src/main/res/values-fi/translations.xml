@@ -21,12 +21,12 @@
   <string name="screen_room_change_permissions_send_messages">"Viestien lähettäminen"</string>
   <string name="screen_room_change_role_administrators_title">"Muokkaa ylläpitäjiä"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Et voi peruuttaa tätä toimenpidettä. Ylennät käyttäjän samalle oikeustasolle kuin sinä."</string>
-  <string name="screen_room_change_role_confirm_add_admin_title">"Lisää ylläpitäjä?"</string>
+  <string name="screen_room_change_role_confirm_add_admin_title">"Lisätäänkö ylläpitäjä?"</string>
   <string name="screen_room_change_role_confirm_change_owners_description">"Et voi kumota tätä toimintoa. Olet siirtämässä omistajuuden valituille käyttäjille. Kun poistut, muutos on pysyvä."</string>
   <string name="screen_room_change_role_confirm_change_owners_title">"Siirretäänkö omistajuus?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Alenna"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Et voi perua tätä muutosta, koska olet alentamassa itseäsi. Jos olet viimeinen oikeutettu henkilö tässä huoneessa, oikeuksia ei voi enää saada takaisin."</string>
-  <string name="screen_room_change_role_confirm_demote_self_title">"Alenna itsesi?"</string>
+  <string name="screen_room_change_role_confirm_demote_self_title">"Haluatko alentaa itsesi?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Kutsuttu)"</string>
   <string name="screen_room_change_role_invited_member_name_android">"(Kutsuttu)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Ylläpitäjillä on automaattisesti valvojan oikeudet"</string>
@@ -37,7 +37,7 @@
   <string name="screen_room_change_role_section_moderators">"Valvojat"</string>
   <string name="screen_room_change_role_section_users">"Jäsenet"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Sinulla on tallentamattomia muutoksia"</string>
-  <string name="screen_room_change_role_unsaved_changes_title">"Tallenna muutokset?"</string>
+  <string name="screen_room_change_role_unsaved_changes_title">"Tallennetaanko muutokset?"</string>
   <string name="screen_room_details_add_topic_title">"Lisää aihe"</string>
   <string name="screen_room_details_badge_encrypted">"Salattu"</string>
   <string name="screen_room_details_badge_not_encrypted">"Ei salattu"</string>
@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Ilmoitusasetuksia ladattaessa tapahtui virhe."</string>
   <string name="screen_room_details_error_muting">"Tämän huoneen mykistäminen epäonnistui, yritä uudelleen."</string>
   <string name="screen_room_details_error_unmuting">"Tämän huoneen mykistyksen poistaminen epäonnistui, yritä uudelleen."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Älä sulje sovellusta ennen kuin se on valmis."</string>
+  <string name="screen_room_details_invite_people_preparing">"Valmistellaan kutsuja…"</string>
   <string name="screen_room_details_invite_people_title">"Kutsu ihmisiä"</string>
   <string name="screen_room_details_leave_conversation_title">"Poistu keskustelusta"</string>
   <string name="screen_room_details_leave_room_title">"Poistu huoneesta"</string>

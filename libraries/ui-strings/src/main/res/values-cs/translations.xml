@@ -44,7 +44,7 @@
   <string name="a11y_remove_reaction_with">"Odstranit reakci pomocí %1$s"</string>
   <string name="a11y_room_avatar">"Avatar místnosti"</string>
   <string name="a11y_send_files">"Odeslat soubory"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje se časově omezená akce"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje se časově omezená akce, na ověření máte jednu minutu"</string>
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_start_call">"Zahájit hovor"</string>
   <string name="a11y_tombstoned_room">"Místnost s náhrobkem"</string>
@@ -107,6 +107,7 @@
   <string name="action_leave">"Odejít"</string>
   <string name="action_leave_conversation">"Opustit konverzaci"</string>
   <string name="action_leave_room">"Opustit místnost"</string>
+  <string name="action_leave_space">"Opustit prostor"</string>
   <string name="action_load_more">"Načíst více"</string>
   <string name="action_manage_account">"Spravovat účet"</string>
   <string name="action_manage_devices">"Spravovat zařízení"</string>
@@ -167,6 +168,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade k dispozici"</string>
   <string name="common_about">"O aplikaci"</string>
   <string name="common_acceptable_use_policy">"Zásady používání"</string>
+  <string name="common_add_account">"Přidat účet"</string>
+  <string name="common_add_another_account">"Přidat další účet"</string>
   <string name="common_adding_caption">"Přidání titulku"</string>
   <string name="common_advanced_settings">"Pokročilá nastavení"</string>
   <string name="common_an_image">"obrázek"</string>
@@ -184,9 +187,11 @@
   <string name="common_creating_room">"Vytváření místnosti…"</string>
   <string name="common_current_user_canceled_knock">"Žádost zrušena"</string>
   <string name="common_current_user_left_room">"Místnost opuštěna"</string>
+  <string name="common_current_user_left_space">"Opustit prostor"</string>
   <string name="common_current_user_rejected_invite">"Pozvánka odmítnuta"</string>
   <string name="common_dark">"Tmavé"</string>
   <string name="common_decryption_error">"Chyba dešifrování"</string>
+  <string name="common_description">"Popis"</string>
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>
   <string name="common_device_id">"ID zařízení"</string>
   <string name="common_direct_chat">"Přímý chat"</string>
@@ -299,14 +304,17 @@ Důvod: %1$s."</string>
   <string name="common_search_results">"Výsledky hledání"</string>
   <string name="common_security">"Zabezpečení"</string>
   <string name="common_seen_by">"Viděno"</string>
+  <string name="common_select_account">"Vybrat účet"</string>
   <string name="common_send_to">"Odeslat do"</string>
   <string name="common_sending">"Odesílání…"</string>
   <string name="common_sending_failed">"Odeslání se nezdařilo"</string>
   <string name="common_sent">"Odesláno"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Server není podporován"</string>
+  <string name="common_server_unreachable">"Server je nedostupný"</string>
   <string name="common_server_url">"URL serveru"</string>
   <string name="common_settings">"Nastavení"</string>
+  <string name="common_share_space">"Sdílet prostor"</string>
   <string name="common_shared_location">"Sdílená poloha"</string>
   <string name="common_signing_out">"Odhlašování"</string>
   <string name="common_something_went_wrong">"Něco se nepovedlo"</string>
@@ -382,6 +390,8 @@ Opravdu chcete pokračovat?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maximální povolená velikost souboru je: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vyberte kvalitu videa, které chcete nahrát."</string>
   <string name="dialog_video_quality_selector_title">"Vyberte kvalitu nahrávání videa"</string>
+  <string name="emoji_picker_search_placeholder">"Hledat emotikony"</string>
+  <string name="error_account_already_logged_in">"Na tomto zařízení jste již přihlášeni jako %1$s."</string>
   <string name="error_account_creation_not_possible">"Váš domovský server je třeba upgradovat, aby podporoval službu Matrix Authentication Service a vytváření účtu."</string>
   <string name="error_failed_creating_the_permalink">"Vytvoření trvalého odkazu se nezdařilo"</string>
   <string name="error_failed_loading_map">"%1$s nemohl načíst mapu. Zkuste to prosím později."</string>
@@ -409,6 +419,9 @@ Opravdu chcete pokračovat?"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle">"Tím budete také odstraněni ze všech místností v tomto prostoru."</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle_admin">"Tímto budete také odstraněni ze všech místností v tomto prostoru, včetně těch, jejichž jediným správcem jste:"</string>
+  <string name="screen_bottom_sheet_leave_space_title">"Opustit %1$s?"</string>
   <string name="screen_bug_report_a11y_screenshot">"Snímek obrazovky"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Možnosti"</string>

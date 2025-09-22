@@ -13,6 +13,7 @@
   <string name="full_screen_intent_banner_message">"Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi\'i gloi."</string>
   <string name="full_screen_intent_banner_title">"Gwella profiad eich galwadau"</string>
   <string name="screen_home_tab_chats">"Sgyrsiau"</string>
+  <string name="screen_home_tab_spaces">"Gofodau"</string>
   <string name="screen_invites_decline_chat_message">"Ydych chi\'n siŵr eich bod am wrthod y gwahoddiad i ymuno â %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Gwrthod y gwahoddiad"</string>
   <string name="screen_invites_decline_direct_chat_message">"Ydych chi\'n siŵr eich bod am wrthod y sgwrs breifat hon gyda %1$s?"</string>
@@ -32,6 +33,7 @@ Am y tro, gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill"</strin
   <string name="screen_roomlist_filter_invites">"Gwahoddiadau"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Does gennych chi ddim gwahoddiadau yn aros."</string>
   <string name="screen_roomlist_filter_low_priority">"Blaenoriaeth Isel"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Does gennych chi ddim sgyrsiau blaenoriaeth isel eto"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Does gennych chi ddim sgyrsiau ar gyfer y dewis hwn"</string>
   <string name="screen_roomlist_filter_people">"Pobl"</string>
