@@ -58,13 +58,6 @@ class DefaultFtueService(
             }
         }
 
-    override suspend fun reset() {
-        analyticsService.reset()
-        if (sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
-            permissionStateProvider.resetPermission(Manifest.permission.POST_NOTIFICATIONS)
-        }
-    }
-
     init {
         combine(
             sessionVerificationService.sessionVerifiedStatus.onEach { sessionVerifiedStatus ->

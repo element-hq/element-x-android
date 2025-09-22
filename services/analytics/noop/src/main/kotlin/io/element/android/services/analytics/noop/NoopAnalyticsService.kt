@@ -31,7 +31,6 @@ class NoopAnalyticsService : AnalyticsService {
     override suspend fun setDidAskUserConsent() = Unit
     override val analyticsIdFlow: Flow<String> = flowOf("")
     override suspend fun setAnalyticsId(analyticsId: String) = Unit
-    override suspend fun reset() = Unit
     override fun capture(event: VectorAnalyticsEvent) = Unit
     override fun screen(screen: VectorAnalyticsScreen) = Unit
     override fun updateUserProperties(userProperties: UserProperties) = Unit
