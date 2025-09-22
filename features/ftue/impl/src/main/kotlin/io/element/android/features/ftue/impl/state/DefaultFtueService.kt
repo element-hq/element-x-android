@@ -28,10 +28,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -59,14 +57,6 @@ class DefaultFtueService(
                 is InternalFtueState.Complete -> FtueState.Complete
             }
         }
-
-    /**
-     * This flow emits true when the FTUE flow is ready to be displayed.
-     * In this case, the FTUE flow is ready when the session verification status is known.
-     */
-    val isVerificationStatusKnown = sessionVerificationService.sessionVerifiedStatus
-        .map { it != SessionVerifiedStatus.Unknown }
-        .distinctUntilChanged()
 
     override suspend fun reset() {
         analyticsService.reset()
@@ -134,9 +124,6 @@ class DefaultFtueService(
     }
 
     private suspend fun isSessionNotVerified(): Boolean {
-        // Wait until the session verification status is known
-        isVerificationStatusKnown.filter { it }.first()
-
         return sessionVerificationService.sessionVerifiedStatus.value == SessionVerifiedStatus.NotVerified && !canSkipVerification()
     }
 
