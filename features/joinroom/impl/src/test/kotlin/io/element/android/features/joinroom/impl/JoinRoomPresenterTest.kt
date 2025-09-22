@@ -50,8 +50,10 @@ import io.element.android.libraries.matrix.test.room.aRoomPreviewInfo
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceRoomList
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.matrix.ui.model.toInviteSender
+import io.element.android.libraries.previewutils.room.aSpaceRoom
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
@@ -185,6 +187,137 @@ class JoinRoomPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(inviteData, expectedInviteSender))
                 assertThat((state.contentState as ContentState.Loaded).numberOfMembers).isEqualTo(5)
+            }
+        }
+    }
+
+    @Test
+    fun `present - when space is invited then join authorization is equal to invited, an inviter is provided`() = runTest {
+        val inviter = aRoomMember(userId = A_USER_ID_2, displayName = "Bob")
+        val expectedInviteSender = inviter.toInviteSender()
+        val spaceHero = aMatrixUser()
+        val roomInfo = aRoomInfo(
+            isSpace = true,
+            currentUserMembership = CurrentUserMembership.INVITED,
+            joinedMembersCount = 5,
+            inviter = inviter,
+            heroes = listOf(spaceHero),
+        )
+        val inviteData = roomInfo.toInviteData()
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            numberOfJoinedMembers = 5,
+                        ),
+                        roomMembershipDetails = {
+                            Result.success(aRoomMembershipDetails())
+                        },
+                    )
+                )
+            },
+            spaceService = FakeSpaceService(
+                spaceRoomListResult = {
+                    FakeSpaceRoomList(
+                        initialSpaceFlowValue = aSpaceRoom(
+                            childrenCount = 3,
+                        )
+                    )
+                },
+            ),
+        ).apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
+            }
+        }
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient
+        )
+        presenter.test {
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(inviteData, expectedInviteSender))
+                assertThat((state.contentState as ContentState.Loaded).numberOfMembers).isEqualTo(5)
+                // Space details are provided
+                assertThat(state.contentState.details).isEqualTo(
+                    LoadedDetails.Space(
+                        childrenCount = 3,
+                        heroes = persistentListOf(spaceHero),
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `present - space is invited - no room info`() = runTest {
+        val spaceHero = aMatrixUser()
+        val spaceRoom = aSpaceRoom(
+            childrenCount = 3,
+            heroes = listOf(spaceHero),
+        )
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.failure(Exception("Error"))
+            },
+            spaceService = FakeSpaceService(
+                spaceRoomListResult = {
+                    FakeSpaceRoomList(
+                        initialSpaceFlowValue = spaceRoom,
+                    )
+                },
+            ),
+        ).apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.ofNullable(null))
+            }
+        }
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                // Space details are provided
+                assertThat((state.contentState as ContentState.Loaded).details).isEqualTo(
+                    LoadedDetails.Space(
+                        childrenCount = 3,
+                        heroes = persistentListOf(spaceHero),
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `present - space is invited - no room info - space room state set`() = runTest {
+        val spaceRoom = aSpaceRoom(
+            state = CurrentUserMembership.INVITED,
+        )
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.failure(Exception("Error"))
+            },
+            spaceService = FakeSpaceService(
+                spaceRoomListResult = {
+                    FakeSpaceRoomList(
+                        initialSpaceFlowValue = spaceRoom,
+                    )
+                },
+            ),
+        ).apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.ofNullable(null))
+            }
+        }
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient
+        )
+        presenter.test {
+            awaitItem().also { state ->
+                // Space details are provided
+                assertThat(state.contentState).isInstanceOf(ContentState.Loading::class.java)
             }
         }
     }
