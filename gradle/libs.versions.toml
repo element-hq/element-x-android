@@ -219,7 +219,7 @@ inject = "javax.inject:javax.inject:1"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.15.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.16.0-rc.4"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
