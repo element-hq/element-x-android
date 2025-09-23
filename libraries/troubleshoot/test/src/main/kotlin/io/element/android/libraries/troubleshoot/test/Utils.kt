@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:Suppress("UnusedImports")
+
 package io.element.android.libraries.troubleshoot.test
 
 import app.cash.turbine.TurbineTestContext

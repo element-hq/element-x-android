@@ -19,3 +19,13 @@ dependencies {
     implementation(libs.test.core)
     implementation(libs.test.turbine)
 }
+
+ktlint {
+    filter {
+        exclude { element ->
+            val path = element.file.path
+            // Exclude this file, that ktlint cannot parse.
+            path.contains("libraries/troubleshoot/test/src/main/kotlin/io/element/android/libraries/troubleshoot/test/Utils.kt")
+        }
+    }
+}
