@@ -60,13 +60,9 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(composerState = aMessageComposerState(showAttachmentSourcePicker = true)),
             aMessagesState(userEventPermissions = aUserEventPermissions(canSendMessage = false)),
             aMessagesState(showReinvitePrompt = true),
-            aMessagesState(roomName = null),
             aMessagesState(composerState = aMessageComposerState(showTextFormatting = true)),
             aMessagesState(
                 voiceMessageComposerState = aVoiceMessageComposerState(showPermissionRationaleDialog = true),
-            ),
-            aMessagesState(
-                roomCallState = anOngoingCallState(),
             ),
             aMessagesState(
                 voiceMessageComposerState = aVoiceMessageComposerState(
@@ -75,16 +71,11 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 ),
             ),
             aMessagesState(
-                roomCallState = aStandByCallState(canStartCall = false),
-            ),
-            aMessagesState(
                 pinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(
                     knownPinnedMessagesCount = 4,
                     currentPinnedMessageIndex = 0,
                 ),
             ),
-            aMessagesState(roomName = "A DM with a very looong name", dmUserVerificationState = IdentityState.Verified),
-            aMessagesState(roomName = "A DM with a very looong name", dmUserVerificationState = IdentityState.VerificationViolation),
             aMessagesState(successorRoom = SuccessorRoom(RoomId("!id:domain"), null)),
             aMessagesState(timelineState = aTimelineState(
                 timelineMode = Timeline.Mode.Thread(threadRootId = ThreadId("\$a-thread-id")),
