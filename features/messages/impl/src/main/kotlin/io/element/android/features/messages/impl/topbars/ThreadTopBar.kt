@@ -26,6 +26,7 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -36,7 +37,6 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,52 +92,43 @@ internal fun ThreadTopBar(
 @PreviewsDayNight
 @Composable
 internal fun ThreadTopBarPreview() = ElementPreview {
-    val name = "Room name"
-    val initialsAvatarData = AvatarData(
-        id = "id",
-        name = name,
-        url = null,
-        size = AvatarSize.TimelineRoom,
+    @Composable
+    fun AThreadTopBar(
+        roomName: String? = "Room name",
+        roomAvatarData: AvatarData = anAvatarData(
+            name = "Room name",
+            size = AvatarSize.TimelineRoom,
+        ),
+        isTombstoned: Boolean = false,
+        heroes: List<AvatarData> = emptyList(),
+    ) = ThreadTopBar(
+        roomName = roomName,
+        roomAvatarData = roomAvatarData,
+        isTombstoned = isTombstoned,
+        heroes = heroes.toImmutableList(),
+        onBackClick = {},
     )
     Column {
-        ThreadTopBar(
-            roomName = name,
-            roomAvatarData = initialsAvatarData,
-            heroes = persistentListOf(),
-            isTombstoned = false,
-            onBackClick = {},
-        )
+        AThreadTopBar()
         HorizontalDivider()
-        ThreadTopBar(
-            roomName = name,
-            roomAvatarData = initialsAvatarData,
+        AThreadTopBar(
             heroes = aMatrixUserList().map { it.getAvatarData(AvatarSize.TimelineRoom) }.toImmutableList(),
-            isTombstoned = false,
-            onBackClick = {},
         )
         HorizontalDivider()
-        ThreadTopBar(
+        AThreadTopBar(
             roomName = null,
-            roomAvatarData = initialsAvatarData,
-            heroes = persistentListOf(),
-            isTombstoned = false,
-            onBackClick = {},
         )
         HorizontalDivider()
-        ThreadTopBar(
-            roomName = name,
-            roomAvatarData = initialsAvatarData.copy(url = "https://some-avatar.jpg"),
-            heroes = persistentListOf(),
-            isTombstoned = false,
-            onBackClick = {},
+        AThreadTopBar(
+            roomAvatarData = anAvatarData(
+                name = "Room name",
+                url = "https://some-avatar.jpg",
+                size = AvatarSize.TimelineRoom,
+            ),
         )
         HorizontalDivider()
-        ThreadTopBar(
-            roomName = name,
-            roomAvatarData = initialsAvatarData,
-            heroes = persistentListOf(),
+        AThreadTopBar(
             isTombstoned = true,
-            onBackClick = {},
         )
     }
 }

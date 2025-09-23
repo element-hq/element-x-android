@@ -37,6 +37,7 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -158,10 +159,8 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
     @Composable
     fun AMessagesViewTopBar(
         roomName: String? = "Room name",
-        roomAvatar: AvatarData = AvatarData(
-            id = "id",
+        roomAvatar: AvatarData = anAvatarData(
             name = "Room name",
-            url = null,
             size = AvatarSize.TimelineRoom,
         ),
         isTombstoned: Boolean = false,
@@ -194,12 +193,10 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         HorizontalDivider()
         AMessagesViewTopBar(
             roomName = "A DM with a very very very long name",
-            roomAvatar = AvatarData(
-                id = "id",
-                name = "Room name",
-                url = null,
+            roomAvatar = anAvatarData(
                 size = AvatarSize.TimelineRoom,
-            ).copy(url = "https://some-avatar.jpg"),
+                url = "https://some-avatar.jpg"
+            ),
             roomCallState = aStandByCallState(canStartCall = false),
             dmUserIdentityState = IdentityState.Verified
         )
