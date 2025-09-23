@@ -7,12 +7,11 @@
 
 package io.element.android.libraries.push.impl.troubleshoot
 
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.push.test.FakeGetCurrentPushProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
+import io.element.android.libraries.troubleshoot.test.runAndTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -23,10 +22,7 @@ class CurrentPushProviderTestTest {
             getCurrentPushProvider = FakeGetCurrentPushProvider("foo"),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
@@ -41,10 +37,7 @@ class CurrentPushProviderTestTest {
             getCurrentPushProvider = FakeGetCurrentPushProvider(null),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()

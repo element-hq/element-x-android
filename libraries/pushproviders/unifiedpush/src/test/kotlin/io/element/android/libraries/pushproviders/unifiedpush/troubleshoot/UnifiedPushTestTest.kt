@@ -7,13 +7,13 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.libraries.troubleshoot.api.test.TestFilterData
 import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleshootNavigator
+import io.element.android.libraries.troubleshoot.test.runAndTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
@@ -31,10 +31,7 @@ class UnifiedPushTestTest {
             openDistributorWebPageAction = FakeOpenDistributorWebPageAction(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
@@ -58,16 +55,13 @@ class UnifiedPushTestTest {
             ),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true))
             // Quick fix
-            launch {
+            backgroundScope.launch {
                 sut.quickFix(this, FakeNotificationTroubleshootNavigator())
                 sut.run(this)
             }
@@ -92,10 +86,7 @@ class UnifiedPushTestTest {
             ),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()

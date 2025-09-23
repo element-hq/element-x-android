@@ -15,4 +15,7 @@ android {
 dependencies {
     implementation(projects.libraries.troubleshoot.api)
     implementation(projects.tests.testutils)
+    implementation(libs.coroutines.test)
+    implementation(libs.test.core)
+    implementation(libs.test.turbine)
 }

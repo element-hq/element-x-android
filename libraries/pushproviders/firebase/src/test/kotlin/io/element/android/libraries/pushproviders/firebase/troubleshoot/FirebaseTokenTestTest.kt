@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.pushproviders.firebase.troubleshoot
 
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.pushproviders.firebase.FakeFirebaseTroubleshooter
 import io.element.android.libraries.pushproviders.firebase.FirebaseConfig
@@ -15,8 +14,8 @@ import io.element.android.libraries.pushproviders.firebase.InMemoryFirebaseStore
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.libraries.troubleshoot.api.test.TestFilterData
 import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleshootNavigator
+import io.element.android.libraries.troubleshoot.test.runAndTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -28,10 +27,7 @@ class FirebaseTokenTestTest {
             firebaseTroubleshooter = FakeFirebaseTroubleshooter(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
@@ -54,10 +50,7 @@ class FirebaseTokenTestTest {
             ),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
@@ -82,10 +75,7 @@ class FirebaseTokenTestTest {
             ),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true))

@@ -8,12 +8,12 @@
 package io.element.android.libraries.permissions.impl.troubleshoot
 
 import android.os.Build
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.permissions.impl.action.FakePermissionActions
 import io.element.android.libraries.permissions.test.FakePermissionStateProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleshootNavigator
+import io.element.android.libraries.troubleshoot.test.runAndTestState
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
@@ -29,10 +29,7 @@ class NotificationTroubleshootCheckPermissionTestTest {
             permissionActions = FakePermissionActions(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
@@ -48,10 +45,7 @@ class NotificationTroubleshootCheckPermissionTestTest {
             permissionActions = FakePermissionActions(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
@@ -75,16 +69,13 @@ class NotificationTroubleshootCheckPermissionTestTest {
             permissionActions = actions,
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true))
             // Quick fix
-            launch {
+            backgroundScope.launch {
                 sut.quickFix(this, FakeNotificationTroubleshootNavigator())
                 // Run the test again (IRL it will be done thanks to the resuming of the application)
                 sut.run(this)
@@ -110,10 +101,7 @@ class NotificationTroubleshootCheckPermissionTestTest {
             permissionActions = actions,
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true))

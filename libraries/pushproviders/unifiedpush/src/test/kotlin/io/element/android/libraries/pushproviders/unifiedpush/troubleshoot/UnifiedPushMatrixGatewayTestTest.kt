@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.test.aCurrentUserPushConfig
@@ -18,8 +17,8 @@ import io.element.android.libraries.pushproviders.unifiedpush.matrixDiscoveryRes
 import io.element.android.libraries.pushproviders.unifiedpush.network.DiscoveryResponse
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.libraries.troubleshoot.api.test.TestFilterData
+import io.element.android.libraries.troubleshoot.test.runAndTestState
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -31,10 +30,7 @@ class UnifiedPushMatrixGatewayTestTest {
             currentUserPushConfig = aCurrentUserPushConfig(),
             discoveryResponse = matrixDiscoveryResponse,
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
@@ -48,10 +44,7 @@ class UnifiedPushMatrixGatewayTestTest {
             currentUserPushConfig = null,
             discoveryResponse = matrixDiscoveryResponse,
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
@@ -65,10 +58,7 @@ class UnifiedPushMatrixGatewayTestTest {
             currentUserPushConfig = aCurrentUserPushConfig(),
             discoveryResponse = invalidDiscoveryResponse,
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
@@ -85,10 +75,7 @@ class UnifiedPushMatrixGatewayTestTest {
             currentUserPushConfig = aCurrentUserPushConfig(),
             discoveryResponse = { error("Network error") },
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
