@@ -152,7 +152,7 @@ class CallScreenPresenter(
                 delay(10.seconds)
 
                 if (!isWidgetLoaded) {
-                    Timber.w("The call took too long to be joined. Displaying an error before exiting.")
+                    Timber.w("The call took too long to load. Displaying an error before exiting.")
 
                     // This will display a simple 'Sorry, an error occurred' dialog and force the user to exit the call
                     webViewError = ""
