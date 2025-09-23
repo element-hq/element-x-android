@@ -843,7 +843,7 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                                 senderProfile = ProfileTimelineDetails.Ready(
                                     displayName = "Alice",
                                     avatarUrl = null,
-                                    displayNameAmbiguous = true,
+                                    displayNameAmbiguous = false,
                                 ),
                                 timestamp = 0L,
                             )
