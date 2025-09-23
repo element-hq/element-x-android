@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.troubleshoot.impl
 
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import kotlinx.coroutines.CoroutineScope
@@ -50,7 +51,10 @@ class FakeNotificationTroubleshootTest(
         }
     }
 
-    override suspend fun quickFix(coroutineScope: CoroutineScope) {
+    override suspend fun quickFix(
+        coroutineScope: CoroutineScope,
+        navigator: NotificationTroubleshootNavigator,
+    ) {
         updateState(NotificationTroubleshootTestState.Status.InProgress)
         quickFixAction()?.let {
             _state.emit(it)

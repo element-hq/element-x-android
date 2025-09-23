@@ -13,6 +13,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.pushproviders.unifiedpush.R
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushDistributorProvider
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
@@ -57,14 +58,17 @@ class UnifiedPushTest(
         } else {
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_unified_push_failure),
-                status = NotificationTroubleshootTestState.Status.Failure(true)
+                status = NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true)
             )
         }
     }
 
     override suspend fun reset() = delegate.reset()
 
-    override suspend fun quickFix(coroutineScope: CoroutineScope) {
+    override suspend fun quickFix(
+        coroutineScope: CoroutineScope,
+        navigator: NotificationTroubleshootNavigator,
+    ) {
         openDistributorWebPageAction.execute()
     }
 }

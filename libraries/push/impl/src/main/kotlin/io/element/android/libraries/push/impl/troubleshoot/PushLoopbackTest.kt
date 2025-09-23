@@ -13,6 +13,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
@@ -56,7 +57,7 @@ class PushLoopbackTest(
             val hasQuickFix = pushService.getCurrentPushProvider()?.canRotateToken() == true
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_1),
-                status = NotificationTroubleshootTestState.Status.Failure(hasQuickFix)
+                status = NotificationTroubleshootTestState.Status.Failure(hasQuickFix = hasQuickFix)
             )
             job.cancel()
             return
@@ -64,7 +65,7 @@ class PushLoopbackTest(
             Timber.e(e, "Failed to test push")
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_2, e.message),
-                status = NotificationTroubleshootTestState.Status.Failure(false)
+                status = NotificationTroubleshootTestState.Status.Failure()
             )
             job.cancel()
             return
@@ -72,7 +73,7 @@ class PushLoopbackTest(
         if (!testPushResult) {
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_3),
-                status = NotificationTroubleshootTestState.Status.Failure(false)
+                status = NotificationTroubleshootTestState.Status.Failure()
             )
             job.cancel()
             return
@@ -93,13 +94,16 @@ class PushLoopbackTest(
                 job.cancel()
                 delegate.updateState(
                     description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_4),
-                    status = NotificationTroubleshootTestState.Status.Failure(false)
+                    status = NotificationTroubleshootTestState.Status.Failure()
                 )
             }
         )
     }
 
-    override suspend fun quickFix(coroutineScope: CoroutineScope) {
+    override suspend fun quickFix(
+        coroutineScope: CoroutineScope,
+        navigator: NotificationTroubleshootNavigator,
+    ) {
         delegate.start()
         pushService.getCurrentPushProvider()?.rotateToken()
         run(coroutineScope)
