@@ -79,7 +79,7 @@ class CallScreenPresenter(
         val urlState = remember { mutableStateOf<AsyncData<String>>(AsyncData.Uninitialized) }
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
-        var isJoinedCall by rememberSaveable { mutableStateOf(false) }
+        var isWidgetLoaded by rememberSaveable { mutableStateOf(false) }
         var ignoreWebViewError by rememberSaveable { mutableStateOf(false) }
         var webViewError by remember { mutableStateOf<String?>(null) }
         val languageTag = languageTagProvider.provideLanguageTag()
@@ -139,8 +139,8 @@ class CallScreenPresenter(
                         if (parsedMessage?.direction == WidgetMessage.Direction.FromWidget) {
                             if (parsedMessage.action == WidgetMessage.Action.Close) {
                                 close(callWidgetDriver.value, navigator)
-                            } else if (parsedMessage.action == WidgetMessage.Action.Join) {
-                                isJoinedCall = true
+                            } else if (parsedMessage.action == WidgetMessage.Action.ContentLoaded) {
+                                isWidgetLoaded = true
                             }
                         }
                     }
@@ -151,8 +151,8 @@ class CallScreenPresenter(
                 // Wait for the call to be joined, if it takes too long, we display an error
                 delay(10.seconds)
 
-                if (!isJoinedCall) {
-                    Timber.w("The call took too long to be joined. Displaying an error before exiting.")
+                if (!isWidgetLoaded) {
+                    Timber.w("The call took too long to load. Displaying an error before exiting.")
 
                     // This will display a simple 'Sorry, an error occurred' dialog and force the user to exit the call
                     webViewError = ""
@@ -165,10 +165,10 @@ class CallScreenPresenter(
                 is CallScreenEvents.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
                     val interceptor = messageInterceptor.value
-                    if (widgetId != null && interceptor != null && isJoinedCall) {
+                    if (widgetId != null && interceptor != null && isWidgetLoaded) {
                         // If the call was joined, we need to hang up first. Then the UI will be dismissed automatically.
                         sendHangupMessage(widgetId, interceptor)
-                        isJoinedCall = false
+                        isWidgetLoaded = false
 
                         coroutineScope.launch {
                             // Wait for a couple of seconds to receive the hangup message
@@ -198,7 +198,7 @@ class CallScreenPresenter(
             urlState = urlState.value,
             webViewError = webViewError,
             userAgent = userAgent,
-            isCallActive = isJoinedCall,
+            isCallActive = isWidgetLoaded,
             isInWidgetMode = isInWidgetMode,
             eventSink = { handleEvents(it) },
         )
