@@ -11,6 +11,7 @@ import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.NotificationTroubleshoot
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.push.api.GetCurrentPushProvider
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.libraries.troubleshoot.api.test.TestFilterData
@@ -90,8 +91,12 @@ class TroubleshootTestSuite(
         )
     }
 
-    suspend fun quickFix(testIndex: Int, coroutineScope: CoroutineScope) {
-        tests[testIndex].quickFix(coroutineScope)
+    suspend fun quickFix(
+        testIndex: Int,
+        coroutineScope: CoroutineScope,
+        navigator: NotificationTroubleshootNavigator,
+    ) {
+        tests[testIndex].quickFix(coroutineScope, navigator)
     }
 }
 
@@ -104,7 +109,7 @@ fun List<NotificationTroubleshootTestState>.computeMainState(): AsyncAction<Unit
         else -> {
             if (any { it.status is NotificationTroubleshootTestState.Status.WaitingForUser }) {
                 AsyncAction.ConfirmingNoParams
-            } else if (any { it.status is NotificationTroubleshootTestState.Status.Failure }) {
+            } else if (any { it.status.let { status -> status is NotificationTroubleshootTestState.Status.Failure && status.isCritical } }) {
                 AsyncAction.Failure(Exception("Some tests failed"))
             } else {
                 AsyncAction.Success(Unit)

@@ -13,6 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.ftue.impl.state.DefaultFtueService
 import io.element.android.features.ftue.impl.state.FtueStep
+import io.element.android.features.ftue.impl.state.InternalFtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -26,8 +27,6 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.noop.NoopAnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -69,9 +68,11 @@ class DefaultFtueServiceTest {
         analyticsService.setDidAskUserConsent()
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
-        service.updateState()
-
-        assertThat(service.state.value).isEqualTo(FtueState.Complete)
+        service.updateFtueStep()
+        service.state.test {
+            assertThat(awaitItem()).isEqualTo(FtueState.Unknown)
+            assertThat(awaitItem()).isEqualTo(FtueState.Complete)
+        }
     }
 
     @Test
@@ -90,9 +91,11 @@ class DefaultFtueServiceTest {
         sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
-        service.updateState()
-
-        assertThat(service.state.value).isEqualTo(FtueState.Complete)
+        service.updateFtueStep()
+        service.state.test {
+            assertThat(awaitItem()).isEqualTo(FtueState.Unknown)
+            assertThat(awaitItem()).isEqualTo(FtueState.Complete)
+        }
     }
 
     @Test
@@ -109,35 +112,30 @@ class DefaultFtueServiceTest {
             permissionStateProvider = permissionStateProvider,
             lockScreenService = lockScreenService,
         )
-        val steps = mutableListOf<FtueStep?>()
 
-        // Session verification
-        steps.add(service.getNextStep(steps.lastOrNull()))
-        sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.NotVerified)
-
-        // Notifications opt in
-        steps.add(service.getNextStep(steps.lastOrNull()))
-        permissionStateProvider.setPermissionGranted()
-
-        // Entering PIN code
-        steps.add(service.getNextStep(steps.lastOrNull()))
-        lockScreenService.setIsPinSetup(true)
-
-        // Analytics opt in
-        steps.add(service.getNextStep(steps.lastOrNull()))
-        analyticsService.setDidAskUserConsent()
-
-        // Final step (null)
-        steps.add(service.getNextStep(steps.lastOrNull()))
-
-        assertThat(steps).containsExactly(
-            FtueStep.SessionVerification,
-            FtueStep.NotificationsOptIn,
-            FtueStep.LockscreenSetup,
-            FtueStep.AnalyticsOptIn,
-            // Final state
-            null,
-        )
+        service.ftueStepStateFlow.test {
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Unknown)
+            // Session verification
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.SessionVerification))
+            sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
+            // User completes verification
+            service.onUserCompletedSessionVerification()
+            // Notifications opt in
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.NotificationsOptIn))
+            permissionStateProvider.setPermissionGranted()
+            // Simulate event from NotificationsOptInNode.Callback.onNotificationsOptInFinished
+            service.updateFtueStep()
+            // Entering PIN code
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.LockscreenSetup))
+            lockScreenService.setIsPinSetup(true)
+            // Simulate event from LockScreenEntryPoint.Callback.onSetupDone()
+            service.updateFtueStep()
+            // Analytics opt in
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.AnalyticsOptIn))
+            analyticsService.setDidAskUserConsent()
+            // Final step
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Complete)
+        }
     }
 
     @Test
@@ -158,10 +156,13 @@ class DefaultFtueServiceTest {
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
 
-        assertThat(service.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
-
-        analyticsService.setDidAskUserConsent()
-        assertThat(service.getNextStep(null)).isNull()
+        service.ftueStepStateFlow.test {
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Unknown)
+            // Analytics opt in
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.AnalyticsOptIn))
+            analyticsService.setDidAskUserConsent()
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Complete)
+        }
     }
 
     @Test
@@ -180,51 +181,13 @@ class DefaultFtueServiceTest {
         sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
         lockScreenService.setIsPinSetup(true)
 
-        assertThat(service.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
-
-        analyticsService.setDidAskUserConsent()
-        assertThat(service.getNextStep(null)).isNull()
-    }
-
-    @Test
-    fun `reset do the expected actions S`() = runTest {
-        val resetAnalyticsLambda = lambdaRecorder<Unit> { }
-        val analyticsService = FakeAnalyticsService(
-            resetLambda = resetAnalyticsLambda
-        )
-        val resetPermissionLambda = lambdaRecorder<String, Unit> { }
-        val permissionStateProvider = FakePermissionStateProvider(
-            resetPermissionLambda = resetPermissionLambda
-        )
-        val service = createDefaultFtueService(
-            sdkIntVersion = Build.VERSION_CODES.S,
-            permissionStateProvider = permissionStateProvider,
-            analyticsService = analyticsService,
-        )
-        service.reset()
-        resetAnalyticsLambda.assertions().isCalledOnce()
-        resetPermissionLambda.assertions().isNeverCalled()
-    }
-
-    @Test
-    fun `reset do the expected actions TIRAMISU`() = runTest {
-        val resetLambda = lambdaRecorder<Unit> { }
-        val analyticsService = FakeAnalyticsService(
-            resetLambda = resetLambda
-        )
-        val resetPermissionLambda = lambdaRecorder<String, Unit> { }
-        val permissionStateProvider = FakePermissionStateProvider(
-            resetPermissionLambda = resetPermissionLambda
-        )
-        val service = createDefaultFtueService(
-            sdkIntVersion = Build.VERSION_CODES.TIRAMISU,
-            permissionStateProvider = permissionStateProvider,
-            analyticsService = analyticsService,
-        )
-        service.reset()
-        resetLambda.assertions().isCalledOnce()
-        resetPermissionLambda.assertions().isCalledOnce()
-            .with(value("android.permission.POST_NOTIFICATIONS"))
+        service.ftueStepStateFlow.test {
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Unknown)
+            // Analytics opt in
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.AnalyticsOptIn))
+            analyticsService.setDidAskUserConsent()
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Complete)
+        }
     }
 }
 

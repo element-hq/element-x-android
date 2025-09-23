@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.asStateFlow
 class FakeAnalyticsService(
     isEnabled: Boolean = false,
     didAskUserConsent: Boolean = false,
-    private val resetLambda: () -> Unit = {},
 ) : AnalyticsService {
     private val isEnabledFlow = MutableStateFlow(isEnabled)
     override val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
@@ -64,10 +63,5 @@ class FakeAnalyticsService(
 
     override fun updateSuperProperties(updatedProperties: SuperProperties) {
         // No op
-    }
-
-    override suspend fun reset() {
-        didAskUserConsentFlow.value = false
-        resetLambda()
     }
 }

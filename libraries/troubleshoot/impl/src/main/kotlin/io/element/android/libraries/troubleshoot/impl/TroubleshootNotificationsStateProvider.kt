@@ -31,8 +31,12 @@ open class TroubleshootNotificationsStateProvider : PreviewParameterProvider<Tro
             aTroubleshootNotificationsState(
                 listOf(
                     aTroubleshootTestStateSuccess(),
+                    aTroubleshootTestStateFailure(
+                        isCritical = false,
+                        hasQuickFix = true,
+                        quickFixButtonString = "Custom quick fix",
+                    ),
                     aTroubleshootTestStateInProgress(),
-                    aTroubleshootTestStateIdle(),
                 )
             ),
             aTroubleshootNotificationsState(
@@ -106,5 +110,14 @@ fun aTroubleshootTestStateWaitingForUser() =
 fun aTroubleshootTestStateSuccess() =
     aTroubleshootTestState(status = NotificationTroubleshootTestState.Status.Success)
 
-fun aTroubleshootTestStateFailure(hasQuickFix: Boolean) =
-    aTroubleshootTestState(status = NotificationTroubleshootTestState.Status.Failure(hasQuickFix = hasQuickFix))
+fun aTroubleshootTestStateFailure(
+    hasQuickFix: Boolean = false,
+    isCritical: Boolean = true,
+    quickFixButtonString: String? = null,
+) = aTroubleshootTestState(
+    status = NotificationTroubleshootTestState.Status.Failure(
+        hasQuickFix = hasQuickFix,
+        isCritical = isCritical,
+        quickFixButtonString = quickFixButtonString,
+    )
+)

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Create a new backup password"</string>
+  <string name="screen_identity_confirmation_subtitle">"Confirm this device to set up secure messaging."</string>
+  <string name="screen_identity_confirmation_title">"Confirm it\'s you"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Use backup password"</string>
+  <string name="screen_identity_confirmed_title">"Device confirmed"</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Now you can trust this user when sending or receiving messages."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Enter backup password"</string>
+  <string name="screen_session_verification_request_success_title">"Device confirmed"</string>
+  <string name="screen_session_verification_use_another_device_title">"Open the app on another confirmed device"</string>
+  <string name="screen_session_verification_user_responder_subtitle">"For extra security, another user wants to verify you. You\'ll be shown a set of emojis to compare."</string>
+</resources>
