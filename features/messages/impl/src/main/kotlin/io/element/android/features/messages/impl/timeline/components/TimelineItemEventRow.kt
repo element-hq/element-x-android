@@ -305,13 +305,12 @@ private fun ThreadSummaryView(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bubbleShape = MessageEventBubbleDefaults.threadInfoShape
     BoxWithConstraints(modifier = modifier) {
         Row(
             modifier = Modifier
                 .then(if (!isOutgoing) Modifier.padding(start = 16.dp) else Modifier)
                 .graphicsLayer {
-                    shape = bubbleShape
+                    shape = MessageEventBubbleDefaults.threadInfoShape
                     clip = true
                 }
                 .background(MessageEventBubbleDefaults.backgroundBubbleColor(isOutgoing))
@@ -337,7 +336,7 @@ private fun ThreadSummaryView(
             threadSummary.latestEvent.dataOrNull()?.let { latestEvent ->
                 val avatarData = AvatarData(
                     id = latestEvent.senderId.value,
-                    name = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId),
+                    name = latestEvent.senderProfile.getDisplayName(),
                     url = latestEvent.senderProfile.getAvatarUrl(),
                     size = AvatarSize.TimelineThreadLatestEventSender,
                 )
@@ -349,7 +348,7 @@ private fun ThreadSummaryView(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = latestEvent.senderProfile.getDisplayName() ?: latestEvent.senderId.value,
+                    text = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId),
                     style = ElementTheme.typography.fontBodySmMedium,
                     color = ElementTheme.colors.textSecondary,
                 )
