@@ -14,7 +14,6 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
-import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData

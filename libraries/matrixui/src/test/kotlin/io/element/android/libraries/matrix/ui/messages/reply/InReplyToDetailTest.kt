@@ -8,7 +8,6 @@
 package io.element.android.libraries.matrix.ui.messages.reply
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
