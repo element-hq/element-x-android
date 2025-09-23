@@ -310,7 +310,7 @@ private fun ThreadSummaryView(
             modifier = Modifier
                 .then(if (!isOutgoing) Modifier.padding(start = 16.dp) else Modifier)
                 .graphicsLayer {
-                    shape = MessageEventBubbleDefaults.threadInfoShape
+                    shape = RoundedCornerShape(8.dp)
                     clip = true
                 }
                 .background(MessageEventBubbleDefaults.backgroundBubbleColor(isOutgoing))
@@ -320,6 +320,7 @@ private fun ThreadSummaryView(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
+                modifier = Modifier.size(20.dp),
                 imageVector = CompoundIcons.ThreadsSolid(),
                 contentDescription = null,
                 tint = ElementTheme.colors.iconSecondary,
