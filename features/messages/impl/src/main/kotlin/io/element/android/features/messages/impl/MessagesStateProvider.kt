@@ -36,7 +36,6 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
-import io.element.android.features.roomcall.api.anOngoingCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
@@ -77,10 +76,12 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 ),
             ),
             aMessagesState(successorRoom = SuccessorRoom(RoomId("!id:domain"), null)),
-            aMessagesState(timelineState = aTimelineState(
-                timelineMode = Timeline.Mode.Thread(threadRootId = ThreadId("\$a-thread-id")),
-                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
-            )),
+            aMessagesState(
+                timelineState = aTimelineState(
+                    timelineMode = Timeline.Mode.Thread(threadRootId = ThreadId("\$a-thread-id")),
+                    timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+                )
+            ),
         )
 }
 
