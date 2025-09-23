@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,12 +101,12 @@ internal fun ThreadTopBarPreview() = ElementPreview {
             size = AvatarSize.TimelineRoom,
         ),
         isTombstoned: Boolean = false,
-        heroes: List<AvatarData> = emptyList(),
+        heroes: ImmutableList<AvatarData> = persistentListOf(),
     ) = ThreadTopBar(
         roomName = roomName,
         roomAvatarData = roomAvatarData,
         isTombstoned = isTombstoned,
-        heroes = heroes.toImmutableList(),
+        heroes = heroes,
         onBackClick = {},
     )
     Column {
