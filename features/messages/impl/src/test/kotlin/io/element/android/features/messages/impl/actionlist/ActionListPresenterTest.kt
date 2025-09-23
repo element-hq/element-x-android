@@ -198,7 +198,7 @@ class ActionListPresenterTest {
             val messageEvent = aMessageEvent(
                 isMine = false,
                 isEditable = false,
-                threadInfo = TimelineItemThreadInfo(threadRootId = A_THREAD_ID, latestEventText = null, threadSummary = null),
+                threadInfo = TimelineItemThreadInfo.ThreadResponse(threadRootId = A_THREAD_ID),
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = A_MESSAGE)
             )
             initialState.eventSink.invoke(
@@ -432,7 +432,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                threadInfo = TimelineItemThreadInfo(threadRootId = A_THREAD_ID, latestEventText = null, threadSummary = null),
+                threadInfo = TimelineItemThreadInfo.ThreadResponse(threadRootId = A_THREAD_ID),
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = A_MESSAGE)
             )
             initialState.eventSink.invoke(
@@ -1264,7 +1264,7 @@ class ActionListPresenterTest {
                 content = aTimelineItemVoiceContent(
                     caption = null,
                 ),
-                threadInfo = TimelineItemThreadInfo(threadRootId = A_THREAD_ID, latestEventText = null, threadSummary = null)
+                threadInfo = TimelineItemThreadInfo.ThreadResponse(threadRootId = A_THREAD_ID)
             )
             initialState.eventSink.invoke(
                 ActionListEvents.ComputeForMessage(
@@ -1368,7 +1368,7 @@ class ActionListPresenterTest {
                 content = aTimelineItemVoiceContent(
                     caption = null,
                 ),
-                threadInfo = TimelineItemThreadInfo(threadRootId = A_THREAD_ID, latestEventText = null, threadSummary = null),
+                threadInfo = TimelineItemThreadInfo.ThreadResponse(threadRootId = A_THREAD_ID),
             )
 
             assertThat(messageEvent.isRemote).isTrue()

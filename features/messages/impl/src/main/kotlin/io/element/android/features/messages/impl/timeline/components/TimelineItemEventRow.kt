@@ -95,18 +95,17 @@ import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -266,24 +265,22 @@ fun TimelineItemEventRow(
             )
         }
 
-        if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread) {
-            event.threadInfo.threadSummary?.let { threadSummary ->
-                ThreadSummaryView(
-                    modifier = if (event.isMine) {
-                        Modifier.align(Alignment.End).padding(end = 16.dp)
-                    } else {
-                        if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
-                    }.padding(top = 2.dp),
-                    threadSummary = threadSummary,
-                    latestEventText = event.threadInfo.latestEventText,
-                    isOutgoing = event.isMine,
-                    onClick = {
-                        event.eventId?.let {
-                            eventSink(TimelineEvents.OpenThread(it.toThreadId(), null))
-                        }
+        if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread && event.threadInfo is TimelineItemThreadInfo.ThreadRoot) {
+            ThreadSummaryView(
+                modifier = if (event.isMine) {
+                    Modifier.align(Alignment.End).padding(end = 16.dp)
+                } else {
+                    if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
+                }.padding(top = 2.dp),
+                threadSummary = event.threadInfo.summary,
+                latestEventText = event.threadInfo.latestEventText,
+                isOutgoing = event.isMine,
+                onClick = {
+                    event.eventId?.let {
+                        eventSink(TimelineEvents.OpenThread(it.toThreadId(), null))
                     }
-                )
-            }
+                }
+            )
         }
 
         // Read receipts / Send state
@@ -308,7 +305,7 @@ private fun ThreadSummaryView(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bubbleShape = MessageEventBubbleDefaults.shape(false, TimelineItemGroupPosition.None, isOutgoing)
+    val bubbleShape = MessageEventBubbleDefaults.threadInfoShape
     BoxWithConstraints(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -340,7 +337,7 @@ private fun ThreadSummaryView(
             threadSummary.latestEvent.dataOrNull()?.let { latestEvent ->
                 val avatarData = AvatarData(
                     id = latestEvent.senderId.value,
-                    name = latestEvent.senderProfile.getDisplayName(),
+                    name = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId),
                     url = latestEvent.senderProfile.getAvatarUrl(),
                     size = AvatarSize.TimelineThreadLatestEventSender,
                 )
@@ -779,7 +776,7 @@ private fun MessageEventBubbleContent(
         else -> ContentPadding.Textual
     }
     CommonLayout(
-        showThreadDecoration = timelineMode !is Timeline.Mode.Thread && event.threadInfo.threadRootId != null,
+        showThreadDecoration = timelineMode !is Timeline.Mode.Thread && event.threadInfo is TimelineItemThreadInfo.ThreadResponse,
         timestampPosition = timestampPosition,
         paddingBehaviour = paddingBehaviour,
         inReplyToDetails = event.inReplyTo,
@@ -831,17 +828,16 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                             " hopefully can be manually adjusted to test different behaviors."
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
-                    threadInfo = TimelineItemThreadInfo(
-                        threadRootId = ThreadId("\$thread-root-id"),
+                    threadInfo = TimelineItemThreadInfo.ThreadRoot(
                         latestEventText = "This is the latest message in the thread",
-                        threadSummary = ThreadSummary(AsyncData.Success(
+                        summary = ThreadSummary(AsyncData.Success(
                             EmbeddedEventInfo(
                                 eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
                                 content = MessageContent(
                                     body = "This is the latest message in the thread",
                                     inReplyTo = null,
                                     isEdited = false,
-                                    threadInfo = EventThreadInfo(null, null),
+                                    threadInfo = null,
                                     type = TextMessageType("This is the latest message in the thread", null)
                                 ),
                                 senderId = UserId("@user:id"),
@@ -874,7 +870,7 @@ internal fun ThreadSummaryViewPreview() {
                         body = body,
                         inReplyTo = null,
                         isEdited = false,
-                        threadInfo = EventThreadInfo(null, null),
+                        threadInfo = null,
                         type = TextMessageType(body, null)
                     ),
                     senderId = UserId("@user:id"),

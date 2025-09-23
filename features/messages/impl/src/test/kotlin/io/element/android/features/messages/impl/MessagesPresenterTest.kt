@@ -1181,7 +1181,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(
                 action = TimelineItemAction.ReplyInThread,
-                event = aMessageEvent(threadInfo = TimelineItemThreadInfo(A_THREAD_ID, null, null))
+                event = aMessageEvent(threadInfo = TimelineItemThreadInfo.ThreadResponse(A_THREAD_ID))
             ))
             awaitItem()
             openThreadLambda.assertions().isCalledOnce().with(value(A_THREAD_ID), value(null))
@@ -1204,7 +1204,7 @@ class MessagesPresenterTest {
                 event = aMessageEvent(
                     // The event id will be used as the thread id instead
                     eventId = AN_EVENT_ID,
-                    threadInfo = TimelineItemThreadInfo(null, null, null),
+                    threadInfo = null,
                 )
             ))
             awaitItem()

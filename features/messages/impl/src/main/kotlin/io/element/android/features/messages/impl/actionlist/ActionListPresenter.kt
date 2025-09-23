@@ -25,6 +25,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailureFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
@@ -174,7 +175,7 @@ class DefaultActionListPresenter(
                     add(TimelineItemAction.ReplyInThread)
                     add(TimelineItemAction.Reply)
                 } else {
-                    if (!isThreadsEnabled && timelineItem.threadInfo.threadRootId != null) {
+                    if (!isThreadsEnabled && timelineItem.threadInfo is TimelineItemThreadInfo.ThreadResponse) {
                         // If threads are not enabled, we can reply in a thread if the item is already in the thread
                         add(TimelineItemAction.ReplyInThread)
                     } else {

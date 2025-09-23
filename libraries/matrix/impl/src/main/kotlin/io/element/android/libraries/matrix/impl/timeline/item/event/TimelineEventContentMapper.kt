@@ -89,10 +89,12 @@ class TimelineEventContentMapper(
                                     numberOfReplies = numberOfReplies,
                                 )
                             }
-                            val threadInfo = EventThreadInfo(
-                                threadRootId = it.content.threadRoot?.let(::ThreadId),
-                                threadSummary = threadSummary,
-                            )
+                            val threadRootId = it.content.threadRoot?.let(::ThreadId)
+                            val threadInfo = when {
+                                threadSummary != null -> EventThreadInfo.ThreadRoot(threadSummary)
+                                threadRootId != null -> EventThreadInfo.ThreadResponse(threadRootId)
+                                else -> null
+                            }
                             eventMessageMapper.map(kind, inReplyTo, threadInfo)
                         }
                         is MsgLikeKind.Redacted -> {

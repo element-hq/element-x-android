@@ -64,7 +64,7 @@ class TimelineItemContentFactory(
         sender: UserId,
         senderProfile: ProfileTimelineDetails,
     ): TimelineItemEventContent {
-        val isOutgoing = currentSessionIdHolder.isCurrentSession(sender)
+        val isOutgoing = currentSessionIdHolder.current == sender
         return when (itemContent) {
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)

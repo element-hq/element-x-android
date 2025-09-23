@@ -58,11 +58,7 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(
                     ),
                     inReplyTo = inReplyToDetails,
                     displayNameAmbiguous = displayNameAmbiguous,
-                    threadInfo = TimelineItemThreadInfo(
-                        threadRootId = ThreadId("\$thread-root-id"),
-                        latestEventText = null,
-                        threadSummary = null,
-                    ),
+                    threadInfo = TimelineItemThreadInfo.ThreadResponse(threadRootId = ThreadId("\$thread-root-id")),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
             )

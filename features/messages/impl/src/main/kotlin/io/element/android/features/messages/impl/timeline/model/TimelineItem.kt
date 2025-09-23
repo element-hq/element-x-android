@@ -83,7 +83,7 @@ sealed interface TimelineItem {
         val readReceiptState: TimelineItemReadReceipts,
         val localSendState: LocalEventSendState?,
         val inReplyTo: InReplyToDetails?,
-        val threadInfo: TimelineItemThreadInfo,
+        val threadInfo: TimelineItemThreadInfo?,
         val origin: TimelineItemEventOrigin?,
         val timelineItemDebugInfoProvider: TimelineItemDebugInfoProvider,
         val messageShieldProvider: MessageShieldProvider,
@@ -132,8 +132,7 @@ sealed interface TimelineItem {
     ) : TimelineItem
 }
 
-data class TimelineItemThreadInfo(
-    val threadRootId: ThreadId?,
-    val latestEventText: String?,
-    val threadSummary: ThreadSummary?,
-)
+sealed interface TimelineItemThreadInfo {
+    data class ThreadRoot(val summary: ThreadSummary, val latestEventText: String?) : TimelineItemThreadInfo
+    data class ThreadResponse(val threadRootId: ThreadId) : TimelineItemThreadInfo
+}

@@ -42,7 +42,7 @@ class TimelineItemGrouperTest {
         isEditable = false,
         canBeRepliedTo = false,
         inReplyTo = null,
-        threadInfo = TimelineItemThreadInfo(threadRootId = null, latestEventText = null, threadSummary = null),
+        threadInfo = null,
         origin = null,
         timelineItemDebugInfoProvider = { aTimelineItemDebugInfo() },
         messageShieldProvider = { null },

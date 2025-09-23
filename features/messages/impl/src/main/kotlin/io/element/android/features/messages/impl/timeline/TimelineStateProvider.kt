@@ -146,7 +146,7 @@ internal fun aTimelineItemEvent(
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: LocalEventSendState? = null,
     inReplyTo: InReplyToDetails? = null,
-    threadInfo: TimelineItemThreadInfo = TimelineItemThreadInfo(threadRootId = null, latestEventText = null, threadSummary = null),
+    threadInfo: TimelineItemThreadInfo? = null,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
     readReceiptState: TimelineItemReadReceipts = aTimelineItemReadReceipts(),

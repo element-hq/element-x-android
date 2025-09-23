@@ -14,10 +14,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 
-data class EventThreadInfo(
-    val threadRootId: ThreadId?,
-    val threadSummary: ThreadSummary?,
-)
+sealed interface EventThreadInfo {
+    data class ThreadRoot(val summary: ThreadSummary) : EventThreadInfo
+    data class ThreadResponse(val threadRootId: ThreadId) : EventThreadInfo
+}
 
 data class ThreadSummary(
     val latestEvent: AsyncData<EmbeddedEventInfo>,

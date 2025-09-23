@@ -41,7 +41,7 @@ internal fun aMessageEvent(
     canBeRepliedTo: Boolean = true,
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, formattedBody = A_MESSAGE, isEdited = false),
     inReplyTo: InReplyToDetails? = null,
-    threadInfo: TimelineItemThreadInfo = TimelineItemThreadInfo(threadRootId = null, latestEventText = null, threadSummary = null),
+    threadInfo: TimelineItemThreadInfo? = null,
     sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),
     debugInfoProvider: TimelineItemDebugInfoProvider = TimelineItemDebugInfoProvider { aTimelineItemDebugInfo() },
     messageShieldProvider: MessageShieldProvider = MessageShieldProvider { null },

@@ -70,7 +70,7 @@ class InReplyToDetailTest {
                 body = "**Hello!**",
                 inReplyTo = null,
                 isEdited = false,
-                threadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
+                threadInfo = null,
                 type = TextMessageType(
                     body = "**Hello!**",
                     formatted = FormattedBody(
@@ -95,7 +95,7 @@ class InReplyToDetailTest {
                 body = "**Hello!**",
                 inReplyTo = null,
                 isEdited = false,
-                threadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
+                threadInfo = null,
                 type = TextMessageType(
                     body = "**Hello!**",
                     formatted = null,
