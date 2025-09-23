@@ -7,9 +7,6 @@
 
 package io.element.android.libraries.troubleshoot.impl
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.push.test.FakeGetCurrentPushProvider
@@ -26,9 +23,7 @@ class TroubleshootNotificationsPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createTroubleshootNotificationsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.testSuiteState.tests).isEmpty()
             assertThat(initialState.testSuiteState.mainState).isEqualTo(AsyncAction.Uninitialized)
@@ -43,9 +38,7 @@ class TroubleshootNotificationsPresenterTest {
         val presenter = createTroubleshootNotificationsPresenter(
             troubleshootTestSuite = troubleshootTestSuite,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(TroubleshootNotificationsEvents.StartTests)
             skipItems(1)
@@ -66,9 +59,7 @@ class TroubleshootNotificationsPresenterTest {
         val presenter = createTroubleshootNotificationsPresenter(
             troubleshootTestSuite = troubleshootTestSuite,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(TroubleshootNotificationsEvents.RetryFailedTests)
             skipItems(1)
@@ -163,9 +154,7 @@ class TroubleshootNotificationsPresenterTest {
         val presenter = createTroubleshootNotificationsPresenter(
             troubleshootTestSuite = troubleshootTestSuite,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.testSuiteState.mainState).isInstanceOf(AsyncAction.Failure::class.java)
