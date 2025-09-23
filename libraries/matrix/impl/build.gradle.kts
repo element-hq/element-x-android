@@ -37,7 +37,7 @@ dependencies {
     implementation(projects.services.toolbox.api)
     api(projects.libraries.matrix.api)
     implementation(projects.libraries.core)
-    implementation("net.java.dev.jna:jna:5.17.0@aar")
+    implementation("net.java.dev.jna:jna:5.18.0@aar")
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)
