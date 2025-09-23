@@ -63,7 +63,7 @@ class FirebaseTokenTest(
                 } else {
                     delegate.updateState(
                         description = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_token_failure),
-                        status = NotificationTroubleshootTestState.Status.Failure(true)
+                        status = NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true)
                     )
                 }
             }

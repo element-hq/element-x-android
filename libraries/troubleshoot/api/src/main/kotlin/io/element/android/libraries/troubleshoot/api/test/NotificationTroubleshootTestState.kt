@@ -18,7 +18,7 @@ data class NotificationTroubleshootTestState(
         data object WaitingForUser : Status
         data object Success : Status
         data class Failure(
-            val hasQuickFix: Boolean,
+            val hasQuickFix: Boolean = false,
             val isCritical: Boolean = true,
             val quickFixButtonString: String? = null,
         ) : Status

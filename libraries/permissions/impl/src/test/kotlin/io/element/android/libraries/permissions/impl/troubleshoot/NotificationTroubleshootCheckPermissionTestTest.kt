@@ -82,7 +82,7 @@ class NotificationTroubleshootCheckPermissionTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true))
             // Quick fix
             launch {
                 sut.quickFix(this, FakeNotificationTroubleshootNavigator())
@@ -116,7 +116,7 @@ class NotificationTroubleshootCheckPermissionTestTest {
         sut.state.test {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
-            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true))
             sut.reset()
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
         }

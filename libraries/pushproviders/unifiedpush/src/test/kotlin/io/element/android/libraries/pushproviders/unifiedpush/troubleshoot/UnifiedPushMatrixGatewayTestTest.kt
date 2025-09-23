@@ -55,7 +55,7 @@ class UnifiedPushMatrixGatewayTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure())
         }
     }
 
@@ -72,7 +72,7 @@ class UnifiedPushMatrixGatewayTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure())
             // Reset the error
             sut.reset()
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
@@ -92,7 +92,7 @@ class UnifiedPushMatrixGatewayTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure())
         }
     }
 

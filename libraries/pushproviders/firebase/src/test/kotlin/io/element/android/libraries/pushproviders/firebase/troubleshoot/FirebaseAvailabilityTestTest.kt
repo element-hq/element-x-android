@@ -49,7 +49,7 @@ class FirebaseAvailabilityTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure())
             sut.reset()
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
         }

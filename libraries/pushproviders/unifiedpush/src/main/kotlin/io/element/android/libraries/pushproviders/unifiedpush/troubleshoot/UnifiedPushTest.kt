@@ -58,7 +58,7 @@ class UnifiedPushTest(
         } else {
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_unified_push_failure),
-                status = NotificationTroubleshootTestState.Status.Failure(true)
+                status = NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true)
             )
         }
     }
