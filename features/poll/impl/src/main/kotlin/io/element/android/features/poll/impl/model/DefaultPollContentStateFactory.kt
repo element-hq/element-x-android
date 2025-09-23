@@ -14,8 +14,8 @@ import io.element.android.features.poll.api.pollcontent.PollContentState
 import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.isDisclosed
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toImmutableList
 
@@ -25,8 +25,10 @@ class DefaultPollContentStateFactory(
     private val matrixClient: MatrixClient,
 ) : PollContentStateFactory {
     override suspend fun create(
-        event: EventTimelineItem,
-        content: PollContent
+        eventId: EventId?,
+        isEditable: Boolean,
+        isOwn: Boolean,
+        content: PollContent,
     ): PollContentState {
         val totalVoteCount = content.votes.flatMap { it.value }.size
         val myVotes = content.votes.filter { matrixClient.sessionId in it.value }.keys
@@ -59,13 +61,13 @@ class DefaultPollContentStateFactory(
         }
 
         return PollContentState(
-            eventId = event.eventId,
+            eventId = eventId,
             question = content.question,
             answerItems = answerItems.toImmutableList(),
             pollKind = content.kind,
-            isPollEditable = event.isEditable,
+            isPollEditable = isEditable,
             isPollEnded = isPollEnded,
-            isMine = event.isOwn,
+            isMine = isOwn,
         )
     }
 }

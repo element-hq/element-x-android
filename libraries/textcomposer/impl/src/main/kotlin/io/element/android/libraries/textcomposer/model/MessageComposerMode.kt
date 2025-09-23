@@ -9,6 +9,7 @@ package io.element.android.libraries.textcomposer.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -49,7 +50,7 @@ sealed interface MessageComposerMode {
         get() = this is Reply &&
             replyToDetails is InReplyToDetails.Ready &&
             replyToDetails.eventContent is MessageContent &&
-            (replyToDetails.eventContent as MessageContent).threadInfo.threadRootId != null
+            (replyToDetails.eventContent as MessageContent).threadInfo is EventThreadInfo.ThreadResponse
 }
 
 fun MessageComposerMode.showCaptionCompatibilityWarning(): Boolean {

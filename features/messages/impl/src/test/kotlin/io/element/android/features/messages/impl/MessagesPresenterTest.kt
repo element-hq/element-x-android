@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMess
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineState
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
@@ -61,7 +62,6 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
@@ -1181,7 +1181,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(
                 action = TimelineItemAction.ReplyInThread,
-                event = aMessageEvent(threadInfo = EventThreadInfo(A_THREAD_ID, null))
+                event = aMessageEvent(threadInfo = TimelineItemThreadInfo.ThreadResponse(A_THREAD_ID))
             ))
             awaitItem()
             openThreadLambda.assertions().isCalledOnce().with(value(A_THREAD_ID), value(null))
@@ -1204,7 +1204,7 @@ class MessagesPresenterTest {
                 event = aMessageEvent(
                     // The event id will be used as the thread id instead
                     eventId = AN_EVENT_ID,
-                    threadInfo = EventThreadInfo(null, null),
+                    threadInfo = null,
                 )
             ))
             awaitItem()
