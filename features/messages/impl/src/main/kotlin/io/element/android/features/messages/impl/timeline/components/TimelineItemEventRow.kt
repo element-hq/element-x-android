@@ -352,6 +352,8 @@ private fun ThreadSummaryView(
                     text = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId),
                     style = ElementTheme.typography.fontBodySmMedium,
                     color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
 
                 Spacer(modifier = Modifier.width(4.dp))
