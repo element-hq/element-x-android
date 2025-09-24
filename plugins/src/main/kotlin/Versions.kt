@@ -44,7 +44,7 @@ private const val versionMonth = 9
  * Release number in the month. Value must be in [0,99].
  * Do not update this value. it is updated by the release script.
  */
-private const val versionReleaseNumber = 1
+private const val versionReleaseNumber = 2
 
 object Versions {
     /**
