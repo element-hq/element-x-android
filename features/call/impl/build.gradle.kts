@@ -90,6 +90,7 @@ dependencies {
 
     testCommonDependencies(libs, true)
     testImplementation(projects.features.call.test)
+    testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.matrix.test)

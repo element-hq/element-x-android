@@ -14,14 +14,16 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.ui.ElementCallActivity
+import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.utils.FakeActiveCallManager
+import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -49,7 +51,12 @@ class DefaultElementCallEntryPointTest {
     fun `handleIncomingCall - registers the incoming call using ActiveCallManager`() = runTest {
         val registerIncomingCallLambda = lambdaRecorder<CallNotificationData, Unit> {}
         val activeCallManager = FakeActiveCallManager(registerIncomingCallResult = registerIncomingCallLambda)
-        val entryPoint = createEntryPoint(activeCallManager = activeCallManager)
+        val entryPoint = createEntryPoint(
+            activeCallManager = activeCallManager,
+            enterpriseService = FakeEnterpriseService(
+                isElementCallAvailableResult = { true }
+            )
+        )
 
         entryPoint.handleIncomingCall(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
@@ -69,10 +76,39 @@ class DefaultElementCallEntryPointTest {
         registerIncomingCallLambda.assertions().isCalledOnce()
     }
 
-    private fun TestScope.createEntryPoint(
-        activeCallManager: FakeActiveCallManager = FakeActiveCallManager(),
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `handleIncomingCall - no effect if Element Call is not supported`() = runTest {
+        val registerIncomingCallLambda = lambdaRecorder<CallNotificationData, Unit> {}
+        val activeCallManager = FakeActiveCallManager(registerIncomingCallResult = registerIncomingCallLambda)
+        val entryPoint = createEntryPoint(
+            activeCallManager = activeCallManager,
+            enterpriseService = FakeEnterpriseService(
+                isElementCallAvailableResult = { false }
+            )
+        )
+        entryPoint.handleIncomingCall(
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            eventId = AN_EVENT_ID,
+            senderId = A_USER_ID_2,
+            roomName = "roomName",
+            senderName = "senderName",
+            avatarUrl = "avatarUrl",
+            timestamp = 0,
+            expirationTimestamp = 0,
+            notificationChannelId = "notificationChannelId",
+            textContent = "textContent",
+        )
+        advanceTimeBy(1.seconds)
+        registerIncomingCallLambda.assertions().isNeverCalled()
+    }
+
+    private fun createEntryPoint(
+        activeCallManager: ActiveCallManager = FakeActiveCallManager(),
+        enterpriseService: EnterpriseService = FakeEnterpriseService(isEnterpriseBuild = false),
     ) = DefaultElementCallEntryPoint(
         context = InstrumentationRegistry.getInstrumentation().targetContext,
         activeCallManager = activeCallManager,
+        enterpriseService = enterpriseService,
     )
 }
