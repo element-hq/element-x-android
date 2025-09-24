@@ -101,7 +101,7 @@ class DefaultActiveCallManager(
     private val imageLoaderHolder: ImageLoaderHolder,
     private val systemClock: SystemClock,
 ) : ActiveCallManager {
-    private val tag = "DefaultActiveCallManager"
+    private val tag = "ActiveCallManager"
     private var timedOutCallJob: Job? = null
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
