@@ -17,7 +17,7 @@ interface SpaceRoomList {
         data class Idle(val hasMoreToLoad: Boolean) : PaginationStatus
     }
 
-    fun currentSpaceFlow(): StateFlow<Optional<SpaceRoom>>
+    val currentSpaceFlow: StateFlow<Optional<SpaceRoom>>
 
     val spaceRoomsFlow: Flow<List<SpaceRoom>>
     val paginationStatusFlow: StateFlow<PaginationStatus>

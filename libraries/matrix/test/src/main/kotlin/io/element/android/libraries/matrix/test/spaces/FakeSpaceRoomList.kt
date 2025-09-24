@@ -24,7 +24,7 @@ class FakeSpaceRoomList(
     private val paginateResult: () -> Result<Unit> = { lambdaError() },
 ) : SpaceRoomList {
     private val currentSpaceMutableStateFlow: MutableStateFlow<Optional<SpaceRoom>> = MutableStateFlow(Optional.ofNullable(initialSpaceFlowValue))
-    override fun currentSpaceFlow(): StateFlow<Optional<SpaceRoom>> = currentSpaceMutableStateFlow.asStateFlow()
+    override val currentSpaceFlow: StateFlow<Optional<SpaceRoom>> = currentSpaceMutableStateFlow.asStateFlow()
 
     fun emitCurrentSpace(value: SpaceRoom?) {
         currentSpaceMutableStateFlow.value = Optional.ofNullable(value)
