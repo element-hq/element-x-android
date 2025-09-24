@@ -19,6 +19,9 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
+import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
+import io.element.android.libraries.architecture.map
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
@@ -43,6 +46,7 @@ class TimelineItemEventFactory(
     private val matrixClient: MatrixClient,
     private val dateFormatter: DateFormatter,
     private val permalinkParser: PermalinkParser,
+    private val summaryFormatter: MessageSummaryFormatter,
 ) {
     @AssistedFactory
     interface Creator {
@@ -69,6 +73,29 @@ class TimelineItemEventFactory(
             url = senderProfile.getAvatarUrl(),
             size = AvatarSize.TimelineSender
         )
+        val mappedThreadInfo = when (val threadInfo = currentTimelineItem.event.threadInfo()) {
+            is EventThreadInfo.ThreadResponse -> {
+                TimelineItemThreadInfo.ThreadResponse(threadInfo.threadRootId)
+            }
+            is EventThreadInfo.ThreadRoot -> {
+                TimelineItemThreadInfo.ThreadRoot(
+                    summary = threadInfo.summary,
+                    latestEventText = threadInfo.summary.latestEvent.dataOrNull()
+                        ?.let {
+                            contentFactory.create(
+                                itemContent = it.content,
+                                eventId = it.eventOrTransactionId.eventId,
+                                isEditable = false,
+                                sender = it.senderId,
+                                senderProfile = it.senderProfile,
+                            )
+                        }
+                        ?.let(summaryFormatter::format)
+                )
+            }
+            null -> null
+        }
+
         return TimelineItem.Event(
             id = currentTimelineItem.uniqueId,
             eventId = currentTimelineItem.eventId,
@@ -87,7 +114,7 @@ class TimelineItemEventFactory(
             readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers),
             localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo()?.map(permalinkParser = permalinkParser),
-            threadInfo = currentTimelineItem.event.threadInfo() ?: EventThreadInfo(threadRootId = null, threadSummary = null),
+            threadInfo = mappedThreadInfo,
             origin = currentTimelineItem.event.origin,
             timelineItemDebugInfoProvider = currentTimelineItem.event.timelineItemDebugInfoProvider,
             messageShieldProvider = currentTimelineItem.event.messageShieldProvider,

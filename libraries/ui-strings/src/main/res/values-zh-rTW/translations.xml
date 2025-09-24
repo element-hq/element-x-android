@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"新增反應：%1$s"</string>
   <string name="a11y_avatar">"大頭貼"</string>
+  <string name="a11y_collapse_message_text_field">"最小化訊息文字欄位"</string>
   <string name="a11y_delete">"刪除"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"已輸入 %1$d 個位數"</item>
@@ -9,6 +10,7 @@
   <string name="a11y_edit_avatar">"編輯大頭照"</string>
   <string name="a11y_edit_room_address_hint">"完整地址為 %1$s"</string>
   <string name="a11y_encryption_details">"加密詳細資訊"</string>
+  <string name="a11y_expand_message_text_field">"展開訊息文字欄位"</string>
   <string name="a11y_hide_password">"隱藏密碼"</string>
   <string name="a11y_join_call">"加入通話"</string>
   <string name="a11y_jump_to_bottom">"跳至底部"</string>
@@ -38,7 +40,7 @@
   <string name="a11y_remove_reaction_with">"移除反應 %1$s"</string>
   <string name="a11y_room_avatar">"聊天室大頭照"</string>
   <string name="a11y_send_files">"傳送檔案"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"需要限時動作"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"需要限時動作，您有一分鐘可以驗證"</string>
   <string name="a11y_show_password">"顯示密碼"</string>
   <string name="a11y_start_call">"開始通話"</string>
   <string name="a11y_tombstoned_room">"墓碑聊天室"</string>
@@ -86,6 +88,7 @@
   <string name="action_enable">"啟用"</string>
   <string name="action_end_poll">"結束投票"</string>
   <string name="action_enter_pin">"輸入 PIN 碼"</string>
+  <string name="action_finish">"結束"</string>
   <string name="action_forgot_password">"忘記密碼？"</string>
   <string name="action_forward">"轉寄"</string>
   <string name="action_go_back">"返回"</string>
@@ -100,6 +103,7 @@
   <string name="action_leave">"離開"</string>
   <string name="action_leave_conversation">"離開對話"</string>
   <string name="action_leave_room">"離開聊天室"</string>
+  <string name="action_leave_space">"離開空間"</string>
   <string name="action_load_more">"載入更多"</string>
   <string name="action_manage_account">"管理帳號"</string>
   <string name="action_manage_devices">"管理裝置"</string>
@@ -160,10 +164,14 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"可升級"</string>
   <string name="common_about">"關於"</string>
   <string name="common_acceptable_use_policy">"可接受使用政策"</string>
+  <string name="common_add_account">"新增帳號"</string>
+  <string name="common_add_another_account">"新增其他帳號"</string>
   <string name="common_adding_caption">"新增標題"</string>
   <string name="common_advanced_settings">"進階設定"</string>
   <string name="common_an_image">"影像"</string>
   <string name="common_analytics">"分析"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"您離開了聊天室"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"您已登出工作階段"</string>
   <string name="common_appearance">"外觀"</string>
   <string name="common_audio">"音訊"</string>
   <string name="common_blocked_users">"封鎖的使用者"</string>
@@ -175,9 +183,11 @@
   <string name="common_creating_room">"正在建立聊天室…"</string>
   <string name="common_current_user_canceled_knock">"請求已取消"</string>
   <string name="common_current_user_left_room">"已離開聊天室"</string>
+  <string name="common_current_user_left_space">"離開空間"</string>
   <string name="common_current_user_rejected_invite">"邀請被拒絕"</string>
   <string name="common_dark">"深色"</string>
   <string name="common_decryption_error">"解密錯誤"</string>
+  <string name="common_description">"描述"</string>
   <string name="common_developer_options">"開發者選項"</string>
   <string name="common_device_id">"裝置 ID"</string>
   <string name="common_direct_chat">"私訊"</string>
@@ -282,18 +292,21 @@
   <string name="common_search_results">"搜尋結果"</string>
   <string name="common_security">"安全性"</string>
   <string name="common_seen_by">"已讀"</string>
+  <string name="common_select_account">"選取帳號"</string>
   <string name="common_send_to">"傳送給"</string>
   <string name="common_sending">"傳送中…"</string>
   <string name="common_sending_failed">"傳送失敗"</string>
   <string name="common_sent">"已傳送"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"伺服器不支援"</string>
+  <string name="common_server_unreachable">"無法連線至伺服器"</string>
   <string name="common_server_url">"伺服器 URL"</string>
   <string name="common_settings">"設定"</string>
   <string name="common_shared_location">"位置分享"</string>
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"有錯誤發生"</string>
   <string name="common_something_went_wrong_message">"我們了遇到了問題。請再試一次。"</string>
+  <string name="common_space">"空間"</string>
   <plurals name="common_spaces">
     <item quantity="other">"%1$d 個空間"</item>
   </plurals>
@@ -327,6 +340,12 @@
   <string name="common_verify_identity">"驗證身份"</string>
   <string name="common_verify_user">"驗證使用者"</string>
   <string name="common_video">"影片"</string>
+  <string name="common_video_quality_high">"高品質"</string>
+  <string name="common_video_quality_high_description">"品質最佳但檔案較大"</string>
+  <string name="common_video_quality_low">"低品質"</string>
+  <string name="common_video_quality_low_description">"最快的上傳速度且檔案最小"</string>
+  <string name="common_video_quality_standard">"標準品質"</string>
+  <string name="common_video_quality_standard_description">"品質與上傳速度的平衡"</string>
   <string name="common_voice_message">"語音訊息"</string>
   <string name="common_waiting">"等待中…"</string>
   <string name="common_waiting_for_decryption_key">"等待此則訊息"</string>
@@ -341,6 +360,10 @@
 
 您確定您想要繼續嗎？"</string>
   <string name="dialog_confirm_link_title">"仔細檢查此連結"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"選取您上傳的視訊預設品質。"</string>
+  <string name="dialog_default_video_quality_selector_title">"視訊上傳品質"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"允許的最大檔案大小為：%1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"檔案太大，無法上傳"</string>
   <string name="dialog_room_reported">"聊天室已回報"</string>
   <string name="dialog_room_reported_and_left">"回報並離開聊天室"</string>
   <string name="dialog_title_confirmation">"確認"</string>
@@ -349,6 +372,11 @@
   <string name="dialog_title_warning">"警告"</string>
   <string name="dialog_unsaved_changes_description_android">"變更尚未儲存，您確定要返回嗎？"</string>
   <string name="dialog_unsaved_changes_title">"是否儲存變更？"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"最大允許的檔案大小為：%1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"選取您要上傳的視訊的品質。"</string>
+  <string name="dialog_video_quality_selector_title">"選取視訊上傳品質"</string>
+  <string name="emoji_picker_search_placeholder">"搜尋表情符號"</string>
+  <string name="error_account_already_logged_in">"您已在此裝置上以 %1$s 的身份登入。"</string>
   <string name="error_account_creation_not_possible">"您的家伺服器需要升級才能支援 Matrix Authentication Service 與帳號建立。"</string>
   <string name="error_failed_creating_the_permalink">"無法建立永久連結"</string>
   <string name="error_failed_loading_map">"%1$s無法載入地圖。請稍後再試。"</string>
@@ -376,6 +404,9 @@
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"憤怒搖晃以回報臭蟲"</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle">"這也會將您從此空間中的所有聊天室移除。"</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle_admin">"這也會將您從此空間中的所有聊天室移除，包含您是唯一管理員的聊天室："</string>
+  <string name="screen_bottom_sheet_leave_space_title">"離開 %1$s？"</string>
   <string name="screen_bug_report_a11y_screenshot">"螢幕截圖"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s：%2$s"</string>
   <string name="screen_create_poll_options_section_title">"選項"</string>
@@ -398,6 +429,7 @@
   <string name="screen_resolve_send_failure_unsigned_device_title">"未傳送您的訊息，因為 %1$s 尚未驗證所有裝置。"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"您的一個或多個裝置未經驗證。您仍可傳送訊息，也可以取消並在您驗證您的所有裝置後再試一次。"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"因為您尚未驗證一個或多個裝置，因為未傳送您的訊息"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"編輯管理員或擁有者"</string>
   <string name="screen_room_error_failed_processing_media">"無法處理要上傳的媒體，請再試一次。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"無法擷取使用者詳細資訊"</string>
   <string name="screen_room_event_pill">"%1$s 中的訊息"</string>

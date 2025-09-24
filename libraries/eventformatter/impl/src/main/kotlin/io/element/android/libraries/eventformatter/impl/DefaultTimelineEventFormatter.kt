@@ -13,7 +13,9 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
+import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
@@ -43,12 +45,16 @@ class DefaultTimelineEventFormatter(
     override fun format(event: EventTimelineItem): CharSequence? {
         val isOutgoing = event.isOwn
         val senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender)
-        return when (val content = event.content) {
+        return format(event.content, isOutgoing, event.sender, senderDisambiguatedDisplayName)
+    }
+
+    override fun format(content: EventContent, isOutgoing: Boolean, sender: UserId, senderDisambiguatedDisplayName: String): CharSequence? {
+        return when (content) {
             is RoomMembershipContent -> {
                 roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
             }
             is ProfileChangeContent -> {
-                profileChangeContentFormatter.format(content, event.sender, senderDisambiguatedDisplayName, isOutgoing)
+                profileChangeContentFormatter.format(content, sender, senderDisambiguatedDisplayName, isOutgoing)
             }
             is StateContent -> {
                 stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.Timeline)
@@ -66,7 +72,7 @@ class DefaultTimelineEventFormatter(
             is FailedToParseStateContent,
             is UnknownContent -> {
                 if (buildMeta.isDebuggable) {
-                    error("You should not use this formatter for this event: $event")
+                    error("You should not use this formatter for this event content: $content")
                 }
                 sp.getString(CommonStrings.common_unsupported_event)
             }

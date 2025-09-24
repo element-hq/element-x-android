@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Při načítání nastavení oznámení došlo k chybě."</string>
   <string name="screen_room_details_error_muting">"Ztišení této místnosti se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_details_error_unmuting">"Nepodařilo se zrušit ztišení této místnosti, zkuste to prosím znovu."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Nezavírejte aplikaci, dokud neskončíte."</string>
+  <string name="screen_room_details_invite_people_preparing">"Příprava pozvánek…"</string>
   <string name="screen_room_details_invite_people_title">"Pozvat přátele"</string>
   <string name="screen_room_details_leave_conversation_title">"Opustit konverzaci"</string>
   <string name="screen_room_details_leave_room_title">"Opustit místnost"</string>

@@ -28,12 +28,13 @@ class DefaultNotificationTroubleShootEntryPointTest {
             TroubleshootNotificationsNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenter = createTroubleshootNotificationsPresenter(),
+                factory = { createTroubleshootNotificationsPresenter() },
                 screenTracker = FakeScreenTracker(),
             )
         }
         val callback = object : NotificationTroubleShootEntryPoint.Callback {
             override fun onDone() = lambdaError()
+            override fun openIgnoredUsers() = lambdaError()
         }
         val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
             .callback(callback)

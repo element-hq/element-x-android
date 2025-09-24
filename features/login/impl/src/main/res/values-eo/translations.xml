@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_qr_code_login_connection_note_secure_state_description">"A secure connection could not be made to the new device. Your existing connected devices are still safe and you don\'t need to worry about them."</string>
+</resources>

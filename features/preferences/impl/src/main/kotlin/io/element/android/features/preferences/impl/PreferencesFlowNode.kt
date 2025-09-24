@@ -208,6 +208,10 @@ class PreferencesFlowNode(
                                 navigateUp()
                             }
                         }
+
+                        override fun openIgnoredUsers() {
+                            backstack.push(NavTarget.BlockedUsers)
+                        }
                     })
                     .build()
             }

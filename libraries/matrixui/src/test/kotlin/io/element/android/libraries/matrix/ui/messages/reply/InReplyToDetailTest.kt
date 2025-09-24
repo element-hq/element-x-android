@@ -8,7 +8,6 @@
 package io.element.android.libraries.matrix.ui.messages.reply
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
@@ -70,7 +69,7 @@ class InReplyToDetailTest {
                 body = "**Hello!**",
                 inReplyTo = null,
                 isEdited = false,
-                threadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
+                threadInfo = null,
                 type = TextMessageType(
                     body = "**Hello!**",
                     formatted = FormattedBody(
@@ -95,7 +94,7 @@ class InReplyToDetailTest {
                 body = "**Hello!**",
                 inReplyTo = null,
                 isEdited = false,
-                threadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
+                threadInfo = null,
                 type = TextMessageType(
                     body = "**Hello!**",
                     formatted = null,

@@ -19,6 +19,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import io.element.android.services.analytics.api.ScreenTracker
 
 @ContributesNode(SessionScope::class)
@@ -26,12 +27,23 @@ import io.element.android.services.analytics.api.ScreenTracker
 class TroubleshootNotificationsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: TroubleshootNotificationsPresenter,
     private val screenTracker: ScreenTracker,
-) : Node(buildContext, plugins = plugins) {
+    factory: TroubleshootNotificationsPresenter.Factory,
+) : Node(buildContext, plugins = plugins),
+    NotificationTroubleshootNavigator {
+    private val presenter = factory.create(
+        navigator = this,
+    )
+
     private fun onDone() {
         plugins<NotificationTroubleShootEntryPoint.Callback>().forEach {
             it.onDone()
+        }
+    }
+
+    override fun openIgnoredUsers() {
+        plugins<NotificationTroubleShootEntryPoint.Callback>().forEach {
+            it.openIgnoredUsers()
         }
     }
 

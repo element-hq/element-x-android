@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Додати реакцію: %1$s"</string>
   <string name="a11y_avatar">"Аватар"</string>
+  <string name="a11y_collapse_message_text_field">"Згорнути поле тексту повідомлення"</string>
   <string name="a11y_delete">"Видалити"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Введена %1$d цифра"</item>
@@ -11,6 +12,7 @@
   <string name="a11y_edit_avatar">"Редагувати аватар"</string>
   <string name="a11y_edit_room_address_hint">"Повна адреса буде %1$s"</string>
   <string name="a11y_encryption_details">"Подробиці шифрування"</string>
+  <string name="a11y_expand_message_text_field">"Розгорнути текстове поле повідомлення"</string>
   <string name="a11y_hide_password">"Cховати пароль"</string>
   <string name="a11y_join_call">"Приєднатися до виклику"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
@@ -42,7 +44,7 @@
   <string name="a11y_remove_reaction_with">"Прибрати реакцію %1$s"</string>
   <string name="a11y_room_avatar">"Аватар кімнати"</string>
   <string name="a11y_send_files">"Надіслати файли"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Необхідно виконати дію, обмежену в часі"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Необхідно виконати дію, обмежену в часі, у вас є одна хвилина для верифікації"</string>
   <string name="a11y_show_password">"Показати пароль"</string>
   <string name="a11y_start_call">"Розпочати виклик"</string>
   <string name="a11y_tombstoned_room">"Кімната більше не використовується"</string>
@@ -165,10 +167,14 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Доступне оновлення"</string>
   <string name="common_about">"Відомості"</string>
   <string name="common_acceptable_use_policy">"Політика прийнятного використання"</string>
+  <string name="common_add_account">"Додати обліковий запис"</string>
+  <string name="common_add_another_account">"Додати ще один обліковий запис"</string>
   <string name="common_adding_caption">"Додавання підпису"</string>
   <string name="common_advanced_settings">"Додаткові налаштування"</string>
   <string name="common_an_image">"зображення"</string>
   <string name="common_analytics">"Аналітика"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Ви вийшли з кімнати"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Ви вийшли з сеансу"</string>
   <string name="common_appearance">"Тема"</string>
   <string name="common_audio">"Аудіо"</string>
   <string name="common_blocked_users">"Заблоковані користувачі"</string>
@@ -297,6 +303,7 @@
   <string name="common_search_results">"Результати пошуку"</string>
   <string name="common_security">"Безпека"</string>
   <string name="common_seen_by">"Переглянули"</string>
+  <string name="common_select_account">"Вибрати обліковий запис"</string>
   <string name="common_send_to">"Надіслати до"</string>
   <string name="common_sending">"Надсилання…"</string>
   <string name="common_sending_failed">"Не вдалося надіслати"</string>
@@ -380,6 +387,8 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально дозволений розмір файлу: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Виберіть якість відео, яке ви хочете вивантажити."</string>
   <string name="dialog_video_quality_selector_title">"Виберіть якість вивантажуваного відео"</string>
+  <string name="emoji_picker_search_placeholder">"Пошук емодзі"</string>
+  <string name="error_account_already_logged_in">"Ви вже ввійшли на цьому пристрої як %1$s."</string>
   <string name="error_account_creation_not_possible">"Ваш домашній сервер потрібно оновити, щоб він підтримував службу автентифікації Matrix і створення облікових записів."</string>
   <string name="error_failed_creating_the_permalink">"Не вдалося створити постійне посилання"</string>
   <string name="error_failed_loading_map">"%1$s не може завантажити мапу. Повторіть спробу пізніше."</string>

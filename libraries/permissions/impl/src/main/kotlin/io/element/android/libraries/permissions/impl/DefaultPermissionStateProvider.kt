@@ -40,6 +40,4 @@ class DefaultPermissionStateProvider(
     override suspend fun setPermissionAsked(permission: String, value: Boolean) = permissionsStore.setPermissionAsked(permission, value)
 
     override fun isPermissionAsked(permission: String): Flow<Boolean> = permissionsStore.isPermissionAsked(permission)
-
-    override suspend fun resetPermission(permission: String) = permissionsStore.resetPermission(permission)
 }

@@ -13,6 +13,13 @@
   <string name="screen_advanced_settings_media_compression_description">"Llwythwch i fyny lluniau a fideos yn gynt a lleihau\'r defnydd o ddata"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimeiddio ansawdd y cyfryngau"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Cymedroli a Diogelwch"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimeiddio delweddau\'n awtomatig ar gyfer llwytho cyflymach a meintiau ffeiliau llai."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimeiddio ansawdd llwytho delweddau"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s Tapiwch yma i newid."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Uchel (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Isel (480c)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Safonol (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Ansawdd lwytho fideo"</string>
   <string name="screen_advanced_settings_push_provider_android">"Darparwr hysbysiad gwthio"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Analluogi\'r golygydd testun cyfoethog i deipio Markdown â llaw."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Derbynebau darllen"</string>

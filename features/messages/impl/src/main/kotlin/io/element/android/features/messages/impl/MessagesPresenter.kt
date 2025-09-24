@@ -43,6 +43,7 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
@@ -328,7 +329,10 @@ class MessagesPresenter(
                 val displayThreads = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
                 if (displayThreads) {
                     // Get either the thread id this event is in, or the event id if it's not in a thread so we can start one
-                    val threadId = targetEvent.threadInfo.threadRootId ?: targetEvent.eventId!!.toThreadId()
+                    val threadId = when (targetEvent.threadInfo) {
+                        is TimelineItemThreadInfo.ThreadResponse -> targetEvent.threadInfo.threadRootId
+                        is TimelineItemThreadInfo.ThreadRoot, null -> targetEvent.eventId?.toThreadId()
+                    } ?: return@launch
                     navigator.onOpenThread(threadId, null)
                 } else {
                     handleActionReply(targetEvent, composerState, timelineProtectionState)
