@@ -18,6 +18,7 @@ interface BugReporter {
      * @param withScreenshot true to include the screenshot
      * @param problemDescription the bug description
      * @param canContact true if the user opt in to be contacted directly
+     * @param sendPushRules true to include the push rules
      * @param listener the listener
      */
     suspend fun sendBugReport(
@@ -26,6 +27,7 @@ interface BugReporter {
         withScreenshot: Boolean,
         problemDescription: String,
         canContact: Boolean = false,
+        sendPushRules: Boolean = false,
         listener: BugReporterListener
     )
 

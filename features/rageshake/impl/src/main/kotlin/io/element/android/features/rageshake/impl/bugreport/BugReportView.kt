@@ -142,6 +142,13 @@ fun BugReportView(
                     }
                 }
             }
+            PreferenceSwitch(
+                isChecked = state.formState.sendPushRules,
+                onCheckedChange = { eventSink(BugReportEvents.SetSendPushRules(it)) },
+                enabled = isFormEnabled,
+                title = stringResource(R.string.screen_bug_report_send_notification_settings_title),
+                subtitle = stringResource(R.string.screen_bug_report_send_notification_settings_description),
+            )
             // Submit
             PreferenceRow {
                 Button(

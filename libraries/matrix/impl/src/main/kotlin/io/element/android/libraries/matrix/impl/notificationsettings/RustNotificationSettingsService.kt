@@ -139,4 +139,8 @@ class RustNotificationSettingsService(
         runCatchingExceptions {
             notificationSettings.await().canPushEncryptedEventToDevice()
         }
+
+    override suspend fun getRawPushRules(): Result<String?> = runCatchingExceptions {
+        notificationSettings.await().getRawPushRules()
+    }
 }

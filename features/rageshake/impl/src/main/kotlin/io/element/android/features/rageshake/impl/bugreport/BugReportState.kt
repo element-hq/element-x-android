@@ -29,14 +29,16 @@ data class BugReportFormState(
     val description: String,
     val sendLogs: Boolean,
     val canContact: Boolean,
-    val sendScreenshot: Boolean
+    val sendScreenshot: Boolean,
+    val sendPushRules: Boolean,
 ) : Parcelable {
     companion object {
         val Default = BugReportFormState(
             description = "",
             sendLogs = true,
             canContact = false,
-            sendScreenshot = false
+            sendScreenshot = false,
+            sendPushRules = false,
         )
     }
 }
