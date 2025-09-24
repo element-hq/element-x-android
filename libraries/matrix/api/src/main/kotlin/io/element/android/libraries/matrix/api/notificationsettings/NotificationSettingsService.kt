@@ -33,4 +33,5 @@ interface NotificationSettingsService {
     suspend fun setInviteForMeEnabled(enabled: Boolean): Result<Unit>
     suspend fun getRoomsWithUserDefinedRules(): Result<List<String>>
     suspend fun canHomeServerPushEncryptedEventsToDevice(): Result<Boolean>
+    suspend fun getRawPushRules(): Result<String?>
 }

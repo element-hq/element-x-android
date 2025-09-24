@@ -105,6 +105,9 @@ class BugReportPresenter(
                 is BugReportEvents.SetSendScreenshot -> updateFormState(formState) {
                     copy(sendScreenshot = event.sendScreenshot)
                 }
+                is BugReportEvents.SetSendPushRules -> updateFormState(formState) {
+                    copy(sendPushRules = event.sendPushRules)
+                }
                 BugReportEvents.ClearError -> {
                     sendingProgress.floatValue = 0f
                     sendingAction.value = AsyncAction.Uninitialized
@@ -137,6 +140,7 @@ class BugReportPresenter(
             withScreenshot = formState.sendScreenshot,
             problemDescription = formState.description,
             canContact = formState.canContact,
+            sendPushRules = formState.sendPushRules,
             listener = listener
         )
     }

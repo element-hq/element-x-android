@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NOTIFICATION_MODE
+import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -23,6 +24,7 @@ class FakeNotificationSettingsService(
     initialEncryptedGroupDefaultMode: RoomNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
     initialOneToOneDefaultMode: RoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
     initialEncryptedOneToOneDefaultMode: RoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
+    private val getRawPushRulesResult: () -> Result<String> = { lambdaError() },
 ) : NotificationSettingsService {
     private val notificationSettingsStateFlow = MutableStateFlow(Unit)
     private var defaultGroupRoomNotificationMode: RoomNotificationMode = initialGroupDefaultMode
@@ -177,5 +179,9 @@ class FakeNotificationSettingsService(
 
     fun givenCanHomeServerPushEncryptedEventsToDeviceResult(result: Result<Boolean>) {
         canHomeServerPushEncryptedEventsToDeviceResult = result
+    }
+
+    override suspend fun getRawPushRules(): Result<String?> {
+        return getRawPushRulesResult()
     }
 }

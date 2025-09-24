@@ -107,6 +107,20 @@ class BugReportPresenterTest {
     }
 
     @Test
+    fun `present - send notification settings`() = runTest {
+        val presenter = createPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetSendPushRules(true))
+            assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendPushRules = true))
+            initialState.eventSink.invoke(BugReportEvents.SetSendPushRules(false))
+            assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendPushRules = false))
+        }
+    }
+
+    @Test
     fun `present - reset all`() = runTest {
         val presenter = createPresenter(
             crashDataStore = FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),

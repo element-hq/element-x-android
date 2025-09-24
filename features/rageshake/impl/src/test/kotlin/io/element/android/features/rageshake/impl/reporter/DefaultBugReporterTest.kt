@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.tracing.FakeTracingService
 import io.element.android.libraries.network.useragent.DefaultUserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -65,6 +66,7 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
+            withPushRules = true,
             problemDescription = "a bug occurred",
             canContact = true,
             listener = object : BugReporterListener {
@@ -109,7 +111,12 @@ class DefaultBugReporterTest {
         )
 
         val fakeEncryptionService = FakeEncryptionService()
-        val matrixClient = FakeMatrixClient(encryptionService = fakeEncryptionService)
+
+        val fakePushRules = "{ content: ... }"
+        val fakeNotificationSettingsService = FakeNotificationSettingsService(
+            getRawPushRulesResult = { Result.success(fakePushRules) }
+        )
+        val matrixClient = FakeMatrixClient(encryptionService = fakeEncryptionService, notificationSettingsService = fakeNotificationSettingsService)
 
         fakeEncryptionService.givenDeviceKeys("CURVECURVECURVE", "EDKEYEDKEYEDKY")
         val sut = createDefaultBugReporter(
@@ -124,6 +131,7 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
+            withPushRules = true,
             problemDescription = "a bug occurred",
             canContact = true,
             listener = object : BugReporterListener {
@@ -149,9 +157,11 @@ class DefaultBugReporterTest {
         assertThat(foundValues["user_id"]).isEqualTo("@foo:example.com")
         assertThat(foundValues["text"]).isEqualTo("a bug occurred")
         assertThat(foundValues["device_keys"]).isEqualTo("curve25519:CURVECURVECURVE, ed25519:EDKEYEDKEYEDKY")
+        assertThat(foundValues["file"]).contains(fakePushRules)
 
         // device_key now added given they are not null
-        assertThat(progressValues.size).isEqualTo(EXPECTED_NUMBER_OF_PROGRESS_VALUE + 1)
+        // so is the push_rules value
+        assertThat(progressValues.size).isEqualTo(EXPECTED_NUMBER_OF_PROGRESS_VALUE + 2)
 
         server.shutdown()
     }
@@ -272,6 +282,7 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
+            withPushRules = true,
             problemDescription = "a bug occurred",
             canContact = true,
             listener = object : BugReporterListener {

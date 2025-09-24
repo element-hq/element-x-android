@@ -13,6 +13,7 @@ import io.element.android.libraries.core.bool.orFalse
 @Suppress("ktlint:standard:property-naming")
 object MimeTypes {
     const val Any: String = "*/*"
+    const val Json = "application/json"
     const val OctetStream = "application/octet-stream"
     const val Apk = "application/vnd.android.package-archive"
     const val Pdf = "application/pdf"
