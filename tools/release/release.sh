@@ -366,6 +366,7 @@ printf " - Optionally reorder items and fix typos.\n"
 printf " - Add the file %s to the GitHub release.\n" "${signedBundlePath}"
 printf " - Add the universal APK, downloaded from the GooglePlay console to the GitHub release.\n"
 printf " - Add the 4 signed APKs for F-Droid, located at %s to the GitHub release.\n" "${fdroidTargetPath}"
+printf " - Check the box 'Set as a pre-release'.\n"
 read -r -p ". Press enter to continue. "
 
 printf "\n================================================================================\n"
