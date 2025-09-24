@@ -29,7 +29,6 @@ import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 @Inject
@@ -66,7 +65,7 @@ class SpacePresenter(
             }
         }.collectAsState()
 
-        val currentSpace by remember { spaceRoomList.currentSpaceFlow() }.collectAsState(Optional.empty())
+        val currentSpace by spaceRoomList.currentSpaceFlow.collectAsState()
 
         fun handleEvents(event: SpaceEvents) {
             when (event) {

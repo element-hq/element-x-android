@@ -11,13 +11,10 @@ package io.element.android.libraries.matrix.impl.spaces
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSpaceRoom
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSpaceRoomList
-import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
-import io.element.android.libraries.previewutils.room.aSpaceRoom
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -26,7 +23,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.SpaceListUpdate
 import uniffi.matrix_sdk_ui.SpaceRoomListPaginationState
-import kotlin.jvm.optionals.getOrNull
 import org.matrix.rustcomponents.sdk.SpaceRoomList as InnerSpaceRoomList
 
 class RustSpaceRoomListTest {
@@ -87,33 +83,15 @@ class RustSpaceRoomListTest {
         paginateResult.assertions().isCalledOnce()
     }
 
-    @Test
-    fun `currentSpaceFlow reads value from the SpaceRoomCache`() = runTest {
-        val spaceRoomCache = SpaceRoomCache()
-        val sut = createRustSpaceRoomList(
-            spaceRoomCache = spaceRoomCache,
-        )
-        sut.currentSpaceFlow().test {
-            assertThat(awaitItem().getOrNull()).isNull()
-            val spaceRoom = aSpaceRoom(roomId = A_ROOM_ID)
-            spaceRoomCache.update(listOf(spaceRoom))
-            assertThat(awaitItem().getOrNull()).isEqualTo(spaceRoom)
-        }
-    }
-
     private fun TestScope.createRustSpaceRoomList(
-        roomId: RoomId = A_ROOM_ID,
         innerSpaceRoomList: InnerSpaceRoomList = FakeFfiSpaceRoomList(),
         innerProvider: suspend () -> InnerSpaceRoomList = { innerSpaceRoomList },
         spaceRoomMapper: SpaceRoomMapper = SpaceRoomMapper(),
-        spaceRoomCache: SpaceRoomCache = SpaceRoomCache(),
     ): RustSpaceRoomList {
         return RustSpaceRoomList(
-            roomId = roomId,
             innerProvider = innerProvider,
             sessionCoroutineScope = backgroundScope,
             spaceRoomMapper = spaceRoomMapper,
-            spaceRoomCache = spaceRoomCache,
         )
     }
 }

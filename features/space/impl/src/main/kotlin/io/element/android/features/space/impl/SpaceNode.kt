@@ -36,8 +36,8 @@ class SpaceNode(
         SpaceView(
             state = state,
             onBackClick = ::navigateUp,
-            onRoomClick = { roomId ->
-                callback.onOpenRoom(roomId)
+            onRoomClick = { spaceRoom ->
+                callback.onOpenRoom(spaceRoom.roomId, spaceRoom.via)
             },
             modifier = modifier
         )

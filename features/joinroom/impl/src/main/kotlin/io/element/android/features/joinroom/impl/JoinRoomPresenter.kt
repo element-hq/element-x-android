@@ -94,9 +94,7 @@ class JoinRoomPresenter(
         val roomInfo by remember {
             matrixClient.getRoomInfoFlow(roomId)
         }.collectAsState(initial = Optional.empty())
-        val spaceRoom by remember {
-            spaceList.currentSpaceFlow()
-        }.collectAsState()
+        val spaceRoom by spaceList.currentSpaceFlow.collectAsState()
         val joinAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val knockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val cancelKnockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }

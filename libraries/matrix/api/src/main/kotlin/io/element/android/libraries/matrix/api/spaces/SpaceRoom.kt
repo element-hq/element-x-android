@@ -28,6 +28,10 @@ data class SpaceRoom(
     val state: CurrentUserMembership?,
     val topic: String?,
     val worldReadable: Boolean,
+    /**
+     * The via parameters of the room.
+     */
+    val via: List<String>,
 ) {
     val isSpace = roomType == RoomType.Space
 }

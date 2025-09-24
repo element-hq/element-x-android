@@ -38,12 +38,10 @@ class RustSpaceService(
     private val sessionDispatcher: CoroutineDispatcher,
 ) : SpaceService {
     private val spaceRoomMapper = SpaceRoomMapper()
-    private val spaceRoomCache = SpaceRoomCache()
     override val spaceRoomsFlow = MutableSharedFlow<List<SpaceRoom>>(replay = 1, extraBufferCapacity = 1)
     private val spaceListUpdateProcessor = SpaceListUpdateProcessor(
         spaceRoomsFlow = spaceRoomsFlow,
-        mapper = spaceRoomMapper,
-        spaceRoomCache = spaceRoomCache
+        mapper = spaceRoomMapper
     )
 
     override suspend fun joinedSpaces(): Result<List<SpaceRoom>> = withContext(sessionDispatcher) {
@@ -57,11 +55,9 @@ class RustSpaceService(
 
     override fun spaceRoomList(id: RoomId): SpaceRoomList {
         return RustSpaceRoomList(
-            roomId = id,
             innerProvider = { innerSpaceService.spaceRoomList(id.value) },
             sessionCoroutineScope = sessionCoroutineScope,
             spaceRoomMapper = spaceRoomMapper,
-            spaceRoomCache = spaceRoomCache,
         )
     }
 
