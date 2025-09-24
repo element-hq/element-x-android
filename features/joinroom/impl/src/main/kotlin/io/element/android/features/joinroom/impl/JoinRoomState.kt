@@ -16,9 +16,11 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
-import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
+import io.element.android.libraries.matrix.api.room.join.JoinRule
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.InviteSender
+import kotlinx.collections.immutable.ImmutableList
 
 internal const val MAX_KNOCK_MESSAGE_LENGTH = 500
 
@@ -41,9 +43,6 @@ data class JoinRoomState(
     val joinAuthorisationStatus = when (contentState) {
         is ContentState.Loaded -> {
             when {
-                contentState.roomType == RoomType.Space -> {
-                    JoinAuthorisationStatus.IsSpace(applicationName)
-                }
                 isJoinActionUnauthorized -> {
                     JoinAuthorisationStatus.Unauthorized
                 }
@@ -77,12 +76,13 @@ sealed interface ContentState {
         val topic: String?,
         val alias: RoomAlias?,
         val numberOfMembers: Long?,
-        val isDm: Boolean,
-        val roomType: RoomType,
         val roomAvatarUrl: String?,
         val joinAuthorisationStatus: JoinAuthorisationStatus,
+        val joinRule: JoinRule?,
+        val details: LoadedDetails,
     ) : ContentState {
         val showMemberCount = numberOfMembers != null
+        val isSpace = details is LoadedDetails.Space
 
         fun avatarData(size: AvatarSize): AvatarData {
             return AvatarData(
@@ -95,9 +95,20 @@ sealed interface ContentState {
     }
 }
 
+@Immutable
+sealed interface LoadedDetails {
+    data class Room(
+        val isDm: Boolean,
+    ) : LoadedDetails
+
+    data class Space(
+        val childrenCount: Int,
+        val heroes: ImmutableList<MatrixUser>,
+    ) : LoadedDetails
+}
+
 sealed interface JoinAuthorisationStatus {
     data object None : JoinAuthorisationStatus
-    data class IsSpace(val applicationName: String) : JoinAuthorisationStatus
     data class IsInvited(val inviteData: InviteData, val inviteSender: InviteSender?) : JoinAuthorisationStatus
     data class IsBanned(val banSender: InviteSender?, val reason: String?) : JoinAuthorisationStatus
     data object IsKnocked : JoinAuthorisationStatus

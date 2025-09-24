@@ -199,7 +199,7 @@ class DefaultNotifiableEventResolver(
                 )
                 ResolvedPushEvent.Event(notifiableMessageEvent)
             }
-            is NotificationContent.MessageLike.CallNotify -> {
+            is NotificationContent.MessageLike.RtcNotification -> {
                 val notifiableEvent = callNotificationEventResolver.resolveEvent(userId, this).getOrThrow()
                 ResolvedPushEvent.Event(notifiableEvent)
             }

@@ -37,16 +37,7 @@ class ChangeRolesNode(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-
-    private val presenter = presenterFactory.run {
-        val role = when (inputs.listType) {
-            ChangeRoomMemberRolesListType.Admins -> RoomMember.Role.Admin
-            ChangeRoomMemberRolesListType.Moderators -> RoomMember.Role.Moderator
-            ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving -> RoomMember.Role.Owner(isCreator = false)
-        }
-        create(role)
-    }
-
+    private val presenter = presenterFactory.create(inputs.listType.toRoomMemberRole())
     private val stateFlow = launchMolecule { presenter.present() }
 
     suspend fun waitForRoleChanged() {
@@ -62,4 +53,10 @@ class ChangeRolesNode(
             navigateUp = this::navigateUp,
         )
     }
+}
+
+internal fun ChangeRoomMemberRolesListType.toRoomMemberRole() = when (this) {
+    ChangeRoomMemberRolesListType.Admins -> RoomMember.Role.Admin
+    ChangeRoomMemberRolesListType.Moderators -> RoomMember.Role.Moderator
+    ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving -> RoomMember.Role.Owner(isCreator = false)
 }

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients can unlock them."</string>
+</resources>

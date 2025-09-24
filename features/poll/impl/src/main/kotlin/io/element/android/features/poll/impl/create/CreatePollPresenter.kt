@@ -47,7 +47,7 @@ class CreatePollPresenter(
     @Assisted private val timelineMode: Timeline.Mode,
 ) : Presenter<CreatePollState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             timelineMode: Timeline.Mode,
             backNavigator: () -> Unit,

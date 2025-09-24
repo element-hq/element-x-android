@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2022-2024 New Vector Ltd.
@@ -55,16 +56,10 @@ dependencies {
     implementation(libs.haze.materials)
     implementation(projects.features.reportroom.api)
     implementation(projects.features.changeroommemberroles.api)
+    implementation(projects.libraries.previewutils)
     api(projects.features.home.api)
 
-    testImplementation(libs.androidx.compose.ui.test.junit)
-    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.test.robolectric)
+    testCommonDependencies(libs, true)
     testImplementation(projects.features.invite.test)
     testImplementation(projects.features.logout.test)
     testImplementation(projects.features.networkmonitor.test)
@@ -79,5 +74,4 @@ dependencies {
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
-    testImplementation(projects.tests.testutils)
 }

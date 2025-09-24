@@ -123,7 +123,7 @@ class RustTimeline(
     )
 
     override val forwardPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode !is Timeline.Mode.FocusedOnEvent)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode is Timeline.Mode.FocusedOnEvent)
     )
 
     init {
@@ -221,7 +221,6 @@ class RustTimeline(
                         items = items,
                         hasMoreToLoadBackward = backwardPaginationStatus.hasMoreToLoad,
                         hasMoreToLoadForward = forwardPaginationStatus.hasMoreToLoad,
-                        timelineMode = mode,
                     )
                 }
                 .let { items ->
@@ -431,7 +430,7 @@ class RustTimeline(
         }
     }
 
-    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = withContext(dispatcher) {
+    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Boolean> = withContext(dispatcher) {
         runCatchingExceptions {
             inner.toggleReaction(
                 key = emoji,

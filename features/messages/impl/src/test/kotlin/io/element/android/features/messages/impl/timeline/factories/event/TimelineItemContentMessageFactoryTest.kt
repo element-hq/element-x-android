@@ -750,7 +750,7 @@ class TimelineItemContentMessageFactoryTest {
         body: String = "Body",
         inReplyTo: InReplyTo? = null,
         isEdited: Boolean = false,
-        threadInfo: EventThreadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
+        threadInfo: EventThreadInfo? = null,
         type: MessageType,
     ): MessageContent {
         return MessageContent(

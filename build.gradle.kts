@@ -93,6 +93,8 @@ allprojects {
             // Fix compilation warning for annotations
             // See https://youtrack.jetbrains.com/issue/KT-73255/Change-defaulting-rule-for-annotations for more details
             freeCompilerArgs.add("-Xannotation-default-target=first-only")
+            // Opt-in to context receivers
+            freeCompilerArgs.add("-Xcontext-parameters")
         }
     }
 }

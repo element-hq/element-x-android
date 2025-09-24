@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="action_manage_devices">"Manage connected devices"</string>
+  <string name="action_reset_identity">"Start fresh"</string>
+  <string name="common_recovery_key">"Backup password"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Sent from an unconfirmed device"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Sender\'s security verification has changed"</string>
+  <string name="common_verify_device">"Confirm device"</string>
+  <string name="common_verify_identity">"Verify user"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s\'s security verification has changed. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s security verification has changed. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s\'s security verification has changed."</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s\'s %2$s security verification has changed. %3$s"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"You\'re about to go to your %1$s account to start fresh. Afterwards you\'ll be taken back to the app."</string>
+  <string name="screen_reset_identity_confirmation_title">"Can\'t confirm? Go to your account to start fresh."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Your message was not sent because %1$s\'s security verification has changed"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s is using one or more unconfirmed devices. You can send the message anyway, or you can cancel for now and try again later after %2$s has confirmed all their devices."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Your message was not sent because %1$s has not confirmed all devices"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"One or more of your connected devices are unconfirmed. You can send the message anyway, or you can cancel for now and try again later after you have confirmed all of your connected devices."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Your message was not sent because you have not confirmed one or more of your connected devices"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s\'s security verification has changed."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not confirmed all their devices."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not confirmed one or more of your connected devices."</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"You need to confirm this device for access to historical messages"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"This message was blocked either because you did not confirm your device or because the sender needs to verify you."</string>
+</resources>

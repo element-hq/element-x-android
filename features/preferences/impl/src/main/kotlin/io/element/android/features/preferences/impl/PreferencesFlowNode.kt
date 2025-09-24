@@ -208,6 +208,10 @@ class PreferencesFlowNode(
                                 navigateUp()
                             }
                         }
+
+                        override fun openIgnoredUsers() {
+                            backstack.push(NavTarget.BlockedUsers)
+                        }
                     })
                     .build()
             }
@@ -261,7 +265,7 @@ class PreferencesFlowNode(
                     .build()
             }
             is NavTarget.OssLicenses -> {
-                openSourceLicensesEntryPoint.getNode(this, buildContext)
+                openSourceLicensesEntryPoint.createNode(this, buildContext)
             }
             NavTarget.AccountDeactivation -> {
                 accountDeactivationEntryPoint.createNode(this, buildContext)

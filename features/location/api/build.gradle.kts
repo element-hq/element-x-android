@@ -8,6 +8,7 @@
 import config.BuildTimeConfig
 import extension.buildConfigFieldStr
 import extension.readLocalProperty
+import extension.testCommonDependencies
 
 plugins {
     id("io.element.android-compose-library")
@@ -70,6 +71,5 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(libs.coil.compose)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
+    testCommonDependencies(libs)
 }

@@ -14,17 +14,18 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.api.core.SpaceId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.ui.components.SpaceHeaderRootView
 import io.element.android.libraries.matrix.ui.components.SpaceHeaderView
+import io.element.android.libraries.matrix.ui.components.SpaceRoomItemView
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun HomeSpacesView(
     state: HomeSpacesState,
-    onSpaceClick: (SpaceId) -> Unit,
+    onSpaceClick: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier) {
@@ -51,15 +52,18 @@ fun HomeSpacesView(
                 )
             }
         }
-        state.spaceRooms.forEach {
-            item(it.spaceId) {
-                val isInvitation = it.state == CurrentUserMembership.INVITED
-                HomeSpaceItemView(
-                    spaceRoom = it,
-                    showUnreadIndicator = isInvitation && it.spaceId !in state.seenSpaceInvites,
+        state.spaceRooms.forEach { spaceRoom ->
+            item(spaceRoom.roomId) {
+                val isInvitation = spaceRoom.state == CurrentUserMembership.INVITED
+                SpaceRoomItemView(
+                    spaceRoom = spaceRoom,
+                    showUnreadIndicator = isInvitation && spaceRoom.roomId !in state.seenSpaceInvites,
                     hideAvatars = isInvitation && state.hideInvitesAvatar,
                     onClick = {
-                        onSpaceClick(it.spaceId)
+                        onSpaceClick(spaceRoom.roomId)
+                    },
+                    onLongClick = {
+                        // TODO
                     }
                 )
             }

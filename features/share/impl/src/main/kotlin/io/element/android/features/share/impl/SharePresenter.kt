@@ -43,7 +43,7 @@ class SharePresenter(
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<ShareState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(intent: Intent): SharePresenter
     }
 

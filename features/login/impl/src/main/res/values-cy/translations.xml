@@ -13,6 +13,9 @@
   <string name="screen_change_account_provider_other">"Arall"</string>
   <string name="screen_change_account_provider_subtitle">"Defnyddiwch ddarparwr cyfrif gwahanol, fel eich gweinydd preifat eich hun neu gyfrif gwaith."</string>
   <string name="screen_change_account_provider_title">"Newid darparwr cyfrif"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"Mae angen yr ap Element Pro ar %1$s. Llwythwch ef o\'r siop."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Mae angen Element Pro"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Doedd dim modd i ni gyrraedd y gweinydd cartref hwn. Gwiriwch eich bod wedi rhoi URL y gweinydd cartref yn gywir. Os yw\'r URL yn gywir, cysylltwch â gweinyddwr eich gweinydd cartref am ragor o help."</string>
   <string name="screen_change_server_error_invalid_well_known">"Dyw cydweddu llithrig ddim ar gael oherwydd problem yn y ffeil .well-known:
 %1$s"</string>

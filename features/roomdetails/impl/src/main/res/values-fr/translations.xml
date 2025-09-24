@@ -50,6 +50,7 @@
   <string name="screen_room_details_error_loading_notification_settings">"Une erreur s’est produite lors du chargement des paramètres de notification."</string>
   <string name="screen_room_details_error_muting">"Échec de la mise en sourdine de ce salon, veuillez réessayer."</string>
   <string name="screen_room_details_error_unmuting">"Échec de la désactivation de la mise en sourdine de ce salon, veuillez réessayer."</string>
+  <string name="screen_room_details_invite_people_preparing">"Préparation des invitations…"</string>
   <string name="screen_room_details_invite_people_title">"Inviter des amis"</string>
   <string name="screen_room_details_leave_conversation_title">"Quitter la discussion"</string>
   <string name="screen_room_details_leave_room_title">"Quitter le salon"</string>

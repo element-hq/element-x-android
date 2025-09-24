@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -42,18 +43,15 @@ dependencies {
 
     // UnifiedPush library
     api(libs.unifiedpush)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.robolectric)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
+
+    testCommonDependencies(libs)
     testImplementation(libs.kotlinx.collections.immutable)
     testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.libraries.pushstore.test)
-    testImplementation(projects.tests.testutils)
+    testImplementation(projects.libraries.troubleshoot.test)
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.services.appnavstate.test)
 }

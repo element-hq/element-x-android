@@ -105,6 +105,7 @@
   <string name="action_leave">"Lahku"</string>
   <string name="action_leave_conversation">"Lahku vestlusest"</string>
   <string name="action_leave_room">"Lahku jututoast"</string>
+  <string name="action_leave_space">"Lahku kogukonnast"</string>
   <string name="action_load_more">"Näita veel"</string>
   <string name="action_manage_account">"Halda kasutajakontot"</string>
   <string name="action_manage_devices">"Halda seadmeid"</string>
@@ -187,6 +188,7 @@
   <string name="common_current_user_rejected_invite">"Keeldusid kutsest"</string>
   <string name="common_dark">"Tume"</string>
   <string name="common_decryption_error">"Dekrüptimisviga"</string>
+  <string name="common_description">"Kirjeldus"</string>
   <string name="common_developer_options">"Arendaja valikud"</string>
   <string name="common_device_id">"Seadme tunnus"</string>
   <string name="common_direct_chat">"Otsevestlus"</string>
@@ -303,6 +305,7 @@ Põhjus: %1$s."</string>
   <string name="common_sent">"Saadetud"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Server pole toetatud"</string>
+  <string name="common_server_unreachable">"Server pole leitav"</string>
   <string name="common_server_url">"Serveri URL"</string>
   <string name="common_settings">"Seadistused"</string>
   <string name="common_shared_location">"Jagatud asukoht"</string>
@@ -408,6 +411,9 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Veast teatamiseks raputa nutiseadet ägedalt"</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle">"Sellega eemaldad end ka kõikidest antud kogukonna jututubadest."</string>
+  <string name="screen_bottom_sheet_leave_space_subtitle_admin">"Sellega eemaldad end ka kõikidest antud kogukonna jututubadest, sealhulgast järgnevaist, kus oled ainus peakasutaja:"</string>
+  <string name="screen_bottom_sheet_leave_space_title">"Kas lahkud %1$s kogukonnast?"</string>
   <string name="screen_bug_report_a11y_screenshot">"Ekraanitõmmis"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Valikud"</string>

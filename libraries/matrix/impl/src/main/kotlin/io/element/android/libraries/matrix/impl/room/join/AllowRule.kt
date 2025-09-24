@@ -20,7 +20,7 @@ fun RustAllowRule.map(): AllowRule {
 
 fun AllowRule.map(): RustAllowRule {
     return when (this) {
-        is AllowRule.RoomMembership -> RustAllowRule.RoomMembership(roomId.toString())
+        is AllowRule.RoomMembership -> RustAllowRule.RoomMembership(roomId.value)
         is AllowRule.Custom -> RustAllowRule.Custom(json)
     }
 }

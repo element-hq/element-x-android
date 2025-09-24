@@ -17,7 +17,6 @@ data class RoomMember(
     val membership: RoomMembershipState,
     val isNameAmbiguous: Boolean,
     val powerLevel: Long,
-    val normalizedPowerLevel: Long,
     val isIgnored: Boolean,
     val role: Role,
     val membershipChangeReason: String?,

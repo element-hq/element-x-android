@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @Inject
@@ -102,13 +103,44 @@ class RoomListDataSource(
     }
 
     private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>, useCache: Boolean = true) {
+        // Used to detect duplicates in the room list summaries - see comment below
+        data class CacheResult(val index: Int, val fromCache: Boolean)
+        val cachingResults = mutableMapOf<RoomId, MutableList<CacheResult>>()
+
         val roomListRoomSummaries = diffCache.indices().mapNotNull { index ->
             if (useCache) {
-                diffCache.get(index) ?: buildAndCacheItem(roomSummaries, index)
+                diffCache.get(index)?.let { cachedItem ->
+                    // Add the cached item to the caching results
+                    val pairs = cachingResults.getOrDefault(cachedItem.roomId, mutableListOf())
+                    pairs.add(CacheResult(index, fromCache = true))
+                    cachingResults[cachedItem.roomId] = pairs
+                    cachedItem
+                } ?: run {
+                    roomSummaries.getOrNull(index)?.roomId?.let {
+                        // Add the non-cached item to the caching results
+                        val pairs = cachingResults.getOrDefault(it, mutableListOf())
+                        pairs.add(CacheResult(index, fromCache = false))
+                        cachingResults[it] = pairs
+                    }
+                    buildAndCacheItem(roomSummaries, index)
+                }
             } else {
+                roomSummaries.getOrNull(index)?.roomId?.let {
+                    // Add the non-cached item to the caching results
+                    val pairs = cachingResults.getOrDefault(it, mutableListOf())
+                    pairs.add(CacheResult(index, fromCache = false))
+                    cachingResults[it] = pairs
+                }
                 buildAndCacheItem(roomSummaries, index)
             }
         }
+
+        // TODO remove once https://github.com/element-hq/element-x-android/issues/5031 has been confirmed as fixed
+        val duplicates = cachingResults.filter { (_, operations) -> operations.size > 1 }
+        if (duplicates.isNotEmpty()) {
+            Timber.e("Found duplicates in room summaries after an UI update: $duplicates. This could be a race condition/caching issue of some kind")
+        }
+
         _allRooms.emit(roomListRoomSummaries.toImmutableList())
     }
 

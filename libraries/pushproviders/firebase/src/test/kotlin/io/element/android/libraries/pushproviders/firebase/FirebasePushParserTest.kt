@@ -60,6 +60,12 @@ class FirebasePushParserTest {
     }
 
     @Test
+    fun `test empty client secret`() {
+        val pushParser = FirebasePushParser()
+        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("cs", null))).isNull()
+    }
+
+    @Test
     fun `test invalid eventId`() {
         val pushParser = FirebasePushParser()
         assertThrowsInDebug { pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", "anEventId")) }

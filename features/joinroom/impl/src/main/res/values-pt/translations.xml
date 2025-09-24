@@ -20,7 +20,7 @@
   <string name="screen_join_room_knock_action">"Bater à porta"</string>
   <string name="screen_join_room_knock_message_characters_count">"%1$d de %2$d caracteres permitidos"</string>
   <string name="screen_join_room_knock_message_description">"Mensagem (opcional)"</string>
-  <string name="screen_join_room_knock_sent_description">"Irá receber um convite para participar na sala se seu pedido for aceite."</string>
+  <string name="screen_join_room_knock_sent_description">"Irás receber um convite para participar na sala se o pedido for aceite."</string>
   <string name="screen_join_room_knock_sent_title">"Pedido de adesão enviado"</string>
   <string name="screen_join_room_loading_alert_message">"Não conseguimos exibir a pré-visualização da sala. Isso pode ser devido a problemas de rede ou servidor."</string>
   <string name="screen_join_room_loading_alert_title">"Não foi possível exibir a pré-visualização desta sala"</string>

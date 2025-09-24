@@ -52,7 +52,6 @@ import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
-import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
@@ -60,6 +59,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.share.api.ShareEntryPoint
+import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.verifysession.api.IncomingVerificationEntryPoint
@@ -118,7 +118,6 @@ class LoggedInFlowNode(
     private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
     private val sendingQueue: SendQueues,
-    private val logoutEntryPoint: LogoutEntryPoint,
     private val incomingVerificationEntryPoint: IncomingVerificationEntryPoint,
     private val mediaPreviewConfigMigration: MediaPreviewConfigMigration,
     private val sessionEnterpriseService: SessionEnterpriseService,
@@ -277,9 +276,6 @@ class LoggedInFlowNode(
         data class IncomingShare(val intent: Intent) : NavTarget
 
         @Parcelize
-        data object LogoutForNativeSlidingSyncMigrationNeeded : NavTarget
-
-        @Parcelize
         data class IncomingVerificationRequest(val data: VerificationRequest.Incoming) : NavTarget
     }
 
@@ -323,10 +319,6 @@ class LoggedInFlowNode(
                     override fun onReportBugClick() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
-
-                    override fun onLogoutForNativeSlidingSyncMigrationNeeded() {
-                        backstack.push(NavTarget.LogoutForNativeSlidingSyncMigrationNeeded)
-                    }
                 }
                 homeEntryPoint
                     .nodeBuilder(this, buildContext)
@@ -334,7 +326,7 @@ class LoggedInFlowNode(
                     .build()
             }
             is NavTarget.Room -> {
-                val callback = object : JoinedRoomLoadedFlowNode.Callback {
+                val joinedRoomCallback = object : JoinedRoomLoadedFlowNode.Callback {
                     override fun onOpenRoom(roomId: RoomId, serverNames: List<String>) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), serverNames))
                     }
@@ -373,6 +365,11 @@ class LoggedInFlowNode(
                         backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationSettings))
                     }
                 }
+                val spaceCallback = object : SpaceEntryPoint.Callback {
+                    override fun onOpenRoom(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                    }
+                }
                 val inputs = RoomFlowNode.Inputs(
                     roomIdOrAlias = navTarget.roomIdOrAlias,
                     roomDescription = Optional.ofNullable(navTarget.roomDescription),
@@ -380,7 +377,7 @@ class LoggedInFlowNode(
                     trigger = Optional.ofNullable(navTarget.trigger),
                     initialElement = navTarget.initialElement
                 )
-                createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback))
+                createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, joinedRoomCallback, spaceCallback))
             }
             is NavTarget.UserProfile -> {
                 val callback = object : UserProfileEntryPoint.Callback {
@@ -448,8 +445,7 @@ class LoggedInFlowNode(
                     .build()
             }
             NavTarget.Ftue -> {
-                ftueEntryPoint.nodeBuilder(this, buildContext)
-                    .build()
+                ftueEntryPoint.createNode(this, buildContext)
             }
             NavTarget.RoomDirectorySearch -> {
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
@@ -478,17 +474,6 @@ class LoggedInFlowNode(
                         }
                     })
                     .params(ShareEntryPoint.Params(intent = navTarget.intent))
-                    .build()
-            }
-            is NavTarget.LogoutForNativeSlidingSyncMigrationNeeded -> {
-                val callback = object : LogoutEntryPoint.Callback {
-                    override fun onChangeRecoveryKeyClick() {
-                        backstack.push(NavTarget.SecureBackup())
-                    }
-                }
-
-                logoutEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(callback)
                     .build()
             }
             is NavTarget.IncomingVerificationRequest -> {

@@ -215,7 +215,7 @@ import kotlin.time.Duration.Companion.seconds
     }
 
     @Test
-    fun `present - a received 'joined' action makes the call to be active`() = runTest {
+    fun `present - a received 'content loaded' action makes the call to be active`() = runTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
@@ -238,7 +238,7 @@ import kotlin.time.Duration.Companion.seconds
             messageInterceptor.givenInterceptedMessage(
                 """
                     {
-                        "action":"io.element.join",
+                        "action":"content_loaded",
                         "api":"fromWidget",
                         "widgetId":"1",
                         "requestId":"1"

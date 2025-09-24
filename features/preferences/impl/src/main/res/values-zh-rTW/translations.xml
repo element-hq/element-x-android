@@ -13,6 +13,13 @@
   <string name="screen_advanced_settings_media_compression_description">"上傳照片與影片更快且減少資料使用量"</string>
   <string name="screen_advanced_settings_media_compression_title">"最佳化媒體品質"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"管理與安全"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"自動最佳化影像以提供更快的上傳速度與較小的檔案大小。"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"最佳化影像上傳品質"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s。輕點此處以變更。"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"高 (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"低 (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"標準 (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"視訊上傳品質"</string>
   <string name="screen_advanced_settings_push_provider_android">"推播通知提供者"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"手動輸入 Markdown，停用格式化文字編輯器。"</string>
   <string name="screen_advanced_settings_send_read_receipts">"已讀回條"</string>

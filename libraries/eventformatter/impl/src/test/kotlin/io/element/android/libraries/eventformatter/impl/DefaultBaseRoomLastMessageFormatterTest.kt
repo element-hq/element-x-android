@@ -14,7 +14,6 @@ import com.google.common.truth.Truth.assertWithMessage
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
@@ -102,7 +101,7 @@ class DefaultBaseRoomLastMessageFormatterTest {
         val info = ImageInfo(null, null, null, null, null, null, null)
         val message = createRoomEvent(false, null, aStickerContent(body, info, aMediaSource(url = "url")))
         val result = formatter.format(message, false)
-        val expectedBody = someoneElseId.toString() + ": Sticker (a sticker body)"
+        val expectedBody = someoneElseId.value + ": Sticker (a sticker body)"
         assertThat(result.toString()).isEqualTo(expectedBody)
     }
 
@@ -175,7 +174,7 @@ class DefaultBaseRoomLastMessageFormatterTest {
     ) {
         val body = "Shared body"
         fun createMessageContent(type: MessageType): MessageContent {
-            return MessageContent(body, null, false, EventThreadInfo(null, null), type)
+            return MessageContent(body, null, false, null, type)
         }
 
         val sharedContentMessagesTypes = arrayOf(

@@ -47,7 +47,7 @@ class SendLocationPresenter(
     private val buildMeta: BuildMeta,
 ) : Presenter<SendLocationState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(timelineMode: Timeline.Mode): SendLocationPresenter
     }
 

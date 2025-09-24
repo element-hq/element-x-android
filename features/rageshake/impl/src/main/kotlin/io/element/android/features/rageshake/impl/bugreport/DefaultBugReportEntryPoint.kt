@@ -29,7 +29,7 @@ class DefaultBugReportEntryPoint : BugReportEntryPoint {
             }
 
             override fun build(): Node {
-                return parentNode.createNode<BugReportNode>(buildContext, plugins)
+                return parentNode.createNode<BugReportFlowNode>(buildContext, plugins)
             }
         }
     }

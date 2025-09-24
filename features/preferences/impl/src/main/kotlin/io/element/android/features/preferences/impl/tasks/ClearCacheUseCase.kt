@@ -12,7 +12,6 @@ import coil3.SingletonImageLoader
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provider
-import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -36,7 +35,6 @@ class DefaultClearCacheUseCase(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val defaultCacheService: DefaultCacheService,
     private val okHttpClient: Provider<OkHttpClient>,
-    private val ftueService: FtueService,
     private val pushService: PushService,
     private val seenInvitesStore: SeenInvitesStore,
     private val activeRoomsHolder: ActiveRoomsHolder,
@@ -56,7 +54,6 @@ class DefaultClearCacheUseCase(
         // Clear app cache
         context.cacheDir.deleteRecursively()
         // Clear some settings
-        ftueService.reset()
         seenInvitesStore.clear()
         // Ensure any error will be displayed again
         pushService.setIgnoreRegistrationError(matrixClient.sessionId, false)

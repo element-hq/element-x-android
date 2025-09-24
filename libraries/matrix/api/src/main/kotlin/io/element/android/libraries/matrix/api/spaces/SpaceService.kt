@@ -7,9 +7,12 @@
 
 package io.element.android.libraries.matrix.api.spaces
 
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.flow.SharedFlow
 
 interface SpaceService {
-    val spaceRooms: SharedFlow<List<SpaceRoom>>
+    val spaceRoomsFlow: SharedFlow<List<SpaceRoom>>
     suspend fun joinedSpaces(): Result<List<SpaceRoom>>
+
+    fun spaceRoomList(id: RoomId): SpaceRoomList
 }

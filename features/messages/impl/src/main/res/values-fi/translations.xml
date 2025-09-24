@@ -7,13 +7,17 @@
   <string name="emoji_picker_category_objects">"Esineet"</string>
   <string name="emoji_picker_category_people">"Hymiöt ja ihmiset"</string>
   <string name="emoji_picker_category_places">"Matkustaminen ja paikat"</string>
+  <string name="emoji_picker_category_recent">"Viimeaikaiset emojit"</string>
   <string name="emoji_picker_category_symbols">"Symbolit"</string>
   <string name="screen_media_upload_preview_caption_warning">"Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia."</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"Napauta muuttaaksesi videon lähetyslaatua"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Tiedostoa ei voitu lähettää."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Median käsittely epäonnistui, yritä uudelleen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Median lähettäminen epäonnistui, yritä uudelleen."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"Suurin sallittu tiedostokoko on %1$s."</string>
   <string name="screen_media_upload_preview_error_too_large_title">"Tiedosto on liian suuri lähetettäväksi"</string>
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimoi kuvanlaatu"</string>
+  <string name="screen_media_upload_preview_processing">"Käsitellään…"</string>
   <string name="screen_report_content_block_user">"Estä käyttäjä"</string>
   <string name="screen_report_content_block_user_hint">"Valitse tämä, jos haluat piilottaa kaikki nykyiset ja tulevat viestit tältä käyttäjältä"</string>
   <string name="screen_report_content_explanation">"Tämä viesti ilmoitetaan kotipalvelimesi ylläpitäjälle. Ylläpitäjä ei pysty lukemaan salattuja viestejä."</string>

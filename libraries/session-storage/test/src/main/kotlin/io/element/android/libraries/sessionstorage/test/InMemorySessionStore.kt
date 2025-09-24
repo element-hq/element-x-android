@@ -20,7 +20,7 @@ class InMemorySessionStore(
 ) : SessionStore {
     private val sessionDataListFlow = MutableStateFlow(initialList)
 
-    override fun isLoggedIn(): Flow<LoggedInState> {
+    override fun loggedInStateFlow(): Flow<LoggedInState> {
         return sessionDataListFlow.map {
             if (it.isEmpty()) {
                 LoggedInState.NotLoggedIn
@@ -37,7 +37,7 @@ class InMemorySessionStore(
 
     override fun sessionsFlow(): Flow<List<SessionData>> = sessionDataListFlow.asStateFlow()
 
-    override suspend fun storeData(sessionData: SessionData) {
+    override suspend fun addSession(sessionData: SessionData) {
         val currentList = sessionDataListFlow.value.toMutableList()
         currentList.removeAll { it.userId == sessionData.userId }
         currentList.add(sessionData)

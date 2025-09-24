@@ -10,10 +10,9 @@ package io.element.android.features.messages.impl.utils.messagesummary
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
@@ -21,6 +20,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -37,15 +37,15 @@ import io.element.android.libraries.ui.strings.CommonStrings
 class DefaultMessageSummaryFormatter(
     @ApplicationContext private val context: Context,
 ) : MessageSummaryFormatter {
-    override fun format(event: TimelineItem.Event): String {
-        return when (event.content) {
-            is TimelineItemTextBasedContent -> event.content.plainText
-            is TimelineItemProfileChangeContent -> event.content.body
-            is TimelineItemStateContent -> event.content.body
+    override fun format(content: TimelineItemEventContent): String {
+        return when (content) {
+            is TimelineItemTextBasedContent -> content.plainText
+            is TimelineItemProfileChangeContent -> content.body
+            is TimelineItemStateContent -> content.body
             is TimelineItemLocationContent -> context.getString(CommonStrings.common_shared_location)
             is TimelineItemEncryptedContent -> context.getString(CommonStrings.common_unable_to_decrypt)
             is TimelineItemRedactedContent -> context.getString(CommonStrings.common_message_removed)
-            is TimelineItemPollContent -> event.content.question
+            is TimelineItemPollContent -> content.question
             is TimelineItemVoiceContent -> context.getString(CommonStrings.common_voice_message)
             is TimelineItemUnknownContent -> context.getString(CommonStrings.common_unsupported_event)
             is TimelineItemImageContent -> context.getString(CommonStrings.common_image)
@@ -54,7 +54,7 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
             is TimelineItemLegacyCallInviteContent -> context.getString(CommonStrings.common_unsupported_call)
-            is TimelineItemCallNotifyContent -> context.getString(CommonStrings.common_call_started)
+            is TimelineItemRtcNotificationContent -> context.getString(CommonStrings.common_call_started)
         }
             // Truncate the message to a safe length to avoid crashes in Compose
             .toSafeLength()

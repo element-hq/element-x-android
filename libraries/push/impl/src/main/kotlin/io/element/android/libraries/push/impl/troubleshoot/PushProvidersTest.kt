@@ -48,7 +48,7 @@ class PushProvidersTest(
         } else {
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_detect_push_provider_failure),
-                status = NotificationTroubleshootTestState.Status.Failure(false)
+                status = NotificationTroubleshootTestState.Status.Failure()
             )
         }
     }

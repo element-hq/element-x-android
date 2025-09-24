@@ -36,7 +36,6 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
-import io.element.android.features.roomcall.api.anOngoingCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
@@ -60,13 +59,9 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(composerState = aMessageComposerState(showAttachmentSourcePicker = true)),
             aMessagesState(userEventPermissions = aUserEventPermissions(canSendMessage = false)),
             aMessagesState(showReinvitePrompt = true),
-            aMessagesState(roomName = null),
             aMessagesState(composerState = aMessageComposerState(showTextFormatting = true)),
             aMessagesState(
                 voiceMessageComposerState = aVoiceMessageComposerState(showPermissionRationaleDialog = true),
-            ),
-            aMessagesState(
-                roomCallState = anOngoingCallState(),
             ),
             aMessagesState(
                 voiceMessageComposerState = aVoiceMessageComposerState(
@@ -75,21 +70,18 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 ),
             ),
             aMessagesState(
-                roomCallState = aStandByCallState(canStartCall = false),
-            ),
-            aMessagesState(
                 pinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(
                     knownPinnedMessagesCount = 4,
                     currentPinnedMessageIndex = 0,
                 ),
             ),
-            aMessagesState(roomName = "A DM with a very looong name", dmUserVerificationState = IdentityState.Verified),
-            aMessagesState(roomName = "A DM with a very looong name", dmUserVerificationState = IdentityState.VerificationViolation),
             aMessagesState(successorRoom = SuccessorRoom(RoomId("!id:domain"), null)),
-            aMessagesState(timelineState = aTimelineState(
-                timelineMode = Timeline.Mode.Thread(threadRootId = ThreadId("\$a-thread-id")),
-                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
-            )),
+            aMessagesState(
+                timelineState = aTimelineState(
+                    timelineMode = Timeline.Mode.Thread(threadRootId = ThreadId("\$a-thread-id")),
+                    timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+                )
+            ),
         )
 }
 

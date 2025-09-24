@@ -15,7 +15,6 @@ class FakePermissionStateProvider(
     private var permissionGranted: Boolean = true,
     permissionDenied: Boolean = false,
     permissionAsked: Boolean = false,
-    private val resetPermissionLambda: (String) -> Unit = {},
 ) : PermissionStateProvider {
     private val permissionDeniedFlow = MutableStateFlow(permissionDenied)
     private val permissionAskedFlow = MutableStateFlow(permissionAsked)
@@ -37,10 +36,4 @@ class FakePermissionStateProvider(
     }
 
     override fun isPermissionAsked(permission: String): Flow<Boolean> = permissionAskedFlow
-
-    override suspend fun resetPermission(permission: String) {
-        setPermissionAsked(permission, false)
-        setPermissionDenied(permission, false)
-        resetPermissionLambda(permission)
-    }
 }

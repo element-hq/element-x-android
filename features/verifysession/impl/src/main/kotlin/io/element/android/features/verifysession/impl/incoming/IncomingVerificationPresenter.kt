@@ -48,7 +48,7 @@ class IncomingVerificationPresenter(
     private val dateFormatter: DateFormatter,
 ) : Presenter<IncomingVerificationState> {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             verificationRequest: VerificationRequest.Incoming,
             navigator: IncomingVerificationNavigator,

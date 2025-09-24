@@ -22,5 +22,5 @@ data class PushData(
     val eventId: EventId,
     val roomId: RoomId,
     val unread: Int?,
-    val clientSecret: String?,
+    val clientSecret: String,
 )
