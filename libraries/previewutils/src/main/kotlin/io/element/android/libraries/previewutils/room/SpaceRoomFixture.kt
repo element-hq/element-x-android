@@ -29,6 +29,7 @@ fun aSpaceRoom(
     state: CurrentUserMembership? = null,
     topic: String? = null,
     worldReadable: Boolean = false,
+    via: List<String> = emptyList(),
 ) = SpaceRoom(
     name = name,
     avatarUrl = avatarUrl,
@@ -42,5 +43,6 @@ fun aSpaceRoom(
     roomType = roomType,
     state = state,
     topic = topic,
-    worldReadable = worldReadable
+    worldReadable = worldReadable,
+    via = via,
 )
