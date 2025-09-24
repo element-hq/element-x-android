@@ -49,7 +49,7 @@ class DefaultSpaceEntryPointTest {
             )
         }
         val callback = object : SpaceEntryPoint.Callback {
-            override fun onOpenRoom(roomId: RoomId) {
+            override fun onOpenRoom(roomId: RoomId, viaParameters: List<String>) {
                 lambdaError()
             }
         }

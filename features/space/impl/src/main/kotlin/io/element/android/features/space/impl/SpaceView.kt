@@ -39,7 +39,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.ui.components.SpaceHeaderView
@@ -52,7 +51,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun SpaceView(
     state: SpaceState,
     onBackClick: () -> Unit,
-    onRoomClick: (roomId: RoomId) -> Unit,
+    onRoomClick: (spaceRoom: SpaceRoom) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -76,7 +75,7 @@ fun SpaceView(
 @Composable
 private fun SpaceViewContent(
     state: SpaceState,
-    onRoomClick: (roomId: RoomId) -> Unit,
+    onRoomClick: (spaceRoom: SpaceRoom) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier.fillMaxSize()) {
@@ -102,7 +101,7 @@ private fun SpaceViewContent(
                     showUnreadIndicator = isInvitation && spaceRoom.roomId !in state.seenSpaceInvites,
                     hideAvatars = isInvitation && state.hideInvitesAvatar,
                     onClick = {
-                        onRoomClick(spaceRoom.roomId)
+                        onRoomClick(spaceRoom)
                     },
                     onLongClick = {
                         // TODO

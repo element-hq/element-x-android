@@ -366,8 +366,8 @@ class LoggedInFlowNode(
                     }
                 }
                 val spaceCallback = object : SpaceEntryPoint.Callback {
-                    override fun onOpenRoom(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                    override fun onOpenRoom(roomId: RoomId, viaParameters: List<String>) {
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), serverNames = viaParameters))
                     }
                 }
                 val inputs = RoomFlowNode.Inputs(

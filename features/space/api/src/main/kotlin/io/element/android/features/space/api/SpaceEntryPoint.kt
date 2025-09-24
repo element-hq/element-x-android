@@ -31,6 +31,6 @@ interface SpaceEntryPoint : FeatureEntryPoint {
     ) : NodeInputs
 
     interface Callback : Plugin {
-        fun onOpenRoom(roomId: RoomId)
+        fun onOpenRoom(roomId: RoomId, viaParameters: List<String>)
     }
 }
