@@ -26,6 +26,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.SpaceListUpdate
 import uniffi.matrix_sdk_ui.SpaceRoomListPaginationState
+import kotlin.jvm.optionals.getOrNull
 import org.matrix.rustcomponents.sdk.SpaceRoomList as InnerSpaceRoomList
 
 class RustSpaceRoomListTest {
@@ -93,10 +94,10 @@ class RustSpaceRoomListTest {
             spaceRoomCache = spaceRoomCache,
         )
         sut.currentSpaceFlow().test {
-            assertThat(awaitItem()).isNull()
+            assertThat(awaitItem().getOrNull()).isNull()
             val spaceRoom = aSpaceRoom(roomId = A_ROOM_ID)
             spaceRoomCache.update(listOf(spaceRoom))
-            assertThat(awaitItem()).isEqualTo(spaceRoom)
+            assertThat(awaitItem().getOrNull()).isEqualTo(spaceRoom)
         }
     }
 

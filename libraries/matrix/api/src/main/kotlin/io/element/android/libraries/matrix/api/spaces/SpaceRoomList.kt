@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.api.spaces
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Optional
 
 interface SpaceRoomList {
     sealed interface PaginationStatus {
@@ -16,7 +17,7 @@ interface SpaceRoomList {
         data class Idle(val hasMoreToLoad: Boolean) : PaginationStatus
     }
 
-    fun currentSpaceFlow(): Flow<SpaceRoom?>
+    fun currentSpaceFlow(): StateFlow<Optional<SpaceRoom>>
 
     val spaceRoomsFlow: Flow<List<SpaceRoom>>
     val paginationStatusFlow: StateFlow<PaginationStatus>

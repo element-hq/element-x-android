@@ -14,7 +14,7 @@ enum class AvatarSize(val dp: Dp) {
     CurrentUserTopBar(32.dp),
 
     IncomingCall(140.dp),
-    RoomHeader(96.dp),
+    RoomDetailsHeader(96.dp),
     RoomListItem(52.dp),
 
     SpaceListItem(52.dp),
@@ -69,5 +69,7 @@ enum class AvatarSize(val dp: Dp) {
 
     OrganizationHeader(64.dp),
     SpaceHeader(64.dp),
+    RoomPreviewHeader(64.dp),
+    RoomPreviewInviter(56.dp),
     SpaceMember(24.dp),
 }
