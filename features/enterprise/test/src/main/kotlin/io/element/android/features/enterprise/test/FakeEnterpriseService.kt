@@ -26,6 +26,7 @@ class FakeEnterpriseService(
     private val semanticColorsDarkResult: () -> SemanticColors = { lambdaError() },
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
+    private val isElementCallAvailableResult: (SessionId) -> Boolean = { lambdaError() },
 ) : EnterpriseService {
     override suspend fun isEnterpriseUser(sessionId: SessionId): Boolean = simulateLongTask {
         isEnterpriseUserResult(sessionId)
@@ -53,6 +54,10 @@ class FakeEnterpriseService(
 
     override fun unifiedPushDefaultPushGateway(): String? {
         return unifiedPushDefaultPushGatewayResult()
+    }
+
+    override suspend fun isElementCallAvailable(sessionId: SessionId): Boolean {
+        return isElementCallAvailableResult(sessionId)
     }
 
     val bugReportUrlMutableFlow = MutableStateFlow<BugReportUrl>(BugReportUrl.UseDefault)

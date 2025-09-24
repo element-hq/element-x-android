@@ -37,4 +37,10 @@ class DefaultEnterpriseServiceTest {
         val defaultEnterpriseService = DefaultEnterpriseService()
         assertThat(defaultEnterpriseService.isEnterpriseUser(A_SESSION_ID)).isFalse()
     }
+
+    @Test
+    fun `isElementCallAvailable is always true`() = runTest {
+        val service = DefaultEnterpriseService()
+        assertThat(service.isElementCallAvailable(A_SESSION_ID)).isTrue()
+    }
 }

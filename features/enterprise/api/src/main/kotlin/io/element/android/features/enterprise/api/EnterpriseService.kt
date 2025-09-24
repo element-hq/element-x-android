@@ -25,6 +25,11 @@ interface EnterpriseService {
 
     val bugReportUrlFlow: Flow<BugReportUrl>
 
+    /**
+     * Same as [SessionEnterpriseService.isElementCallAvailable] but with a [SessionId] as parameter.
+     */
+    suspend fun isElementCallAvailable(sessionId: SessionId): Boolean
+
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"
     }

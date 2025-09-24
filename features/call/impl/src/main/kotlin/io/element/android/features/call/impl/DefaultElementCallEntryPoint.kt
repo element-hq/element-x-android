@@ -16,15 +16,18 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.impl.utils.IntentProvider
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
 @Inject
 class DefaultElementCallEntryPoint(
     @ApplicationContext private val context: Context,
     private val activeCallManager: ActiveCallManager,
+    private val enterpriseService: EnterpriseService,
 ) : ElementCallEntryPoint {
     companion object {
         const val EXTRA_CALL_TYPE = "EXTRA_CALL_TYPE"
@@ -47,6 +50,11 @@ class DefaultElementCallEntryPoint(
         notificationChannelId: String,
         textContent: String?,
     ) {
+        // Check the Element call is supported before processing ringing call events
+        if (enterpriseService.isElementCallAvailable(callType.sessionId).not()) {
+            Timber.w("Received a call notification but Element Call is not available. Ignoring.")
+            return
+        }
         val incomingCallNotificationData = CallNotificationData(
             sessionId = callType.sessionId,
             roomId = callType.roomId,

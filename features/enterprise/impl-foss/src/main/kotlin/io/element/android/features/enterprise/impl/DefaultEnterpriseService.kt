@@ -35,5 +35,7 @@ class DefaultEnterpriseService : EnterpriseService {
     override fun firebasePushGateway(): String? = null
     override fun unifiedPushDefaultPushGateway(): String? = null
 
+    override suspend fun isElementCallAvailable(sessionId: SessionId) = true
+
     override val bugReportUrlFlow = flowOf(BugReportUrl.UseDefault)
 }
