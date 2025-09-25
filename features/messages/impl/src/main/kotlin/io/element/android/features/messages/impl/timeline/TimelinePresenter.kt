@@ -208,7 +208,7 @@ class TimelinePresenter(
                 is TimelineEvents.NavigateToPredecessorOrSuccessorRoom -> {
                     // Navigate to the predecessor or successor room
                     val serverNames = calculateServerNamesForRoom(room)
-                    navigator.onNavigateToRoom(event.roomId, serverNames)
+                    navigator.onNavigateToRoom(event.roomId, null, serverNames)
                 }
                 is TimelineEvents.OpenThread -> {
                     navigator.onOpenThread(
@@ -275,11 +275,13 @@ class TimelinePresenter(
                                         focusRequestState = FocusRequestState.Success(eventId = eventId)
                                     }
                                     is EventFocusResult.IsInThread -> {
-                                        if (timelineController.mainTimelineMode() is Timeline.Mode.Thread) {
+                                        val currentThreadId = (timelineController.mainTimelineMode() as? Timeline.Mode.Thread)?.threadRootId
+                                        if (currentThreadId == result.threadId) {
+                                            // It's the same thread, we just focus on the event
                                             focusRequestState = FocusRequestState.Success(eventId = eventId)
                                         } else {
                                             focusRequestState = FocusRequestState.Success(eventId = result.threadId.asEventId())
-                                            // It's part of a thread, let's open it in another timeline
+                                            // It's part of a thread we're not in, let's open it in another timeline
                                             navigator.onOpenThread(result.threadId, eventId)
                                         }
                                     }
