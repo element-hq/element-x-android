@@ -282,8 +282,8 @@ class MessagesPresenter(
         }
         return produceState(UserEventPermissions.DEFAULT, key1 = key) {
             value = UserEventPermissions(
-                canSendMessage = room.canSendMessage(type = MessageEventType.ROOM_MESSAGE).getOrElse { true },
-                canSendReaction = room.canSendMessage(type = MessageEventType.REACTION).getOrElse { true },
+                canSendMessage = room.canSendMessage(type = MessageEventType.RoomMessage).getOrElse { true },
+                canSendReaction = room.canSendMessage(type = MessageEventType.Reaction).getOrElse { true },
                 canRedactOwn = room.canRedactOwn().getOrElse { false },
                 canRedactOther = room.canRedactOther().getOrElse { false },
                 canPinUnpin = room.canPinUnpin().getOrElse { false },

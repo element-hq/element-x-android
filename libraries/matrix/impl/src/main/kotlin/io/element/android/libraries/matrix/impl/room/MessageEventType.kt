@@ -11,53 +11,55 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import org.matrix.rustcomponents.sdk.MessageLikeEventType
 
 fun MessageEventType.map(): MessageLikeEventType = when (this) {
-    MessageEventType.CALL_ANSWER -> MessageLikeEventType.CALL_ANSWER
-    MessageEventType.CALL_INVITE -> MessageLikeEventType.CALL_INVITE
-    MessageEventType.CALL_HANGUP -> MessageLikeEventType.CALL_HANGUP
-    MessageEventType.CALL_CANDIDATES -> MessageLikeEventType.CALL_CANDIDATES
-    MessageEventType.RTC_NOTIFICATION -> MessageLikeEventType.RTC_NOTIFICATION
-    MessageEventType.KEY_VERIFICATION_READY -> MessageLikeEventType.KEY_VERIFICATION_READY
-    MessageEventType.KEY_VERIFICATION_START -> MessageLikeEventType.KEY_VERIFICATION_START
-    MessageEventType.KEY_VERIFICATION_CANCEL -> MessageLikeEventType.KEY_VERIFICATION_CANCEL
-    MessageEventType.KEY_VERIFICATION_ACCEPT -> MessageLikeEventType.KEY_VERIFICATION_ACCEPT
-    MessageEventType.KEY_VERIFICATION_KEY -> MessageLikeEventType.KEY_VERIFICATION_KEY
-    MessageEventType.KEY_VERIFICATION_MAC -> MessageLikeEventType.KEY_VERIFICATION_MAC
-    MessageEventType.KEY_VERIFICATION_DONE -> MessageLikeEventType.KEY_VERIFICATION_DONE
-    MessageEventType.REACTION -> MessageLikeEventType.REACTION
-    MessageEventType.ROOM_ENCRYPTED -> MessageLikeEventType.ROOM_ENCRYPTED
-    MessageEventType.ROOM_MESSAGE -> MessageLikeEventType.ROOM_MESSAGE
-    MessageEventType.ROOM_REDACTION -> MessageLikeEventType.ROOM_REDACTION
-    MessageEventType.STICKER -> MessageLikeEventType.STICKER
-    MessageEventType.POLL_END -> MessageLikeEventType.POLL_END
-    MessageEventType.POLL_RESPONSE -> MessageLikeEventType.POLL_RESPONSE
-    MessageEventType.POLL_START -> MessageLikeEventType.POLL_START
-    MessageEventType.UNSTABLE_POLL_END -> MessageLikeEventType.UNSTABLE_POLL_END
-    MessageEventType.UNSTABLE_POLL_RESPONSE -> MessageLikeEventType.UNSTABLE_POLL_RESPONSE
-    MessageEventType.UNSTABLE_POLL_START -> MessageLikeEventType.UNSTABLE_POLL_START
+    MessageEventType.CallAnswer -> MessageLikeEventType.CallAnswer
+    MessageEventType.CallInvite -> MessageLikeEventType.CallInvite
+    MessageEventType.CallHangup -> MessageLikeEventType.CallHangup
+    MessageEventType.CallCandidates -> MessageLikeEventType.CallCandidates
+    MessageEventType.RtcNotification -> MessageLikeEventType.RtcNotification
+    MessageEventType.KeyVerificationReady -> MessageLikeEventType.KeyVerificationReady
+    MessageEventType.KeyVerificationStart -> MessageLikeEventType.KeyVerificationStart
+    MessageEventType.KeyVerificationCancel -> MessageLikeEventType.KeyVerificationCancel
+    MessageEventType.KeyVerificationAccept -> MessageLikeEventType.KeyVerificationAccept
+    MessageEventType.KeyVerificationKey -> MessageLikeEventType.KeyVerificationKey
+    MessageEventType.KeyVerificationMac -> MessageLikeEventType.KeyVerificationMac
+    MessageEventType.KeyVerificationDone -> MessageLikeEventType.KeyVerificationDone
+    MessageEventType.Reaction -> MessageLikeEventType.Reaction
+    MessageEventType.RoomEncrypted -> MessageLikeEventType.RoomEncrypted
+    MessageEventType.RoomMessage -> MessageLikeEventType.RoomMessage
+    MessageEventType.RoomRedaction -> MessageLikeEventType.RoomRedaction
+    MessageEventType.Sticker -> MessageLikeEventType.Sticker
+    MessageEventType.PollEnd -> MessageLikeEventType.PollEnd
+    MessageEventType.PollResponse -> MessageLikeEventType.PollResponse
+    MessageEventType.PollStart -> MessageLikeEventType.PollStart
+    MessageEventType.UnstablePollEnd -> MessageLikeEventType.UnstablePollEnd
+    MessageEventType.UnstablePollResponse -> MessageLikeEventType.UnstablePollResponse
+    MessageEventType.UnstablePollStart -> MessageLikeEventType.UnstablePollStart
+    is MessageEventType.Other -> MessageLikeEventType.Other(type)
 }
 
 fun MessageLikeEventType.map(): MessageEventType = when (this) {
-    MessageLikeEventType.CALL_ANSWER -> MessageEventType.CALL_ANSWER
-    MessageLikeEventType.CALL_INVITE -> MessageEventType.CALL_INVITE
-    MessageLikeEventType.CALL_HANGUP -> MessageEventType.CALL_HANGUP
-    MessageLikeEventType.CALL_CANDIDATES -> MessageEventType.CALL_CANDIDATES
-    MessageLikeEventType.RTC_NOTIFICATION -> MessageEventType.RTC_NOTIFICATION
-    MessageLikeEventType.KEY_VERIFICATION_READY -> MessageEventType.KEY_VERIFICATION_READY
-    MessageLikeEventType.KEY_VERIFICATION_START -> MessageEventType.KEY_VERIFICATION_START
-    MessageLikeEventType.KEY_VERIFICATION_CANCEL -> MessageEventType.KEY_VERIFICATION_CANCEL
-    MessageLikeEventType.KEY_VERIFICATION_ACCEPT -> MessageEventType.KEY_VERIFICATION_ACCEPT
-    MessageLikeEventType.KEY_VERIFICATION_KEY -> MessageEventType.KEY_VERIFICATION_KEY
-    MessageLikeEventType.KEY_VERIFICATION_MAC -> MessageEventType.KEY_VERIFICATION_MAC
-    MessageLikeEventType.KEY_VERIFICATION_DONE -> MessageEventType.KEY_VERIFICATION_DONE
-    MessageLikeEventType.REACTION -> MessageEventType.REACTION
-    MessageLikeEventType.ROOM_ENCRYPTED -> MessageEventType.ROOM_ENCRYPTED
-    MessageLikeEventType.ROOM_MESSAGE -> MessageEventType.ROOM_MESSAGE
-    MessageLikeEventType.ROOM_REDACTION -> MessageEventType.ROOM_REDACTION
-    MessageLikeEventType.STICKER -> MessageEventType.STICKER
-    MessageLikeEventType.POLL_END -> MessageEventType.POLL_END
-    MessageLikeEventType.POLL_RESPONSE -> MessageEventType.POLL_RESPONSE
-    MessageLikeEventType.POLL_START -> MessageEventType.POLL_START
-    MessageLikeEventType.UNSTABLE_POLL_END -> MessageEventType.UNSTABLE_POLL_END
-    MessageLikeEventType.UNSTABLE_POLL_RESPONSE -> MessageEventType.UNSTABLE_POLL_RESPONSE
-    MessageLikeEventType.UNSTABLE_POLL_START -> MessageEventType.UNSTABLE_POLL_START
+    MessageLikeEventType.CallAnswer -> MessageEventType.CallAnswer
+    MessageLikeEventType.CallInvite -> MessageEventType.CallInvite
+    MessageLikeEventType.CallHangup -> MessageEventType.CallHangup
+    MessageLikeEventType.CallCandidates -> MessageEventType.CallCandidates
+    MessageLikeEventType.RtcNotification -> MessageEventType.RtcNotification
+    MessageLikeEventType.KeyVerificationReady -> MessageEventType.KeyVerificationReady
+    MessageLikeEventType.KeyVerificationStart -> MessageEventType.KeyVerificationStart
+    MessageLikeEventType.KeyVerificationCancel -> MessageEventType.KeyVerificationCancel
+    MessageLikeEventType.KeyVerificationAccept -> MessageEventType.KeyVerificationAccept
+    MessageLikeEventType.KeyVerificationKey -> MessageEventType.KeyVerificationKey
+    MessageLikeEventType.KeyVerificationMac -> MessageEventType.KeyVerificationMac
+    MessageLikeEventType.KeyVerificationDone -> MessageEventType.KeyVerificationDone
+    MessageLikeEventType.Reaction -> MessageEventType.Reaction
+    MessageLikeEventType.RoomEncrypted -> MessageEventType.RoomEncrypted
+    MessageLikeEventType.RoomMessage -> MessageEventType.RoomMessage
+    MessageLikeEventType.RoomRedaction -> MessageEventType.RoomRedaction
+    MessageLikeEventType.Sticker -> MessageEventType.Sticker
+    MessageLikeEventType.PollEnd -> MessageEventType.PollEnd
+    MessageLikeEventType.PollResponse -> MessageEventType.PollResponse
+    MessageLikeEventType.PollStart -> MessageEventType.PollStart
+    MessageLikeEventType.UnstablePollEnd -> MessageEventType.UnstablePollEnd
+    MessageLikeEventType.UnstablePollResponse -> MessageEventType.UnstablePollResponse
+    MessageLikeEventType.UnstablePollStart -> MessageEventType.UnstablePollStart
+    is MessageLikeEventType.Other -> MessageEventType.Other(v1)
 }
