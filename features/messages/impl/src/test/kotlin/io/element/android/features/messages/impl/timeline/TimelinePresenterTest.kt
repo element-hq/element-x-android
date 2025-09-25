@@ -535,7 +535,10 @@ class TimelinePresenterTest {
         val room = FakeJoinedRoom(
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) },
-            baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
+            baseRoom = FakeBaseRoom(
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                threadRootIdForEventResult = { _ -> Result.success(null) },
+            ),
         )
         val presenter = createTimelinePresenter(
             room = room,
@@ -613,7 +616,10 @@ class TimelinePresenterTest {
                     timelineItems = flowOf(emptyList()),
                 ),
                 createTimelineResult = { Result.failure(RuntimeException("An error")) },
-                baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
+                baseRoom = FakeBaseRoom(
+                    canUserSendMessageResult = { _, _ -> Result.success(true) },
+                    threadRootIdForEventResult = { _ -> Result.success(null) },
+                ),
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -754,7 +760,7 @@ class TimelinePresenterTest {
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
             ),
         )
-        val onNavigateToRoomLambda = lambdaRecorder<RoomId, List<String>, Unit> { _, _ -> }
+        val onNavigateToRoomLambda = lambdaRecorder<RoomId, EventId?, List<String>, Unit> { _, _, _ -> }
         val navigator = FakeMessagesNavigator(
             onNavigateToRoomLambda = onNavigateToRoomLambda
         )
@@ -766,6 +772,7 @@ class TimelinePresenterTest {
                 .isCalledOnce()
                 .with(
                     value(A_ROOM_ID),
+                    value(null),
                     value(emptyList<String>())
                 )
         }
