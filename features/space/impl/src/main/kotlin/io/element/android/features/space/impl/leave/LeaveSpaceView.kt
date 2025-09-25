@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -254,6 +255,7 @@ private fun SpaceItem(
                 color = ElementTheme.colors.textPrimary,
                 style = ElementTheme.typography.fontBodyLgMedium,
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -280,15 +282,26 @@ private fun SpaceItem(
                     )
                 }
                 // Number of members
+                val subTitle = buildString {
+                    append(
+                        pluralStringResource(
+                            CommonPlurals.common_member_count,
+                            room.numJoinedMembers,
+                            room.numJoinedMembers
+                        )
+                    )
+                    if (selectableSpaceRoom.isLastAdmin) {
+                        append(" ")
+                        append(stringResource(R.string.screen_leave_space_last_admin_info))
+                    }
+                }
                 Text(
                     modifier = Modifier.padding(end = 16.dp),
-                    text = pluralStringResource(
-                        CommonPlurals.common_member_count,
-                        room.numJoinedMembers,
-                        room.numJoinedMembers
-                    ),
+                    text = subTitle,
                     color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodyMdRegular,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }

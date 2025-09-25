@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"(Admin)"</string>
   <plurals name="screen_leave_space_submit">
     <item quantity="one">"Leave %1$d room and space"</item>
     <item quantity="other">"Leave %1$d rooms and space"</item>
