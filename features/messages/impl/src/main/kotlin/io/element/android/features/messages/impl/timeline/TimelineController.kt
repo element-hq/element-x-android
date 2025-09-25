@@ -75,8 +75,7 @@ class TimelineController(
         }
     }
 
-    suspend fun focusOnEvent(eventId: EventId): Result<EventFocusResult> {
-        val threadRootId = room.threadRootIdForEvent(eventId).getOrElse { return Result.failure(it) }
+    suspend fun focusOnEvent(eventId: EventId, threadRootId: ThreadId?): Result<EventFocusResult> {
         return if (threadRootId != null) {
             Result.success(EventFocusResult.IsInThread(threadRootId))
         } else {

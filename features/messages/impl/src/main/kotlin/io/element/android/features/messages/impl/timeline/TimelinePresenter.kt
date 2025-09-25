@@ -258,27 +258,37 @@ class TimelinePresenter(
                 }
                 is FocusRequestState.Loading -> {
                     val eventId = currentFocusRequestState.eventId
-                    timelineController.focusOnEvent(eventId)
-                        .onSuccess { result ->
-                            when (result) {
-                                is EventFocusResult.FocusedOnLive -> {
-                                    focusRequestState = FocusRequestState.Success(eventId = eventId)
-                                }
-                                is EventFocusResult.IsInThread -> {
-                                    if (timelineController.mainTimelineMode() is Timeline.Mode.Thread) {
+                    val threadId = room.threadRootIdForEvent(eventId).getOrElse {
+                        focusRequestState = FocusRequestState.Failure(it)
+                        return@LaunchedEffect
+                    }
+
+                    if (timelineController.mainTimelineMode() is Timeline.Mode.Thread && threadId == null) {
+                        // We are in a thread timeline, and the event isn't part of a thread, we need to navigate back to the room
+                        focusRequestState = FocusRequestState.None
+                        navigator.onNavigateToRoom(room.roomId, eventId, calculateServerNamesForRoom(room))
+                    } else {
+                        timelineController.focusOnEvent(eventId, threadId)
+                            .onSuccess { result ->
+                                when (result) {
+                                    is EventFocusResult.FocusedOnLive -> {
                                         focusRequestState = FocusRequestState.Success(eventId = eventId)
-                                    } else {
-                                        focusRequestState = FocusRequestState.Success(eventId = result.threadId.asEventId())
-                                        // It's part of a thread, let's open it in another timeline
-                                        navigator.onOpenThread(result.threadId, eventId)
+                                    }
+                                    is EventFocusResult.IsInThread -> {
+                                        if (timelineController.mainTimelineMode() is Timeline.Mode.Thread) {
+                                            focusRequestState = FocusRequestState.Success(eventId = eventId)
+                                        } else {
+                                            focusRequestState = FocusRequestState.Success(eventId = result.threadId.asEventId())
+                                            // It's part of a thread, let's open it in another timeline
+                                            navigator.onOpenThread(result.threadId, eventId)
+                                        }
                                     }
                                 }
                             }
-
-                        }
-                        .onFailure {
-                            focusRequestState = FocusRequestState.Failure(it)
-                        }
+                            .onFailure {
+                                focusRequestState = FocusRequestState.Failure(it)
+                            }
+                    }
                 }
                 else -> Unit
             }

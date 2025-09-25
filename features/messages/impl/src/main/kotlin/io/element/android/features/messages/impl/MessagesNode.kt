@@ -223,11 +223,11 @@ class MessagesNode(
         callbacks.forEach { it.onPreviewAttachments(attachments, inReplyToEventId) }
     }
 
-    override fun onNavigateToRoom(roomId: RoomId, serverNames: List<String>) {
+    override fun onNavigateToRoom(roomId: RoomId, eventId: EventId?, serverNames: List<String>) {
         if (roomId == room.roomId) {
             displaySameRoomToast()
         } else {
-            val permalinkData = PermalinkData.RoomLink(roomId.toRoomIdOrAlias(), viaParameters = serverNames.toImmutableList())
+            val permalinkData = PermalinkData.RoomLink(roomId.toRoomIdOrAlias(), eventId, viaParameters = serverNames.toImmutableList())
             callbacks.forEach { it.onPermalinkClick(permalinkData) }
         }
     }
