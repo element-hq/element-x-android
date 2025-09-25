@@ -238,7 +238,7 @@ private fun IncomingVerificationBottomMenu(
                 VerificationBottomMenu {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(CommonStrings.action_start),
+                        text = stringResource(CommonStrings.action_start_verification),
                         onClick = { eventSink(IncomingVerificationViewEvents.StartVerification) },
                     )
                     TextButton(
