@@ -157,7 +157,10 @@ private fun OutgoingVerificationHeader(step: Step, request: VerificationRequest.
         }
         Step.Canceled -> CommonStrings.common_verification_failed
         Step.Ready -> R.string.screen_session_verification_compare_emojis_title
-        Step.Completed -> CommonStrings.common_verification_complete
+        Step.Completed -> when (request) {
+            is VerificationRequest.Outgoing.CurrentSession -> R.string.screen_session_verification_device_verified
+            is VerificationRequest.Outgoing.User -> CommonStrings.common_verification_complete
+        }
         is Step.Verifying -> when (step.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_title
