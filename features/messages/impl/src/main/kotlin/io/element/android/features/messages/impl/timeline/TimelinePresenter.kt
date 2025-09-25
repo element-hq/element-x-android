@@ -117,8 +117,8 @@ class TimelinePresenter(
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
-        val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
+        val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.RoomMessage, updateKey = syncUpdateFlow.value)
+        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.Reaction, updateKey = syncUpdateFlow.value)
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<UniqueId?>(null) }
 

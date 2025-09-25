@@ -794,8 +794,8 @@ class MessagesPresenterTest {
                 canUserPinUnpinResult = { Result.success(true) },
                 canUserSendMessageResult = { _, messageEventType ->
                     when (messageEventType) {
-                        MessageEventType.ROOM_MESSAGE -> Result.success(true)
-                        MessageEventType.REACTION -> Result.success(true)
+                        MessageEventType.RoomMessage -> Result.success(true)
+                        MessageEventType.Reaction -> Result.success(true)
                         else -> lambdaError()
                     }
                 },
@@ -820,8 +820,8 @@ class MessagesPresenterTest {
                 canUserPinUnpinResult = { Result.success(true) },
                 canUserSendMessageResult = { _, messageEventType ->
                     when (messageEventType) {
-                        MessageEventType.ROOM_MESSAGE -> Result.success(false)
-                        MessageEventType.REACTION -> Result.success(false)
+                        MessageEventType.RoomMessage -> Result.success(false)
+                        MessageEventType.Reaction -> Result.success(false)
                         else -> lambdaError()
                     }
                 },
