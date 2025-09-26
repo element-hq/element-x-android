@@ -459,6 +459,10 @@ class MessagesFlowNode(
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(callType)
                     }
+
+                    override fun openThread(threadRootId: ThreadId, focusedEventId: EventId?) {
+                        backstack.push(NavTarget.OpenThread(threadRootId, focusedEventId))
+                    }
                 }
                 createNode<ThreadedMessagesNode>(buildContext, listOf(inputs, callback))
             }

@@ -57,6 +57,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
@@ -68,6 +69,7 @@ import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -125,6 +127,7 @@ class ThreadedMessagesNode(
         fun onCreatePollClick()
         fun onEditPollClick(eventId: EventId)
         fun onJoinCallClick(roomId: RoomId)
+        fun openThread(threadRootId: ThreadId, focusedEventId: EventId?)
     }
 
     override fun onBuilt() {
@@ -219,7 +222,10 @@ class ThreadedMessagesNode(
         callbacks.forEach { it.onPreviewAttachments(attachments, inReplyToEventId) }
     }
 
-    override fun onNavigateToRoom(roomId: RoomId, serverNames: List<String>) = Unit
+    override fun onNavigateToRoom(roomId: RoomId, eventId: EventId?, serverNames: List<String>) {
+        val permalinkData = PermalinkData.RoomLink(roomId.toRoomIdOrAlias(), eventId, viaParameters = serverNames.toImmutableList())
+        callbacks.forEach { it.onPermalinkClick(permalinkData) }
+    }
 
     private fun onSendLocationClick() {
         callbacks.forEach { it.onSendLocationClick() }
@@ -238,6 +244,7 @@ class ThreadedMessagesNode(
     }
 
     override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
+        callbacks.forEach { it.openThread(threadRootId, focusedEventId) }
     }
 
     @Composable

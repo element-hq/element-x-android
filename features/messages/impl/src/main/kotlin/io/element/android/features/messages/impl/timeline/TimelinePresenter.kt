@@ -44,6 +44,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.isDm
@@ -207,7 +208,7 @@ class TimelinePresenter(
                 is TimelineEvents.NavigateToPredecessorOrSuccessorRoom -> {
                     // Navigate to the predecessor or successor room
                     val serverNames = calculateServerNamesForRoom(room)
-                    navigator.onNavigateToRoom(event.roomId, serverNames)
+                    navigator.onNavigateToRoom(event.roomId, null, serverNames)
                 }
                 is TimelineEvents.OpenThread -> {
                     navigator.onOpenThread(
@@ -257,13 +258,39 @@ class TimelinePresenter(
                 }
                 is FocusRequestState.Loading -> {
                     val eventId = currentFocusRequestState.eventId
-                    timelineController.focusOnEvent(eventId)
-                        .onSuccess {
-                            focusRequestState = FocusRequestState.Success(eventId = eventId)
-                        }
-                        .onFailure {
-                            focusRequestState = FocusRequestState.Failure(it)
-                        }
+                    val threadId = room.threadRootIdForEvent(eventId).getOrElse {
+                        focusRequestState = FocusRequestState.Failure(it)
+                        return@LaunchedEffect
+                    }
+
+                    if (timelineController.mainTimelineMode() is Timeline.Mode.Thread && threadId == null) {
+                        // We are in a thread timeline, and the event isn't part of a thread, we need to navigate back to the room
+                        focusRequestState = FocusRequestState.None
+                        navigator.onNavigateToRoom(room.roomId, eventId, calculateServerNamesForRoom(room))
+                    } else {
+                        timelineController.focusOnEvent(eventId, threadId)
+                            .onSuccess { result ->
+                                when (result) {
+                                    is EventFocusResult.FocusedOnLive -> {
+                                        focusRequestState = FocusRequestState.Success(eventId = eventId)
+                                    }
+                                    is EventFocusResult.IsInThread -> {
+                                        val currentThreadId = (timelineController.mainTimelineMode() as? Timeline.Mode.Thread)?.threadRootId
+                                        if (currentThreadId == result.threadId) {
+                                            // It's the same thread, we just focus on the event
+                                            focusRequestState = FocusRequestState.Success(eventId = eventId)
+                                        } else {
+                                            focusRequestState = FocusRequestState.Success(eventId = result.threadId.asEventId())
+                                            // It's part of a thread we're not in, let's open it in another timeline
+                                            navigator.onOpenThread(result.threadId, eventId)
+                                        }
+                                    }
+                                }
+                            }
+                            .onFailure {
+                                focusRequestState = FocusRequestState.Failure(it)
+                            }
+                    }
                 }
                 else -> Unit
             }
@@ -341,7 +368,7 @@ class TimelinePresenter(
             newMostRecentItemId != prevMostRecentItemIdValue
 
         if (hasNewEvent) {
-            val newMostRecentEvent = newMostRecentItem as? TimelineItem.Event
+            val newMostRecentEvent = newMostRecentItem
             // Scroll to bottom if the new event is from me, even if sent from another device
             val fromMe = newMostRecentEvent?.isMine == true
             newEventState.value = if (fromMe) {

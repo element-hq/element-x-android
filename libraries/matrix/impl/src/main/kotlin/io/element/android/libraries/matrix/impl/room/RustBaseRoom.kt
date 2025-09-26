@@ -322,4 +322,12 @@ class RustBaseRoom(
             })
         }
     }
+
+    override suspend fun threadRootIdForEvent(eventId: EventId): Result<ThreadId?> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.loadOrFetchEvent(eventId.value).use {
+                it.threadRootEventId()?.let(::ThreadId)
+            }
+        }
+    }
 }
