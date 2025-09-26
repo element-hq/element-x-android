@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package io.element.android.features.space.impl.leave
 
 import androidx.compose.foundation.clickable
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +44,7 @@ import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -50,6 +54,7 @@ import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonPlurals
@@ -76,7 +81,10 @@ fun LeaveSpaceView(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            LeaveSpaceHeader(state)
+            LeaveSpaceHeader(
+                state = state,
+                onBackClick = onCancel,
+            )
             LazyColumn(
                 modifier = Modifier
                     .weight(1f),
@@ -88,6 +96,7 @@ fun LeaveSpaceView(
                             item {
                                 SpaceItem(
                                     selectableSpaceRoom = selectableSpaceRoom,
+                                    showCheckBox = state.hasOnlyLastAdminRoom.not(),
                                     onClick = {
                                         state.eventSink(LeaveSpaceEvents.ToggleRoomSelection(selectableSpaceRoom.spaceRoom.roomId))
                                     }
@@ -126,10 +135,19 @@ fun LeaveSpaceView(
 }
 
 @Composable
-private fun LeaveSpaceHeader(state: LeaveSpaceState) {
+private fun LeaveSpaceHeader(
+    state: LeaveSpaceState,
+    onBackClick: () -> Unit,
+) {
     Column {
+        TopAppBar(
+            navigationIcon = {
+                BackButton(onClick = onBackClick)
+            },
+            title = {},
+        )
         IconTitleSubtitleMolecule(
-            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
+            modifier = Modifier.padding(top = 0.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
             iconStyle = BigIcon.Style.AlertSolid,
             title = stringResource(
                 R.string.screen_leave_space_title,
@@ -212,6 +230,7 @@ private fun LeaveSpaceButtons(
 @Composable
 private fun SpaceItem(
     selectableSpaceRoom: SelectableSpaceRoom,
+    showCheckBox: Boolean,
     onClick: () -> Unit,
 ) {
     val room = selectableSpaceRoom.spaceRoom
@@ -305,11 +324,13 @@ private fun SpaceItem(
                 )
             }
         }
-        Checkbox(
-            checked = selectableSpaceRoom.isSelected,
-            onCheckedChange = null,
-            enabled = selectableSpaceRoom.isLastAdmin.not(),
-        )
+        if (showCheckBox) {
+            Checkbox(
+                checked = selectableSpaceRoom.isSelected,
+                onCheckedChange = null,
+                enabled = selectableSpaceRoom.isLastAdmin.not(),
+            )
+        }
     }
 }
 

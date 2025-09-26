@@ -76,6 +76,22 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
             ),
             aLeaveSpaceState(
                 selectableSpaceRooms = AsyncData.Success(
+                    persistentListOf(
+                        aSelectableSpaceRoom(
+                            spaceRoom = aSpaceRoom(
+                                worldReadable = true,
+                            ),
+                            isLastAdmin = true,
+                        ),
+                        aSelectableSpaceRoom(
+                            spaceRoom = aSpaceRoom(),
+                            isLastAdmin = true,
+                        ),
+                    )
+                ),
+            ),
+            aLeaveSpaceState(
+                selectableSpaceRooms = AsyncData.Success(
                     List(10) { aSelectableSpaceRoom() }.toPersistentList()
                 ),
                 leaveSpaceAction = AsyncAction.Loading,
