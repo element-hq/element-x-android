@@ -4,7 +4,7 @@
 [versions]
 # Project
 # We cannot use 8.12.+ since it breaks F-Droid build (see https://github.com/element-hq/element-x-android/issues/3420#issuecomment-3199571010)
-android_gradle_plugin = "8.11.1"
+android_gradle_plugin = "8.13.0"
 # When updateing this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.2.20"
 kotlinpoet = "2.2.0"
