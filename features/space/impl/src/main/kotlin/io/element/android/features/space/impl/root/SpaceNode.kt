@@ -16,7 +16,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.libraries.androidutils.R
@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
-@Inject
+@AssistedInject
 class SpaceNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
