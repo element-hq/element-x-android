@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
@@ -28,6 +27,7 @@ import io.element.android.features.lockscreen.impl.setup.pin.SetupPinNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.appyx.LoadingNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import kotlinx.coroutines.flow.first
@@ -42,7 +42,7 @@ class LockScreenSettingsFlowNode(
     private val pinCodeManager: PinCodeManager,
 ) : BaseFlowNode<LockScreenSettingsFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Unknown,
+        initialElement = NavTarget.Loading,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -50,7 +50,7 @@ class LockScreenSettingsFlowNode(
 ) {
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Unknown : NavTarget
+        data object Loading : NavTarget
 
         @Parcelize
         data object Unlock : NavTarget
@@ -94,6 +94,9 @@ class LockScreenSettingsFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
+            NavTarget.Loading -> {
+                createNode<LoadingNode>(buildContext)
+            }
             NavTarget.Unlock -> {
                 val callback = object : PinUnlockNode.Callback {
                     override fun onUnlock() {
@@ -113,7 +116,6 @@ class LockScreenSettingsFlowNode(
                 }
                 createNode<LockScreenSettingsNode>(buildContext, plugins = listOf(callback))
             }
-            NavTarget.Unknown -> node(buildContext) { }
         }
     }
 
