@@ -10,7 +10,7 @@ package io.element.android.libraries.mediaupload.api
 import android.net.Uri
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.flatMapCatching
@@ -25,7 +25,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
-@Inject
+@AssistedInject
 class MediaSender(
     private val preProcessor: MediaPreProcessor,
     private val room: JoinedRoom,

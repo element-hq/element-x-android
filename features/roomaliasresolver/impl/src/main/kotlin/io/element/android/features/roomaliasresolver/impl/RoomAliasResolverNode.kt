@@ -14,7 +14,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
 import io.element.android.libraries.architecture.inputs
@@ -22,7 +22,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 
 @ContributesNode(SessionScope::class)
-@Inject
+@AssistedInject
 class RoomAliasResolverNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

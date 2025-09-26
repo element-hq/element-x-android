@@ -13,7 +13,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ForcedDarkElementTheme
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
 
 @ContributesNode(RoomScope::class)
-@Inject
+@AssistedInject
 class AttachmentsPreviewNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

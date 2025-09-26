@@ -14,11 +14,11 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
 @Suppress("unused")
-@Inject
+@AssistedInject
 class DefaultPermissionsPresenter(
     @Assisted private val permissions: List<String>
 ) : PermissionsPresenter {

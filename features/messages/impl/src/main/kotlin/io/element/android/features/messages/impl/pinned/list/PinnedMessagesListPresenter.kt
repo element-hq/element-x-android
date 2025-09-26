@@ -19,7 +19,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.UserEventPermissions
@@ -61,7 +61,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
+@AssistedInject
 class PinnedMessagesListPresenter(
     @Assisted private val navigator: PinnedMessagesListNavigator,
     private val room: JoinedRoom,

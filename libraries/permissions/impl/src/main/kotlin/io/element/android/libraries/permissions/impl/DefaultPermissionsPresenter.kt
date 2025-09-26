@@ -24,8 +24,8 @@ import com.google.accompanist.permissions.shouldShowRationale
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -37,7 +37,7 @@ import timber.log.Timber
 
 private val loggerTag = LoggerTag("DefaultPermissionsPresenter")
 
-@Inject
+@AssistedInject
 class DefaultPermissionsPresenter(
     @Assisted val permission: String,
     private val permissionsStore: PermissionsStore,

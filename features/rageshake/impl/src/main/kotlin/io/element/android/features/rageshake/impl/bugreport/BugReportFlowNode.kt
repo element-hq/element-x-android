@@ -19,7 +19,7 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
@@ -29,7 +29,7 @@ import io.element.android.libraries.architecture.createNode
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-@Inject
+@AssistedInject
 class BugReportFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
