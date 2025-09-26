@@ -41,7 +41,7 @@ class CustomReactionPresenter(
         fun handleShowCustomReactionSheet(event: TimelineItem.Event) {
             target.value = CustomReactionState.Target.Loading(event)
             localCoroutineScope.launch {
-                recentEmojis = getRecentEmojis().getOrNull()?.toImmutableList() ?: persistentListOf()
+                recentEmojis = getRecentEmojis().getOrNull().orEmpty().toImmutableList()
                 target.value = CustomReactionState.Target.Success(
                     event = event,
                     emojibaseStore = emojibaseProvider.emojibaseStore
