@@ -23,7 +23,6 @@ import com.bumble.appyx.navmodel.backstack.operation.replace
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
-import dev.zacsweers.metro.Inject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.ftue.impl.notifications.NotificationsOptInNode
@@ -149,7 +148,7 @@ class FtueFlowNode(
 }
 
 @ContributesNode(AppScope::class)
-@Inject
+@AssistedInject
 class PlaceholderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

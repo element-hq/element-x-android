@@ -39,7 +39,6 @@ import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
-import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
@@ -550,7 +549,7 @@ class LoggedInFlowNode(
 }
 
 @ContributesNode(AppScope::class)
-@Inject
+@AssistedInject
 class PlaceholderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
