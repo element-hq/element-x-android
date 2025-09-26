@@ -6,9 +6,9 @@
 # We cannot use 8.12.+ since it breaks F-Droid build (see https://github.com/element-hq/element-x-android/issues/3420#issuecomment-3199571010)
 android_gradle_plugin = "8.11.1"
 # When updateing this, please also update the version in the file ./idea/kotlinc.xml
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 kotlinpoet = "2.2.0"
-ksp = "2.2.10-2.0.2"
+ksp = "2.2.20-2.0.2"
 firebaseAppDistribution = "5.1.1"
 
 # AndroidX
@@ -51,7 +51,7 @@ haze = "1.6.10"
 dependencyAnalysis = "3.0.4"
 
 # DI
-metro = "0.6.4"
+metro = "0.6.6"
 
 # Auto service
 autoservice = "1.1.1"

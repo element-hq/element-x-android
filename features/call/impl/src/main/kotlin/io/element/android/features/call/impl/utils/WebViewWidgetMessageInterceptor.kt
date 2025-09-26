@@ -133,6 +133,7 @@ class WebViewWidgetMessageInterceptor(
                 return assetLoader.shouldInterceptRequest(request.url)
             }
 
+            @Suppress("OVERRIDE_DEPRECATION")
             override fun shouldInterceptRequest(view: WebView?, url: String): WebResourceResponse? {
                 return assetLoader.shouldInterceptRequest(url.toUri())
             }
