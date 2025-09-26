@@ -21,7 +21,6 @@ import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.AppScope
@@ -123,7 +122,7 @@ class RootFlowNode(
     }
 
     private fun switchToLoggedInFlow() {
-        backstack.newRoot(NavTarget.LoggedInFlow)
+        backstack.safeRoot(NavTarget.LoggedInFlow)
     }
 
     private fun switchToNotLoggedInFlow(params: LoginParams?) {
