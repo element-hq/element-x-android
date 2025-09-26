@@ -118,7 +118,7 @@ fun LeaveSpaceView(
             }
             LeaveSpaceButtons(
                 showLeaveButton = state.selectableSpaceRooms is AsyncData.Success,
-                nbOfSelectedRooms = state.numberOfSelectRooms,
+                selectedRoomsCount = state.selectedRoomsCount,
                 onLeaveSpace = {
                     state.eventSink(LeaveSpaceEvents.LeaveSpace)
                 },
@@ -198,7 +198,7 @@ private fun LeaveSpaceHeader(
 @Composable
 private fun LeaveSpaceButtons(
     showLeaveButton: Boolean,
-    nbOfSelectedRooms: Int,
+    selectedRoomsCount: Int,
     onLeaveSpace: () -> Unit,
     onCancel: () -> Unit,
 ) {
@@ -206,8 +206,8 @@ private fun LeaveSpaceButtons(
         modifier = Modifier.padding(top = 16.dp)
     ) {
         if (showLeaveButton) {
-            val text = if (nbOfSelectedRooms > 0) {
-                pluralStringResource(R.plurals.screen_leave_space_submit, nbOfSelectedRooms, nbOfSelectedRooms)
+            val text = if (selectedRoomsCount > 0) {
+                pluralStringResource(R.plurals.screen_leave_space_submit, selectedRoomsCount, selectedRoomsCount)
             } else {
                 stringResource(CommonStrings.action_leave_space)
             }

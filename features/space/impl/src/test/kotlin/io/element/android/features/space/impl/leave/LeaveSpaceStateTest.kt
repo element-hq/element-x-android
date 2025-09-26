@@ -20,9 +20,9 @@ class LeaveSpaceStateTest {
             selectableSpaceRooms = AsyncData.Loading()
         )
         assertThat(sut.showQuickAction).isFalse()
-        assertThat(sut.areAllSelected).isFalse()
+        assertThat(sut.areAllSelected).isTrue()
         assertThat(sut.hasOnlyLastAdminRoom).isFalse()
-        assertThat(sut.numberOfSelectRooms).isEqualTo(0)
+        assertThat(sut.selectedRoomsCount).isEqualTo(0)
     }
 
     @Test
@@ -33,9 +33,9 @@ class LeaveSpaceStateTest {
             )
         )
         assertThat(sut.showQuickAction).isFalse()
-        assertThat(sut.areAllSelected).isFalse()
+        assertThat(sut.areAllSelected).isTrue()
         assertThat(sut.hasOnlyLastAdminRoom).isFalse()
-        assertThat(sut.numberOfSelectRooms).isEqualTo(0)
+        assertThat(sut.selectedRoomsCount).isEqualTo(0)
     }
 
     @Test
@@ -51,7 +51,7 @@ class LeaveSpaceStateTest {
         assertThat(sut.showQuickAction).isTrue()
         assertThat(sut.areAllSelected).isFalse()
         assertThat(sut.hasOnlyLastAdminRoom).isFalse()
-        assertThat(sut.numberOfSelectRooms).isEqualTo(1)
+        assertThat(sut.selectedRoomsCount).isEqualTo(1)
     }
 
     @Test
@@ -67,7 +67,7 @@ class LeaveSpaceStateTest {
         assertThat(sut.showQuickAction).isTrue()
         assertThat(sut.areAllSelected).isTrue()
         assertThat(sut.hasOnlyLastAdminRoom).isFalse()
-        assertThat(sut.numberOfSelectRooms).isEqualTo(2)
+        assertThat(sut.selectedRoomsCount).isEqualTo(2)
     }
 
     @Test
@@ -84,7 +84,7 @@ class LeaveSpaceStateTest {
         assertThat(sut.showQuickAction).isTrue()
         assertThat(sut.areAllSelected).isTrue()
         assertThat(sut.hasOnlyLastAdminRoom).isFalse()
-        assertThat(sut.numberOfSelectRooms).isEqualTo(2)
+        assertThat(sut.selectedRoomsCount).isEqualTo(2)
     }
 
     @Test
@@ -98,8 +98,8 @@ class LeaveSpaceStateTest {
             )
         )
         assertThat(sut.showQuickAction).isFalse()
-        assertThat(sut.areAllSelected).isFalse()
+        assertThat(sut.areAllSelected).isTrue()
         assertThat(sut.hasOnlyLastAdminRoom).isTrue()
-        assertThat(sut.numberOfSelectRooms).isEqualTo(0)
+        assertThat(sut.selectedRoomsCount).isEqualTo(0)
     }
 }

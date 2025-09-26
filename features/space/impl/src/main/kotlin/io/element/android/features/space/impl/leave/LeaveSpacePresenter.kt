@@ -27,7 +27,10 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.jvm.optionals.getOrNull
@@ -52,13 +55,13 @@ class LeaveSpacePresenter(
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
         val selectedRoomIds = remember {
-            mutableStateOf<Set<RoomId>>(emptySet())
+            mutableStateOf<ImmutableSet<RoomId>>(persistentSetOf())
         }
         val joinedSpaceRooms by produceState(emptyList()) {
-            // TODO Get the joined room from the SDK, should also have the
+            // TODO Get the joined room from the SDK, should also have the isLastAdmin boolean
             val rooms = emptyList<SpaceRoom>()
             // By default select all rooms
-            selectedRoomIds.value = rooms.map { it.roomId }.toSet()
+            selectedRoomIds.value = rooms.map { it.roomId }.toPersistentSet()
             value = rooms
         }
         val selectableSpaceRooms by produceState<AsyncData<ImmutableList<SelectableSpaceRoom>>>(
@@ -81,14 +84,14 @@ class LeaveSpacePresenter(
         fun handleEvents(event: LeaveSpaceEvents) {
             when (event) {
                 LeaveSpaceEvents.DeselectAllRooms -> {
-                    selectedRoomIds.value = emptySet()
+                    selectedRoomIds.value = persistentSetOf()
                 }
                 LeaveSpaceEvents.SelectAllRooms -> {
                     selectedRoomIds.value = selectableSpaceRooms.dataOrNull()
                         .orEmpty()
                         .filter { it.isLastAdmin.not() }
                         .map { it.spaceRoom.roomId }
-                        .toSet()
+                        .toPersistentSet()
                 }
                 is LeaveSpaceEvents.ToggleRoomSelection -> {
                     val currentSet = selectedRoomIds.value
@@ -97,6 +100,7 @@ class LeaveSpacePresenter(
                     } else {
                         currentSet + event.roomId
                     }
+                        .toPersistentSet()
                 }
                 LeaveSpaceEvents.LeaveSpace -> coroutineScope.leaveSpace(
                     leaveSpaceAction = leaveSpaceAction,

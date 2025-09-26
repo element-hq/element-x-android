@@ -18,33 +18,27 @@ data class LeaveSpaceState(
     val eventSink: (LeaveSpaceEvents) -> Unit,
 ) {
     private val rooms = selectableSpaceRooms.dataOrNull().orEmpty()
+    private val partition = rooms.partition { it.isLastAdmin }
+    private val lastAdminRooms = partition.first
+    private val selectableRooms = partition.second
 
     /**
      * True if we should show the quick action to select/deselect all rooms.
      */
-    val showQuickAction = rooms
-        .any { !it.isLastAdmin }
+    val showQuickAction = selectableRooms.isNotEmpty()
 
     /**
-     * True if there are rooms and they are all selected.
+     * True if there all the selectable rooms are selected.
      */
-    val areAllSelected = rooms
-        .filter { !it.isLastAdmin }
-        .let { rooms ->
-            rooms.isNotEmpty() && rooms.all { it.isSelected }
-        }
+    val areAllSelected = selectableRooms.all { it.isSelected }
 
     /**
      * True if there are rooms but the user is the last admin in all of them.
      */
-    val hasOnlyLastAdminRoom = rooms
-        .let { rooms ->
-            rooms.isNotEmpty() && rooms.all { it.isLastAdmin }
-        }
+    val hasOnlyLastAdminRoom = lastAdminRooms.isNotEmpty() && selectableRooms.isEmpty()
 
     /**
      * Number of selected rooms.
      */
-    val numberOfSelectRooms = rooms
-        .count { it.isSelected }
+    val selectedRoomsCount = selectableRooms.count { it.isSelected }
 }
