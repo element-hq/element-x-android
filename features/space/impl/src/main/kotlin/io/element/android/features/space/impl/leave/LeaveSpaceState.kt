@@ -9,7 +9,6 @@ package io.element.android.features.space.impl.leave
 
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.core.bool.orFalse
 import kotlinx.collections.immutable.ImmutableList
 
 data class LeaveSpaceState(
@@ -18,18 +17,34 @@ data class LeaveSpaceState(
     val leaveSpaceAction: AsyncAction<Unit>,
     val eventSink: (LeaveSpaceEvents) -> Unit,
 ) {
-    val showQuickAction = selectableSpaceRooms.dataOrNull().orEmpty().any { !it.isLastAdmin }
-    val hasOnlyLastAdminRoom = selectableSpaceRooms.dataOrNull()
-        ?.let { rooms ->
-            rooms.isNotEmpty() && rooms.all { it.isLastAdmin }
-        }
-        .orFalse()
-    val numberOfSelectRooms = selectableSpaceRooms.dataOrNull().orEmpty().count { it.isSelected }
+    private val rooms = selectableSpaceRooms.dataOrNull().orEmpty()
 
-    val areAllSelected = selectableSpaceRooms.dataOrNull()
-        ?.filter { !it.isLastAdmin }
-        ?.let { rooms ->
+    /**
+     * True if we should show the quick action to select/deselect all rooms.
+     */
+    val showQuickAction = rooms
+        .any { !it.isLastAdmin }
+
+    /**
+     * True if there are rooms and they are all selected.
+     */
+    val areAllSelected = rooms
+        .filter { !it.isLastAdmin }
+        .let { rooms ->
             rooms.isNotEmpty() && rooms.all { it.isSelected }
         }
-        .orFalse()
+
+    /**
+     * True if there are rooms but the user is the last admin in all of them.
+     */
+    val hasOnlyLastAdminRoom = rooms
+        .let { rooms ->
+            rooms.isNotEmpty() && rooms.all { it.isLastAdmin }
+        }
+
+    /**
+     * Number of selected rooms.
+     */
+    val numberOfSelectRooms = rooms
+        .count { it.isSelected }
 }
