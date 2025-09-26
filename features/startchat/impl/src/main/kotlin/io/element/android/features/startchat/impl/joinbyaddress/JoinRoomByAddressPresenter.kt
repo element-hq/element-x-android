@@ -17,7 +17,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.startchat.StartChatNavigator
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.tryOrNull
@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.seconds
 
 private const val ADDRESS_RESOLVE_TIMEOUT_IN_SECONDS = 10
 
-@Inject
+@AssistedInject
 class JoinRoomByAddressPresenter(
     @Assisted private val navigator: StartChatNavigator,
     private val client: MatrixClient,

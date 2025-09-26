@@ -118,7 +118,7 @@ class ContributesNodeProcessor(
         val assistedParameters = constructor.parameters.filter { it.isAnnotationPresent(Assisted::class) }
         if (assistedParameters.size != 2) {
             error(
-                "${ksClass.qualifiedName?.asString()} must have an @Inject constructor with 2 @Assisted parameters. Found: ${assistedParameters.size}",
+                "${ksClass.qualifiedName?.asString()} must have a constructor with 2 @Assisted parameters. Found: ${assistedParameters.size}",
             )
         }
         val contextAssistedParam = assistedParameters[0]

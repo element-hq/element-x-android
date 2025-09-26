@@ -22,6 +22,7 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.Inject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
@@ -42,7 +43,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
+@AssistedInject
 class FtueFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

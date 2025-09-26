@@ -16,8 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.SessionScope
@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import kotlin.math.roundToLong
 
-@Inject
+@AssistedInject
 class DefaultMediaOptimizationSelectorPresenter(
     @Assisted private val localMedia: LocalMedia,
     private val maxUploadSizeProvider: MaxUploadSizeProvider,

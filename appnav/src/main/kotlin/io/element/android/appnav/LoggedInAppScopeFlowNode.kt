@@ -24,7 +24,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.di.SessionGraphFactory
 import io.element.android.libraries.architecture.NodeInputs
@@ -41,7 +41,7 @@ import kotlinx.parcelize.Parcelize
  * This allow to inject objects with SessionScope in the constructor of [LoggedInFlowNode].
  */
 @ContributesNode(AppScope::class)
-@Inject
+@AssistedInject
 class LoggedInAppScopeFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

@@ -15,13 +15,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class SignedOutPresenter(
     // Cannot inject SessionId
     @Assisted private val sessionId: String,
