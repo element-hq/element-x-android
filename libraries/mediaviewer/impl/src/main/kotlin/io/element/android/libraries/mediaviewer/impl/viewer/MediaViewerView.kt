@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.TopAppBarDefaults
@@ -97,6 +99,7 @@ fun MediaViewerView(
     onBackClick: () -> Unit,
     audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
+    setMinimize: (Boolean) -> Unit
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     var showOverlay by remember { mutableStateOf(true) }
@@ -170,6 +173,7 @@ fun MediaViewerView(
                             },
                             audioFocus = audioFocus,
                             isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
+                            setMinimize = setMinimize
                         )
                         // Bottom bar
                         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
@@ -206,7 +210,8 @@ fun MediaViewerView(
                             onInfoClick = {
                                 state.eventSink(MediaViewerEvents.OpenInfo(currentData))
                             },
-                            eventSink = state.eventSink
+                            eventSink = state.eventSink,
+                            setMinimize = setMinimize
                         )
                     }
                     else -> {
@@ -295,6 +300,7 @@ private fun MediaViewerPage(
     onShowOverlayChange: (Boolean) -> Unit,
     audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
+    setMinimize: (Boolean) -> Unit
 ) {
     val currentShowOverlay by rememberUpdatedState(showOverlay)
     val currentOnShowOverlayChange by rememberUpdatedState(onShowOverlayChange)
@@ -445,6 +451,7 @@ private fun MediaViewerTopBar(
     onBackClick: () -> Unit,
     onInfoClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
+    setMinimize: (Boolean) -> Unit
 ) {
     val downloadedMedia by data.downloadedMedia
     val actionsEnabled = downloadedMedia.isSuccess()
@@ -483,6 +490,20 @@ private fun MediaViewerTopBar(
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
+            if (mimeType.isMimeTypeVideo()) {
+                IconButton(
+                    onClick = {
+                        setMinimize(true)
+                        onBackClick()
+                    },
+                    modifier = Modifier
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.FullscreenExit,
+                        contentDescription = "Minimize"
+                    )
+                }
+            }
             IconButton(
                 enabled = actionsEnabled,
                 onClick = {
@@ -598,5 +619,6 @@ internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::
         audioFocus = null,
         textFileViewer = { _, _ -> },
         onBackClick = {},
+        setMinimize = {}
     )
 }
