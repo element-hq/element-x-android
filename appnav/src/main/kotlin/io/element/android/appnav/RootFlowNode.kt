@@ -9,6 +9,8 @@ package io.element.android.appnav
 
 import android.content.Intent
 import android.os.Parcelable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -23,6 +25,8 @@ import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
+import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackSlider
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
@@ -42,6 +46,7 @@ import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.appyx.rememberDelegateTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.core.uri.ensureProtocol
@@ -63,9 +68,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
-@ContributesNode(AppScope::class)
-@AssistedInject
-class RootFlowNode(
+@ContributesNode(AppScope::class) @AssistedInject class RootFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val sessionStore: SessionStore,
@@ -101,27 +104,24 @@ class RootFlowNode(
     }
 
     private fun observeNavState() {
-        navStateFlowFactory.create(buildContext.savedStateMap)
-            .distinctUntilChanged()
-            .onEach { navState ->
-                Timber.v("navState=$navState")
-                when (navState.loggedInState) {
-                    is LoggedInState.LoggedIn -> {
-                        if (navState.loggedInState.isTokenValid) {
-                            tryToRestoreLatestSession(
-                                onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
-                                onFailure = { switchToNotLoggedInFlow(null) }
-                            )
-                        } else {
-                            switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
-                        }
-                    }
-                    LoggedInState.NotLoggedIn -> {
-                        switchToNotLoggedInFlow(null)
+        navStateFlowFactory.create(buildContext.savedStateMap).distinctUntilChanged().onEach { navState ->
+            Timber.v("navState=$navState")
+            when (navState.loggedInState) {
+                is LoggedInState.LoggedIn -> {
+                    if (navState.loggedInState.isTokenValid) {
+                        tryToRestoreLatestSession(
+                            onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
+                            onFailure = { switchToNotLoggedInFlow(null) }
+                        )
+                    } else {
+                        switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
                     }
                 }
+                LoggedInState.NotLoggedIn -> {
+                    switchToNotLoggedInFlow(null)
+                }
             }
-            .launchIn(lifecycleScope)
+        }.launchIn(lifecycleScope)
     }
 
     private fun switchToLoggedInFlow(sessionId: SessionId, navId: Int) {
@@ -143,20 +143,17 @@ class RootFlowNode(
         onFailure: () -> Unit,
         onSuccess: (SessionId) -> Unit,
     ) {
-        matrixSessionCache.getOrRestore(sessionId)
-            .onSuccess {
-                Timber.v("Succeed to restore session $sessionId")
-                onSuccess(sessionId)
-            }
-            .onFailure {
-                Timber.e(it, "Failed to restore session $sessionId")
-                onFailure()
-            }
+        matrixSessionCache.getOrRestore(sessionId).onSuccess {
+            Timber.v("Succeed to restore session $sessionId")
+            onSuccess(sessionId)
+        }.onFailure {
+            Timber.e(it, "Failed to restore session $sessionId")
+            onFailure()
+        }
     }
 
     private suspend fun tryToRestoreLatestSession(
-        onSuccess: (SessionId) -> Unit,
-        onFailure: () -> Unit
+        onSuccess: (SessionId) -> Unit, onFailure: () -> Unit
     ) {
         val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
@@ -178,39 +175,45 @@ class RootFlowNode(
             modifier = modifier,
             onOpenBugReport = this::onOpenBugReport,
         ) {
-            BackstackView()
+            val backstackSlider = rememberBackstackSlider<NavTarget>(
+                transitionSpec = { spring(stiffness = Spring.StiffnessMediumLow) },
+            )
+            val backstackFader = rememberBackstackFader<NavTarget>(
+                transitionSpec = { spring(stiffness = Spring.StiffnessMediumLow) },
+            )
+            val transitionHandler = rememberDelegateTransitionHandler<NavTarget, BackStack.State> { navTarget ->
+                when (navTarget) {
+                    is NavTarget.SplashScreen,
+                    is NavTarget.LoggedInFlow -> backstackFader
+                    else -> backstackSlider
+                }
+            }
+            BackstackView(transitionHandler = transitionHandler)
         }
     }
 
     sealed interface NavTarget : Parcelable {
-        @Parcelize
-        data object SplashScreen : NavTarget
+        @Parcelize data object SplashScreen : NavTarget
 
-        @Parcelize
-        data class AccountSelect(
+        @Parcelize data class AccountSelect(
             val currentSessionId: SessionId,
             val intent: Intent?,
             val permalinkData: PermalinkData?,
         ) : NavTarget
 
-        @Parcelize
-        data class NotLoggedInFlow(
+        @Parcelize data class NotLoggedInFlow(
             val params: LoginParams?
         ) : NavTarget
 
-        @Parcelize
-        data class LoggedInFlow(
-            val sessionId: SessionId,
-            val navId: Int
+        @Parcelize data class LoggedInFlow(
+            val sessionId: SessionId, val navId: Int
         ) : NavTarget
 
-        @Parcelize
-        data class SignedOutFlow(
+        @Parcelize data class SignedOutFlow(
             val sessionId: SessionId
         ) : NavTarget
 
-        @Parcelize
-        data object BugReport : NavTarget
+        @Parcelize data object BugReport : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -243,13 +246,11 @@ class RootFlowNode(
                 createNode<NotLoggedInFlowNode>(buildContext, plugins = listOf(params, callback))
             }
             is NavTarget.SignedOutFlow -> {
-                signedOutEntryPoint.nodeBuilder(this, buildContext)
-                    .params(
-                        SignedOutEntryPoint.Params(
-                            sessionId = navTarget.sessionId
-                        )
+                signedOutEntryPoint.nodeBuilder(this, buildContext).params(
+                    SignedOutEntryPoint.Params(
+                        sessionId = navTarget.sessionId
                     )
-                    .build()
+                ).build()
             }
             NavTarget.SplashScreen -> splashNode(buildContext)
             NavTarget.BugReport -> {
@@ -258,10 +259,7 @@ class RootFlowNode(
                         backstack.pop()
                     }
                 }
-                bugReportEntryPoint
-                    .nodeBuilder(this, buildContext)
-                    .callback(callback)
-                    .build()
+                bugReportEntryPoint.nodeBuilder(this, buildContext).callback(callback).build()
             }
             is NavTarget.AccountSelect -> {
                 val callback: AccountSelectEntryPoint.Callback = object : AccountSelectEntryPoint.Callback {
@@ -286,10 +284,7 @@ class RootFlowNode(
                         backstack.pop()
                     }
                 }
-                accountSelectEntryPoint
-                    .nodeBuilder(this, buildContext)
-                    .callback(callback)
-                    .build()
+                accountSelectEntryPoint.nodeBuilder(this, buildContext).callback(callback).build()
             }
         }
     }
@@ -416,13 +411,12 @@ class RootFlowNode(
 
     private suspend fun navigateTo(deeplinkData: DeeplinkData) {
         Timber.d("Navigating to $deeplinkData")
-        attachSession(deeplinkData.sessionId)
-            .apply {
-                when (deeplinkData) {
-                    is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
-                    is DeeplinkData.Room -> attachRoom(deeplinkData.roomId.toRoomIdOrAlias(), clearBackstack = true)
-                }
+        attachSession(deeplinkData.sessionId).apply {
+            when (deeplinkData) {
+                is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
+                is DeeplinkData.Room -> attachRoom(deeplinkData.roomId.toRoomIdOrAlias(), clearBackstack = true)
             }
+        }
     }
 
     private fun onOidcAction(oidcAction: OidcAction) {
@@ -434,8 +428,7 @@ class RootFlowNode(
         sessionStore.setLatestSession(sessionId.value)
         return waitForChildAttached<LoggedInAppScopeFlowNode, NavTarget> { navTarget ->
             navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == sessionId
-        }
-            .attachSession()
+        }.attachSession()
     }
 }
 
