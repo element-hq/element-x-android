@@ -8,10 +8,7 @@
 package io.element.android.features.ftue.impl
 
 import android.os.Parcelable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
@@ -20,10 +17,8 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.replace
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
-import dev.zacsweers.metro.Inject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.ftue.impl.notifications.NotificationsOptInNode
@@ -34,8 +29,8 @@ import io.element.android.features.ftue.impl.state.InternalFtueState
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.appyx.LoadingNode
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.SessionScope
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -88,7 +83,7 @@ class FtueFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Placeholder -> {
-                createNode<PlaceholderNode>(buildContext)
+                createNode<LoadingNode>(buildContext)
             }
             is NavTarget.SessionVerification -> {
                 val callback = object : FtueSessionVerificationFlowNode.Callback {
@@ -145,19 +140,5 @@ class FtueFlowNode(
     @Composable
     override fun View(modifier: Modifier) {
         BackstackView()
-    }
-}
-
-@ContributesNode(AppScope::class)
-@Inject
-class PlaceholderNode(
-    @Assisted buildContext: BuildContext,
-    @Assisted plugins: List<Plugin>,
-) : Node(buildContext, plugins = plugins) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
     }
 }

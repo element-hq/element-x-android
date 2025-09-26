@@ -36,10 +36,8 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
-import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
@@ -66,6 +64,7 @@ import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.verifysession.api.IncomingVerificationEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.appyx.LoadingNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForNavTargetAttached
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -282,7 +281,7 @@ class LoggedInFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Placeholder -> createNode<PlaceholderNode>(buildContext)
+            NavTarget.Placeholder -> createNode<LoadingNode>(buildContext)
             NavTarget.LoggedInPermanent -> {
                 val callback = object : LoggedInNode.Callback {
                     override fun navigateToNotificationTroubleshoot() {
@@ -548,13 +547,6 @@ class LoggedInFlowNode(
         }
     }
 }
-
-@ContributesNode(AppScope::class)
-@Inject
-class PlaceholderNode(
-    @Assisted buildContext: BuildContext,
-    @Assisted plugins: List<Plugin>,
-) : Node(buildContext, plugins = plugins)
 
 @Parcelize
 private class AttachRoomOperation(

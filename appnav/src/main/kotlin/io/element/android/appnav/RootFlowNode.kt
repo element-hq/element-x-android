@@ -9,15 +9,11 @@ package io.element.android.appnav
 
 import android.content.Intent
 import android.os.Parcelable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.navmodel.backstack.BackStack
@@ -41,11 +37,11 @@ import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.appyx.LoadingNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -203,9 +199,10 @@ class RootFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.LoggedInFlow -> {
-                val matrixClient = matrixSessionCache.getOrNull(navTarget.sessionId) ?: return splashNode(buildContext).also {
-                    Timber.w("Couldn't find any session, go through SplashScreen")
-                }
+                val matrixClient = matrixSessionCache.getOrNull(navTarget.sessionId)
+                    ?: return createNode<LoadingNode>(buildContext).also {
+                        Timber.w("Couldn't find any session, go through SplashScreen")
+                    }
                 val inputs = LoggedInAppScopeFlowNode.Inputs(matrixClient)
                 val callback = object : LoggedInAppScopeFlowNode.Callback {
                     override fun onOpenBugReport() {
@@ -234,7 +231,7 @@ class RootFlowNode(
                     )
                     .build()
             }
-            NavTarget.SplashScreen -> splashNode(buildContext)
+            NavTarget.SplashScreen -> createNode<LoadingNode>(buildContext)
             NavTarget.BugReport -> {
                 val callback = object : BugReportEntryPoint.Callback {
                     override fun onDone() {
@@ -246,12 +243,6 @@ class RootFlowNode(
                     .callback(callback)
                     .build()
             }
-        }
-    }
-
-    private fun splashNode(buildContext: BuildContext) = node(buildContext) {
-        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
         }
     }
 
