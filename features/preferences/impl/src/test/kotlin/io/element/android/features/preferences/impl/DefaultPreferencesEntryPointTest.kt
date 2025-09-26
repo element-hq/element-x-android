@@ -20,7 +20,6 @@ import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
 import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -64,10 +63,11 @@ class DefaultPreferencesEntryPointTest {
             )
         }
         val callback = object : PreferencesEntryPoint.Callback {
+            override fun onAddAccount() = lambdaError()
             override fun onOpenBugReport() = lambdaError()
             override fun onSecureBackupClick() = lambdaError()
             override fun onOpenRoomNotificationSettings(roomId: RoomId) = lambdaError()
-            override fun navigateTo(sessionId: SessionId, roomId: RoomId, eventId: EventId) = lambdaError()
+            override fun navigateTo(roomId: RoomId, eventId: EventId) = lambdaError()
         }
         val params = PreferencesEntryPoint.Params(
             initialElement = PreferencesEntryPoint.InitialTarget.NotificationSettings,

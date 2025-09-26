@@ -14,6 +14,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
@@ -29,6 +30,10 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 
 @Inject
 class HomePresenter(
@@ -41,10 +46,21 @@ class HomePresenter(
     private val logoutPresenter: Presenter<DirectLogoutState>,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val featureFlagService: FeatureFlagService,
+    private val sessionStore: SessionStore,
 ) : Presenter<HomeState> {
+    private val currentUserWithNeighborsBuilder = CurrentUserWithNeighborsBuilder()
+
     @Composable
     override fun present(): HomeState {
-        val matrixUser = client.userProfile.collectAsState()
+        val coroutineState = rememberCoroutineScope()
+        val matrixUser by client.userProfile.collectAsState()
+        val currentUserAndNeighbors by remember {
+            combine(
+                client.userProfile,
+                sessionStore.sessionsFlow(),
+                currentUserWithNeighborsBuilder::build,
+            )
+        }.collectAsState(initial = persistentListOf(matrixUser))
         val isOnline by syncService.isOnline.collectAsState()
         val canReportBug by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
         val roomListState = roomListPresenter.present()
@@ -71,6 +87,9 @@ class HomePresenter(
                 is HomeEvents.SelectHomeNavigationBarItem -> {
                     currentHomeNavigationBarItemOrdinal = event.item.ordinal
                 }
+                is HomeEvents.SwitchToAccount -> coroutineState.launch {
+                    sessionStore.setLatestSession(event.sessionId.value)
+                }
             }
         }
 
@@ -82,7 +101,7 @@ class HomePresenter(
         }
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         return HomeState(
-            matrixUser = matrixUser.value,
+            currentUserAndNeighbors = currentUserAndNeighbors,
             showAvatarIndicator = showAvatarIndicator,
             hasNetworkConnection = isOnline,
             currentHomeNavigationBarItem = currentHomeNavigationBarItem,

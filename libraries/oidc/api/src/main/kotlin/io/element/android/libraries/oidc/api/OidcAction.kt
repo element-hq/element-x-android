@@ -8,6 +8,6 @@
 package io.element.android.libraries.oidc.api
 
 sealed interface OidcAction {
-    data object GoBack : OidcAction
+    data class GoBack(val toUnblock: Boolean = false) : OidcAction
     data class Success(val url: String) : OidcAction
 }

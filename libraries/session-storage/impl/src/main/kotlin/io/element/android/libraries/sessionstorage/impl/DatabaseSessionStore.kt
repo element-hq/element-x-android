@@ -34,7 +34,7 @@ class DatabaseSessionStore(
     private val sessionDataMutex = Mutex()
 
     override fun loggedInStateFlow(): Flow<LoggedInState> {
-        return database.sessionDataQueries.selectFirst()
+        return database.sessionDataQueries.selectLatest()
             .asFlow()
             .mapToOneOrNull(dispatchers.io)
             .map {
@@ -51,7 +51,17 @@ class DatabaseSessionStore(
 
     override suspend fun addSession(sessionData: SessionData) {
         sessionDataMutex.withLock {
-            database.sessionDataQueries.insertSessionData(sessionData.toDbModel())
+            val lastUsageIndex = getLastUsageIndex()
+            database.sessionDataQueries.insertSessionData(
+                sessionData
+                    .copy(
+                        // position value does not really matter, so just use lastUsageIndex + 1 to ensure that
+                        // the value is always greater than value of any existing account
+                        position = lastUsageIndex + 1,
+                        lastUsageIndex = lastUsageIndex + 1,
+                    )
+                    .toDbModel()
+            )
         }
     }
 
@@ -65,18 +75,71 @@ class DatabaseSessionStore(
                 Timber.e("User ${sessionData.userId} not found in session database")
                 return
             }
-            // Copy new data from SDK, but keep login timestamp
+            // Copy new data from SDK, but keep application data
             database.sessionDataQueries.updateSession(
                 sessionData.copy(
                     loginTimestamp = result.loginTimestamp,
+                    position = result.position,
+                    lastUsageIndex = result.lastUsageIndex,
+                    userDisplayName = result.userDisplayName,
+                    userAvatarUrl = result.userAvatarUrl,
                 ).toDbModel()
             )
         }
     }
 
+    override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?) {
+        sessionDataMutex.withLock {
+            val result = database.sessionDataQueries.selectByUserId(sessionId)
+                .executeAsOneOrNull()
+                ?.toApiModel()
+            if (result == null) {
+                Timber.e("User $sessionId not found in session database")
+                return
+            }
+            database.sessionDataQueries.updateSession(
+                result.copy(
+                    userDisplayName = displayName,
+                    userAvatarUrl = avatarUrl,
+                ).toDbModel()
+            )
+        }
+    }
+
+    override suspend fun setLatestSession(sessionId: String) {
+        val latestSession = getLatestSession()
+        if (latestSession?.userId == sessionId) {
+            // Already the latest session
+            return
+        }
+        val lastUsageIndex = latestSession?.lastUsageIndex ?: 0
+        val result = database.sessionDataQueries.selectByUserId(sessionId)
+            .executeAsOneOrNull()
+            ?.toApiModel()
+        if (result == null) {
+            Timber.e("User $sessionId not found in session database")
+            return
+        }
+        sessionDataMutex.withLock {
+            // Update lastUsageIndex of the session
+            database.sessionDataQueries.updateSession(
+                result.copy(
+                    lastUsageIndex = lastUsageIndex + 1,
+                ).toDbModel()
+            )
+        }
+    }
+
+    private fun getLastUsageIndex(): Long {
+        return database.sessionDataQueries.selectLatest()
+            .executeAsOneOrNull()
+            ?.lastUsageIndex
+            ?: -1L
+    }
+
     override suspend fun getLatestSession(): SessionData? {
         return sessionDataMutex.withLock {
-            database.sessionDataQueries.selectFirst()
+            database.sessionDataQueries.selectLatest()
                 .executeAsOneOrNull()
                 ?.toApiModel()
         }
