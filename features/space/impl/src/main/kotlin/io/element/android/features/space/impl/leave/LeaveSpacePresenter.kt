@@ -65,6 +65,8 @@ class LeaveSpacePresenter(
                     roomId = RoomId("!roomId2:example.com"),
                 ),
             )
+            // By default select all rooms
+            selectedRoomIds.value = rooms.map { it.roomId }.toSet()
             value = rooms
         }
         val selectableSpaceRooms by produceState<AsyncData<ImmutableList<SelectableSpaceRoom>>>(
@@ -86,7 +88,9 @@ class LeaveSpacePresenter(
 
         fun handleEvents(event: LeaveSpaceEvents) {
             when (event) {
-                LeaveSpaceEvents.DeselectAllRooms -> selectedRoomIds.value = emptySet()
+                LeaveSpaceEvents.DeselectAllRooms -> {
+                    selectedRoomIds.value = emptySet()
+                }
                 LeaveSpaceEvents.SelectAllRooms -> {
                     selectedRoomIds.value = selectableSpaceRooms.dataOrNull()
                         .orEmpty()
