@@ -111,7 +111,7 @@ class IntentResolverTest {
     @Test
     fun `test resolve oidc`() {
         val sut = createIntentResolver(
-            oidcIntentResolverResult = { OidcAction.GoBack },
+            oidcIntentResolverResult = { OidcAction.GoBack() },
         )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_VIEW
@@ -120,7 +120,7 @@ class IntentResolverTest {
         val result = sut.resolve(intent)
         assertThat(result).isEqualTo(
             ResolvedIntent.Oidc(
-                oidcAction = OidcAction.GoBack
+                oidcAction = OidcAction.GoBack()
             )
         )
     }

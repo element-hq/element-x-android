@@ -34,6 +34,7 @@ class PreferencesRootNode(
     private val directLogoutView: DirectLogoutView,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
+        fun onAddAccount()
         fun onOpenBugReport()
         fun onSecureBackupClick()
         fun onOpenAnalytics()
@@ -46,6 +47,10 @@ class PreferencesRootNode(
         fun onOpenBlockedUsers()
         fun onSignOutClick()
         fun onOpenAccountDeactivation()
+    }
+
+    private fun onAddAccount() {
+        plugins<Callback>().forEach { it.onAddAccount() }
     }
 
     private fun onOpenBugReport() {
@@ -119,6 +124,7 @@ class PreferencesRootNode(
             state = state,
             modifier = modifier,
             onBackClick = this::navigateUp,
+            onAddAccountClick = this::onAddAccount,
             onOpenRageShake = this::onOpenBugReport,
             onOpenAnalytics = this::onOpenAnalytics,
             onOpenAbout = this::onOpenAbout,

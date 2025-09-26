@@ -31,7 +31,7 @@ class DefaultOidcUrlParserTest {
     fun `test cancel url`() {
         val sut = createDefaultOidcUrlParser()
         val aCancelUrl = "$FAKE_REDIRECT_URL?error=access_denied&state=IFF1UETGye2ZA8pO"
-        assertThat(sut.parse(aCancelUrl)).isEqualTo(OidcAction.GoBack)
+        assertThat(sut.parse(aCancelUrl)).isEqualTo(OidcAction.GoBack())
     }
 
     @Test

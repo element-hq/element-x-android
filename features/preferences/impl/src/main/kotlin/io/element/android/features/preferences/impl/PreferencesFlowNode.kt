@@ -41,7 +41,6 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
 import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
@@ -117,6 +116,10 @@ class PreferencesFlowNode(
         return when (navTarget) {
             NavTarget.Root -> {
                 val callback = object : PreferencesRootNode.Callback {
+                    override fun onAddAccount() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onAddAccount() }
+                    }
+
                     override fun onOpenBugReport() {
                         plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenBugReport() }
                     }
@@ -226,8 +229,8 @@ class PreferencesFlowNode(
                             }
                         }
 
-                        override fun onItemClick(sessionId: SessionId, roomId: RoomId, eventId: EventId) {
-                            plugins<PreferencesEntryPoint.Callback>().forEach { it.navigateTo(sessionId, roomId, eventId) }
+                        override fun navigateTo(roomId: RoomId, eventId: EventId) {
+                            plugins<PreferencesEntryPoint.Callback>().forEach { it.navigateTo(roomId, eventId) }
                         }
                     })
                     .build()

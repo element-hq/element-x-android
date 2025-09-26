@@ -14,20 +14,14 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_FORMATTED_DATE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
-import io.element.android.tests.testutils.EnsureNeverCalledWithThreeParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.value
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -103,9 +97,8 @@ class PushHistoryViewTest {
     }
 
     @Test
-    fun `clicking on a valid event invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<PushHistoryEvents>(expectEvents = false)
-        val onItemClick = lambdaRecorder<SessionId, RoomId, EventId, Unit> { _, _, _ -> }
+    fun `clicking on a valid event emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<PushHistoryEvents>()
         rule.setPushHistoryView(
             aPushHistoryState(
                 pushHistoryItems = listOf(
@@ -118,25 +111,26 @@ class PushHistoryViewTest {
                 ),
                 eventSink = eventsRecorder,
             ),
-            onItemClick = onItemClick,
         )
         rule.onNodeWithText(A_FORMATTED_DATE).performClick()
-        onItemClick.assertions()
-            .isCalledOnce()
-            .with(value(A_SESSION_ID), value(A_ROOM_ID), value(AN_EVENT_ID))
+        eventsRecorder.assertSingle(
+            PushHistoryEvents.NavigateTo(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+            )
+        )
     }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPushHistoryView(
     state: PushHistoryState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
-    onItemClick: (SessionId, RoomId, EventId) -> Unit = EnsureNeverCalledWithThreeParams(),
 ) {
     setContent {
         PushHistoryView(
             state = state,
             onBackClick = onBackClick,
-            onItemClick = onItemClick,
         )
     }
 }

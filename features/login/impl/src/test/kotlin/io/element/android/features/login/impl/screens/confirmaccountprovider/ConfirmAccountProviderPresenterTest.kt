@@ -117,7 +117,7 @@ class ConfirmAccountProviderPresenterTest {
             assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
             assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
             authenticationService.givenOidcCancelError(AN_EXCEPTION)
-            defaultOidcActionFlow.post(OidcAction.GoBack)
+            defaultOidcActionFlow.post(OidcAction.GoBack())
             val cancelFailureState = awaitItem()
             assertThat(cancelFailureState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
         }
@@ -144,7 +144,30 @@ class ConfirmAccountProviderPresenterTest {
             assertThat(successState.submitEnabled).isFalse()
             assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
             assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
-            defaultOidcActionFlow.post(OidcAction.GoBack)
+            defaultOidcActionFlow.post(OidcAction.GoBack())
+            val cancelFinalState = awaitItem()
+            assertThat(cancelFinalState.loginMode).isInstanceOf(AsyncData.Uninitialized::class.java)
+        }
+    }
+
+    @Test
+    fun `present - oidc - cancel to unblock`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService()
+        val defaultOidcActionFlow = FakeOidcActionFlow()
+        val presenter = createConfirmAccountProviderPresenter(
+            matrixAuthenticationService = authenticationService,
+            defaultOidcActionFlow = defaultOidcActionFlow,
+        )
+        authenticationService.givenHomeserver(A_HOMESERVER_OIDC)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
+            val loadingState = awaitItem()
+            assertThat(loadingState.submitEnabled).isTrue()
+            assertThat(loadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            defaultOidcActionFlow.post(OidcAction.GoBack(toUnblock = true))
             val cancelFinalState = awaitItem()
             assertThat(cancelFinalState.loginMode).isInstanceOf(AsyncData.Uninitialized::class.java)
         }
