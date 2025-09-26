@@ -16,7 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -31,7 +31,7 @@ fun interface PushHistoryNavigator {
     fun navigateTo(roomId: RoomId, eventId: EventId)
 }
 
-@Inject
+@AssistedInject
 class PushHistoryPresenter(
     @Assisted private val pushHistoryNavigator: PushHistoryNavigator,
     private val pushService: PushService,
