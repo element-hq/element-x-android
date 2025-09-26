@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
-package io.element.android.features.space.impl
+package io.element.android.features.space.impl.root
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.api.SeenInvitesStore

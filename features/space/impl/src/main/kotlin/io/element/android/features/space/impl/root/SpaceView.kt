@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.space.impl
+package io.element.android.features.space.impl.root
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,7 +17,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -36,6 +40,10 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.DropdownMenu
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -51,13 +59,20 @@ import kotlinx.collections.immutable.toImmutableList
 fun SpaceView(
     state: SpaceState,
     onBackClick: () -> Unit,
+    onLeaveSpaceClick: () -> Unit,
     onRoomClick: (spaceRoom: SpaceRoom) -> Unit,
+    onShareSpace: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
-            SpaceViewTopBar(currentSpace = state.currentSpace, onBackClick = onBackClick)
+            SpaceViewTopBar(
+                state = state,
+                onBackClick = onBackClick,
+                onLeaveSpaceClick = onLeaveSpaceClick,
+                onShareSpace = onShareSpace,
+            )
         },
         content = { padding ->
             Box(
@@ -140,10 +155,13 @@ private fun LoadingMoreIndicator(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SpaceViewTopBar(
-    currentSpace: SpaceRoom?,
+    state: SpaceState,
     onBackClick: () -> Unit,
+    @Suppress("unused") onLeaveSpaceClick: () -> Unit,
+    onShareSpace: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val currentSpace = state.currentSpace
     TopAppBar(
         modifier = modifier,
         navigationIcon = {
@@ -158,6 +176,51 @@ private fun SpaceViewTopBar(
             }
         },
         actions = {
+            var showMenu by remember { mutableStateOf(false) }
+            IconButton(
+                onClick = { showMenu = !showMenu }
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.OverflowVertical(),
+                    contentDescription = null,
+                )
+            }
+            DropdownMenu(
+                expanded = showMenu,
+                onDismissRequest = { showMenu = false }
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        showMenu = false
+                        onShareSpace()
+                    },
+                    text = { Text(stringResource(id = CommonStrings.action_share)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = CompoundIcons.ShareAndroid(),
+                            tint = ElementTheme.colors.iconSecondary,
+                            contentDescription = null,
+                        )
+                    }
+                )
+                /*
+                // TODO re-enable when we have SDK APIs to leave a space
+                DropdownMenuItem(
+                    onClick = {
+                        showMenu = false
+                        onLeaveSpaceClick()
+                    },
+                    text = { Text(stringResource(id = CommonStrings.action_leave)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = CompoundIcons.Leave(),
+                            tint = ElementTheme.colors.iconSecondary,
+                            contentDescription = null,
+                        )
+                    }
+                )
+                 */
+            }
         },
     )
 }
@@ -198,7 +261,9 @@ internal fun SpaceViewPreview(
 ) = ElementPreview {
     SpaceView(
         state = state,
-        onRoomClick = {},
         onBackClick = {},
+        onLeaveSpaceClick = {},
+        onRoomClick = {},
+        onShareSpace = {},
     )
 }
