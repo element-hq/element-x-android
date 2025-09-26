@@ -25,18 +25,17 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.previewutils.room.aSpaceRoom
+import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.jvm.optionals.getOrNull
 
 @Inject
 class LeaveSpacePresenter(
     @Assisted private val inputs: SpaceEntryPoint.Inputs,
-    private val matrixClient: MatrixClient,
+    matrixClient: MatrixClient,
 ) : Presenter<LeaveSpaceState> {
     @AssistedFactory
     fun interface Factory {
@@ -57,14 +56,7 @@ class LeaveSpacePresenter(
         }
         val joinedSpaceRooms by produceState(emptyList()) {
             // TODO Get the joined room from the SDK, should also have the
-            val rooms = listOf(
-                aSpaceRoom(
-                    roomId = RoomId("!roomId1:example.com"),
-                ),
-                aSpaceRoom(
-                    roomId = RoomId("!roomId2:example.com"),
-                ),
-            )
+            val rooms = emptyList<SpaceRoom>()
             // By default select all rooms
             selectedRoomIds.value = rooms.map { it.roomId }.toSet()
             value = rooms
@@ -77,10 +69,10 @@ class LeaveSpacePresenter(
             value = AsyncData.Success(
                 joinedSpaceRooms.map {
                     SelectableSpaceRoom(
-                        it,
+                        spaceRoom = it,
                         // TODO Get this value from the SDK
                         isLastAdmin = false,
-                        selectedRoomIds.value.contains(it.roomId),
+                        isSelected = selectedRoomIds.value.contains(it.roomId),
                     )
                 }.toPersistentList()
             )
@@ -130,10 +122,7 @@ class LeaveSpacePresenter(
     ) = launch {
         runUpdatingState(leaveSpaceAction) {
             // TODO SDK API call to leave all the rooms and space
-            delay(1000)
-            val room = matrixClient.getRoom(inputs.roomId)
-                ?: return@runUpdatingState Result.failure(Exception("Room not found"))
-            room.leave()
+            Result.failure(Exception("Not implemented"))
         }
     }
 }
