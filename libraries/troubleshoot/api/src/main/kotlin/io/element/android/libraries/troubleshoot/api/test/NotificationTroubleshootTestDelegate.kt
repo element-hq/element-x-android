@@ -60,7 +60,7 @@ class NotificationTroubleshootTestDelegate(
             if (isSuccess) {
                 NotificationTroubleshootTestState.Status.Success
             } else {
-                NotificationTroubleshootTestState.Status.Failure(hasQuickFix)
+                NotificationTroubleshootTestState.Status.Failure(hasQuickFix = hasQuickFix)
             }
         )
     }

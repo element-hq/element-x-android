@@ -31,6 +31,7 @@ class SpaceRoomMapper {
             state = spaceRoom.state?.map(),
             topic = spaceRoom.topic,
             worldReadable = spaceRoom.worldReadable.orFalse(),
+            via = spaceRoom.via,
         )
     }
 }

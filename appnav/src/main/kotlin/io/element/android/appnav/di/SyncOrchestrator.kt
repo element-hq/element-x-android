@@ -10,7 +10,7 @@ package io.element.android.appnav.di
 import androidx.annotation.VisibleForTesting
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
+@AssistedInject
 class SyncOrchestrator(
     @Assisted matrixClient: MatrixClient,
     private val appForegroundStateService: AppForegroundStateService,

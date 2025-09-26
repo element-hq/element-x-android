@@ -185,6 +185,5 @@ class RoomSummaryListProcessorTest {
     ) = SpaceListUpdateProcessor(
         spaceRoomsFlow = spaceRoomsFlow,
         mapper = SpaceRoomMapper(),
-        spaceRoomCache = SpaceRoomCache(),
     )
 }

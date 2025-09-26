@@ -16,11 +16,14 @@ import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import org.matrix.rustcomponents.sdk.SpaceListUpdate
+import org.matrix.rustcomponents.sdk.SpaceRoom
 import org.matrix.rustcomponents.sdk.SpaceRoomListEntriesListener
 import org.matrix.rustcomponents.sdk.SpaceRoomListInterface
 import org.matrix.rustcomponents.sdk.SpaceRoomListPaginationStateListener
+import org.matrix.rustcomponents.sdk.SpaceRoomListSpaceListener
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.SpaceRoomListPaginationState
+import java.util.Optional
 
 internal fun SpaceRoomListInterface.paginationStateFlow(): Flow<SpaceRoomListPaginationState> = callbackFlow {
     val listener = object : SpaceRoomListPaginationStateListener {
@@ -54,4 +57,22 @@ internal fun SpaceRoomListInterface.spaceListUpdateFlow(): Flow<List<SpaceListUp
         }
     }.catch {
         Timber.d(it, "spaceListUpdateFlow() failed")
+    }.buffer(Channel.UNLIMITED)
+
+internal fun SpaceRoomListInterface.spaceUpdateFlow(): Flow<Optional<SpaceRoom>> =
+    callbackFlow {
+        val listener = object : SpaceRoomListSpaceListener {
+            override fun onUpdate(space: SpaceRoom?) {
+                trySendBlocking(Optional.ofNullable(space))
+            }
+        }
+        Timber.d("Open spaceUpdateFlow for SpaceRoomListInterface ${this@spaceUpdateFlow}")
+        trySendBlocking(Optional.ofNullable(space()))
+        val taskHandle = subscribeToSpaceUpdates(listener)
+        awaitClose {
+            Timber.d("Close spaceUpdateFlow for SpaceRoomListInterface ${this@spaceUpdateFlow}")
+            taskHandle.cancelAndDestroy()
+        }
+    }.catch {
+        Timber.d(it, "spaceUpdateFlow() failed")
     }.buffer(Channel.UNLIMITED)

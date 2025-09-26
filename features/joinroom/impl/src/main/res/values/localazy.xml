@@ -15,6 +15,7 @@
   <string name="screen_join_room_fail_reason">"This room is either invite-only or there might be restrictions to access at space level."</string>
   <string name="screen_join_room_forget_action">"Forget this room"</string>
   <string name="screen_join_room_invite_required_message">"You need an invite in order to join this room"</string>
+  <string name="screen_join_room_invited_by">"Invited by"</string>
   <string name="screen_join_room_join_action">"Join room"</string>
   <string name="screen_join_room_join_restricted_message">"You may need to be invited or be a member of a space in order to join."</string>
   <string name="screen_join_room_knock_action">"Send request to join"</string>

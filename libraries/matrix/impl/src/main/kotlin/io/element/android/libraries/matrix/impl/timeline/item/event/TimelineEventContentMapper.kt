@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershi
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
@@ -79,7 +80,7 @@ class TimelineEventContentMapper(
                                                 content = map(latestEvent.content),
                                                 senderId = UserId(latestEvent.sender),
                                                 senderProfile = latestEvent.senderProfile.map(),
-                                                timestamp = latestEvent.timestamp.toLong()
+                                                timestamp = latestEvent.timestamp.toLong(),
                                             )
                                         )
                                     }
@@ -89,10 +90,12 @@ class TimelineEventContentMapper(
                                     numberOfReplies = numberOfReplies,
                                 )
                             }
-                            val threadInfo = EventThreadInfo(
-                                threadRootId = it.content.threadRoot?.let(::ThreadId),
-                                threadSummary = threadSummary,
-                            )
+                            val threadRootId = it.content.threadRoot?.let(::ThreadId)
+                            val threadInfo = when {
+                                threadSummary != null -> EventThreadInfo.ThreadRoot(threadSummary)
+                                threadRootId != null -> EventThreadInfo.ThreadResponse(threadRootId)
+                                else -> null
+                            }
                             eventMessageMapper.map(kind, inReplyTo, threadInfo)
                         }
                         is MsgLikeKind.Redacted -> {
@@ -124,6 +127,7 @@ class TimelineEventContentMapper(
                                 source = kind.source.map(),
                             )
                         }
+                        is MsgLikeKind.Other -> UnknownContent
                     }
                 }
                 is TimelineItemContent.ProfileChange -> {

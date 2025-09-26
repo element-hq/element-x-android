@@ -41,5 +41,8 @@ data class WidgetMessage(
 
         @SerialName("send_event")
         SendEvent,
+
+        @SerialName("content_loaded")
+        ContentLoaded,
     }
 }

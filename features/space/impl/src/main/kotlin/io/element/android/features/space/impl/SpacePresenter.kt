@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.libraries.architecture.Presenter
@@ -29,8 +29,9 @@ import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlin.jvm.optionals.getOrNull
 
-@Inject
+@AssistedInject
 class SpacePresenter(
     @Assisted private val inputs: SpaceEntryPoint.Inputs,
     private val client: MatrixClient,
@@ -64,7 +65,7 @@ class SpacePresenter(
             }
         }.collectAsState()
 
-        val currentSpace by remember { spaceRoomList.currentSpaceFlow() }.collectAsState(null)
+        val currentSpace by spaceRoomList.currentSpaceFlow.collectAsState()
 
         fun handleEvents(event: SpaceEvents) {
             when (event) {
@@ -72,7 +73,7 @@ class SpacePresenter(
             }
         }
         return SpaceState(
-            currentSpace = currentSpace,
+            currentSpace = currentSpace.getOrNull(),
             children = children.toPersistentList(),
             seenSpaceInvites = seenSpaceInvites,
             hideInvitesAvatar = hideInvitesAvatar,

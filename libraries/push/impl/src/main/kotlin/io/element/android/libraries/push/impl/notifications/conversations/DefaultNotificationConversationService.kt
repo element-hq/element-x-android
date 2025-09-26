@@ -105,7 +105,7 @@ class DefaultNotificationConversationService(
             targetSize = defaultShortcutIconSize.toLong()
         )?.let(IconCompat::createWithBitmap)
             ?: InitialsAvatarBitmapGenerator(useDarkTheme = useDarkTheme)
-                .generateBitmap(defaultShortcutIconSize, AvatarData(id = roomId.value, name = roomName, size = AvatarSize.RoomHeader))
+                .generateBitmap(defaultShortcutIconSize, AvatarData(id = roomId.value, name = roomName, size = AvatarSize.RoomDetailsHeader))
                 ?.let(IconCompat::createWithAdaptiveBitmap)
 
         val shortcutInfo = ShortcutInfoCompat.Builder(context, createShortcutId(sessionId, roomId))

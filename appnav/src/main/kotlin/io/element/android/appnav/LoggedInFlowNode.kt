@@ -38,6 +38,7 @@ import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.annotations.ContributesNode
@@ -99,7 +100,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
 
 @ContributesNode(SessionScope::class)
-@Inject
+@AssistedInject
 class LoggedInFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
@@ -366,8 +367,8 @@ class LoggedInFlowNode(
                     }
                 }
                 val spaceCallback = object : SpaceEntryPoint.Callback {
-                    override fun onOpenRoom(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                    override fun onOpenRoom(roomId: RoomId, viaParameters: List<String>) {
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), serverNames = viaParameters))
                     }
                 }
                 val inputs = RoomFlowNode.Inputs(

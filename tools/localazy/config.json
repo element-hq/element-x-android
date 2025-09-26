@@ -123,6 +123,7 @@
       "includeRegex" : [
         "push_.*",
         "notification_.*",
+        "troubleshoot_notifications\\.test_blocked_users\\..*",
         "troubleshoot_notifications_test_current_push_provider.*",
         "troubleshoot_notifications_test_detect_push_provider.*",
         "troubleshoot_notifications_test_display_notification_.*",

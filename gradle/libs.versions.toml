@@ -6,9 +6,9 @@
 # We cannot use 8.12.+ since it breaks F-Droid build (see https://github.com/element-hq/element-x-android/issues/3420#issuecomment-3199571010)
 android_gradle_plugin = "8.11.1"
 # When updateing this, please also update the version in the file ./idea/kotlinc.xml
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 kotlinpoet = "2.2.0"
-ksp = "2.2.10-2.0.2"
+ksp = "2.2.20-2.0.2"
 firebaseAppDistribution = "5.1.1"
 
 # AndroidX
@@ -48,10 +48,10 @@ telephoto = "0.17.0"
 haze = "1.6.10"
 
 # Dependency analysis
-dependencyAnalysis = "2.19.0"
+dependencyAnalysis = "3.0.4"
 
 # DI
-metro = "0.6.4"
+metro = "0.6.7"
 
 # Auto service
 autoservice = "1.1.1"
@@ -166,7 +166,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.9.19"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.9.25"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -182,7 +182,7 @@ showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.21.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
-molecule-runtime = "app.cash.molecule:molecule-runtime:2.1.0"
+molecule-runtime = "app.cash.molecule:molecule-runtime:2.2.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
@@ -190,13 +190,13 @@ sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", ver
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:sqlcipher-android:4.10.0"
-sqlite = "androidx.sqlite:sqlite-ktx:2.6.0"
+sqlite = "androidx.sqlite:sqlite-ktx:2.6.1"
 unifiedpush = "org.unifiedpush.android:connector:3.0.10"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.13.1"
+maplibre = "org.maplibre.gl:android-sdk:11.13.5"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.2.0"
@@ -205,8 +205,8 @@ haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.21.2"
-sentry = "io.sentry:sentry-android:8.21.1"
+posthog = "com.posthog:posthog-android:3.21.3"
+sentry = "io.sentry:sentry-android:8.22.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
@@ -219,7 +219,7 @@ inject = "javax.inject:javax.inject:1"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.15.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.16.0"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
@@ -241,7 +241,7 @@ metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = "org.jlleitschuh.gradle.ktlint:13.1.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:12.1.3"
+dependencycheck = "org.owasp.dependencycheck:12.1.6"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:2.0.0-alpha02"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

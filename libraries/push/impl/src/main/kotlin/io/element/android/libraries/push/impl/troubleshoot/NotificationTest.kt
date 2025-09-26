@@ -54,7 +54,7 @@ class NotificationTest(
         } else {
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_permission_failure),
-                status = NotificationTroubleshootTestState.Status.Failure(false)
+                status = NotificationTroubleshootTestState.Status.Failure()
             )
         }
     }
@@ -81,7 +81,7 @@ class NotificationTest(
                 notificationDisplayer.dismissDiagnosticNotification()
                 delegate.updateState(
                     description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_failure),
-                    status = NotificationTroubleshootTestState.Status.Failure(false)
+                    status = NotificationTroubleshootTestState.Status.Failure()
                 )
             }
         )

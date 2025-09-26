@@ -146,7 +146,7 @@ printf "Creating fastlane file...\n"
 printf -v versionReleaseNumber2Digits "%02d" "${versionReleaseNumber}"
 fastlaneFile="20${versionYear}${versionMonth}${versionReleaseNumber2Digits}0.txt"
 fastlanePathFile="./fastlane/metadata/android/en-US/changelogs/${fastlaneFile}"
-printf "Main changes in this version: TODO.\nFull changelog: https://github.com/element-hq/element-x-android/releases" > "${fastlanePathFile}"
+printf "Main changes in this version: bug fixes and improvements.\nFull changelog: https://github.com/element-hq/element-x-android/releases" > "${fastlanePathFile}"
 
 read -r -p "I have created the file ${fastlanePathFile}, please edit it and press enter to continue. "
 git add "${fastlanePathFile}"

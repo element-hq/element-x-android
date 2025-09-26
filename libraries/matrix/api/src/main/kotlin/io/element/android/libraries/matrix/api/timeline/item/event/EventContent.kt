@@ -24,7 +24,7 @@ data class MessageContent(
     val body: String,
     val inReplyTo: InReplyTo?,
     val isEdited: Boolean,
-    val threadInfo: EventThreadInfo,
+    val threadInfo: EventThreadInfo?,
     val type: MessageType
 ) : EventContent
 

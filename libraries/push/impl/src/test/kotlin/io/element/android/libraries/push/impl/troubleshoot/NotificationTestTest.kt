@@ -7,14 +7,13 @@
 
 package io.element.android.libraries.push.impl.troubleshoot
 
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
+import io.element.android.libraries.troubleshoot.test.runAndTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -31,10 +30,7 @@ class NotificationTestTest {
     fun `test NotificationTest notification cannot be displayed`() = runTest {
         fakeNotificationDisplayer.displayDiagnosticNotificationResult = lambdaRecorder { _ -> false }
         val sut = createNotificationTest()
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             assertThat(awaitItem().status).isInstanceOf(NotificationTroubleshootTestState.Status.Failure::class.java)
@@ -44,10 +40,7 @@ class NotificationTestTest {
     @Test
     fun `test NotificationTest user does not click on notification`() = runTest {
         val sut = createNotificationTest()
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.WaitingForUser)
@@ -60,10 +53,7 @@ class NotificationTestTest {
     @Test
     fun `test NotificationTest user clicks on notification`() = runTest {
         val sut = createNotificationTest()
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.WaitingForUser)

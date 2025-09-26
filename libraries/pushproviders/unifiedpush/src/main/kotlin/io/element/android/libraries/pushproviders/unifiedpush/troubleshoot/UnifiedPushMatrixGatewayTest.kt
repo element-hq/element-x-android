@@ -48,7 +48,7 @@ class UnifiedPushMatrixGatewayTest(
         if (config == null) {
             delegate.updateState(
                 description = "No current push provider",
-                status = NotificationTroubleshootTestState.Status.Failure(false)
+                status = NotificationTroubleshootTestState.Status.Failure()
             )
         } else {
             val gatewayBaseUrl = config.url.removeSuffix("/_matrix/push/v1/notify")
@@ -65,13 +65,13 @@ class UnifiedPushMatrixGatewayTest(
                     } else {
                         delegate.updateState(
                             description = "${config.url} is not a Matrix gateway.",
-                            status = NotificationTroubleshootTestState.Status.Failure(false)
+                            status = NotificationTroubleshootTestState.Status.Failure()
                         )
                     }
                 } catch (throwable: Throwable) {
                     delegate.updateState(
                         description = "Fail to check the gateway ${config.url}: ${throwable.localizedMessage}",
-                        status = NotificationTroubleshootTestState.Status.Failure(false)
+                        status = NotificationTroubleshootTestState.Status.Failure()
                     )
                 }
             }

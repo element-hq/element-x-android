@@ -34,14 +34,13 @@ fun RoomPreviewOrganism(
         title()
         Spacer(modifier = Modifier.height(8.dp))
         subtitle()
-        Spacer(modifier = Modifier.height(8.dp))
         if (memberCount != null) {
+            Spacer(modifier = Modifier.height(8.dp))
             memberCount()
         }
-        Spacer(modifier = Modifier.height(8.dp))
         if (description != null) {
+            Spacer(modifier = Modifier.height(16.dp))
             description()
         }
-        Spacer(modifier = Modifier.height(24.dp))
     }
 }

@@ -18,7 +18,6 @@ import timber.log.Timber
 internal class SpaceListUpdateProcessor(
     private val spaceRoomsFlow: MutableSharedFlow<List<SpaceRoom>>,
     private val mapper: SpaceRoomMapper,
-    private val spaceRoomCache: SpaceRoomCache,
 ) {
     private val mutex = Mutex()
 
@@ -37,7 +36,6 @@ internal class SpaceListUpdateProcessor(
                 mutableListOf()
             }
             block(spaceRooms)
-            spaceRoomCache.update(spaceRooms)
             spaceRoomsFlow.emit(spaceRooms)
         }
 

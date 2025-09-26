@@ -8,7 +8,11 @@
 package io.element.android.features.messages.impl.utils.messagesummary
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 
 interface MessageSummaryFormatter {
-    fun format(event: TimelineItem.Event): String
+    fun format(event: TimelineItem.Event): String {
+        return format(event.content)
+    }
+    fun format(content: TimelineItemEventContent): String
 }

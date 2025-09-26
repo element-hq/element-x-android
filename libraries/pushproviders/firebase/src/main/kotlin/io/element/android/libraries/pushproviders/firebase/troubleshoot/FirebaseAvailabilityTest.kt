@@ -51,7 +51,7 @@ class FirebaseAvailabilityTest(
         } else {
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_availability_failure),
-                status = NotificationTroubleshootTestState.Status.Failure(false)
+                status = NotificationTroubleshootTestState.Status.Failure()
             )
         }
     }

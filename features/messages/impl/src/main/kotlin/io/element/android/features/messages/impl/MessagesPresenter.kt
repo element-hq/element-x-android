@@ -24,7 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.appconfig.MessageComposerConfig
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
@@ -43,6 +43,7 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
@@ -92,7 +93,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-@Inject
+@AssistedInject
 class MessagesPresenter(
     @Assisted private val navigator: MessagesNavigator,
     private val room: JoinedRoom,
@@ -281,8 +282,8 @@ class MessagesPresenter(
         }
         return produceState(UserEventPermissions.DEFAULT, key1 = key) {
             value = UserEventPermissions(
-                canSendMessage = room.canSendMessage(type = MessageEventType.ROOM_MESSAGE).getOrElse { true },
-                canSendReaction = room.canSendMessage(type = MessageEventType.REACTION).getOrElse { true },
+                canSendMessage = room.canSendMessage(type = MessageEventType.RoomMessage).getOrElse { true },
+                canSendReaction = room.canSendMessage(type = MessageEventType.Reaction).getOrElse { true },
                 canRedactOwn = room.canRedactOwn().getOrElse { false },
                 canRedactOther = room.canRedactOther().getOrElse { false },
                 canPinUnpin = room.canPinUnpin().getOrElse { false },
@@ -328,7 +329,10 @@ class MessagesPresenter(
                 val displayThreads = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
                 if (displayThreads) {
                     // Get either the thread id this event is in, or the event id if it's not in a thread so we can start one
-                    val threadId = targetEvent.threadInfo.threadRootId ?: targetEvent.eventId!!.toThreadId()
+                    val threadId = when (targetEvent.threadInfo) {
+                        is TimelineItemThreadInfo.ThreadResponse -> targetEvent.threadInfo.threadRootId
+                        is TimelineItemThreadInfo.ThreadRoot, null -> targetEvent.eventId?.toThreadId()
+                    } ?: return@launch
                     navigator.onOpenThread(threadId, null)
                 } else {
                     handleActionReply(targetEvent, composerState, timelineProtectionState)

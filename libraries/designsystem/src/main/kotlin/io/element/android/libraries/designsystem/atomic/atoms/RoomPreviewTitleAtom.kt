@@ -23,7 +23,7 @@ fun RoomPreviewTitleAtom(
     Text(
         modifier = modifier,
         text = title,
-        style = ElementTheme.typography.fontHeadingMdBold,
+        style = ElementTheme.typography.fontHeadingLgBold,
         textAlign = TextAlign.Center,
         fontStyle = fontStyle,
         color = ElementTheme.colors.textPrimary,

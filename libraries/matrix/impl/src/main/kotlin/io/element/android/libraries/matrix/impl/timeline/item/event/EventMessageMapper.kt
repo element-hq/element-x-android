@@ -38,7 +38,7 @@ private const val MSG_TYPE_GALLERY_UNSTABLE = "dm.filament.gallery"
 class EventMessageMapper {
     private val inReplyToMapper by lazy { InReplyToMapper(TimelineEventContentMapper()) }
 
-    fun map(message: MsgLikeKind.Message, inReplyTo: InReplyToDetails?, threadInfo: EventThreadInfo): MessageContent = message.use {
+    fun map(message: MsgLikeKind.Message, inReplyTo: InReplyToDetails?, threadInfo: EventThreadInfo?): MessageContent = message.use {
         val type = it.content.msgType.use(this::mapMessageType)
         val inReplyToEvent: InReplyTo? = inReplyTo?.use(inReplyToMapper::map)
         MessageContent(

@@ -20,9 +20,11 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.exception.ClientException
-import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
+import io.element.android.libraries.matrix.api.room.join.JoinRule
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.InviteSender
+import kotlinx.collections.immutable.toPersistentList
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
@@ -77,13 +79,17 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                     name = "A space",
                     alias = null,
                     topic = "This is the topic of a space",
-                    roomType = RoomType.Space,
+                    details = aLoadedDetailsSpace(
+                        childrenCount = 42,
+                    ),
                 )
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(
                     name = "A DM",
-                    isDm = true,
+                    details = aLoadedDetailsRoom(
+                        isDm = true,
+                    ),
                 )
             ),
             aJoinRoomState(
@@ -156,20 +162,34 @@ fun aLoadedContentState(
     alias: RoomAlias? = RoomAlias("#exa:matrix.org"),
     topic: String? = "Element X is a secure, private and decentralized messenger.",
     numberOfMembers: Long? = null,
-    isDm: Boolean = false,
-    roomType: RoomType = RoomType.Room,
     roomAvatarUrl: String? = null,
     joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown,
+    joinRule: JoinRule? = null,
+    details: LoadedDetails = aLoadedDetailsRoom(isDm = false),
 ) = ContentState.Loaded(
     roomId = roomId,
     name = name,
     alias = alias,
     topic = topic,
     numberOfMembers = numberOfMembers,
-    isDm = isDm,
-    roomType = roomType,
     roomAvatarUrl = roomAvatarUrl,
-    joinAuthorisationStatus = joinAuthorisationStatus
+    joinAuthorisationStatus = joinAuthorisationStatus,
+    joinRule = joinRule,
+    details = details,
+)
+
+fun aLoadedDetailsRoom(
+    isDm: Boolean = false,
+) = LoadedDetails.Room(
+    isDm = isDm
+)
+
+fun aLoadedDetailsSpace(
+    childrenCount: Int = 0,
+    heroes: List<MatrixUser> = emptyList(),
+) = LoadedDetails.Space(
+    childrenCount = childrenCount,
+    heroes = heroes.toPersistentList()
 )
 
 fun aJoinRoomState(

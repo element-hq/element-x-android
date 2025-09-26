@@ -54,6 +54,14 @@
   <string name="push_distributor_background_sync_android">"Background synchronization"</string>
   <string name="push_distributor_firebase_android">"Google Services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"No valid Google Play Services found. Notifications may not work properly."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Checking blocked users"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"View blocked users"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"No users are blocked."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"You blocked %1$d user. You will not receive notifications for this user."</item>
+    <item quantity="other">"You blocked %1$d users. You will not receive notifications for these users."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Blocked users"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Get the name of the current provider."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"No push providers selected."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Current push provider: %1$s."</string>

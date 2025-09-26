@@ -64,11 +64,12 @@ private fun ColumnScope.TroubleshootTestView(
     testState: NotificationTroubleshootTestState,
     onQuickFixClick: () -> Unit,
 ) {
-    if ((testState.status as? Status.Idle)?.visible == false) return
+    val status = testState.status
+    if ((status as? Status.Idle)?.visible == false) return
     ListItem(
         headlineContent = { Text(text = testState.name) },
         supportingContent = { Text(text = testState.description) },
-        trailingContent = when (testState.status) {
+        trailingContent = when (status) {
             is Status.Idle -> null
             Status.InProgress -> ListItemContent.Custom {
                 CircularProgressIndicator(
@@ -98,20 +99,19 @@ private fun ColumnScope.TroubleshootTestView(
                 Icon(
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    imageVector = CompoundIcons.ErrorSolid(),
-                    tint = ElementTheme.colors.textCriticalPrimary
+                    imageVector = if (status.isCritical) CompoundIcons.ErrorSolid() else CompoundIcons.Warning(),
+                    tint = ElementTheme.colors.iconCriticalPrimary,
                 )
             }
         }
     )
-    if ((testState.status as? Status.Failure)?.hasQuickFix == true) {
+    if (status is Status.Failure && status.hasQuickFix) {
         ListItem(
-            headlineContent = {
-            },
+            headlineContent = { },
             trailingContent = ListItemContent.Custom {
                 Button(
-                    text = stringResource(id = R.string.troubleshoot_notifications_screen_quick_fix_action),
-                    onClick = onQuickFixClick
+                    text = status.quickFixButtonString ?: stringResource(id = R.string.troubleshoot_notifications_screen_quick_fix_action),
+                    onClick = onQuickFixClick,
                 )
             }
         )

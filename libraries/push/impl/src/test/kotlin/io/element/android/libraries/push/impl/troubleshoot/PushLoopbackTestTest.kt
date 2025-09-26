@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.push.impl.troubleshoot
 
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
@@ -15,10 +14,11 @@ import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import io.element.android.libraries.push.test.FakePushService
 import io.element.android.libraries.pushproviders.test.FakePushProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
+import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleshootNavigator
+import io.element.android.libraries.troubleshoot.test.runAndTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -32,14 +32,11 @@ class PushLoopbackTestTest {
             clock = FakeSystemClock(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure())
         }
     }
 
@@ -56,14 +53,11 @@ class PushLoopbackTestTest {
             clock = FakeSystemClock(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure())
             sut.reset()
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
         }
@@ -89,17 +83,14 @@ class PushLoopbackTestTest {
             clock = FakeSystemClock(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
-            sut.quickFix(this)
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true))
+            sut.quickFix(this, FakeNotificationTroubleshootNavigator())
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
-            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(hasQuickFix = true))
             rotateTokenLambda.assertions().isCalledOnce()
         }
     }
@@ -115,14 +106,11 @@ class PushLoopbackTestTest {
             clock = FakeSystemClock(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure())
         }
     }
 
@@ -139,14 +127,11 @@ class PushLoopbackTestTest {
             clock = FakeSystemClock(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
-            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure())
             assertThat(lastItem.description).contains(A_FAILURE_REASON)
         }
     }
@@ -163,10 +148,7 @@ class PushLoopbackTestTest {
             clock = FakeSystemClock(),
             stringProvider = FakeStringProvider(),
         )
-        launch {
-            sut.run(this)
-        }
-        sut.state.test {
+        sut.runAndTestState {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()

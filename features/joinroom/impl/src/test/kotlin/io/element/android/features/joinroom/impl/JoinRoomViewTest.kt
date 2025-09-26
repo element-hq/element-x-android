@@ -14,7 +14,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.test.anInviteData
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.ui.model.toInviteSender
@@ -216,21 +215,6 @@ class JoinRoomViewTest {
         )
         rule.clickOn(CommonStrings.action_retry)
         eventsRecorder.assertSingle(JoinRoomEvents.RetryFetchingContent)
-    }
-
-    @Test
-    fun `clicking on ok when a space is displayed invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
-        ensureCalledOnce {
-            rule.setJoinRoomView(
-                aJoinRoomState(
-                    contentState = aLoadedContentState(roomType = RoomType.Space),
-                    eventSink = eventsRecorder,
-                ),
-                onBackClick = it
-            )
-            rule.clickOn(CommonStrings.action_ok)
-        }
     }
 
     @Test

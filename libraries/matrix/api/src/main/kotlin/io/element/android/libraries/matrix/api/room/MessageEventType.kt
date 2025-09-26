@@ -7,28 +7,32 @@
 
 package io.element.android.libraries.matrix.api.room
 
-enum class MessageEventType {
-    CALL_ANSWER,
-    CALL_INVITE,
-    CALL_HANGUP,
-    CALL_CANDIDATES,
-    RTC_NOTIFICATION,
-    KEY_VERIFICATION_READY,
-    KEY_VERIFICATION_START,
-    KEY_VERIFICATION_CANCEL,
-    KEY_VERIFICATION_ACCEPT,
-    KEY_VERIFICATION_KEY,
-    KEY_VERIFICATION_MAC,
-    KEY_VERIFICATION_DONE,
-    REACTION,
-    ROOM_ENCRYPTED,
-    ROOM_MESSAGE,
-    ROOM_REDACTION,
-    STICKER,
-    POLL_END,
-    POLL_RESPONSE,
-    POLL_START,
-    UNSTABLE_POLL_END,
-    UNSTABLE_POLL_RESPONSE,
-    UNSTABLE_POLL_START,
+import androidx.compose.runtime.Immutable
+
+@Immutable
+sealed interface MessageEventType {
+    data object CallAnswer : MessageEventType
+    data object CallInvite : MessageEventType
+    data object CallHangup : MessageEventType
+    data object CallCandidates : MessageEventType
+    data object RtcNotification : MessageEventType
+    data object KeyVerificationReady : MessageEventType
+    data object KeyVerificationStart : MessageEventType
+    data object KeyVerificationCancel : MessageEventType
+    data object KeyVerificationAccept : MessageEventType
+    data object KeyVerificationKey : MessageEventType
+    data object KeyVerificationMac : MessageEventType
+    data object KeyVerificationDone : MessageEventType
+    data object Reaction : MessageEventType
+    data object RoomEncrypted : MessageEventType
+    data object RoomMessage : MessageEventType
+    data object RoomRedaction : MessageEventType
+    data object Sticker : MessageEventType
+    data object PollEnd : MessageEventType
+    data object PollResponse : MessageEventType
+    data object PollStart : MessageEventType
+    data object UnstablePollEnd : MessageEventType
+    data object UnstablePollResponse : MessageEventType
+    data object UnstablePollStart : MessageEventType
+    data class Other(val type: String) : MessageEventType
 }

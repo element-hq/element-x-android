@@ -16,7 +16,10 @@ interface NotificationTroubleshootTest {
     fun isRelevant(data: TestFilterData): Boolean = true
     suspend fun run(coroutineScope: CoroutineScope)
     suspend fun reset()
-    suspend fun quickFix(coroutineScope: CoroutineScope) {
+    suspend fun quickFix(
+        coroutineScope: CoroutineScope,
+        navigator: NotificationTroubleshootNavigator,
+    ) {
         error("Quick fix not implemented, you need to override this method in your test")
     }
 }

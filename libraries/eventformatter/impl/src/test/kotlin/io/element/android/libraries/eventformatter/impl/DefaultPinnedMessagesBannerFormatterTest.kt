@@ -14,7 +14,6 @@ import com.google.common.truth.Truth.assertWithMessage
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
@@ -130,7 +129,7 @@ class DefaultPinnedMessagesBannerFormatterTest {
     fun `Message contents`() {
         val body = "Shared body"
         fun createMessageContent(type: MessageType): MessageContent {
-            return MessageContent(body, null, false, EventThreadInfo(null, null), type)
+            return MessageContent(body, null, false, null, type)
         }
 
         val sharedContentMessagesTypes = arrayOf(

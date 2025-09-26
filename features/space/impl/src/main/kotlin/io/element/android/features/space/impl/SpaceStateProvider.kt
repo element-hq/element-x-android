@@ -18,7 +18,15 @@ open class SpaceStateProvider : PreviewParameterProvider<SpaceState> {
     override val values: Sequence<SpaceState>
         get() = sequenceOf(
             aSpaceState(),
-            aSpaceState(hasMoreToLoad = true),
+            aSpaceState(
+                parentSpace = aSpaceRoom(
+                    name = null,
+                    numJoinedMembers = 5,
+                    childrenCount = 10,
+                    worldReadable = true,
+                ),
+                hasMoreToLoad = true,
+            ),
             aSpaceState(
                 hasMoreToLoad = true,
                 children = aListOfSpaceRooms(),

@@ -43,4 +43,5 @@ dependencies {
     testImplementation(projects.features.invite.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.previewutils)
 }

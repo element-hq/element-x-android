@@ -104,7 +104,7 @@ fun aMessageContent(
     body: String = "body",
     inReplyTo: InReplyTo? = null,
     isEdited: Boolean = false,
-    threadInfo: EventThreadInfo = EventThreadInfo(threadRootId = null, threadSummary = null),
+    threadInfo: EventThreadInfo? = null,
     messageType: MessageType = TextMessageType(
         body = body,
         formatted = null

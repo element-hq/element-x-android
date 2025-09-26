@@ -134,10 +134,7 @@ class InReplyToDetailsOtherProvider : InReplyToDetailsProvider() {
 private fun aMessageContent(
     body: String,
     type: MessageType,
-    threadInfo: EventThreadInfo = EventThreadInfo(
-        threadRootId = null,
-        threadSummary = null,
-    ),
+    threadInfo: EventThreadInfo? = null,
 ) = MessageContent(
     body = body,
     inReplyTo = null,
