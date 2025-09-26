@@ -7,16 +7,26 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction.picker
 
+import androidx.annotation.StringRes
 import io.element.android.emojibasebindings.Emoji
-import io.element.android.emojibasebindings.EmojibaseCategory
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
 
 data class EmojiPickerState(
-    val categories: ImmutableMap<EmojibaseCategory, ImmutableList<Emoji>>,
+    val categories: ImmutableList<EmojiCategory>,
+    val allEmojis: ImmutableList<Emoji>,
     val searchQuery: String,
     val isSearchActive: Boolean,
     val searchResults: SearchBarResultState<ImmutableList<Emoji>>,
     val eventSink: (EmojiPickerEvents) -> Unit,
+)
+
+/**
+ * Represents a category of emojis with a title id, icon, and the list of associated emojis.
+ */
+data class EmojiCategory(
+    @StringRes val titleId: Int,
+    val icon: IconSource,
+    val emojis: ImmutableList<Emoji>,
 )
