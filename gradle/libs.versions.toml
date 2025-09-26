@@ -43,7 +43,7 @@ coil = "3.3.0"
 showkase = "1.0.5"
 appyx = "1.7.1"
 sqldelight = "2.1.0"
-wysiwyg = "2.39.0"
+wysiwyg = "2.40.0"
 telephoto = "0.17.0"
 haze = "1.6.10"
 
