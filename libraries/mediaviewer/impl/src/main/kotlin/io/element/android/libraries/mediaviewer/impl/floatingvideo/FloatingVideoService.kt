@@ -55,7 +55,7 @@ class FloatingVideoService : Service() {
     private var overlayContainer: FrameLayout? = null
     private var currentVideoData: MediaViewerPageData.MediaViewerData? = null
     private var currentPosition: Long = 0L
-    private var isMaximized = false
+    private var isMaximized = true
     private var seekBar: SeekBar? = null
     private var progressHandler = Handler(Looper.getMainLooper())
 
