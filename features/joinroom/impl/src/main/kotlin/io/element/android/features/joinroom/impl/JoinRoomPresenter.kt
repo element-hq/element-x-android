@@ -39,8 +39,6 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
-import io.element.android.libraries.matrix.api.exception.ClientException
-import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
@@ -141,11 +139,7 @@ class JoinRoomPresenter(
                             preview.previewInfo.toContentState(membershipDetails)
                         },
                         onFailure = { throwable ->
-                            if (throwable is ClientException.MatrixApi && (throwable.kind == ErrorKind.NotFound || throwable.kind == ErrorKind.Forbidden)) {
-                                ContentState.UnknownRoom
-                            } else {
-                                ContentState.Failure(throwable)
-                            }
+                            ContentState.UnknownRoom
                         }
                     )
                 }
