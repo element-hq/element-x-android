@@ -60,9 +60,8 @@ public class SymbolState(
 
 @Composable
 public fun rememberSymbolState(
-    key: String? = null,
     position: LatLng = LatLng(0.0, 0.0)
-): SymbolState = rememberSaveable(key = key, saver = SymbolState.Saver) {
+): SymbolState = rememberSaveable(saver = SymbolState.Saver) {
     SymbolState(position)
 }
 

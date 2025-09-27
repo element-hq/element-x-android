@@ -33,7 +33,7 @@ class DefaultSpaceEntryPoint : SpaceEntryPoint {
             }
 
             override fun build(): Node {
-                return parentNode.createNode<SpaceNode>(buildContext, plugins = plugins.toList())
+                return parentNode.createNode<SpaceFlowNode>(buildContext, plugins = plugins.toList())
             }
         }
     }

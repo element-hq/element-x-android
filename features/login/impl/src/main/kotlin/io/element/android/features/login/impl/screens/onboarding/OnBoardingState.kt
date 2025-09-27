@@ -12,6 +12,7 @@ import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.libraries.architecture.AsyncData
 
 data class OnBoardingState(
+    val isAddingAccount: Boolean,
     val productionApplicationName: String,
     val defaultAccountProvider: String?,
     val mustChooseAccountProvider: Boolean,

@@ -24,4 +24,8 @@ internal fun aSessionData() = SessionData(
     passphrase = null,
     sessionPath = "sessionPath",
     cachePath = "cachePath",
+    position = 0,
+    lastUsageIndex = 0,
+    userDisplayName = null,
+    userAvatarUrl = null,
 )

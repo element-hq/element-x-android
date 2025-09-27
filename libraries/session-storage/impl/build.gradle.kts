@@ -36,7 +36,7 @@ dependencies {
 sqldelight {
     databases {
         create("SessionDatabase") {
-            // https://cashapp.github.io/sqldelight/2.0.0/android_sqlite/migrations/
+            // https://sqldelight.github.io/sqldelight/2.1.0/android_sqlite/migrations/
             // To generate a .db file from your latest schema, run this task
             // ./gradlew generateDebugSessionDatabaseSchema
             // Test migration by running

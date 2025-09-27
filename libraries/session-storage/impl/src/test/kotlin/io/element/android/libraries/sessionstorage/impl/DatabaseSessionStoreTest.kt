@@ -13,6 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.session.SessionData
 import io.element.android.libraries.sessionstorage.api.LoggedInState
+import io.element.android.libraries.sessionstorage.api.LoginType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -45,11 +46,11 @@ class DatabaseSessionStoreTest {
 
     @Test
     fun `addSession persists the SessionData into the DB`() = runTest {
-        assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isNull()
+        assertThat(database.sessionDataQueries.selectLatest().executeAsOneOrNull()).isNull()
 
         databaseSessionStore.addSession(aSessionData.toApiModel())
 
-        assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isEqualTo(aSessionData)
+        assertThat(database.sessionDataQueries.selectLatest().executeAsOneOrNull()).isEqualTo(aSessionData)
         assertThat(database.sessionDataQueries.selectAll().executeAsList().size).isEqualTo(1)
     }
 
@@ -59,7 +60,12 @@ class DatabaseSessionStoreTest {
             assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
             databaseSessionStore.addSession(aSessionData.toApiModel())
             assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(sessionId = aSessionData.userId, isTokenValid = true))
-            // TODO add more sessions in multi-account PR.
+            // Add a second session
+            databaseSessionStore.addSession(aSessionData.copy(userId = "otherUserId").toApiModel())
+            assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(sessionId = "otherUserId", isTokenValid = true))
+            // Remove the second session
+            databaseSessionStore.removeSession("otherUserId")
+            assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(sessionId = aSessionData.userId, isTokenValid = true))
             // Remove the first session
             databaseSessionStore.removeSession(aSessionData.userId)
             assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
@@ -124,7 +130,83 @@ class DatabaseSessionStoreTest {
     }
 
     @Test
-    fun `update session update all fields except loginTimestamp`() = runTest {
+    fun `updateUserProfile does nothing if the session is not found`() = runTest {
+        databaseSessionStore.updateUserProfile(aSessionData.userId, "userDisplayName", "userAvatarUrl")
+        assertThat(database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOneOrNull()).isNull()
+    }
+
+    @Test
+    fun `updateUserProfile update the data`() = runTest {
+        database.sessionDataQueries.insertSessionData(aSessionData)
+        databaseSessionStore.updateUserProfile(aSessionData.userId, "userDisplayName", "userAvatarUrl")
+        val updatedSession = database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOne()
+        assertThat(updatedSession.userDisplayName).isEqualTo("userDisplayName")
+        assertThat(updatedSession.userAvatarUrl).isEqualTo("userAvatarUrl")
+    }
+
+    @Test
+    fun `setLatestSession is no op when the session is already the latest session`() = runTest {
+        database.sessionDataQueries.insertSessionData(aSessionData)
+        val session = database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOne()
+        assertThat(session.lastUsageIndex).isEqualTo(0)
+        assertThat(session.position).isEqualTo(0)
+        databaseSessionStore.setLatestSession(aSessionData.userId)
+        assertThat(database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOne().lastUsageIndex).isEqualTo(0)
+    }
+
+    @Test
+    fun `setLatestSession is no op when the session is not found`() = runTest {
+        databaseSessionStore.setLatestSession(aSessionData.userId)
+    }
+
+    @Test
+    fun `multi session test`() = runTest {
+        databaseSessionStore.addSession(aSessionData.toApiModel())
+        val session = databaseSessionStore.getSession(aSessionData.userId)!!
+        assertThat(session.lastUsageIndex).isEqualTo(0)
+        assertThat(session.position).isEqualTo(0)
+        val secondSessionData = aSessionData.copy(
+            userId = "otherUserId",
+            position = 1,
+            lastUsageIndex = 1,
+        )
+        databaseSessionStore.addSession(secondSessionData.toApiModel())
+        val secondSession = database.sessionDataQueries.selectByUserId(secondSessionData.userId).executeAsOne()
+        assertThat(secondSession.lastUsageIndex).isEqualTo(1)
+        assertThat(secondSession.position).isEqualTo(1)
+        // Set the first session as the latest
+        databaseSessionStore.setLatestSession(aSessionData.userId)
+        val firstSession = database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOne()
+        assertThat(firstSession.lastUsageIndex).isEqualTo(2)
+        assertThat(firstSession.position).isEqualTo(0)
+        // Check that the second session has not been altered
+        val secondSession2 = database.sessionDataQueries.selectByUserId(secondSessionData.userId).executeAsOne()
+        assertThat(secondSession2.lastUsageIndex).isEqualTo(1)
+        assertThat(secondSession2.position).isEqualTo(1)
+    }
+
+    @Test
+    fun `test sessionsFlow()`() = runTest {
+        databaseSessionStore.sessionsFlow().test {
+            assertThat(awaitItem()).isEmpty()
+            databaseSessionStore.addSession(aSessionData.toApiModel())
+            assertThat(awaitItem().size).isEqualTo(1)
+            val secondSessionData = aSessionData.copy(
+                userId = "otherUserId",
+                position = 1,
+                lastUsageIndex = 1,
+            )
+            databaseSessionStore.addSession(secondSessionData.toApiModel())
+            assertThat(awaitItem().size).isEqualTo(2)
+            databaseSessionStore.removeSession(aSessionData.userId)
+            assertThat(awaitItem().size).isEqualTo(1)
+            databaseSessionStore.removeSession(secondSessionData.userId)
+            assertThat(awaitItem()).isEmpty()
+        }
+    }
+
+    @Test
+    fun `update session update all fields except info used by the application`() = runTest {
         val firstSessionData = SessionData(
             userId = "userId",
             deviceId = "deviceId",
@@ -139,6 +221,10 @@ class DatabaseSessionStoreTest {
             passphrase = "aPassphrase",
             sessionPath = "sessionPath",
             cachePath = "cachePath",
+            position = 0,
+            lastUsageIndex = 0,
+            userDisplayName = "userDisplayName",
+            userAvatarUrl = "userAvatarUrl",
         )
         val secondSessionData = SessionData(
             userId = "userId",
@@ -152,8 +238,12 @@ class DatabaseSessionStoreTest {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphraseAltered",
-            sessionPath = "sessionPath",
-            cachePath = "cachePath",
+            sessionPath = "sessionPathAltered",
+            cachePath = "cachePathAltered",
+            position = 1,
+            lastUsageIndex = 1,
+            userDisplayName = "userDisplayNameAltered",
+            userAvatarUrl = "userAvatarUrlAltered",
         )
         assertThat(firstSessionData.userId).isEqualTo(secondSessionData.userId)
         assertThat(firstSessionData.loginTimestamp).isNotEqualTo(secondSessionData.loginTimestamp)
@@ -174,6 +264,11 @@ class DatabaseSessionStoreTest {
         assertThat(alteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
         assertThat(alteredSession.oidcData).isEqualTo(secondSessionData.oidcData)
         assertThat(alteredSession.passphrase).isEqualTo(secondSessionData.passphrase)
+        // Check that application data have not been altered
+        assertThat(alteredSession.position).isEqualTo(firstSessionData.position)
+        assertThat(alteredSession.lastUsageIndex).isEqualTo(firstSessionData.lastUsageIndex)
+        assertThat(alteredSession.userDisplayName).isEqualTo(firstSessionData.userDisplayName)
+        assertThat(alteredSession.userAvatarUrl).isEqualTo(firstSessionData.userAvatarUrl)
     }
 
     @Test
@@ -188,10 +283,14 @@ class DatabaseSessionStoreTest {
             loginTimestamp = 1,
             oidcData = "aOidcData",
             isTokenValid = 1,
-            loginType = null,
+            loginType = LoginType.PASSWORD.name,
             passphrase = "aPassphrase",
             sessionPath = "sessionPath",
             cachePath = "cachePath",
+            position = 0,
+            lastUsageIndex = 0,
+            userDisplayName = "userDisplayName",
+            userAvatarUrl = "userAvatarUrl",
         )
         val secondSessionData = SessionData(
             userId = "userIdUnknown",
@@ -203,10 +302,14 @@ class DatabaseSessionStoreTest {
             loginTimestamp = 2,
             oidcData = "aOidcDataAltered",
             isTokenValid = 1,
-            loginType = null,
+            loginType = LoginType.PASSWORD.name,
             passphrase = "aPassphraseAltered",
-            sessionPath = "sessionPath",
-            cachePath = "cachePath",
+            sessionPath = "sessionPathAltered",
+            cachePath = "cachePathAltered",
+            position = 1,
+            lastUsageIndex = 1,
+            userDisplayName = "userDisplayNameAltered",
+            userAvatarUrl = "userAvatarUrlAltered",
         )
         assertThat(firstSessionData.userId).isNotEqualTo(secondSessionData.userId)
 
@@ -216,14 +319,6 @@ class DatabaseSessionStoreTest {
         // Get the session and check that it has not been altered
         val notAlteredSession = databaseSessionStore.getSession(firstSessionData.userId)!!.toDbModel()
 
-        assertThat(notAlteredSession.userId).isEqualTo(firstSessionData.userId)
-        assertThat(notAlteredSession.deviceId).isEqualTo(firstSessionData.deviceId)
-        assertThat(notAlteredSession.accessToken).isEqualTo(firstSessionData.accessToken)
-        assertThat(notAlteredSession.refreshToken).isEqualTo(firstSessionData.refreshToken)
-        assertThat(notAlteredSession.homeserverUrl).isEqualTo(firstSessionData.homeserverUrl)
-        assertThat(notAlteredSession.slidingSyncProxy).isEqualTo(firstSessionData.slidingSyncProxy)
-        assertThat(notAlteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
-        assertThat(notAlteredSession.oidcData).isEqualTo(firstSessionData.oidcData)
-        assertThat(notAlteredSession.passphrase).isEqualTo(firstSessionData.passphrase)
+        assertThat(notAlteredSession).isEqualTo(firstSessionData)
     }
 }
