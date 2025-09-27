@@ -9,7 +9,7 @@
 
     <!-- To be able to install APK from the application -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <application
         android:name=".ElementXApplication"
         android:allowBackup="false"
@@ -26,7 +26,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ElementX"
         tools:targetApi="33">
-
+        <service
+            android:name="io.element.android.libraries.mediaviewer.impl.floatingvideo.FloatingVideoService"
+            android:enabled="true"
+            android:exported="false" />
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc" />
