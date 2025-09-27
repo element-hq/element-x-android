@@ -21,7 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.SeenInvitesStore
@@ -59,7 +59,7 @@ import kotlinx.coroutines.launch
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-@Inject
+@AssistedInject
 class JoinRoomPresenter(
     @Assisted private val roomId: RoomId,
     @Assisted private val roomIdOrAlias: RoomIdOrAlias,

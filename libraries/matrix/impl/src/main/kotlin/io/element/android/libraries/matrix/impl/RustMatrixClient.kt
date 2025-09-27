@@ -235,7 +235,6 @@ class RustMatrixClient(
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
             userId = sessionId,
-            // TODO cache for displayName?
             displayName = null,
             avatarUrl = null,
         )
@@ -264,6 +263,16 @@ class RustMatrixClient(
             // Start notification settings
             notificationSettingsService.start()
 
+            // Update the user profile in the session store if needed
+            sessionStore.getSession(sessionId.value)?.let { sessionData ->
+                _userProfile.emit(
+                    MatrixUser(
+                        userId = sessionId,
+                        displayName = sessionData.userDisplayName,
+                        avatarUrl = sessionData.userAvatarUrl,
+                    )
+                )
+            }
             // Force a refresh of the profile
             getUserProfile()
         }
@@ -399,7 +408,15 @@ class RustMatrixClient(
     }
 
     override suspend fun getUserProfile(): Result<MatrixUser> = getProfile(sessionId)
-        .onSuccess { _userProfile.tryEmit(it) }
+        .onSuccess { matrixUser ->
+            _userProfile.emit(matrixUser)
+            // Also update our session storage
+            sessionStore.updateUserProfile(
+                sessionId = sessionId.value,
+                displayName = matrixUser.displayName,
+                avatarUrl = matrixUser.avatarUrl,
+            )
+        }
 
     override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
         withContext(sessionDispatcher) {
@@ -706,6 +723,18 @@ class RustMatrixClient(
 
     override suspend fun getMaxFileUploadSize(): Result<Long> = withContext(sessionDispatcher) {
         runCatchingExceptions { innerClient.getMaxMediaUploadSize().toLong() }
+    }
+
+    override suspend fun addRecentEmoji(emoji: String): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.addRecentEmoji(emoji)
+        }
+    }
+
+    override suspend fun getRecentEmojis(): Result<List<String>> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.getRecentEmojis().map { it.emoji }
+        }
     }
 
     private suspend fun File.getCacheSize(

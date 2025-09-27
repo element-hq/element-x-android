@@ -12,7 +12,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.test.FakePushService
 import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
 import io.element.android.services.analytics.test.FakeScreenTracker
@@ -32,15 +32,21 @@ class DefaultPushHistoryEntryPointTest {
             PushHistoryNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenter = PushHistoryPresenter(
-                    pushService = FakePushService(),
-                ),
+                presenterFactory = {
+                    PushHistoryPresenter(
+                        pushHistoryNavigator = object : PushHistoryNavigator {
+                            override fun navigateTo(roomId: RoomId, eventId: EventId) = lambdaError()
+                        },
+                        pushService = FakePushService(),
+                        matrixClient = FakeMatrixClient(),
+                    )
+                },
                 screenTracker = FakeScreenTracker(),
             )
         }
         val callback = object : PushHistoryEntryPoint.Callback {
             override fun onDone() = lambdaError()
-            override fun onItemClick(sessionId: SessionId, roomId: RoomId, eventId: EventId) = lambdaError()
+            override fun navigateTo(roomId: RoomId, eventId: EventId) = lambdaError()
         }
         val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
             .callback(callback)

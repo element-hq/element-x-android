@@ -14,8 +14,8 @@ import android.util.Size
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlin.time.Duration
@@ -30,7 +30,7 @@ interface VideoMetadataExtractor : AutoCloseable {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
+@AssistedInject
 class DefaultVideoMetadataExtractor(
     @ApplicationContext private val context: Context,
     @Assisted private val uri: Uri,

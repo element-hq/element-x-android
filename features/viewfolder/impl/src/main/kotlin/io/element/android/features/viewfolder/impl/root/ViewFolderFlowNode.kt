@@ -19,7 +19,7 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
 import io.element.android.features.viewfolder.impl.file.ViewFileNode
@@ -33,7 +33,7 @@ import io.element.android.libraries.architecture.inputs
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-@Inject
+@AssistedInject
 class ViewFolderFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

@@ -31,9 +31,17 @@ class LoggedInEventProcessor(
         observingJob = roomMembershipObserver.updates
             .filter { !it.isUserInRoom }
             .distinctUntilChanged()
-            .onEach {
-                when (it.change) {
-                    MembershipChange.LEFT -> displayMessage(CommonStrings.common_current_user_left_room)
+            .onEach { roomMemberShipUpdate ->
+                when (roomMemberShipUpdate.change) {
+                    MembershipChange.LEFT -> {
+                        displayMessage(
+                            if (roomMemberShipUpdate.isSpace) {
+                                CommonStrings.common_current_user_left_space
+                            } else {
+                                CommonStrings.common_current_user_left_room
+                            }
+                        )
+                    }
                     MembershipChange.INVITATION_REJECTED -> displayMessage(CommonStrings.common_current_user_rejected_invite)
                     MembershipChange.KNOCK_RETRACTED -> displayMessage(CommonStrings.common_current_user_canceled_knock)
                     else -> Unit
