@@ -54,6 +54,14 @@
   <string name="push_distributor_background_sync_android">"Sünkroniseerimine taustal"</string>
   <string name="push_distributor_firebase_android">"Google\'i teenused"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Google Play Services taustateenust ei leidu. Teavitused ei pruugi toimida korrektselt."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Kontrollin blokeeritud kasutajaid"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Vaata blokeeritud kasutajaid"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Sa pole ühtegi kasutajat blokeerinud."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Sa oled blokeerinud %1$d kasutaja. Sa ei saa tema kohta teavitusi"</item>
+    <item quantity="other">"Sa oled blokeerinud %1$d kasutajat. Sa ei saa tema kohta teavitusi"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Blokeeritud kasutajad"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Vali hetkel kasutatava tõuketeenuste pakkuja nimi."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Tõuketeenuste pakkujaid pole valitud."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Hetkel kasutatav tõuketeenuste pakkuja: %1$s."</string>

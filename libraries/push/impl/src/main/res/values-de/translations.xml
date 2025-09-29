@@ -54,6 +54,14 @@
   <string name="push_distributor_background_sync_android">"Hintergrundsynchronisation"</string>
   <string name="push_distributor_firebase_android">"Google-Dienste"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Keine gültigen Google Play-Dienste gefunden. Benachrichtigungen funktionieren möglicherweise nicht richtig."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Überprüfen von gesperrten Nutzern"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Gesperrte Nutzer ansehen"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Keine Nutzer sind gesperrt."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Du hast %1$d Nutzer gesperrt. Du wirst für diesen Nutzer keine Benachrichtigungen erhalten."</item>
+    <item quantity="other">"Du hast %1$d Nutzer gesperrt. Du wirst für diese Nutzer keine Benachrichtigungen erhalten."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Gesperrte Nutzer"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Ermittele den Namen des aktuellen Anbieters."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Kein Dienst für Push-Benachrichtigungen ausgewählt."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Aktueller Push-Dienst: %1$s."</string>

@@ -15,6 +15,7 @@
   <string name="screen_join_room_fail_reason">"Dieser Chat ist entweder nur auf Einladung zugänglich oder es gibt andere Zugangsbeschränkungen durch Spaces."</string>
   <string name="screen_join_room_forget_action">"Vergiss diesen Chat"</string>
   <string name="screen_join_room_invite_required_message">"Du benötigst eine Einladung, um diesem Chat beizutreten"</string>
+  <string name="screen_join_room_invited_by">"Eingeladen von"</string>
   <string name="screen_join_room_join_action">"Chat beitreten"</string>
   <string name="screen_join_room_join_restricted_message">"Möglicherweise musst du eingeladen werden oder ein Mitglied eines Spaces sein, um beitreten zu können."</string>
   <string name="screen_join_room_knock_action">"Anklopfen"</string>

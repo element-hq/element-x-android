@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_room_alert_empty_subtitle">"Сигурни ли сте, че искате да напуснете тази стая? Вие сте единственият човек тук. Ако напуснете, никой няма да може да се присъедини в бъдеще, включително и вие."</string>
+  <string name="leave_room_alert_private_subtitle">"Сигурни ли сте, че искате да напуснете тази стая? Тази стая не е общодостъпна и няма да можете да се присъедините отново без покана."</string>
   <string name="leave_room_alert_subtitle">"Сигурни ли сте, че искате да напуснете стаята?"</string>
 </resources>

@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Изберете как да получавате известия"</string>
+  <string name="screen_advanced_settings_developer_mode">"Режим за програмисти"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Активирайте, за да имате достъп до функции и функционалности за програмисти."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Скриване на профилните снимки в заявките за покана за стая"</string>
+  <string name="screen_advanced_settings_media_compression_description">"Качвайте снимки и видеоклипове по-бързо и намалете използването на данни"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимизиране на качеството на медията"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерация и безопасност"</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Изключете редактора за форматиран текст, за да пишете Markdown ръчно."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Потвърждения за прочитане"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Ако е изключено, вашите потвърждения за прочитане няма да бъдат изпращани на никого. Все още ще получавате потвърждения за прочитане от други потребители."</string>
   <string name="screen_advanced_settings_share_presence">"Споделяне на присъствието"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Ако е изключено, няма да можете да изпращате или получавате потвърждения за прочитане или известия за писане."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Скриване винаги"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Показване винаги"</string>
   <string name="screen_advanced_settings_show_media_timeline_private_rooms">"В частни стаи"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Скрита мултимедия винаги може да бъде показана, като се докосне"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Показване на мултимедия в хронологията"</string>
+  <string name="screen_advanced_settings_view_source_description">"Активиране на опцията за преглед на изходния код на съобщението в хронологията."</string>
   <string name="screen_blocked_users_unblock_alert_action">"Отблокиране"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Ще можете да виждате отново всички съобщения от тях."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Отблокиране на потребителя"</string>
   <string name="screen_edit_profile_display_name">"Име"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Вашето Име"</string>
@@ -18,13 +28,17 @@
   <string name="screen_edit_profile_title">"Редактиране на профила"</string>
   <string name="screen_edit_profile_updating_details">"Обновяване на профила…"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Допълнителни настройки"</string>
+  <string name="screen_notification_settings_calls_label">"Аудио и видео разговори"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Несъответствие в конфигурацията"</string>
   <string name="screen_notification_settings_direct_chats">"Директни чатове"</string>
   <string name="screen_notification_settings_edit_custom_settings_section_title">"Персонализирана настройка за чат"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Възникна грешка при обновяването на настройките за известия."</string>
   <string name="screen_notification_settings_edit_mode_all_messages">"Всички съобщения"</string>
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Само споменавания и ключови думи"</string>
   <string name="screen_notification_settings_edit_screen_direct_section_header">"В директни чатове да бъда известяван за"</string>
   <string name="screen_notification_settings_edit_screen_group_section_header">"В групови чатове да бъда известяван за"</string>
   <string name="screen_notification_settings_enable_notifications">"Включване на известията на това устройство"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Конфигурацията не е оправена, моля, опитайте отново."</string>
   <string name="screen_notification_settings_group_chats">"Групови чатове"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Покани"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Вашият сървър не поддържа тази опция в шифровани стаи, може да не получавате известия в някои стаи."</string>
@@ -34,5 +48,8 @@
   <string name="screen_notification_settings_room_mention_label">"Известяване за @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"За да получавате известия, моля, променете своя %1$s"</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системни настройки"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Системните известия са изключени"</string>
   <string name="screen_notification_settings_title">"Известия"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Отстраняване на неизправности"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Отстраняване на неизправности с известията"</string>
 </resources>

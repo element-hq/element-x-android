@@ -54,6 +54,14 @@
   <string name="push_distributor_background_sync_android">"Háttérszinkronizálás"</string>
   <string name="push_distributor_firebase_android">"Google szolgáltatások"</string>
   <string name="push_no_valid_google_play_services_apk_android">"A Google Play szolgáltatások nem találhatók. Előfordulhat, hogy az értesítések nem működnek megfelelően."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Letiltott felhasználók ellenőrzése"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Letiltott felhasználók megtekintése"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Nincs felhasználó letiltva."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Letiltotta %1$d felhasználót. Nem fog értesítéseket kapni erről a felhasználóról."</item>
+    <item quantity="other">"Letiltott %1$d felhasználót. Nem fog értesítéseket kapni ezekről a felhasználókról."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Letiltott felhasználók"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"A jelenlegi szolgáltató nevének lekérdezése."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nincs kiválasztva leküldéses értesítési szolgáltató."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Jelenlegi leküldéses értesítési szolgáltató: %1$s."</string>
@@ -61,8 +69,8 @@
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Győződjön meg arról, hogy az alkalmazás legalább egy leküldéses értesítési szolgáltatóval rendelkezik."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nem található leküldéses értesítési szolgáltató."</string>
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"%1$d leküldéses szolgáltató találva: %2$s"</item>
-    <item quantity="other">"%1$d leküldéses szolgáltató találva: %2$s"</item>
+    <item quantity="one">"%1$d leküldéses értesítési szolgáltató találva: %2$s"</item>
+    <item quantity="other">"%1$d leküldéses értesítési szolgáltató találva: %2$s"</item>
   </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Az alkalmazás úgy lett összeállítva, hogy támogatja a következőket: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Leküldéses értesítési szolgáltatók észlelése"</string>
@@ -78,5 +86,5 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Hiba, nem lehet tesztelni a leküldéses értesítést."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Hiba, időtúllépés a leküldéses értesítésre való várakozás során."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"A leküldéses értesítés folyamata %1$d ezredmásodpercig tartott."</string>
-  <string name="troubleshoot_notifications_test_push_loop_back_title">"Tesztelje a leküldéses értesítés folyamatát"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Leküldéses értesítés folyamatának tesztelése"</string>
 </resources>

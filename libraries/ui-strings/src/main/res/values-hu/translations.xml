@@ -42,7 +42,7 @@
   <string name="a11y_remove_reaction_with">"Reakció eltávolítása: %1$s"</string>
   <string name="a11y_room_avatar">"Szoba profilképe"</string>
   <string name="a11y_send_files">"Fájlküldés"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Időkorlátos művelet szükséges"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Időkorlátos művelet szükséges, egy perce van az ellenőrzésre"</string>
   <string name="a11y_show_password">"Jelszó megjelenítése"</string>
   <string name="a11y_start_call">"Hanghívás indítása"</string>
   <string name="a11y_tombstoned_room">"Elévült szoba"</string>
@@ -71,7 +71,7 @@
   <string name="action_copy">"Másolás"</string>
   <string name="action_copy_caption">"Felirat másolása"</string>
   <string name="action_copy_link">"Hivatkozás másolása"</string>
-  <string name="action_copy_link_to_message">"Üzenetre mutató hivatkozás másolása"</string>
+  <string name="action_copy_link_to_message">"Üzenethivatkozás másolása"</string>
   <string name="action_copy_text">"Szöveg másolása"</string>
   <string name="action_create">"Létrehozás"</string>
   <string name="action_create_a_room">"Szoba létrehozása"</string>
@@ -105,6 +105,7 @@
   <string name="action_leave">"Elhagyás"</string>
   <string name="action_leave_conversation">"Beszélgetés elhagyása"</string>
   <string name="action_leave_room">"Szoba elhagyása"</string>
+  <string name="action_leave_space">"Tér elhagyása"</string>
   <string name="action_load_more">"Továbbiak betöltése"</string>
   <string name="action_manage_account">"Fiók kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
@@ -165,6 +166,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Frissítés érhető el"</string>
   <string name="common_about">"Névjegy"</string>
   <string name="common_acceptable_use_policy">"Elfogadható használatra vonatkozó szabályzat"</string>
+  <string name="common_add_account">"Fiók hozzáadása"</string>
+  <string name="common_add_another_account">"Másik fiók hozzáadása"</string>
   <string name="common_adding_caption">"Felirat hozzáadása"</string>
   <string name="common_advanced_settings">"Speciális beállítások"</string>
   <string name="common_an_image">"egy kép"</string>
@@ -182,9 +185,12 @@
   <string name="common_creating_room">"Szoba létrehozása…"</string>
   <string name="common_current_user_canceled_knock">"Kérés megszakítva"</string>
   <string name="common_current_user_left_room">"Elhagyta a szobát"</string>
+  <string name="common_current_user_left_space">"Tér elhagyva"</string>
   <string name="common_current_user_rejected_invite">"Meghívás elutasítva"</string>
   <string name="common_dark">"Sötét"</string>
   <string name="common_decryption_error">"Visszafejtési hiba"</string>
+  <string name="common_description">"Leírás"</string>
+  <string name="common_deselect_all">"Kijelölés megszüntetése"</string>
   <string name="common_developer_options">"Fejlesztői beállítások"</string>
   <string name="common_device_id">"Eszközazonosító"</string>
   <string name="common_direct_chat">"Közvetlen csevegés"</string>
@@ -241,6 +247,7 @@ Ok: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nincs találat"</string>
   <string name="common_no_room_name">"Nincs szobanév"</string>
+  <string name="common_no_space_name">"Nincs térnév"</string>
   <string name="common_not_encrypted">"Nincs titkosítva"</string>
   <string name="common_offline">"Kapcsolat nélkül"</string>
   <string name="common_open_source_licenses">"Nyílt forráskódú licencek"</string>
@@ -293,14 +300,18 @@ Ok: %1$s."</string>
   <string name="common_search_results">"Keresési találatok"</string>
   <string name="common_security">"Biztonság"</string>
   <string name="common_seen_by">"Látta"</string>
+  <string name="common_select_account">"Fiók kiválasztása"</string>
+  <string name="common_select_all">"Összes kijelölése"</string>
   <string name="common_send_to">"Címzett"</string>
   <string name="common_sending">"Küldés…"</string>
   <string name="common_sending_failed">"A küldés sikertelen"</string>
   <string name="common_sent">"Elküldve"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"A kiszolgáló nem támogatott"</string>
+  <string name="common_server_unreachable">"A kiszolgáló nem érhető el"</string>
   <string name="common_server_url">"Kiszolgáló webcíme"</string>
   <string name="common_settings">"Beállítások"</string>
+  <string name="common_share_space">"Tér megosztása"</string>
   <string name="common_shared_location">"Megosztott tartózkodási hely"</string>
   <string name="common_signing_out">"Kijelentkezés"</string>
   <string name="common_something_went_wrong">"Valamilyen hiba történt"</string>
@@ -375,6 +386,8 @@ Biztos, hogy folytatja?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"A legnagyobb megengedett fájlméret: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Válassza ki a feltöltendő videó minőségét."</string>
   <string name="dialog_video_quality_selector_title">"Feltöltött videó minőségének kiválasztása"</string>
+  <string name="emoji_picker_search_placeholder">"Emodzsik keresése"</string>
+  <string name="error_account_already_logged_in">"Már bejelentkezett erre az eszközre, mint %1$s."</string>
   <string name="error_account_creation_not_possible">"A Matrix-kiszolgálót frissíteni kell a Matrix Authentication Service és a fióklétrehozás támogatásához."</string>
   <string name="error_failed_creating_the_permalink">"Nem sikerült létrehozni az állandó hivatkozást"</string>
   <string name="error_failed_loading_map">"Az %1$s nem tudta betölteni a térképet. Próbálja meg újra később."</string>
@@ -432,7 +445,7 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_room_grouped_state_events_expand">"Kibontás"</string>
   <string name="screen_room_grouped_state_events_reduce">"Csökkentés"</string>
   <string name="screen_room_permalink_same_room_android">"Már ezt a szobát nézi!"</string>
-  <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s. / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s kitűzött üzenet"</string>
   <string name="screen_room_pinned_banner_loading_description">"Üzenet betöltése…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Összes megtekintése"</string>
@@ -445,6 +458,7 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_share_this_location_action">"E hely megosztása"</string>
   <string name="screen_space_list_description">"Létrehozott vagy olyan terek, melyekhez csatlakozott."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s tér"</string>
   <string name="screen_space_list_title">"Terek"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Az üzenet nem lett elküldve, mert %1$s ellenőrzött személyazonossága megváltozott."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Az üzenet nem lett elküldve, mert %1$s nem ellenőrizte az összes eszközét."</string>

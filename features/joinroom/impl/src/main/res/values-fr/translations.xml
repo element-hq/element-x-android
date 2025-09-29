@@ -15,6 +15,7 @@
   <string name="screen_join_room_fail_reason">"Ce salon est accessible uniquement sur invitation ou il peut y avoir des restrictions d’accès au niveau de l’espace."</string>
   <string name="screen_join_room_forget_action">"Oublier ce salon"</string>
   <string name="screen_join_room_invite_required_message">"Vous avez besoin d’une invitation pour rejoindre ce salon"</string>
+  <string name="screen_join_room_invited_by">"Invité(e) par"</string>
   <string name="screen_join_room_join_action">"Rejoindre"</string>
   <string name="screen_join_room_join_restricted_message">"Il est possible que vous deviez être invité ou être membre d’un Espace pour pouvoir rejoindre le salon."</string>
   <string name="screen_join_room_knock_action">"Demander à joindre"</string>

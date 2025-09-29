@@ -54,6 +54,14 @@
   <string name="push_distributor_background_sync_android">"Synchronisation en arrière-plan"</string>
   <string name="push_distributor_firebase_android">"Services Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Aucun service Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Vérification des utilisateurs bloqués"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Voir les utilisateurs bloqués"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Aucun utilisateur n’est bloqué."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Vous avez bloqué %1$d utilisateur. Vous ne recevrez pas de notifications pour cet utilisateur."</item>
+    <item quantity="other">"Vous avez bloqué %1$d utilisateurs. Vous ne recevrez pas de notifications pour ces utilisateurs."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Utilisateurs bloqués"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Obtenir le nom du fournisseur de Push actuel."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Aucun fournisseur de Push n’est sélectionné."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Fournisseur de Push actuel : %1$s."</string>

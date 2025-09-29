@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Hiba történt az értesítési beállítások betöltésekor."</string>
   <string name="screen_room_details_error_muting">"Nem sikerült elnémítani ezt a szobát, próbálja újra."</string>
   <string name="screen_room_details_error_unmuting">"Nem sikerült feloldani a szoba némítását, próbálja újra."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Ne zárja be az alkalmazást, amíg nem végzett."</string>
+  <string name="screen_room_details_invite_people_preparing">"Meghívók előkészítése…"</string>
   <string name="screen_room_details_invite_people_title">"Ismerősök meghívása"</string>
   <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
   <string name="screen_room_details_leave_room_title">"Szoba elhagyása"</string>

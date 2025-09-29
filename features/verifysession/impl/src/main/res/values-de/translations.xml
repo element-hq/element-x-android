@@ -11,13 +11,14 @@
   <string name="screen_identity_use_another_device">"Ein anderes Gerät verwenden"</string>
   <string name="screen_identity_waiting_on_other_device">"Bitte warten bis das andere Gerät bereit ist."</string>
   <string name="screen_session_verification_cancelled_subtitle">"Etwas scheint nicht zu stimmen. Entweder ist das Zeitlimit für die Anfrage abgelaufen oder die Anfrage wurde abgelehnt."</string>
-  <string name="screen_session_verification_compare_emojis_subtitle">"Bestätige, dass die folgenden Emojis mit denen in deiner anderen Sitzung übereinstimmen."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Bestätige, dass die folgenden Emojis mit denen auf deinem anderen Gerät übereinstimmen."</string>
   <string name="screen_session_verification_compare_emojis_title">"Emojis vergleichen"</string>
   <string name="screen_session_verification_compare_emojis_user_subtitle">"Bestätige, dass die folgenden Emojis mit denen auf dem Gerät des anderen Nutzers übereinstimmen."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Bestätige, dass die folgenden Zahlen mit denen in deiner anderen Sitzung übereinstimmen."</string>
   <string name="screen_session_verification_compare_numbers_title">"Vergleiche die Zahlen"</string>
-  <string name="screen_session_verification_complete_subtitle">"Deine neue Sitzung ist nun verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten und wird von anderen Nutzern als vertrauenswürdig eingestuft."</string>
+  <string name="screen_session_verification_complete_subtitle">"Jetzt kannst du verschlüsselte Nachrichten sicher auf deinem anderen Gerät schreiben und lesen."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Jetzt kannst du der Identität dieses Nutzers vertrauen, wenn du Nachrichten sendest oder empfängst."</string>
+  <string name="screen_session_verification_device_verified">"Gerät verifiziert"</string>
   <string name="screen_session_verification_enter_recovery_key">"Wiederherstellungsschlüssel eingeben"</string>
   <string name="screen_session_verification_failed_subtitle">"Entweder ist die Anfrage abgelaufen, oder die Anfrage wurde abgelehnt, oder es gab eine Unstimmigkeit bei der Überprüfung."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Beweise deine Identität, um auf deinen verschlüsselten Nachrichtenverlauf zuzugreifen."</string>
@@ -44,7 +45,7 @@
   <string name="screen_session_verification_user_responder_subtitle">"Für zusätzliche Sicherheit möchte ein anderer Nutzer deine Identität verifizieren. Es werden dir einige Emojis zum Vergleich angezeigt."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Du solltest ein Popup-Fenster auf dem anderen Gerät sehen. Starte die Verifizierung von dort aus."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Starte die Verifizierung auf dem anderen Gerät"</string>
-  <string name="screen_session_verification_waiting_other_device_title">"Warten auf das andere Gerät"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Beginne die Verifizierung auf dem anderen Gerät"</string>
   <string name="screen_session_verification_waiting_other_user_title">"Warten auf den anderen Nutzer"</string>
   <string name="screen_session_verification_waiting_subtitle">"Nach der Bestätigung kannst du mit der Verifizierung fortfahren."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Akzeptiere die Anfrage für die Verifizierung in deiner anderen Sitzung um fortzufahren."</string>

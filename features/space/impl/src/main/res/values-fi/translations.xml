@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_subtitle">"Tämä poistaa sinut myös kaikista tämän tilan huoneista."</string>
+  <string name="screen_leave_space_title">"Haluatko poistua tilasta %1$s?"</string>
+</resources>

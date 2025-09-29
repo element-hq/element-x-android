@@ -60,6 +60,15 @@
   <string name="push_distributor_background_sync_android">"Synchronizace na pozadí"</string>
   <string name="push_distributor_firebase_android">"Služby Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nebyly nalezeny žádné funkční služby Google Play. Oznámení nemusí fungovat správně."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Kontrola blokovaných uživatelů"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Zobrazit blokované uživatele"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Žádní uživatelé nejsou blokováni."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Zablokovali jste %1$d uživatele. Nebudete dostávat oznámení od tohoto uživatele."</item>
+    <item quantity="few">"Zablokovali jste %1$d uživatele. Nebudete dostávat oznámení od těchto uživatelů."</item>
+    <item quantity="other">"Zablokovali jste %1$d uživatelů. Nebudete dostávat oznámení od těchto uživatelů."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Blokovaní uživatelé"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Získat název aktuálního poskytovatele."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nebyli vybráni žádní push poskytovatelé."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Aktuální push poskytovatel: %1$s."</string>

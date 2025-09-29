@@ -105,6 +105,7 @@
   <string name="action_leave">"Quitter"</string>
   <string name="action_leave_conversation">"Quitter la discussion"</string>
   <string name="action_leave_room">"Quitter le salon"</string>
+  <string name="action_leave_space">"Quitter l’espace"</string>
   <string name="action_load_more">"Voir plus"</string>
   <string name="action_manage_account">"Gérer le compte"</string>
   <string name="action_manage_devices">"Gérez les sessions"</string>
@@ -183,11 +184,13 @@
   <string name="common_copyright">"Droits d’auteur"</string>
   <string name="common_creating_room">"Création du salon…"</string>
   <string name="common_current_user_canceled_knock">"Demande annulée"</string>
-  <string name="common_current_user_left_room">"Quitter le salon"</string>
+  <string name="common_current_user_left_room">"Vous avez quitté le salon"</string>
+  <string name="common_current_user_left_space">"Vous avez quitté l’espace"</string>
   <string name="common_current_user_rejected_invite">"Invitation refusée"</string>
   <string name="common_dark">"Sombre"</string>
   <string name="common_decryption_error">"Erreur de déchiffrement"</string>
   <string name="common_description">"Description"</string>
+  <string name="common_deselect_all">"Tout désélectionner"</string>
   <string name="common_developer_options">"Options pour les développeurs"</string>
   <string name="common_device_id">"Identifiant de session"</string>
   <string name="common_direct_chat">"Discussion à deux"</string>
@@ -244,6 +247,7 @@ Raison : %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Aucun résultat"</string>
   <string name="common_no_room_name">"Salon sans nom"</string>
+  <string name="common_no_space_name">"Espace sans nom"</string>
   <string name="common_not_encrypted">"Non chiffré"</string>
   <string name="common_offline">"Hors ligne"</string>
   <string name="common_open_source_licenses">"Licences open source"</string>
@@ -298,6 +302,7 @@ Raison : %1$s."</string>
   <string name="common_security">"Sécurité"</string>
   <string name="common_seen_by">"Vu par"</string>
   <string name="common_select_account">"Choisir un compte"</string>
+  <string name="common_select_all">"Tout sélectionner"</string>
   <string name="common_send_to">"Envoyer vers"</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_sending_failed">"Échec de l’envoi"</string>
@@ -307,6 +312,7 @@ Raison : %1$s."</string>
   <string name="common_server_unreachable">"Serveur inaccessible"</string>
   <string name="common_server_url">"URL du serveur"</string>
   <string name="common_settings">"Paramètres"</string>
+  <string name="common_share_space">"Partager l’espace"</string>
   <string name="common_shared_location">"Position partagée"</string>
   <string name="common_signing_out">"Déconnexion"</string>
   <string name="common_something_went_wrong">"Une erreur s’est produite"</string>
@@ -453,6 +459,7 @@ Raison : %1$s."</string>
   <string name="screen_share_this_location_action">"Partager cette position"</string>
   <string name="screen_space_list_description">"Espaces que vous avez créés ou rejoints."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"Espace %1$s"</string>
   <string name="screen_space_list_title">"Espaces"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Le message n’a pas été envoyé car l’identité vérifiée de %1$s a été réinitialisée."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Le message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils."</string>

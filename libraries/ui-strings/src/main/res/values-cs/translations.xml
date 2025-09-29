@@ -192,6 +192,7 @@
   <string name="common_dark">"Tmavé"</string>
   <string name="common_decryption_error">"Chyba dešifrování"</string>
   <string name="common_description">"Popis"</string>
+  <string name="common_deselect_all">"Odznačit vše"</string>
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>
   <string name="common_device_id">"ID zařízení"</string>
   <string name="common_direct_chat">"Přímý chat"</string>
@@ -250,6 +251,7 @@ Důvod: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Žádné výsledky"</string>
   <string name="common_no_room_name">"Žádný název místnosti"</string>
+  <string name="common_no_space_name">"Žádný název prostoru"</string>
   <string name="common_not_encrypted">"Nešifrováno"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Licence s otevřeným zdrojovým kódem"</string>
@@ -305,6 +307,7 @@ Důvod: %1$s."</string>
   <string name="common_security">"Zabezpečení"</string>
   <string name="common_seen_by">"Viděno"</string>
   <string name="common_select_account">"Vybrat účet"</string>
+  <string name="common_select_all">"Vybrat vše"</string>
   <string name="common_send_to">"Odeslat do"</string>
   <string name="common_sending">"Odesílání…"</string>
   <string name="common_sending_failed">"Odeslání se nezdařilo"</string>
@@ -463,6 +466,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_share_this_location_action">"Sdílet tuto polohu"</string>
   <string name="screen_space_list_description">"Prostory, které jste vytvořili nebo se k nim připojili."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s prostor"</string>
   <string name="screen_space_list_title">"Prostory"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení."</string>

@@ -14,5 +14,7 @@
   <string name="screen_bug_report_include_screenshot">"Send skærmbillede"</string>
   <string name="screen_bug_report_logs_description">"Logfiler vil blive inkluderet i din besked for at sikre, at alt fungerer korrekt. Hvis du vil sende din besked uden logfiler, skal du deaktivere denne indstilling."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s crashede sidste gang den blev brugt. Vil du dele en ulykkesrapport med os?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Hvis du har problemer med notifikationer, kan upload af notifikationsindstillingerne hjælpe os med at identificere den grundlæggende årsag."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Send notifikationsindstillinger"</string>
   <string name="screen_bug_report_view_logs">"Se logfiler"</string>
 </resources>

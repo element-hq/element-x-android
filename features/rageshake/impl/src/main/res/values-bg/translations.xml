@@ -11,5 +11,7 @@
   <string name="screen_bug_report_include_crash_logs">"Изпращане на дневниците за сривове"</string>
   <string name="screen_bug_report_include_logs">"Разрешаване на дневниците"</string>
   <string name="screen_bug_report_include_screenshot">"Изпращане на екранна снимка"</string>
+  <string name="screen_bug_report_logs_description">"Дневниците ще бъдат включени към вашето съобщение, за да се уверим, че всичко работи правилно. За да изпратите съобщението си без дневници, изключете тази настройка."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s се срина при последното използване. Искате ли да споделите доклад за срива с нас?"</string>
   <string name="screen_bug_report_view_logs">"Преглед на дневниците"</string>
 </resources>

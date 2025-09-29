@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Der opstod en fejl under indlæsning af notifikationsindstillinger."</string>
   <string name="screen_room_details_error_muting">"Det lykkedes ikke at slå lyden fra for dette rum. Prøv igen."</string>
   <string name="screen_room_details_error_unmuting">"Det lykkedes ikke at slå lyden til igen i dette rum. Prøv igen."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Luk ikke appen, før den er færdig."</string>
+  <string name="screen_room_details_invite_people_preparing">"Forbereder invitationer…"</string>
   <string name="screen_room_details_invite_people_title">"Invitér andre"</string>
   <string name="screen_room_details_leave_conversation_title">"Forlad samtalen"</string>
   <string name="screen_room_details_leave_room_title">"Forlad rum"</string>

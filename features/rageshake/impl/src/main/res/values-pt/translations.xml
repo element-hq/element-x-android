@@ -14,5 +14,7 @@
   <string name="screen_bug_report_include_screenshot">"Enviar captura de ecrã"</string>
   <string name="screen_bug_report_logs_description">"Os registos serão incluídos na tua mensagem para garantir que tudo está a funcionar corretamente. Para enviares a tua mensagem sem registos, desativa esta definição."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"A %1$s teve uma falha da última vez que foi utilizada. Gostarias de partilhar um relatório de acidente connosco?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Se estiveres a ter problemas com as notificações, enviar as configurações pode ajudar-nos a identificar a causa."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Enviar configurações de notificação"</string>
   <string name="screen_bug_report_view_logs">"Ver registos"</string>
 </resources>

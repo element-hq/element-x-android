@@ -34,8 +34,8 @@
   <string name="screen_advanced_settings_view_source_description">"Engedélyezze a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
   <string name="screen_blocked_users_empty">"Nincsenek letiltott felhasználók"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Letiltás feloldása"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Újra látni fogja az összes üzenetét."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Felhasználó letiltásának feloldása"</string>
   <string name="screen_blocked_users_unblocking">"Tiltás feloldása…"</string>
   <string name="screen_edit_profile_display_name">"Megjelenítendő név"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Saját megjelenítendő név"</string>
@@ -70,7 +70,7 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"rendszerbeállításokat"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"A rendszerértesítések ki vannak kapcsolva"</string>
   <string name="screen_notification_settings_title">"Értesítések"</string>
-  <string name="troubleshoot_notifications_entry_point_push_history_title">"Leküldéses értesítés előzmények"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Leküldéses értesítések előzményei"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Hibaelhárítás"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Értesítések hibaelhárítása"</string>
 </resources>

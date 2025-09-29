@@ -185,10 +185,12 @@
   <string name="common_creating_room">"Loome jututoa…"</string>
   <string name="common_current_user_canceled_knock">"Päring on tühistatud"</string>
   <string name="common_current_user_left_room">"Lahkus jututoast"</string>
+  <string name="common_current_user_left_space">"Lahkus kogukonnast"</string>
   <string name="common_current_user_rejected_invite">"Keeldusid kutsest"</string>
   <string name="common_dark">"Tume"</string>
   <string name="common_decryption_error">"Dekrüptimisviga"</string>
   <string name="common_description">"Kirjeldus"</string>
+  <string name="common_deselect_all">"Eemalda kõik valikud"</string>
   <string name="common_developer_options">"Arendaja valikud"</string>
   <string name="common_device_id">"Seadme tunnus"</string>
   <string name="common_direct_chat">"Otsevestlus"</string>
@@ -245,6 +247,7 @@ Põhjus: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Otsingul pole tulemusi"</string>
   <string name="common_no_room_name">"Jututoal puudub nimi"</string>
+  <string name="common_no_space_name">"Kogukonnal pole nime"</string>
   <string name="common_not_encrypted">"Krüptimata"</string>
   <string name="common_offline">"Võrgust väljas"</string>
   <string name="common_open_source_licenses">"Avatud lähtekoodiga litsentsid"</string>
@@ -299,6 +302,7 @@ Põhjus: %1$s."</string>
   <string name="common_security">"Turvalisus"</string>
   <string name="common_seen_by">"Seda nägi(d)"</string>
   <string name="common_select_account">"Vali kasutajakonto"</string>
+  <string name="common_select_all">"Vali kõik"</string>
   <string name="common_send_to">"Saada kasutajale"</string>
   <string name="common_sending">"Saadame…"</string>
   <string name="common_sending_failed">"Saatmine ei õnnestunud"</string>
@@ -308,6 +312,7 @@ Põhjus: %1$s."</string>
   <string name="common_server_unreachable">"Server pole leitav"</string>
   <string name="common_server_url">"Serveri URL"</string>
   <string name="common_settings">"Seadistused"</string>
+  <string name="common_share_space">"Jaga kogukonda"</string>
   <string name="common_shared_location">"Jagatud asukoht"</string>
   <string name="common_signing_out">"Logime välja"</string>
   <string name="common_something_went_wrong">"Midagi läks valesti"</string>
@@ -454,6 +459,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_share_this_location_action">"Jaga seda asukohta"</string>
   <string name="screen_space_list_description">"Sinu loodud kogukonnad ning need, millega oled liitunud."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"Kogukond: %1$s"</string>
   <string name="screen_space_list_title">"Kogukonnad"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on lähtestatud."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
