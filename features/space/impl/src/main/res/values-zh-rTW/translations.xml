@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_subtitle">"這也會將您從此空間中的所有聊天室移除。"</string>
+  <string name="screen_leave_space_title">"離開 %1$s？"</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"(Adminisztrátor)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"%1$d szoba és tér elhagyása"</item>
+    <item quantity="other">"%1$d szoba és tér elhagyása"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Ez a tér összes szobájából is eltávolítja."</string>
+  <string name="screen_leave_space_title">"Kilép innen: %1$s?"</string>
+</resources>

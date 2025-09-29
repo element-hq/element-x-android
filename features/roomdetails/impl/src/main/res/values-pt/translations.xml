@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Erro ao carregar as configurações de notificação."</string>
   <string name="screen_room_details_error_muting">"Não foi possível silenciar esta sala, por favor tenta novamente."</string>
   <string name="screen_room_details_error_unmuting">"Não foi possível dessilenciar esta sala, por favor tenta novamente."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Não feches a aplicação até concluir."</string>
+  <string name="screen_room_details_invite_people_preparing">"A preparar convites…"</string>
   <string name="screen_room_details_invite_people_title">"Convidar pessoas"</string>
   <string name="screen_room_details_leave_conversation_title">"Sair da conversa"</string>
   <string name="screen_room_details_leave_room_title">"Sair da sala"</string>

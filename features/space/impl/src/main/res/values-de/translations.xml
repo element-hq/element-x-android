@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"(Admin)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"%1$d Chat und Space verlassen"</item>
+    <item quantity="other">"%1$d Chats und Space verlassen"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Dadurch wirst du auch aus allen Chats in diesem Space entfernt."</string>
+  <string name="screen_leave_space_title">"%1$s verlassen?"</string>
+</resources>

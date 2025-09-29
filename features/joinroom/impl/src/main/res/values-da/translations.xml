@@ -15,6 +15,7 @@
   <string name="screen_join_room_fail_reason">"Dette rum er enten kun for gæster, eller der kan være sat begrænsninger for adgangen på klyngeniveau."</string>
   <string name="screen_join_room_forget_action">"Glem dette rum"</string>
   <string name="screen_join_room_invite_required_message">"Du har brug for en invitation for at deltage i dette rum"</string>
+  <string name="screen_join_room_invited_by">"Inviteret af"</string>
   <string name="screen_join_room_join_action">"Deltag i rummet"</string>
   <string name="screen_join_room_join_restricted_message">"Du skal muligvis være inviteret eller være medlem af en klynge for at deltage."</string>
   <string name="screen_join_room_knock_action">"Send anmodning om at deltage"</string>

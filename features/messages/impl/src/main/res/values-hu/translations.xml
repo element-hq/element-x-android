@@ -7,6 +7,7 @@
   <string name="emoji_picker_category_objects">"Tárgyak"</string>
   <string name="emoji_picker_category_people">"Mosolyok és emberek"</string>
   <string name="emoji_picker_category_places">"Utazás és helyek"</string>
+  <string name="emoji_picker_category_recent">"Legutóbbi emodzsik"</string>
   <string name="emoji_picker_category_symbols">"Szimbólumok"</string>
   <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Koppintson a feltöltött videók minőségének módosításához"</string>
@@ -15,6 +16,7 @@
   <string name="screen_media_upload_preview_error_failed_sending">"Nem sikerült a média feltöltése, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"A maximálisan megengedett fájlméret: %1$s ."</string>
   <string name="screen_media_upload_preview_error_too_large_title">"A fájl túl nagy a feltöltéshez"</string>
+  <string name="screen_media_upload_preview_item_count">"%1$d. elem / %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Képminőség optimalizációja"</string>
   <string name="screen_media_upload_preview_processing">"Feldolgozás…"</string>
   <string name="screen_report_content_block_user">"Felhasználó letiltása"</string>

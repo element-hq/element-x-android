@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_dm_details_block_alert_action">"Блокиране"</string>
+  <string name="screen_dm_details_block_alert_description">"Блокираните потребители няма да могат да ви изпращат съобщения и всички техни съобщения ще бъдат скрити. Можете да ги отблокирате по всяко време."</string>
   <string name="screen_dm_details_block_user">"Блокиране на потребителя"</string>
   <string name="screen_dm_details_unblock_alert_action">"Отблокиране"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Ще можете да виждате отново всички съобщения от тях."</string>
   <string name="screen_dm_details_unblock_user">"Отблокиране на потребителя"</string>
   <string name="screen_room_member_details_block_alert_action">"Блокиране"</string>
+  <string name="screen_room_member_details_block_alert_description">"Блокираните потребители няма да могат да ви изпращат съобщения и всички техни съобщения ще бъдат скрити. Можете да ги отблокирате по всяко време."</string>
   <string name="screen_room_member_details_block_user">"Блокиране на потребителя"</string>
   <string name="screen_room_member_details_title">"Профил"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Отблокиране"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Ще можете да виждате отново всички съобщения от тях."</string>
   <string name="screen_room_member_details_unblock_user">"Отблокиране на потребителя"</string>
   <string name="screen_room_member_details_verify_button_title">"Потвърждаване на %1$s"</string>
+  <string name="screen_start_chat_error_starting_chat">"Възникна грешка при опита за започване на чат"</string>
 </resources>

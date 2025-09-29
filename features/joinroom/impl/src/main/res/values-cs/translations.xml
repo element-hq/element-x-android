@@ -15,6 +15,7 @@
   <string name="screen_join_room_fail_reason">"Tato místnost je buď určena pouze pro zvané, nebo do ní může být omezen přístup na úrovni prostoru."</string>
   <string name="screen_join_room_forget_action">"Zapomenout na tuto místnost"</string>
   <string name="screen_join_room_invite_required_message">"Abyste se mohli připojit k této místnosti, potřebujete pozvánku."</string>
+  <string name="screen_join_room_invited_by">"Pozván(a)"</string>
   <string name="screen_join_room_join_action">"Připojit se do místnosti"</string>
   <string name="screen_join_room_join_restricted_message">"Abyste se mohli připojit, musíte být pozváni nebo být členem některého prostoru."</string>
   <string name="screen_join_room_knock_action">"Zaklepejte a připojte se"</string>

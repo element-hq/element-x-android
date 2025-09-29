@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Обаждане"</string>
+  <string name="notification_channel_listening_for_events">"Слушане за събития"</string>
   <string name="notification_channel_noisy">"Шумни известия"</string>
   <string name="notification_channel_silent">"Безшумни известия"</string>
   <plurals name="notification_compat_summary_line_for_room">
@@ -10,12 +12,14 @@
     <item quantity="one">"%d известие"</item>
     <item quantity="other">"%d известия"</item>
   </plurals>
+  <string name="notification_fallback_content">"Имате нови съобщения."</string>
   <string name="notification_inline_reply_failed">"** Неуспешно изпращане - моля, отворете стаята"</string>
   <string name="notification_invitation_action_join">"Присъединяване"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d покана"</item>
     <item quantity="other">"%d покани"</item>
   </plurals>
+  <string name="notification_invite_body">"Поканиха ви за чат"</string>
   <string name="notification_mentioned_you_body">"Ви спомена: %1$s"</string>
   <string name="notification_new_messages">"Нови съобщения"</string>
   <plurals name="notification_new_messages_for_room">
@@ -26,8 +30,14 @@
   <string name="notification_room_action_mark_as_read">"Отбелязване като прочетено"</string>
   <string name="notification_room_action_quick_reply">"Бърз отговор"</string>
   <string name="notification_room_invite_body">"Ви покани да се присъедините към стаята"</string>
+  <string name="notification_sender_me">"Аз"</string>
+  <string name="notification_test_push_notification_content">"Преглеждате известието! Кликнете върху мен!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d непрочетено известено съобщение"</item>
+    <item quantity="other">"%d непрочетени известени съобщения"</item>
+  </plurals>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s и %2$s"</string>
   <string name="notification_unread_notified_messages_in_room">"%1$s в %2$s"</string>
   <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s в %2$s и %3$s"</string>
@@ -35,5 +45,20 @@
     <item quantity="one">"%d стая"</item>
     <item quantity="other">"%d стаи"</item>
   </plurals>
+  <string name="push_distributor_background_sync_android">"Синхронизация на заден план"</string>
+  <string name="push_distributor_firebase_android">"Услуги на Google"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Не са намерени валидни услуги на Google Play. Известията може да не работят правилно."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Проверка на блокирани потребители"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Преглед на блокираните потребители"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Няма блокирани потребители."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Блокирани потребители"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Получаване на името на текущия доставчик."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Приложението е изградено с поддръжка за: %1$s"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Проверка дали приложението може да показва известия."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Известието не е било кликнато."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Не може да се покаже известието."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Известието беше натиснато!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Показване на известие"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Моля, натиснете известието, за да продължите теста."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Грешка: %1$s"</string>
 </resources>

@@ -8,7 +8,7 @@
   <string name="screen_deactivate_account_list_item_1">"%1$s a fiókját (nem fog tudni újra bejelentkezni, és az azonosítója nem használható újra)."</string>
   <string name="screen_deactivate_account_list_item_1_bold_part">"Véglegesen letiltja"</string>
   <string name="screen_deactivate_account_list_item_2">"Eltávolításra kerül az összes csevegőszobából."</string>
-  <string name="screen_deactivate_account_list_item_3">"Törlésre kerülnek a fiókadatai a személyazonosító kiszolgálónkról."</string>
+  <string name="screen_deactivate_account_list_item_3">"Törlésre kerülnek a fiókadatai az azonosítási kiszolgálónkról."</string>
   <string name="screen_deactivate_account_list_item_4">"Üzenetei továbbra is láthatóak maradnak a regisztrált felhasználók számára, de nem lesznek elérhetőek az új vagy nem regisztrált felhasználók számára, ha úgy dönt, hogy törli őket."</string>
   <string name="screen_deactivate_account_title">"Fiók deaktiválása"</string>
 </resources>

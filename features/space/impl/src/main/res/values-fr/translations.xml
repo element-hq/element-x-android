@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"(Admin)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Quitter %1$d salon et l’espace"</item>
+    <item quantity="other">"Quitter %1$d salons et l’espace"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Sélectionnez les salons que vous souhaitez quitter et dont vous n’êtes pas le seul administrateur:"</string>
+  <string name="screen_leave_space_title">"Quitter %1$s?"</string>
+</resources>

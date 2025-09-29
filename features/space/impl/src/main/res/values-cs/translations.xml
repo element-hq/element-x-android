@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"(Správce)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Opustit %1$d místnost a prostor"</item>
+    <item quantity="few">"Opustit %1$d místnosti a prostor"</item>
+    <item quantity="other">"Opustit %1$d místností a prostor"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Tím budete také odstraněni ze všech místností v tomto prostoru."</string>
+  <string name="screen_leave_space_title">"Opustit %1$s?"</string>
+</resources>

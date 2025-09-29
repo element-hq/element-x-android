@@ -11,13 +11,14 @@
   <string name="screen_identity_use_another_device">"Brug en anden enhed"</string>
   <string name="screen_identity_waiting_on_other_device">"Venter på en anden enhed…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Et ellervandet virker ikke rigtigt. Enten udløb anmodningen, eller anmodningen blev afvist."</string>
-  <string name="screen_session_verification_compare_emojis_subtitle">"Bekræft, at emojierne nedenfor matcher dem, der vises på din anden session."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Bekræft, at emojierne nedenfor matcher dem, der vises på din anden enhed."</string>
   <string name="screen_session_verification_compare_emojis_title">"Sammenlign emojier"</string>
   <string name="screen_session_verification_compare_emojis_user_subtitle">"Bekræft, at emojierne nedenfor matcher dem, der vises på den anden brugers enhed."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Bekræft, at numrene nedenfor stemmer overens med dem, der vises på din anden session."</string>
   <string name="screen_session_verification_compare_numbers_title">"Sammenlign tal"</string>
-  <string name="screen_session_verification_complete_subtitle">"Din nye session er nu bekræftet. Det har adgang til dine krypterede meddelelser, og andre brugere vil se den som betroet."</string>
+  <string name="screen_session_verification_complete_subtitle">"Nu kan du læse eller sende beskeder sikkert med din anden enhed."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Nu kan du stole på identiteten af denne bruger, når I sender og modtager beskeder fra hinanden."</string>
+  <string name="screen_session_verification_device_verified">"Enhed verificeret"</string>
   <string name="screen_session_verification_enter_recovery_key">"Indtast gendannelsesnøgle"</string>
   <string name="screen_session_verification_failed_subtitle">"Enten udløb anmodningen, den blev afvist, eller der var en fejl i verifikationen."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bevis, at det er dig, for at få adgang til din krypterede beskedhistorik."</string>
@@ -44,7 +45,7 @@
   <string name="screen_session_verification_user_responder_subtitle">"For ekstra sikkerhed ønsker en anden bruger at bekræfte din identitet. Du får vist et sæt emojier til sammenligning."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Du burde se en popup på den anden enhed. Start verifikationen derfra nu."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Start verifikation på den anden enhed"</string>
-  <string name="screen_session_verification_waiting_other_device_title">"Venter på den anden enhed"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Start verifikation på den anden enhed"</string>
   <string name="screen_session_verification_waiting_other_user_title">"Venter på den anden bruger"</string>
   <string name="screen_session_verification_waiting_subtitle">"Når du er blevet accepteret, kan du fortsætte med verifikationen."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Accepter anmodningen om at starte bekræftelsesprocessen i din anden session for at fortsætte."</string>

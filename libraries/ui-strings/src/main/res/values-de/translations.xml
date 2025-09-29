@@ -190,6 +190,7 @@
   <string name="common_dark">"Dunkel"</string>
   <string name="common_decryption_error">"Dekodierungsfehler"</string>
   <string name="common_description">"Beschreibung"</string>
+  <string name="common_deselect_all">"Auswahl aufheben"</string>
   <string name="common_developer_options">"Entwickleroptionen"</string>
   <string name="common_device_id">"Geräte-ID"</string>
   <string name="common_direct_chat">"Direktnachricht"</string>
@@ -246,6 +247,7 @@ Grund: %1$s."</string>
   <string name="common_name_and_id">"%1$s(%2$s)"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
   <string name="common_no_room_name">"Kein Chat-Name"</string>
+  <string name="common_no_space_name">"Kein Space Name"</string>
   <string name="common_not_encrypted">"Nicht verschlüsselt"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Open-Source-Lizenzen"</string>
@@ -300,6 +302,7 @@ Grund: %1$s."</string>
   <string name="common_security">"Sicherheit"</string>
   <string name="common_seen_by">"Gesehen von"</string>
   <string name="common_select_account">"Konto auswählen"</string>
+  <string name="common_select_all">"Alles auswählen"</string>
   <string name="common_send_to">"Senden an"</string>
   <string name="common_sending">"Wird gesendet…"</string>
   <string name="common_sending_failed">"Senden fehlgeschlagen"</string>
@@ -309,6 +312,7 @@ Grund: %1$s."</string>
   <string name="common_server_unreachable">"Server nicht erreichbar"</string>
   <string name="common_server_url">"Server-URL"</string>
   <string name="common_settings">"Einstellungen"</string>
+  <string name="common_share_space">"Space teilen"</string>
   <string name="common_shared_location">"Geteilter Standort"</string>
   <string name="common_signing_out">"Abmelden"</string>
   <string name="common_something_went_wrong">"Es ist ein Fehler aufgetreten."</string>
@@ -455,6 +459,7 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_share_this_location_action">"Diesen Standort teilen"</string>
   <string name="screen_space_list_description">"Von dir erstellte oder beigetretene Spaces."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s Space"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$s geändert hat."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Die Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat."</string>
