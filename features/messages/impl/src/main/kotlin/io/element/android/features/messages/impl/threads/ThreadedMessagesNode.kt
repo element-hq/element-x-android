@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.threads
 
 import android.app.Activity
-import android.content.Context
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -44,13 +43,11 @@ import io.element.android.features.messages.impl.timeline.di.TimelineItemPresent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
-import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
 import io.element.android.libraries.matrix.api.core.EventId
@@ -66,7 +63,6 @@ import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -79,7 +75,6 @@ import kotlinx.coroutines.runBlocking
 class ThreadedMessagesNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    @ApplicationContext private val context: Context,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val analyticsService: AnalyticsService,
@@ -194,8 +189,11 @@ class ThreadedMessagesNode(
             if (eventId != null) {
                 eventSink(TimelineEvents.FocusOnEvent(eventId))
             } else {
-                // Click on the same room, ignore
-                displaySameRoomToast()
+                // Click on the same room, navigate up
+                // Note that it can not be enough to go back to the room if the thread has been opened
+                // following a permalink from another thread. In this case navigating up will go back
+                // to the previous thread. But this should not happen often.
+                navigateUp()
             }
         } else {
             callbacks.forEach { it.onPermalinkClick(roomLink) }
@@ -241,10 +239,6 @@ class ThreadedMessagesNode(
 
     private fun onJoinCallClick() {
         callbacks.forEach { it.onJoinCallClick(room.roomId) }
-    }
-
-    private fun displaySameRoomToast() {
-        context.toast(CommonStrings.screen_room_permalink_same_room_android)
     }
 
     @Composable
