@@ -19,7 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.call.api.CallType
@@ -49,7 +49,7 @@ import timber.log.Timber
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
-@Inject
+@AssistedInject
 class CallScreenPresenter(
     @Assisted private val callType: CallType,
     @Assisted private val navigator: CallScreenNavigator,

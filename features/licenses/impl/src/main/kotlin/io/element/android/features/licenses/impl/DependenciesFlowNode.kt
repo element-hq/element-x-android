@@ -17,7 +17,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.licenses.impl.details.DependenciesDetailsNode
 import io.element.android.features.licenses.impl.list.DependencyLicensesListNode
@@ -28,7 +28,7 @@ import io.element.android.libraries.architecture.createNode
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-@Inject
+@AssistedInject
 class DependenciesFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

@@ -9,7 +9,7 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.groups.canBeDisplayedInBubbleBlock
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
@@ -39,7 +39,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import java.util.Date
 
-@Inject
+@AssistedInject
 class TimelineItemEventFactory(
     @Assisted private val config: TimelineItemsFactoryConfig,
     private val contentFactory: TimelineItemContentFactory,

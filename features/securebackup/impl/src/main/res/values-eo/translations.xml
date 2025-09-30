@@ -23,9 +23,11 @@
   <string name="screen_recovery_key_change_generate_key">"Generate a new backup password"</string>
   <string name="screen_recovery_key_change_success">"Backup password changed"</string>
   <string name="screen_recovery_key_change_title">"Change backup password?"</string>
+  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Create new backup password"</string>
   <string name="screen_recovery_key_confirm_error_content">"Please try again to confirm access to your message backup."</string>
   <string name="screen_recovery_key_confirm_error_title">"Incorrect backup password"</string>
   <string name="screen_recovery_key_confirm_key_description">"You might have seen the terms \"recovery key\", \"security key\" or \"security phrase\" instead of \"backup password\". Don\'t worry, this is all the same."</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Lost your backup password?"</string>
   <string name="screen_recovery_key_confirm_success">"Backup password confirmed"</string>
   <string name="screen_recovery_key_confirm_title">"Enter your backup password"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Copied backup password"</string>

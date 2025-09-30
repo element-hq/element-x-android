@@ -26,6 +26,7 @@ import androidx.compose.ui.semantics.focused
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -214,9 +215,7 @@ private fun ContentInitial(
                     .padding(top = 24.dp),
             ) {
                 VerificationUserProfileContent(
-                    userId = request.details.senderProfile.userId,
-                    displayName = request.details.senderProfile.displayName,
-                    avatarUrl = request.details.senderProfile.avatarUrl,
+                    user = request.details.senderProfile,
                 )
             }
         }
@@ -238,7 +237,7 @@ private fun IncomingVerificationBottomMenu(
                 VerificationBottomMenu {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(CommonStrings.action_start),
+                        text = stringResource(CommonStrings.action_start_verification),
                         onClick = { eventSink(IncomingVerificationViewEvents.StartVerification) },
                     )
                     TextButton(
@@ -290,5 +289,13 @@ private fun IncomingVerificationBottomMenu(
 internal fun IncomingVerificationViewPreview(@PreviewParameter(IncomingVerificationStateProvider::class) state: IncomingVerificationState) = ElementPreview {
     IncomingVerificationView(
         state = state,
+    )
+}
+
+@Preview
+@Composable
+internal fun IncomingVerificationViewA11yPreview() = ElementPreview {
+    IncomingVerificationView(
+        state = anIncomingVerificationState(),
     )
 }

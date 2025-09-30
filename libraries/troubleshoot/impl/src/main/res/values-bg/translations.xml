@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Изпълняване на тестове"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Изпълняване на тестовете отново"</string>
+  <string name="troubleshoot_notifications_screen_success">"Всички тестове преминаха успешно."</string>
+  <string name="troubleshoot_notifications_screen_title">"Отстраняване на неизправности с известията"</string>
+</resources>

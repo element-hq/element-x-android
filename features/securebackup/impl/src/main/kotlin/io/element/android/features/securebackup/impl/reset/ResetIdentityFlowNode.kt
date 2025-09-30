@@ -24,7 +24,7 @@ import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.securebackup.impl.reset.password.ResetIdentityPasswordNode
@@ -47,7 +47,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
-@Inject
+@AssistedInject
 class ResetIdentityFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

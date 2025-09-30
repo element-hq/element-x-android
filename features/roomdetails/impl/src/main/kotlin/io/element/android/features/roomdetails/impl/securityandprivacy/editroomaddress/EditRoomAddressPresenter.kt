@@ -18,7 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyNavigator
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
@@ -34,7 +34,7 @@ import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidityEf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class EditRoomAddressPresenter(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val client: MatrixClient,

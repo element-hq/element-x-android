@@ -16,12 +16,12 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.util.openLearnMorePage
 
 @ContributesNode(AppScope::class)
-@Inject
+@AssistedInject
 class ChangeAccountProviderNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

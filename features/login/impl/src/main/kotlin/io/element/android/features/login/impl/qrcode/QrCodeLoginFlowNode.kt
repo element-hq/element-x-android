@@ -23,7 +23,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.di.QrCodeLoginBindings
 import io.element.android.features.login.impl.di.QrCodeLoginGraph
@@ -49,7 +49,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(AppScope::class)
-@Inject
+@AssistedInject
 class QrCodeLoginFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

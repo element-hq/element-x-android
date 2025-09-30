@@ -19,7 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationState.Step
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
@@ -38,7 +38,7 @@ import timber.log.Timber
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationStateMachine.Event as StateMachineEvent
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationStateMachine.State as StateMachineState
 
-@Inject
+@AssistedInject
 class IncomingVerificationPresenter(
     @Assisted private val verificationRequest: VerificationRequest.Incoming,
     @Assisted private val navigator: IncomingVerificationNavigator,
@@ -155,7 +155,7 @@ class IncomingVerificationPresenter(
             StateMachineState.RejectingIncomingVerification,
             null -> {
                 Step.Initial(
-                    deviceDisplayName = sessionVerificationRequestDetails.senderProfile.displayName ?: sessionVerificationRequestDetails.deviceId.value,
+                    deviceDisplayName = sessionVerificationRequestDetails.deviceDisplayName,
                     deviceId = sessionVerificationRequestDetails.deviceId,
                     formattedSignInTime = formattedSignInTime,
                     isWaiting = machineState == StateMachineState.AcceptingIncomingVerification ||

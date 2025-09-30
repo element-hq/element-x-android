@@ -22,7 +22,7 @@ data class IncomingVerificationState(
     @Stable
     sealed interface Step {
         data class Initial(
-            val deviceDisplayName: String,
+            val deviceDisplayName: String?,
             val deviceId: DeviceId,
             val formattedSignInTime: String,
             val isWaiting: Boolean,

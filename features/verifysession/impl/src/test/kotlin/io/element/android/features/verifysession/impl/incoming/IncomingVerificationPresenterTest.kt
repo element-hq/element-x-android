@@ -12,6 +12,7 @@ import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificat
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.FlowId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
@@ -293,13 +294,14 @@ class IncomingVerificationPresenterTest {
 
 private val anIncomingSessionVerificationRequest = VerificationRequest.Incoming.OtherSession(
     details = SessionVerificationRequestDetails(
-        senderProfile = SessionVerificationRequestDetails.SenderProfile(
+        senderProfile = MatrixUser(
             userId = A_USER_ID,
-            displayName = "a device name",
+            displayName = "a user name",
             avatarUrl = null,
         ),
         flowId = FlowId("flowId"),
         deviceId = A_DEVICE_ID,
+        deviceDisplayName = "a device name",
         firstSeenTimestamp = A_TIMESTAMP,
     )
 )

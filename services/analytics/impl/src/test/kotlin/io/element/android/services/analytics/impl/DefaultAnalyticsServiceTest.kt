@@ -16,7 +16,9 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import io.element.android.services.analytics.impl.store.AnalyticsStore
 import io.element.android.services.analytics.impl.store.FakeAnalyticsStore
@@ -167,7 +169,7 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when a session is deleted, the store is reset`() = runTest {
+    fun `when the last session is deleted, the store is reset`() = runTest {
         val resetLambda = lambdaRecorder<Unit> { }
         val store = FakeAnalyticsStore(
             resetLambda = resetLambda,
@@ -258,11 +260,13 @@ class DefaultAnalyticsServiceTest {
         ),
         analyticsStore: AnalyticsStore = FakeAnalyticsStore(),
         sessionObserver: SessionObserver = NoOpSessionObserver(),
+        sessionStore: SessionStore = InMemorySessionStore(),
     ) = DefaultAnalyticsService(
         analyticsProviders = analyticsProviders,
         analyticsStore = analyticsStore,
         coroutineScope = coroutineScope,
         sessionObserver = sessionObserver,
+        sessionStore = sessionStore,
     ).also {
         // Wait for the service to be ready
         delay(1)

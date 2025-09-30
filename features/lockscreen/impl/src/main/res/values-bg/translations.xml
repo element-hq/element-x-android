@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"биометрично удостоверяване"</string>
+  <string name="screen_app_lock_biometric_unlock">"биометрично отключване"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Отключване с биометрия"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Потвърдете биометричните данни"</string>
   <string name="screen_app_lock_forgot_pin">"Забравихте PIN?"</string>
   <string name="screen_app_lock_settings_change_pin">"Промяна на PIN кода"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Разрешаване на биометрично отключване"</string>
   <string name="screen_app_lock_settings_remove_pin">"Премахване на PIN"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_message">"Сигурни ли сте, че искате да премахнете PIN?"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_title">"Премахване на PIN?"</string>
@@ -9,6 +14,10 @@
   <string name="screen_app_lock_setup_biometric_unlock_skip">"Предпочитам да използвам PIN"</string>
   <string name="screen_app_lock_setup_choose_pin">"Избор на PIN"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Потвърждаване на PIN"</string>
+  <string name="screen_app_lock_setup_pin_context">"Заключете %1$s, за да добавите допълнителна сигурност към вашите чатове.
+
+Изберете нещо запомнящо се. Ако забравите този PIN, ще бъдете излезли от приложението."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Не можете да изберете това за ваш PIN код от съображения за сигурност"</string>
   <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Избор на различен PIN"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Моля, въведете един и същ PIN два пъти"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINs не съвпадат"</string>
@@ -20,6 +29,7 @@
     <item quantity="one">"Грешен PIN. Имате още %1$d шанс"</item>
     <item quantity="other">"Грешен PIN. Имате още %1$d шанса"</item>
   </plurals>
+  <string name="screen_app_lock_use_biometric_android">"Използване на биометрия"</string>
   <string name="screen_app_lock_use_pin_android">"Използване на PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Излизане…"</string>
 </resources>

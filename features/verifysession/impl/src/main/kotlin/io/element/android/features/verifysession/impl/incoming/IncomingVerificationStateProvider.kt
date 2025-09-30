@@ -14,6 +14,7 @@ import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificat
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.FlowId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 
@@ -55,26 +56,28 @@ internal fun aStepInitial(
 
 internal fun anIncomingSessionVerificationRequest() = VerificationRequest.Incoming.OtherSession(
     details = SessionVerificationRequestDetails(
-        senderProfile = SessionVerificationRequestDetails.SenderProfile(
+        senderProfile = MatrixUser(
             userId = UserId("@alice:example.com"),
             displayName = "Alice",
             avatarUrl = null,
         ),
         flowId = FlowId("1234"),
         deviceId = DeviceId("ILAKNDNASDLK"),
+        deviceDisplayName = "a device name",
         firstSeenTimestamp = 0,
     )
 )
 
 internal fun anIncomingUserVerificationRequest() = VerificationRequest.Incoming.User(
     details = SessionVerificationRequestDetails(
-        senderProfile = SessionVerificationRequestDetails.SenderProfile(
+        senderProfile = MatrixUser(
             userId = UserId("@alice:example.com"),
             displayName = "Alice",
             avatarUrl = null,
         ),
         flowId = FlowId("1234"),
         deviceId = DeviceId("ILAKNDNASDLK"),
+        deviceDisplayName = "a device name",
         firstSeenTimestamp = 0,
     )
 )

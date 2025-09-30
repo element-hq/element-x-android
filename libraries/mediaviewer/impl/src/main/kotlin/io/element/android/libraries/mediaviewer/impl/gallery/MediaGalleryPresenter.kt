@@ -18,7 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -44,7 +44,7 @@ import io.element.android.libraries.mediaviewer.impl.model.mediaSource
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class MediaGalleryPresenter(
     @Assisted private val navigator: MediaGalleryNavigator,
     private val room: BaseRoom,

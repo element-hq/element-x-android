@@ -16,8 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionComparator
@@ -43,6 +43,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.recentemojis.GetRecentEmojis
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -62,7 +63,7 @@ interface ActionListPresenter : Presenter<ActionListState> {
     }
 }
 
-@Inject
+@AssistedInject
 class DefaultActionListPresenter(
     @Assisted
     private val postProcessor: TimelineItemActionPostProcessor,
@@ -73,6 +74,7 @@ class DefaultActionListPresenter(
     private val userSendFailureFactory: VerifiedUserSendFailureFactory,
     private val dateFormatter: DateFormatter,
     private val featureFlagService: FeatureFlagService,
+    private val getRecentEmojis: GetRecentEmojis,
 ) : ActionListPresenter {
     @AssistedFactory
     @ContributesBinding(RoomScope::class)
@@ -153,14 +155,15 @@ class DefaultActionListPresenter(
                 ),
                 displayEmojiReactions = displayEmojiReactions,
                 verifiedUserSendFailure = verifiedUserSendFailure,
-                actions = actions.toImmutableList()
+                actions = actions.toImmutableList(),
+                recentEmojis = getRecentEmojis().getOrNull()?.toImmutableList() ?: persistentListOf()
             )
         } else {
             target.value = ActionListState.Target.None
         }
     }
 
-    private suspend fun buildActions(
+    private fun buildActions(
         timelineItem: TimelineItem.Event,
         usersEventPermissions: UserEventPermissions,
         isDeveloperModeEnabled: Boolean,

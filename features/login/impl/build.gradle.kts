@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.permissions.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.qrcode)
     implementation(projects.libraries.oidc.api)
     implementation(projects.libraries.uiUtils)
@@ -56,5 +57,6 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.oidc.test)
     testImplementation(projects.libraries.permissions.test)
+    testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.libraries.wellknown.test)
 }

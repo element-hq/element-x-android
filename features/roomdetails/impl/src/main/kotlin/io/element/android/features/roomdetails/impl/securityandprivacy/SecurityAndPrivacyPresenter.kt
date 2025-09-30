@@ -19,7 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.matchesServer
 import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.securityAndPrivacyPermissionsAsState
 import io.element.android.libraries.architecture.AsyncAction
@@ -40,7 +40,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class SecurityAndPrivacyPresenter(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val matrixClient: MatrixClient,

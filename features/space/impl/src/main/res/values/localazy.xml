@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"(Admin)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Leave %1$d room and space"</item>
+    <item quantity="other">"Leave %1$d rooms and space"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Select the rooms you’d like to leave which you\'re not the only administrator for:"</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"You will not be removed from the following room(s) because you\'re the only administrator:"</string>
+  <string name="screen_leave_space_title">"Leave %1$s?"</string>
+</resources>

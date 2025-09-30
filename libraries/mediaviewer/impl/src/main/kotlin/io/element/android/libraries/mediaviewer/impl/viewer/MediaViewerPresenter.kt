@@ -23,7 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
 
-@Inject
+@AssistedInject
 class MediaViewerPresenter(
     @Assisted private val inputs: MediaViewerEntryPoint.Params,
     @Assisted private val navigator: MediaViewerNavigator,

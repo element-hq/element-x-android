@@ -8,8 +8,9 @@
   <string name="screen_identity_confirmed_title">"Устройството е потвърдено"</string>
   <string name="screen_identity_use_another_device">"Използване на друго устройство"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Нещо не изглежда наред. Или времето за изчакване на заявката е изтекло, или заявката е отхвърлена."</string>
-  <string name="screen_session_verification_compare_emojis_subtitle">"Потвърдете, че емоджитата по-долу съвпадат с показаните в другата ви сесия."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Потвърдете, че емоджитата по-долу съвпадат с показаните в другото ви устройство."</string>
   <string name="screen_session_verification_compare_emojis_title">"Сравнете емоджита"</string>
+  <string name="screen_session_verification_complete_subtitle">"Сега можете да четете или изпращате съобщения сигурно на другото си устройство."</string>
   <string name="screen_session_verification_enter_recovery_key">"Въвеждане на ключ за възстановяване"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Докажете, че сте вие, за да получите достъп до хронологията на шифрованите си съобщения."</string>
   <string name="screen_session_verification_open_existing_session_title">"Отворете съществуваща сесия"</string>
@@ -17,6 +18,7 @@
   <string name="screen_session_verification_positive_button_initial">"Готов съм"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"В очакване на съвпадение"</string>
   <string name="screen_session_verification_ready_subtitle">"Сравнете уникален набор от емоджита."</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Сравнете уникалните емоджита, като се уверите, че се появяват в същия ред."</string>
   <string name="screen_session_verification_request_failure_title">"Неуспешно потвърждаване"</string>
   <string name="screen_session_verification_request_success_subtitle">"Сега можете да четете или изпращате съобщения сигурно на другото си устройство."</string>
   <string name="screen_session_verification_request_success_title">"Устройството е потвърдено"</string>
@@ -24,7 +26,7 @@
   <string name="screen_session_verification_they_match">"Те съвпадат"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Уверете се, че приложението е отворено на другото устройство, преди да започнете потвърждението оттук."</string>
   <string name="screen_session_verification_use_another_device_title">"Отворете приложението на друго потвърдено устройство"</string>
-  <string name="screen_session_verification_waiting_other_device_title">"Чака се другото устройство"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Започнете да потвърждавате на другото устройство"</string>
   <string name="screen_session_verification_waiting_other_user_title">"Чака се другият потребител"</string>
   <string name="screen_session_verification_waiting_subtitle">"След като бъдете приети, ще можете да продължите потвърждението."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Приемете заявката, за да започнете процеса на потвърждаване в другата си сесия, за да продължите."</string>

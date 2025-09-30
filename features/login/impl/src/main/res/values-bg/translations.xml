@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_account_provider_change">"Промяна на доставчика на акаунт"</string>
+  <string name="screen_account_provider_form_hint">"Адрес на сървъра"</string>
   <string name="screen_account_provider_form_notice">"Въведете термин за търсене или адрес на домейн."</string>
   <string name="screen_account_provider_form_subtitle">"Потърсете компания, общност или частен сървър."</string>
   <string name="screen_account_provider_form_title">"Намерете доставчик на акаунт"</string>
@@ -8,13 +9,19 @@
   <string name="screen_account_provider_signin_title">"На път сте да влезете в %s"</string>
   <string name="screen_account_provider_signup_subtitle">"Това е мястото, където ще живеят вашите разговори — точно както бихте използвали имейл доставчик, за да съхранявате вашите имейли."</string>
   <string name="screen_account_provider_signup_title">"На път сте да създадете акаунт в %s"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org е голям, безплатен сървър в публичната мрежа на Matrix за сигурна, децентрализирана комуникация, управляван от фондация Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Друг"</string>
   <string name="screen_change_account_provider_subtitle">"Използвайте друг доставчик на акаунт, като например собствен частен сървър или работен акаунт."</string>
   <string name="screen_change_account_provider_title">"Промяна на доставчика на акаунт"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Не можахме да достигнем този сървър. Моля, проверете дали сте въвели правилно URL адреса на сървъра. Ако URL адресът е правилен, свържете се с администратора на вашия сървър за допълнителна помощ."</string>
+  <string name="screen_change_server_form_header">"URL адрес на сървъра"</string>
   <string name="screen_change_server_subtitle">"Какъв е адресът на вашия сървър?"</string>
+  <string name="screen_change_server_title">"Изберете своя сървър"</string>
   <string name="screen_create_account_title">"Създаване на акаунт"</string>
   <string name="screen_login_error_deactivated_account">"Този акаунт бе деактивиран."</string>
   <string name="screen_login_error_invalid_credentials">"Неправилно потребителско име и/или парола"</string>
+  <string name="screen_login_error_invalid_user_id">"Това не е валиден потребителски идентификатор. Очакван формат: ‘@user:homeserver.org’"</string>
+  <string name="screen_login_error_unsupported_authentication">"Избраният сървър не поддържа влизане с парола или OIDC. Моля, свържете се с вашия администратор или изберете друг сървър."</string>
   <string name="screen_login_form_header">"Въведете своите данни"</string>
   <string name="screen_login_subtitle">"Matrix е отворена мрежа за сигурна, децентрализирана комуникация."</string>
   <string name="screen_login_title">"Добре дошли отново!"</string>
@@ -28,6 +35,7 @@
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Повторен опит"</string>
   <string name="screen_qr_code_login_verify_code_title">"Вашият код за потвърждение"</string>
   <string name="screen_server_confirmation_change_server">"Промяна на доставчика на акаунт"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Частен сървър за служителите на Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix е отворена мрежа за сигурна, децентрализирана комуникация."</string>
   <string name="screen_server_confirmation_message_register">"Това е мястото, където ще живеят вашите разговори — точно както бихте използвали имейл доставчик, за да съхранявате вашите имейли."</string>
   <string name="screen_server_confirmation_title_login">"На път сте да влезете в %1$s"</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Възникна грешка при обновяването на настройките за известия."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Вашият сървър не поддържа тази опция в шифровани стаи, може да не получавате известия в някои стаи."</string>
   <string name="screen_polls_history_title">"Анкети"</string>
   <string name="screen_room_change_permissions_administrators">"Само администратори"</string>
@@ -26,9 +27,13 @@
   <string name="screen_room_details_badge_not_encrypted">"Без шифроване"</string>
   <string name="screen_room_details_badge_public">"Общодостъпна стая"</string>
   <string name="screen_room_details_edit_room_title">"Редактиране на стаята"</string>
+  <string name="screen_room_details_edition_error">"Възникна неизвестна грешка и информацията не можа да бъде променена."</string>
   <string name="screen_room_details_edition_error_title">"Не може да се обнови стаята"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Съобщенията са защитени с ключове. Само вие и получателите имате уникалните ключове, за да ги отключите."</string>
   <string name="screen_room_details_encryption_enabled_title">"Шифроването на съобщенията е включено"</string>
+  <string name="screen_room_details_error_loading_notification_settings">"Възникна грешка при зареждането на настройките за известия."</string>
+  <string name="screen_room_details_error_muting">"Неуспешно заглушаване на тази стая, моля, опитайте отново."</string>
+  <string name="screen_room_details_error_unmuting">"Неуспешно раззаглушаване на тази стая, моля, опитайте отново."</string>
   <string name="screen_room_details_invite_people_title">"Поканване на хора"</string>
   <string name="screen_room_details_leave_conversation_title">"Напускане на разговора"</string>
   <string name="screen_room_details_leave_room_title">"Напускане на стаята"</string>
@@ -40,6 +45,7 @@
   <string name="screen_room_details_profile_row_title">"Профил"</string>
   <string name="screen_room_details_roles_and_permissions">"Роли и разрешения"</string>
   <string name="screen_room_details_room_name_label">"Име на стаята"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Защита и поверителност"</string>
   <string name="screen_room_details_security_title">"Защита"</string>
   <string name="screen_room_details_share_room_title">"Споделяне на стаята"</string>
   <string name="screen_room_details_title">"Информация за стаята"</string>
@@ -53,7 +59,16 @@
   <string name="screen_room_member_list_role_administrator">"Администратор"</string>
   <string name="screen_room_member_list_role_moderator">"Модератор"</string>
   <string name="screen_room_member_list_room_members_header_title">"Членове на стаята"</string>
+  <string name="screen_room_notification_settings_allow_custom">"Разрешаване на персонализирана настройка"</string>
+  <string name="screen_room_notification_settings_allow_custom_footnote">"Включването на това ще замени вашата настройка по подразбиране"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Да бъда известяван в този чат за"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"Можете да го промените във вашите %1$s."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"глобални настройки"</string>
+  <string name="screen_room_notification_settings_default_setting_title">"Настройка по подразбиране"</string>
+  <string name="screen_room_notification_settings_edit_remove_setting">"Премахване на персонализираната настройка"</string>
+  <string name="screen_room_notification_settings_error_loading_settings">"Възникна грешка при зареждането на настройките за известия."</string>
+  <string name="screen_room_notification_settings_error_restoring_default">"Неуспешно възстановяване на режима по подразбиране, моля, опитайте отново."</string>
+  <string name="screen_room_notification_settings_error_setting_mode">"Неуспешно задаване на режима, моля, опитайте отново."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Всички съобщения"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Само споменавания и ключови думи"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В тази стая, да бъда известяван за"</string>
@@ -67,9 +82,25 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Роли"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Подробности за стаята"</string>
   <string name="screen_room_roles_and_permissions_title">"Роли и разрешения"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Добавяне на адрес на стаята"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Да, включване на шифроването"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Да се включи ли шифроването?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Веднъж включено, шифроването не може да бъде изключено."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Шифроване"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Включване на шифроване от край до край"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Всеки може да намери и да се присъедини"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Всеки"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Хората могат да се присъединят само ако са поканени"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Само с покана"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Достъп до стаята"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Пространствата в момента не се поддържат"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Членове на пространството"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Ще ви е необходим адрес на стаята, за да я направите видима в директорията на стаите."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Видима в директорията на обществените стаи"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Всеки"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Кой може да чете историята"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Само за членове откакто са поканени"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Само за членове от избирането на тази опция"</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Видимост на стаята"</string>
+  <string name="screen_security_and_privacy_title">"Защита и поверителност"</string>
 </resources>

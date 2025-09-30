@@ -10,8 +10,8 @@ package io.element.android.libraries.push.impl.notifications
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -58,7 +58,7 @@ interface NotificationMediaRepo {
     ): Result<File>
 }
 
-@Inject
+@AssistedInject
 class DefaultNotificationMediaRepo(
     @CacheDirectory private val cacheDir: File,
     private val mxcTools: MxcTools,

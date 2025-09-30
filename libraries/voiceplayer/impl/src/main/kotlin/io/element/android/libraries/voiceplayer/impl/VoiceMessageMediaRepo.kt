@@ -9,8 +9,8 @@ package io.element.android.libraries.voiceplayer.impl
 
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.RoomScope
@@ -56,7 +56,7 @@ interface VoiceMessageMediaRepo {
     suspend fun getMediaFile(): Result<File>
 }
 
-@Inject
+@AssistedInject
 class DefaultVoiceMessageMediaRepo(
     @CacheDirectory private val cacheDir: File,
     mxcTools: MxcTools,

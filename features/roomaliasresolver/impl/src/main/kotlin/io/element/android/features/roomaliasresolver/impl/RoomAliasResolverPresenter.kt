@@ -14,7 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -25,7 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.jvm.optionals.getOrElse
 
-@Inject
+@AssistedInject
 class RoomAliasResolverPresenter(
     @Assisted private val roomAlias: RoomAlias,
     private val matrixClient: MatrixClient,

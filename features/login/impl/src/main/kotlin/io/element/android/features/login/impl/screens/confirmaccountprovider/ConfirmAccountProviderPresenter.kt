@@ -13,12 +13,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.libraries.architecture.Presenter
 
-@Inject
+@AssistedInject
 class ConfirmAccountProviderPresenter(
     @Assisted private val params: Params,
     private val accountProviderDataSource: AccountProviderDataSource,

@@ -7,5 +7,5 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Enter your backup password"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Forgot your backup password?"</string>
   <string name="confirm_recovery_key_banner_title">"Your message backup is out of sync"</string>
-  <string name="session_verification_banner_message">"Looks like you\'re using a new device. Confirm it with another connected device to access your encrypted messages."</string>
+  <string name="session_verification_banner_message">"Looks like you\'re using a new device. Confirm it with another linked device to access your encrypted messages."</string>
 </resources>

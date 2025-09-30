@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Уверете се, че Firebase е наличен."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase не е наличен."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase е наличен."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Проверка на Firebase"</string>
+</resources>

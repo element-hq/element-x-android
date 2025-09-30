@@ -38,7 +38,9 @@ class RustMatrixClientFactoryTest {
 fun TestScope.createRustMatrixClientFactory(
     baseDirectory: File = File("/base"),
     cacheDirectory: File = File("/cache"),
-    sessionStore: SessionStore = InMemorySessionStore(),
+    sessionStore: SessionStore = InMemorySessionStore(
+        updateUserProfileResult = { _, _, _ -> },
+    ),
     clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
 ) = RustMatrixClientFactory(
     baseDirectory = baseDirectory,

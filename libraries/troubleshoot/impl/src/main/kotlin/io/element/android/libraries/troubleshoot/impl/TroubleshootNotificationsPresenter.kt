@@ -14,12 +14,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class TroubleshootNotificationsPresenter(
     @Assisted private val navigator: NotificationTroubleshootNavigator,
     private val troubleshootTestSuite: TroubleshootTestSuite,

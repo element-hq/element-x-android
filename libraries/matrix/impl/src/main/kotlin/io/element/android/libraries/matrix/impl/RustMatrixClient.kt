@@ -51,6 +51,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.encryption.RustEncryptionService
 import io.element.android.libraries.matrix.impl.exception.mapClientException
+import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.media.RustMediaPreviewService
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
@@ -75,7 +76,6 @@ import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
-import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
@@ -235,7 +235,6 @@ class RustMatrixClient(
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
             userId = sessionId,
-            // TODO cache for displayName?
             displayName = null,
             avatarUrl = null,
         )
@@ -264,6 +263,16 @@ class RustMatrixClient(
             // Start notification settings
             notificationSettingsService.start()
 
+            // Update the user profile in the session store if needed
+            sessionStore.getSession(sessionId.value)?.let { sessionData ->
+                _userProfile.emit(
+                    MatrixUser(
+                        userId = sessionId,
+                        displayName = sessionData.userDisplayName,
+                        avatarUrl = sessionData.userAvatarUrl,
+                    )
+                )
+            }
             // Force a refresh of the profile
             getUserProfile()
         }
@@ -394,12 +403,20 @@ class RustMatrixClient(
 
     override suspend fun getProfile(userId: UserId): Result<MatrixUser> = withContext(sessionDispatcher) {
         runCatchingExceptions {
-            innerClient.getProfile(userId.value).let(UserProfileMapper::map)
+            innerClient.getProfile(userId.value).map()
         }
     }
 
     override suspend fun getUserProfile(): Result<MatrixUser> = getProfile(sessionId)
-        .onSuccess { _userProfile.tryEmit(it) }
+        .onSuccess { matrixUser ->
+            _userProfile.emit(matrixUser)
+            // Also update our session storage
+            sessionStore.updateUserProfile(
+                sessionId = sessionId.value,
+                displayName = matrixUser.displayName,
+                avatarUrl = matrixUser.avatarUrl,
+            )
+        }
 
     override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
         withContext(sessionDispatcher) {
@@ -706,6 +723,18 @@ class RustMatrixClient(
 
     override suspend fun getMaxFileUploadSize(): Result<Long> = withContext(sessionDispatcher) {
         runCatchingExceptions { innerClient.getMaxMediaUploadSize().toLong() }
+    }
+
+    override suspend fun addRecentEmoji(emoji: String): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.addRecentEmoji(emoji)
+        }
+    }
+
+    override suspend fun getRecentEmojis(): Result<List<String>> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.getRecentEmojis().map { it.emoji }
+        }
     }
 
     private suspend fun File.getCacheSize(

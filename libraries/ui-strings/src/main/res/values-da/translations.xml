@@ -105,6 +105,7 @@
   <string name="action_leave">"Forlad"</string>
   <string name="action_leave_conversation">"Forlad samtalen"</string>
   <string name="action_leave_room">"Forlad rum"</string>
+  <string name="action_leave_space">"Forlad klynge"</string>
   <string name="action_load_more">"Indlæs mere"</string>
   <string name="action_manage_account">"Administrer konto"</string>
   <string name="action_manage_devices">"Administrer enheder"</string>
@@ -184,10 +185,12 @@
   <string name="common_creating_room">"Opretter rum…"</string>
   <string name="common_current_user_canceled_knock">"Anmodning annulleret"</string>
   <string name="common_current_user_left_room">"Forlod rummet"</string>
+  <string name="common_current_user_left_space">"Forlod klynge"</string>
   <string name="common_current_user_rejected_invite">"Invitationen blev afvist"</string>
   <string name="common_dark">"Mørkt tema"</string>
   <string name="common_decryption_error">"Fejl under dekryptering"</string>
   <string name="common_description">"Beskrivelse"</string>
+  <string name="common_deselect_all">"Fravælg alle"</string>
   <string name="common_developer_options">"Indstillinger for udviklere"</string>
   <string name="common_device_id">"Enheds-ID"</string>
   <string name="common_direct_chat">"Direkte samtale"</string>
@@ -244,6 +247,7 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Ingen resultater"</string>
   <string name="common_no_room_name">"Intet rumnavn"</string>
+  <string name="common_no_space_name">"Intet klyngenavn"</string>
   <string name="common_not_encrypted">"Ikke krypteret"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Open Source-licenser"</string>
@@ -297,6 +301,7 @@
   <string name="common_security">"Sikkerhed"</string>
   <string name="common_seen_by">"Set af"</string>
   <string name="common_select_account">"Vælg en konto"</string>
+  <string name="common_select_all">"Vælg alle"</string>
   <string name="common_send_to">"Send til"</string>
   <string name="common_sending">"Sender…"</string>
   <string name="common_sending_failed">"Afsendelse mislykkedes"</string>
@@ -306,6 +311,7 @@
   <string name="common_server_unreachable">"Serveren er ikke tilgængelig"</string>
   <string name="common_server_url">"Server URL"</string>
   <string name="common_settings">"Indstillinger"</string>
+  <string name="common_share_space">"Del klynge"</string>
   <string name="common_shared_location">"Delt placering"</string>
   <string name="common_signing_out">"Logger ud"</string>
   <string name="common_something_went_wrong">"Noget gik galt"</string>
@@ -452,6 +458,7 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_share_this_location_action">"Del denne lokation"</string>
   <string name="screen_space_list_description">"Klynger, du har oprettet eller deltager i"</string>
   <string name="screen_space_list_details">"%1$s•%2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s klynge"</string>
   <string name="screen_space_list_title">"Klynger"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Beskeden blev ikke sendt fordi %1$s s bekræftede identitet blev nulstillet."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meddelelsen er ikke sendt, fordi %1$s ikke har bekræftet alle enheder."</string>

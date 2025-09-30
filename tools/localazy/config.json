@@ -201,6 +201,12 @@
       ]
     },
     {
+      "name" : ":features:space:impl",
+      "includeRegex" : [
+        "screen\\.leave_space\\..*"
+      ]
+    },
+    {
       "name" : ":features:userprofile:shared",
       "includeRegex" : [
         "screen_start_chat_error_starting_chat",

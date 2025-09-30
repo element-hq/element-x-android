@@ -14,7 +14,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
@@ -22,7 +22,7 @@ import io.element.android.libraries.di.RoomScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
-@Inject
+@AssistedInject
 class ChangeRoomPermissionsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

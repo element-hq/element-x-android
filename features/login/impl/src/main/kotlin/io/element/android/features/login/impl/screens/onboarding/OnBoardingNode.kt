@@ -16,7 +16,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.util.openLearnMorePage
 import io.element.android.libraries.architecture.NodeInputs
@@ -24,7 +24,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 @ContributesNode(AppScope::class)
-@Inject
+@AssistedInject
 class OnBoardingNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
@@ -97,6 +97,7 @@ class OnBoardingNode(
             onNeedLoginPassword = ::onLoginPasswordNeeded,
             onLearnMoreClick = { openLearnMorePage(context) },
             onCreateAccountContinue = ::onCreateAccountContinue,
+            onBackClick = ::navigateUp,
         )
     }
 }

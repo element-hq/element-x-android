@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.actions.LocationActions
@@ -26,7 +26,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 
-@Inject
+@AssistedInject
 class ShowLocationPresenter(
     @Assisted private val location: Location,
     @Assisted private val description: String?,

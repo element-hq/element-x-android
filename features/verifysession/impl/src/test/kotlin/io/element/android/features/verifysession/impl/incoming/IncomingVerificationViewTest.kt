@@ -62,7 +62,7 @@ class IncomingVerificationViewTest {
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(CommonStrings.action_start)
+        rule.clickOn(CommonStrings.action_start_verification)
         eventsRecorder.assertSingle(IncomingVerificationViewEvents.StartVerification)
     }
 

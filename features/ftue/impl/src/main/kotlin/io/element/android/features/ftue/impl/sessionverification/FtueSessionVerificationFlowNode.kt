@@ -21,7 +21,7 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.features.ftue.impl.sessionverification.choosemode.ChooseSelfVerificationModeNode
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-@Inject
+@AssistedInject
 class FtueSessionVerificationFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

@@ -21,8 +21,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
@@ -51,7 +51,7 @@ import java.io.File
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-@Inject
+@AssistedInject
 class DefaultVoiceMessageComposerPresenter(
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     @Assisted private val timelineMode: Timeline.Mode,

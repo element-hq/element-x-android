@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Прикачване на файл"</string>
+  <string name="rich_text_editor_close_formatting_options">"Отказ и затваряне на форматирането на текст"</string>
+  <string name="rich_text_editor_code_block">"Превключване на кодов блок"</string>
   <string name="rich_text_editor_composer_placeholder">"Съобщение…"</string>
   <string name="rich_text_editor_create_link">"Създаване на връзка"</string>
   <string name="rich_text_editor_edit_link">"Редактиране на връзката"</string>
@@ -8,8 +10,15 @@
   <string name="rich_text_editor_format_italic">"Прилагане на курсив формат"</string>
   <string name="rich_text_editor_format_strikethrough">"Прилагане на зачеркнат формат"</string>
   <string name="rich_text_editor_format_underline">"Прилагане на формат за подчертаване"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Превключване на режим на цял екран"</string>
+  <string name="rich_text_editor_indent">"Отстъп навътре"</string>
   <string name="rich_text_editor_inline_code">"Прилагане на формат на вграден код"</string>
+  <string name="rich_text_editor_link">"Задаване на връзка"</string>
+  <string name="rich_text_editor_numbered_list">"Превключване на номериран списък"</string>
+  <string name="rich_text_editor_open_compose_options">"Отваряне на опциите за съставяне"</string>
   <string name="rich_text_editor_quote">"Превключване на цитат"</string>
   <string name="rich_text_editor_remove_link">"Премахване на връзката"</string>
+  <string name="rich_text_editor_unindent">"Отстъп навън"</string>
   <string name="rich_text_editor_url_placeholder">"Връзка"</string>
+  <string name="screen_room_voice_message_tooltip">"Задръжте, за записване"</string>
 </resources>

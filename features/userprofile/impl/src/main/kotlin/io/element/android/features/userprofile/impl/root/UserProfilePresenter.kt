@@ -19,7 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.startchat.api.StartDMAction
 import io.element.android.features.userprofile.api.UserProfileEvents
@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class UserProfilePresenter(
     @Assisted private val userId: UserId,
     private val client: MatrixClient,

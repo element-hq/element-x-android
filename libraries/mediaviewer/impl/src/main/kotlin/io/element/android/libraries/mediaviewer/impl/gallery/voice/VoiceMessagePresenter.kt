@@ -10,10 +10,10 @@ package io.element.android.libraries.mediaviewer.impl.gallery.voice
 import androidx.compose.runtime.Composable
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.IntoMap
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
@@ -33,7 +33,7 @@ interface VoiceMessagePresenterModule {
     fun bindVoiceMessagePresenterFactory(factory: VoiceMessagePresenter.Factory): MediaItemPresenterFactory<*, *>
 }
 
-@Inject
+@AssistedInject
 class VoiceMessagePresenter(
     voiceMessagePresenterFactory: VoiceMessagePresenterFactory,
     @Assisted private val item: MediaItem.Voice,

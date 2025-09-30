@@ -9,7 +9,7 @@ package io.element.android.features.messages.impl.timeline.factories
 
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.messages.impl.timeline.diff.TimelineItemsCacheInvalidator
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
@@ -29,7 +29,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
-@Inject
+@AssistedInject
 class TimelineItemsFactory(
     @Assisted config: TimelineItemsFactoryConfig,
     eventItemFactoryCreator: TimelineItemEventFactory.Creator,

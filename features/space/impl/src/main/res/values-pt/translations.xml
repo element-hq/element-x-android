@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Sair do espaço e de %1$d sala"</item>
+    <item quantity="other">"Sair do espaço e de %1$d salas"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Também irás sair de todas as salas deste espaço."</string>
+  <string name="screen_leave_space_title">"Sair de %1$s?"</string>
+</resources>

@@ -20,7 +20,7 @@ import com.freeletics.flowredux.compose.StateAndDispatch
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.securebackup.impl.loggerTagSetup
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
@@ -32,7 +32,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Inject
+@AssistedInject
 class SecureBackupSetupPresenter(
     @Assisted private val isChangeRecoveryKeyUserStory: Boolean,
     private val stateMachine: SecureBackupSetupStateMachine,

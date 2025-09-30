@@ -97,6 +97,8 @@ class FakeMatrixClient(
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
     private val getMaxUploadSizeResult: () -> Result<Long> = { lambdaError() },
     private val getJoinedRoomIdsResult: () -> Result<Set<RoomId>> = { Result.success(emptySet()) },
+    private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },
+    private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -348,5 +350,13 @@ class FakeMatrixClient(
 
     override suspend fun getMaxFileUploadSize(): Result<Long> {
         return getMaxUploadSizeResult()
+    }
+
+    override suspend fun addRecentEmoji(emoji: String): Result<Unit> {
+        return addRecentEmojiLambda(emoji)
+    }
+
+    override suspend fun getRecentEmojis(): Result<List<String>> {
+        return getRecentEmojisLambda()
     }
 }

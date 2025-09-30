@@ -10,20 +10,14 @@ package io.element.android.libraries.matrix.api.verification
 import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.FlowId
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SessionVerificationRequestDetails(
-    val senderProfile: SenderProfile,
+    val senderProfile: MatrixUser,
     val flowId: FlowId,
     val deviceId: DeviceId,
+    val deviceDisplayName: String?,
     val firstSeenTimestamp: Long,
-) : Parcelable {
-    @Parcelize
-    data class SenderProfile(
-        val userId: UserId,
-        val displayName: String?,
-        val avatarUrl: String?,
-    ) : Parcelable
-}
+) : Parcelable
