@@ -26,7 +26,7 @@ class ChooseSelfVerificationModePresenter(
 ) : Presenter<ChooseSelfVerificationModeState> {
     @Composable
     override fun present(): ChooseSelfVerificationModeState {
-        val isLastDevice by encryptionService.isLastDevice.collectAsState()
+        val hasDevicesToVerifyAgainst by encryptionService.hasDevicesToVerifyAgainst.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val canEnterRecoveryKey by remember { derivedStateOf { recoveryState == RecoveryState.INCOMPLETE } }
 
@@ -39,7 +39,7 @@ class ChooseSelfVerificationModePresenter(
         }
 
         return ChooseSelfVerificationModeState(
-            isLastDevice = isLastDevice,
+            isLastDevice = !hasDevicesToVerifyAgainst,
             canEnterRecoveryKey = canEnterRecoveryKey,
             directLogoutState = directLogoutState,
             eventSink = ::eventHandler,

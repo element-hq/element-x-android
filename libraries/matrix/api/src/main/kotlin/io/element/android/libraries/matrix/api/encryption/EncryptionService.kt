@@ -17,6 +17,7 @@ interface EncryptionService {
     val recoveryStateStateFlow: StateFlow<RecoveryState>
     val enableRecoveryProgressStateFlow: StateFlow<EnableRecoveryProgress>
     val isLastDevice: StateFlow<Boolean>
+    val hasDevicesToVerifyAgainst: StateFlow<Boolean>
 
     suspend fun enableBackups(): Result<Unit>
 

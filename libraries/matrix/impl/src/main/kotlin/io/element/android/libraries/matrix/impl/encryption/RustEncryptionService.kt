@@ -96,6 +96,15 @@ internal class RustEncryptionService(
     }
         .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
+    override val hasDevicesToVerifyAgainst: StateFlow<Boolean> = flow {
+        while (currentCoroutineContext().isActive) {
+            val result = hasDevicesToVerifyAgainst().getOrDefault(false)
+            emit(result)
+            delay(5_000)
+        }
+    }
+        .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
+
     override suspend fun enableBackups(): Result<Unit> = withContext(dispatchers.io) {
         runCatchingExceptions {
             service.enableBackups()
@@ -166,6 +175,14 @@ internal class RustEncryptionService(
     private suspend fun isLastDevice(): Result<Boolean> = withContext(dispatchers.io) {
         runCatchingExceptions {
             service.isLastDevice()
+        }.mapFailure {
+            it.mapRecoveryException()
+        }
+    }
+
+    private suspend fun hasDevicesToVerifyAgainst(): Result<Boolean> = withContext(dispatchers.io) {
+        runCatchingExceptions {
+            service.hasDevicesToVerifyAgainst()
         }.mapFailure {
             it.mapRecoveryException()
         }
