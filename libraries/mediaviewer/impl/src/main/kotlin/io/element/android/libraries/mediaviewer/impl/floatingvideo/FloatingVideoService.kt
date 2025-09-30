@@ -41,8 +41,10 @@ import timber.log.Timber
 import kotlin.math.abs
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.mediaviewer.impl.R
+import io.element.android.compound.R
+import io.element.android.libraries.ui.strings.CommonStrings
 import java.io.File
 
 class FloatingVideoService : Service() {
@@ -242,12 +244,12 @@ class FloatingVideoService : Service() {
             visibility = View.VISIBLE
         }
         closeButton = ImageView(this).apply {
-            setImageResource(R.drawable.ic_close)
+            setImageResource(R.drawable.ic_compound_close)
             setColorFilter(Color.WHITE)
 
 
 
-            layoutParams = FrameLayout.LayoutParams(dpToPx(24), dpToPx(24)).apply {
+            layoutParams = FrameLayout.LayoutParams(dpToPx(28), dpToPx(28)).apply {
                 gravity = Gravity.TOP or Gravity.END
                 setMargins(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4))
             }
@@ -274,14 +276,14 @@ class FloatingVideoService : Service() {
         overlayContainer?.addView(closeButton)
 
         maximizeButton = ImageView(this).apply {
-            setImageResource(R.drawable.ic_full_screen)
+            setImageResource(R.drawable.ic_compound_expand)
             setColorFilter(Color.WHITE)
 
             background = GradientDrawable().apply {
                 cornerRadius = dpToPx(16).toFloat()
             }
 
-            layoutParams = FrameLayout.LayoutParams(dpToPx(24), dpToPx(24)).apply {
+            layoutParams = FrameLayout.LayoutParams(dpToPx(20), dpToPx(20)).apply {
                 gravity = Gravity.TOP or Gravity.START
                 setMargins(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4))
             }
@@ -424,7 +426,7 @@ class FloatingVideoService : Service() {
                     start()
                 }
                 setOnErrorListener { _, what, extra ->
-                    showErrorInFloatingView(context.getString(R.string.video_playback_error))
+                    showErrorInFloatingView(context.getString(CommonStrings.error_unknown))
                     true
                 }
                 setOnInfoListener { _, what, _ ->
@@ -539,13 +541,15 @@ class FloatingVideoService : Service() {
     }
 
     private fun updateButtonSizes(isMaximized: Boolean) {
-        val size = if (isMaximized) dpToPx(28) else dpToPx(24)
+        val size = if (isMaximized) dpToPx(24) else dpToPx(16)
+        val closeButtonSize = if (isMaximized) dpToPx(28) else dpToPx(20)
+
         val margin = if (isMaximized) dpToPx(12) else dpToPx(4)
 
         closeButton?.layoutParams =
             (closeButton?.layoutParams as? FrameLayout.LayoutParams)?.apply {
-                width = size
-                height = size
+                width = closeButtonSize
+                height = closeButtonSize
                 setMargins(margin, margin, margin, margin)
             }
 
@@ -583,7 +587,7 @@ class FloatingVideoService : Service() {
         if (!isMaximized) {
             isMaximized = true
             maximizeButton?.apply {
-                setImageResource(R.drawable.ic_full_screen)
+                setImageResource(R.drawable.ic_compound_expand)
             }
             updateButtonSizes(false)
             hideControls()
@@ -591,7 +595,7 @@ class FloatingVideoService : Service() {
         } else {
             isMaximized = false
             maximizeButton?.apply {
-                setImageResource(R.drawable.ic_full_screen_exit)
+                setImageResource(R.drawable.ic_compound_collapse)
             }
             updateButtonSizes(true)
             showControls()
