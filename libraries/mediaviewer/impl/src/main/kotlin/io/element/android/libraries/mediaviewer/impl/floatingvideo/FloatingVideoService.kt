@@ -41,7 +41,6 @@ import timber.log.Timber
 import kotlin.math.abs
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.compound.R
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -348,9 +347,7 @@ class FloatingVideoService : Service() {
             visibility = View.VISIBLE
             layoutParams = LinearLayout.LayoutParams(
                 0, dpToPx(32), 1f // take remaining width
-            ).apply {
-                setMargins(8,0,8,0)
-            }
+            )
             setPadding(dpToPx(16), dpToPx(0), dpToPx(16), dpToPx(0))
 
         }
