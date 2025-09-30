@@ -174,7 +174,6 @@ fun MediaViewerView(
                             },
                             audioFocus = audioFocus,
                             isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
-                            setMinimize = setMinimize
                         )
                         // Bottom bar
                         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
@@ -304,7 +303,6 @@ private fun MediaViewerPage(
     onShowOverlayChange: (Boolean) -> Unit,
     audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
-    setMinimize: (Boolean) -> Unit
 ) {
     val currentShowOverlay by rememberUpdatedState(showOverlay)
     val currentOnShowOverlayChange by rememberUpdatedState(onShowOverlayChange)
@@ -504,7 +502,8 @@ private fun MediaViewerTopBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.FullscreenExit,
-                        contentDescription = "Minimize"
+                        //Common string needed (CommonStrings.action_minimize)
+                        contentDescription = stringResource(CommonStrings.error_unknown)
                     )
                 }
             }
