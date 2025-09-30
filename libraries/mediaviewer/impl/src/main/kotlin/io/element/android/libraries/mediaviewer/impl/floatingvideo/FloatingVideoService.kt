@@ -70,7 +70,7 @@ class FloatingVideoService : Service() {
         const val ACTION_START_FLOATING = "START_FLOATING"
         const val ACTION_STOP_FLOATING = "STOP_FLOATING"
         const val ACTION_UPDATE_POSITION = "UPDATE_POSITION"
-        const val EXTRA_VIDEO_ID = "video_id"  // Changed from EXTRA_VIDEO_DATA
+        const val EXTRA_VIDEO_ID = "video_id"
         const val EXTRA_POSITION = "position"
 
         @SuppressLint("ObsoleteSdkInt")
@@ -114,7 +114,6 @@ class FloatingVideoService : Service() {
     private var currentVideoId: String? = null
     private var eventId: String? = null
 
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START_FLOATING -> {
@@ -152,7 +151,6 @@ class FloatingVideoService : Service() {
         return START_STICKY
     }
 
-
     private fun createFloatingView() {
         removeFloatingView()
         floatingView = createFloatingVideoLayout()
@@ -168,10 +166,11 @@ class FloatingVideoService : Service() {
                 PixelFormat.TRANSLUCENT
             )
         } else {
+            @Suppress("DEPRECATION")
             WindowManager.LayoutParams(
                 dpToPx(150),
                 fixedHeight,
-                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.TYPE_PHONE, // Deprecated, but no alternative for pre-O
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT
             )
@@ -283,9 +282,9 @@ class FloatingVideoService : Service() {
                 cornerRadius = dpToPx(16).toFloat()
             }
 
-            layoutParams = FrameLayout.LayoutParams(dpToPx(20), dpToPx(20)).apply {
+            layoutParams = FrameLayout.LayoutParams(dpToPx(16), dpToPx(16)).apply {
                 gravity = Gravity.TOP or Gravity.START
-                setMargins(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4))
+                setMargins(dpToPx(8), dpToPx(8), dpToPx(8), dpToPx(8))
             }
 
             setOnTouchListener { view, event ->
@@ -340,7 +339,6 @@ class FloatingVideoService : Service() {
                     } else {
                         setImageResource(android.R.drawable.ic_media_pause)
                         vv.start()
-
                     }
                 }
             }
@@ -384,7 +382,6 @@ class FloatingVideoService : Service() {
         return container
     }
 
-
     private fun setupVideo(layoutParams: WindowManager.LayoutParams, fixedHeight: Int) {
         currentVideoData?.let { data ->
             val resolvedUri = when (val downloadedState = data.downloadedMedia.value) {
@@ -421,7 +418,6 @@ class FloatingVideoService : Service() {
 
                     if (currentPosition > 0) {
                         seekTo(currentPosition.toInt())
-
                     }
                     start()
                 }
@@ -435,7 +431,6 @@ class FloatingVideoService : Service() {
             }
         }
     }
-
 
     private fun showErrorInFloatingView(message: String) {
         floatingView?.let { view ->
@@ -527,7 +522,6 @@ class FloatingVideoService : Service() {
         })
     }
 
-
     private fun removeFloatingView() {
         floatingView?.let { view ->
             try {
@@ -545,6 +539,8 @@ class FloatingVideoService : Service() {
         val closeButtonSize = if (isMaximized) dpToPx(28) else dpToPx(20)
 
         val margin = if (isMaximized) dpToPx(12) else dpToPx(4)
+        val minimizeButtonMargin = if (isMaximized) dpToPx(14) else dpToPx(6)
+
 
         closeButton?.layoutParams =
             (closeButton?.layoutParams as? FrameLayout.LayoutParams)?.apply {
@@ -557,9 +553,8 @@ class FloatingVideoService : Service() {
             (maximizeButton?.layoutParams as? FrameLayout.LayoutParams)?.apply {
                 width = size
                 height = size
-                setMargins(margin, margin, margin, margin)
+                setMargins(minimizeButtonMargin, minimizeButtonMargin, minimizeButtonMargin, minimizeButtonMargin)
             }
-
 
         // Overlay container does not need weird expressions
         overlayContainer?.layoutParams =
@@ -591,7 +586,6 @@ class FloatingVideoService : Service() {
             }
             updateButtonSizes(false)
             hideControls()
-
         } else {
             isMaximized = false
             maximizeButton?.apply {
@@ -625,7 +619,6 @@ class FloatingVideoService : Service() {
             videoView?.layoutParams = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
             )
-
         } else {
             // Back to floating size
             val fixedHeight = dpToPx(200)
@@ -664,7 +657,6 @@ class FloatingVideoService : Service() {
         }
     }
 
-
     private fun showControls() {
         seekBar?.visibility = View.VISIBLE
 
@@ -676,7 +668,6 @@ class FloatingVideoService : Service() {
     private fun hideControls() {
 
         controlsVisibility = false
-
     }
 
     private fun startProgressUpdater() {
@@ -693,7 +684,6 @@ class FloatingVideoService : Service() {
             }
         })
     }
-
 }
 
 @OptIn(UnstableApi::class)
