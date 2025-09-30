@@ -34,6 +34,7 @@ class FakeEncryptionService(
     override val recoveryStateStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(RecoveryState.UNKNOWN)
     override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Starting)
     override val isLastDevice: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    override val hasDevicesToVerifyAgainst: MutableStateFlow<Boolean> = MutableStateFlow(true)
     private var waitForBackupUploadSteadyStateFlow: Flow<BackupUploadState> = flowOf()
 
     private var recoverFailure: Exception? = null
@@ -81,6 +82,10 @@ class FakeEncryptionService(
 
     fun emitIsLastDevice(isLastDevice: Boolean) {
         this.isLastDevice.value = isLastDevice
+    }
+
+    fun emitHasDevicesToVerifyAgainst(hasDevicesToVerifyAgainst: Boolean) {
+        this.hasDevicesToVerifyAgainst.value = hasDevicesToVerifyAgainst
     }
 
     override suspend fun resetRecoveryKey(): Result<String> = simulateLongTask {

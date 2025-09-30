@@ -32,6 +32,10 @@ class FakeFfiEncryption : Encryption(NoPointer) {
         return false
     }
 
+    override suspend fun hasDevicesToVerifyAgainst(): Boolean {
+        return true
+    }
+
     override fun backupState(): BackupState {
         return BackupState.ENABLED
     }

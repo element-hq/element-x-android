@@ -24,8 +24,8 @@ class ChooseSessionVerificationModePresenterTest {
     @Test
     fun `initial state - is relayed from EncryptionService`() = runTest {
         val encryptionService = FakeEncryptionService().apply {
-            // Is last device
-            emitIsLastDevice(true)
+            // Has device to verify against
+            emitHasDevicesToVerifyAgainst(false)
             // Can enter recovery key
             emitRecoveryState(RecoveryState.INCOMPLETE)
         }
