@@ -127,7 +127,7 @@ class ThreadedMessagesNode(
         fun onCreatePollClick()
         fun onEditPollClick(eventId: EventId)
         fun onJoinCallClick(roomId: RoomId)
-        fun openThread(threadRootId: ThreadId, focusedEventId: EventId?)
+        fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?)
     }
 
     override fun onBuilt() {
@@ -227,6 +227,10 @@ class ThreadedMessagesNode(
         callbacks.forEach { it.onPermalinkClick(permalinkData) }
     }
 
+    override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
+        callbacks.forEach { it.onOpenThread(threadRootId, focusedEventId) }
+    }
+
     private fun onSendLocationClick() {
         callbacks.forEach { it.onSendLocationClick() }
     }
@@ -241,10 +245,6 @@ class ThreadedMessagesNode(
 
     private fun displaySameRoomToast() {
         context.toast(CommonStrings.screen_room_permalink_same_room_android)
-    }
-
-    override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
-        callbacks.forEach { it.openThread(threadRootId, focusedEventId) }
     }
 
     @Composable
@@ -280,11 +280,11 @@ class ThreadedMessagesNode(
                 onUserDataClick = this::onUserDataClick,
                 onLinkClick = { url, customTab ->
                     onLinkClick(
-                        activity,
-                        isDark,
-                        url,
-                        state.timelineState.eventSink,
-                        customTab
+                        activity = activity,
+                        darkTheme = isDark,
+                        url = url,
+                        eventSink = state.timelineState.eventSink,
+                        customTab = customTab,
                     )
                 },
                 onSendLocationClick = this::onSendLocationClick,

@@ -460,7 +460,7 @@ class MessagesFlowNode(
                         elementCallEntryPoint.startCall(callType)
                     }
 
-                    override fun openThread(threadRootId: ThreadId, focusedEventId: EventId?) {
+                    override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
                         backstack.push(NavTarget.OpenThread(threadRootId, focusedEventId))
                     }
                 }

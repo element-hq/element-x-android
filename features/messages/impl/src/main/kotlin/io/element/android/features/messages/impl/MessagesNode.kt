@@ -92,6 +92,14 @@ class MessagesNode(
     private val knockRequestsBannerRenderer: KnockRequestsBannerRenderer,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
+    private val callbacks = plugins<Callback>()
+
+    data class Inputs(
+        val focusedEventId: EventId?,
+    ) : NodeInputs
+
+    private val inputs = inputs<Inputs>()
+
     private val timelineController = TimelineController(room, room.liveTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
@@ -99,18 +107,12 @@ class MessagesNode(
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
         actionListPresenter = actionListPresenterFactory.create(
             postProcessor = TimelineItemActionPostProcessor.Default,
-            timelineMode = timelineController.mainTimelineMode()
+            timelineMode = timelineController.mainTimelineMode(),
         ),
         timelineController = timelineController,
     )
-    private val callbacks = plugins<Callback>()
-
-    data class Inputs(val focusedEventId: EventId?) : NodeInputs
-
-    private val inputs = inputs<Inputs>()
 
     interface Callback : Plugin {
-        fun onRoomDetailsClick()
         fun onEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun onUserDataClick(userId: UserId)
@@ -122,9 +124,10 @@ class MessagesNode(
         fun onCreatePollClick()
         fun onEditPollClick(eventId: EventId)
         fun onJoinCallClick(roomId: RoomId)
+        fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?)
+        fun onRoomDetailsClick()
         fun onViewAllPinnedEvents()
         fun onViewKnockRequests()
-        fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?)
     }
 
     override fun onBuilt() {
@@ -141,6 +144,14 @@ class MessagesNode(
 
     private fun onRoomDetailsClick() {
         callbacks.forEach { it.onRoomDetailsClick() }
+    }
+
+    private fun onViewAllPinnedMessagesClick() {
+        callbacks.forEach { it.onViewAllPinnedEvents() }
+    }
+
+    private fun onViewKnockRequestsClick() {
+        callbacks.forEach { it.onViewKnockRequests() }
     }
 
     private fun onEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
@@ -236,10 +247,6 @@ class MessagesNode(
         callbacks.forEach { it.onOpenThread(threadRootId, focusedEventId) }
     }
 
-    private fun onViewAllPinnedMessagesClick() {
-        callbacks.forEach { it.onViewAllPinnedEvents() }
-    }
-
     private fun onSendLocationClick() {
         callbacks.forEach { it.onSendLocationClick() }
     }
@@ -250,10 +257,6 @@ class MessagesNode(
 
     private fun onJoinCallClick() {
         callbacks.forEach { it.onJoinCallClick(room.roomId) }
-    }
-
-    private fun onViewKnockRequestsClick() {
-        callbacks.forEach { it.onViewKnockRequests() }
     }
 
     private fun displaySameRoomToast() {
@@ -291,7 +294,15 @@ class MessagesNode(
                     }
                 },
                 onUserDataClick = this::onUserDataClick,
-                onLinkClick = { url, customTab -> onLinkClick(activity, isDark, url, state.timelineState.eventSink, customTab) },
+                onLinkClick = { url, customTab ->
+                    onLinkClick(
+                        activity = activity,
+                        darkTheme = isDark,
+                        url = url,
+                        eventSink = state.timelineState.eventSink,
+                        customTab = customTab,
+                    )
+                },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,
