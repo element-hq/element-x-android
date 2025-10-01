@@ -97,6 +97,11 @@ internal class RustEncryptionService(
     }
         .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
+    /**
+     * Check if the user has any devices available to verify against every 5 seconds.
+     * TODO This is a temporary workaround, when we will have a way to observe
+     * the sessions, this code will have to be updated.
+     */
     override val hasDevicesToVerifyAgainst: StateFlow<Boolean> = flow {
         while (currentCoroutineContext().isActive) {
             val result = hasDevicesToVerifyAgainst().getOrDefault(false)
