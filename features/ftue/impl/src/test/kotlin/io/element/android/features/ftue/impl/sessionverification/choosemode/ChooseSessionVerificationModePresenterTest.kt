@@ -32,7 +32,7 @@ class ChooseSessionVerificationModePresenterTest {
         val presenter = createPresenter(encryptionService = encryptionService)
         presenter.test {
             awaitItem().run {
-                assertThat(isLastDevice).isTrue()
+                assertThat(canUseAnotherDevice).isFalse()
                 assertThat(canEnterRecoveryKey).isTrue()
                 assertThat(directLogoutState.logoutAction.isUninitialized()).isTrue()
             }

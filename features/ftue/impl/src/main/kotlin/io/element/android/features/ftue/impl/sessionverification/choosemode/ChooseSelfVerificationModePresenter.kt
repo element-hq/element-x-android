@@ -39,7 +39,7 @@ class ChooseSelfVerificationModePresenter(
         }
 
         return ChooseSelfVerificationModeState(
-            isLastDevice = !hasDevicesToVerifyAgainst,
+            canUseAnotherDevice = hasDevicesToVerifyAgainst,
             canEnterRecoveryKey = canEnterRecoveryKey,
             directLogoutState = directLogoutState,
             eventSink = ::eventHandler,

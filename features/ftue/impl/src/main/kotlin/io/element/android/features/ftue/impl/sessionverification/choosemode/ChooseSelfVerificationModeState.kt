@@ -10,7 +10,7 @@ package io.element.android.features.ftue.impl.sessionverification.choosemode
 import io.element.android.features.logout.api.direct.DirectLogoutState
 
 data class ChooseSelfVerificationModeState(
-    val isLastDevice: Boolean,
+    val canUseAnotherDevice: Boolean,
     val canEnterRecoveryKey: Boolean,
     val directLogoutState: DirectLogoutState,
     val eventSink: (ChooseSelfVerificationModeEvent) -> Unit,

@@ -43,7 +43,7 @@ class ChooseSessionVerificationModeViewTest {
     fun `clicking on use another device calls the callback`() {
         ensureCalledOnce { callback ->
             rule.setChooseSelfVerificationModeView(
-                aChooseSelfVerificationModeState(isLastDevice = false),
+                aChooseSelfVerificationModeState(canUseAnotherDevice = true),
                 onUseAnotherDevice = callback,
             )
             rule.clickOn(R.string.screen_identity_use_another_device)

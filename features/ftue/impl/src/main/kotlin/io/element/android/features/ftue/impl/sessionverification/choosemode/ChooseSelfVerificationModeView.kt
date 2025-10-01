@@ -76,7 +76,7 @@ fun ChooseSelfVerificationModeView(
             ButtonColumnMolecule(
                 modifier = Modifier.padding(bottom = 16.dp)
             ) {
-                if (state.isLastDevice.not()) {
+                if (state.canUseAnotherDevice) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_identity_use_another_device),
