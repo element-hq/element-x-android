@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
@@ -184,7 +185,7 @@ internal class RustEncryptionService(
         runCatchingExceptions {
             service.hasDevicesToVerifyAgainst()
         }.mapFailure {
-            it.mapRecoveryException()
+            it.mapClientException()
         }
     }
 
