@@ -40,7 +40,7 @@ jobs:
           java-version: '21'
       # Add gradle cache, this should speed up the process
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Record screenshots
