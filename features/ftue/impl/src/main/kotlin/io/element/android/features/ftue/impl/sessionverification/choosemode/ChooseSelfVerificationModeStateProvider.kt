@@ -13,10 +13,10 @@ import io.element.android.features.logout.api.direct.aDirectLogoutState
 class ChooseSelfVerificationModeStateProvider :
     PreviewParameterProvider<ChooseSelfVerificationModeState> {
     override val values = sequenceOf(
-        aChooseSelfVerificationModeState(canUseAnotherDevice = true, canEnterRecoveryKey = true),
-        aChooseSelfVerificationModeState(canUseAnotherDevice = true, canEnterRecoveryKey = false),
         aChooseSelfVerificationModeState(canUseAnotherDevice = false, canEnterRecoveryKey = true),
         aChooseSelfVerificationModeState(canUseAnotherDevice = false, canEnterRecoveryKey = false),
+        aChooseSelfVerificationModeState(canUseAnotherDevice = true, canEnterRecoveryKey = true),
+        aChooseSelfVerificationModeState(canUseAnotherDevice = true, canEnterRecoveryKey = false),
     )
 }
 
