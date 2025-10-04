@@ -12,58 +12,75 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.PixelFormat
-import android.graphics.drawable.GradientDrawable
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.Gravity
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.SeekBar
-import android.widget.TextView
 import android.widget.VideoView
 import androidx.annotation.OptIn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Fullscreen
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerPageData
 import timber.log.Timber
-import kotlin.math.abs
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
+import androidx.savedstate.SavedStateRegistry
+import androidx.savedstate.SavedStateRegistryController
+import androidx.savedstate.SavedStateRegistryOwner
+import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.compound.R
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.ui.strings.CommonStrings
 import java.io.File
+import androidx.core.net.toUri
 
-class FloatingVideoService : Service() {
+class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, SavedStateRegistryOwner {
     private var windowManager: WindowManager? = null
     private var floatingView: View? = null
     private var videoView: VideoView? = null
-    private var closeButton: ImageView? = null
-    private var maximizeButton: ImageView? = null
-    private var playPauseButton: ImageView? = null
-    private var overlayContainer: FrameLayout? = null
     private var currentVideoData: MediaViewerPageData.MediaViewerData? = null
     private var currentPosition: Long = 0L
     private var isMaximized = true
-    private var seekBar: SeekBar? = null
-    private var progressHandler = Handler(Looper.getMainLooper())
 
-    private var overlayHandler = Handler(Looper.getMainLooper())
-    private var controlsVisibility: Boolean = false
-
-    private lateinit var layoutParams: WindowManager.LayoutParams
+    private lateinit var windowLayoutParams: WindowManager.LayoutParams
 
     companion object {
         const val ACTION_START_FLOATING = "START_FLOATING"
@@ -79,7 +96,7 @@ class FloatingVideoService : Service() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
                 // Request overlay permission
                 val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
-                    data = Uri.parse("package:${context.packageName}")
+                    data = "package:${context.packageName}".toUri()
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
 
@@ -105,9 +122,26 @@ class FloatingVideoService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
+    override val viewModelStore = ViewModelStore()
+    private val lifecycleRegistry = LifecycleRegistry(this)
+    private val savedStateRegistryController = SavedStateRegistryController.create(this)
+    override val lifecycle: Lifecycle
+        get() = lifecycleRegistry
+
+    override val savedStateRegistry: SavedStateRegistry
+        get() = savedStateRegistryController.savedStateRegistry
+
     override fun onCreate() {
         super.onCreate()
-        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
+        // 1. Attach controller
+        savedStateRegistryController.performAttach()
+
+        // 2. Restore state (if any)
+        savedStateRegistryController.performRestore(null)
+
+        // 3. Now move lifecycle forward
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
     }
 
     private var currentVideoId: String? = null
@@ -152,14 +186,12 @@ class FloatingVideoService : Service() {
 
     private fun createFloatingView() {
         removeFloatingView()
-        floatingView = createFloatingVideoLayout()
-        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
-        val fixedHeight = dpToPx(200)
-        layoutParams = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        windowLayoutParams = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams(
-                dpToPx(150),
-                fixedHeight,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT
@@ -167,356 +199,45 @@ class FloatingVideoService : Service() {
         } else {
             @Suppress("DEPRECATION")
             WindowManager.LayoutParams(
-                dpToPx(150),
-                fixedHeight,
-                WindowManager.LayoutParams.TYPE_PHONE, // Deprecated, but no alternative for pre-O
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT
             )
         }
 
-        layoutParams.gravity = Gravity.TOP or Gravity.START
-        layoutParams.x = getScreenWidth() - dpToPx(150) - dpToPx(16)
-        layoutParams.y = getScreenHeight() - fixedHeight - dpToPx(100)
+        windowLayoutParams.gravity = Gravity.TOP or Gravity.START
+        windowLayoutParams.x = 0
+        windowLayoutParams.y = getScreenHeight() - dpToPx(300)
 
-        setupTouchListener(layoutParams)
+        val composeView = ComposeView(this).apply {
+            setViewTreeLifecycleOwner(this@FloatingVideoService)
+            setViewTreeViewModelStoreOwner(this@FloatingVideoService)
+            setViewTreeSavedStateRegistryOwner(this@FloatingVideoService)
+            setContent {
+                FloatingVideoOverlay(
+                    onClose = {
+                        removeFloatingView()
+                        stopSelf()
+                    },
+                    onToggleFullScreen = {
+                        Timber.tag("onToggleFullScreen").d(isMaximized.toString())
+                        toggleFullScreen()
+                    }
+                )
+            }
+        }
+
+
+        floatingView = composeView
+
 
         try {
-            windowManager?.addView(floatingView, layoutParams)
-
-            setupVideo(layoutParams, fixedHeight)
+            windowManager?.addView(floatingView, windowLayoutParams)
         } catch (e: Exception) {
             Timber.tag("FloatingVideoService").e(e, "Error adding floating view")
         }
-    }
-
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun createFloatingVideoLayout(): ViewGroup {
-        var cornerRadius = dpToPx(0).toFloat()
-
-        val container = FrameLayout(this).apply {
-            layoutDirection = View.LAYOUT_DIRECTION_LTR
-            clipToOutline = true // This enables corner clipping
-
-            background = GradientDrawable().apply {
-                setColor(Color.BLACK) // Optional: background behind video
-                this.cornerRadius = cornerRadius
-            }
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-
-                )
-        }
-        videoView = VideoView(this).apply {
-            id = View.generateViewId()
-            layoutDirection = View.LAYOUT_DIRECTION_LTR
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
-            ).apply {
-                setMargins(2, 2, 2, 2)
-            }
-
-        }
-
-        container.addView(videoView)
-        overlayContainer = FrameLayout(this).apply {
-            id = View.generateViewId()
-            layoutDirection = View.LAYOUT_DIRECTION_LTR
-
-            // Semi-transparent black background
-            background = GradientDrawable().apply {
-                setColor(Color.parseColor("#80000000")) // 50% transparent black
-            }
-
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, dpToPx(32)
-            )
-
-            isFocusable = false
-            isFocusableInTouchMode = false
-            descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
-            clearFocus()
-            // Initially visible, you can hide/show this container for auto-hide functionality
-            visibility = View.VISIBLE
-        }
-        closeButton = ImageView(this).apply {
-            setImageResource(R.drawable.ic_compound_close)
-            setColorFilter(Color.WHITE)
-
-
-
-            layoutParams = FrameLayout.LayoutParams(dpToPx(28), dpToPx(28)).apply {
-                gravity = Gravity.TOP or Gravity.END
-                setMargins(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4))
-            }
-            setOnTouchListener { view, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        view.alpha = 0.7f
-                        true
-                    }
-
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                        view.alpha = 1f
-                        if (event.action == MotionEvent.ACTION_UP) {
-                            removeFloatingView()
-                            stopSelf()
-                        }
-                        true
-                    }
-
-                    else -> false
-                }
-            }
-        }
-        overlayContainer?.addView(closeButton)
-
-        maximizeButton = ImageView(this).apply {
-            setImageResource(R.drawable.ic_compound_expand)
-            setColorFilter(Color.WHITE)
-
-            background = GradientDrawable().apply {
-                cornerRadius = dpToPx(16).toFloat()
-            }
-
-            layoutParams = FrameLayout.LayoutParams(dpToPx(16), dpToPx(16)).apply {
-                gravity = Gravity.TOP or Gravity.START
-                setMargins(dpToPx(8), dpToPx(8), dpToPx(8), dpToPx(8))
-            }
-
-            setOnTouchListener { view, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        view.alpha = 0.7f
-                        true
-                    }
-
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                        view.alpha = 1f
-                        if (event.action == MotionEvent.ACTION_UP) {
-                            toggleFullScreen()
-                        }
-                        true
-                    }
-
-                    else -> false
-                }
-            }
-        }
-        overlayContainer?.addView(maximizeButton)
-
-        val controlBar = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                dpToPx(48) // height of bar
-            ).apply {
-                gravity = Gravity.BOTTOM
-            }
-            setPadding(dpToPx(8), dpToPx(4), dpToPx(8), dpToPx(4))
-            setBackgroundColor(Color.parseColor("#80000000")) // optional semi-transparent bg
-        }
-        playPauseButton = ImageView(this).apply {
-            setImageResource(android.R.drawable.ic_media_pause)
-            setColorFilter(Color.WHITE)
-            background = GradientDrawable().apply {
-                shape = GradientDrawable.OVAL
-                setColor(Color.parseColor("#40FFFFFF")) // semi-transparent background
-            }
-            layoutParams = LinearLayout.LayoutParams(dpToPx(20), dpToPx(20)).apply {
-
-            }
-
-            setOnClickListener {
-                videoView?.let { vv ->
-                    if (vv.isPlaying) {
-                        vv.pause()
-                        setImageResource(android.R.drawable.ic_media_play)
-                    } else {
-                        setImageResource(android.R.drawable.ic_media_pause)
-                        vv.start()
-                    }
-                }
-            }
-        }
-
-        seekBar = SeekBar(this).apply {
-            visibility = View.VISIBLE
-            layoutParams = LinearLayout.LayoutParams(
-                0, dpToPx(32), 1f // take remaining width
-            )
-            setPadding(dpToPx(16), dpToPx(0), dpToPx(16), dpToPx(0))
-
-        }
-
-        controlBar.addView(playPauseButton)
-        controlBar.addView(seekBar)
-
-// Add control bar to container
-        container.addView(controlBar)
-        seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    videoView?.seekTo(progress)
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // pause updates while user is dragging
-                progressHandler.removeCallbacksAndMessages(null)
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                startProgressUpdater()
-                showControls()
-            }
-        })
-
-        container.addView(overlayContainer)
-        return container
-    }
-
-    private fun setupVideo(layoutParams: WindowManager.LayoutParams, fixedHeight: Int) {
-        currentVideoData?.let { data ->
-            val resolvedUri = when (val downloadedState = data.downloadedMedia.value) {
-                is AsyncData.Success -> downloadedState.data.uri
-                else -> getVideoUriFromMediaSource(data.mediaSource)
-            }
-            videoView?.apply {
-                stopPlayback()
-                setVideoURI(resolvedUri)
-                setMediaController(null)
-
-                setOnPreparedListener { mediaPlayer ->
-                    seekBar?.max = mediaPlayer.duration
-                    startProgressUpdater()
-                    mediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
-
-                    // Calculate scaled width for fixed height
-                    val videoWidth = mediaPlayer.videoWidth
-                    val videoHeight = mediaPlayer.videoHeight
-                    if (videoWidth > 0 && videoHeight > 0) {
-                        val scaledWidth = fixedHeight * videoWidth / videoHeight
-                        layoutParams.width = scaledWidth
-                        layoutParams.height = fixedHeight
-                        windowManager?.updateViewLayout(floatingView, layoutParams)
-
-                        val videoLayoutParams = videoView?.layoutParams
-                        videoLayoutParams?.width = scaledWidth
-                        videoLayoutParams?.height = fixedHeight
-                        videoView?.layoutParams = videoLayoutParams
-
-                        Timber.tag("FloatingVideoService")
-                            .d("Updated floating view size: ${scaledWidth}x$fixedHeight")
-                    }
-
-                    if (currentPosition > 0) {
-                        seekTo(currentPosition.toInt())
-                    }
-                    start()
-                }
-                setOnErrorListener { _, what, extra ->
-                    showErrorInFloatingView(context.getString(CommonStrings.error_unknown))
-                    true
-                }
-                setOnInfoListener { _, what, _ ->
-                    false
-                }
-            }
-        }
-    }
-
-    private fun showErrorInFloatingView(message: String) {
-        floatingView?.let { view ->
-            // Find or create a TextView to show error
-            var errorText = view.findViewWithTag<TextView>("error_text")
-            if (errorText == null) {
-                errorText = TextView(this).apply {
-                    tag = "error_text"
-                    text = message
-                    setTextColor(Color.WHITE)
-                    textSize = 12f
-                    gravity = Gravity.CENTER
-                    setBackgroundColor(Color.TRANSPARENT)
-
-                    layoutParams = FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
-                    ).apply {
-                        gravity = Gravity.CENTER
-                    }
-                }
-                (view as ViewGroup).addView(errorText)
-            } else {
-                errorText.text = message
-                errorText.visibility = View.VISIBLE
-            }
-        }
-    }
-
-    private fun setupTouchListener(layoutParams: WindowManager.LayoutParams) {
-        floatingView?.setOnTouchListener(object : View.OnTouchListener {
-            private var initialX = 0
-            private var initialY = 0
-            private var initialTouchX = 0f
-            private var initialTouchY = 0f
-            private var isDragging = false
-
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                when (event?.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        initialX = layoutParams.x
-                        initialY = layoutParams.y
-                        initialTouchX = event.rawX
-                        initialTouchY = event.rawY
-                        isDragging = false
-                        return true
-                    }
-
-                    MotionEvent.ACTION_MOVE -> {
-                        val deltaX = event.rawX - initialTouchX
-                        val deltaY = event.rawY - initialTouchY
-
-                        if (abs(deltaX) > 10 || abs(deltaY) > 10) {
-                            isDragging = true
-                            layoutParams.x = initialX + deltaX.toInt()
-                            layoutParams.y = initialY + deltaY.toInt()
-
-                            layoutParams.x =
-                                layoutParams.x.coerceIn(0, getScreenWidth() - dpToPx(150))
-                            layoutParams.y =
-                                layoutParams.y.coerceIn(0, getScreenHeight() - dpToPx(100))
-
-                            windowManager?.updateViewLayout(floatingView, layoutParams)
-                        }
-                        return true
-                    }
-
-                    MotionEvent.ACTION_UP -> {
-                        if (!isDragging) {
-                            // Single tap - toggle play/pause
-                            videoView?.let { vv ->
-                                if (vv.isPlaying) {
-                                    vv.pause()
-                                    playPauseButton?.setImageResource(
-                                        android.R.drawable.ic_media_play
-                                    )
-                                } else {
-                                    vv.start()
-                                    playPauseButton?.setImageResource(
-                                        android.R.drawable.ic_media_pause
-                                    )
-                                }
-                            }
-                        }
-                        return true
-                    }
-                }
-                return false
-            }
-        })
     }
 
     private fun removeFloatingView() {
@@ -531,44 +252,175 @@ class FloatingVideoService : Service() {
         }
     }
 
-    private fun updateButtonSizes(isMaximized: Boolean) {
-        val size = if (isMaximized) dpToPx(24) else dpToPx(16)
-        val closeButtonSize = if (isMaximized) dpToPx(28) else dpToPx(20)
+    @Composable
+    fun FloatingVideoOverlay(
+        onClose: () -> Unit,
+        onToggleFullScreen: () -> Unit
+    ) {
+        var currentAspectRatio by remember { mutableStateOf(16f / 9f) }
+        val videoViewRef = remember { mutableStateOf<VideoView?>(null) }
 
-        val margin = if (isMaximized) dpToPx(12) else dpToPx(4)
-        val minimizeButtonMargin = if (isMaximized) dpToPx(14) else dpToPx(6)
 
 
-        closeButton?.layoutParams =
-            (closeButton?.layoutParams as? FrameLayout.LayoutParams)?.apply {
-                width = closeButtonSize
-                height = closeButtonSize
-                setMargins(margin, margin, margin, margin)
+        var resolvedUri: Uri = Uri.EMPTY
+        currentVideoData?.let { data ->
+            resolvedUri = when (val downloadedState = data.downloadedMedia.value) {
+                is AsyncData.Success -> downloadedState.data.uri
+                else -> getVideoUriFromMediaSource(data.mediaSource)
             }
+        }
 
-        maximizeButton?.layoutParams =
-            (maximizeButton?.layoutParams as? FrameLayout.LayoutParams)?.apply {
-                width = size
-                height = size
-                setMargins(minimizeButtonMargin, minimizeButtonMargin, minimizeButtonMargin, minimizeButtonMargin)
+        // Function to update window size directly
+        fun updateWindowSize(aspectRatio: Float) {
+            val widthFrac = if (aspectRatio > 1f) 0.6f else 0.3f
+            val width = if (isMaximized) {
+                (getScreenWidth() * widthFrac).toInt()
+            } else {
+                (getScreenWidth() * 0.9f).toInt()
             }
+            val height = (width / aspectRatio).toInt()
 
-        // Overlay container does not need weird expressions
-        overlayContainer?.layoutParams =
-            (overlayContainer?.layoutParams as? FrameLayout.LayoutParams)?.apply {
-                width = FrameLayout.LayoutParams.MATCH_PARENT
-                height = FrameLayout.LayoutParams.WRAP_CONTENT
+            Timber.tag("WindowUpdate").d("Updating window - width: $width, height: $height, aspectRatio: $aspectRatio")
+
+            windowLayoutParams.width = width
+            windowLayoutParams.height = height
+            windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            windowManager?.updateViewLayout(floatingView, windowLayoutParams)
+        }
+
+        // Initial window size (16:9)
+        LaunchedEffect(Unit) {
+            updateWindowSize(16f / 9f)
+        }
+
+        // Update window size when isMaximized changes
+        LaunchedEffect(isMaximized) {
+            Timber.tag("MaximizeToggle").d("isMaximized changed to: $isMaximized, updating with aspectRatio: $currentAspectRatio")
+            updateWindowSize(currentAspectRatio)
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = androidx.compose.ui.graphics.Color.Black).pointerInput(Unit) {
+                    var dragStarted = false
+                    detectTapGestures(
+                        onPress = {
+                            dragStarted = false
+                        },
+                        onTap = {
+                            if (!dragStarted) {
+                                videoViewRef.value?.let { video ->
+                                    if (video.isPlaying) {
+                                        video.pause()
+                                    } else {
+                                        video.start()
+                                    }
+                                }
+                            }
+                        }
+                    )
+                }
+        ) {
+            // Video layer
+            AndroidView(
+                factory = { context ->
+                    VideoView(context).apply {
+                        videoViewRef.value = this
+                        setVideoURI(resolvedUri)
+                        setOnPreparedListener { mp ->
+                            val videoWidth = mp.videoWidth
+                            val videoHeight = mp.videoHeight
+
+                            if (videoWidth > 0 && videoHeight > 0) {
+                                val newAspectRatio = videoWidth.toFloat() / videoHeight
+
+                                // Store the aspect ratio and update window size
+                                android.os.Handler(android.os.Looper.getMainLooper()).post {
+                                    currentAspectRatio = newAspectRatio
+                                    updateWindowSize(newAspectRatio)
+                                }
+                            }
+                            start()
+                        }
+
+                    }
+                },
+                update = { videoView ->
+                    if (resolvedUri != Uri.EMPTY && videoView.currentPosition == 0) {
+                        videoView.setVideoURI(resolvedUri)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectDragGestures { change, dragAmount ->
+                            change.consume()
+                            val newX = windowLayoutParams.x + dragAmount.x.toInt()
+                            val newY = windowLayoutParams.y + dragAmount.y.toInt()
+                            windowLayoutParams.x = newX
+                            windowLayoutParams.y = newY
+                            windowManager?.updateViewLayout(floatingView, windowLayoutParams)
+                        }
+                    }
+            )
+
+            Row(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .background(
+                        brush = androidx.compose.ui.graphics.Brush.verticalGradient(
+                            colors = listOf(
+                                androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.6f),
+                                androidx.compose.ui.graphics.Color.Transparent
+                            )
+                        )
+                    )
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                IconButton(
+                    onClick = {
+                        onToggleFullScreen()
+                        updateWindowSize(currentAspectRatio)
+                    },
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Fullscreen,
+                        //action full screen needs to be added to CommonsString
+                        contentDescription = stringResource(CommonStrings.action_view),
+                        tint = androidx.compose.ui.graphics.Color.White
+                    )
+                }
+
+                IconButton(
+                    onClick = onClose,
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(CommonStrings.action_close),
+                        tint = androidx.compose.ui.graphics.Color.White
+                    )
+                }
             }
-
-        // Make sure to request layout after changes
-        closeButton?.requestLayout()
-        maximizeButton?.requestLayout()
-        overlayContainer?.requestLayout()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         removeFloatingView()
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        viewModelStore.clear()
     }
 
     private fun dpToPx(dp: Int): Int {
@@ -576,21 +428,7 @@ class FloatingVideoService : Service() {
     }
 
     private fun toggleFullScreen() {
-        if (!isMaximized) {
-            isMaximized = true
-            maximizeButton?.apply {
-                setImageResource(R.drawable.ic_compound_expand)
-            }
-            updateButtonSizes(false)
-            hideControls()
-        } else {
-            isMaximized = false
-            maximizeButton?.apply {
-                setImageResource(R.drawable.ic_compound_collapse)
-            }
-            updateButtonSizes(true)
-            showControls()
-        }
+        isMaximized = !isMaximized
 
         if (floatingView?.parent == null) return
 
@@ -599,37 +437,28 @@ class FloatingVideoService : Service() {
             val margin = dpToPx(24)
 
             // shrink the container size by margins
-            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-            layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-            layoutParams.x = 0
-            layoutParams.y = 0
+            windowLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+            windowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+            windowLayoutParams.x = 0
+            windowLayoutParams.y = 0
 
             // video fills the container, container itself is inset by margins
             val screenWidth = Resources.getSystem().displayMetrics.widthPixels
-            val screenHeight = Resources.getSystem().displayMetrics.heightPixels
 
-            layoutParams.width = screenWidth - margin * 2
-            layoutParams.height = screenHeight - margin * 2
-            layoutParams.x = margin
-            layoutParams.y = margin
-
-            videoView?.layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
-            )
+            windowLayoutParams.width = screenWidth - margin * 2
+            windowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+            windowLayoutParams.x = margin
+            windowLayoutParams.y = margin
         } else {
-            // Back to floating size
-            val fixedHeight = dpToPx(200)
-            val scaledWidth = fixedHeight * (videoView?.width ?: 16) / (videoView?.height ?: 9)
+            val scaledWidth = getScreenWidth() * 0.3f
 
-            layoutParams.width = scaledWidth
-            layoutParams.height = fixedHeight
-            layoutParams.x = 0
-            layoutParams.y = 0
-
-            videoView?.layoutParams = FrameLayout.LayoutParams(scaledWidth, fixedHeight)
+            windowLayoutParams.width = scaledWidth.toInt()
+            windowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+            windowLayoutParams.x = 0
+            windowLayoutParams.y = 0
         }
 
-        windowManager?.updateViewLayout(floatingView, layoutParams)
+        windowManager?.updateViewLayout(floatingView, windowLayoutParams)
     }
 
     private fun getScreenWidth(): Int {
@@ -653,34 +482,6 @@ class FloatingVideoService : Service() {
             displayMetrics.heightPixels
         }
     }
-
-    private fun showControls() {
-        seekBar?.visibility = View.VISIBLE
-
-        overlayHandler.removeCallbacksAndMessages(null)
-        overlayHandler.postDelayed({ hideControls() }, 3000)
-        controlsVisibility = true
-    }
-
-    private fun hideControls() {
-
-        controlsVisibility = false
-    }
-
-    private fun startProgressUpdater() {
-        progressHandler.post(object : Runnable {
-            override fun run() {
-                if (videoView != null && videoView!!.isPlaying) {
-                    seekBar?.progress = videoView!!.currentPosition
-                    if (!videoView!!.isPlaying) {
-                        // show controls automatically when paused
-                        showControls()
-                    }
-                }
-                progressHandler.postDelayed(this, 500) // update every 0.5s
-            }
-        })
-    }
 }
 
 @OptIn(UnstableApi::class)
@@ -692,11 +493,11 @@ fun getVideoUriFromMediaSource(mediaSource: MediaSource): Uri {
         when {
             url.startsWith("http://") || url.startsWith("https://") -> {
                 // Remote URL
-                Uri.parse(url)
+                url.toUri()
             }
             url.startsWith("file://") -> {
                 // Already a file URI
-                Uri.parse(url)
+                url.toUri()
             }
             url.startsWith("/") -> {
                 // Local file path, convert to file URI
@@ -704,15 +505,16 @@ fun getVideoUriFromMediaSource(mediaSource: MediaSource): Uri {
             }
             url.startsWith("content://") -> {
                 // Content URI (from MediaStore, etc.)
-                Uri.parse(url)
+                url.toUri()
             }
             else -> {
                 Log.w("VideoPlayer", "Unknown URL format: $url")
                 // Try parsing as-is, might work
-                Uri.parse(url)
+                url.toUri()
             }
         }
     } catch (e: Exception) {
+        Timber.tag("Uri Parsing").e(e)
         Uri.EMPTY
     }
 }
