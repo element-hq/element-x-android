@@ -36,4 +36,10 @@ interface Feature {
      * If true: the feature is finished, it will not appear in the developer options screen.
      */
     val isFinished: Boolean
+
+    /**
+     * Whether the feature is only available in Labs (and not in developer options).
+     * Feature flags that set this to `true` can be enabled by any users, not only those that have enabled developer mode.
+     */
+    val isInLabs: Boolean
 }

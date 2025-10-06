@@ -90,8 +90,8 @@ class DeveloperSettingsPresenter(
         }
 
         LaunchedEffect(Unit) {
-            FeatureFlags.entries
-                .filter { it.isFinished.not() }
+            featureFlagService.getAvailableFeatures()
+                .filter { it.isInLabs.not() && it.isFinished.not() }
                 .run {
                     // Never display room directory search in release builds for Play Store
                     if (buildMeta.flavorDescription == "GooglePlay" && buildMeta.buildType == BuildType.RELEASE) {
@@ -169,6 +169,7 @@ class DeveloperSettingsPresenter(
                         key = feature.key,
                         title = feature.title,
                         description = feature.description,
+                        icon = null,
                         isEnabled = isEnabled
                     )
                 }

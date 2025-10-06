@@ -30,6 +30,7 @@ import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNod
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.blockedusers.BlockedUsersNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
+import io.element.android.features.preferences.impl.labs.LabsNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
@@ -74,6 +75,9 @@ class PreferencesFlowNode(
 
         @Parcelize
         data object AdvancedSettings : NavTarget
+
+        @Parcelize
+        data object Labs : NavTarget
 
         @Parcelize
         data object AnalyticsSettings : NavTarget
@@ -152,6 +156,10 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.AdvancedSettings)
                     }
 
+                    override fun onOpenLabs() {
+                        backstack.push(NavTarget.Labs)
+                    }
+
                     override fun onOpenUserProfile(matrixUser: MatrixUser) {
                         backstack.push(NavTarget.UserProfile(matrixUser))
                     }
@@ -177,6 +185,9 @@ class PreferencesFlowNode(
                     }
                 }
                 createNode<DeveloperSettingsNode>(buildContext, listOf(developerSettingsCallback))
+            }
+            NavTarget.Labs -> {
+                createNode<LabsNode>(buildContext)
             }
             NavTarget.About -> {
                 val callback = object : AboutNode.Callback {

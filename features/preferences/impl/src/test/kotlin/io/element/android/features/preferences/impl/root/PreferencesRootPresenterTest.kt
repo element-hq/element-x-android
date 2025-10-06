@@ -18,6 +18,7 @@ import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.indicator.test.FakeIndicatorService
@@ -181,6 +182,52 @@ class PreferencesRootPresenterTest {
                 loadedState.eventSink(PreferencesRootEvents.OnVersionInfoClick)
             }
             assertThat(awaitItem().showDeveloperSettings).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - labs can be shown if any feature flag is in labs and not finished`() = runTest {
+        createPresenter(
+            featureFlagService = FakeFeatureFlagService(
+                providedAvailableFeatures = listOf(
+                    FakeFeature(
+                        key = "feature_1",
+                        title = "Feature 1",
+                        isInLabs = true,
+                        isFinished = false,
+                    )
+                )
+            ),
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { true },
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+        ).test {
+            assertThat(awaitItem().showLabsItem).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - labs can't be shown if all feature flags in labs are finished`() = runTest {
+        createPresenter(
+            featureFlagService = FakeFeatureFlagService(
+                providedAvailableFeatures = listOf(
+                    FakeFeature(
+                        key = "feature_1",
+                        title = "Feature 1",
+                        isInLabs = true,
+                        isFinished = true,
+                    )
+                )
+            ),
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { true },
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+        ).test {
+            assertThat(awaitItem().showLabsItem).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

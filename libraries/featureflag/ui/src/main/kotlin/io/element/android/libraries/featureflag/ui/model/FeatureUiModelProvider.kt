@@ -12,7 +12,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 fun aFeatureUiModelList(): ImmutableList<FeatureUiModel> {
     return persistentListOf(
-        FeatureUiModel("key1", "Display State Events", "Show state events in the timeline", true),
-        FeatureUiModel("key2", "Display Room Events", null, false),
+        FeatureUiModel(key = "key1", title = "Display State Events", description = "Show state events in the timeline", icon = null, isEnabled = true),
+        FeatureUiModel(key = "key2", title = "Display Room Events", description = null, icon = null, isEnabled = false),
     )
 }

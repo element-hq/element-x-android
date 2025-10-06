@@ -19,6 +19,7 @@ enum class FeatureFlags(
     override val description: String? = null,
     override val defaultValue: (BuildMeta) -> Boolean,
     override val isFinished: Boolean,
+    override val isInLabs: Boolean = false,
 ) : Feature {
     RoomDirectorySearch(
         key = "feature.roomdirectorysearch",
@@ -99,6 +100,7 @@ enum class FeatureFlags(
         description = "Renders thread messages as a dedicated timeline. Restarting the app is required for this setting to fully take effect.",
         defaultValue = { false },
         isFinished = false,
+        isInLabs = true,
     ),
     MultiAccount(
         key = "feature.multi_account",

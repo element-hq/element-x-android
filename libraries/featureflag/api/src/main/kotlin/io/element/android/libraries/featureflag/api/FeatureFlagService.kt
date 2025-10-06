@@ -33,4 +33,9 @@ interface FeatureFlagService {
      * is registered
      */
     suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean): Boolean
+
+    /**
+     * @return the list of available (not finished) features that can be toggled.
+     */
+    fun getAvailableFeatures(): List<Feature>
 }

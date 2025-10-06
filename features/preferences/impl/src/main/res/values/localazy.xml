@@ -44,6 +44,10 @@
   <string name="screen_edit_profile_error_title">"Unable to update profile"</string>
   <string name="screen_edit_profile_title">"Edit profile"</string>
   <string name="screen_edit_profile_updating_details">"Updating profile…"</string>
+  <string name="screen_labs_enable_threads">"Enable thread replies"</string>
+  <string name="screen_labs_header_description">"Try out our latest ideas in development. These features are not finalised; they may be unstable, may change."</string>
+  <string name="screen_labs_header_title">"Feeling experimental?"</string>
+  <string name="screen_labs_title">"Labs"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
   <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Configuration mismatch"</string>

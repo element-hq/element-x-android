@@ -299,7 +299,8 @@
         "screen_notification_settings_.*",
         "screen_blocked_users_.*",
         "full_screen_intent_banner_.*",
-        "troubleshoot_notifications_entry_point_.*"
+        "troubleshoot_notifications_entry_point_.*",
+        "screen\\.labs\\..*"
       ]
     },
     {

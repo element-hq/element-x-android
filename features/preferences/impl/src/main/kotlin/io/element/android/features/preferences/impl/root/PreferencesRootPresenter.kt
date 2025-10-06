@@ -112,6 +112,8 @@ class PreferencesRootPresenter(
                 .launchIn(this)
         }
 
+        val showLabsItem = remember { featureFlagService.getAvailableFeatures().any { it.isInLabs && !it.isFinished } }
+
         val directLogoutState = directLogoutPresenter.present()
 
         LaunchedEffect(Unit) {
@@ -146,6 +148,7 @@ class PreferencesRootPresenter(
             showDeveloperSettings = showDeveloperSettings,
             canDeactivateAccount = canDeactivateAccount,
             showBlockedUsersItem = showBlockedUsersItem,
+            showLabsItem = showLabsItem,
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvent,

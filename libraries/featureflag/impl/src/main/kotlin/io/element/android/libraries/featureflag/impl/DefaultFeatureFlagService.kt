@@ -14,6 +14,7 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -39,5 +40,9 @@ class DefaultFeatureFlagService(
             ?.setFeatureEnabled(feature, enabled)
             ?.let { true }
             ?: false
+    }
+
+    override fun getAvailableFeatures(): List<Feature> {
+        return FeatureFlags.entries.filter { !it.isFinished }
     }
 }
