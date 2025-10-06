@@ -54,6 +54,9 @@
   <string name="push_distributor_background_sync_android">"Bakgrunnssynkronisering"</string>
   <string name="push_distributor_firebase_android">"Google Services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Ingen gyldige Google Play-tjenester funnet. Det kan hende at varsler ikke fungerer som de skal."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Sjekker blokkerte brukere"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Ingen brukere er blokkert."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Blokkerte brukere"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Få navnet på den nåværende tilbyderen."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Ingen push-leverandører er valgt."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Gjeldende push-leverandør: %1$s."</string>

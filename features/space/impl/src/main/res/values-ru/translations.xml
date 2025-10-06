@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"%1$s (Администратор)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Покинуть %1$d комнату и пространство"</item>
+    <item quantity="few">"Покинуть %1$d комнат и пространство"</item>
+    <item quantity="many">"Покинуть %1$d комнат и пространство"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Выберите комнаты, которые вы хотите покинуть и в которых вы не являетесь единственным администратором:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Прежде чем покинуть это пространство, вам необходимо назначить другого администратора."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Вы не будете удалены из следующих комнат, поскольку вы являетесь единственным администратором:"</string>
+  <string name="screen_leave_space_title">"Выйти из %1$s?"</string>
+  <string name="screen_leave_space_title_last_admin">"Вы единственный администратор для %1$s"</string>
+</resources>

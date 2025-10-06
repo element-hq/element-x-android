@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"%1$s (Admin)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Părăsiți %1$d cameră și spațiul"</item>
+    <item quantity="few">"Părăsiți %1$d camere și spațiul"</item>
+    <item quantity="other">"Părăsiți %1$d camere și spațiul"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Selectați camerele pe care doriți să le părăsiți și în care nu sunteți singurul administrator:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Trebuie să desemnați un alt administrator pentru acest spațiu înainte de a-l părăsi."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Nu veți părăsi următoarele camere deoarece sunteți singurul administrator:"</string>
+  <string name="screen_leave_space_title">"Părăsiți %1$s?"</string>
+  <string name="screen_leave_space_title_last_admin">"Sunteți singurul administrator pentru %1$s"</string>
+</resources>

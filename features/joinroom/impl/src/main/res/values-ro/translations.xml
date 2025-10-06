@@ -15,6 +15,7 @@
   <string name="screen_join_room_fail_reason">"Această cameră este fie accesibilă numai pe bază de invitație, fie exista restricții de acces la nivel de spațiu."</string>
   <string name="screen_join_room_forget_action">"Uitați această cameră"</string>
   <string name="screen_join_room_invite_required_message">"Aveți nevoie de o invitație pentru a vă alătura acestei camere."</string>
+  <string name="screen_join_room_invited_by">"Invitat de"</string>
   <string name="screen_join_room_join_action">"Alăturați-vă camerei"</string>
   <string name="screen_join_room_join_restricted_message">"Este posibil să fie necesar să fiți invitat sau să fiți membru al unui spațiu pentru a vă alătura."</string>
   <string name="screen_join_room_knock_action">"Trimiteți o cerere de alăturare"</string>

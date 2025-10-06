@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"%1$s (Peakasutaja)"</string>
   <plurals name="screen_leave_space_submit">
     <item quantity="one">"Lahku %1$d-st jututoast ja kogukonnast"</item>
     <item quantity="other">"Lahku %1$d-st jututoast ja kogukonnast"</item>
   </plurals>
   <string name="screen_leave_space_subtitle">"Sellega eemaldad end ka kõikidest antud kogukonna jututubadest."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Sind ei saa järgnevatest jututubadest eemaldada, kuna oled seal/neis ainus peakasutaja:"</string>
   <string name="screen_leave_space_title">"Kas lahkud %1$s kogukonnast?"</string>
 </resources>

@@ -13,6 +13,7 @@
   <string name="screen_change_account_provider_other">"Другое"</string>
   <string name="screen_change_account_provider_subtitle">"Используйте другого поставщика учетных записей, например, собственный частный сервер или рабочую учетную запись."</string>
   <string name="screen_change_account_provider_title">"Сменить поставщика учетной записи"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Требуется приложение Element Pro для %1$s. Пожалуйста, загрузите его из магазина."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Требуется Element Pro"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Нам не удалось связаться с этим домашним сервером. Убедитесь, что вы правильно ввели URL-адрес домашнего сервера. Если URL-адрес указан правильно, обратитесь к администратору домашнего сервера за дополнительной помощью."</string>

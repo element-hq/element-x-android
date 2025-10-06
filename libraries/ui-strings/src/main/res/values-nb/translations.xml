@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Legg til reaksjon: %1$s"</string>
   <string name="a11y_avatar">"Profilbilde"</string>
+  <string name="a11y_collapse_message_text_field">"Minimer meldingstekstfeltet"</string>
   <string name="a11y_delete">"Slett"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d siffer angitt"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Rediger avatar"</string>
   <string name="a11y_edit_room_address_hint">"Den fullstendige adressen vil være %1$s"</string>
   <string name="a11y_encryption_details">"Krypteringsdetaljer"</string>
+  <string name="a11y_expand_message_text_field">"Utvid meldingstekstfeltet"</string>
   <string name="a11y_hide_password">"Skjul passord"</string>
   <string name="a11y_join_call">"Bli med i samtale"</string>
   <string name="a11y_jump_to_bottom">"Hopp til bunnen"</string>
@@ -87,6 +89,7 @@
   <string name="action_enable">"Aktiver"</string>
   <string name="action_end_poll">"Avslutt avstemning"</string>
   <string name="action_enter_pin">"Skriv inn PIN-koden"</string>
+  <string name="action_finish">"Fullfør"</string>
   <string name="action_forgot_password">"Glemt passordet?"</string>
   <string name="action_forward">"Videresend"</string>
   <string name="action_go_back">"Gå tilbake"</string>
@@ -101,6 +104,7 @@
   <string name="action_leave">"Forlat"</string>
   <string name="action_leave_conversation">"Forlat samtalen"</string>
   <string name="action_leave_room">"Forlat rommet"</string>
+  <string name="action_leave_space">"Forlat område"</string>
   <string name="action_load_more">"Last inn mer"</string>
   <string name="action_manage_account">"Administrer konto"</string>
   <string name="action_manage_devices">"Administrer enheter"</string>
@@ -161,10 +165,14 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Oppgradering tilgjengelig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Retningslinjer for akseptabel bruk"</string>
+  <string name="common_add_account">"Legg til en konto"</string>
+  <string name="common_add_another_account">"Legg til en annen konto"</string>
   <string name="common_adding_caption">"Legger til bildetekst"</string>
   <string name="common_advanced_settings">"Avanserte innstillinger"</string>
   <string name="common_an_image">"et bilde"</string>
   <string name="common_analytics">"Analyse"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Du forlot rommet"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Du ble logget ut av økten"</string>
   <string name="common_appearance">"Utseende"</string>
   <string name="common_audio">"Lyd"</string>
   <string name="common_blocked_users">"Blokkerte brukere"</string>
@@ -176,9 +184,11 @@
   <string name="common_creating_room">"Oppretter rom …"</string>
   <string name="common_current_user_canceled_knock">"Forespørsel kansellert"</string>
   <string name="common_current_user_left_room">"Forlot rommet"</string>
+  <string name="common_current_user_left_space">"Forlot område"</string>
   <string name="common_current_user_rejected_invite">"Invitasjon avslått"</string>
   <string name="common_dark">"Mørk"</string>
   <string name="common_decryption_error">"Dekrypteringsfeil"</string>
+  <string name="common_description">"Beskrivelse"</string>
   <string name="common_developer_options">"Alternativer for utviklere"</string>
   <string name="common_device_id">"Enhets-ID"</string>
   <string name="common_direct_chat">"Direkte chat"</string>
@@ -287,17 +297,21 @@
   <string name="common_search_results">"Søkeresultater"</string>
   <string name="common_security">"Sikkerhet"</string>
   <string name="common_seen_by">"Sett av"</string>
+  <string name="common_select_account">"Velg en konto"</string>
   <string name="common_send_to">"Sendt til"</string>
   <string name="common_sending">"Sender…"</string>
   <string name="common_sending_failed">"Kunne ikke sende"</string>
   <string name="common_sent">"Sendt"</string>
   <string name="common_server_not_supported">"Server støttes ikke"</string>
+  <string name="common_server_unreachable">"Serveren er ikke tilgjengelig"</string>
   <string name="common_server_url">"URL-adresse til server"</string>
   <string name="common_settings">"Innstillinger"</string>
+  <string name="common_share_space">"Del område"</string>
   <string name="common_shared_location">"Delt posisjon"</string>
   <string name="common_signing_out">"Logger av"</string>
   <string name="common_something_went_wrong">"Noe gikk galt"</string>
   <string name="common_something_went_wrong_message">"Vi har støtt på et problem. Vennligst prøv igjen."</string>
+  <string name="common_space">"Område"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Område"</item>
     <item quantity="other">"%1$d Områder"</item>
@@ -332,6 +346,12 @@
   <string name="common_verify_identity">"Verifiser identiteten"</string>
   <string name="common_verify_user">"Verifiser bruker"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Høy kvalitet"</string>
+  <string name="common_video_quality_high_description">"Beste kvalitet, men større filstørrelse"</string>
+  <string name="common_video_quality_low">"Lav kvalitet"</string>
+  <string name="common_video_quality_low_description">"Raskeste opplastingshastighet og minste filstørrelse"</string>
+  <string name="common_video_quality_standard">"Standard kvalitet"</string>
+  <string name="common_video_quality_standard_description">"Balansen mellom kvalitet og opplastingshastighet"</string>
   <string name="common_voice_message">"Talemelding"</string>
   <string name="common_waiting">"Venter…"</string>
   <string name="common_waiting_for_decryption_key">"Venter på denne meldingen"</string>
@@ -346,6 +366,10 @@
 
 Er du sikker på at du vil fortsette?"</string>
   <string name="dialog_confirm_link_title">"Dobbeltsjekk denne lenken"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Velg standardkvaliteten på videoene du laster opp."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kvalitet på videoopplasting"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Maksimal tillatt filstørrelse er: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Filstørrelsen er for stor til å kunne lastes opp"</string>
   <string name="dialog_room_reported">"Rommet er rapportert"</string>
   <string name="dialog_room_reported_and_left">"Rapportert og forlatt rommet"</string>
   <string name="dialog_title_confirmation">"Bekreftelse"</string>
@@ -354,6 +378,11 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="dialog_title_warning">"Advarsel"</string>
   <string name="dialog_unsaved_changes_description_android">"Endringene dine er ikke lagret. Er du sikker på at du vil gå tilbake?"</string>
   <string name="dialog_unsaved_changes_title">"Lagre endringer?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Maksimal tillatt filstørrelse er: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Velg kvaliteten på videoen du vil laste opp."</string>
+  <string name="dialog_video_quality_selector_title">"Velg kvalitet for videoopplasting"</string>
+  <string name="emoji_picker_search_placeholder">"Søk etter emojier"</string>
+  <string name="error_account_already_logged_in">"Du er allerede logget inn på denne enheten som %1$s."</string>
   <string name="error_account_creation_not_possible">"Hjemmeserveren din må oppgraderes for å støtte Matrix Authentication Service og kontooppretting."</string>
   <string name="error_failed_creating_the_permalink">"Opprettelse av permalenken mislyktes"</string>
   <string name="error_failed_loading_map">"%1$s kunne ikke laste inn kartet. Prøv igjen senere."</string>
@@ -404,6 +433,7 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Meldingen din ble ikke sendt fordi %1$s ikke har bekreftet alle enhetene"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"En eller flere av enhetene dine er ikke verifisert. Du kan sende meldingen likevel, eller du kan avbryte og prøve igjen senere etter at du har verifisert alle enhetene dine."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Meldingen din ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Rediger administratorer eller eiere"</string>
   <string name="screen_room_error_failed_processing_media">"Kunne ikke behandle medier for opplasting, vennligst prøv igjen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunne ikke hente brukerdetaljer"</string>
   <string name="screen_room_event_pill">"Melding i %1$s"</string>

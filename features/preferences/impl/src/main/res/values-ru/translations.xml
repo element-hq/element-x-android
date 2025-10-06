@@ -10,9 +10,13 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Скрыть аватары в запросах на приглашение в комнату"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Скрыть предварительный просмотр медиафайлов на временной шкале"</string>
+  <string name="screen_advanced_settings_labs">"Лаборатория"</string>
   <string name="screen_advanced_settings_media_compression_description">"Загружайте фотографии и видео быстрее и сокращайте потребление трафика"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимизировать качество мультимедиа"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерация и безопасность"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Автоматически оптимизируйте изображения для более быстрой загрузки и уменьшения размера файлов."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Оптимизируйте качество загрузки изображения"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Нажмите здесь, чтобы изменить."</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Высокое (1080p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Низкое (480p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Среднее (720p)"</string>

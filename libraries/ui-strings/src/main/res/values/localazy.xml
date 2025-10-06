@@ -110,6 +110,7 @@
   <string name="action_manage_account">"Manage account"</string>
   <string name="action_manage_devices">"Manage devices"</string>
   <string name="action_message">"Message"</string>
+  <string name="action_minimize">"Minimise"</string>
   <string name="action_next">"Next"</string>
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
@@ -164,6 +165,8 @@
   <string name="action_yes_try_again">"Yes, try again"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade available"</string>
+  <string name="banner_new_sound_message">"Your notification ping has been updated—clearer, quicker, and less disruptive."</string>
+  <string name="banner_new_sound_title">"We’ve refreshed your sounds"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_add_account">"Add an account"</string>
@@ -176,6 +179,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"You were logged out of the session"</string>
   <string name="common_appearance">"Appearance"</string>
   <string name="common_audio">"Audio"</string>
+  <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blocked users"</string>
   <string name="common_bubbles">"Bubbles"</string>
   <string name="common_call_started">"Call started"</string>
@@ -225,6 +229,7 @@ Reason: %1$s."</string>
   <string name="common_install_apk_android">"Install APK"</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
+  <string name="common_leaving_space">"Leaving space"</string>
   <string name="common_light">"Light"</string>
   <string name="common_line_copied_to_clipboard">"Line copied to clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
@@ -421,6 +426,10 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
+  <string name="screen_labs_enable_threads">"Enable thread replies"</string>
+  <string name="screen_labs_header_description">"Try out our latest ideas in development. These features are not finalised; they may be unstable, may change."</string>
+  <string name="screen_labs_header_title">"Feeling experimental?"</string>
+  <string name="screen_labs_title">"Labs"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>

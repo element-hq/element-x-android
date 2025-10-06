@@ -17,6 +17,7 @@
   <string name="screen_room_change_role_administrators_title">"Rediger administratorer"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Du vil ikke kunne angre denne handlingen. Du forfremmer brukeren til å ha samme rettighetsnivå som deg."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Legg til administrator?"</string>
+  <string name="screen_room_change_role_confirm_change_owners_description">"Du kan ikke angre denne handlingen. Du overfører eierskapet til de valgte brukerne. Når du forlater siden, vil dette være permanent."</string>
   <string name="screen_room_change_role_confirm_change_owners_title">"Overføre eierskapet?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Degradere"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Du vil ikke kunne angre denne endringen ettersom du degraderer deg selv, og hvis du er den siste privilegerte brukeren i rommet, vil det være umulig å få tilbake privilegiene."</string>

@@ -54,9 +54,21 @@
   <string name="push_distributor_background_sync_android">"Sincronizare în fundal"</string>
   <string name="push_distributor_firebase_android">"Servicii Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nu au fost găsite servicii Google Play valide. Este posibil ca notificările să nu funcționeze corect."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Se verifică utilizatorii blocați"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Vizualizați utilizatorii blocați"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Niciun utilizator nu este blocat."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Ai blocat%1$d utilizator. Nu veți primi notificări pentru acest utilizator."</item>
+    <item quantity="few">"Ai blocat%1$d utilizatori. Nu veți primi notificări pentru acești utilizatori."</item>
+    <item quantity="other">"Ai blocat%1$d utilizatori. Nu veți primi notificări pentru acești utilizatori."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Utilizatori blocați"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Obțineți numele furnizorului curent."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Niciun furnizor push selectat."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Furnizorul actual de push: %1$s și distribuitorul actual: %2$s. Dar distribuitorul %3$s nu este găsit. Poate că aplicația a fost dezinstalată?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Furnizor push actual: %1$s, dar nu au fost configurați distribuitori."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Furnizor de push actual: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Furnizor actual de push: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Furnizor de push curent"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Asigurați-vă că aplicația are cel puțin un furnizor push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nu s-au găsit furnizori push."</string>

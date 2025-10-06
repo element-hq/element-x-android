@@ -16,8 +16,9 @@
   <string name="screen_session_verification_compare_emojis_user_subtitle">"Confirmați că emoji-urile de mai jos corespund cu cele afișate pe dispozitivul celuilalt utilizator."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Confirmați că numerele de mai jos se potrivesc cu cele afișate în cealaltă sesiune."</string>
   <string name="screen_session_verification_compare_numbers_title">"Comparați numerele"</string>
-  <string name="screen_session_verification_complete_subtitle">"Noua dumneavoastră sesiune este acum verificată. Are acces la mesajele dumneavoastră criptate, iar alți utilizatori vă vor vedea ca fiind de încredere."</string>
+  <string name="screen_session_verification_complete_subtitle">"Noua dumneavoastră sesiune este acum verificată. Are acces la mesajele dumneavoastră criptate, iar ceilalti utilizatori vă vor vedea ca fiind de încredere."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Acum puteți avea încredere în identitatea acestui utilizator atunci când trimiteți sau primiți mesaje."</string>
+  <string name="screen_session_verification_device_verified">"Dispozitiv verificat"</string>
   <string name="screen_session_verification_enter_recovery_key">"Introduceți cheia de recuperare"</string>
   <string name="screen_session_verification_failed_subtitle">"Fie cererea a expirat, cererea a fost respinsă, fie a existat o nepotrivire de verificare."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Demonstrați-vă identitatea pentru a accesa mesaje anterioare criptate."</string>
@@ -44,7 +45,7 @@
   <string name="screen_session_verification_user_responder_subtitle">"Pentru o securitate suplimentară, un alt utilizator dorește să vă verifice identitatea. Vi se va afișa un set de emoji-uri pentru comparație."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Ar trebui să vedeți o fereastră pop-up pe celălalt dispozitiv. Începeți verificarea de acolo acum."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Începeți verificarea pe celălalt dispozitiv"</string>
-  <string name="screen_session_verification_waiting_other_device_title">"Se așteaptă celălalt dispozitiv"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Începeți verificarea pe celălalt dispozitiv"</string>
   <string name="screen_session_verification_waiting_other_user_title">"Se așteaptă celălalt utilizator"</string>
   <string name="screen_session_verification_waiting_subtitle">"După acceptare, veți putea continua verificarea."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Acceptați cererea de a începe procesul de verificare în cealaltă sesiune pentru a continua."</string>

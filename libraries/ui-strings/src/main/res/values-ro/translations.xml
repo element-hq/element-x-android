@@ -44,7 +44,7 @@
   <string name="a11y_remove_reaction_with">"Îndepărtați reacția %1$s"</string>
   <string name="a11y_room_avatar">"Avatarul camerei"</string>
   <string name="a11y_send_files">"Trimiteți fișiere"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Acțiune cu termen limită necesară"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Acțiune limitată în timp necesară, aveți un minut pentru a verifica"</string>
   <string name="a11y_show_password">"Afișați parola"</string>
   <string name="a11y_start_call">"Începeți un apel"</string>
   <string name="a11y_tombstoned_room">"Cameră terminată"</string>
@@ -107,10 +107,12 @@
   <string name="action_leave">"Părăsiți"</string>
   <string name="action_leave_conversation">"Părăsiți conversația"</string>
   <string name="action_leave_room">"Părăsiți camera"</string>
+  <string name="action_leave_space">"Părăsiți spațiul"</string>
   <string name="action_load_more">"Încărcați mai mult"</string>
   <string name="action_manage_account">"Administrare cont"</string>
   <string name="action_manage_devices">"Gestionare dispozitive"</string>
   <string name="action_message">"Mesaj"</string>
+  <string name="action_minimize">"Minimizați"</string>
   <string name="action_next">"Următorul"</string>
   <string name="action_no">"Nu"</string>
   <string name="action_not_now">"Nu acum"</string>
@@ -167,6 +169,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade disponibil"</string>
   <string name="common_about">"Despre"</string>
   <string name="common_acceptable_use_policy">"Politică de utilizare rezonabilă"</string>
+  <string name="common_add_account">"Adăugați un cont"</string>
+  <string name="common_add_another_account">"Adăugați un alt cont"</string>
   <string name="common_adding_caption">"Adăugare descriere"</string>
   <string name="common_advanced_settings">"Setări avansate"</string>
   <string name="common_an_image">"o imagine"</string>
@@ -184,9 +188,12 @@
   <string name="common_creating_room">"Se creează camera…"</string>
   <string name="common_current_user_canceled_knock">"Cerere anulată"</string>
   <string name="common_current_user_left_room">"Ați parăsit camera"</string>
+  <string name="common_current_user_left_space">"S-a părăsit spațiul"</string>
   <string name="common_current_user_rejected_invite">"Invitația a fost refuzată"</string>
   <string name="common_dark">"Întunecat"</string>
   <string name="common_decryption_error">"Eroare de decriptare"</string>
+  <string name="common_description">"Descriere"</string>
+  <string name="common_deselect_all">"Deselectați tot"</string>
   <string name="common_developer_options">"Opțiuni programator"</string>
   <string name="common_device_id">"ID-ul dispozitivului"</string>
   <string name="common_direct_chat">"Chat direct"</string>
@@ -221,6 +228,7 @@ Motiv:%1$s."</string>
   <string name="common_install_apk_android">"Instalați APK"</string>
   <string name="common_invite_unknown_profile">"Nu am putut valida ID-ul Matrix al acestui utilizator. Este posibil ca invitația să nu fi fost trimisă."</string>
   <string name="common_leaving_room">"Se părăsește conversația"</string>
+  <string name="common_leaving_space">"Se părăsește spațiul"</string>
   <string name="common_light">"Deschis"</string>
   <string name="common_line_copied_to_clipboard">"Linie copiată în clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Linkul a fost copiat în clipboard"</string>
@@ -245,6 +253,7 @@ Motiv:%1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Niciun rezultat"</string>
   <string name="common_no_room_name">"Fără nume de cameră"</string>
+  <string name="common_no_space_name">"Fără nume de spațiu"</string>
   <string name="common_not_encrypted">"Necriptat"</string>
   <string name="common_offline">"Deconectat"</string>
   <string name="common_open_source_licenses">"Licențe open source"</string>
@@ -301,14 +310,18 @@ Motiv:%1$s."</string>
   <string name="common_search_results">"Rezultatele căutării"</string>
   <string name="common_security">"Securitate"</string>
   <string name="common_seen_by">"Văzut de"</string>
+  <string name="common_select_account">"Selectați un cont"</string>
+  <string name="common_select_all">"Selectați tot"</string>
   <string name="common_send_to">"Trimiteți către"</string>
   <string name="common_sending">"Se trimite…"</string>
   <string name="common_sending_failed">"Trimiterea a eșuat"</string>
   <string name="common_sent">"Trimis"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Serverul nu este compatibil"</string>
+  <string name="common_server_unreachable">"Serverul nu poate fi accesat"</string>
   <string name="common_server_url">"Adresa URL a serverului"</string>
   <string name="common_settings">"Setări"</string>
+  <string name="common_share_space">"Partajați spațiul"</string>
   <string name="common_shared_location">"Locație partajată"</string>
   <string name="common_signing_out">"Deconectare în curs"</string>
   <string name="common_something_went_wrong">"Ceva nu a mers bine"</string>
@@ -384,6 +397,8 @@ Sunteți sigur că doriți să continuați?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Dimensiunea maximă permisă pentru fișiere este: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Selectați calitatea videoclipului pe care doriți să îl încărcați."</string>
   <string name="dialog_video_quality_selector_title">"Selectați calitatea de încărcare a videoclipurilor"</string>
+  <string name="emoji_picker_search_placeholder">"Căutați emoticoane"</string>
+  <string name="error_account_already_logged_in">"Sunteți deja conectat pe acest dispozitiv ca %1$s."</string>
   <string name="error_account_creation_not_possible">"Serverul dumneavoastră trebuie actualizat pentru a suporta serviciul de autentificare Matrix și crearea de conturi."</string>
   <string name="error_failed_creating_the_permalink">"Crearea permalink-ului a eșuat"</string>
   <string name="error_failed_loading_map">"%1$s nu a putut încărca harta. Vă rugăm să încercați din nou mai târziu."</string>
@@ -455,6 +470,7 @@ Sunteți sigur că doriți să continuați?"</string>
   <string name="screen_share_this_location_action">"Distribuiți această locație"</string>
   <string name="screen_space_list_description">"Spații pe care le-ați creat sau la care v-ați alăturat."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"Spațiu %1$s"</string>
   <string name="screen_space_list_title">"Spații"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mesajul nu a fost trimis deoarece identitatea verificată a lui %1$s s-a schimbat."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Mesajul nu a fost trimis deoarece %1$s nu a verificat toate dispozitivele."</string>

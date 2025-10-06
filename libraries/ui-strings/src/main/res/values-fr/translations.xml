@@ -110,6 +110,7 @@
   <string name="action_manage_account">"Gérer le compte"</string>
   <string name="action_manage_devices">"Gérez les sessions"</string>
   <string name="action_message">"Message"</string>
+  <string name="action_minimize">"Minimiser"</string>
   <string name="action_next">"Suivant"</string>
   <string name="action_no">"Non"</string>
   <string name="action_not_now">"Pas maintenant"</string>
@@ -225,6 +226,7 @@ Raison : %1$s."</string>
   <string name="common_install_apk_android">"Installer l’APK"</string>
   <string name="common_invite_unknown_profile">"Cet identifiant Matrix est introuvable, il est donc possible que l’invitation ne soit pas reçue."</string>
   <string name="common_leaving_room">"Quitter le salon…"</string>
+  <string name="common_leaving_space">"En train de quitter l’espace"</string>
   <string name="common_light">"Clair"</string>
   <string name="common_line_copied_to_clipboard">"Ligne copiée dans le presse-papiers"</string>
   <string name="common_link_copied_to_clipboard">"Lien copié dans le presse-papiers"</string>

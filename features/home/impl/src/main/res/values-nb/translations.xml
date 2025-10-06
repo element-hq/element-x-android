@@ -33,6 +33,7 @@ Inntil videre kan du velge bort filtre for å se de andre chattene dine"</string
   <string name="screen_roomlist_filter_invites">"Invitasjoner"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Du har ingen ventende invitasjoner."</string>
   <string name="screen_roomlist_filter_low_priority">"Lav prioritet"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Du har ingen lavprioriterte chatter ennå"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Du kan velge bort filtre for å se de andre chattene dine"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Du har ikke chatter for dette utvalget"</string>
   <string name="screen_roomlist_filter_people">"Personer"</string>

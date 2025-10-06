@@ -64,7 +64,10 @@
   <string name="troubleshoot_notifications_test_blocked_users_title">"Utilisateurs bloqués"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Obtenir le nom du fournisseur de Push actuel."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Aucun fournisseur de Push n’est sélectionné."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Fournisseur de Push actuel: %1$s et distributeur actuel: %2$s. Mais le distributeur %3$s est introuvable. L’application a peut-être été désinstallée?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Fournisseur de Push actuel: %1$s, mais aucun distributeur n’a été configuré."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Fournisseur de Push actuel : %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Fournisseur de Push actuel: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Fournisseur de Push actuel"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Vérifier que l’application possède au moins un fournisseur de Push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Aucun fournisseur de Push n’a été trouvé."</string>

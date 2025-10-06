@@ -110,6 +110,7 @@
   <string name="action_manage_account">"Halda kasutajakontot"</string>
   <string name="action_manage_devices">"Halda seadmeid"</string>
   <string name="action_message">"Saada sõnum"</string>
+  <string name="action_minimize">"Minimeeri"</string>
   <string name="action_next">"Edasi"</string>
   <string name="action_no">"Ei"</string>
   <string name="action_not_now">"Mitte praegu"</string>

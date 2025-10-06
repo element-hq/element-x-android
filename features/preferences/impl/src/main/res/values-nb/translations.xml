@@ -13,6 +13,13 @@
   <string name="screen_advanced_settings_media_compression_description">"Last opp bilder og videoer raskere og reduser databruken"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimaliser mediekvaliteten"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderasjon og sikkerhet"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimaliser bilder automatisk for raskere opplastinger og mindre filstørrelser."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimaliser kvaliteten på bildeopplasting"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Trykk her for å endre."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Høy (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Lav (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Kvalitet på videoopplasting"</string>
   <string name="screen_advanced_settings_push_provider_android">"Leverandør av pushvarsling"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Deaktiver rik tekstredigering for å skrive Markdown manuelt."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Lesebekreftelser"</string>

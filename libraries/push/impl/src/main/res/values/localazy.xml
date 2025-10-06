@@ -64,7 +64,10 @@
   <string name="troubleshoot_notifications_test_blocked_users_title">"Blocked users"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Get the name of the current provider."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"No push providers selected."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Current push provider: %1$s and current distributor: %2$s. But the distributor %3$s is not found. Maybe the application has been uninstalled?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Current push provider: %1$s, but no distributors have been configured."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Current push provider: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Current push provider: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Current push provider"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Ensure that the application supports at least one push provider."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"No push provider support found."</string>

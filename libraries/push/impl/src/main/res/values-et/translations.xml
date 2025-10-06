@@ -64,7 +64,10 @@
   <string name="troubleshoot_notifications_test_blocked_users_title">"Blokeeritud kasutajad"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Vali hetkel kasutatava tõuketeenuste pakkuja nimi."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Tõuketeenuste pakkujaid pole valitud."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Praegune tõuketeenuste pakkuja on %1$s ja praegune levitaja on %2$s. Aga levitajat %3$s ei leidu - kas võib olla, et rakendus on eemaldatud?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Praegune tõuketeenuste pakkuja on %1$s, aga ühtegi levitajat pole seadistatud."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Hetkel kasutatav tõuketeenuste pakkuja: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Praegune tõuketeenuste pakkuja: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Hetkel kasutatav tõuketeenuste pakkuja"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Palun taga selle rakenduse jaoks on seadistatud vähemalt üks tõuketeenuste pakkuja."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Ühtegi tõuketeenuste pakkujat ei leidu."</string>
