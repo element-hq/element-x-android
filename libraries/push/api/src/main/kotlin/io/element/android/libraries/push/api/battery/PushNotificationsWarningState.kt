@@ -8,12 +8,10 @@
 package io.element.android.libraries.push.api.battery
 
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 
-fun aBatteryOptimizationState(
-    shouldDisplayBanner: Boolean = false,
-    eventSink: (PushNotificationsWarningEvents) -> Unit = {},
-) = PushNotificationsWarningState(
-    currentUserPushConfig = AsyncData.Loading(),
-    needsEnablingBatteryOptimization = shouldDisplayBanner,
-    eventSink = eventSink,
+data class PushNotificationsWarningState(
+    val currentUserPushConfig: AsyncData<CurrentUserPushConfig?>,
+    val needsEnablingBatteryOptimization: Boolean,
+    val eventSink: (PushNotificationsWarningEvents) -> Unit,
 )

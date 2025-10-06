@@ -16,8 +16,8 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.ApplicationContext
-import io.element.android.libraries.push.api.battery.BatteryOptimizationState
-import io.element.android.libraries.push.impl.battery.BatteryOptimizationPresenter
+import io.element.android.libraries.push.api.battery.PushNotificationsWarningState
+import io.element.android.libraries.push.impl.battery.PushNotificationsWarningPresenter
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -30,5 +30,5 @@ interface PushModule {
     }
 
     @Binds
-    fun bindBatteryOptimizationPresenter(presenter: BatteryOptimizationPresenter): Presenter<BatteryOptimizationState>
+    fun bindPushNotificationsWarningPresenter(presenter: PushNotificationsWarningPresenter): Presenter<PushNotificationsWarningState>
 }

@@ -20,26 +20,35 @@ import io.element.android.libraries.push.api.battery.PushNotificationsWarningSta
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 
 @Composable
-internal fun BatteryOptimizationBanner(
-    state: PushNotificationsWarningState,
+internal fun PushServerRateLimitedBanner(
+    pushServer: String,
+    pushDistributorAppName: String,
+    onNavigateToPushDistributor: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Announcement(
         modifier = modifier.roomListBannerPadding(),
-        title = stringResource(R.string.banner_battery_optimization_title_android),
-        description = stringResource(R.string.banner_battery_optimization_content_android),
+        // TODO: use actual string resource when available
+        title = "Notifications may not arrive",
+        // TODO: use actual string resource when available
+        description = String.format("Your chosen push server '%1\$s' may block some notifications. Try selecting a different push server in your push notification distributor app.", pushServer),
         type = AnnouncementType.Actionable(
-            actionText = stringResource(R.string.banner_battery_optimization_submit_android),
-            onActionClick = { state.eventSink(PushNotificationsWarningEvents.RequestDisableOptimizations) },
-            onDismissClick = { state.eventSink(PushNotificationsWarningEvents.Dismiss) },
+            // TODO: use actual string resource when available
+            actionText = String.format("Open %1\$s", pushDistributorAppName),
+            onActionClick = onNavigateToPushDistributor,
+            onDismissClick = onDismiss,
         ),
     )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun BatteryOptimizationBannerPreview() = ElementPreview {
-    BatteryOptimizationBanner(
-        state = aBatteryOptimizationState(),
+internal fun PushServerRateLimitedBannerPreview() = ElementPreview {
+    PushServerRateLimitedBanner(
+        pushServer = "nrfy.sh",
+        pushDistributorAppName = "ntfy",
+        onNavigateToPushDistributor = {},
+        onDismiss = {},
     )
 }

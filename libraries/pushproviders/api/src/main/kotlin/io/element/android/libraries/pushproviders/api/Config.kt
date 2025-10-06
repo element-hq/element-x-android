@@ -10,4 +10,6 @@ package io.element.android.libraries.pushproviders.api
 data class Config(
     val url: String,
     val pushKey: String,
+    val isRateLimited: Boolean,
+    val distributor: Distributor,
 )

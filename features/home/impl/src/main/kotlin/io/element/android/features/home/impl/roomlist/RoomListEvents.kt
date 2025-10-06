@@ -15,6 +15,7 @@ sealed interface RoomListEvents {
     data object DismissRequestVerificationPrompt : RoomListEvents
     data object DismissBanner : RoomListEvents
     data object DismissNewNotificationSoundBanner : RoomListEvents
+    data object OpenPushDistributor : RoomListEvents
     data object ToggleSearchResults : RoomListEvents
     data class ShowContextMenu(val roomSummary: RoomListRoomSummary) : RoomListEvents
 

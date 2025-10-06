@@ -9,7 +9,7 @@ package io.element.android.libraries.push.impl.battery
 
 import androidx.lifecycle.Lifecycle
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.push.api.battery.BatteryOptimizationEvents
+import io.element.android.libraries.push.api.battery.PushNotificationsWarningEvents
 import io.element.android.libraries.push.impl.push.FakeMutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.store.InMemoryPushDataStore
@@ -39,7 +39,7 @@ class BatteryOptimizationPresenterTest {
         val lifeCycleOwner = FakeLifecycleOwner()
         presenter.testWithLifecycleOwner(lifeCycleOwner) {
             val initialState = awaitItem()
-            assertThat(initialState.shouldDisplayBanner).isFalse()
+            assertThat(initialState.needsEnablingBatteryOptimization).isFalse()
             lifeCycleOwner.givenState(Lifecycle.State.RESUMED)
         }
     }
@@ -56,8 +56,8 @@ class BatteryOptimizationPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            assertThat(initialState.shouldDisplayBanner).isFalse()
-            assertThat(awaitItem().shouldDisplayBanner).isTrue()
+            assertThat(initialState.needsEnablingBatteryOptimization).isFalse()
+            assertThat(awaitItem().needsEnablingBatteryOptimization).isTrue()
         }
     }
 
@@ -73,8 +73,8 @@ class BatteryOptimizationPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            assertThat(initialState.shouldDisplayBanner).isFalse()
-            assertThat(awaitItem().shouldDisplayBanner).isFalse()
+            assertThat(initialState.needsEnablingBatteryOptimization).isFalse()
+            assertThat(awaitItem().needsEnablingBatteryOptimization).isFalse()
         }
     }
 
@@ -94,10 +94,10 @@ class BatteryOptimizationPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            assertThat(initialState.shouldDisplayBanner).isFalse()
+            assertThat(initialState.needsEnablingBatteryOptimization).isFalse()
             val displayedItem = awaitItem()
-            assertThat(displayedItem.shouldDisplayBanner).isTrue()
-            displayedItem.eventSink(BatteryOptimizationEvents.Dismiss)
+            assertThat(displayedItem.needsEnablingBatteryOptimization).isTrue()
+            displayedItem.eventSink(PushNotificationsWarningEvents.Dismiss)
             onOptimizationBannerDismissedResult.assertions().isCalledOnce()
         }
     }
@@ -120,10 +120,10 @@ class BatteryOptimizationPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            assertThat(initialState.shouldDisplayBanner).isFalse()
+            assertThat(initialState.needsEnablingBatteryOptimization).isFalse()
             val displayedItem = awaitItem()
-            assertThat(displayedItem.shouldDisplayBanner).isTrue()
-            displayedItem.eventSink(BatteryOptimizationEvents.RequestDisableOptimizations)
+            assertThat(displayedItem.needsEnablingBatteryOptimization).isTrue()
+            displayedItem.eventSink(PushNotificationsWarningEvents.RequestDisableOptimizations)
             requestDisablingBatteryOptimizationResult.assertions().isCalledOnce()
             onOptimizationBannerDismissedResult.assertions().isCalledOnce()
         }
@@ -146,15 +146,15 @@ class BatteryOptimizationPresenterTest {
         val lifeCycleOwner = FakeLifecycleOwner()
         presenter.testWithLifecycleOwner(lifeCycleOwner) {
             val initialState = awaitItem()
-            assertThat(initialState.shouldDisplayBanner).isFalse()
+            assertThat(initialState.needsEnablingBatteryOptimization).isFalse()
             val displayedItem = awaitItem()
-            assertThat(displayedItem.shouldDisplayBanner).isTrue()
-            displayedItem.eventSink(BatteryOptimizationEvents.RequestDisableOptimizations)
+            assertThat(displayedItem.needsEnablingBatteryOptimization).isTrue()
+            displayedItem.eventSink(PushNotificationsWarningEvents.RequestDisableOptimizations)
             requestDisablingBatteryOptimizationResult.assertions().isCalledOnce()
             batteryOptimization.isIgnoringBatteryOptimizationsResult = true
             lifeCycleOwner.givenState(Lifecycle.State.RESUMED)
-            assertThat(awaitItem().shouldDisplayBanner).isFalse()
-            assertThat(awaitItem().shouldDisplayBanner).isFalse()
+            assertThat(awaitItem().needsEnablingBatteryOptimization).isFalse()
+            assertThat(awaitItem().needsEnablingBatteryOptimization).isFalse()
         }
     }
 
@@ -162,7 +162,7 @@ class BatteryOptimizationPresenterTest {
         pushDataStore: PushDataStore = InMemoryPushDataStore(),
         mutableBatteryOptimizationStore: MutableBatteryOptimizationStore = FakeMutableBatteryOptimizationStore(),
         batteryOptimization: BatteryOptimization = FakeBatteryOptimization(),
-    ) = BatteryOptimizationPresenter(
+    ) = PushNotificationsWarningPresenter(
         pushDataStore = pushDataStore,
         mutableBatteryOptimizationStore = mutableBatteryOptimizationStore,
         batteryOptimization = batteryOptimization

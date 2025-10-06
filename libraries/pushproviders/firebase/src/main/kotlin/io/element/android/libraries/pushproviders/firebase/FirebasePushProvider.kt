@@ -78,7 +78,9 @@ class FirebasePushProvider(
         return firebaseStore.getFcmToken()?.let { fcmToken ->
             Config(
                 url = firebaseGatewayProvider.getFirebaseGateway(),
-                pushKey = fcmToken
+                pushKey = fcmToken,
+                distributor = firebaseDistributor,
+                isRateLimited = false,
             )
         }
     }

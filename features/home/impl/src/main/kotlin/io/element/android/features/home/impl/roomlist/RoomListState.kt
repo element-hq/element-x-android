@@ -15,7 +15,7 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteS
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.push.api.battery.BatteryOptimizationState
+import io.element.android.libraries.push.api.battery.PushNotificationsWarningState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 
@@ -67,7 +67,7 @@ sealed interface RoomListContentState {
     data class Rooms(
         val securityBannerState: SecurityBannerState,
         val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
-        val batteryOptimizationState: BatteryOptimizationState,
+        val pushNotificationsWarningState: PushNotificationsWarningState,
         val showNewNotificationSoundBanner: Boolean,
         val summaries: ImmutableList<RoomListRoomSummary>,
         val seenRoomInvites: ImmutableSet<RoomId>,

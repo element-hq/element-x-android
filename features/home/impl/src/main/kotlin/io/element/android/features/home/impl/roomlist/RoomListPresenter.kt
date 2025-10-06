@@ -47,7 +47,7 @@ import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.push.api.battery.BatteryOptimizationState
+import io.element.android.libraries.push.api.battery.PushNotificationsWarningState
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -80,7 +80,7 @@ class RoomListPresenter(
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
-    private val batteryOptimizationPresenter: Presenter<BatteryOptimizationState>,
+    private val batteryOptimizationPresenter: Presenter<PushNotificationsWarningState>,
     private val notificationCleaner: NotificationCleaner,
     private val appPreferencesStore: AppPreferencesStore,
     private val seenInvitesStore: SeenInvitesStore,
@@ -123,6 +123,7 @@ class RoomListPresenter(
                 RoomListEvents.DismissNewNotificationSoundBanner -> coroutineScope.launch {
                     announcementService.onAnnouncementDismissed(Announcement.NewNotificationSound)
                 }
+                RoomListEvents.OpenPushDistributor -> TODO("Open push distributor app")
                 RoomListEvents.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
                 is RoomListEvents.ShowContextMenu -> {
                     coroutineScope.showContextMenu(event, contextMenu)
@@ -239,7 +240,7 @@ class RoomListPresenter(
                     securityBannerState = securityBannerState,
                     showNewNotificationSoundBanner = showNewNotificationSoundBanner,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
-                    batteryOptimizationState = batteryOptimizationPresenter.present(),
+                    pushNotificationsWarningState = batteryOptimizationPresenter.present(),
                     summaries = roomSummaries.dataOrNull().orEmpty().toImmutableList(),
                     seenRoomInvites = seenRoomInvites.toImmutableSet(),
                 )

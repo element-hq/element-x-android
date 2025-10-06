@@ -248,13 +248,29 @@ private fun RoomsViewList(
                     )
                 }
             }
-            SecurityBannerState.None -> if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
-                item {
-                    FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
-                }
-            } else if (state.batteryOptimizationState.shouldDisplayBanner) {
-                item {
-                    BatteryOptimizationBanner(state = state.batteryOptimizationState)
+            SecurityBannerState.None -> {
+                val currentUserPushConfig = state.pushNotificationsWarningState.currentUserPushConfig.dataOrNull()
+                when {
+                    state.fullScreenIntentPermissionsState.shouldDisplayBanner -> {
+                        item {
+                            FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
+                        }
+                    }
+                    state.pushNotificationsWarningState.needsEnablingBatteryOptimization -> {
+                        item {
+                            BatteryOptimizationBanner(state = state.pushNotificationsWarningState)
+                        }
+                    }
+                    currentUserPushConfig?.isRateLimited == true -> {
+                        item {
+                            PushServerRateLimitedBanner(
+                                pushServer = currentUserPushConfig.url,
+                                pushDistributorAppName = currentUserPushConfig.distributor.name,
+                                onNavigateToPushDistributor = { updatedEventSink(RoomListEvents.OpenPushDistributor) },
+                                onDismiss = { updatedEventSink(RoomListEvents.DismissBanner) },
+                            )
+                        }
+                    }
                 }
             } else if (state.showNewNotificationSoundBanner) {
                 item {
