@@ -86,8 +86,7 @@ class LabsPresenter(
                     else -> feature.title
                 }
                 val description = when (feature) {
-                    // TODO check if the description for threads needs to be updated
-                    FeatureFlags.Threads -> null
+                    FeatureFlags.Threads -> stringProvider.getString(R.string.screen_labs_enable_threads_description)
                     else -> feature.description
                 }
                 val icon = when (feature) {

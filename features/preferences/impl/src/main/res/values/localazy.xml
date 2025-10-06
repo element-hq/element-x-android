@@ -45,6 +45,7 @@
   <string name="screen_edit_profile_title">"Edit profile"</string>
   <string name="screen_edit_profile_updating_details">"Updating profile…"</string>
   <string name="screen_labs_enable_threads">"Enable thread replies"</string>
+  <string name="screen_labs_enable_threads_description">"The app will restart to apply this change."</string>
   <string name="screen_labs_header_description">"Try out our latest ideas in development. These features are not finalised; they may be unstable, may change."</string>
   <string name="screen_labs_header_title">"Feeling experimental?"</string>
   <string name="screen_labs_title">"Labs"</string>
