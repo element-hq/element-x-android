@@ -9,14 +9,18 @@ package io.element.android.features.preferences.impl.labs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import dev.zacsweers.metro.Inject
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
+import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -33,6 +37,7 @@ import kotlinx.coroutines.launch
 class LabsPresenter(
     private val stringProvider: StringProvider,
     private val featureFlagService: FeatureFlagService,
+    private val clearCacheUseCase: ClearCacheUseCase,
 ) : Presenter<LabsState> {
     @Composable
     override fun present(): LabsState {
@@ -54,6 +59,8 @@ class LabsPresenter(
             }
         }
 
+        var isApplyingChanges by remember { mutableStateOf(false) }
+
         val featureUiModels = createUiModels(features, enabledFeatures)
 
         fun handleEvent(event: LabsEvents) {
@@ -63,12 +70,21 @@ class LabsPresenter(
                     val isEnabled = featureFlagService.isFeatureEnabled(feature)
                     featureFlagService.setFeatureEnabled(feature = feature, enabled = !isEnabled)
                     enabledFeatures[feature.key] = !isEnabled
+
+                    when (feature.key) {
+                        FeatureFlags.Threads.key -> {
+                            // Threads require a cache clear to recreate the event cache
+                            clearCacheUseCase()
+                            isApplyingChanges = true
+                        }
+                    }
                 }
             }
         }
 
         return LabsState(
             features = featureUiModels,
+            isApplyingChanges = isApplyingChanges,
             eventSink = ::handleEvent,
         )
     }
@@ -105,13 +121,4 @@ class LabsPresenter(
             }
         }.toImmutableList()
     }
-}
-
-data class LabsState(
-    val features: ImmutableList<FeatureUiModel>,
-    val eventSink: (LabsEvents) -> Unit,
-)
-
-sealed interface LabsEvents {
-    data class ToggleFeature(val feature: String) : LabsEvents
 }

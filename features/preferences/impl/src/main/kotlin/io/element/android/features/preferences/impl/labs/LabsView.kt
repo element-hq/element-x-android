@@ -7,6 +7,7 @@
 
 package io.element.android.features.preferences.impl.labs
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,21 +20,20 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.list.SwitchListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
-import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,6 +42,15 @@ fun LabsView(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (state.isApplyingChanges) {
+        ProgressDialog()
+    }
+
+    BackHandler(
+        enabled = !state.isApplyingChanges,
+        onBack = onBack,
+    )
+
     HeaderFooterPage(
         modifier = modifier
             .fillMaxSize()
@@ -51,7 +60,7 @@ fun LabsView(
             TopAppBar(
                 titleStr = stringResource(R.string.screen_labs_title),
                 navigationIcon = {
-                    BackButton(onClick = onBack)
+                    BackButton(onClick = onBack, enabled = !state.isApplyingChanges)
                 }
             )
         },
@@ -87,29 +96,8 @@ fun LabsView(
 
 @PreviewsDayNight
 @Composable
-internal fun LabsViewPreview() {
+internal fun LabsViewPreview(@PreviewParameter(LabsStateProvider::class) state: LabsState) {
     ElementPreview {
-        LabsView(
-            state = LabsState(
-                features = persistentListOf(
-                    FeatureUiModel(
-                        key = "feature_1",
-                        title = "Feature 1",
-                        description = "This is a description of feature 1.",
-                        isEnabled = true,
-                        icon = IconSource.Vector(CompoundIcons.Threads()),
-                    ),
-                    FeatureUiModel(
-                        key = "feature_2",
-                        title = "Feature 2",
-                        description = "This is a description of feature 2.",
-                        isEnabled = false,
-                        icon = IconSource.Vector(CompoundIcons.VideoCall()),
-                    )
-                ),
-                eventSink = {},
-            ),
-            onBack = {},
-        )
+        LabsView(state = state, onBack = {})
     }
 }

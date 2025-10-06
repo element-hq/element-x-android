@@ -8,7 +8,10 @@
 package io.element.android.features.preferences.impl.labs
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
+import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.libraries.featureflag.api.Feature
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
@@ -77,12 +80,47 @@ class LabsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - ToggleFeature with the 'Threads' feature resets the cache`() = runTest {
+        val availableFeatures = listOf(
+            FakeFeature(
+                key = FeatureFlags.Threads.key,
+                title = "Threads",
+                isInLabs = true,
+            ),
+        )
+
+        val clearCacheUseCase = FakeClearCacheUseCase()
+        createLabsPresenter(
+            availableFeatures = availableFeatures,
+            clearCacheUseCase = clearCacheUseCase,
+        ).test {
+            val initialItem = awaitItem()
+            val feature = initialItem.features.first()
+            assertThat(feature.isEnabled).isFalse()
+            assertThat(initialItem.isApplyingChanges).isFalse()
+
+            // Wait until the data finished loading
+            skipItems(1)
+
+            // Toggle the feature
+            initialItem.eventSink(LabsEvents.ToggleFeature(feature.key))
+            assertThat(awaitItem().features.first().isEnabled).isTrue()
+
+            // The clear cache use case should have been called
+            assertThat(awaitItem().isApplyingChanges).isTrue()
+            assertThat(clearCacheUseCase.executeHasBeenCalled).isTrue()
+        }
+    }
+
     private fun createLabsPresenter(
         availableFeatures: List<Feature> = emptyList(),
+        clearCacheUseCase: ClearCacheUseCase = FakeClearCacheUseCase(),
     ): LabsPresenter {
         return LabsPresenter(
             stringProvider = FakeStringProvider(),
             featureFlagService = FakeFeatureFlagService(providedAvailableFeatures = availableFeatures),
+            clearCacheUseCase = clearCacheUseCase,
         )
     }
 }
