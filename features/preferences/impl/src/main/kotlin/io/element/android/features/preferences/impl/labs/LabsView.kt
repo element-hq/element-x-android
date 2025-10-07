@@ -70,7 +70,7 @@ fun LabsView(
         },
         header = {
             IconTitleSubtitleMolecule(
-                modifier = Modifier.padding(horizontal = 24.dp),
+                modifier = Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp),
                 title = stringResource(R.string.screen_labs_header_title),
                 subTitle = stringResource(R.string.screen_labs_header_description),
                 iconStyle = BigIcon.Style.Default(CompoundIcons.Labs())
