@@ -71,11 +71,11 @@ class LabsPresenterTest {
             skipItems(1)
 
             // Toggle the feature, should be true now
-            initialItem.eventSink(LabsEvents.ToggleFeature(feature.key))
+            initialItem.eventSink(LabsEvents.ToggleFeature(feature))
             assertThat(awaitItem().features.first().isEnabled).isTrue()
 
             // Toggle the feature, should be false now
-            initialItem.eventSink(LabsEvents.ToggleFeature(feature.key))
+            initialItem.eventSink(LabsEvents.ToggleFeature(feature))
             assertThat(awaitItem().features.first().isEnabled).isFalse()
         }
     }
@@ -104,7 +104,7 @@ class LabsPresenterTest {
             skipItems(1)
 
             // Toggle the feature
-            initialItem.eventSink(LabsEvents.ToggleFeature(feature.key))
+            initialItem.eventSink(LabsEvents.ToggleFeature(feature))
             assertThat(awaitItem().features.first().isEnabled).isTrue()
 
             // The clear cache use case should have been called

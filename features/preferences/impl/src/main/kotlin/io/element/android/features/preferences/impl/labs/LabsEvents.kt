@@ -7,6 +7,8 @@
 
 package io.element.android.features.preferences.impl.labs
 
+import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
+
 sealed interface LabsEvents {
-    data class ToggleFeature(val feature: String) : LabsEvents
+    data class ToggleFeature(val feature: FeatureUiModel) : LabsEvents
 }

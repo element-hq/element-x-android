@@ -85,7 +85,7 @@ fun LabsView(
                         supportingText = feature.description,
                         value = feature.isEnabled,
                         onChange = {
-                            state.eventSink(LabsEvents.ToggleFeature(feature.key))
+                            state.eventSink(LabsEvents.ToggleFeature(feature))
                         }
                     )
                 }

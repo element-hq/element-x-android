@@ -66,7 +66,7 @@ class LabsPresenter(
         fun handleEvent(event: LabsEvents) {
             when (event) {
                 is LabsEvents.ToggleFeature -> coroutineScope.launch {
-                    val feature = features[event.feature] ?: return@launch
+                    val feature = features[event.feature.key] ?: return@launch
                     val isEnabled = featureFlagService.isFeatureEnabled(feature)
                     featureFlagService.setFeatureEnabled(feature = feature, enabled = !isEnabled)
                     enabledFeatures[feature.key] = !isEnabled
