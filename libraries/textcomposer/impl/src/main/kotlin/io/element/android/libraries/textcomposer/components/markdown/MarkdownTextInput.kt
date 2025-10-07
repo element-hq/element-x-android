@@ -167,6 +167,7 @@ private fun Editable.checkSuggestionNeeded(): Suggestion? {
             '@' -> SuggestionType.Mention
             '#' -> SuggestionType.Room
             '/' -> SuggestionType.Command
+            ':' -> SuggestionType.Emoji
             else -> error("Unknown suggestion type. This should never happen.")
         }
         Suggestion(startOfWord, endOfWord, suggestionType, text)

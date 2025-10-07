@@ -69,6 +69,7 @@ class SuggestionsProcessor {
                     }
             }
             SuggestionType.Command,
+            SuggestionType.Emoji,
             is SuggestionType.Custom -> {
                 // Clear suggestions
                 emptyList()

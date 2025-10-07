@@ -28,6 +28,7 @@ sealed interface SuggestionType {
     data object Mention : SuggestionType
     data object Command : SuggestionType
     data object Room : SuggestionType
+    data object Emoji : SuggestionType
     data class Custom(val pattern: String) : SuggestionType
 
     companion object {
@@ -36,6 +37,7 @@ sealed interface SuggestionType {
                 PatternKey.At -> Mention
                 PatternKey.Slash -> Command
                 PatternKey.Hash -> Room
+                PatternKey.Colon -> Emoji
                 is PatternKey.Custom -> Custom(key.v1)
             }
         }
