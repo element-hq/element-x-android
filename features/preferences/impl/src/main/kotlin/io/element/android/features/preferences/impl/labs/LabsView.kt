@@ -35,6 +35,10 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 
+/**
+ * The contents of the Labs screen.
+ * Design: https://www.figma.com/design/V0dkfRAW6T3yCQKjahpzkX/ER-46-EX--Threads?node-id=2004-27319&t=yssy1yYYigsGON3s-0
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LabsView(
