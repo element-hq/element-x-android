@@ -3,11 +3,11 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M5.19 8v2h2V8z m3.87 0v2h2V8z m3.88 0v2h2V8z m3.87 0v2h2V8zM5.2 11.53v2h2v-2z m3.87 0v2h2v-2z m3.88 0v2h2v-2z m3.87 0v2h2v-2zM9 15a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2z"/>
-    <path
-        android:fillColor="#FF000000"
-        android:fillType="evenOdd"
-        android:pathData="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z m2 0h16v12H4z"/>
+  <path
+      android:pathData="M5.188,8v2h2L7.188,8zM9.063,8v2h2L11.063,8zM12.938,8v2h2L14.938,8zM16.813,8v2h2L18.813,8zM5.188,11.531v2h2v-2zM9.063,11.531v2h2v-2zM12.938,11.531v2h2v-2zM16.813,11.531v2h2v-2zM9,15a1,1 0,1 0,0 2h6a1,1 0,1 0,0 -2z"
+      android:fillColor="#FF000000"/>
+  <path
+      android:pathData="M2,6a2,2 0,0 1,2 -2h16a2,2 0,0 1,2 2v12a2,2 0,0 1,-2 2L4,20a2,2 0,0 1,-2 -2zM4,6h16v12L4,18z"
+      android:fillColor="#FF000000"
+      android:fillType="evenOdd"/>
 </vector>
