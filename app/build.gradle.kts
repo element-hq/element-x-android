@@ -197,6 +197,12 @@ android {
             buildConfigFieldStr("FLAVOR_DESCRIPTION", "FDroid")
         }
     }
+
+    packaging {
+        resources.pickFirsts += setOf(
+            "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+        )
+    }
 }
 
 androidComponents {
