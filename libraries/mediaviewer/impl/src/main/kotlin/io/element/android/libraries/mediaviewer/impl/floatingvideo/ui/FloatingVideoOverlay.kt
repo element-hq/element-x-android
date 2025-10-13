@@ -48,9 +48,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun FloatingVideoOverlay(
     onClose: () -> Unit,
-    onToggleFullScreen: () -> Unit,
+    onToggleFullScreen: (Float) -> Unit,
     currentVideoData : MediaViewerPageData.MediaViewerData?,
-    isMaximized : Boolean ,
+    isMaximized : Boolean,
     windowManager : WindowManager?,
     windowLayoutParams : WindowManager.LayoutParams,
     floatingView : View?
@@ -91,10 +91,6 @@ fun FloatingVideoOverlay(
         updateWindowSize(16f / 9f)
     }
 
-    // Update window size when isMaximized changes
-    LaunchedEffect(isMaximized) {
-        updateWindowSize(currentAspectRatio)
-    }
 
     Box(
         modifier = Modifier
@@ -185,16 +181,18 @@ fun FloatingVideoOverlay(
         ) {
             IconButton(
                 onClick = {
-                    onToggleFullScreen()
-                    updateWindowSize(currentAspectRatio)
+                    onToggleFullScreen ( currentAspectRatio )
+//                    updateWindowSize(currentAspectRatio)
                 },
-                modifier = Modifier.size(32.dp)
+                //it seems the CompoundIcons.Expand() is bigger than the CompoundIcons.Close(),
+                modifier = Modifier.size(28.dp)
             ) {
                 Icon(
                     imageVector = CompoundIcons.Expand(),
                     //action full screen needs to be added to CommonsString
-                    contentDescription = stringResource(CommonStrings.action_view),
-                    tint = Color.White
+                    contentDescription = stringResource(CommonStrings.a11y_expand_message_text_field),
+                    tint = Color.White,
+                    modifier = Modifier.padding(4.dp)
                 )
             }
 

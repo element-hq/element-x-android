@@ -494,6 +494,7 @@ private fun MediaViewerTopBar(
         actions = {
             if (mimeType.isMimeTypeVideo()) {
                 IconButton(
+                   enabled =  actionsEnabled,
                     onClick = {
                         setMinimize(true)
                         onBackClick()

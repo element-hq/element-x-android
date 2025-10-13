@@ -14,7 +14,9 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.provider.Settings
 import android.view.Gravity
 import android.view.View
@@ -35,7 +37,6 @@ import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import androidx.core.net.toUri
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.ui.FloatingVideoOverlay
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenHeight
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenWidth
@@ -191,8 +192,7 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
                     },
                     onToggleFullScreen = {
                         Timber.tag("onToggleFullScreen").d(isMaximized.toString())
-                        toggleFullScreen(windowLayoutParams , windowManager)
-                    },
+                        this@FloatingVideoService.toggleFullScreen(it)                    },
                     floatingView = floatingView,
                     isMaximized = isMaximized ,
                     currentVideoData = currentVideoData,
@@ -236,39 +236,55 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
         return (dp * resources.displayMetrics.density).toInt()
     }
 
-    private fun toggleFullScreen(layoutParams : WindowManager.LayoutParams, windowManager: WindowManager?) {
+
+    private fun toggleFullScreen( aspectRatio : Float ) {
+        val layoutParams = windowLayoutParams
+        val wm = windowManager ?: return
+        val view = floatingView ?: return
+
         isMaximized = !isMaximized
 
-        if (floatingView?.parent == null) return
+        if (view.parent == null) return
 
-        if (!isMaximized) {
-            // Full screen with margin
+
+        val widthFrac = if (aspectRatio > 1f) 0.6f else 0.3f
+        val width = if (isMaximized) {
+            (windowManager.getScreenWidth() * widthFrac).toInt()
+        } else {
+            (windowManager.getScreenWidth() * 0.9f).toInt()
+        }
+        val height = (width / aspectRatio).toInt()
+
+
+
+
+        if (isMaximized) {
+            // Go full screen
             val margin = dpToPx(24)
-
-            // shrink the container size by margins
-            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-            layoutParams.x = 0
-            layoutParams.y = 0
-
-            // video fills the container, container itself is inset by margins
             val screenWidth = Resources.getSystem().displayMetrics.widthPixels
-
             layoutParams.width = screenWidth - margin * 2
             layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
             layoutParams.x = margin
             layoutParams.y = margin
         } else {
-            val scaledWidth = windowManager.getScreenWidth() * 0.3f
-
+            // Minimized
+            val scaledWidth = wm.getScreenWidth() * 0.3f
             layoutParams.width = scaledWidth.toInt()
             layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
             layoutParams.x = 0
             layoutParams.y = 0
         }
 
-        windowManager?.updateViewLayout(floatingView, layoutParams)
-    }
+        windowLayoutParams.width = width
+        windowLayoutParams.height = height
+        windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        windowManager?.updateViewLayout(floatingView, windowLayoutParams)
 
+        Handler(Looper.getMainLooper()).post {
+            wm.updateViewLayout(view, layoutParams)
+        }
+
+    }
 
 }
