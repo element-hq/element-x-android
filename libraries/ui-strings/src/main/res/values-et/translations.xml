@@ -95,6 +95,7 @@
   <string name="action_forgot_password">"Kas unustasid salasõna?"</string>
   <string name="action_forward">"Edasta"</string>
   <string name="action_go_back">"Tagasi eelmisesse vaatesse"</string>
+  <string name="action_go_to_settings">"Ava seadistused"</string>
   <string name="action_ignore">"Eira"</string>
   <string name="action_invite">"Kutsu"</string>
   <string name="action_invite_friends">"Kutsu osalejaid"</string>
@@ -179,6 +180,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sa olid sessioonist väljaloginud"</string>
   <string name="common_appearance">"Välimus"</string>
   <string name="common_audio">"Heli"</string>
+  <string name="common_beta">"Beetaversioon"</string>
   <string name="common_blocked_users">"Blokeeritud kasutajad"</string>
   <string name="common_bubbles">"Mullid"</string>
   <string name="common_call_started">"Kõne algas"</string>

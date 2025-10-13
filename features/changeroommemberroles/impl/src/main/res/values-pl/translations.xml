@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_room_change_permissions_administrators">"Tylko administratorzy"</string>
   <string name="screen_room_change_permissions_ban_people">"Banowanie osób"</string>
-  <string name="screen_room_change_permissions_delete_messages">"Usuwanie wiadomości"</string>
+  <string name="screen_room_change_permissions_delete_messages">"Usuń wiadomości"</string>
   <string name="screen_room_change_permissions_everyone">"Wszyscy"</string>
   <string name="screen_room_change_permissions_invite_people">"Zapraszanie osób i akceptowanie próśb o dołączenie"</string>
   <string name="screen_room_change_permissions_member_moderation">"Moderacja członków"</string>

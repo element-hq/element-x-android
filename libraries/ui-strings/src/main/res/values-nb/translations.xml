@@ -251,6 +251,7 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Ingen resultater"</string>
   <string name="common_no_room_name">"Ingen romnavn"</string>
+  <string name="common_no_space_name">"Ikke noe områdenavn"</string>
   <string name="common_not_encrypted">"Ikke kryptert"</string>
   <string name="common_offline">"Frakoblet"</string>
   <string name="common_open_source_licenses">"Åpen kildekode-lisenser"</string>

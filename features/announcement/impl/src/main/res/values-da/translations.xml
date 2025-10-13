@@ -5,7 +5,7 @@
   <string name="screen_space_announcement_item3">"Finde alle rum, du kan deltage i, i dine klynger"</string>
   <string name="screen_space_announcement_item4">"Deltage i offentlige klynger"</string>
   <string name="screen_space_announcement_item5">"Forlade de klynger, du har tilsluttet dig"</string>
-  <string name="screen_space_announcement_notice">"Oprettelse og administration af klynger kommer snart."</string>
+  <string name="screen_space_announcement_notice">"Filtrering, oprettelse og administration af klynger kommer snart."</string>
   <string name="screen_space_announcement_subtitle">"Velkommen til betaversionen af Klynger! Med denne første version kan du:"</string>
   <string name="screen_space_announcement_title">"Introduktion til Klynger"</string>
 </resources>

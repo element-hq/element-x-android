@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Dodaj reakcję: %1$s"</string>
   <string name="a11y_avatar">"Awatar"</string>
+  <string name="a11y_collapse_message_text_field">"Zmniejsz pole tekstowe wiadomości"</string>
   <string name="a11y_delete">"Usuń"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Wprowadzono %1$d cyfrę"</item>
@@ -11,6 +12,7 @@
   <string name="a11y_edit_avatar">"Edytuj awatar"</string>
   <string name="a11y_edit_room_address_hint">"Podgląd pełnego adresu %1$s"</string>
   <string name="a11y_encryption_details">"Szczegóły szyfrowania"</string>
+  <string name="a11y_expand_message_text_field">"Powiększ pole tekstowe wiadomości"</string>
   <string name="a11y_hide_password">"Ukryj hasło"</string>
   <string name="a11y_join_call">"Dołącz do połączenia"</string>
   <string name="a11y_jump_to_bottom">"Przejdź na dół"</string>
@@ -42,7 +44,7 @@
   <string name="a11y_remove_reaction_with">"Usuń reakcję z %1$s"</string>
   <string name="a11y_room_avatar">"Awatar pokoju"</string>
   <string name="a11y_send_files">"Wyślij pliki"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Wymagane jest działanie ograniczone czasowo"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Wymagane jest działanie ograniczone czasowo, została jedna minuta"</string>
   <string name="a11y_show_password">"Pokaż hasło"</string>
   <string name="a11y_start_call">"Rozpocznij rozmowę"</string>
   <string name="a11y_tombstoned_room">"Pokój nagrobkowy"</string>
@@ -80,6 +82,7 @@
   <string name="action_decline">"Odrzuć"</string>
   <string name="action_decline_and_block">"Odrzuć i zablokuj"</string>
   <string name="action_delete_poll">"Usuń ankietę"</string>
+  <string name="action_deselect_all">"Odznacz wszystko"</string>
   <string name="action_disable">"Wyłącz"</string>
   <string name="action_discard">"Odrzuć"</string>
   <string name="action_dismiss">"Zamknij"</string>
@@ -90,9 +93,11 @@
   <string name="action_enable">"Włącz"</string>
   <string name="action_end_poll">"Zakończ ankietę"</string>
   <string name="action_enter_pin">"Wprowadź PIN"</string>
+  <string name="action_finish">"Zakończ"</string>
   <string name="action_forgot_password">"Nie pamiętasz hasła?"</string>
   <string name="action_forward">"Przekaż dalej"</string>
   <string name="action_go_back">"Wróć"</string>
+  <string name="action_go_to_settings">"Przejdź do ustawień"</string>
   <string name="action_ignore">"Ignoruj"</string>
   <string name="action_invite">"Zaproś"</string>
   <string name="action_invite_friends">"Zaproś znajomych"</string>
@@ -104,10 +109,12 @@
   <string name="action_leave">"Opuść"</string>
   <string name="action_leave_conversation">"Opuść rozmowę"</string>
   <string name="action_leave_room">"Opuść pokój"</string>
+  <string name="action_leave_space">"Opuść przestrzeń"</string>
   <string name="action_load_more">"Załaduj więcej"</string>
   <string name="action_manage_account">"Zarządzaj kontem"</string>
   <string name="action_manage_devices">"Zarządzaj urządzeniami"</string>
   <string name="action_message">"Wiadomość"</string>
+  <string name="action_minimize">"Minimalizuj"</string>
   <string name="action_next">"Dalej"</string>
   <string name="action_no">"Nie"</string>
   <string name="action_not_now">"Nie teraz"</string>
@@ -136,6 +143,7 @@
   <string name="action_retry_decryption">"Ponów próbę odszyfrowania"</string>
   <string name="action_save">"Zapisz"</string>
   <string name="action_search">"Szukaj"</string>
+  <string name="action_select_all">"Zaznacz wszystko"</string>
   <string name="action_send">"Wyślij"</string>
   <string name="action_send_edited_message">"Wyślij edytowaną wiadomość"</string>
   <string name="action_send_message">"Wyślij wiadomość"</string>
@@ -164,12 +172,17 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Dostępna aktualizacja"</string>
   <string name="common_about">"O programie"</string>
   <string name="common_acceptable_use_policy">"Polityka użytkowania"</string>
+  <string name="common_add_account">"Dodaj konto"</string>
+  <string name="common_add_another_account">"Dodaj kolejne konto"</string>
   <string name="common_adding_caption">"Dodawanie opisu"</string>
   <string name="common_advanced_settings">"Ustawienia zaawansowane"</string>
   <string name="common_an_image">"obraz"</string>
   <string name="common_analytics">"Dane analityczne"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Opuściłeś pokój"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Zostałeś wylogowany z sesji"</string>
   <string name="common_appearance">"Wygląd"</string>
   <string name="common_audio">"Dźwięk"</string>
+  <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Zablokowani użytkownicy"</string>
   <string name="common_bubbles">"Bąbelki"</string>
   <string name="common_call_started">"Rozpoczęto rozmowę"</string>
@@ -179,9 +192,11 @@
   <string name="common_creating_room">"Tworzenie pokoju…"</string>
   <string name="common_current_user_canceled_knock">"Anulowano żądanie"</string>
   <string name="common_current_user_left_room">"Opuszczono pokój"</string>
+  <string name="common_current_user_left_space">"Opuścił przestrzeń"</string>
   <string name="common_current_user_rejected_invite">"Odrzucono zaproszenie"</string>
   <string name="common_dark">"Ciemny"</string>
   <string name="common_decryption_error">"Błąd deszyfrowania"</string>
+  <string name="common_description">"Opis"</string>
   <string name="common_developer_options">"Opcje programisty"</string>
   <string name="common_device_id">"ID urządzenia"</string>
   <string name="common_direct_chat">"Czat prywatny"</string>
@@ -216,6 +231,7 @@ Powód: %1$s."</string>
   <string name="common_install_apk_android">"Zainstaluj APK"</string>
   <string name="common_invite_unknown_profile">"Nie można znaleźć identyfikatora Matrix ID, zaproszenie mogło nie dotrzeć."</string>
   <string name="common_leaving_room">"Opuszczanie pokoju"</string>
+  <string name="common_leaving_space">"Opuszczam przestrzeń"</string>
   <string name="common_light">"Jasny"</string>
   <string name="common_line_copied_to_clipboard">"Wiersz skopiowany do schowka"</string>
   <string name="common_link_copied_to_clipboard">"Link został skopiowany do schowka"</string>
@@ -228,7 +244,7 @@ Powód: %1$s."</string>
   </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d członek"</item>
-    <item quantity="few">"%1$d członki"</item>
+    <item quantity="few">"%1$d członków"</item>
     <item quantity="many">"%1$d członków"</item>
   </plurals>
   <string name="common_message">"Wiadomość"</string>
@@ -240,6 +256,7 @@ Powód: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Brak wyników"</string>
   <string name="common_no_room_name">"Brak nazwy pokoju"</string>
+  <string name="common_no_space_name">"Brak nazwy przestrzeni"</string>
   <string name="common_not_encrypted">"Nieszyfrowane"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Licencje open-source"</string>
@@ -263,7 +280,9 @@ Powód: %1$s."</string>
   <string name="common_preparing">"Przygotowuję…"</string>
   <string name="common_privacy_policy">"Polityka prywatności"</string>
   <string name="common_private_room">"Pokój prywatny"</string>
+  <string name="common_private_space">"Prywatna przestrzeń"</string>
   <string name="common_public_room">"Pokój publiczny"</string>
+  <string name="common_public_space">"Przestrzeń publiczna"</string>
   <string name="common_reaction">"Reakcja"</string>
   <string name="common_reactions">"Reakcje"</string>
   <string name="common_reason">"Powód"</string>
@@ -282,6 +301,11 @@ Powód: %1$s."</string>
   <string name="common_room">"Pokój"</string>
   <string name="common_room_name">"Nazwa pokoju"</string>
   <string name="common_room_name_placeholder">"np. nazwa projektu"</string>
+  <plurals name="common_rooms">
+    <item quantity="one">"%1$d Pokój"</item>
+    <item quantity="few">"%1$d Pokoje"</item>
+    <item quantity="many">"%1$d Pokoi"</item>
+  </plurals>
   <string name="common_saved_changes">"Zapisano zmiany"</string>
   <string name="common_saving">"Zapisywanie"</string>
   <string name="common_screen_lock">"Blokada ekranu"</string>
@@ -289,18 +313,28 @@ Powód: %1$s."</string>
   <string name="common_search_results">"Wyniki wyszukiwania"</string>
   <string name="common_security">"Bezpieczeństwo"</string>
   <string name="common_seen_by">"Wyświetlone przez"</string>
+  <string name="common_select_account">"Wybierz konto"</string>
   <string name="common_send_to">"Wyślij do"</string>
   <string name="common_sending">"Wysyłanie…"</string>
   <string name="common_sending_failed">"Błąd wysyłania"</string>
   <string name="common_sent">"Wysłano"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Serwer nie jest obsługiwany"</string>
+  <string name="common_server_unreachable">"Serwer niedostępny"</string>
   <string name="common_server_url">"Adres URL serwera"</string>
   <string name="common_settings">"Ustawienia"</string>
+  <string name="common_share_space">"Udostępnij przestrzeń"</string>
   <string name="common_shared_location">"Udostępniona lokalizacja"</string>
+  <string name="common_shared_space">"Udostępniona przestrzeń"</string>
   <string name="common_signing_out">"Wylogowywanie"</string>
   <string name="common_something_went_wrong">"Coś poszło nie tak"</string>
   <string name="common_something_went_wrong_message">"Napotkaliśmy problem. Spróbuj ponownie."</string>
+  <string name="common_space">"Przestrzeń"</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d Przestrzeń"</item>
+    <item quantity="few">"%1$d Przestrzenie"</item>
+    <item quantity="many">"%1$d Przestrzeni"</item>
+  </plurals>
   <string name="common_starting_chat">"Rozpoczynanie czatu…"</string>
   <string name="common_sticker">"Naklejka"</string>
   <string name="common_success">"Sukces"</string>
@@ -331,6 +365,12 @@ Powód: %1$s."</string>
   <string name="common_verify_identity">"Zweryfikuj tożsamość"</string>
   <string name="common_verify_user">"Zweryfikuj użytkownika"</string>
   <string name="common_video">"Film"</string>
+  <string name="common_video_quality_high">"Wysoka jakość"</string>
+  <string name="common_video_quality_high_description">"Najlepsza jakość, większy rozmiar pliku"</string>
+  <string name="common_video_quality_low">"Niska jakość"</string>
+  <string name="common_video_quality_low_description">"Największa prędkość przesyłania i najmniejszy rozmiar pliku"</string>
+  <string name="common_video_quality_standard">"Jakość standardowa"</string>
+  <string name="common_video_quality_standard_description">"Balans między jakością a szybkością przesyłania"</string>
   <string name="common_voice_message">"Wiadomość głosowa"</string>
   <string name="common_waiting">"Oczekiwanie…"</string>
   <string name="common_waiting_for_decryption_key">"Oczekiwanie na tę wiadomość"</string>
@@ -345,6 +385,10 @@ Powód: %1$s."</string>
 
 Czy na pewno chcesz kontynuować?"</string>
   <string name="dialog_confirm_link_title">"Sprawdź dwukrotnie ten link"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Wybierz domyślną jakość przesyłanych filmów."</string>
+  <string name="dialog_default_video_quality_selector_title">"Jakość przesyłania wideo"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Maksymalny dozwolony rozmiar pliku to: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Rozmiar pliku jest za duży, aby go przesłać"</string>
   <string name="dialog_room_reported">"Pokój zgłoszony"</string>
   <string name="dialog_room_reported_and_left">"Opuszczono i zgłoszono pokój"</string>
   <string name="dialog_title_confirmation">"Potwierdzenie"</string>
@@ -353,6 +397,11 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="dialog_title_warning">"Ostrzeżenie"</string>
   <string name="dialog_unsaved_changes_description_android">"Zmiany nie zostały zapisane. Czy na pewno chcesz wrócić?"</string>
   <string name="dialog_unsaved_changes_title">"Zapisać zmiany?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Maksymalny dozwolony rozmiar pliku to: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Wybierz jakość filmu, który chcesz przesłać."</string>
+  <string name="dialog_video_quality_selector_title">"Wybierz jakość przesyłania wideo"</string>
+  <string name="emoji_picker_search_placeholder">"Wyszukaj emoji"</string>
+  <string name="error_account_already_logged_in">"Jesteś już zalogowany na tym urządzeniu jako %1$s."</string>
   <string name="error_account_creation_not_possible">"Twój serwer domowy wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont."</string>
   <string name="error_failed_creating_the_permalink">"Nie udało się utworzyć linku bezpośredniego"</string>
   <string name="error_failed_loading_map">"%1$s nie mogło wczytać mapy. Spróbuj ponownie później."</string>
@@ -404,6 +453,7 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Twoja wiadomość nie została wysłana, ponieważ %1$s nie zweryfikował swoich wszystkich urządzeń"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno lub więcej z Twoich urządzeń jest niezweryfikowanych. Wyślij wiadomość mimo to lub anuluj i spróbuj ponownie po zweryfikowaniu wszystkich swoich urządzeń."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Twoja wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń."</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Edytuj administratorów lub właścicieli"</string>
   <string name="screen_room_error_failed_processing_media">"Przetwarzanie multimediów do przesłania nie powiodło się, spróbuj ponownie."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nie można pobrać danych użytkownika"</string>
   <string name="screen_room_event_pill">"Wiadomość w %1$s"</string>
@@ -421,6 +471,10 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_share_open_google_maps">"Otwórz w Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Otwórz w OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Udostępnij tę lokalizację"</string>
+  <string name="screen_space_list_description">"Przestrzenie, które stworzyłeś lub do których dołączyłeś."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"Przestrzeń %1$s"</string>
+  <string name="screen_space_list_title">"Przestrzenie"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Wiadomość nie została wysłana, ponieważ tożsamość %1$s została zresetowana."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Wiadomość nie została wysłana, ponieważ %1$s nie zweryfikował wszystkich urządzeń."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń."</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_ban_by_message">"Zostałeś zbanowany z tego pokoju przez %1$s."</string>
-  <string name="screen_join_room_ban_message">"Zostałeś zbanowany z tego pokoju"</string>
+  <string name="screen_join_room_ban_by_message">"Zostałeś zbanowany przez %1$s ."</string>
+  <string name="screen_join_room_ban_message">"Zostałeś zbanowany"</string>
   <string name="screen_join_room_ban_reason">"Powód: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Anuluj prośbę"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Tak, anuluj"</string>
@@ -11,10 +11,11 @@
   <string name="screen_join_room_decline_and_block_alert_message">"Czy na pewno chcesz odrzucić zaproszenie dołączenia do tego pokoju? %1$s nie będzie mógł się również z Tobą skontaktować, ani zaprosić Cię do pokoju."</string>
   <string name="screen_join_room_decline_and_block_alert_title">"Odrzuć zaproszenie i zablokuj"</string>
   <string name="screen_join_room_decline_and_block_button_title">"Odrzuć i zablokuj"</string>
-  <string name="screen_join_room_fail_message">"Nie udało się dołączyć do pokoju."</string>
-  <string name="screen_join_room_fail_reason">"Ten pokój wymaga zaproszenia lub jest ograniczony z poziomu przestrzeni."</string>
-  <string name="screen_join_room_forget_action">"Zapomnij o tym pokoju"</string>
-  <string name="screen_join_room_invite_required_message">"Potrzebujesz zaproszenia, aby dołączyć do tego pokoju"</string>
+  <string name="screen_join_room_fail_message">"Nie udało się dołączyć do pokoju"</string>
+  <string name="screen_join_room_fail_reason">"Ten pokój wymaga zaproszenia lub dołączanie zostało ograniczone."</string>
+  <string name="screen_join_room_forget_action">"Zapomnij"</string>
+  <string name="screen_join_room_invite_required_message">"Aby dołączyć, potrzebujesz zaproszenia"</string>
+  <string name="screen_join_room_invited_by">"Zaproszony przez"</string>
   <string name="screen_join_room_join_action">"Dołącz"</string>
   <string name="screen_join_room_join_restricted_message">"Aby dołączyć, musisz uzyskać zaproszenie lub być członkiem danej przestrzeni."</string>
   <string name="screen_join_room_knock_action">"Wyślij prośbę o dołączenie"</string>

@@ -95,6 +95,7 @@
   <string name="action_forgot_password">"Elfelejtette a jelszót?"</string>
   <string name="action_forward">"Tovább"</string>
   <string name="action_go_back">"Visszalépés"</string>
+  <string name="action_go_to_settings">"Ugrás a beállításokhoz"</string>
   <string name="action_ignore">"Mellőzés"</string>
   <string name="action_invite">"Meghívás"</string>
   <string name="action_invite_friends">"Ismerősök meghívása"</string>
@@ -111,6 +112,7 @@
   <string name="action_manage_account">"Fiók kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
   <string name="action_message">"Üzenet"</string>
+  <string name="action_minimize">"Minimalizálás"</string>
   <string name="action_next">"Következő"</string>
   <string name="action_no">"Nem"</string>
   <string name="action_not_now">"Most nem"</string>
@@ -178,6 +180,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Ki lett jelentkeztetve a munkamenetből"</string>
   <string name="common_appearance">"Megjelenítés"</string>
   <string name="common_audio">"Hang"</string>
+  <string name="common_beta">"Béta"</string>
   <string name="common_blocked_users">"Letiltott felhasználók"</string>
   <string name="common_bubbles">"Buborékok"</string>
   <string name="common_call_started">"A hívás elindult"</string>
@@ -226,6 +229,7 @@ Ok: %1$s."</string>
   <string name="common_install_apk_android">"APK telepítése"</string>
   <string name="common_invite_unknown_profile">"Ez a Matrix-azonosító nem található, ezért előfordulhat, hogy a meghívó nem érkezik meg."</string>
   <string name="common_leaving_room">"Szoba elhagyása"</string>
+  <string name="common_leaving_space">"Tér elhagyása"</string>
   <string name="common_light">"Világos"</string>
   <string name="common_line_copied_to_clipboard">"A sor a vágólapra másolva"</string>
   <string name="common_link_copied_to_clipboard">"Hivatkozás a vágólapra másolva"</string>
@@ -313,6 +317,7 @@ Ok: %1$s."</string>
   <string name="common_settings">"Beállítások"</string>
   <string name="common_share_space">"Tér megosztása"</string>
   <string name="common_shared_location">"Megosztott tartózkodási hely"</string>
+  <string name="common_shared_space">"Megosztott tér"</string>
   <string name="common_signing_out">"Kijelentkezés"</string>
   <string name="common_something_went_wrong">"Valamilyen hiba történt"</string>
   <string name="common_something_went_wrong_message">"Problémába ütköztünk. Próbálja újra."</string>

@@ -3,6 +3,8 @@
   <string name="banner_battery_optimization_content_android">"Kui tahad olla kindel, et näed õigel ajal kõiki teavitusi, siis palun lülita akukasutuse optimeerimine välja."</string>
   <string name="banner_battery_optimization_submit_android">"Lülita akukasutuse optimeerimine välja"</string>
   <string name="banner_battery_optimization_title_android">"Sa ei näe kõiki teavitusi?"</string>
+  <string name="banner_new_sound_message">"Sinu nutiseadme teavituste heli on uuenenud - see on nüüd selgem, kiirem ja vähem häiriv."</string>
+  <string name="banner_new_sound_title">"Oleme sinu helisid värskendanud"</string>
   <string name="banner_set_up_recovery_content">"Loo uus taastevõti, mida saad kasutada oma krüptitud sõnumite ajaloo taastamisel olukorras, kus kaotad ligipääsu oma seadmetele."</string>
   <string name="banner_set_up_recovery_submit">"Seadista andmete taastamine"</string>
   <string name="banner_set_up_recovery_title">"Seadista taastamine"</string>

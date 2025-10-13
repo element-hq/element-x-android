@@ -11,7 +11,7 @@
   <string name="screen_identity_use_another_device">"Använd en annan enhet"</string>
   <string name="screen_identity_waiting_on_other_device">"Väntar på annan enhet …"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Något verkar inte stämma. Antingen gick tidsgränsen för begäran ut eller så avvisades begäran."</string>
-  <string name="screen_session_verification_compare_emojis_subtitle">"Bekräfta att emojierna nedan matchar de som visas på din andra session."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Bekräfta att emojierna nedan matchar de som visas på din andra enhet."</string>
   <string name="screen_session_verification_compare_emojis_title">"Jämför emojis"</string>
   <string name="screen_session_verification_compare_emojis_user_subtitle">"Bekräfta att emojierna nedan matchar de som visas på den andra användarens enhet."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Bekräfta att siffrorna nedan matchar de som visas på din andra session."</string>

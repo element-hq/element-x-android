@@ -3,6 +3,8 @@
   <string name="banner_battery_optimization_content_android">"Wyłącz optymalizację baterii dla tej aplikacji, aby upewnić się, że wszystkie powiadomienia są odbierane."</string>
   <string name="banner_battery_optimization_submit_android">"Wyłącz optymalizację"</string>
   <string name="banner_battery_optimization_title_android">"Powiadomienia nie dochodzą?"</string>
+  <string name="banner_new_sound_message">"Sygnał powiadomień został zaktualizowany — jest wyraźniejszy, szybszy i mniej uciążliwy."</string>
+  <string name="banner_new_sound_title">"Odświeżyliśmy Twoje dźwięki"</string>
   <string name="banner_set_up_recovery_content">"Wygeneruj nowy klucz przywracania, którego można użyć do przywrócenia historii wiadomości szyfrowanych w przypadku utraty dostępu do swoich urządzeń."</string>
   <string name="banner_set_up_recovery_submit">"Skonfiguruj przywracanie"</string>
   <string name="banner_set_up_recovery_title">"Skonfiguruj przywracanie"</string>
@@ -13,6 +15,7 @@
   <string name="full_screen_intent_banner_message">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
   <string name="full_screen_intent_banner_title">"Popraw jakość swoich rozmów"</string>
   <string name="screen_home_tab_chats">"Wszystkie czaty"</string>
+  <string name="screen_home_tab_spaces">"Przestrzenie"</string>
   <string name="screen_invites_decline_chat_message">"Czy na pewno chcesz odrzucić zaproszenie dołączenia do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odrzuć zaproszenie"</string>
   <string name="screen_invites_decline_direct_chat_message">"Czy na pewno chcesz odrzucić rozmowę prywatną z %1$s?"</string>
@@ -32,6 +35,7 @@ Na razie możesz wyczyścić filtry, aby zobaczyć pozostałe czaty"</string>
   <string name="screen_roomlist_filter_invites">"Zaproszenia"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Nie masz żadnych oczekujących zaproszeń."</string>
   <string name="screen_roomlist_filter_low_priority">"Niski priorytet"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Nie masz jeszcze żadnych czatów o niskim priorytecie"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Wyczyść filtry, aby zobaczyć pozostałe czaty"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Brak czatów dla podanych kryteriów"</string>
   <string name="screen_roomlist_filter_people">"Osoby"</string>
