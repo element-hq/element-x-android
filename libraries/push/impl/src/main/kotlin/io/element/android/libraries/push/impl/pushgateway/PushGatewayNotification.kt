@@ -20,5 +20,5 @@ data class PushGatewayNotification(
      * Required. This is an array of devices that the notification should be sent to.
      */
     @SerialName("devices")
-    val devices: List<PushGatewayDevice>
+    val devices: List<PushGatewayDevice>,
 )

@@ -42,9 +42,12 @@ class DefaultPushGatewayNotifyRequest(
                     devices = listOf(
                         PushGatewayDevice(
                             params.appId,
-                            params.pushKey
+                            params.pushKey,
+                            PusherData(mapOf(
+                                "cs" to "A_FAKE_SECRET",
+                            ))
                         )
-                    )
+                    ),
                 )
             )
         )

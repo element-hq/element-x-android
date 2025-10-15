@@ -21,5 +21,14 @@ data class PushGatewayDevice(
      * Required. The pushkey given when the pusher was created.
      */
     @SerialName("pushkey")
-    val pushKey: String
+    val pushKey: String,
+    /** Optional. Additional pusher data. */
+    @SerialName("data")
+    val data: PusherData? = null,
+)
+
+@Serializable
+data class PusherData(
+    @SerialName("default_payload")
+    val defaultPayload: Map<String, String>,
 )
