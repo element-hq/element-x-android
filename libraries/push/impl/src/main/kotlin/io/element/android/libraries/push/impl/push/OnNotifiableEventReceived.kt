@@ -27,11 +27,9 @@ class DefaultOnNotifiableEventReceived(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
-    private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
 ) : OnNotifiableEventReceived {
     override fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>) {
         coroutineScope.launch {
-            launch { syncOnNotifiableEvent(notifiableEvents) }
             defaultNotificationDrawerManager.onNotifiableEventsReceived(notifiableEvents.filter { it !is NotifiableRingingCallEvent })
         }
     }

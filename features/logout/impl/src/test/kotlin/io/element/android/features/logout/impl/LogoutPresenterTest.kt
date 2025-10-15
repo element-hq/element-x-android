@@ -14,6 +14,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -21,7 +22,9 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
+import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
@@ -145,7 +148,9 @@ class LogoutPresenterTest {
 
     @Test
     fun `present - logout then confirm`() = runTest {
-        val presenter = createLogoutPresenter()
+        val cancelWorkManagerJobsLambda = lambdaRecorder<SessionId, Unit> {}
+        val workManagerScheduler = FakeWorkManagerScheduler(cancelLambda = cancelWorkManagerJobsLambda)
+        val presenter = createLogoutPresenter(workManagerScheduler = workManagerScheduler)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -158,6 +163,8 @@ class LogoutPresenterTest {
             assertThat(loadingState.logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.logoutAction).isInstanceOf(AsyncAction.Success::class.java)
+
+            cancelWorkManagerJobsLambda.assertions().isCalledOnce()
         }
     }
 
@@ -230,7 +237,9 @@ class LogoutPresenterTest {
 internal fun createLogoutPresenter(
     matrixClient: MatrixClient = FakeMatrixClient(),
     encryptionService: EncryptionService = FakeEncryptionService(),
+    workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(cancelLambda = {}),
 ): LogoutPresenter = LogoutPresenter(
     matrixClient = matrixClient,
     encryptionService = encryptionService,
+    workManagerScheduler = workManagerScheduler,
 )

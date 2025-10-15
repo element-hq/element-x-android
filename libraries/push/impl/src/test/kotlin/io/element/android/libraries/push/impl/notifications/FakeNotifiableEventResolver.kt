@@ -8,6 +8,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.tests.testutils.lambda.lambdaError
 

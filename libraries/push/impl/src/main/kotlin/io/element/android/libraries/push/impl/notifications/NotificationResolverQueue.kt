@@ -11,10 +11,12 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
+import io.element.android.libraries.push.impl.workmanager.SyncNotificationWorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -38,6 +40,8 @@ class NotificationResolverQueue(
     private val notifiableEventResolver: NotifiableEventResolver,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
+    private val workManagerScheduler: WorkManagerScheduler,
+    private val featureFlagService: FeatureFlagService,
 ) {
     companion object {
         private const val BATCH_WINDOW_MS = 250L
@@ -75,30 +79,35 @@ class NotificationResolverQueue(
         // If this job is still active (so this is the latest job), we launch a separate one that won't be cancelled when enqueueing new items
         // to process the existing queued items.
         appCoroutineScope.launch {
-            val groupedRequestsById = buildList {
-                while (!requestQueue.isEmpty) {
-                    requestQueue.receiveCatching().getOrNull()?.let(this::add)
-                }
-            }.groupBy { it.sessionId }
+            if (featureFlagService.isFeatureEnabled(FeatureFlags.SyncNotificationsWithWorkManager)) {
+                val groupedRequestsById = buildList {
+                    while (!requestQueue.isEmpty) {
+                        requestQueue.receiveCatching().getOrNull()?.let(this::add)
+                    }
+                }.groupBy { it.sessionId }
 
-            val sessionIds = groupedRequestsById.keys
-            for (sessionId in sessionIds) {
-                val requests = groupedRequestsById[sessionId].orEmpty()
-                Timber.d("Fetching notifications for $sessionId: $requests. Pending requests: ${!requestQueue.isEmpty}")
-                // Resolving the events in parallel should improve performance since each session id will query a different Client
-                launch {
-                    // No need for a Mutex since the SDK already has one internally
-                    val notifications = notifiableEventResolver.resolveEvents(sessionId, requests).getOrNull().orEmpty()
-                    (results as MutableSharedFlow).emit(requests to notifications)
+                for ((sessionId, requests) in groupedRequestsById) {
+                    workManagerScheduler.submit(SyncNotificationWorkManagerRequest(sessionId, requests))
+                }
+            } else {
+                val groupedRequestsById = buildList {
+                    while (!requestQueue.isEmpty) {
+                        requestQueue.receiveCatching().getOrNull()?.let(this::add)
+                    }
+                }.groupBy { it.sessionId }
+
+                val sessionIds = groupedRequestsById.keys
+                for (sessionId in sessionIds) {
+                    val requests = groupedRequestsById[sessionId].orEmpty()
+                    Timber.d("Fetching notifications for $sessionId: $requests. Pending requests: ${!requestQueue.isEmpty}")
+                    // Resolving the events in parallel should improve performance since each session id will query a different Client
+                    launch {
+                        // No need for a Mutex since the SDK already has one internally
+                        val notifications = notifiableEventResolver.resolveEvents(sessionId, requests).getOrNull().orEmpty()
+                        (results as MutableSharedFlow).emit(requests to notifications)
+                    }
                 }
             }
         }
     }
 }
-
-data class NotificationEventRequest(
-    val sessionId: SessionId,
-    val roomId: RoomId,
-    val eventId: EventId,
-    val providerInfo: String,
-)

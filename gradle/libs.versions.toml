@@ -20,6 +20,7 @@ lifecycle = "2.9.2"
 activity = "1.11.0"
 media3 = "1.8.0"
 camera = "1.5.1"
+work = "2.10.5"
 
 # Compose
 compose_bom = "2025.07.00"
@@ -94,6 +95,7 @@ androidx_camera_lifecycle = { module = "androidx.camera:camera-lifecycle", versi
 androidx_camera_view = { module = "androidx.camera:camera-view", version.ref = "camera" }
 androidx_camera_camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera" }
 androidx_javascriptengine = "androidx.javascriptengine:javascriptengine:1.0.0"
+androidx_workmanager_runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 
 androidx_recyclerview = "androidx.recyclerview:recyclerview:1.4.0"
 androidx_browser = "androidx.browser:browser:1.9.0"

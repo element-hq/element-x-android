@@ -14,6 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -28,11 +29,12 @@ import io.element.android.libraries.matrix.test.A_SECRET
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.push.api.push.NotificationEventRequest
+import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.history.FakePushHistoryService
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.FallbackNotificationFactory
-import io.element.android.libraries.push.impl.notifications.NotificationEventRequest
 import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
 import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
@@ -48,6 +50,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
+import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.any
@@ -644,6 +647,8 @@ class DefaultPushHandlerTest {
         elementCallEntryPoint: FakeElementCallEntryPoint = FakeElementCallEntryPoint(),
         notificationChannels: FakeNotificationChannels = FakeNotificationChannels(),
         pushHistoryService: PushHistoryService = FakePushHistoryService(),
+        syncOnNotifiableEvent: SyncOnNotifiableEvent = SyncOnNotifiableEvent {},
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
     ): DefaultPushHandler {
         return DefaultPushHandler(
             onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceived),
@@ -661,12 +666,19 @@ class DefaultPushHandlerTest {
             elementCallEntryPoint = elementCallEntryPoint,
             notificationChannels = notificationChannels,
             pushHistoryService = pushHistoryService,
-            resolverQueue = NotificationResolverQueue(notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventsResult), backgroundScope),
+            resolverQueue = NotificationResolverQueue(
+                notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventsResult),
+                appCoroutineScope = backgroundScope,
+                workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
+                featureFlagService = featureFlagService,
+            ),
             appCoroutineScope = backgroundScope,
             fallbackNotificationFactory = FallbackNotificationFactory(
                 clock = FakeSystemClock(),
                 stringProvider = FakeStringProvider(),
-            )
+            ),
+            syncOnNotifiableEvent = syncOnNotifiableEvent,
+            featureFlagService = featureFlagService,
         )
     }
 }
