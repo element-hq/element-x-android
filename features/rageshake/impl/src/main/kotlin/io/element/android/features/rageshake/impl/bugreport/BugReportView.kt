@@ -7,6 +7,7 @@
 
 package io.element.android.features.rageshake.impl.bugreport
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -40,7 +42,6 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -181,9 +182,20 @@ fun BugReportView(
     }
 }
 
-@PreviewsDayNight
+@Preview(heightDp = 1000)
 @Composable
-internal fun BugReportViewPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
+internal fun BugReportViewDayPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
+    BugReportView(
+        state = state,
+        onSuccess = {},
+        onBackClick = {},
+        onViewLogs = {},
+    )
+}
+
+@Preview(heightDp = 1000, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+internal fun BugReportViewNightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
     BugReportView(
         state = state,
         onSuccess = {},
