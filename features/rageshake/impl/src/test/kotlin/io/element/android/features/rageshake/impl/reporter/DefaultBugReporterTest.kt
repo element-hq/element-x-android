@@ -66,7 +66,7 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
-            withPushRules = true,
+            sendPushRules = true,
             problemDescription = "a bug occurred",
             canContact = true,
             listener = object : BugReporterListener {
@@ -131,7 +131,7 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
-            withPushRules = true,
+            sendPushRules = true,
             problemDescription = "a bug occurred",
             canContact = true,
             listener = object : BugReporterListener {
@@ -282,7 +282,7 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
-            withPushRules = true,
+            sendPushRules = true,
             problemDescription = "a bug occurred",
             canContact = true,
             listener = object : BugReporterListener {

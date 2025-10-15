@@ -114,7 +114,7 @@ class DefaultBugReporter(
         withScreenshot: Boolean,
         problemDescription: String,
         canContact: Boolean,
-        withPushRules: Boolean,
+        sendPushRules: Boolean,
         listener: BugReporterListener,
     ) {
         val url = bugReporterUrlProvider.provide().first()
@@ -184,7 +184,7 @@ class DefaultBugReporter(
                             builder.addFormDataPart("device_keys", "curve25519:$curveKey, ed25519:$edKey")
                         }
 
-                        if (withPushRules) {
+                        if (sendPushRules) {
                             client.notificationSettingsService.getRawPushRules().getOrNull()?.let { pushRules ->
                                 builder.addFormDataPart(
                                     name = "file",
