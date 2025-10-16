@@ -10,13 +10,24 @@ package io.element.android.libraries.push.impl.workmanager
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.binding
+import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.push.NotificationEventRequest
-import io.element.android.libraries.push.impl.di.WorkManagerNotificationBindings
-import io.element.android.libraries.push.impl.di.WorkManagerPushBindings
+import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
+import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
+import io.element.android.libraries.workmanager.api.WorkManagerScheduler
+import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
+import io.element.android.libraries.workmanager.api.di.WorkerKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
@@ -26,9 +37,15 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
+@AssistedInject
 class FetchNotificationsWorker(
-    context: Context,
-    workerParams: WorkerParameters
+    @Assisted workerParams: WorkerParameters,
+    @ApplicationContext context: Context,
+    private val networkMonitor: NetworkMonitor,
+    private val eventResolver: NotifiableEventResolver,
+    private val queue: NotificationResolverQueue,
+    private val workManagerScheduler: WorkManagerScheduler,
+    private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
 ) : CoroutineWorker(context, workerParams) {
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -44,10 +61,6 @@ class FetchNotificationsWorker(
 
         Timber.d("Deserialized ${requests.size} requests")
 
-        val workManagerBindings = applicationContext.bindings<WorkManagerPushBindings>()
-
-        val networkMonitor = applicationContext.bindings<WorkManagerNotificationBindings>().networkMonitor()
-
         // Wait for network to be available, but not more than 10 seconds
         val hasNetwork = withTimeoutOrNull(10.seconds) {
             networkMonitor.connectivity.first { it == NetworkStatus.Connected }
@@ -56,9 +69,6 @@ class FetchNotificationsWorker(
             Timber.w("No network, retrying later")
             return@withContext Result.retry()
         }
-
-        val eventResolver = workManagerBindings.notifiableEventResolver()
-        val queue = workManagerBindings.notifiableEventQueue()
 
         val failedSyncForSessions = mutableSetOf<SessionId>()
 
@@ -80,27 +90,23 @@ class FetchNotificationsWorker(
 
         // If there were failures for whole sessions, we retry all their requests
         if (failedSyncForSessions.isNotEmpty()) {
-            val scheduler = workManagerBindings.workManagerScheduler()
             for (failedSessionId in failedSyncForSessions) {
                 val requestsToRetry = groupedRequests[failedSessionId] ?: continue
                 Timber.d("Re-scheduling ${requestsToRetry.size} failed notification requests for session $failedSessionId")
-                scheduler.submit(SyncNotificationWorkManagerRequest(failedSessionId, requestsToRetry))
+                workManagerScheduler.submit(SyncNotificationWorkManagerRequest(failedSessionId, requestsToRetry))
             }
         }
 
         Timber.d("Notifications processed successfully")
 
-        performOpportunisticSyncIfNeeded(workManagerBindings, groupedRequests)
+        performOpportunisticSyncIfNeeded(groupedRequests)
 
         Result.success()
     }
 
     private suspend fun performOpportunisticSyncIfNeeded(
-        workManagerPushBindings: WorkManagerPushBindings,
         groupedRequests: Map<SessionId, List<NotificationEventRequest>>,
     ) {
-        val syncOnNotifiableEvent = workManagerPushBindings.syncOnNotifiableEvent()
-
         for ((sessionId, notificationRequests) in groupedRequests) {
             runCatchingExceptions {
                 syncOnNotifiableEvent(notificationRequests)
@@ -109,4 +115,9 @@ class FetchNotificationsWorker(
             }
         }
     }
+
+    @ContributesIntoMap(AppScope::class, binding = binding<MetroWorkerFactory.WorkerInstanceFactory<*>>())
+    @WorkerKey(FetchNotificationsWorker::class)
+    @AssistedFactory
+    abstract class Factory : MetroWorkerFactory.WorkerInstanceFactory<FetchNotificationsWorker>
 }

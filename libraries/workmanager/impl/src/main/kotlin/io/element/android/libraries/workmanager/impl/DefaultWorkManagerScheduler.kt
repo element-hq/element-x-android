@@ -28,7 +28,7 @@ class DefaultWorkManagerScheduler(
     override fun submit(workManagerRequest: WorkManagerRequest) {
         workManagerRequest.build().fold(
             onSuccess = {
-                val workManager = WorkManager.Companion.getInstance(context)
+                val workManager = WorkManager.getInstance(context)
                 workManager.enqueue(it)
             },
             onFailure = {
@@ -38,7 +38,7 @@ class DefaultWorkManagerScheduler(
     }
 
     override fun cancel(sessionId: SessionId) {
-        val workManager = WorkManager.Companion.getInstance(context)
+        val workManager = WorkManager.getInstance(context)
         Timber.Forest.d("Cancelling work for sessionId: $sessionId")
 
         for (requestType in WorkManagerRequestType.entries) {

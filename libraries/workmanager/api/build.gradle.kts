@@ -1,3 +1,5 @@
+import extension.setupDependencyInjection
+
 /*
  * Copyright 2025 New Vector Ltd.
  *
@@ -11,6 +13,8 @@ plugins {
 android {
     namespace = "io.element.android.libraries.workmanager.api"
 }
+
+setupDependencyInjection()
 
 dependencies {
     api(libs.androidx.workmanager.runtime)
