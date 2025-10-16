@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -33,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -64,6 +67,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeView(
@@ -165,6 +169,7 @@ private fun HomeScaffold(
     }
 
     val hazeState = rememberHazeState()
+    val roomsLazyListState = rememberLazyListState()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -196,40 +201,18 @@ private fun HomeScaffold(
         },
         bottomBar = {
             if (state.showNavigationBar) {
-                NavigationBar(
-                    containerColor = Color.Transparent,
-                    modifier = Modifier
-                        .hazeEffect(
-                            state = hazeState,
-                            style = HazeMaterials.thick(),
-                        )
-                ) {
-                    HomeNavigationBarItem.entries.forEach { item ->
-                        val isSelected = state.currentHomeNavigationBarItem == item
-                        NavigationBarItem(
-                            selected = isSelected,
-                            onClick = {
-                                state.eventSink(HomeEvents.SelectHomeNavigationBarItem(item))
-                            },
-                            icon = {
-                                NavigationBarIcon(
-                                    imageVector = item.icon(isSelected),
-                                )
-                            },
-                            label = {
-                                NavigationBarText(
-                                    text = stringResource(item.labelRes),
-                                )
-                            }
-                        )
-                    }
-                }
+                HomeNavigationBar(
+                    hazeState = hazeState,
+                    state = state,
+                    roomsLazyListState = roomsLazyListState
+                )
             }
         },
         content = { padding ->
             when (state.currentHomeNavigationBarItem) {
                 HomeNavigationBarItem.Chats -> {
                     RoomListContentView(
+                        lazyListState = roomsLazyListState,
                         contentState = roomListState.contentState,
                         filtersState = roomListState.filtersState,
                         hideInvitesAvatars = roomListState.hideInvitesAvatars,
@@ -290,6 +273,48 @@ private fun HomeScaffold(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     )
+}
+
+@Composable
+private fun HomeNavigationBar(
+    hazeState: HazeState,
+    state: HomeState,
+    roomsLazyListState: LazyListState,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    NavigationBar(
+        containerColor = Color.Transparent,
+        modifier = Modifier
+            .hazeEffect(
+                state = hazeState,
+                style = HazeMaterials.thick(),
+            )
+    ) {
+        HomeNavigationBarItem.entries.forEach { item ->
+            val isSelected = state.currentHomeNavigationBarItem == item
+            NavigationBarItem(
+                selected = isSelected,
+                onClick = {
+                    if (item == HomeNavigationBarItem.Chats && isSelected) {
+                        coroutineScope.launch {
+                            roomsLazyListState.scrollToItem(0)
+                        }
+                    }
+                    state.eventSink(HomeEvents.SelectHomeNavigationBarItem(item))
+                },
+                icon = {
+                    NavigationBarIcon(
+                        imageVector = item.icon(isSelected),
+                    )
+                },
+                label = {
+                    NavigationBarText(
+                        text = stringResource(item.labelRes),
+                    )
+                }
+            )
+        }
+    }
 }
 
 internal fun RoomListRoomSummary.contentType() = displayType.ordinal

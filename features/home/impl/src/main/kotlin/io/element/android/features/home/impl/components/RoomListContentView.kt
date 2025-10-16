@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -61,6 +62,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun RoomListContentView(
     contentState: RoomListContentState,
     filtersState: RoomListFiltersState,
+    lazyListState: LazyListState,
     hideInvitesAvatars: Boolean,
     eventSink: (RoomListEvents) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
@@ -91,6 +93,7 @@ fun RoomListContentView(
         is RoomListContentState.Rooms -> {
             RoomsViewList(
                 modifier = modifier,
+                lazyListState = lazyListState,
                 state = contentState,
                 hideInvitesAvatars = hideInvitesAvatars,
                 filtersState = filtersState,
@@ -169,6 +172,7 @@ private fun EmptyView(
 
 @Composable
 private fun RoomsViewList(
+    lazyListState: LazyListState,
     state: RoomListContentState.Rooms,
     filtersState: RoomListFiltersState,
     hideInvitesAvatars: Boolean,
@@ -179,7 +183,6 @@ private fun RoomsViewList(
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
-    val lazyListState = rememberLazyListState()
     val visibleRange by remember {
         derivedStateOf {
             val layoutInfo = lazyListState.layoutInfo
@@ -331,6 +334,7 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
                 )
             }
         ),
+        lazyListState = rememberLazyListState(),
         hideInvitesAvatars = false,
         eventSink = {},
         onSetUpRecoveryClick = {},
