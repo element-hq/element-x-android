@@ -7,19 +7,14 @@
 
 package io.element.android.libraries.mediaviewer.impl.floatingvideo
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerPageData
 
+@SingleIn(AppScope::class)
+@Inject
 class VideoDataRepository {
-    companion object {
-        @Volatile
-        private var INSTANCE: VideoDataRepository? = null
-
-        fun getInstance(): VideoDataRepository {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: VideoDataRepository().also { INSTANCE = it }
-            }
-        }
-    }
 
     private val videoDataMap = mutableMapOf<String, MediaViewerPageData.MediaViewerData>()
 

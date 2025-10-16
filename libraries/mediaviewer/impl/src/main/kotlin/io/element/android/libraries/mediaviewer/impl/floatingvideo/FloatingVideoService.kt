@@ -40,6 +40,8 @@ import androidx.core.net.toUri
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.ui.FloatingVideoOverlay
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenHeight
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenWidth
+import dev.zacsweers.metro.Inject
+import io.element.android.libraries.architecture.bindings
 
 class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, SavedStateRegistryOwner {
     private var windowManager: WindowManager? = null
@@ -77,8 +79,8 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
             // Generate unique ID for this video session
             val videoId = "floating_video_${System.currentTimeMillis()}"
 
-            // Store the video data in repository
-            VideoDataRepository.getInstance().storeVideoData(videoId, videoData)
+            // Store the video data in repository via DI
+            context.bindings<FloatingVideoServiceBindings>().videoDataRepository().storeVideoData(videoId, videoData)
 
             val intent = Intent(context, FloatingVideoService::class.java).apply {
                 action = ACTION_START_FLOATING
@@ -88,6 +90,8 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
             context.startService(intent)
         }
     }
+
+    @Inject lateinit var videoDataRepository: VideoDataRepository
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -102,6 +106,7 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
 
     override fun onCreate() {
         super.onCreate()
+        bindings<FloatingVideoServiceBindings>().inject(this)
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         // 1. Attach controller
         savedStateRegistryController.performAttach()
@@ -124,7 +129,7 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
 
                 if (videoId != null) {
                     // Get video data from repository using the ID
-                    val videoData = VideoDataRepository.getInstance().getVideoData(videoId)
+                    val videoData = videoDataRepository.getVideoData(videoId)
                     if (videoData != null) {
                         eventId = videoData.eventId?.value ?: ""
                         currentVideoData = videoData
@@ -138,7 +143,7 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
             ACTION_STOP_FLOATING -> {
                 // Clean up stored data
                 currentVideoId?.let { videoId ->
-                    VideoDataRepository.getInstance().removeVideoData(videoId)
+                    videoDataRepository.removeVideoData(videoId)
                 }
                 removeFloatingView()
                 stopSelf()
