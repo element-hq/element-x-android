@@ -14,6 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -50,6 +51,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
+import io.element.android.libraries.workmanager.api.WorkManagerRequest
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
@@ -131,6 +133,45 @@ class DefaultPushHandlerTest {
             .isCalledOnce()
             .with(value(listOf(aNotifiableMessageEvent)))
         onPushReceivedResult.assertions()
+            .isCalledOnce()
+    }
+
+    @Test
+    fun `when classical PushData is received and the workmanager flag is enabled, the work is scheduled`() = runTest {
+        val aNotifiableMessageEvent = aNotifiableMessageEvent()
+        val notifiableEventResult =
+            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
+            }
+        val incrementPushCounterResult = lambdaRecorder<Unit> {}
+        val aPushData = PushData(
+            eventId = AN_EVENT_ID,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+
+        val featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SyncNotificationsWithWorkManager.key to true))
+        val submitWorkLambda = lambdaRecorder<WorkManagerRequest, Unit> {}
+        val workManagerScheduler = FakeWorkManagerScheduler(submitLambda = submitWorkLambda)
+
+        val defaultPushHandler = createDefaultPushHandler(
+            notifiableEventsResult = notifiableEventResult,
+            pushClientSecret = FakePushClientSecret(
+                getUserIdFromSecretResult = { A_USER_ID }
+            ),
+            incrementPushCounterResult = incrementPushCounterResult,
+            featureFlagService = featureFlagService,
+            workManagerScheduler = workManagerScheduler,
+        )
+        defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+        advanceTimeBy(300.milliseconds)
+
+        submitWorkLambda.assertions().isCalledOnce()
+
+        incrementPushCounterResult.assertions()
             .isCalledOnce()
     }
 
@@ -649,6 +690,7 @@ class DefaultPushHandlerTest {
         pushHistoryService: PushHistoryService = FakePushHistoryService(),
         syncOnNotifiableEvent: SyncOnNotifiableEvent = SyncOnNotifiableEvent {},
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
     ): DefaultPushHandler {
         return DefaultPushHandler(
             onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceived),
@@ -670,7 +712,7 @@ class DefaultPushHandlerTest {
             resolverQueue = DefaultNotificationResolverQueue(
                 notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventsResult),
                 appCoroutineScope = backgroundScope,
-                workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
+                workManagerScheduler = workManagerScheduler,
                 featureFlagService = featureFlagService,
             ),
             appCoroutineScope = backgroundScope,
