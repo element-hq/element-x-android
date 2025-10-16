@@ -8,6 +8,8 @@
 package io.element.android.features.home.impl.spaces
 
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -26,10 +28,14 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun HomeSpacesView(
     state: HomeSpacesState,
+    lazyListState: LazyListState,
     onSpaceClick: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier) {
+    LazyColumn(
+        modifier = modifier,
+        state = lazyListState
+    ) {
         val space = state.space
         when (space) {
             CurrentSpace.Root -> {
@@ -77,6 +83,7 @@ internal fun HomeSpacesViewPreview(
 ) = ElementPreview {
     HomeSpacesView(
         state = state,
+        lazyListState = rememberLazyListState(),
         onSpaceClick = {},
         modifier = Modifier,
     )
