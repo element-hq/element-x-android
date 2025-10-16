@@ -32,14 +32,14 @@ class DefaultWorkManagerScheduler(
                 workManager.enqueue(it)
             },
             onFailure = {
-                Timber.Forest.e(it, "Failed to build WorkManager request $workManagerRequest")
+                Timber.e(it, "Failed to build WorkManager request $workManagerRequest")
             }
         )
     }
 
     override fun cancel(sessionId: SessionId) {
         val workManager = WorkManager.getInstance(context)
-        Timber.Forest.d("Cancelling work for sessionId: $sessionId")
+        Timber.d("Cancelling work for sessionId: $sessionId")
 
         for (requestType in WorkManagerRequestType.entries) {
             workManager.cancelAllWorkByTag(workManagerTag(sessionId, requestType))
