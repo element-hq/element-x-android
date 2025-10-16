@@ -21,6 +21,8 @@ import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
+import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.test.notifications.FakeNotificationResolverQueue
 import io.element.android.libraries.workmanager.api.WorkManagerRequest
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
@@ -47,7 +49,9 @@ class FetchNotificationWorkerTest {
         var synced = false
         val syncOnNotifiableEventLambda = SyncOnNotifiableEvent { synced = true }
 
-        val queue = FakeNotificationResolverQueue()
+        val queue = FakeNotificationResolverQueue(
+            processingLambda = { Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent())) }
+        )
         val worker = createWorker(
             input = """
             [
@@ -156,7 +160,9 @@ class FetchNotificationWorkerTest {
         input: String,
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
         eventResolver: FakeNotifiableEventResolver = FakeNotifiableEventResolver(resolveEventsResult = { _, _ -> Result.success(emptyMap()) }),
-        queue: NotificationResolverQueue = FakeNotificationResolverQueue(),
+        queue: NotificationResolverQueue = FakeNotificationResolverQueue(
+            processingLambda = { Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent())) }
+        ),
         workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
         syncOnNotifiableEvent: SyncOnNotifiableEvent = SyncOnNotifiableEvent {},
     ) = FetchNotificationsWorker(
