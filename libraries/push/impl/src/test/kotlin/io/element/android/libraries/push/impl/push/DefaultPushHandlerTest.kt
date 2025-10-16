@@ -33,9 +33,9 @@ import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.history.FakePushHistoryService
 import io.element.android.libraries.push.impl.history.PushHistoryService
+import io.element.android.libraries.push.impl.notifications.DefaultNotificationResolverQueue
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.FallbackNotificationFactory
-import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
 import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
@@ -666,7 +666,8 @@ class DefaultPushHandlerTest {
             elementCallEntryPoint = elementCallEntryPoint,
             notificationChannels = notificationChannels,
             pushHistoryService = pushHistoryService,
-            resolverQueue = NotificationResolverQueue(
+            // We don't use a fake here so we can perform tests that are a bit more end to end
+            resolverQueue = DefaultNotificationResolverQueue(
                 notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventsResult),
                 appCoroutineScope = backgroundScope,
                 workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),

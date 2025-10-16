@@ -78,6 +78,7 @@ dependencies {
     testImplementation(projects.libraries.workmanager.test)
     testImplementation(projects.features.call.test)
     testImplementation(projects.features.lockscreen.test)
+    testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.toolbox.impl)
     testImplementation(projects.services.toolbox.test)

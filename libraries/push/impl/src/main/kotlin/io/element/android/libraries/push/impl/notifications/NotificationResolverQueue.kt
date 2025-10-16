@@ -8,6 +8,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
@@ -29,20 +30,26 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 
+interface NotificationResolverQueue {
+    val results: SharedFlow<Pair<List<NotificationEventRequest>, Map<NotificationEventRequest, Result<ResolvedPushEvent>>>>
+    suspend fun enqueue(request: NotificationEventRequest)
+}
+
 /**
  * This class is responsible for periodically batching notification requests and resolving them in a single call,
  * so that we can avoid having to resolve each notification individually in the SDK.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 @SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 @Inject
-class NotificationResolverQueue(
+class DefaultNotificationResolverQueue(
     private val notifiableEventResolver: NotifiableEventResolver,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val workManagerScheduler: WorkManagerScheduler,
     private val featureFlagService: FeatureFlagService,
-) {
+) : NotificationResolverQueue {
     companion object {
         private const val BATCH_WINDOW_MS = 250L
     }
@@ -54,7 +61,7 @@ class NotificationResolverQueue(
      * A flow that emits pairs of a list of notification event requests and a map of the resolved events.
      * The map contains the original request as the key and the resolved event as the value.
      */
-    val results: SharedFlow<Pair<List<NotificationEventRequest>, Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> = MutableSharedFlow()
+    override val results = MutableSharedFlow<Pair<List<NotificationEventRequest>, Map<NotificationEventRequest, Result<ResolvedPushEvent>>>>()
 
     /**
      * Enqueues a notification event request to be resolved.
@@ -62,7 +69,7 @@ class NotificationResolverQueue(
      *
      * @param request The notification event request to enqueue.
      */
-    suspend fun enqueue(request: NotificationEventRequest) {
+    override suspend fun enqueue(request: NotificationEventRequest) {
         // Cancel previous processing job if it exists, acting as a debounce operation
         Timber.d("Cancelling job: $currentProcessingJob")
         currentProcessingJob?.cancel()
@@ -104,7 +111,7 @@ class NotificationResolverQueue(
                     launch {
                         // No need for a Mutex since the SDK already has one internally
                         val notifications = notifiableEventResolver.resolveEvents(sessionId, requests).getOrNull().orEmpty()
-                        (results as MutableSharedFlow).emit(requests to notifications)
+                        results.emit(requests to notifications)
                     }
                 }
             }
