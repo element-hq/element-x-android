@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -42,9 +41,6 @@ import io.element.android.appconfig.RoomListConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
-import io.element.android.features.home.impl.filters.RoomListFiltersState
-import io.element.android.features.home.impl.filters.RoomListFiltersView
-import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -60,8 +56,8 @@ import io.element.android.libraries.designsystem.theme.components.DropdownMenuIt
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -76,7 +72,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomListTopBar(
+fun HomeTopBar(
     title: String,
     currentUserAndNeighbors: ImmutableList<MatrixUser>,
     showAvatarIndicator: Boolean,
@@ -87,12 +83,10 @@ fun RoomListTopBar(
     onAccountSwitch: (SessionId) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     displayMenuItems: Boolean,
-    displayFilters: Boolean,
-    filtersState: RoomListFiltersState,
     canReportBug: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    DefaultRoomListTopBar(
+    DefaultHomeTopBar(
         title = title,
         currentUserAndNeighbors = currentUserAndNeighbors,
         showAvatarIndicator = showAvatarIndicator,
@@ -103,8 +97,6 @@ fun RoomListTopBar(
         onMenuActionClick = onMenuActionClick,
         scrollBehavior = scrollBehavior,
         displayMenuItems = displayMenuItems,
-        displayFilters = displayFilters,
-        filtersState = filtersState,
         canReportBug = canReportBug,
         modifier = modifier,
     )
@@ -112,7 +104,7 @@ fun RoomListTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DefaultRoomListTopBar(
+private fun DefaultHomeTopBar(
     title: String,
     currentUserAndNeighbors: ImmutableList<MatrixUser>,
     showAvatarIndicator: Boolean,
@@ -123,8 +115,6 @@ private fun DefaultRoomListTopBar(
     onSearchClick: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     displayMenuItems: Boolean,
-    displayFilters: Boolean,
-    filtersState: RoomListFiltersState,
     canReportBug: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -145,7 +135,7 @@ private fun DefaultRoomListTopBar(
             ),
         ) {
             Column {
-                MediumTopAppBar(
+                TopAppBar(
                     modifier = Modifier
                         .backgroundVerticalGradient(
                             isVisible = !areSearchResultsDisplayed,
@@ -234,12 +224,6 @@ private fun DefaultRoomListTopBar(
                     scrollBehavior = scrollBehavior,
                     windowInsets = WindowInsets(0.dp),
                 )
-                if (displayFilters) {
-                    RoomListFiltersView(
-                        state = filtersState,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                }
             }
         }
 
@@ -329,19 +313,17 @@ private fun AccountIcon(
 @OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
-internal fun DefaultRoomListTopBarPreview() = ElementPreview {
-    DefaultRoomListTopBar(
+internal fun DefaultHomeTopBarPreview() = ElementPreview {
+    DefaultHomeTopBar(
         title = stringResource(R.string.screen_roomlist_main_space_title),
         currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
-        scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
         onOpenSettings = {},
         onAccountSwitch = {},
         onSearchClick = {},
         displayMenuItems = true,
-        displayFilters = true,
-        filtersState = aRoomListFiltersState(),
         canReportBug = true,
         onMenuActionClick = {},
     )
@@ -350,19 +332,17 @@ internal fun DefaultRoomListTopBarPreview() = ElementPreview {
 @OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
-internal fun DefaultRoomListTopBarWithIndicatorPreview() = ElementPreview {
-    DefaultRoomListTopBar(
+internal fun DefaultHomeTopBarWithIndicatorPreview() = ElementPreview {
+    DefaultHomeTopBar(
         title = stringResource(R.string.screen_roomlist_main_space_title),
         currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = true,
         areSearchResultsDisplayed = false,
-        scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
         onOpenSettings = {},
         onAccountSwitch = {},
         onSearchClick = {},
         displayMenuItems = true,
-        displayFilters = true,
-        filtersState = aRoomListFiltersState(),
         canReportBug = true,
         onMenuActionClick = {},
     )
@@ -371,19 +351,17 @@ internal fun DefaultRoomListTopBarWithIndicatorPreview() = ElementPreview {
 @OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
-internal fun DefaultRoomListTopBarMultiAccountPreview() = ElementPreview {
-    DefaultRoomListTopBar(
+internal fun DefaultHomeTopBarMultiAccountPreview() = ElementPreview {
+    DefaultHomeTopBar(
         title = stringResource(R.string.screen_roomlist_main_space_title),
         currentUserAndNeighbors = aMatrixUserList().take(3).toImmutableList(),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
-        scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
         onOpenSettings = {},
         onAccountSwitch = {},
         onSearchClick = {},
         displayMenuItems = true,
-        displayFilters = true,
-        filtersState = aRoomListFiltersState(),
         canReportBug = true,
         onMenuActionClick = {},
     )

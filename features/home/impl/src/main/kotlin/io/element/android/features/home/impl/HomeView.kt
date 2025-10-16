@@ -42,7 +42,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.components.RoomListContentView
 import io.element.android.features.home.impl.components.RoomListMenuAction
-import io.element.android.features.home.impl.components.RoomListTopBar
+import io.element.android.features.home.impl.components.HomeTopBar
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.roomlist.RoomListContextMenu
 import io.element.android.features.home.impl.roomlist.RoomListDeclineInviteMenu
@@ -154,7 +154,7 @@ private fun HomeScaffold(
     }
 
     val appBarState = rememberTopAppBarState()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(appBarState)
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     val roomListState: RoomListState = state.roomListState
 
@@ -169,7 +169,7 @@ private fun HomeScaffold(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            RoomListTopBar(
+            HomeTopBar(
                 title = stringResource(state.currentHomeNavigationBarItem.labelRes),
                 currentUserAndNeighbors = state.currentUserAndNeighbors,
                 showAvatarIndicator = state.showAvatarIndicator,
@@ -182,8 +182,6 @@ private fun HomeScaffold(
                 },
                 scrollBehavior = scrollBehavior,
                 displayMenuItems = state.displayActions,
-                displayFilters = roomListState.displayFilters && state.currentHomeNavigationBarItem == HomeNavigationBarItem.Chats,
-                filtersState = roomListState.filtersState,
                 canReportBug = state.canReportBug,
                 modifier = if (state.isSpaceFeatureEnabled) {
                     Modifier.hazeEffect(

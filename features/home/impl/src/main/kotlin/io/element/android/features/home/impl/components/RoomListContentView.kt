@@ -39,6 +39,7 @@ import io.element.android.features.home.impl.contentType
 import io.element.android.features.home.impl.filters.RoomListFilter
 import io.element.android.features.home.impl.filters.RoomListFiltersEmptyStateResources
 import io.element.android.features.home.impl.filters.RoomListFiltersState
+import io.element.android.features.home.impl.filters.RoomListFiltersView
 import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.features.home.impl.filters.selection.FilterSelectionState
 import io.element.android.features.home.impl.model.RoomListRoomSummary
@@ -88,7 +89,7 @@ fun RoomListContentView(
             )
         }
         is RoomListContentState.Rooms -> {
-            RoomsView(
+            RoomsViewList(
                 modifier = modifier,
                 state = contentState,
                 hideInvitesAvatars = hideInvitesAvatars,
@@ -167,39 +168,9 @@ private fun EmptyView(
 }
 
 @Composable
-private fun RoomsView(
-    state: RoomListContentState.Rooms,
-    hideInvitesAvatars: Boolean,
-    filtersState: RoomListFiltersState,
-    eventSink: (RoomListEvents) -> Unit,
-    onSetUpRecoveryClick: () -> Unit,
-    onConfirmRecoveryKeyClick: () -> Unit,
-    onRoomClick: (RoomListRoomSummary) -> Unit,
-    contentPadding: PaddingValues,
-    modifier: Modifier = Modifier,
-) {
-    if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
-        EmptyViewForFilterStates(
-            selectedFilters = filtersState.selectedFilters(),
-            modifier = modifier.fillMaxSize()
-        )
-    } else {
-        RoomsViewList(
-            state = state,
-            hideInvitesAvatars = hideInvitesAvatars,
-            eventSink = eventSink,
-            onSetUpRecoveryClick = onSetUpRecoveryClick,
-            onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-            onRoomClick = onRoomClick,
-            contentPadding = contentPadding,
-            modifier = modifier.fillMaxSize(),
-        )
-    }
-}
-
-@Composable
 private fun RoomsViewList(
     state: RoomListContentState.Rooms,
+    filtersState: RoomListFiltersState,
     hideInvitesAvatars: Boolean,
     eventSink: (RoomListEvents) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
@@ -221,11 +192,25 @@ private fun RoomsViewList(
     LaunchedEffect(visibleRange) {
         updatedEventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
     }
+    val showEmptyState = state.summaries.isEmpty() && filtersState.hasAnyFilterSelected
+    LaunchedEffect(showEmptyState) {
+        if(showEmptyState){
+            // If we are showing the empty state, scroll to the top to show it properly
+            lazyListState.animateScrollToItem(0)
+        }
+    }
     LazyColumn(
         state = lazyListState,
         modifier = modifier,
         contentPadding = contentPadding,
+        userScrollEnabled = !showEmptyState
     ) {
+        item {
+            RoomListFiltersView(
+                state = filtersState,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
         when (state.securityBannerState) {
             SecurityBannerState.SetUpRecovery -> {
                 item {
@@ -260,22 +245,31 @@ private fun RoomsViewList(
             }
         }
 
-        // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
-        // is moved to the top of the list.
-        itemsIndexed(
-            items = state.summaries,
-            contentType = { _, room -> room.contentType() },
-        ) { index, room ->
-            RoomSummaryRow(
-                room = room,
-                hideInviteAvatars = hideInvitesAvatars,
-                isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
-                    state.seenRoomInvites.contains(room.roomId),
-                onClick = onRoomClick,
-                eventSink = eventSink,
-            )
-            if (index != state.summaries.lastIndex) {
-                HorizontalDivider()
+        if (showEmptyState) {
+            item {
+                EmptyViewForFilterStates(
+                    selectedFilters = filtersState.selectedFilters(),
+                    modifier = Modifier.fillParentMaxHeight()
+                )
+            }
+        } else {
+            // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
+            // is moved to the top of the list.
+            itemsIndexed(
+                items = state.summaries,
+                contentType = { _, room -> room.contentType() },
+            ) { index, room ->
+                RoomSummaryRow(
+                    room = room,
+                    hideInviteAvatars = hideInvitesAvatars,
+                    isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
+                        state.seenRoomInvites.contains(room.roomId),
+                    onClick = onRoomClick,
+                    eventSink = eventSink,
+                )
+                if (index != state.summaries.lastIndex) {
+                    HorizontalDivider()
+                }
             }
         }
     }
