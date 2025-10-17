@@ -198,6 +198,10 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
                     onToggleFullScreen = {
                         Timber.tag("onToggleFullScreen").d(isMaximized.toString())
                         this@FloatingVideoService.toggleFullScreen(it)                    },
+                    onCompleted = {
+                        removeFloatingView()
+                        stopSelf()
+                    },
                     floatingView = floatingView,
                     isMaximized = isMaximized ,
                     currentVideoData = currentVideoData,
@@ -232,15 +236,18 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
 
     override fun onDestroy() {
         super.onDestroy()
-        removeFloatingView()
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-        viewModelStore.clear()
+        onVideoComplete()
     }
 
     private fun dpToPx(dp: Int): Int {
         return (dp * resources.displayMetrics.density).toInt()
     }
 
+    private fun onVideoComplete(){
+        removeFloatingView()
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        viewModelStore.clear()
+    }
 
     private fun toggleFullScreen( aspectRatio : Float ) {
         val layoutParams = windowLayoutParams

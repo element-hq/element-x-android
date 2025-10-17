@@ -53,7 +53,8 @@ fun FloatingVideoOverlay(
     isMaximized : Boolean,
     windowManager : WindowManager?,
     windowLayoutParams : WindowManager.LayoutParams,
-    floatingView : View?
+    floatingView : View?,
+    onCompleted : () -> Unit
 ) {
     var currentAspectRatio by remember { mutableFloatStateOf(16f / 9f) }
     val videoViewRef = remember { mutableStateOf<VideoView?>(null) }
@@ -136,6 +137,9 @@ fun FloatingVideoOverlay(
                         }
                         start()
                     }
+                    setOnCompletionListener {
+                        onCompleted()
+                    }
 
                 }
             },
@@ -182,7 +186,6 @@ fun FloatingVideoOverlay(
             IconButton(
                 onClick = {
                     onToggleFullScreen ( currentAspectRatio )
-//                    updateWindowSize(currentAspectRatio)
                 },
                 //it seems the CompoundIcons.Expand() is bigger than the CompoundIcons.Close(),
                 modifier = Modifier.size(28.dp)
