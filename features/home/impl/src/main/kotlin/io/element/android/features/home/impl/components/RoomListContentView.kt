@@ -252,7 +252,7 @@ private fun RoomsViewList(
             item {
                 EmptyViewForFilterStates(
                     selectedFilters = filtersState.selectedFilters(),
-                    modifier = Modifier.fillParentMaxHeight()
+                    modifier = Modifier.fillParentMaxSize()
                 )
             }
         } else {
