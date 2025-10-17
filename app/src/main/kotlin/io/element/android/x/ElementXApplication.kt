@@ -35,9 +35,6 @@ class ElementXApplication : Application(), DependencyInjectionGraphOwner, Config
             initializeComponent(CacheCleanerInitializer::class.java)
         }
 
-        // Use a custom configuration for WorkManager
-        WorkManager.initialize(this, workManagerConfiguration)
-
         logApplicationInfo(this)
     }
 }
