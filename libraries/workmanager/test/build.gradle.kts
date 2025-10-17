@@ -1,5 +1,3 @@
-import extension.setupDependencyInjection
-
 /*
  * Copyright 2025 New Vector Ltd.
  *
@@ -13,8 +11,6 @@ plugins {
 android {
     namespace = "io.element.android.libraries.workmanager.test"
 }
-
-setupDependencyInjection()
 
 dependencies {
     api(projects.libraries.workmanager.api)
