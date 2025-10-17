@@ -37,12 +37,10 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.annotations.CoreColorToken
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.compound.tokens.generated.internal.LightColorTokens
+import io.element.android.libraries.designsystem.colors.gradientActionColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Icon
 
 @OptIn(CoreColorToken::class)
@@ -53,26 +51,14 @@ fun GradientFloatingActionButton(
     shape: Shape = RoundedCornerShape(25),
     content: @Composable () -> Unit,
 ) {
-    val color1 = if (LocalBuildMeta.current.isEnterpriseBuild) {
-        ElementTheme.colors.textActionAccent
-    } else {
-        LightColorTokens.colorGreen700
-    }
-    val color2 = if (LocalBuildMeta.current.isEnterpriseBuild) {
-        ElementTheme.colors.textActionAccent
-    } else {
-        LightColorTokens.colorBlue900
-    }
+    val colors = gradientActionColors()
     val linearShaderBrush = remember {
         object : ShaderBrush() {
             override fun createShader(size: Size): Shader {
                 return LinearGradientShader(
                     from = Offset(size.width, size.height),
                     to = Offset(size.width, 0f),
-                    colors = listOf(
-                        color2,
-                        color1,
-                    ),
+                    colors = colors,
                 )
             }
         }
@@ -83,10 +69,7 @@ fun GradientFloatingActionButton(
                 return RadialGradientShader(
                     center = size.center,
                     radius = size.width / 2,
-                    colors = listOf(
-                        color1,
-                        color2,
-                    )
+                    colors = colors,
                 )
             }
         }

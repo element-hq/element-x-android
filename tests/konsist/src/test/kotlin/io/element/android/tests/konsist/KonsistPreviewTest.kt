@@ -79,7 +79,6 @@ class KonsistPreviewTest {
         "AsyncIndicatorFailurePreview",
         "AsyncIndicatorLoadingPreview",
         "BackgroundVerticalGradientDisabledPreview",
-        "BackgroundVerticalGradientEnterprisePreview",
         "BackgroundVerticalGradientPreview",
         "ColorAliasesPreview",
         "FocusedEventEnterprisePreview",

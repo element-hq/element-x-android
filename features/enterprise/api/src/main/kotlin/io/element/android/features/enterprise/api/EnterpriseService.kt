@@ -7,6 +7,8 @@
 
 package io.element.android.features.enterprise.api
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
@@ -17,8 +19,17 @@ interface EnterpriseService {
     fun defaultHomeserverList(): List<String>
     suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
 
-    fun semanticColorsLight(): SemanticColors
-    fun semanticColorsDark(): SemanticColors
+    /**
+     * Override the brand color.
+     * @param brandColor the color in hex format (#RRGGBBAA or #RRGGBB), or null to reset to default.
+     */
+    fun overrideBrandColor(brandColor: String?)
+
+    @Composable
+    fun semanticColorsLight(): State<SemanticColors>
+
+    @Composable
+    fun semanticColorsDark(): State<SemanticColors>
 
     fun firebasePushGateway(): String?
     fun unifiedPushDefaultPushGateway(): String?

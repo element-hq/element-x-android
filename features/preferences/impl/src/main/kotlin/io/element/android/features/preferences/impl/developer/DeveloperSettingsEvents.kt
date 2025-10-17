@@ -7,6 +7,7 @@
 
 package io.element.android.features.preferences.impl.developer
 
+import androidx.compose.ui.graphics.Color
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
@@ -16,5 +17,7 @@ sealed interface DeveloperSettingsEvents {
     data class SetCustomElementCallBaseUrl(val baseUrl: String?) : DeveloperSettingsEvents
     data class SetTracingLogLevel(val logLevel: LogLevelItem) : DeveloperSettingsEvents
     data class ToggleTracingLogPack(val logPack: TraceLogPack, val enabled: Boolean) : DeveloperSettingsEvents
+    data class SetShowColorPicker(val show: Boolean) : DeveloperSettingsEvents
+    data class ChangeBrandColor(val color: Color?) : DeveloperSettingsEvents
     data object ClearCache : DeveloperSettingsEvents
 }

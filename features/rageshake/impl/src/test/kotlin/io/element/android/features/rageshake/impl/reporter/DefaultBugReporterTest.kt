@@ -163,7 +163,7 @@ class DefaultBugReporterTest {
         assertThat(foundValues["file"]).contains(fakePushRules)
 
         // device_key now added given they are not null
-        // so is the push_rules value
+        // so is the file value for the included push_rules
         assertThat(progressValues.size).isEqualTo(EXPECTED_NUMBER_OF_PROGRESS_VALUE + 2)
 
         server.shutdown()

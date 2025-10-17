@@ -118,6 +118,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:fullscreenintent:impl"))
     implementation(project(":libraries:wellknown:impl"))
     implementation(project(":libraries:oidc:impl"))
+    implementation(project(":libraries:workmanager:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {

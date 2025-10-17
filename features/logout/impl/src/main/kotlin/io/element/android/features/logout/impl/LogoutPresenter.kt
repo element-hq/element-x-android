@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 class LogoutPresenter(
     private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
+    private val workManagerScheduler: WorkManagerScheduler,
 ) : Presenter<LogoutState> {
     @Composable
     override fun present(): LogoutState {
@@ -109,6 +111,9 @@ class LogoutPresenter(
         ignoreSdkError: Boolean,
     ) = launch {
         suspend {
+            // Cancel any pending work (e.g. notification sync)
+            workManagerScheduler.cancel(matrixClient.sessionId)
+
             matrixClient.logout(userInitiated = true, ignoreSdkError)
         }.runCatchingUpdatingState(logoutAction)
     }

@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
+import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -95,7 +96,10 @@ class DefaultNotifiableEventResolver(
         val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
             return Result.failure(IllegalStateException("Couldn't get or restore client for session $sessionId"))
         }
-        val ids = notificationEventRequests.groupBy { it.roomId }.mapValues { (_, value) -> value.map { it.eventId } }
+        val ids = notificationEventRequests.groupBy { it.roomId }
+            .mapValues { (_, requests) ->
+                requests.map { it.eventId }
+            }
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
         val notificationsResult = client.notificationService.getNotifications(ids)

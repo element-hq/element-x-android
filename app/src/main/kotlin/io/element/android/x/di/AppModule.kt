@@ -35,6 +35,7 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.plus
+import kotlinx.serialization.json.Json
 import java.io.File
 
 @BindingContainer
@@ -119,5 +120,11 @@ object AppModule {
     @SingleIn(AppScope::class)
     fun providesEmojibaseProvider(@ApplicationContext context: Context): EmojibaseProvider {
         return DefaultEmojibaseProvider(context)
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun providesJson(): Json = Json {
+        ignoreUnknownKeys = true
     }
 }

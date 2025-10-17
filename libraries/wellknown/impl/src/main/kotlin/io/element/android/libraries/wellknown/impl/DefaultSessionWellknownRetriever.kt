@@ -22,7 +22,7 @@ import timber.log.Timber
 @Inject
 class DefaultSessionWellknownRetriever(
     private val matrixClient: MatrixClient,
-    private val parser: Json,
+    private val json: Json,
 ) : SessionWellknownRetriever {
     private val domain by lazy { matrixClient.userIdServerName() }
 
@@ -32,7 +32,7 @@ class DefaultSessionWellknownRetriever(
             .getUrl(url)
             .mapCatchingExceptions {
                 val data = String(it)
-                parser.decodeFromString(InternalWellKnown.serializer(), data)
+                json.decodeFromString(InternalWellKnown.serializer(), data)
             }
             .onFailure { Timber.e(it, "Failed to retrieve .well-known from $domain") }
             .map { it.map() }
@@ -45,7 +45,7 @@ class DefaultSessionWellknownRetriever(
             .getUrl(url)
             .mapCatchingExceptions {
                 val data = String(it)
-                parser.decodeFromString(InternalElementWellKnown.serializer(), data)
+                json.decodeFromString(InternalElementWellKnown.serializer(), data)
             }
             .onFailure { Timber.e(it, "Failed to retrieve Element .well-known from $domain") }
             .map { it.map() }

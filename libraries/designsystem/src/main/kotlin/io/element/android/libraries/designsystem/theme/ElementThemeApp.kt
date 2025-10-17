@@ -70,8 +70,8 @@ fun ElementThemeApp(
             }
         )
     }
-    val compoundLight = remember { enterpriseService.semanticColorsLight() }
-    val compoundDark = remember { enterpriseService.semanticColorsDark() }
+    val compoundLight by enterpriseService.semanticColorsLight()
+    val compoundDark by enterpriseService.semanticColorsDark()
     CompositionLocalProvider(
         LocalBuildMeta provides buildMeta,
     ) {

@@ -244,6 +244,6 @@ class DefaultSessionWellknownRetrieverTest {
             userIdServerNameLambda = { "user.domain.org" },
             getUrlLambda = getUrlLambda,
         ),
-        parser = Json { ignoreUnknownKeys = true }
+        json = Json { ignoreUnknownKeys = true },
     )
 }

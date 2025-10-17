@@ -100,6 +100,7 @@ class KonsistClassNameTest {
             .withoutName(
                 "FakeFileSystem",
                 "FakeImageLoader",
+                "FakeListenableFuture",
             )
             .assertTrue {
                 val interfaceName = it.name
@@ -149,6 +150,7 @@ class KonsistClassNameTest {
                 "Factory",
                 "TimelineController",
                 "TimelineMediaGalleryDataSource",
+                "MetroWorkerFactory",
             )
             .withoutNameStartingWith(
                 "Accompanist",

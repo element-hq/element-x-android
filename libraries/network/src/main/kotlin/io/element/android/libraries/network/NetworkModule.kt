@@ -15,7 +15,6 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.network.interceptors.FormattedJsonHttpLogger
 import io.element.android.libraries.network.interceptors.UserAgentInterceptor
-import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -35,12 +34,6 @@ object NetworkModule {
         addInterceptor(userAgentInterceptor)
         if (buildMeta.isDebuggable) addInterceptor(providesHttpLoggingInterceptor())
     }.build()
-
-    @Provides
-    @SingleIn(AppScope::class)
-    fun providesJson(): Json = Json {
-        ignoreUnknownKeys = true
-    }
 }
 
 private fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {

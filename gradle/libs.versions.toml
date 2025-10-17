@@ -20,6 +20,7 @@ lifecycle = "2.9.2"
 activity = "1.11.0"
 media3 = "1.8.0"
 camera = "1.5.1"
+work = "2.10.5"
 
 # Compose
 compose_bom = "2025.07.00"
@@ -93,6 +94,8 @@ androidx_constraintlayout_compose = { module = "androidx.constraintlayout:constr
 androidx_camera_lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camera" }
 androidx_camera_view = { module = "androidx.camera:camera-view", version.ref = "camera" }
 androidx_camera_camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera" }
+androidx_javascriptengine = "androidx.javascriptengine:javascriptengine:1.0.0"
+androidx_workmanager_runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 
 androidx_recyclerview = "androidx.recyclerview:recyclerview:1.4.0"
 androidx_browser = "androidx.browser:browser:1.9.0"
@@ -126,6 +129,7 @@ androidx_compose_material_icons = { module = "androidx.compose.material:material
 
 # Coroutines
 coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines_guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
 coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # Accompanist
@@ -203,6 +207,7 @@ opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
+color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.23.0"

@@ -7,6 +7,8 @@
 
 package io.element.android.features.enterprise.test
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
@@ -22,8 +24,9 @@ class FakeEnterpriseService(
     private val isEnterpriseUserResult: (SessionId) -> Boolean = { lambdaError() },
     private val defaultHomeserverListResult: () -> List<String> = { emptyList() },
     private val isAllowedToConnectToHomeserverResult: (String) -> Boolean = { lambdaError() },
-    private val semanticColorsLightResult: () -> SemanticColors = { lambdaError() },
-    private val semanticColorsDarkResult: () -> SemanticColors = { lambdaError() },
+    private val semanticColorsLightResult: () -> State<SemanticColors> = { lambdaError() },
+    private val semanticColorsDarkResult: () -> State<SemanticColors> = { lambdaError() },
+    private val overrideBrandColorResult: (String?) -> Unit = { lambdaError() },
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
 ) : EnterpriseService {
@@ -39,11 +42,17 @@ class FakeEnterpriseService(
         isAllowedToConnectToHomeserverResult(homeserverUrl)
     }
 
-    override fun semanticColorsLight(): SemanticColors {
+    override fun overrideBrandColor(brandColor: String?) {
+        overrideBrandColorResult(brandColor)
+    }
+
+    @Composable
+    override fun semanticColorsLight(): State<SemanticColors> {
         return semanticColorsLightResult()
     }
 
-    override fun semanticColorsDark(): SemanticColors {
+    @Composable
+    override fun semanticColorsDark(): State<SemanticColors> {
         return semanticColorsDarkResult()
     }
 

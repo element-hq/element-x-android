@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,8 +37,11 @@ import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.mhssn.colorpicker.ColorPickerDialog
+import io.mhssn.colorpicker.ColorPickerType
 import kotlinx.collections.immutable.toImmutableList
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DeveloperSettingsView(
     state: DeveloperSettingsState,
@@ -54,7 +58,6 @@ fun DeveloperSettingsView(
         // Note: this is OK to hardcode strings in this debug screen.
         PreferenceCategory(
             title = "Feature flags",
-            showTopDivider = true,
         ) {
             FeatureListContent(state)
         }
@@ -99,7 +102,27 @@ fun DeveloperSettingsView(
         RageshakePreferencesView(
             state = state.rageshakeState,
         )
-        PreferenceCategory(title = "Crash", showTopDivider = false) {
+        if (state.isEnterpriseBuild) {
+            PreferenceCategory(title = "Theme") {
+                ListItem(
+                    headlineContent = {
+                        Text("Change brand color")
+                    },
+                    onClick = {
+                        state.eventSink(DeveloperSettingsEvents.SetShowColorPicker(true))
+                    }
+                )
+                ListItem(
+                    headlineContent = {
+                        Text("Reset brand color")
+                    },
+                    onClick = {
+                        state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(null))
+                    }
+                )
+            }
+        }
+        PreferenceCategory(title = "Crash") {
             ListItem(
                 headlineContent = {
                     Text("Crash the app 💥")
@@ -108,7 +131,7 @@ fun DeveloperSettingsView(
             )
         }
         val cache = state.cacheSize
-        PreferenceCategory(title = "Cache", showTopDivider = false) {
+        PreferenceCategory(title = "Cache") {
             ListItem(
                 headlineContent = {
                     Text("Clear cache")
@@ -133,13 +156,25 @@ fun DeveloperSettingsView(
             )
         }
     }
+    ColorPickerDialog(
+        show = state.showColorPicker,
+        type = ColorPickerType.Classic(
+            showAlphaBar = false,
+        ),
+        onDismissRequest = {
+            state.eventSink(DeveloperSettingsEvents.SetShowColorPicker(false))
+        },
+        onPickedColor = {
+            state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(it))
+        },
+    )
 }
 
 @Composable
 private fun ElementCallCategory(
     state: DeveloperSettingsState,
 ) {
-    PreferenceCategory(title = "Element Call", showTopDivider = true) {
+    PreferenceCategory(title = "Element Call") {
         val callUrlState = state.customElementCallBaseUrlState
 
         val supportingText = if (callUrlState.baseUrl.isNullOrEmpty()) {
@@ -189,7 +224,9 @@ private fun FeatureListContent(
 
 @PreviewsDayNight
 @Composable
-internal fun DeveloperSettingsViewPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) = ElementPreview {
+internal fun DeveloperSettingsViewPreview(
+    @PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState
+) = ElementPreview {
     DeveloperSettingsView(
         state = state,
         onOpenShowkase = {},

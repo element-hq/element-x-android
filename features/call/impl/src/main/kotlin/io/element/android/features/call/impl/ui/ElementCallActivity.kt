@@ -42,6 +42,7 @@ import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.libraries.androidutils.browser.ConsoleMessageLogger
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.audio.api.AudioFocus
@@ -65,6 +66,7 @@ class ElementCallActivity :
     @Inject lateinit var pictureInPicturePresenter: PictureInPicturePresenter
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var audioFocus: AudioFocus
+    @Inject lateinit var consoleMessageLogger: ConsoleMessageLogger
 
     private lateinit var presenter: Presenter<CallScreenState>
 
@@ -119,6 +121,9 @@ class ElementCallActivity :
                 CallScreenView(
                     state = state,
                     pipState = pipState,
+                    onConsoleMessage = {
+                        consoleMessageLogger.log("ElementCall", it)
+                    },
                     requestPermissions = { permissions, callback ->
                         requestPermissionCallback = callback
                         requestPermissionsLauncher.launch(permissions)

@@ -64,6 +64,7 @@ class CallScreenPresenter(
     private val appForegroundStateService: AppForegroundStateService,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
+    private val widgetMessageSerializer: WidgetMessageSerializer,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
     interface Factory {
@@ -258,7 +259,7 @@ class CallScreenPresenter(
     }
 
     private fun parseMessage(message: String): WidgetMessage? {
-        return WidgetMessageSerializer.deserialize(message).getOrNull()
+        return widgetMessageSerializer.deserialize(message).getOrNull()
     }
 
     private fun sendHangupMessage(widgetId: String, messageInterceptor: WidgetMessageInterceptor) {
@@ -269,7 +270,7 @@ class CallScreenPresenter(
             action = WidgetMessage.Action.HangUp,
             data = null,
         )
-        messageInterceptor.sendMessage(WidgetMessageSerializer.serialize(message))
+        messageInterceptor.sendMessage(widgetMessageSerializer.serialize(message))
     }
 
     private fun CoroutineScope.close(widgetDriver: MatrixWidgetDriver?, navigator: CallScreenNavigator) = launch(dispatchers.io) {

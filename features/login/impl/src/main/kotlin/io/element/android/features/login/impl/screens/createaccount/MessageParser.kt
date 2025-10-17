@@ -26,10 +26,10 @@ interface MessageParser {
 @Inject
 class DefaultMessageParser(
     private val accountProviderDataSource: AccountProviderDataSource,
+    private val json: Json,
 ) : MessageParser {
     override fun parse(message: String): ExternalSession {
-        val parser = Json { ignoreUnknownKeys = true }
-        val response = parser.decodeFromString(MobileRegistrationResponse.serializer(), message)
+        val response = json.decodeFromString(MobileRegistrationResponse.serializer(), message)
         val userId = response.userId ?: error("No user ID in response")
         val homeServer = response.homeServer ?: accountProviderDataSource.flow.value.url
         val accessToken = response.accessToken ?: error("No access token in response")

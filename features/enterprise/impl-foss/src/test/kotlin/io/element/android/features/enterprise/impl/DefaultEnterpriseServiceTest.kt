@@ -7,7 +7,12 @@
 
 package io.element.android.features.enterprise.impl
 
+import app.cash.molecule.RecompositionMode
+import app.cash.molecule.moleculeFlow
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.compound.tokens.generated.compoundColorsDark
+import io.element.android.compound.tokens.generated.compoundColorsLight
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import kotlinx.coroutines.test.runTest
@@ -36,5 +41,31 @@ class DefaultEnterpriseServiceTest {
     fun `isEnterpriseUser always return false`() = runTest {
         val defaultEnterpriseService = DefaultEnterpriseService()
         assertThat(defaultEnterpriseService.isEnterpriseUser(A_SESSION_ID)).isFalse()
+    }
+
+    @Test
+    fun `semanticColorsLight always emits the same value`() = runTest {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        moleculeFlow(RecompositionMode.Immediate) {
+            defaultEnterpriseService.semanticColorsLight().value
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState).isEqualTo(compoundColorsLight)
+            defaultEnterpriseService.overrideBrandColor("#87654321")
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `semanticColorsDark always emits the same value`() = runTest {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        moleculeFlow(RecompositionMode.Immediate) {
+            defaultEnterpriseService.semanticColorsDark().value
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState).isEqualTo(compoundColorsDark)
+            defaultEnterpriseService.overrideBrandColor("#87654321")
+            expectNoEvents()
+        }
     }
 }

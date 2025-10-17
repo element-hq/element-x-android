@@ -7,6 +7,10 @@
 
 package io.element.android.features.enterprise.impl
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
@@ -28,9 +32,17 @@ class DefaultEnterpriseService : EnterpriseService {
     override fun defaultHomeserverList(): List<String> = emptyList()
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String) = true
 
-    override fun semanticColorsLight(): SemanticColors = compoundColorsLight
+    override fun overrideBrandColor(brandColor: String?) = Unit
 
-    override fun semanticColorsDark(): SemanticColors = compoundColorsDark
+    @Composable
+    override fun semanticColorsLight(): State<SemanticColors> {
+        return remember { derivedStateOf { compoundColorsLight } }
+    }
+
+    @Composable
+    override fun semanticColorsDark(): State<SemanticColors> {
+        return remember { derivedStateOf { compoundColorsDark } }
+    }
 
     override fun firebasePushGateway(): String? = null
     override fun unifiedPushDefaultPushGateway(): String? = null
