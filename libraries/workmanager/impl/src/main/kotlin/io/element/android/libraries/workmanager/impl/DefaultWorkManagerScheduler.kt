@@ -25,10 +25,11 @@ import timber.log.Timber
 class DefaultWorkManagerScheduler(
     @ApplicationContext private val context: Context,
 ) : WorkManagerScheduler {
+    private val workManager by lazy { WorkManager.getInstance(context) }
+
     override fun submit(workManagerRequest: WorkManagerRequest) {
         workManagerRequest.build().fold(
             onSuccess = {
-                val workManager = WorkManager.getInstance(context)
                 workManager.enqueue(it)
             },
             onFailure = {
@@ -38,9 +39,7 @@ class DefaultWorkManagerScheduler(
     }
 
     override fun cancel(sessionId: SessionId) {
-        val workManager = WorkManager.getInstance(context)
         Timber.d("Cancelling work for sessionId: $sessionId")
-
         for (requestType in WorkManagerRequestType.entries) {
             workManager.cancelAllWorkByTag(workManagerTag(sessionId, requestType))
         }
