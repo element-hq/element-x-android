@@ -16,7 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.androidutils.system.areAnimationsEnabled
 import kotlinx.coroutines.delay
 import me.saket.telephoto.ExperimentalTelephotoApi
 import me.saket.telephoto.flick.FlickToDismiss
@@ -34,10 +36,14 @@ fun MediaViewerFlickToDismiss(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
+    val context = LocalContext.current
     DismissFlickEffects(
         flickState = flickState,
         onDismissing = { animationDuration ->
-            delay(animationDuration / 3)
+            // Only add the delay if an animation should be played, otherwise `onDismiss` will never be called
+            if (context.areAnimationsEnabled()) {
+                delay(animationDuration / 3)
+            }
             onDismiss()
         },
         onDragging = onDragging,
