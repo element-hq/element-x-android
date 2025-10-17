@@ -86,23 +86,17 @@ class DefaultNotificationResolverQueue(
         // If this job is still active (so this is the latest job), we launch a separate one that won't be cancelled when enqueueing new items
         // to process the existing queued items.
         appCoroutineScope.launch {
-            if (featureFlagService.isFeatureEnabled(FeatureFlags.SyncNotificationsWithWorkManager)) {
-                val groupedRequestsById = buildList {
-                    while (!requestQueue.isEmpty) {
-                        requestQueue.receiveCatching().getOrNull()?.let(this::add)
-                    }
-                }.groupBy { it.sessionId }
+            val groupedRequestsById = buildList {
+                while (!requestQueue.isEmpty) {
+                    requestQueue.receiveCatching().getOrNull()?.let(::add)
+                }
+            }.groupBy { it.sessionId }
 
+            if (featureFlagService.isFeatureEnabled(FeatureFlags.SyncNotificationsWithWorkManager)) {
                 for ((sessionId, requests) in groupedRequestsById) {
                     workManagerScheduler.submit(SyncNotificationWorkManagerRequest(sessionId, requests))
                 }
             } else {
-                val groupedRequestsById = buildList {
-                    while (!requestQueue.isEmpty) {
-                        requestQueue.receiveCatching().getOrNull()?.let(this::add)
-                    }
-                }.groupBy { it.sessionId }
-
                 val sessionIds = groupedRequestsById.keys
                 for (sessionId in sessionIds) {
                     val requests = groupedRequestsById[sessionId].orEmpty()
