@@ -33,6 +33,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.UUID
@@ -174,6 +175,7 @@ class FetchNotificationWorkerTest {
         workManagerScheduler = workManagerScheduler,
         syncOnNotifiableEvent = syncOnNotifiableEvent,
         coroutineDispatchers = testCoroutineDispatchers(),
+        json = Json {},
     )
 
     private fun TestScope.createWorkerParams(

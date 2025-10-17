@@ -47,9 +47,8 @@ class FetchNotificationsWorker(
     private val workManagerScheduler: WorkManagerScheduler,
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val json: Json,
 ) : CoroutineWorker(context, workerParams) {
-    private val json = Json { ignoreUnknownKeys = true }
-
     override suspend fun doWork(): Result = withContext(coroutineDispatchers.io) {
         Timber.d("FetchNotificationsWorker started")
         val rawRequestsJson = inputData.getString("requests") ?: return@withContext Result.failure()
