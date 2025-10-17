@@ -21,6 +21,7 @@ import android.provider.Settings
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import android.widget.VideoView
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
@@ -65,6 +66,10 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
             context: Context, videoData: MediaViewerPageData.MediaViewerData, position: Long = 0L
         ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
+
+                //the message needs to be added into commonStrings as notice for permission needed
+                Toast.makeText(context, "To show the floating video, please allow 'Display over other apps' permission.", Toast.LENGTH_LONG).show()
+
                 // Request overlay permission
                 val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
                     data = "package:${context.packageName}".toUri()
@@ -197,13 +202,14 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
                     },
                     onToggleFullScreen = {
                         Timber.tag("onToggleFullScreen").d(isMaximized.toString())
-                        this@FloatingVideoService.toggleFullScreen(it)                    },
+                        this@FloatingVideoService.toggleFullScreen(it)
+                    },
                     onCompleted = {
                         removeFloatingView()
                         stopSelf()
                     },
                     floatingView = floatingView,
-                    isMaximized = isMaximized ,
+                    isMaximized = isMaximized,
                     currentVideoData = currentVideoData,
                     windowManager = windowManager,
                     windowLayoutParams = windowLayoutParams
@@ -243,13 +249,13 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
         return (dp * resources.displayMetrics.density).toInt()
     }
 
-    private fun onVideoComplete(){
+    private fun onVideoComplete() {
         removeFloatingView()
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         viewModelStore.clear()
     }
 
-    private fun toggleFullScreen( aspectRatio : Float ) {
+    private fun toggleFullScreen(aspectRatio: Float) {
         val layoutParams = windowLayoutParams
         val wm = windowManager ?: return
         val view = floatingView ?: return
@@ -257,7 +263,6 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
         isMaximized = !isMaximized
 
         if (view.parent == null) return
-
 
         val widthFrac = if (aspectRatio > 1f) 0.6f else 0.3f
         val width = if (isMaximized) {
@@ -296,7 +301,5 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
         Handler(Looper.getMainLooper()).post {
             wm.updateViewLayout(view, layoutParams)
         }
-
     }
-
 }
