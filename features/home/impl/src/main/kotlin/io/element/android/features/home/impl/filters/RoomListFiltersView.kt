@@ -69,7 +69,7 @@ fun RoomListFiltersView(
     var scrollToStart by remember { mutableIntStateOf(0) }
     val lazyListState = rememberLazyListState()
     LaunchedEffect(scrollToStart) {
-        if(scrollToStart == 0) return@LaunchedEffect
+        if (scrollToStart == 0) return@LaunchedEffect
         // Scroll until the first item start to be displayed
         // Since all items have different size, there is no way to compute the amount of
         // pixel to scroll to go directly to the start of the row.

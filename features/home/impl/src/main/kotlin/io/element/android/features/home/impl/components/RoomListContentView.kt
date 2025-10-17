@@ -197,8 +197,8 @@ private fun RoomsViewList(
     }
     val showEmptyState = state.summaries.isEmpty() && filtersState.hasAnyFilterSelected
     LaunchedEffect(showEmptyState) {
-        if(showEmptyState){
-            // If we are showing the empty state, scroll to the top to show it properly
+        // If we are showing the empty state, scroll to the top to show it properly
+        if (showEmptyState) {
             lazyListState.animateScrollToItem(0)
         }
     }
