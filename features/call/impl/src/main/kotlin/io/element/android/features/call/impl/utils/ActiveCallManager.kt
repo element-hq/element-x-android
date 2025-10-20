@@ -180,13 +180,7 @@ class DefaultActiveCallManager(
 
         val previousActiveCall = activeCall.value ?: return
         val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
-        activeCall.value = null
-        if (activeWakeLock?.isHeld == true) {
-            Timber.tag(tag).d("Releasing partial wakelock after timeout")
-            activeWakeLock.release()
-        }
-
-        cancelIncomingCallNotification()
+        removeCurrentCall()
 
         if (displayMissedCallNotification) {
             displayMissedCallNotification(notificationData)
@@ -211,13 +205,9 @@ class DefaultActiveCallManager(
                 ?.declineCall(notificationData.eventId)
         }
 
-        cancelIncomingCallNotification()
-        if (activeWakeLock?.isHeld == true) {
-            Timber.tag(tag).d("Releasing partial wakelock after hang up")
-            activeWakeLock.release()
-        }
         timedOutCallJob?.cancel()
-        activeCall.value = null
+
+        removeCurrentCall()
     }
 
     override suspend fun joinedCall(callType: CallType) = mutex.withLock {
@@ -234,6 +224,19 @@ class DefaultActiveCallManager(
             callType = callType,
             callState = CallState.InCall,
         )
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun removeCurrentCall() {
+        // Remove the active call and cancel the notification
+        activeCall.value = null
+        cancelIncomingCallNotification()
+
+        // Also remove any wake locks that may be held
+        if (activeWakeLock?.isHeld == true) {
+            Timber.tag(tag).d("Releasing partial wakelock after call declined from another session")
+            activeWakeLock.release()
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -309,13 +312,7 @@ class DefaultActiveCallManager(
             }
             .onEach { decliner ->
                 Timber.tag(tag).d("Call: $activeCall was declined by user from another session")
-                // Remove the active call and cancel the notification
-                activeCall.value = null
-                if (activeWakeLock?.isHeld == true) {
-                    Timber.tag(tag).d("Releasing partial wakelock after call declined from another session")
-                    activeWakeLock.release()
-                }
-                cancelIncomingCallNotification()
+                removeCurrentCall()
             }
             .launchIn(coroutineScope)
         // This will observe ringing calls and ensure they're terminated if the room call is cancelled or if the user
@@ -344,10 +341,17 @@ class DefaultActiveCallManager(
                     // The call was cancelled
                     timedOutCallJob?.cancel()
                     incomingCallTimedOut(displayMissedCallNotification = true)
+
+                    val notificationData = (activeCall.value?.callState as? CallState.Ringing)?.notificationData
+                    removeCurrentCall()
+
+                    if (notificationData != null) {
+                        displayMissedCallNotification(notificationData)
+                    }
                 } else if (userIsInTheCall) {
                     // The user joined the call from another session
                     timedOutCallJob?.cancel()
-                    incomingCallTimedOut(displayMissedCallNotification = false)
+                    removeCurrentCall()
                 }
             }
             .launchIn(coroutineScope)
