@@ -10,6 +10,7 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"無效的 URL，請確定包含了協定 (http/https) 與正確的地址。"</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"在聊天室邀請請求中隱藏大頭貼"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"在時間軸中隱藏媒體預覽"</string>
+  <string name="screen_advanced_settings_labs">"實驗室"</string>
   <string name="screen_advanced_settings_media_compression_description">"上傳照片與影片更快且減少資料使用量"</string>
   <string name="screen_advanced_settings_media_compression_title">"最佳化媒體品質"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"管理與安全"</string>
@@ -43,6 +44,11 @@
   <string name="screen_edit_profile_error_title">"無法更新個人檔案"</string>
   <string name="screen_edit_profile_title">"編輯個人檔案"</string>
   <string name="screen_edit_profile_updating_details">"正在更新個人檔案…"</string>
+  <string name="screen_labs_enable_threads">"啟用討論串回覆"</string>
+  <string name="screen_labs_enable_threads_description">"應用程式將會重新啟動以套用此變更。"</string>
+  <string name="screen_labs_header_description">"試試我們正在開發中的最新構想。這些功能可能尚未完成，可能不夠穩定，也可能隨時變動。"</string>
+  <string name="screen_labs_header_title">"想不想來點新花樣？"</string>
+  <string name="screen_labs_title">"實驗室"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"其他設定"</string>
   <string name="screen_notification_settings_calls_label">"音訊與視訊通話"</string>
   <string name="screen_notification_settings_configuration_mismatch">"組態錯誤"</string>

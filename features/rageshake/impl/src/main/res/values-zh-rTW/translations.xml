@@ -14,5 +14,7 @@
   <string name="screen_bug_report_include_screenshot">"傳送螢幕截圖"</string>
   <string name="screen_bug_report_logs_description">"紀錄檔將包含在您的訊息中以確保一切運作正常。要在不包含紀錄檔的情況下傳送訊息，請關閉此設定。"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s 上次使用時當機了。您想要與我們分享當機報告嗎？"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"若您遇到通知問題，上傳通知推播規則可以協助我們找出根本原因。請注意，這些規則可能包含您的私人資訊，例如您的顯示名稱或要接收通知的關鍵字。"</string>
+  <string name="screen_bug_report_send_notification_settings_title">"傳送通知設定"</string>
   <string name="screen_bug_report_view_logs">"查看日誌"</string>
 </resources>

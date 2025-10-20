@@ -10,6 +10,7 @@
   <string name="confirm_recovery_key_banner_title">"ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده"</string>
   <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
   <string name="screen_home_tab_chats">"گپ‌ها"</string>
+  <string name="screen_home_tab_spaces">"فضاها"</string>
   <string name="screen_invites_decline_chat_message">"مطمئنید که می‌خواهید دعوت پیوستن به %1$s را رد کنید؟"</string>
   <string name="screen_invites_decline_chat_title">"رد دعوت"</string>
   <string name="screen_invites_decline_direct_chat_message">"مطمئنید که می‌خواهید این گپ خصوصی با %1$s را رد کنید؟"</string>
@@ -19,6 +20,7 @@
   <string name="screen_migration_message">"فرایندی یک باره است. ممنون از شکیباییتان."</string>
   <string name="screen_migration_title">"برپایی حسابتان."</string>
   <string name="screen_roomlist_a11y_create_message">"ایجاد اتاق یا گفت‌وگویی جدید"</string>
+  <string name="screen_roomlist_clear_filters">"پاک کردن پالایه‌ها"</string>
   <string name="screen_roomlist_empty_message">"آغاز با پیام دادن به کسی."</string>
   <string name="screen_roomlist_empty_title">"هنوز گپی وجود ندارد."</string>
   <string name="screen_roomlist_filter_favourites">"علاقه‌مندی‌ها"</string>
@@ -39,6 +41,7 @@
   <string name="screen_roomlist_main_space_title">"گپ‌ها"</string>
   <string name="screen_roomlist_mark_as_read">"علامت‌گذاری به عنوان خوانده شده"</string>
   <string name="screen_roomlist_mark_as_unread">"نشان به ناخوانده"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"این اتاق ارتقا یافته"</string>
   <string name="session_verification_banner_message">"گویا از افزاره‌ای جدید استفاده می‌کنید. تأیید با افزاره‌ای دیگر برای دسترسی به پیام‌های رمزنگاری شده‌تان."</string>
   <string name="session_verification_banner_title">"تأیید کنید که خودتانید"</string>
 </resources>

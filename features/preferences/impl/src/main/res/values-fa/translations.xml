@@ -9,8 +9,13 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL نامعتبر، لطفا مطمئن شوید که پروتکل (http/https) و آدرس صحیح را درج کرده اید."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"نهفتن چهرک‌ها در درخواست‌های دعوت اتاق"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"نهفتن رسانه در خط زمانی"</string>
+  <string name="screen_advanced_settings_labs">"آزمایشگاه‌ها"</string>
   <string name="screen_advanced_settings_media_compression_title">"بهینه سازی کیفیت رسانه"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"نظارت و امنیت"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"زیاد (۱۰۸۰ت)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"کم (۴۸۰ت)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"استاندارد (۷۲۰ت)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"کیفیت بارگذاری ویدیو"</string>
   <string name="screen_advanced_settings_push_provider_android">"فراهم کنندهٔ آگاهی‌های ارسالی"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"از کار انداختن ویرایشگر متن غنی یا نوشتن دستی مارک‌دون."</string>
   <string name="screen_advanced_settings_send_read_receipts">"رسید‌های خواندن"</string>
@@ -31,6 +36,7 @@
   <string name="screen_edit_profile_error_title">"ناتوان در به‌روز کردن نمایه"</string>
   <string name="screen_edit_profile_title">"ویرایش نمایه"</string>
   <string name="screen_edit_profile_updating_details">"به‌روز کردن نمایه…"</string>
+  <string name="screen_labs_title">"آزمایشگاه‌ها"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"تنظیمات اضافی"</string>
   <string name="screen_notification_settings_calls_label">"تماس‌های صوتی و تصویری"</string>
   <string name="screen_notification_settings_configuration_mismatch">"نامتطابقت در پیکربندی"</string>

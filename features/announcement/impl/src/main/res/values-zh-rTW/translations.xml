@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"檢視您建立或加入的空間"</string>
+  <string name="screen_space_announcement_item2">"接受或拒絕空間邀請"</string>
+  <string name="screen_space_announcement_item3">"探索空間內您可以加入的任何聊天室"</string>
+  <string name="screen_space_announcement_item4">"加入公開空間"</string>
+  <string name="screen_space_announcement_item5">"離開任何您已加入的空間"</string>
+  <string name="screen_space_announcement_notice">"篩選、建立與管理空間功能即將推出。"</string>
+  <string name="screen_space_announcement_subtitle">"歡迎使用空間的測試版！此初始版本可讓您："</string>
+  <string name="screen_space_announcement_title">"介紹空間"</string>
+</resources>

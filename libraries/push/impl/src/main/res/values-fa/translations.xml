@@ -6,12 +6,12 @@
   <string name="notification_channel_ringing_calls">"زنگ خوردن تماس"</string>
   <string name="notification_channel_silent">"اعلان‌های صامت"</string>
   <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s:%2$d پیام"</item>
-    <item quantity="other">"%1$s:%2$d پیام‌"</item>
+    <item quantity="%1$s:%2$d پیام">"one"</item>
+    <item quantity="%1$s:%2$d پیام‌">"other"</item>
   </plurals>
   <plurals name="notification_compat_summary_title">
-    <item quantity="one">"%dاعلان"</item>
-    <item quantity="other">"%dاعلان‌"</item>
+    <item quantity="%dاعلان">"one"</item>
+    <item quantity="%dاعلان‌">"other"</item>
   </plurals>
   <string name="notification_fallback_content">"پیام‌های جدیدی دارید."</string>
   <string name="notification_incoming_call">"📹 تماس ورودی"</string>
@@ -19,16 +19,16 @@
   <string name="notification_invitation_action_join">"پیوستن"</string>
   <string name="notification_invitation_action_reject">"رد کردن"</string>
   <plurals name="notification_invitations">
-    <item quantity="one">"%d دعوت"</item>
-    <item quantity="other">"%d دعوت"</item>
+    <item quantity="%d دعوت">"one"</item>
+    <item quantity="%d دعوت">"other"</item>
   </plurals>
   <string name="notification_invite_body">"به گپ دعوتتان کرد"</string>
   <string name="notification_invite_body_with_sender">"%1$s به گپ دعوتتان کرد"</string>
   <string name="notification_mentioned_you_body">"به شما اشاره کرد: %1$s"</string>
   <string name="notification_new_messages">"پیام جدید"</string>
   <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d پیام جدید"</item>
-    <item quantity="other">"%d پیام جدید"</item>
+    <item quantity="%d پیام جدید">"one"</item>
+    <item quantity="%d پیام جدید">"other"</item>
   </plurals>
   <string name="notification_reaction_body">"با %1$s واکنش داد"</string>
   <string name="notification_room_action_mark_as_read">"علامت‌گذاری به عنوان خوانده شده"</string>
@@ -41,19 +41,20 @@
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
-    <item quantity="one">"%d پیام اعلان نشده"</item>
-    <item quantity="other">"%d پیام اعلان نشده"</item>
+    <item quantity="%d پیام اعلان نشده">"one"</item>
+    <item quantity="%d پیام اعلان نشده">"other"</item>
   </plurals>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s و %2$s"</string>
   <string name="notification_unread_notified_messages_in_room">"%1$s در %2$s"</string>
   <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s در %2$s و %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
-    <item quantity="one">"%d اتاق"</item>
-    <item quantity="other">"%d اتاق"</item>
+    <item quantity="%d اتاق">"one"</item>
+    <item quantity="%d اتاق">"other"</item>
   </plurals>
   <string name="push_distributor_background_sync_android">"همگام سازی پس‌زمینه"</string>
   <string name="push_distributor_firebase_android">"خدمات گوگل"</string>
   <string name="push_no_valid_google_play_services_apk_android">"خدمت پلی گوگل معتبری پیدا نشد. ممکن است آگاهی‌ها به درستی کار نکنند."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"کاربران مسدود"</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"روی آگاهی کلیک شد!"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"خطا: فرستنده درخواست را رد کرد."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"خطا: %1$s."</string>

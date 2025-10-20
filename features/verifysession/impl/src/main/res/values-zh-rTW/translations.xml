@@ -11,12 +11,12 @@
   <string name="screen_identity_use_another_device">"使用另一部裝置"</string>
   <string name="screen_identity_waiting_on_other_device">"正在等待其他裝置…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"似乎出了一點問題。有可能是因為等候逾時，或是請求被拒絕。"</string>
-  <string name="screen_session_verification_compare_emojis_subtitle">"確認顯示在其他工作階段上的表情符號是否和下方的相同。"</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"請確認以下表情符號是否與您其他裝置上顯示的符號相符。"</string>
   <string name="screen_session_verification_compare_emojis_title">"比對表情符號"</string>
   <string name="screen_session_verification_compare_emojis_user_subtitle">"確認下方的表情符號與其他使用者裝置上顯示的表情符號相符。"</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"確認以下數字是否與其他作業階段中顯示的數字相符。"</string>
   <string name="screen_session_verification_compare_numbers_title">"比較數字"</string>
-  <string name="screen_session_verification_complete_subtitle">"新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。"</string>
+  <string name="screen_session_verification_complete_subtitle">"現在您可以在其他裝置上安全地閱讀或傳送訊息。"</string>
   <string name="screen_session_verification_complete_user_subtitle">"現在，您可以在傳送或接收訊息時信任此使用者的身份。"</string>
   <string name="screen_session_verification_device_verified">"裝置已驗證"</string>
   <string name="screen_session_verification_enter_recovery_key">"輸入復原金鑰"</string>
@@ -33,7 +33,7 @@
   <string name="screen_session_verification_request_failure_title">"驗證失敗。"</string>
   <string name="screen_session_verification_request_footer">"僅當您啟動此驗證時才繼續。"</string>
   <string name="screen_session_verification_request_subtitle">"驗證其他裝置以保護您的訊息歷史紀錄安全。"</string>
-  <string name="screen_session_verification_request_success_subtitle">"新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。"</string>
+  <string name="screen_session_verification_request_success_subtitle">"現在您可以在其他裝置上安全地閱讀或傳送訊息。"</string>
   <string name="screen_session_verification_request_success_title">"裝置已驗證"</string>
   <string name="screen_session_verification_request_title">"已請求驗證"</string>
   <string name="screen_session_verification_they_dont_match">"不一樣"</string>
