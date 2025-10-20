@@ -208,20 +208,16 @@ class DefaultActiveCallManager(
                 ?.declineCall(notificationData.eventId)
         }
 
-        timedOutCallJob?.cancel()
-
         removeCurrentCall()
     }
 
+    /**
+     * Removes the current active call and any associated UI, cancelling the timeouts and wakelocks.
+     */
     override suspend fun joinedCall(callType: CallType) = mutex.withLock {
         Timber.tag(tag).d("Joined call: $callType")
 
-        cancelIncomingCallNotification()
-        if (activeWakeLock?.isHeld == true) {
-            Timber.tag(tag).d("Releasing partial wakelock after joining call")
-            activeWakeLock.release()
-        }
-        timedOutCallJob?.cancel()
+        removeCurrentCall()
 
         activeCall.value = ActiveCall(
             callType = callType,
@@ -231,6 +227,10 @@ class DefaultActiveCallManager(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun removeCurrentCall() {
+        // Cancel and remove the timeout call job, if any
+        timedOutCallJob?.cancel()
+        timedOutCallJob = null
+
         // Remove the active call and cancel the notification
         activeCall.value = null
         cancelIncomingCallNotification()
@@ -348,9 +348,6 @@ class DefaultActiveCallManager(
             .drop(1)
             .onEach { (roomHasActiveCall, userIsInTheCall) ->
                 if (!roomHasActiveCall) {
-                    // The call was cancelled
-                    timedOutCallJob?.cancel()
-
                     val notificationData = (activeCall.value?.callState as? CallState.Ringing)?.notificationData
                     removeCurrentCall()
 
@@ -358,8 +355,6 @@ class DefaultActiveCallManager(
                         displayMissedCallNotification(notificationData)
                     }
                 } else if (userIsInTheCall) {
-                    // The user joined the call from another session
-                    timedOutCallJob?.cancel()
                     removeCurrentCall()
                 }
             }
