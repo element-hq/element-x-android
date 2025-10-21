@@ -690,7 +690,7 @@ class DefaultPushHandlerTest {
         notificationChannels: FakeNotificationChannels = FakeNotificationChannels(),
         pushHistoryService: PushHistoryService = FakePushHistoryService(),
         syncOnNotifiableEvent: SyncOnNotifiableEvent = SyncOnNotifiableEvent {},
-        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.SyncNotificationsWithWorkManager.key to false)),
         workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
     ): DefaultPushHandler {
         return DefaultPushHandler(
