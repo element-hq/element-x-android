@@ -211,7 +211,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.24.0"
-sentry = "io.sentry:sentry-android:8.23.0"
+sentry = "io.sentry:sentry-android:8.24.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
