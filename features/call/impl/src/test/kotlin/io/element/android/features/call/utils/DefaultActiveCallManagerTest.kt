@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
@@ -46,6 +47,7 @@ import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.plantTestTimber
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -329,6 +331,49 @@ class DefaultActiveCallManagerTest {
         advanceTimeBy(1)
 
         assertThat(manager.activeCall.value).isNull()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `observeRingingCalls - declining won't do anything if the call was already cancelled`() = runTest {
+        val room = FakeBaseRoom().apply {
+            givenRoomInfo(aRoomInfo())
+        }
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(client) })
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+        val manager = spyk<DefaultActiveCallManager>(
+            createActiveCallManager(
+                matrixClientProvider = matrixClientProvider,
+                notificationManagerCompat = notificationManagerCompat,
+            )
+        )
+
+        manager.registerIncomingCall(aCallNotificationData())
+
+        // Call is active (the other user join the call)
+        room.givenRoomInfo(aRoomInfo(hasRoomCall = true))
+        advanceTimeBy(1)
+
+        // Call is cancelled by us, hanging up
+        manager.hungUpCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID))
+        advanceTimeBy(1)
+
+        verify(exactly = 1) { notificationManagerCompat.cancel(any()) }
+        verify(exactly = 1) { manager.removeCurrentCall() }
+        assertThat(manager.activeCall.value).isNull()
+        assertThat(manager.activeWakeLock?.isHeld).isNull()
+
+        // Simulate that another user declined the call
+        room.givenDecliner(A_USER_ID_2, AN_EVENT_ID)
+        advanceTimeBy(1)
+
+        // Check everything stays the same, no extra call to cancelling notifications
+        verify(exactly = 1) { notificationManagerCompat.cancel(any()) }
+        verify(exactly = 1) { manager.removeCurrentCall() }
+        assertThat(manager.activeWakeLock?.isHeld).isNull()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

@@ -15,6 +15,7 @@
   <string name="screen_join_room_fail_reason">"Sinun on joko saatava kutsu liittyäksesi tai pääsyyn voi olla rajoituksia."</string>
   <string name="screen_join_room_forget_action">"Unohda"</string>
   <string name="screen_join_room_invite_required_message">"Tarvitset kutsun liittyäksesi"</string>
+  <string name="screen_join_room_invited_by">"Kutsuja"</string>
   <string name="screen_join_room_join_action">"Liity"</string>
   <string name="screen_join_room_join_restricted_message">"Saatat tarvita kutsun tai olla tilan jäsen, jotta voit liittyä."</string>
   <string name="screen_join_room_knock_action">"Lähetä liittymispyyntö"</string>

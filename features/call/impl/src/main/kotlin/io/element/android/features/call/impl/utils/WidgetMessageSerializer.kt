@@ -9,18 +9,18 @@ package io.element.android.features.call.impl.utils
 
 import dev.zacsweers.metro.Inject
 import io.element.android.features.call.impl.data.WidgetMessage
+import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import kotlinx.serialization.json.Json
 
 @Inject
 class WidgetMessageSerializer(
-    private val json: Json,
+    private val json: JsonProvider,
 ) {
     fun deserialize(message: String): Result<WidgetMessage> {
-        return runCatchingExceptions { json.decodeFromString(WidgetMessage.serializer(), message) }
+        return runCatchingExceptions { json().decodeFromString(WidgetMessage.serializer(), message) }
     }
 
     fun serialize(message: WidgetMessage): String {
-        return json.encodeToString(WidgetMessage.serializer(), message)
+        return json().encodeToString(WidgetMessage.serializer(), message)
     }
 }

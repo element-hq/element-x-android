@@ -15,7 +15,6 @@ import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.impl.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
@@ -23,7 +22,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
-import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
@@ -34,8 +32,10 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import okhttp3.MultipartReader
 import okhttp3.OkHttpClient
@@ -405,53 +405,85 @@ class DefaultBugReporterTest {
         assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs")
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `when the log directory is updated, the tracing service is invoked`() = runTest {
+    fun `when a session is added, the tracing service is invoked`() = runTest {
         var param: WriteToFilesConfiguration? = null
         val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {
             param = it
         }
-        val sut = createDefaultBugReporter(
+        val sessionStore = InMemorySessionStore()
+        createDefaultBugReporter(
             buildMeta = aBuildMeta(isEnterpriseBuild = true),
+            sessionStore = sessionStore,
             tracingService = FakeTracingService(
                 updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
             ),
         )
-        sut.setLogDirectorySubfolder("my.sub.folder")
+        sessionStore.addSession(aSessionData(sessionId = "@alice:server.org"))
+        runCurrent()
         updateWriteToFilesConfigurationResult.assertions().isCalledOnce()
         assertThat(param).isNotNull()
         assertThat(param).isInstanceOf(WriteToFilesConfiguration.Enabled::class.java)
-        assertThat((param as WriteToFilesConfiguration.Enabled).directory).endsWith("/cache/logs/my.sub.folder")
+        assertThat((param as WriteToFilesConfiguration.Enabled).directory).endsWith("/cache/logs/server.org")
         assertThat((param as WriteToFilesConfiguration.Enabled).filenamePrefix).isEqualTo("logs")
         assertThat((param as WriteToFilesConfiguration.Enabled).numberOfFiles).isEqualTo(168)
         assertThat((param as WriteToFilesConfiguration.Enabled).filenameSuffix).isEqualTo("log")
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `foss build - when the log directory is updated, the tracing service is not invoked`() = runTest {
+    fun `when another session is added on same domain, the tracing service is not invoked`() = runTest {
         val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {}
-        val sut = createDefaultBugReporter(
-            tracingService = FakeTracingService(
-                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
-            )
-        )
-        sut.setLogDirectorySubfolder("my.sub.folder")
-        updateWriteToFilesConfigurationResult.assertions().isNeverCalled()
-    }
-
-    @Test
-    fun `when the log directory is reset, the tracing service is invoked`() = runTest {
-        var param: WriteToFilesConfiguration? = null
-        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {
-            param = it
-        }
-        val sut = createDefaultBugReporter(
+        val sessionStore = InMemorySessionStore()
+        createDefaultBugReporter(
             buildMeta = aBuildMeta(isEnterpriseBuild = true),
+            sessionStore = sessionStore,
             tracingService = FakeTracingService(
                 updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
             ),
         )
-        sut.setLogDirectorySubfolder(null)
+        sessionStore.addSession(aSessionData(sessionId = "@alice:server.org"))
+        runCurrent()
+        updateWriteToFilesConfigurationResult.assertions().isCalledOnce()
+        sessionStore.addSession(aSessionData(sessionId = "@bob:server.org"))
+        runCurrent()
+        updateWriteToFilesConfigurationResult.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `foss build - when a session is added, the tracing service is not invoked`() = runTest {
+        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {}
+        val sessionStore = InMemorySessionStore()
+        createDefaultBugReporter(
+            tracingService = FakeTracingService(
+                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
+            ),
+            sessionStore = sessionStore,
+        )
+        sessionStore.addSession(aSessionData(sessionId = "@alice:server.org"))
+        updateWriteToFilesConfigurationResult.assertions().isNeverCalled()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `when the user signs out, the tracing service is invoked`() = runTest {
+        var param: WriteToFilesConfiguration? = null
+        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {
+            param = it
+        }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData(sessionId = "@alice:server.org")),
+        )
+        createDefaultBugReporter(
+            buildMeta = aBuildMeta(isEnterpriseBuild = true),
+            tracingService = FakeTracingService(
+                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
+            ),
+            sessionStore = sessionStore,
+        )
+        sessionStore.removeSession("@alice:server.org")
+        runCurrent()
         updateWriteToFilesConfigurationResult.assertions().isCalledOnce()
         assertThat(param).isNotNull()
         assertThat(param).isInstanceOf(WriteToFilesConfiguration.Enabled::class.java)
@@ -464,66 +496,16 @@ class DefaultBugReporterTest {
     @Test
     fun `foss build - when the log directory is reset, the tracing service is not invoked`() = runTest {
         val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {}
-        val sut = createDefaultBugReporter(
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData(sessionId = "@alice:server.org")),
+        )
+        createDefaultBugReporter(
             tracingService = FakeTracingService(
                 updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
-            )
+            ),
+            sessionStore = sessionStore,
         )
-        sut.setLogDirectorySubfolder(null)
-        updateWriteToFilesConfigurationResult.assertions().isNeverCalled()
-    }
-
-    @Test
-    fun `when a new MatrixClient is created the logs folder is updated`() = runTest {
-        var param: WriteToFilesConfiguration? = null
-        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {
-            param = it
-        }
-        val matrixAuthenticationService = FakeMatrixAuthenticationService().apply {
-            givenMatrixClient(
-                FakeMatrixClient(
-                    userIdServerNameLambda = { "domain.foo.org" },
-                )
-            )
-        }
-        val sut = createDefaultBugReporter(
-            buildMeta = aBuildMeta(isEnterpriseBuild = true),
-            matrixAuthenticationService = matrixAuthenticationService,
-            tracingService = FakeTracingService(
-                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
-            )
-        )
-        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs")
-        matrixAuthenticationService.login("alice", "password")
-        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs/domain.foo.org")
-        updateWriteToFilesConfigurationResult.assertions().isCalledOnce()
-        assertThat(param).isNotNull()
-        assertThat(param).isInstanceOf(WriteToFilesConfiguration.Enabled::class.java)
-        assertThat((param as WriteToFilesConfiguration.Enabled).directory).endsWith("/cache/logs/domain.foo.org")
-        assertThat((param as WriteToFilesConfiguration.Enabled).filenamePrefix).isEqualTo("logs")
-        assertThat((param as WriteToFilesConfiguration.Enabled).numberOfFiles).isEqualTo(168)
-        assertThat((param as WriteToFilesConfiguration.Enabled).filenameSuffix).isEqualTo("log")
-    }
-
-    @Test
-    fun `foss build - when a new MatrixClient is created the logs folder is not updated`() = runTest {
-        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {}
-        val matrixAuthenticationService = FakeMatrixAuthenticationService().apply {
-            givenMatrixClient(
-                FakeMatrixClient(
-                    userIdServerNameLambda = { "domain.foo.org" },
-                )
-            )
-        }
-        val sut = createDefaultBugReporter(
-            matrixAuthenticationService = matrixAuthenticationService,
-            tracingService = FakeTracingService(
-                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
-            )
-        )
-        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs")
-        matrixAuthenticationService.login("alice", "password")
-        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs")
+        sessionStore.removeSession("@alice:server.org")
         updateWriteToFilesConfigurationResult.assertions().isNeverCalled()
     }
 
@@ -534,10 +516,10 @@ class DefaultBugReporterTest {
         crashDataStore: CrashDataStore = FakeCrashDataStore(),
         server: MockWebServer = MockWebServer(),
         tracingService: TracingService = FakeTracingService(),
-        matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
     ): DefaultBugReporter {
         return DefaultBugReporter(
             context = RuntimeEnvironment.getApplication(),
+            appCoroutineScope = backgroundScope,
             screenshotHolder = FakeScreenshotHolder(),
             crashDataStore = crashDataStore,
             coroutineDispatchers = testCoroutineDispatchers(),
@@ -549,7 +531,6 @@ class DefaultBugReporterTest {
             sdkMetadata = FakeSdkMetadata("123456789"),
             matrixClientProvider = matrixClientProvider,
             tracingService = tracingService,
-            matrixAuthenticationService = matrixAuthenticationService,
         )
     }
 

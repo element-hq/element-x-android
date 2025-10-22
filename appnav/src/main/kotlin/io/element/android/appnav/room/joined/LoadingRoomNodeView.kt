@@ -8,8 +8,6 @@
 package io.element.android.appnav.room.joined
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -38,17 +35,13 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun LoadingRoomNodeView(
     state: LoadingRoomState,
-    hasNetworkConnection: Boolean,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
-            Column {
-                ConnectivityIndicatorView(isOnline = hasNetworkConnection)
-                LoadingRoomTopBar(onBackClick)
-            }
+            LoadingRoomTopBar(onBackClick)
         },
         content = { padding ->
             Box(
@@ -85,7 +78,6 @@ private fun LoadingRoomTopBar(
         title = {
             IconTitlePlaceholdersRowMolecule(iconSize = AvatarSize.TimelineRoom.dp)
         },
-        windowInsets = WindowInsets(0.dp),
     )
 }
 
@@ -94,7 +86,6 @@ private fun LoadingRoomTopBar(
 internal fun LoadingRoomNodeViewPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) = ElementPreview {
     LoadingRoomNodeView(
         state = state,
-        onBackClick = {},
-        hasNetworkConnection = false
+        onBackClick = {}
     )
 }

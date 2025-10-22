@@ -10,6 +10,7 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Peida jututubade kutsetest tunnuspildid"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Peida meedia eelvaated ajajoonel"</string>
+  <string name="screen_advanced_settings_labs">"Katsed"</string>
   <string name="screen_advanced_settings_media_compression_description">"Sellega laadid fotosid ja videoid kiiremini üles ning vähendad andmemahtu"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimeeri meedia kvaliteeti"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Modereerimine ja ohutus"</string>
@@ -43,7 +44,11 @@
   <string name="screen_edit_profile_error_title">"Profiili uuendamine ei õnnestunud"</string>
   <string name="screen_edit_profile_title">"Muuda profiili"</string>
   <string name="screen_edit_profile_updating_details">"Profiil on muutmisel…"</string>
+  <string name="screen_labs_enable_threads">"Võta kasutusele vastamine jutulõngas"</string>
+  <string name="screen_labs_enable_threads_description">"Selle muudatuse jõustamiseks käivitub rakendus uuesti."</string>
+  <string name="screen_labs_header_description">"Katseta meie uusimaid arendusideid. Need funktsionaalsused pole veel lõplikud, nad ei pruugi toimida parimal viisil ning võivad veel muutuda."</string>
   <string name="screen_labs_header_title">"Kas tahad katsetada?"</string>
+  <string name="screen_labs_title">"Katsed"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Täiendavad seadistused"</string>
   <string name="screen_notification_settings_calls_label">"Hääl- ja videokõned"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Eelistused ei sobi omavahel"</string>

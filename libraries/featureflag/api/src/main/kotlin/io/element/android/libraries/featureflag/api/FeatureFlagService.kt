@@ -35,7 +35,12 @@ interface FeatureFlagService {
     suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean): Boolean
 
     /**
-     * @return the list of available (not finished) features that can be toggled.
+     * @return the list of available features that can be toggled.
+     * @param includeFinishedFeatures whether to include finished features, default is false
+     * @param isInLabs whether the user is in labs (to include lab features), default is false
      */
-    fun getAvailableFeatures(): List<Feature>
+    fun getAvailableFeatures(
+        includeFinishedFeatures: Boolean = false,
+        isInLabs: Boolean = false,
+    ): List<Feature>
 }

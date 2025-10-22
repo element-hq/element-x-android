@@ -9,20 +9,20 @@ package io.element.android.libraries.wellknown.impl
 
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.SessionWellknownRetriever
 import io.element.android.libraries.wellknown.api.WellKnown
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 @ContributesBinding(SessionScope::class)
 @Inject
 class DefaultSessionWellknownRetriever(
     private val matrixClient: MatrixClient,
-    private val json: Json,
+    private val json: JsonProvider,
 ) : SessionWellknownRetriever {
     private val domain by lazy { matrixClient.userIdServerName() }
 
@@ -32,7 +32,7 @@ class DefaultSessionWellknownRetriever(
             .getUrl(url)
             .mapCatchingExceptions {
                 val data = String(it)
-                json.decodeFromString(InternalWellKnown.serializer(), data)
+                json().decodeFromString(InternalWellKnown.serializer(), data)
             }
             .onFailure { Timber.e(it, "Failed to retrieve .well-known from $domain") }
             .map { it.map() }
@@ -45,7 +45,7 @@ class DefaultSessionWellknownRetriever(
             .getUrl(url)
             .mapCatchingExceptions {
                 val data = String(it)
-                json.decodeFromString(InternalElementWellKnown.serializer(), data)
+                json().decodeFromString(InternalElementWellKnown.serializer(), data)
             }
             .onFailure { Timber.e(it, "Failed to retrieve Element .well-known from $domain") }
             .map { it.map() }

@@ -8,6 +8,9 @@
 package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -15,12 +18,15 @@ import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.compound.theme.ForcedDarkElementTheme
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
 
@@ -31,6 +37,8 @@ class AttachmentsPreviewNode(
     @Assisted plugins: List<Plugin>,
     presenterFactory: AttachmentsPreviewPresenter.Factory,
     private val localMediaRenderer: LocalMediaRenderer,
+    private val sessionId: SessionId,
+    private val enterpriseService: EnterpriseService,
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(
         val attachment: Attachment,
@@ -53,7 +61,12 @@ class AttachmentsPreviewNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        ForcedDarkElementTheme {
+        val colors by remember {
+            enterpriseService.semanticColorsFlow(sessionId = sessionId)
+        }.collectAsState(SemanticColorsLightDark.default)
+        ForcedDarkElementTheme(
+            colors = colors,
+        ) {
             val state = presenter.present()
             AttachmentsPreviewView(
                 state = state,

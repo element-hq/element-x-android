@@ -28,6 +28,7 @@ dependencies {
     api(projects.features.messages.api)
     implementation(projects.appconfig)
     implementation(projects.features.call.api)
+    implementation(projects.features.enterprise.api)
     implementation(projects.features.location.api)
     implementation(projects.features.poll.api)
     implementation(projects.features.roomcall.api)

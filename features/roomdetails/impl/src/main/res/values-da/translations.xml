@@ -134,8 +134,8 @@ Vi anbefaler ikke at aktivere kryptering for rum, som alle kan finde og deltage 
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Andre kan kun deltage, hvis de bliver inviteret"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Kun med invitation"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Adgang til rummet"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Klynger understøttes ikke i øjeblikket"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Medlemmer af klyngen"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Grupper understøttes ikke i øjeblikket"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Medlemmer af gruppen"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du skal bruge en adresse til rummet, for at gøre den synlig i rum-registeret."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Rummets adresse"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Tillad, at dette rum kan findes ved at søge i %1$s fortegnelse over offentlige rum"</string>

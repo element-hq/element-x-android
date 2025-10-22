@@ -189,14 +189,16 @@ class PreferencesRootPresenterTest {
     fun `present - labs can be shown if any feature flag is in labs and not finished`() = runTest {
         createPresenter(
             featureFlagService = FakeFeatureFlagService(
-                providedAvailableFeatures = listOf(
-                    FakeFeature(
-                        key = "feature_1",
-                        title = "Feature 1",
-                        isInLabs = true,
-                        isFinished = false,
+                getAvailableFeaturesResult = { _, _ ->
+                    listOf(
+                        FakeFeature(
+                            key = "feature_1",
+                            title = "Feature 1",
+                            isInLabs = true,
+                            isFinished = false,
+                        )
                     )
-                )
+                }
             ),
             matrixClient = FakeMatrixClient(
                 canDeactivateAccountResult = { true },
@@ -212,20 +214,16 @@ class PreferencesRootPresenterTest {
     fun `present - labs can't be shown if all feature flags in labs are finished`() = runTest {
         createPresenter(
             featureFlagService = FakeFeatureFlagService(
-                providedAvailableFeatures = listOf(
-                    FakeFeature(
-                        key = "feature_1",
-                        title = "Feature 1",
-                        isInLabs = true,
-                        isFinished = true,
-                    )
-                )
+                getAvailableFeaturesResult = { _, _ ->
+                    emptyList()
+                }
             ),
             matrixClient = FakeMatrixClient(
                 canDeactivateAccountResult = { true },
                 accountManagementUrlResult = { Result.success(null) },
             ),
         ).test {
+            skipItems(1)
             assertThat(awaitItem().showLabsItem).isFalse()
             cancelAndIgnoreRemainingEvents()
         }

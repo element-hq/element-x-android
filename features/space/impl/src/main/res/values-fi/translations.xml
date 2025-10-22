@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"%1$s (Ylläpitäjä)"</string>
   <plurals name="screen_leave_space_submit">
     <item quantity="one">"Poistu %1$d huoneesta ja tilasta"</item>
     <item quantity="other">"Poistu %1$d huoneesta ja tilasta"</item>

@@ -32,6 +32,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.serialization.json)
     api(libs.androidx.browser)
 
     testCommonDependencies(libs)

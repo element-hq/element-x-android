@@ -13,8 +13,10 @@ fun anElementWellKnown(
     registrationHelperUrl: String? = null,
     enforceElementPro: Boolean? = null,
     rageshakeUrl: String? = null,
+    brandColor: String? = null,
 ) = ElementWellKnown(
     registrationHelperUrl = registrationHelperUrl,
     enforceElementPro = enforceElementPro,
     rageshakeUrl = rageshakeUrl,
+    brandColor = brandColor,
 )

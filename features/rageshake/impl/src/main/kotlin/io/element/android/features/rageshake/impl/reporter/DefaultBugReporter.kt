@@ -28,16 +28,22 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.SdkMetadata
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.api.sessionIdFlow
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -67,6 +73,8 @@ import java.util.Locale
 @Inject
 class DefaultBugReporter(
     @ApplicationContext private val context: Context,
+    @AppCoroutineScope
+    private val appCoroutineScope: CoroutineScope,
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -78,7 +86,6 @@ class DefaultBugReporter(
     private val sdkMetadata: SdkMetadata,
     private val matrixClientProvider: MatrixClientProvider,
     private val tracingService: TracingService,
-    matrixAuthenticationService: MatrixAuthenticationService,
 ) : BugReporter {
     companion object {
         // filenames
@@ -98,13 +105,18 @@ class DefaultBugReporter(
         if (buildMeta.isEnterpriseBuild) {
             val logSubfolder = runBlocking {
                 sessionStore.getLatestSession()
-            }?.userId?.substringAfter(":")
+            }?.userId?.let(::UserId)?.domainName
             setCurrentLogDirectory(logSubfolder)
-            matrixAuthenticationService.listenToNewMatrixClients {
-                // When a new Matrix client is created, we update the tracing configuration to write
-                // the files in a dedicated subfolders.
-                setLogDirectorySubfolder(it.userIdServerName())
-            }
+            sessionStore.sessionIdFlow()
+                .map {
+                    it?.let(::UserId)?.domainName
+                }
+                .distinctUntilChanged()
+                .onEach { logSubfolder ->
+                    setCurrentLogDirectory(logSubfolder)
+                    tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
+                }
+                .launchIn(appCoroutineScope)
         }
     }
 
@@ -332,13 +344,6 @@ class DefaultBugReporter(
     override fun logDirectory(): File {
         return currentLogDirectory.apply {
             mkdirs()
-        }
-    }
-
-    override fun setLogDirectorySubfolder(subfolderName: String?) {
-        if (buildMeta.isEnterpriseBuild) {
-            setCurrentLogDirectory(subfolderName)
-            tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
         }
     }
 

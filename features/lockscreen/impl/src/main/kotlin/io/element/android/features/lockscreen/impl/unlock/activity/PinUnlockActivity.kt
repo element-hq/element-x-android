@@ -14,8 +14,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.lifecycle.lifecycleScope
 import dev.zacsweers.metro.Inject
+import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
@@ -46,9 +50,13 @@ class PinUnlockActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         bindings<PinUnlockBindings>().inject(this)
         setContent {
+            val colors by remember {
+                enterpriseService.semanticColorsFlow(sessionId = null)
+            }.collectAsState(SemanticColorsLightDark.default)
             ElementThemeApp(
                 appPreferencesStore = appPreferencesStore,
-                enterpriseService = enterpriseService,
+                compoundLight = colors.light,
+                compoundDark = colors.dark,
                 buildMeta = buildMeta,
             ) {
                 val state = presenter.present()

@@ -21,9 +21,12 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
@@ -41,15 +44,17 @@ class DeveloperSettingsPresenterTest {
 
     @Test
     fun `present - ensures initial states are correct`() = runTest {
-        val availableFeatures = listOf(
-            FakeFeature(
-                key = "feature_1",
-                title = "Feature 1",
-                isInLabs = false,
+        val getAvailableFeaturesResult = lambdaRecorder<Boolean, Boolean, List<Feature>> { _, _ ->
+            listOf(
+                FakeFeature(
+                    key = "feature_1",
+                    title = "Feature 1",
+                    isInLabs = false,
+                )
             )
-        )
+        }
         val presenter = createDeveloperSettingsPresenter(
-            featureFlagService = FakeFeatureFlagService(providedAvailableFeatures = availableFeatures)
+            featureFlagService = FakeFeatureFlagService(getAvailableFeaturesResult = getAvailableFeaturesResult)
         )
         presenter.test {
             awaitItem().also { state ->
@@ -73,6 +78,8 @@ class DeveloperSettingsPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.cacheSize).isInstanceOf(AsyncData.Success::class.java)
             }
+            getAvailableFeaturesResult.assertions().isCalledOnce()
+                .with(value(false), value(false))
         }
     }
 
@@ -179,7 +186,7 @@ class DeveloperSettingsPresenterTest {
 
     @Test
     fun `present - enterprise build can change the brand color`() = runTest {
-        val overrideBrandColorResult = lambdaRecorder<String?, Unit> { }
+        val overrideBrandColorResult = lambdaRecorder<SessionId?, String?, Unit> { _, _ -> }
         val presenter = createDeveloperSettingsPresenter(
             enterpriseService = FakeEnterpriseService(
                 isEnterpriseBuild = true,
@@ -198,55 +205,24 @@ class DeveloperSettingsPresenterTest {
             assertThat(awaitItem().showColorPicker).isTrue()
             initialState.eventSink(DeveloperSettingsEvents.ChangeBrandColor(Color.Green))
             assertThat(awaitItem().showColorPicker).isFalse()
+            skipItems(1)
             overrideBrandColorResult.assertions().isCalledOnce()
-                .with(value("00FF00"))
-        }
-    }
-
-    @Test
-    fun `present - won't display features in labs or finished`() = runTest {
-        val availableFeatures = listOf(
-            // Only this feature should be displayed
-            FakeFeature(
-                key = "feature_1",
-                title = "Feature 1",
-                isInLabs = false,
-            ),
-            FakeFeature(
-                key = "feature_2",
-                title = "Feature 2",
-                isInLabs = true,
-            ),
-            FakeFeature(
-                key = "feature_3",
-                title = "Feature 3",
-                isInLabs = false,
-                isFinished = true,
-            )
-        )
-
-        val presenter = createDeveloperSettingsPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                providedAvailableFeatures = availableFeatures,
-            )
-        )
-        presenter.test {
-            skipItems(2)
-            awaitItem().also { state ->
-                assertThat(state.features).hasSize(1)
-            }
+                .with(value(A_SESSION_ID), value("00FF00"))
         }
     }
 
     private fun createDeveloperSettingsPresenter(
+        sessionId: SessionId = A_SESSION_ID,
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(
-            providedAvailableFeatures = listOf(
-                FakeFeature(
-                    key = "feature_1",
-                    title = "Feature 1",
-                    isInLabs = false,
+            getAvailableFeaturesResult = { _, _ ->
+                listOf(
+                    FakeFeature(
+                        key = "feature_1",
+                        title = "Feature 1",
+                        isInLabs = false,
+                    )
                 )
-            )
+            }
         ),
         cacheSizeUseCase: FakeComputeCacheSizeUseCase = FakeComputeCacheSizeUseCase(),
         clearCacheUseCase: FakeClearCacheUseCase = FakeClearCacheUseCase(),
@@ -255,6 +231,7 @@ class DeveloperSettingsPresenterTest {
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
+            sessionId = sessionId,
             featureFlagService = featureFlagService,
             computeCacheSizeUseCase = cacheSizeUseCase,
             clearCacheUseCase = clearCacheUseCase,

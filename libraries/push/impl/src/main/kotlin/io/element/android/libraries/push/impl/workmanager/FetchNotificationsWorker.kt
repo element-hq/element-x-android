@@ -18,6 +18,7 @@ import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.binding
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -33,7 +34,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
@@ -47,13 +47,13 @@ class FetchNotificationsWorker(
     private val workManagerScheduler: WorkManagerScheduler,
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val json: Json,
+    private val json: JsonProvider,
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = withContext(coroutineDispatchers.io) {
         Timber.d("FetchNotificationsWorker started")
         val rawRequestsJson = inputData.getString("requests") ?: return@withContext Result.failure()
         val requests = runCatchingExceptions {
-            json.decodeFromString<List<SyncNotificationWorkManagerRequest.Data>>(rawRequestsJson).map { it.toRequest() }
+            json().decodeFromString<List<SyncNotificationWorkManagerRequest.Data>>(rawRequestsJson).map { it.toRequest() }
         }.getOrElse {
             Timber.e(it, "Failed to deserialize notification requests")
             return@withContext Result.failure()
@@ -93,7 +93,13 @@ class FetchNotificationsWorker(
             for (failedSessionId in failedSyncForSessions) {
                 val requestsToRetry = groupedRequests[failedSessionId] ?: continue
                 Timber.d("Re-scheduling ${requestsToRetry.size} failed notification requests for session $failedSessionId")
-                workManagerScheduler.submit(SyncNotificationWorkManagerRequest(failedSessionId, requestsToRetry))
+                workManagerScheduler.submit(
+                    SyncNotificationWorkManagerRequest(
+                        sessionId = failedSessionId,
+                        notificationEventRequests = requestsToRetry,
+                        json = json,
+                    )
+                )
             }
         }
 

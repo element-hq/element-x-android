@@ -9,7 +9,6 @@ package io.element.android.appnav.room
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
@@ -48,7 +47,6 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
-import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -71,7 +69,6 @@ class RoomFlowNode(
     private val client: MatrixClient,
     private val joinRoomEntryPoint: JoinRoomEntryPoint,
     private val roomAliasResolverEntryPoint: RoomAliasResolverEntryPoint,
-    private val syncService: SyncService,
     private val membershipObserver: RoomMembershipObserver,
     private val spaceEntryPoint: SpaceEntryPoint,
 ) : BaseFlowNode<RoomFlowNode.NavTarget>(
@@ -222,10 +219,8 @@ class RoomFlowNode(
     }
 
     private fun loadingNode(buildContext: BuildContext) = node(buildContext) { modifier ->
-        val isOnline by syncService.isOnline.collectAsState()
         LoadingRoomNodeView(
             state = LoadingRoomState.Loading,
-            hasNetworkConnection = isOnline,
             onBackClick = { navigateUp() },
             modifier = modifier,
         )

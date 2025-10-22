@@ -5,7 +5,7 @@
   <string name="screen_space_announcement_item3">"Découvrir les salons que vous pouvez joindre depuis vos espaces"</string>
   <string name="screen_space_announcement_item4">"Rejoindre les espaces publics"</string>
   <string name="screen_space_announcement_item5">"Quitter les espaces dont vous êtes membre."</string>
-  <string name="screen_space_announcement_notice">"La création et la gestion des espaces seront bientôt disponibles."</string>
+  <string name="screen_space_announcement_notice">"Le filtrage, la création et la gestion des espaces seront bientôt disponibles."</string>
   <string name="screen_space_announcement_subtitle">"Bienvenue dans la version bêta des espaces! Avec cette première version, vous pourrez :"</string>
   <string name="screen_space_announcement_title">"Ajout des espaces"</string>
 </resources>

@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,7 +52,6 @@ import io.element.android.features.home.impl.roomlist.RoomListEvents
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.search.RoomListSearchView
 import io.element.android.features.home.impl.spaces.HomeSpacesView
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -88,56 +86,47 @@ fun HomeView(
     val state: RoomListState = homeState.roomListState
     val coroutineScope = rememberCoroutineScope()
     val firstThrottler = remember { FirstThrottler(300, coroutineScope) }
-
-    ConnectivityIndicatorContainer(
-        modifier = modifier,
-        isOnline = homeState.hasNetworkConnection,
-    ) { topPadding ->
-        Box {
-            if (state.contextMenu is RoomListState.ContextMenu.Shown) {
-                RoomListContextMenu(
-                    contextMenu = state.contextMenu,
-                    canReportRoom = state.canReportRoom,
-                    eventSink = state.eventSink,
-                    onRoomSettingsClick = onRoomSettingsClick,
-                    onReportRoomClick = onReportRoomClick,
-                )
-            }
-            if (state.declineInviteMenu is RoomListState.DeclineInviteMenu.Shown) {
-                RoomListDeclineInviteMenu(
-                    menu = state.declineInviteMenu,
-                    canReportRoom = state.canReportRoom,
-                    eventSink = state.eventSink,
-                    onDeclineAndBlockClick = onDeclineInviteAndBlockUser,
-                )
-            }
-
-            leaveRoomView()
-
-            HomeScaffold(
-                state = homeState,
-                onSetUpRecoveryClick = onSetUpRecoveryClick,
-                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
-                onOpenSettings = { if (firstThrottler.canHandle()) onSettingsClick() },
-                onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
-                onMenuActionClick = onMenuActionClick,
-                modifier = Modifier.padding(top = topPadding),
-            )
-            // This overlaid view will only be visible when state.displaySearchResults is true
-            RoomListSearchView(
-                state = state.searchState,
+    Box(modifier) {
+        if (state.contextMenu is RoomListState.ContextMenu.Shown) {
+            RoomListContextMenu(
+                contextMenu = state.contextMenu,
+                canReportRoom = state.canReportRoom,
                 eventSink = state.eventSink,
-                hideInvitesAvatars = state.hideInvitesAvatars,
-                onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
-                modifier = Modifier
-                        .statusBarsPadding()
-                        .padding(top = topPadding)
-                        .fillMaxSize()
-                        .background(ElementTheme.colors.bgCanvasDefault)
+                onRoomSettingsClick = onRoomSettingsClick,
+                onReportRoomClick = onReportRoomClick,
             )
-            acceptDeclineInviteView()
         }
+        if (state.declineInviteMenu is RoomListState.DeclineInviteMenu.Shown) {
+            RoomListDeclineInviteMenu(
+                menu = state.declineInviteMenu,
+                canReportRoom = state.canReportRoom,
+                eventSink = state.eventSink,
+                onDeclineAndBlockClick = onDeclineInviteAndBlockUser,
+            )
+        }
+
+        leaveRoomView()
+
+        HomeScaffold(
+            state = homeState,
+            onSetUpRecoveryClick = onSetUpRecoveryClick,
+            onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+            onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
+            onOpenSettings = { if (firstThrottler.canHandle()) onSettingsClick() },
+            onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
+            onMenuActionClick = onMenuActionClick,
+        )
+        // This overlaid view will only be visible when state.displaySearchResults is true
+        RoomListSearchView(
+            state = state.searchState,
+            eventSink = state.eventSink,
+            hideInvitesAvatars = state.hideInvitesAvatars,
+            onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
+            modifier = Modifier
+                .fillMaxSize()
+                .background(ElementTheme.colors.bgCanvasDefault)
+        )
+        acceptDeclineInviteView()
     }
 }
 

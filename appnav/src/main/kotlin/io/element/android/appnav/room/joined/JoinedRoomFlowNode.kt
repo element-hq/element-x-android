@@ -35,7 +35,6 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import io.element.android.libraries.matrix.ui.room.LoadingRoomStateFlowFactory
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -50,7 +49,6 @@ class JoinedRoomFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     loadingRoomStateFlowFactory: LoadingRoomStateFlowFactory,
-    private val syncService: SyncService,
 ) :
     BaseFlowNode<JoinedRoomFlowNode.NavTarget>(
         backstack = BackStack(
@@ -116,12 +114,10 @@ class JoinedRoomFlowNode(
 
     private fun loadingNode(buildContext: BuildContext, onBackClick: () -> Unit) = node(buildContext) { modifier ->
         val loadingRoomState by loadingRoomStateStateFlow.collectAsState()
-        val isOnline by syncService.isOnline.collectAsState()
         LoadingRoomNodeView(
             state = loadingRoomState,
-            hasNetworkConnection = isOnline,
-            modifier = modifier,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            modifier = modifier
         )
     }
 

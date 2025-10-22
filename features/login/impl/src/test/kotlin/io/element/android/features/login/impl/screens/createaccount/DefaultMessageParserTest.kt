@@ -11,9 +11,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.Json
 import org.junit.Assert.assertThrows
 import org.junit.Test
 
@@ -70,7 +70,7 @@ class DefaultMessageParserTest {
     private fun createDefaultMessageParser(): DefaultMessageParser {
         return DefaultMessageParser(
             accountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
-            json = Json { ignoreUnknownKeys = true },
+            json = DefaultJsonProvider(),
         )
     }
 }

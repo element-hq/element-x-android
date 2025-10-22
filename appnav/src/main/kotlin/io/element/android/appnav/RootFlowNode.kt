@@ -38,7 +38,6 @@ import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
-import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
 import io.element.android.libraries.architecture.BackstackView
@@ -80,7 +79,6 @@ class RootFlowNode(
     private val accountSelectEntryPoint: AccountSelectEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
-    private val bugReporter: BugReporter,
     private val featureFlagService: FeatureFlagService,
     private val announcementService: AnnouncementService,
 ) : BaseFlowNode<RootFlowNode.NavTarget>(
@@ -130,7 +128,6 @@ class RootFlowNode(
 
     private fun switchToNotLoggedInFlow(params: LoginParams?) {
         matrixSessionCache.removeAll()
-        bugReporter.setLogDirectorySubfolder(null)
         backstack.safeRoot(NavTarget.NotLoggedInFlow(params))
     }
 

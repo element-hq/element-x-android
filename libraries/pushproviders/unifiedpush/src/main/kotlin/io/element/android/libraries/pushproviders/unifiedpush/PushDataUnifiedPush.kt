@@ -39,6 +39,7 @@ data class PushDataUnifiedPushNotification(
     @SerialName("event_id") val eventId: String? = null,
     @SerialName("room_id") val roomId: String? = null,
     @SerialName("counts") val counts: PushDataUnifiedPushCounts? = null,
+    @SerialName("prio") val prio: String? = null,
 )
 
 @Serializable

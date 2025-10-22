@@ -10,7 +10,10 @@ package io.element.android.libraries.push.impl.workmanager
 import androidx.work.OneTimeWorkRequest
 import androidx.work.hasKeyWithValueOfType
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.androidutils.json.DefaultJsonProvider
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotificationEventRequest
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
@@ -20,7 +23,7 @@ import org.junit.Test
 class SyncNotificationWorkManagerRequestTest {
     @Test
     fun `build - success`() = runTest {
-        val request = SyncNotificationWorkManagerRequest(
+        val request = createSyncNotificationWorkManagerRequest(
             sessionId = A_SESSION_ID,
             notificationEventRequests = listOf(aNotificationEventRequest())
         )
@@ -37,7 +40,7 @@ class SyncNotificationWorkManagerRequestTest {
 
     @Test
     fun `build - empty list of requests fails`() = runTest {
-        val request = SyncNotificationWorkManagerRequest(
+        val request = createSyncNotificationWorkManagerRequest(
             sessionId = A_SESSION_ID,
             notificationEventRequests = emptyList()
         )
@@ -48,3 +51,12 @@ class SyncNotificationWorkManagerRequestTest {
 
     // TODO add test for invalid serialization (how?)
 }
+
+private fun createSyncNotificationWorkManagerRequest(
+    sessionId: SessionId,
+    notificationEventRequests: List<NotificationEventRequest>,
+) = SyncNotificationWorkManagerRequest(
+    sessionId = sessionId,
+    notificationEventRequests = notificationEventRequests,
+    json = DefaultJsonProvider(),
+)

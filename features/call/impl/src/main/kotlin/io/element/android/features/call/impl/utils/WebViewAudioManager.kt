@@ -44,6 +44,13 @@ class WebViewAudioManager(
     private val coroutineScope: CoroutineScope,
     private val onInvalidAudioDeviceAdded: (InvalidAudioDeviceReason) -> Unit,
 ) {
+    private val json by lazy {
+        Json {
+            encodeDefaults = true
+            explicitNulls = false
+        }
+    }
+
     /**
      * Whether to disable bluetooth audio devices. This must be done on Android versions lower than Android 12,
      * since the WebView approach breaks when using the legacy Bluetooth audio APIs.
@@ -308,11 +315,7 @@ class WebViewAudioManager(
         devices: List<SerializableAudioDevice> = listAudioDevices().map(SerializableAudioDevice::fromAudioDeviceInfo),
     ) {
         Timber.d("Updating available audio devices")
-        val jsonSerializer = Json {
-            encodeDefaults = true
-            explicitNulls = false
-        }
-        val deviceList = jsonSerializer.encodeToString(devices)
+        val deviceList = json.encodeToString(devices)
         webView.evaluateJavascript("controls.setAvailableOutputDevices($deviceList);", {
             Timber.d("Audio: setAvailableOutputDevices result: $it")
         })

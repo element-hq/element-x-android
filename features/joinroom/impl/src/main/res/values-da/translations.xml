@@ -17,7 +17,7 @@
   <string name="screen_join_room_invite_required_message">"Du har brug for en invitation for at deltage"</string>
   <string name="screen_join_room_invited_by">"Inviteret af"</string>
   <string name="screen_join_room_join_action">"Deltag"</string>
-  <string name="screen_join_room_join_restricted_message">"Du skal muligvis være inviteret eller være medlem af en klynge for at deltage."</string>
+  <string name="screen_join_room_join_restricted_message">"Du skal muligvis være inviteret eller være medlem af en gruppe for at deltage."</string>
   <string name="screen_join_room_knock_action">"Send anmodning om at deltage"</string>
   <string name="screen_join_room_knock_message_characters_count">"Tilladte tegn %1$d af %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Besked (valgfrit)"</string>
@@ -25,8 +25,8 @@
   <string name="screen_join_room_knock_sent_title">"Anmodning om at deltage sendt"</string>
   <string name="screen_join_room_loading_alert_message">"Vi kunne ikke forhåndsvise rummet. Dette kan skyldes netværks- eller serverproblemer."</string>
   <string name="screen_join_room_loading_alert_title">"Vi kunne ikke forhåndsvise rummet"</string>
-  <string name="screen_join_room_space_not_supported_description">"%1$s understøtter ikke klynger endnu. Du kan få adgang til klynger på nettet."</string>
-  <string name="screen_join_room_space_not_supported_title">"Klynger er ikke understøttet endnu"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s understøtter ikke grupper endnu. Du kan få adgang til grupper på nettet."</string>
+  <string name="screen_join_room_space_not_supported_title">"Grupper er ikke understøttet endnu"</string>
   <string name="screen_join_room_subtitle_knock">"Klik på knappen nedenfor, og en rumadministrator vil blive underrettet. Du kan deltage i samtalen, når din anmodning er godkendt."</string>
   <string name="screen_join_room_subtitle_no_preview">"Du skal være medlem af dette rum for at kunne se meddelelseshistorikken."</string>
   <string name="screen_join_room_title_knock">"Vil du deltage i dette rum?"</string>

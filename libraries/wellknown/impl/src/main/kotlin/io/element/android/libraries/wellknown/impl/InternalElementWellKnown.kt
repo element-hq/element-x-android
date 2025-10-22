@@ -27,4 +27,6 @@ data class InternalElementWellKnown(
     val enforceElementPro: Boolean? = null,
     @SerialName("rageshake_url")
     val rageshakeUrl: String? = null,
+    @SerialName("brand_color")
+    val brandColor: String? = null,
 )

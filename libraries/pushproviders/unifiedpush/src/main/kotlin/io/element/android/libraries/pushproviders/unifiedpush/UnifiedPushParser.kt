@@ -8,15 +8,15 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.pushproviders.api.PushData
-import kotlinx.serialization.json.Json
 
 @Inject
 class UnifiedPushParser(
-    private val json: Json,
+    private val json: JsonProvider,
 ) {
     fun parse(message: ByteArray, clientSecret: String): PushData? {
-        return tryOrNull { json.decodeFromString<PushDataUnifiedPush>(String(message)) }?.toPushData(clientSecret)
+        return tryOrNull { json().decodeFromString<PushDataUnifiedPush>(String(message)) }?.toPushData(clientSecret)
     }
 }

@@ -11,4 +11,5 @@ data class ElementWellKnown(
     val registrationHelperUrl: String?,
     val enforceElementPro: Boolean?,
     val rageshakeUrl: String?,
+    val brandColor: String?,
 )

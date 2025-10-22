@@ -2,11 +2,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_leave_space_last_admin_info">"%1$s (Admin)"</string>
   <plurals name="screen_leave_space_submit">
-    <item quantity="one">"Forlad %1$d rum og klynge"</item>
-    <item quantity="other">"Forlad %1$d rum og klynger"</item>
+    <item quantity="one">"Forlad %1$d rum og gruppe"</item>
+    <item quantity="other">"Forlad %1$d rum og Grupper"</item>
   </plurals>
   <string name="screen_leave_space_subtitle">"Vælg de rum, du vil forlade, som du ikke er den eneste administrator for:"</string>
-  <string name="screen_leave_space_subtitle_last_admin">"Du skal tildele en anden administrator til denne klynge, før du kan forlade den."</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Du skal tildele en anden administrator til denne gruppe, før du kan forlade den."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Du vil ikke blive fjernet fra følgende rum, fordi du er den eneste administrator:"</string>
   <string name="screen_leave_space_title">"Forlad %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Du er den eneste administrator for %1$s"</string>

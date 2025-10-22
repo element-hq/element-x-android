@@ -11,6 +11,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -49,10 +50,12 @@ class DefaultNotificationResolverQueue(
     private val appCoroutineScope: CoroutineScope,
     private val workManagerScheduler: WorkManagerScheduler,
     private val featureFlagService: FeatureFlagService,
+    private val json: JsonProvider,
 ) : NotificationResolverQueue {
     companion object {
         private const val BATCH_WINDOW_MS = 250L
     }
+
     private val requestQueue = Channel<NotificationEventRequest>(capacity = 100)
 
     private var currentProcessingJob: Job? = null
@@ -94,7 +97,13 @@ class DefaultNotificationResolverQueue(
 
             if (featureFlagService.isFeatureEnabled(FeatureFlags.SyncNotificationsWithWorkManager)) {
                 for ((sessionId, requests) in groupedRequestsById) {
-                    workManagerScheduler.submit(SyncNotificationWorkManagerRequest(sessionId, requests))
+                    workManagerScheduler.submit(
+                        SyncNotificationWorkManagerRequest(
+                            sessionId = sessionId,
+                            notificationEventRequests = requests,
+                            json = json,
+                        )
+                    )
                 }
             } else {
                 val sessionIds = groupedRequestsById.keys

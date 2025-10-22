@@ -20,6 +20,7 @@ import io.element.android.features.call.impl.utils.WidgetMessageSerializer
 import io.element.android.features.call.utils.FakeActiveCallManager
 import io.element.android.features.call.utils.FakeCallWidgetProvider
 import io.element.android.features.call.utils.FakeWidgetMessageInterceptor
+import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.sync.SyncState
@@ -47,7 +48,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
@@ -412,7 +412,7 @@ class CallScreenPresenterTest {
             languageTagProvider = FakeLanguageTagProvider("en-US"),
             appForegroundStateService = appForegroundStateService,
             appCoroutineScope = backgroundScope,
-            widgetMessageSerializer = WidgetMessageSerializer(Json { ignoreUnknownKeys = true }),
+            widgetMessageSerializer = WidgetMessageSerializer(DefaultJsonProvider()),
         )
     }
 }

@@ -11,8 +11,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
-import kotlinx.serialization.json.Json
 
 interface MessageParser {
     /**
@@ -26,10 +26,10 @@ interface MessageParser {
 @Inject
 class DefaultMessageParser(
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val json: Json,
+    private val json: JsonProvider,
 ) : MessageParser {
     override fun parse(message: String): ExternalSession {
-        val response = json.decodeFromString(MobileRegistrationResponse.serializer(), message)
+        val response = json().decodeFromString(MobileRegistrationResponse.serializer(), message)
         val userId = response.userId ?: error("No user ID in response")
         val homeServer = response.homeServer ?: accountProviderDataSource.flow.value.url
         val accessToken = response.accessToken ?: error("No access token in response")

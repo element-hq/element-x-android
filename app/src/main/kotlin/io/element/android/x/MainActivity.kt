@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -25,6 +28,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
+import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenLockState
@@ -61,9 +65,13 @@ class MainActivity : NodeActivity() {
     @Composable
     private fun MainContent(appBindings: AppBindings) {
         val migrationState = appBindings.migrationEntryPoint().present()
+        val colors by remember {
+            appBindings.enterpriseService().semanticColorsFlow(sessionId = null)
+        }.collectAsState(SemanticColorsLightDark.default)
         ElementThemeApp(
             appPreferencesStore = appBindings.preferencesStore(),
-            enterpriseService = appBindings.enterpriseService(),
+            compoundLight = colors.light,
+            compoundDark = colors.dark,
             buildMeta = appBindings.buildMeta()
         ) {
             CompositionLocalProvider(

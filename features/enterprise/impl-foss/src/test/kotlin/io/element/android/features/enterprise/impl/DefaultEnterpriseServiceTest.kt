@@ -7,12 +7,10 @@
 
 package io.element.android.features.enterprise.impl
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.compound.tokens.generated.compoundColorsDark
-import io.element.android.compound.tokens.generated.compoundColorsLight
+import io.element.android.compound.colors.SemanticColorsLightDark
+import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import kotlinx.coroutines.test.runTest
@@ -44,28 +42,49 @@ class DefaultEnterpriseServiceTest {
     }
 
     @Test
-    fun `semanticColorsLight always emits the same value`() = runTest {
+    fun `semanticColorsFlow always emits the same value`() = runTest {
         val defaultEnterpriseService = DefaultEnterpriseService()
-        moleculeFlow(RecompositionMode.Immediate) {
-            defaultEnterpriseService.semanticColorsLight().value
-        }.test {
+        defaultEnterpriseService.semanticColorsFlow(null).test {
             val initialState = awaitItem()
-            assertThat(initialState).isEqualTo(compoundColorsLight)
-            defaultEnterpriseService.overrideBrandColor("#87654321")
-            expectNoEvents()
+            assertThat(initialState).isEqualTo(SemanticColorsLightDark.default)
+            awaitComplete()
         }
     }
 
     @Test
-    fun `semanticColorsDark always emits the same value`() = runTest {
+    fun `semanticColorsFlow always emits the same value for a session`() = runTest {
         val defaultEnterpriseService = DefaultEnterpriseService()
-        moleculeFlow(RecompositionMode.Immediate) {
-            defaultEnterpriseService.semanticColorsDark().value
-        }.test {
+        defaultEnterpriseService.semanticColorsFlow(A_SESSION_ID).test {
             val initialState = awaitItem()
-            assertThat(initialState).isEqualTo(compoundColorsDark)
-            defaultEnterpriseService.overrideBrandColor("#87654321")
-            expectNoEvents()
+            assertThat(initialState).isEqualTo(SemanticColorsLightDark.default)
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `overrideBrandColor has no effect`() = runTest {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        defaultEnterpriseService.overrideBrandColor(A_SESSION_ID, "aColor")
+    }
+
+    @Test
+    fun `firebasePushGateway returns null`() = runTest {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        assertThat(defaultEnterpriseService.firebasePushGateway()).isNull()
+    }
+
+    @Test
+    fun `unifiedPushDefaultPushGateway returns null`() = runTest {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        assertThat(defaultEnterpriseService.unifiedPushDefaultPushGateway()).isNull()
+    }
+
+    @Test
+    fun `bugReportUrlFlow only emits UseDefault`() = runTest {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        defaultEnterpriseService.bugReportUrlFlow(A_SESSION_ID).test {
+            assertThat(awaitItem()).isEqualTo(BugReportUrl.UseDefault)
+            awaitComplete()
         }
     }
 }

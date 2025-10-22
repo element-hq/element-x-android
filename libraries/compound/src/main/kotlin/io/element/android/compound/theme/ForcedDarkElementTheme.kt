@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import io.element.android.compound.colors.SemanticColorsLightDark
 
 /**
  * Can be used to force a composable in dark theme.
@@ -23,6 +24,7 @@ import androidx.compose.ui.graphics.toArgb
  */
 @Composable
 fun ForcedDarkElementTheme(
+    colors: SemanticColorsLightDark,
     lightStatusBar: Boolean = false,
     content: @Composable () -> Unit,
 ) {
@@ -47,5 +49,11 @@ fun ForcedDarkElementTheme(
             )
         }
     }
-    ElementTheme(darkTheme = true, lightStatusBar = lightStatusBar, content = content)
+    ElementTheme(
+        darkTheme = true,
+        compoundLight = colors.light,
+        compoundDark = colors.dark,
+        lightStatusBar = lightStatusBar,
+        content = content,
+    )
 }

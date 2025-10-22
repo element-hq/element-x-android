@@ -11,6 +11,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
 import androidx.work.workDataOf
+import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -21,22 +22,20 @@ import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.security.InvalidParameterException
 
 class SyncNotificationWorkManagerRequest(
     private val sessionId: SessionId,
     private val notificationEventRequests: List<NotificationEventRequest>,
+    private val json: JsonProvider,
 ) : WorkManagerRequest {
-    private val json = Json { ignoreUnknownKeys = true }
-
     override fun build(): Result<WorkRequest> {
         if (notificationEventRequests.isEmpty()) {
             return Result.failure(InvalidParameterException("notificationEventRequests cannot be empty"))
         }
 
-        val json = runCatchingExceptions { json.encodeToString(notificationEventRequests.map { it.toData() }) }
+        val json = runCatchingExceptions { json().encodeToString(notificationEventRequests.map { it.toData() }) }
             .getOrElse {
                 Timber.e(it, "Failed to serialize notification requests")
                 return Result.failure(it)
@@ -50,7 +49,7 @@ class SyncNotificationWorkManagerRequest(
                 .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .setTraceTag(workManagerTag(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC))
                 // TODO investigate using this instead of the resolver queue
-    //            .setInputMerger()
+                // .setInputMerger()
                 .build()
         )
     }

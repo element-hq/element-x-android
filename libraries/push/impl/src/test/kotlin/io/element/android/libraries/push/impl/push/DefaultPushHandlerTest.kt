@@ -13,6 +13,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.test.FakeElementCallEntryPoint
+import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -714,6 +715,7 @@ class DefaultPushHandlerTest {
                 appCoroutineScope = backgroundScope,
                 workManagerScheduler = workManagerScheduler,
                 featureFlagService = featureFlagService,
+                json = DefaultJsonProvider(),
             ),
             appCoroutineScope = backgroundScope,
             fallbackNotificationFactory = FallbackNotificationFactory(

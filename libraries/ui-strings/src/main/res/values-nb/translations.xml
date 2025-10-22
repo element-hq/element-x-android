@@ -45,6 +45,7 @@
   <string name="a11y_session_verification_time_limited_action_required">"Tidsbegrenset handling kreves, du har ett minutt på deg til å verifisere"</string>
   <string name="a11y_show_password">"Vis passord"</string>
   <string name="a11y_start_call">"Start en samtale"</string>
+  <string name="a11y_tombstoned_room">"Deaktivert rom"</string>
   <string name="a11y_user_avatar">"Brukeravatar"</string>
   <string name="a11y_user_menu">"Brukermeny"</string>
   <string name="a11y_view_avatar">"Vis avatar"</string>
@@ -463,6 +464,7 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"%1$s område"</string>
   <string name="screen_space_list_title">"Områder"</string>
+  <string name="screen_space_menu_action_members">"Vis medlemmer"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meldingen ble ikke sendt fordi %1$ss verifiserte identitet er tilbakestilt."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meldingen ble ikke sendt fordi %1$s ikke har verifisert alle enheter."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine."</string>

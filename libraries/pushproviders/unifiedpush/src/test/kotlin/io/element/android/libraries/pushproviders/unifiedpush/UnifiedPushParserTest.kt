@@ -8,11 +8,11 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.tests.testutils.assertThrowsInDebug
-import kotlinx.serialization.json.Json
 import org.junit.Test
 
 class UnifiedPushParserTest {
@@ -83,8 +83,6 @@ private fun String.mutate(oldValue: String, newValue: String): ByteArray {
     return replace(oldValue, newValue).toByteArray()
 }
 
-fun createUnifiedPushParser(
-    json: Json = Json { ignoreUnknownKeys = true },
-) = UnifiedPushParser(
-    json = json,
+fun createUnifiedPushParser() = UnifiedPushParser(
+    json = DefaultJsonProvider(),
 )

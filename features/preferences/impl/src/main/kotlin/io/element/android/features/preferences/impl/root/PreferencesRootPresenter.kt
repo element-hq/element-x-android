@@ -112,7 +112,7 @@ class PreferencesRootPresenter(
                 .launchIn(this)
         }
 
-        val showLabsItem = remember { featureFlagService.getAvailableFeatures().any { it.isInLabs && !it.isFinished } }
+        val showLabsItem = remember { featureFlagService.getAvailableFeatures(isInLabs = true).isNotEmpty() }
 
         val directLogoutState = directLogoutPresenter.present()
 

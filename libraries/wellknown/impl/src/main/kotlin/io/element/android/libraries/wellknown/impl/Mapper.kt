@@ -15,6 +15,7 @@ internal fun InternalElementWellKnown.map() = ElementWellKnown(
     registrationHelperUrl = registrationHelperUrl,
     enforceElementPro = enforceElementPro,
     rageshakeUrl = rageshakeUrl,
+    brandColor = brandColor,
 )
 
 internal fun InternalWellKnown.map() = WellKnown(

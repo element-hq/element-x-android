@@ -48,9 +48,19 @@
   <string name="push_distributor_background_sync_android">"背景同步"</string>
   <string name="push_distributor_firebase_android">"Google 服務"</string>
   <string name="push_no_valid_google_play_services_apk_android">"找不到有效的 Google Play 服務。通知可能無法正常運作。"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"檢查被封鎖的使用者"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"檢視被封鎖的使用者"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"無被封鎖的使用者。"</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="other">"您已封鎖 %1$d 個使用者。您將不會收到來自這些使用者的通知。"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"已封鎖使用者"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"取得目前提供者的名稱。"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"未選取推播提供者。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"目前的推播提供者 %1$s 與目前的散佈者 %2$s。但找不到散佈者 %3$s。可能已解除安裝應用程式？"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"目前的推播提供者：%1$s，但尚未設定散佈者。"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"目前的推播提供者：%1$s。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"目前的推播提供者：%1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"目前的推播提供者"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"確保應用程式至少有一個推播提供者。"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"找不到推播提供者。"</string>

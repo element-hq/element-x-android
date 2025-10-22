@@ -71,7 +71,6 @@ import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
 import io.element.android.features.messages.impl.topbars.ThreadTopBar
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayout
@@ -183,8 +182,6 @@ fun MessagesView(
             Scaffold(
                 contentWindowInsets = WindowInsets.statusBars,
                 topBar = {
-                    Column {
-                        ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
                         if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
                             ThreadTopBar(
                                 roomName = state.roomName,
@@ -206,7 +203,6 @@ fun MessagesView(
                                 onJoinCallClick = onJoinCallClick,
                             )
                         }
-                    }
                 },
                 content = { padding ->
                     Box(

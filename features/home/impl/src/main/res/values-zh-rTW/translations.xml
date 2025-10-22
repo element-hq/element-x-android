@@ -3,6 +3,8 @@
   <string name="banner_battery_optimization_content_android">"停用此應用程式的電池最佳化，才能確保收到所有通知。"</string>
   <string name="banner_battery_optimization_submit_android">"停用最佳化"</string>
   <string name="banner_battery_optimization_title_android">"沒收到通知？"</string>
+  <string name="banner_new_sound_message">"您的通知提示音已更新，更清晰、更快、更不易分心。"</string>
+  <string name="banner_new_sound_title">"我們已更新您的音效設定"</string>
   <string name="banner_set_up_recovery_content">"若您遺失了所有現有裝置，則請使用復原金鑰以救援您的密碼學身份與訊息歷史紀錄。"</string>
   <string name="banner_set_up_recovery_submit">"設定復原"</string>
   <string name="banner_set_up_recovery_title">"設定備援以保護您的帳號"</string>

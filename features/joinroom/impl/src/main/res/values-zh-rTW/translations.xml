@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_ban_by_message">"您被 %1$s 禁止進入此聊天室。"</string>
-  <string name="screen_join_room_ban_message">"您被禁止進入此聊天室"</string>
+  <string name="screen_join_room_ban_by_message">"您被 %1$s 禁止。"</string>
+  <string name="screen_join_room_ban_message">"您被禁止了"</string>
   <string name="screen_join_room_ban_reason">"理由：%1$s。"</string>
   <string name="screen_join_room_cancel_knock_action">"取消請求"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"是的，取消"</string>
@@ -11,10 +11,11 @@
   <string name="screen_join_room_decline_and_block_alert_message">"您確定要拒絕加入此聊天室的邀請嗎？這也會防止 %1$s 聯絡您或邀請您加入聊天室。"</string>
   <string name="screen_join_room_decline_and_block_alert_title">"拒絕邀請並封鎖"</string>
   <string name="screen_join_room_decline_and_block_button_title">"拒絕並封鎖"</string>
-  <string name="screen_join_room_fail_message">"加入聊天室失敗。"</string>
-  <string name="screen_join_room_fail_reason">"此聊天室僅有受邀者才能進入，或是在空間層級有存取限制。"</string>
-  <string name="screen_join_room_forget_action">"忘記此聊天室"</string>
-  <string name="screen_join_room_invite_required_message">"您需要獲得邀請才能加入此聊天室"</string>
+  <string name="screen_join_room_fail_message">"加入失敗。"</string>
+  <string name="screen_join_room_fail_reason">"您必須獲得邀請才能加入，或者可能存在存取限制。"</string>
+  <string name="screen_join_room_forget_action">"忘記"</string>
+  <string name="screen_join_room_invite_required_message">"您需要獲得邀請才能加入"</string>
+  <string name="screen_join_room_invited_by">"邀請者"</string>
   <string name="screen_join_room_join_action">"加入"</string>
   <string name="screen_join_room_join_restricted_message">"您可能需要被邀請成為空間的成員才能加入。"</string>
   <string name="screen_join_room_knock_action">"傳送加入請求"</string>

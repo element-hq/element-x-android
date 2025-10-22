@@ -11,10 +11,12 @@ import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.mediaplayer.test.FakeAudioFocus
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -63,6 +65,8 @@ class DefaultMediaViewerEntryPointTest {
                 pagerKeysHandler = PagerKeysHandler(),
                 textFileViewer = { _, _ -> lambdaError() },
                 audioFocus = FakeAudioFocus(),
+                sessionId = A_SESSION_ID,
+                enterpriseService = FakeEnterpriseService(),
             )
         }
         val callback = object : MediaViewerEntryPoint.Callback {
@@ -104,6 +108,8 @@ class DefaultMediaViewerEntryPointTest {
                 pagerKeysHandler = PagerKeysHandler(),
                 textFileViewer = { _, _ -> lambdaError() },
                 audioFocus = FakeAudioFocus(),
+                sessionId = A_SESSION_ID,
+                enterpriseService = FakeEnterpriseService(),
             )
         }
         val callback = object : MediaViewerEntryPoint.Callback {

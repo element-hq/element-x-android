@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.PermanentChild
@@ -46,6 +47,8 @@ import io.element.android.appnav.loggedin.SendQueues
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.compound.colors.SemanticColorsLightDark
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
@@ -53,6 +56,7 @@ import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
@@ -66,6 +70,8 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForNavTargetAttached
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
@@ -77,8 +83,10 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.ui.common.nodes.emptyNode
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -122,6 +130,10 @@ class LoggedInFlowNode(
     private val sessionEnterpriseService: SessionEnterpriseService,
     private val networkMonitor: NetworkMonitor,
     private val notificationConversationService: NotificationConversationService,
+    private val syncService: SyncService,
+    private val enterpriseService: EnterpriseService,
+    private val appPreferencesStore: AppPreferencesStore,
+    private val buildMeta: BuildMeta,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -538,11 +550,27 @@ class LoggedInFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Box(modifier = modifier) {
-            val ftueState by ftueService.state.collectAsState()
-            BackstackView()
-            if (ftueState is FtueState.Complete) {
-                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+        val colors by remember {
+            enterpriseService.semanticColorsFlow(sessionId = matrixClient.sessionId)
+        }.collectAsState(SemanticColorsLightDark.default)
+        ElementThemeApp(
+            appPreferencesStore = appPreferencesStore,
+            compoundLight = colors.light,
+            compoundDark = colors.dark,
+            buildMeta = buildMeta,
+        ) {
+            val isOnline by syncService.isOnline.collectAsState()
+            ConnectivityIndicatorContainer(
+                isOnline = isOnline,
+                modifier = modifier,
+            ) { contentModifier ->
+                Box(modifier = contentModifier) {
+                    val ftueState by ftueService.state.collectAsState()
+                    BackstackView()
+                    if (ftueState is FtueState.Complete) {
+                        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                    }
+                }
             }
         }
     }

@@ -7,9 +7,7 @@
 
 package io.element.android.features.enterprise.test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import io.element.android.compound.tokens.generated.SemanticColors
+import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -24,12 +22,13 @@ class FakeEnterpriseService(
     private val isEnterpriseUserResult: (SessionId) -> Boolean = { lambdaError() },
     private val defaultHomeserverListResult: () -> List<String> = { emptyList() },
     private val isAllowedToConnectToHomeserverResult: (String) -> Boolean = { lambdaError() },
-    private val semanticColorsLightResult: () -> State<SemanticColors> = { lambdaError() },
-    private val semanticColorsDarkResult: () -> State<SemanticColors> = { lambdaError() },
-    private val overrideBrandColorResult: (String?) -> Unit = { lambdaError() },
+    initialSemanticColors: SemanticColorsLightDark = SemanticColorsLightDark.default,
+    private val overrideBrandColorResult: (SessionId?, String?) -> Unit = { _, _ -> lambdaError() },
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
 ) : EnterpriseService {
+    private val semanticColorsState = MutableStateFlow(initialSemanticColors)
+
     override suspend fun isEnterpriseUser(sessionId: SessionId): Boolean = simulateLongTask {
         isEnterpriseUserResult(sessionId)
     }
@@ -42,18 +41,12 @@ class FakeEnterpriseService(
         isAllowedToConnectToHomeserverResult(homeserverUrl)
     }
 
-    override fun overrideBrandColor(brandColor: String?) {
-        overrideBrandColorResult(brandColor)
+    override suspend fun overrideBrandColor(sessionId: SessionId?, brandColor: String?) = simulateLongTask {
+        overrideBrandColorResult(sessionId, brandColor)
     }
 
-    @Composable
-    override fun semanticColorsLight(): State<SemanticColors> {
-        return semanticColorsLightResult()
-    }
-
-    @Composable
-    override fun semanticColorsDark(): State<SemanticColors> {
-        return semanticColorsDarkResult()
+    override fun semanticColorsFlow(sessionId: SessionId?): Flow<SemanticColorsLightDark> {
+        return semanticColorsState.asStateFlow()
     }
 
     override fun firebasePushGateway(): String? {
@@ -65,5 +58,7 @@ class FakeEnterpriseService(
     }
 
     val bugReportUrlMutableFlow = MutableStateFlow<BugReportUrl>(BugReportUrl.UseDefault)
-    override val bugReportUrlFlow: Flow<BugReportUrl> = bugReportUrlMutableFlow.asStateFlow()
+    override fun bugReportUrlFlow(sessionId: SessionId?): Flow<BugReportUrl> {
+        return bugReportUrlMutableFlow.asStateFlow()
+    }
 }

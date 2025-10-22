@@ -78,6 +78,7 @@
   <string name="action_decline">"拒絕"</string>
   <string name="action_decline_and_block">"拒絕並封鎖"</string>
   <string name="action_delete_poll">"刪除投票"</string>
+  <string name="action_deselect_all">"取消全選"</string>
   <string name="action_disable">"停用"</string>
   <string name="action_discard">"捨棄"</string>
   <string name="action_dismiss">"關閉"</string>
@@ -92,6 +93,7 @@
   <string name="action_forgot_password">"忘記密碼？"</string>
   <string name="action_forward">"轉寄"</string>
   <string name="action_go_back">"返回"</string>
+  <string name="action_go_to_settings">"前往設定"</string>
   <string name="action_ignore">"忽略"</string>
   <string name="action_invite">"邀請"</string>
   <string name="action_invite_friends">"邀請夥伴"</string>
@@ -108,6 +110,7 @@
   <string name="action_manage_account">"管理帳號"</string>
   <string name="action_manage_devices">"管理裝置"</string>
   <string name="action_message">"聊天"</string>
+  <string name="action_minimize">"最小化"</string>
   <string name="action_next">"下一步"</string>
   <string name="action_no">"否"</string>
   <string name="action_not_now">"以後再說"</string>
@@ -136,6 +139,7 @@
   <string name="action_retry_decryption">"再次嘗試解密"</string>
   <string name="action_save">"儲存"</string>
   <string name="action_search">"搜尋"</string>
+  <string name="action_select_all">"選取全部"</string>
   <string name="action_send">"傳送"</string>
   <string name="action_send_edited_message">"傳送已編輯的訊息"</string>
   <string name="action_send_message">"傳送訊息"</string>
@@ -174,6 +178,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"您已登出工作階段"</string>
   <string name="common_appearance">"外觀"</string>
   <string name="common_audio">"音訊"</string>
+  <string name="common_beta">"測試版"</string>
   <string name="common_blocked_users">"封鎖的使用者"</string>
   <string name="common_bubbles">"泡泡"</string>
   <string name="common_call_started">"開始通話"</string>
@@ -222,6 +227,7 @@
   <string name="common_install_apk_android">"安裝 APK"</string>
   <string name="common_invite_unknown_profile">"找不到此 Matrix ID，因此可能沒有人會收到邀請。"</string>
   <string name="common_leaving_room">"正在離開聊天室"</string>
+  <string name="common_leaving_space">"離開空間"</string>
   <string name="common_light">"淺色"</string>
   <string name="common_line_copied_to_clipboard">"行已複製到剪貼簿"</string>
   <string name="common_link_copied_to_clipboard">"連結已複製到剪貼簿"</string>
@@ -242,6 +248,7 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"查無結果"</string>
   <string name="common_no_room_name">"無聊天室名稱"</string>
+  <string name="common_no_space_name">"沒有空間名稱"</string>
   <string name="common_not_encrypted">"未加密"</string>
   <string name="common_offline">"離線"</string>
   <string name="common_open_source_licenses">"開放原始碼授權條款"</string>
@@ -302,7 +309,9 @@
   <string name="common_server_unreachable">"無法連線至伺服器"</string>
   <string name="common_server_url">"伺服器 URL"</string>
   <string name="common_settings">"設定"</string>
+  <string name="common_share_space">"分享空間"</string>
   <string name="common_shared_location">"位置分享"</string>
+  <string name="common_shared_space">"共享空間"</string>
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"有錯誤發生"</string>
   <string name="common_something_went_wrong_message">"我們了遇到了問題。請再試一次。"</string>
@@ -446,6 +455,7 @@
   <string name="screen_share_this_location_action">"分享這個位置"</string>
   <string name="screen_space_list_description">"您建立或加入的空間"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s 空間"</string>
   <string name="screen_space_list_title">"空間"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"因為 %1$s 的驗證身份已重設，因此未傳送訊息。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"訊息未傳送，因為 %1$s 尚未驗證所有裝置。"</string>

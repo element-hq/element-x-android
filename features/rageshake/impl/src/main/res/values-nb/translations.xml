@@ -15,5 +15,6 @@
   <string name="screen_bug_report_logs_description">"Logger vil bli inkludert i meldingen din, for å sikre at alt fungerer som det skal. For å sende meldingen uten logger, slå av denne innstillingen."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s krasjet sist gang den ble brukt. Vil du dele en krasjrapport med oss?"</string>
   <string name="screen_bug_report_send_notification_settings_description">"Hvis du har problemer med varsler, kan det å laste opp varslingsinnstillingene hjelpe oss med å finne den underliggende årsaken."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Send varslingsinnstillinger"</string>
   <string name="screen_bug_report_view_logs">"Vis logger"</string>
 </resources>

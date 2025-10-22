@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class FakeFeatureFlagService(
     initialState: Map<String, Boolean> = emptyMap(),
     private val buildMeta: BuildMeta = aBuildMeta(),
-    var providedAvailableFeatures: List<Feature> = emptyList(),
+    private val getAvailableFeaturesResult: (Boolean, Boolean) -> List<Feature> = { _, _ -> emptyList() },
 ) : FeatureFlagService {
     private val enabledFeatures = initialState
         .mapValues { MutableStateFlow(it.value) }
@@ -33,7 +33,10 @@ class FakeFeatureFlagService(
         return enabledFeatures.getOrPut(feature.key) { MutableStateFlow(feature.defaultValue(buildMeta)) }
     }
 
-    override fun getAvailableFeatures(): List<Feature> {
-        return providedAvailableFeatures
+    override fun getAvailableFeatures(
+        includeFinishedFeatures: Boolean,
+        isInLabs: Boolean,
+    ): List<Feature> {
+        return getAvailableFeaturesResult(includeFinishedFeatures, isInLabs)
     }
 }
