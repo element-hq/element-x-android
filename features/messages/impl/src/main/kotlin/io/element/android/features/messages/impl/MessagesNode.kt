@@ -346,6 +346,7 @@ class MessagesNode(
                     openThreadId != null -> {
                         state.timelineState.eventSink(TimelineEvents.OpenThread(threadRootEventId = openThreadId!!, focusedEventId))
                         openThreadId = null
+                        focusedEventId = null
                     }
                     focusedEventId != null -> {
                         state.timelineState.eventSink(TimelineEvents.FocusOnEvent(focusedEventId!!))
