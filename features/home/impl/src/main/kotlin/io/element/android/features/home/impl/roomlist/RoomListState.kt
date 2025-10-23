@@ -31,6 +31,9 @@ data class RoomListState(
     val canReportRoom: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
+
+    val displayFilters = contentState is RoomListContentState.Rooms
+
     sealed interface ContextMenu {
         data object Hidden : ContextMenu
         data class Shown(

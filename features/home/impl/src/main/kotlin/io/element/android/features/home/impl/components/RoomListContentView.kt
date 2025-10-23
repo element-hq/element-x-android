@@ -40,7 +40,6 @@ import io.element.android.features.home.impl.contentType
 import io.element.android.features.home.impl.filters.RoomListFilter
 import io.element.android.features.home.impl.filters.RoomListFiltersEmptyStateResources
 import io.element.android.features.home.impl.filters.RoomListFiltersState
-import io.element.android.features.home.impl.filters.RoomListFiltersView
 import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.features.home.impl.filters.selection.FilterSelectionState
 import io.element.android.features.home.impl.model.RoomListRoomSummary
@@ -208,12 +207,6 @@ private fun RoomsViewList(
         contentPadding = contentPadding,
         userScrollEnabled = !showEmptyState
     ) {
-        item {
-            RoomListFiltersView(
-                state = filtersState,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-        }
         when (state.securityBannerState) {
             SecurityBannerState.SetUpRecovery -> {
                 item {

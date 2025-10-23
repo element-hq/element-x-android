@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -147,7 +148,7 @@ private fun HomeScaffold(
     }
 
     val appBarState = rememberTopAppBarState()
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(appBarState)
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     val roomListState: RoomListState = state.roomListState
 
@@ -178,6 +179,8 @@ private fun HomeScaffold(
                 scrollBehavior = scrollBehavior,
                 displayMenuItems = state.displayActions,
                 canReportBug = state.canReportBug,
+                filtersState = state.roomListState.filtersState,
+                displayFilters = state.displayRoomListFilters,
                 modifier = if (state.isSpaceFeatureEnabled) {
                     Modifier.hazeEffect(
                         state = hazeState,
