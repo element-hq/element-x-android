@@ -175,7 +175,6 @@ fun HomeTopBar(
                     }
                 }
             },
-            //scrollBehavior = scrollBehavior,
             // We need a 16dp left padding : 4dp default padding + 8dp IconButton padding + 4dp extra padding
             windowInsets = WindowInsets(left = 4.dp),
         )
