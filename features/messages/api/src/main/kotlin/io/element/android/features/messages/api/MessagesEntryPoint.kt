@@ -15,6 +15,7 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import kotlinx.parcelize.Parcelize
@@ -22,7 +23,10 @@ import kotlinx.parcelize.Parcelize
 interface MessagesEntryPoint : FeatureEntryPoint {
     sealed interface InitialTarget : Parcelable {
         @Parcelize
-        data class Messages(val focusedEventId: EventId?) : InitialTarget
+        data class Messages(
+            val focusedEventId: EventId?,
+            val inThreadId: ThreadId?,
+        ) : InitialTarget
 
         @Parcelize
         data object PinnedMessages : InitialTarget

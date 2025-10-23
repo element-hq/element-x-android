@@ -79,6 +79,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -495,6 +496,7 @@ class LoggedInFlowNode(
         serverNames: List<String> = emptyList(),
         trigger: JoinedRoom.Trigger? = null,
         eventId: EventId? = null,
+        threadId: ThreadId? = null,
         clearBackstack: Boolean,
     ) {
         waitForNavTargetAttached { navTarget ->
@@ -505,7 +507,9 @@ class LoggedInFlowNode(
                 roomIdOrAlias = roomIdOrAlias,
                 serverNames = serverNames,
                 trigger = trigger,
-                initialElement = RoomNavigationTarget.Root(eventId = eventId)
+                initialElement = RoomNavigationTarget.Root(eventId = eventId,
+                    inThreadId = threadId,
+                )
             )
             backstack.accept(AttachRoomOperation(roomNavTarget, clearBackstack))
         }

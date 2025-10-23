@@ -37,6 +37,7 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -227,7 +228,7 @@ class JoinedRoomLoadedFlowNode(
             }
         }
         val params = MessagesEntryPoint.Params(
-            MessagesEntryPoint.InitialTarget.Messages(navTarget.focusedEventId)
+            MessagesEntryPoint.InitialTarget.Messages(navTarget.focusedEventId, navTarget.inThreadId)
         )
         return messagesEntryPoint.nodeBuilder(this, buildContext)
             .params(params)
@@ -240,7 +241,10 @@ class JoinedRoomLoadedFlowNode(
         data object Space : NavTarget
 
         @Parcelize
-        data class Messages(val focusedEventId: EventId? = null) : NavTarget
+        data class Messages(
+            val focusedEventId: EventId? = null,
+            val inThreadId: ThreadId? = null,
+        ) : NavTarget
 
         @Parcelize
         data object RoomDetails : NavTarget

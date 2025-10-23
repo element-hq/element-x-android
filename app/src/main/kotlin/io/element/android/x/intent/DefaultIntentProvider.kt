@@ -14,6 +14,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.deeplink.api.DeepLinkCreator
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -28,11 +29,12 @@ class DefaultIntentProvider(
     override fun getViewRoomIntent(
         sessionId: SessionId,
         roomId: RoomId?,
+        eventId: EventId?,
         threadId: ThreadId?,
     ): Intent {
         return Intent(context, MainActivity::class.java).apply {
             action = Intent.ACTION_VIEW
-            data = deepLinkCreator.create(sessionId, roomId, threadId).toUri()
+            data = deepLinkCreator.create(sessionId, roomId, threadId, eventId).toUri()
         }
     }
 }

@@ -32,19 +32,19 @@ class PendingIntentFactory(
     private val actionIds: NotificationActionIds,
 ) {
     fun createOpenSessionPendingIntent(sessionId: SessionId): PendingIntent? {
-        return createRoomPendingIntent(sessionId = sessionId, roomId = null, threadId = null)
+        return createRoomPendingIntent(sessionId = sessionId, roomId = null, eventId = null, threadId = null)
     }
 
     fun createOpenRoomPendingIntent(sessionId: SessionId, roomId: RoomId): PendingIntent? {
-        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, threadId = null)
+        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, eventId = null, threadId = null)
     }
 
-    fun createOpenThreadPendingIntent(roomInfo: RoomEventGroupInfo, threadId: ThreadId?): PendingIntent? {
-        return createRoomPendingIntent(sessionId = roomInfo.sessionId, roomId = roomInfo.roomId, threadId = threadId)
+    fun createOpenThreadPendingIntent(roomInfo: RoomEventGroupInfo, eventId: EventId?, threadId: ThreadId): PendingIntent? {
+        return createRoomPendingIntent(sessionId = roomInfo.sessionId, roomId = roomInfo.roomId, eventId = eventId, threadId = threadId)
     }
 
-    private fun createRoomPendingIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): PendingIntent? {
-        val intent = intentProvider.getViewRoomIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
+    private fun createRoomPendingIntent(sessionId: SessionId, roomId: RoomId?, eventId: EventId?, threadId: ThreadId?): PendingIntent? {
+        val intent = intentProvider.getViewRoomIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = threadId)
         return PendingIntent.getActivity(
             context,
             clock.epochMillis().toInt(),

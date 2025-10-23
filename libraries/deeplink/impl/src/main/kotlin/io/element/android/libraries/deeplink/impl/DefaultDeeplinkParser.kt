@@ -13,6 +13,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.deeplink.api.DeeplinkParser
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -36,8 +37,9 @@ class DefaultDeeplinkParser : DeeplinkParser {
             null -> DeeplinkData.Root(sessionId)
             else -> {
                 val roomId = screenPathComponent.let(::RoomId)
-                val threadId = pathBits.elementAtOrNull(2)?.let(::ThreadId)
-                DeeplinkData.Room(sessionId, roomId, threadId)
+                val threadId = pathBits.elementAtOrNull(2)?.takeIf { it.isNotBlank() }?.let(::ThreadId)
+                val eventId = pathBits.elementAtOrNull(3)?.takeIf { it.isNotBlank() }?.let(::EventId)
+                DeeplinkData.Room(sessionId, roomId, threadId, eventId)
             }
         }
     }

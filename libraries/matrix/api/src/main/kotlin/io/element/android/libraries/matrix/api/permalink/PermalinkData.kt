@@ -13,6 +13,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -28,6 +29,7 @@ sealed interface PermalinkData : Parcelable {
     data class RoomLink(
         val roomIdOrAlias: RoomIdOrAlias,
         val eventId: EventId? = null,
+        val threadId: ThreadId? = null,
         val viaParameters: ImmutableList<String> = persistentListOf()
     ) : PermalinkData
 

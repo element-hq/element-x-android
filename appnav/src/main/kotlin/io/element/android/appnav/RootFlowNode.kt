@@ -393,6 +393,7 @@ class RootFlowNode(
                     trigger = JoinedRoom.Trigger.MobilePermalink,
                     serverNames = permalinkData.viaParameters,
                     eventId = permalinkData.eventId,
+                    threadId = permalinkData.threadId,
                     clearBackstack = true
                 )
             }
@@ -407,7 +408,12 @@ class RootFlowNode(
         attachSession(deeplinkData.sessionId).apply {
             when (deeplinkData) {
                 is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
-                is DeeplinkData.Room -> attachRoom(deeplinkData.roomId.toRoomIdOrAlias(), clearBackstack = true)
+                is DeeplinkData.Room -> attachRoom(
+                    roomIdOrAlias = deeplinkData.roomId.toRoomIdOrAlias(),
+                    eventId = deeplinkData.eventId,
+                    threadId = deeplinkData.threadId,
+                    clearBackstack = true
+                )
             }
         }
     }
