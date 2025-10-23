@@ -11,7 +11,6 @@ import android.content.Context
 import android.net.Uri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
 
@@ -23,7 +22,6 @@ interface TemporaryUriDeleter {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultTemporaryUriDeleter(
     @ApplicationContext private val context: Context,
 ) : TemporaryUriDeleter {

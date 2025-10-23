@@ -12,7 +12,6 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailabilityLight
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
 
@@ -27,7 +26,6 @@ fun IsPlayServiceAvailable.checkAvailableOrThrow() {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultIsPlayServiceAvailable(
     @ApplicationContext private val context: Context,
 ) : IsPlayServiceAvailable {

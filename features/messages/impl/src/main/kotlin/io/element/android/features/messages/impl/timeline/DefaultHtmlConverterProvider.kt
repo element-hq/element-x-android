@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.libraries.core.bool.orFalse
@@ -29,7 +28,6 @@ import uniffi.wysiwyg_composer.newMentionDetector
 
 @ContributesBinding(RoomScope::class)
 @SingleIn(RoomScope::class)
-@Inject
 class DefaultHtmlConverterProvider(
     private val mentionSpanProvider: MentionSpanProvider,
 ) : HtmlConverterProvider {

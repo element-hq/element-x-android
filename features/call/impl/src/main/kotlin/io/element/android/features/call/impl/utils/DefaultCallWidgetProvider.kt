@@ -9,7 +9,6 @@ package io.element.android.features.call.impl.utils
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -23,7 +22,6 @@ import kotlinx.coroutines.flow.firstOrNull
 private const val EMBEDDED_CALL_WIDGET_BASE_URL = "https://appassets.androidplatform.net/element-call/index.html"
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultCallWidgetProvider(
     private val matrixClientsProvider: MatrixClientProvider,
     private val appPreferencesStore: AppPreferencesStore,

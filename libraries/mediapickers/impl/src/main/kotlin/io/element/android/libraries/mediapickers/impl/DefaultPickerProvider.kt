@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.core.content.FileProvider
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.mediapickers.api.ComposePickerLauncher
 import io.element.android.libraries.mediapickers.api.NoOpPickerLauncher
@@ -27,7 +26,6 @@ import io.element.android.libraries.mediapickers.api.PickerType
 import java.io.File
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPickerProvider(
     @ApplicationContext private val context: Context,
 ) : PickerProvider {

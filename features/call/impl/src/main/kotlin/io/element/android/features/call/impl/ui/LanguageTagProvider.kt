@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
 interface LanguageTagProvider {
     @Composable
@@ -19,7 +18,6 @@ interface LanguageTagProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultLanguageTagProvider : LanguageTagProvider {
     @Composable
     override fun provideLanguageTag(): String? {

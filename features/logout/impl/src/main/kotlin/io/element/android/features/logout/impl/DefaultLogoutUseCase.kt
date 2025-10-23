@@ -9,7 +9,6 @@ package io.element.android.features.logout.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -17,7 +16,6 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultLogoutUseCase(
     private val sessionStore: SessionStore,
     private val matrixClientProvider: MatrixClientProvider,

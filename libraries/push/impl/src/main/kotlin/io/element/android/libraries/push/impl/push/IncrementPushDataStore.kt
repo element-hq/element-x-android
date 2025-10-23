@@ -9,7 +9,6 @@ package io.element.android.libraries.push.impl.push
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
 
 interface IncrementPushDataStore {
@@ -17,7 +16,6 @@ interface IncrementPushDataStore {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultIncrementPushDataStore(
     private val defaultPushDataStore: DefaultPushDataStore
 ) : IncrementPushDataStore {

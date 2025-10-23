@@ -10,7 +10,6 @@ package io.element.android.features.preferences.impl.advanced
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.runUpdatingState
@@ -45,7 +44,6 @@ interface MediaPreviewConfigStateStore {
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-@Inject
 class DefaultMediaPreviewConfigStateStore(
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,

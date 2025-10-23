@@ -31,7 +31,6 @@ import androidx.core.content.PermissionChecker
 import androidx.core.net.toFile
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.system.startInstallFromSourceIntent
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -47,7 +46,6 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AndroidLocalMediaActions(
     @ApplicationContext private val context: Context,
     private val coroutineDispatchers: CoroutineDispatchers,

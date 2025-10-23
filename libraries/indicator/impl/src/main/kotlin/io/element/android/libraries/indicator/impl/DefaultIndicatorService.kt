@@ -14,7 +14,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.encryption.BackupState
@@ -23,7 +22,6 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultIndicatorService(
     private val sessionVerificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,

@@ -9,7 +9,6 @@ package io.element.android.features.cachecleaner.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.cachecleaner.api.CacheCleaner
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -24,7 +23,6 @@ import java.io.File
  * Default implementation of [CacheCleaner].
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultCacheCleaner(
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,

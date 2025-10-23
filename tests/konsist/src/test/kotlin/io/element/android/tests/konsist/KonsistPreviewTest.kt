@@ -86,7 +86,6 @@ class KonsistPreviewTest {
         "HeaderFooterPageScrollablePreview",
         "HomeTopBarMultiAccountPreview",
         "HomeTopBarWithIndicatorPreview",
-        "IconsCompoundPreview",
         "IconsOtherPreview",
         "MarkdownTextComposerEditPreview",
         "MatrixBadgeAtomInfoPreview",

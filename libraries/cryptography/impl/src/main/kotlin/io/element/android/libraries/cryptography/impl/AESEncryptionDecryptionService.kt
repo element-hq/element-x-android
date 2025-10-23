@@ -9,7 +9,6 @@ package io.element.android.libraries.cryptography.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
@@ -21,7 +20,6 @@ import javax.crypto.spec.GCMParameterSpec
  * Default implementation of [EncryptionDecryptionService] using AES encryption.
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class AESEncryptionDecryptionService : EncryptionDecryptionService {
     override fun createEncryptionCipher(key: SecretKey): Cipher {
         return Cipher.getInstance(AESEncryptionSpecs.CIPHER_TRANSFORMATION).apply {

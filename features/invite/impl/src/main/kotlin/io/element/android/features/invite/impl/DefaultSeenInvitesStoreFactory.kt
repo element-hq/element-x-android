@@ -10,7 +10,6 @@ package io.element.android.features.invite.impl
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -21,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultSeenInvitesStoreFactory(
     @ApplicationContext private val context: Context,
     private val sessionObserver: SessionObserver,

@@ -26,7 +26,6 @@ interface LoggedInImageLoaderFactory {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultLoggedInImageLoaderFactory(
     @ApplicationContext private val context: Context,
     private val okHttpClient: Provider<OkHttpClient>,

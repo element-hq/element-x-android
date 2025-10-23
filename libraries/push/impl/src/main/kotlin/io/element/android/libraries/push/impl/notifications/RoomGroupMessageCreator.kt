@@ -12,7 +12,6 @@ import android.graphics.Bitmap
 import coil3.ImageLoader
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
@@ -33,7 +32,6 @@ interface RoomGroupMessageCreator {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultRoomGroupMessageCreator(
     private val bitmapLoader: NotificationBitmapLoader,
     private val stringProvider: StringProvider,

@@ -12,7 +12,6 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import timber.log.Timber
@@ -26,7 +25,6 @@ import javax.crypto.SecretKey
  * The generated key uses AES algorithm, with a key size of 128 bits, and the GCM block mode.
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class KeyStoreSecretKeyRepository(
     private val keyStore: KeyStore,
 ) : SecretKeyRepository {

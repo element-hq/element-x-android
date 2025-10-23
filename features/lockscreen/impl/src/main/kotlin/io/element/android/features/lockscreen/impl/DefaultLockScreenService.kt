@@ -9,7 +9,6 @@ package io.element.android.features.lockscreen.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
@@ -35,7 +34,6 @@ import kotlin.time.Duration
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultLockScreenService(
     private val lockScreenConfig: LockScreenConfig,
     private val lockScreenStore: LockScreenStore,

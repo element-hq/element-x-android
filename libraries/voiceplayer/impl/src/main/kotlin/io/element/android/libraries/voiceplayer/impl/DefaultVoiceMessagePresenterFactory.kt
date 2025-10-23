@@ -8,7 +8,6 @@
 package io.element.android.libraries.voiceplayer.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
@@ -21,7 +20,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlin.time.Duration
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultVoiceMessagePresenterFactory(
     private val analyticsService: AnalyticsService,
     @SessionCoroutineScope

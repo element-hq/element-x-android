@@ -9,7 +9,6 @@ package io.element.android.libraries.oidc.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultOidcActionFlow : OidcActionFlow {
     private val mutableStateFlow = MutableStateFlow<OidcAction?>(null)
 

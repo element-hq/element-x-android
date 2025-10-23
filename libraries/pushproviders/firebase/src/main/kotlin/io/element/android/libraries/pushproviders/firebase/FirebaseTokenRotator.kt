@@ -9,7 +9,6 @@ package io.element.android.libraries.pushproviders.firebase
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 
 interface FirebaseTokenRotator {
@@ -20,7 +19,6 @@ interface FirebaseTokenRotator {
  * This class delete the Firebase token and generate a new one.
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultFirebaseTokenRotator(
     private val firebaseTokenDeleter: FirebaseTokenDeleter,
     private val firebaseTokenGetter: FirebaseTokenGetter,

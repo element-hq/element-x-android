@@ -17,7 +17,6 @@ import android.os.Build
 import androidx.core.content.IntentCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.compat.queryIntentActivitiesCompat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAny
@@ -49,7 +48,6 @@ interface ShareIntentHandler {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultShareIntentHandler(
     @ApplicationContext private val context: Context,
 ) : ShareIntentHandler {

@@ -46,7 +46,7 @@ class HomeserverResolver(
                         wellknownRetriever.getWellKnown(url)
                     }
                 }
-                val isValid = wellKnown?.isValid().orFalse()
+                val isValid = wellKnown?.dataOrNull()?.isValid().orFalse()
                 if (isValid) {
                     // Emit the list as soon as possible
                     currentList.add(

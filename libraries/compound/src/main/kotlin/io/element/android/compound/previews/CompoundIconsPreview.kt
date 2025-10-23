@@ -41,13 +41,13 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-@Preview(widthDp = 730, heightDp = 1800)
+@Preview(widthDp = 730, heightDp = 1920)
 @Composable
 internal fun IconsCompoundPreviewLight() = ElementTheme {
     IconsCompoundPreview()
 }
 
-@Preview(widthDp = 730, heightDp = 1800)
+@Preview(widthDp = 730, heightDp = 1920)
 @Composable
 internal fun IconsCompoundPreviewRtl() = ElementTheme {
     CompositionLocalProvider(
@@ -59,7 +59,7 @@ internal fun IconsCompoundPreviewRtl() = ElementTheme {
     }
 }
 
-@Preview(widthDp = 730, heightDp = 1800)
+@Preview(widthDp = 730, heightDp = 1920)
 @Composable
 internal fun IconsCompoundPreviewDark() = ElementTheme(darkTheme = true) {
     IconsCompoundPreview()

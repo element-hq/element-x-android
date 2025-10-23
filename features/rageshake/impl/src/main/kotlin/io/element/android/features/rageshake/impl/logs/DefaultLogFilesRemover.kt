@@ -9,13 +9,11 @@ package io.element.android.features.rageshake.impl.logs
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
 import io.element.android.features.rageshake.impl.reporter.DefaultBugReporter
 import java.io.File
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultLogFilesRemover(
     private val bugReporter: DefaultBugReporter,
 ) : LogFilesRemover {

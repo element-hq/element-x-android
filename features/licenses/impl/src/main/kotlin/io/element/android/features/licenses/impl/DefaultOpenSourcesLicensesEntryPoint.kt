@@ -11,12 +11,10 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.licenses.api.OpenSourceLicensesEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultOpenSourcesLicensesEntryPoint : OpenSourceLicensesEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
         return parentNode.createNode<DependenciesFlowNode>(buildContext)

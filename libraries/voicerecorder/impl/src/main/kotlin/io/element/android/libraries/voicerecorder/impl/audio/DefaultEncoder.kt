@@ -8,7 +8,6 @@
 package io.element.android.libraries.voicerecorder.impl.audio
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provider
 import io.element.android.libraries.di.RoomScope
 import io.element.android.opusencoder.OggOpusEncoder
@@ -19,7 +18,6 @@ import java.io.File
  * Safe wrapper for OggOpusEncoder.
  */
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultEncoder(
     private val encoderProvider: Provider<OggOpusEncoder>,
     config: AudioConfig,

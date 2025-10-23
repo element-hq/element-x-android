@@ -10,7 +10,6 @@ package io.element.android.libraries.pushproviders.unifiedpush
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
@@ -25,7 +24,6 @@ interface RegisterUnifiedPushUseCase {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultRegisterUnifiedPushUseCase(
     @ApplicationContext private val context: Context,
     private val endpointRegistrationHandler: EndpointRegistrationHandler,

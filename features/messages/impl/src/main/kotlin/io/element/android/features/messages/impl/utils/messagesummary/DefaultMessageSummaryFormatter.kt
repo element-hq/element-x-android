@@ -9,7 +9,6 @@ package io.element.android.features.messages.impl.utils.messagesummary
 
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -33,7 +32,6 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultMessageSummaryFormatter(
     @ApplicationContext private val context: Context,
 ) : MessageSummaryFormatter {

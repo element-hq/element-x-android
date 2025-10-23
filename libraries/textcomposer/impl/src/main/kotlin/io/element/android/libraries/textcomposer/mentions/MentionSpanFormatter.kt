@@ -8,7 +8,6 @@
 package io.element.android.libraries.textcomposer.mentions
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
@@ -28,7 +27,6 @@ interface MentionSpanFormatter {
  * based on its MentionType and context.
  */
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultMentionSpanFormatter(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val roomNamesCache: RoomNamesCache,

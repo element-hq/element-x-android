@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.messagecomposer.suggestions
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -28,7 +27,6 @@ interface RoomAliasSuggestionsDataSource {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultRoomAliasSuggestionsDataSource(
     private val roomListService: RoomListService,
 ) : RoomAliasSuggestionsDataSource {

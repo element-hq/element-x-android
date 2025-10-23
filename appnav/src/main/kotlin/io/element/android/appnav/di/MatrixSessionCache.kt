@@ -12,7 +12,6 @@ import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.core.state.SavedStateMap
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -33,7 +32,6 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHold
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class MatrixSessionCache(
     private val authenticationService: MatrixAuthenticationService,
     private val syncOrchestratorFactory: SyncOrchestrator.Factory,

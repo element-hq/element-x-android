@@ -11,7 +11,6 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.audio.api.AudioFocusRequester
@@ -36,7 +35,6 @@ import kotlin.time.Duration.Companion.seconds
  */
 @ContributesBinding(RoomScope::class)
 @SingleIn(RoomScope::class)
-@Inject
 class DefaultMediaPlayer(
     private val player: SimplePlayer,
     @SessionCoroutineScope

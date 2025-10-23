@@ -11,7 +11,6 @@ import android.content.Intent
 import android.net.Uri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.deeplink.api.DeeplinkParser
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -19,7 +18,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultDeeplinkParser : DeeplinkParser {
     override fun getFromIntent(intent: Intent): DeeplinkData? {
         return intent

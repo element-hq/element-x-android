@@ -9,7 +9,6 @@ package io.element.android.features.viewfolder.impl.file
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.coroutines.withContext
@@ -20,7 +19,6 @@ interface FileContentReader {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultFileContentReader(
     private val dispatchers: CoroutineDispatchers,
 ) : FileContentReader {

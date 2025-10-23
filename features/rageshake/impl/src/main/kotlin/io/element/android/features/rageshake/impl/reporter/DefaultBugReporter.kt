@@ -13,7 +13,6 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
@@ -70,7 +69,6 @@ import java.util.Locale
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultBugReporter(
     @ApplicationContext private val context: Context,
     @AppCoroutineScope

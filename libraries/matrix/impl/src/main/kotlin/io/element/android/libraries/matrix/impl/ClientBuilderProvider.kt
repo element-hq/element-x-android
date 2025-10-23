@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import org.matrix.rustcomponents.sdk.ClientBuilder
 
 interface ClientBuilderProvider {
@@ -17,7 +16,6 @@ interface ClientBuilderProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class RustClientBuilderProvider : ClientBuilderProvider {
     override fun provide(): ClientBuilder {
         return ClientBuilder()

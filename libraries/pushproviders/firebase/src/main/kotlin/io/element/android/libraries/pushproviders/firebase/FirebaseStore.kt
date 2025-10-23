@@ -11,7 +11,6 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onCompletion
@@ -27,7 +26,6 @@ interface FirebaseStore {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class SharedPreferencesFirebaseStore(
     private val sharedPreferences: SharedPreferences,
 ) : FirebaseStore {

@@ -9,7 +9,6 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
 interface GuardServiceStarter {
     fun start() {}
@@ -17,5 +16,4 @@ interface GuardServiceStarter {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class NoopGuardServiceStarter : GuardServiceStarter

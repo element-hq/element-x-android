@@ -15,4 +15,5 @@ internal val iconsOther = listOf(
     R.drawable.ic_notification,
     R.drawable.ic_stop,
     R.drawable.pin,
+    R.drawable.ic_winner,
 )

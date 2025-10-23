@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
@@ -29,7 +28,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultCrashDetectionPresenter(
     private val buildMeta: BuildMeta,
     private val crashDataStore: CrashDataStore,

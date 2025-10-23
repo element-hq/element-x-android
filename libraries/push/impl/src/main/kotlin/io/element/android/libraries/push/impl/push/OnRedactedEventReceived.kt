@@ -16,7 +16,6 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.impl.notifications.ActiveNotificationsProvider
@@ -34,7 +33,6 @@ interface OnRedactedEventReceived {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultOnRedactedEventReceived(
     private val activeNotificationsProvider: ActiveNotificationsProvider,
     private val notificationDisplayer: NotificationDisplayer,

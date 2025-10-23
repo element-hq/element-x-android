@@ -12,11 +12,9 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AndroidStringProvider(private val resources: Resources) : StringProvider {
     override fun getString(@StringRes resId: Int): String {
         return resources.getString(resId)

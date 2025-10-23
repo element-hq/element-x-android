@@ -9,7 +9,6 @@ package io.element.android.libraries.featureflag.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlags
 
@@ -18,7 +17,6 @@ fun interface FeaturesProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultFeaturesProvider : FeaturesProvider {
     override fun provide(): List<Feature> = FeatureFlags.entries
 }

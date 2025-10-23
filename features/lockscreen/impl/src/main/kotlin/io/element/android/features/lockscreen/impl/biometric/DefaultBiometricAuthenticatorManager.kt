@@ -24,7 +24,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.R
@@ -42,7 +41,6 @@ private const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_BIOMETRIC"
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultBiometricAuthenticatorManager(
     @ApplicationContext private val context: Context,
     private val lockScreenStore: LockScreenStore,

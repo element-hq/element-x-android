@@ -19,7 +19,6 @@ import androidx.core.content.res.ResourcesCompat
 import coil3.ImageLoader
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -86,7 +85,6 @@ interface NotificationCreator {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultNotificationCreator(
     @ApplicationContext private val context: Context,
     private val notificationChannels: NotificationChannels,

@@ -10,7 +10,6 @@ package io.element.android.features.licenses.impl
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.licenses.impl.model.DependencyLicenseItem
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -24,7 +23,6 @@ interface LicensesProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AssetLicensesProvider(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,

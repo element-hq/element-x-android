@@ -8,7 +8,6 @@
 package io.element.android.libraries.voicerecorder.impl.file
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.hash.md5
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.RoomScope
@@ -18,7 +17,6 @@ import java.io.File
 import java.util.UUID
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultVoiceFileManager(
     @CacheDirectory private val cacheDir: File,
     private val config: VoiceFileConfig,

@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
@@ -27,7 +26,6 @@ interface MentionSpanUpdater {
 }
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultMentionSpanUpdater(
     private val formatter: MentionSpanFormatter,
     private val theme: MentionSpanTheme,

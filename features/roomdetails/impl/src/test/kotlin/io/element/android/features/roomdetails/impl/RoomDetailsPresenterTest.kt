@@ -720,10 +720,6 @@ class RoomDetailsPresenterTest {
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
             skipItems(1)
             with(awaitItem()) {
-                assertThat(canShowSecurityAndPrivacy).isFalse()
-            }
-            featureFlagService.setFeatureEnabled(FeatureFlags.Knock, true)
-            with(awaitItem()) {
                 assertThat(canShowSecurityAndPrivacy).isTrue()
             }
         }

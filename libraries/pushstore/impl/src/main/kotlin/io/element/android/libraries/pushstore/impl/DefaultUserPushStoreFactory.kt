@@ -10,7 +10,6 @@ package io.element.android.libraries.pushstore.impl
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -21,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultUserPushStoreFactory(
     @ApplicationContext private val context: Context,
     private val preferenceDataStoreFactory: PreferenceDataStoreFactory,

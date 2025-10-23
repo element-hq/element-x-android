@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_URL
 import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -155,7 +156,13 @@ class DefaultAccountProviderAccessControlTest {
             defaultHomeserverListResult = { allowedAccountProviders },
         ),
         wellknownRetriever = FakeWellknownRetriever(
-            getElementWellKnownResult = { elementWellKnown },
+            getElementWellKnownResult = {
+                if (elementWellKnown == null) {
+                    WellknownRetrieverResult.NotFound
+                } else {
+                    WellknownRetrieverResult.Success(elementWellKnown)
+                }
+            },
         ),
     )
 

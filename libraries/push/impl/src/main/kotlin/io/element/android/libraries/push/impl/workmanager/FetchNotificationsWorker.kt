@@ -125,5 +125,5 @@ class FetchNotificationsWorker(
     @ContributesIntoMap(AppScope::class, binding = binding<MetroWorkerFactory.WorkerInstanceFactory<*>>())
     @WorkerKey(FetchNotificationsWorker::class)
     @AssistedFactory
-    abstract class Factory : MetroWorkerFactory.WorkerInstanceFactory<FetchNotificationsWorker>
+    interface Factory : MetroWorkerFactory.WorkerInstanceFactory<FetchNotificationsWorker>
 }

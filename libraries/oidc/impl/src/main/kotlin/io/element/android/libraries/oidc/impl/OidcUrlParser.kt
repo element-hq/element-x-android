@@ -9,7 +9,6 @@ package io.element.android.libraries.oidc.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import io.element.android.libraries.oidc.api.OidcAction
 
@@ -22,7 +21,6 @@ fun interface OidcUrlParser {
  * TODO Find documentation about the format.
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultOidcUrlParser(
     private val oidcRedirectUrlProvider: OidcRedirectUrlProvider,
 ) : OidcUrlParser {

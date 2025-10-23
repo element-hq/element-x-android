@@ -17,7 +17,6 @@ import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
 import timber.log.Timber
@@ -45,7 +44,6 @@ interface BatteryOptimization {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AndroidBatteryOptimization(
     @ApplicationContext
     private val context: Context,

@@ -10,7 +10,6 @@ package io.element.android.libraries.preferences.impl.store
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -23,7 +22,6 @@ import java.util.concurrent.ConcurrentHashMap
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultSessionPreferencesStoreFactory(
     @ApplicationContext private val context: Context,
     sessionObserver: SessionObserver,

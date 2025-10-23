@@ -15,7 +15,6 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
 interface ComposablePermissionStateProvider {
     @Composable
@@ -23,7 +22,6 @@ interface ComposablePermissionStateProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AccompanistPermissionStateProvider : ComposablePermissionStateProvider {
     @Composable
     override fun provide(permission: String, onPermissionResult: (Boolean) -> Unit): PermissionState {

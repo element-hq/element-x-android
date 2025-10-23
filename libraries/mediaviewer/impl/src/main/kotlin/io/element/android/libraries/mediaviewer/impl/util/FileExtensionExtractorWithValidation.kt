@@ -10,11 +10,9 @@ package io.element.android.libraries.mediaviewer.impl.util
 import android.webkit.MimeTypeMap
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 
 @ContributesBinding(AppScope::class)
-@Inject
 class FileExtensionExtractorWithValidation : FileExtensionExtractor {
     override fun extractFromName(name: String): String {
         val fileExtension = name.substringAfterLast('.', "")

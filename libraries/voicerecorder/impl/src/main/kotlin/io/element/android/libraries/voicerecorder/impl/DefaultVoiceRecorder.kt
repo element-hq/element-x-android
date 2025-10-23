@@ -10,7 +10,6 @@ package io.element.android.libraries.voicerecorder.impl
 import android.Manifest
 import androidx.annotation.RequiresPermission
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.VoiceMessageConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -43,7 +42,6 @@ import kotlin.time.TimeSource
 
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultVoiceRecorder(
     private val dispatchers: CoroutineDispatchers,
     private val timeSource: TimeSource,

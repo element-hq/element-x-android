@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.impl.permalink
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -20,7 +19,6 @@ import org.matrix.rustcomponents.sdk.matrixToRoomAliasPermalink
 import org.matrix.rustcomponents.sdk.matrixToUserPermalink
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPermalinkBuilder : PermalinkBuilder {
     override fun permalinkForUser(userId: UserId): Result<String> {
         if (!MatrixPatterns.isUserId(userId.value)) {

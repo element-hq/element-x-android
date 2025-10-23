@@ -8,7 +8,6 @@
 package io.element.android.features.invite.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.core.extensions.mapFailure
@@ -30,7 +29,6 @@ interface AcceptInvite {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultAcceptInvite(
     private val client: MatrixClient,
     private val joinRoom: JoinRoom,

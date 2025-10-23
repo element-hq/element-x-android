@@ -27,6 +27,8 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -45,6 +47,7 @@ class SecurityAndPrivacyPresenter(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val matrixClient: MatrixClient,
     private val room: JoinedRoom,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<SecurityAndPrivacyState> {
     @AssistedFactory
     interface Factory {
@@ -55,6 +58,9 @@ class SecurityAndPrivacyPresenter(
     override fun present(): SecurityAndPrivacyState {
         val coroutineScope = rememberCoroutineScope()
 
+        val isKnockEnabled by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
+        }.collectAsState(false)
         val saveAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val homeserverName = remember { matrixClient.userIdServerName() }
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
@@ -149,6 +155,7 @@ class SecurityAndPrivacyPresenter(
             editedSettings = editedSettings,
             homeserverName = homeserverName,
             showEnableEncryptionConfirmation = showEnableEncryptionConfirmation,
+            isKnockEnabled = isKnockEnabled,
             saveAction = saveAction.value,
             permissions = permissions,
             eventSink = ::handleEvents

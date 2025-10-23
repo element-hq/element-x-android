@@ -18,6 +18,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.wellknown.api.WellKnown
 import io.element.android.libraries.wellknown.api.WellKnownBaseConfig
+import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -94,12 +95,12 @@ class SearchAccountProviderPresenterTest {
 
     @Test
     fun `present - enter text one result with wellknown`() = runTest {
-        val getWellKnownResult = lambdaRecorder<String, WellKnown> {
+        val getWellKnownResult = lambdaRecorder<String, WellknownRetrieverResult<WellKnown>> {
             when (it) {
-                "https://test.org" -> error("not found")
-                "https://test.com" -> error("not found")
-                "https://test.io" -> aWellKnown()
-                "https://test" -> error("not found")
+                "https://test.org" -> WellknownRetrieverResult.NotFound
+                "https://test.com" -> WellknownRetrieverResult.NotFound
+                "https://test.io" -> WellknownRetrieverResult.Success(aWellKnown())
+                "https://test" -> WellknownRetrieverResult.NotFound
                 else -> error("should not happen")
             }
         }
@@ -138,12 +139,12 @@ class SearchAccountProviderPresenterTest {
 
     @Test
     fun `present - enter text two results with wellknown`() = runTest {
-        val getWellKnownResult = lambdaRecorder<String, WellKnown> {
+        val getWellKnownResult = lambdaRecorder<String, WellknownRetrieverResult<WellKnown>> {
             when (it) {
-                "https://test.org" -> aWellKnown()
-                "https://test.com" -> error("not found")
-                "https://test.io" -> aWellKnown()
-                "https://test" -> error("not found")
+                "https://test.org" -> WellknownRetrieverResult.Success(aWellKnown())
+                "https://test.com" -> WellknownRetrieverResult.NotFound
+                "https://test.io" -> WellknownRetrieverResult.Success(aWellKnown())
+                "https://test" -> WellknownRetrieverResult.NotFound
                 else -> error("should not happen")
             }
         }

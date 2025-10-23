@@ -11,12 +11,10 @@ import android.content.Context
 import android.content.Intent
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultExternalIntentLauncher(
     @ApplicationContext private val context: Context,
 ) : ExternalIntentLauncher {

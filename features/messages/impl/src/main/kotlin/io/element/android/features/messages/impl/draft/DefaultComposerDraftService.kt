@@ -8,14 +8,12 @@
 package io.element.android.features.messages.impl.draft
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultComposerDraftService(
     private val volatileComposerDraftStore: VolatileComposerDraftStore,
     private val matrixComposerDraftStore: MatrixComposerDraftStore,

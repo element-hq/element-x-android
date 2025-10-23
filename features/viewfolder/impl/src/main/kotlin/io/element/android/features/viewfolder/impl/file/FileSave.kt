@@ -15,7 +15,6 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -33,7 +32,6 @@ interface FileSave {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultFileSave(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,

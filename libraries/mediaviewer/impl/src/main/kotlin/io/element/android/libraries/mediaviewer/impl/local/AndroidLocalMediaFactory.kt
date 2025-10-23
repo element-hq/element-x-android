@@ -12,7 +12,6 @@ import android.net.Uri
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.file.getFileName
 import io.element.android.libraries.androidutils.file.getFileSize
 import io.element.android.libraries.androidutils.file.getMimeType
@@ -28,7 +27,6 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AndroidLocalMediaFactory(
     @ApplicationContext private val context: Context,
     private val fileSizeFormatter: FileSizeFormatter,

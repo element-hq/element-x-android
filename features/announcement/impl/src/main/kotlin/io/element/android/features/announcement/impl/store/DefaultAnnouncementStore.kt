@@ -11,7 +11,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +20,6 @@ private val spaceAnnouncementKey = intPreferencesKey("spaceAnnouncement")
 private val newNotificationSoundKey = intPreferencesKey("newNotificationSound")
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultAnnouncementStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : AnnouncementStore {

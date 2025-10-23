@@ -9,7 +9,6 @@ package io.element.android.features.startchat.impl
 
 import androidx.compose.runtime.MutableState
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.startchat.api.StartDMAction
@@ -23,7 +22,6 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultStartDMAction(
     private val matrixClient: MatrixClient,
     private val analyticsService: AnalyticsService,

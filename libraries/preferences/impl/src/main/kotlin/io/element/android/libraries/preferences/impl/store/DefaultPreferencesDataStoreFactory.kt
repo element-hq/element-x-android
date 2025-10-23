@@ -13,7 +13,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.preferences.DefaultPreferencesCorruptionHandlerFactory
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -22,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPreferencesDataStoreFactory(
     @ApplicationContext private val context: Context,
 ) : PreferenceDataStoreFactory {

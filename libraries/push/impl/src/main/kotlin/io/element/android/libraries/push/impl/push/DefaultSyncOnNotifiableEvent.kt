@@ -9,7 +9,6 @@ package io.element.android.libraries.push.impl.push
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -23,7 +22,6 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultSyncOnNotifiableEvent(
     private val matrixClientProvider: MatrixClientProvider,
     private val featureFlagService: FeatureFlagService,

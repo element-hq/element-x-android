@@ -12,7 +12,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
@@ -32,7 +31,6 @@ private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultAppPreferencesStore(
     private val buildMeta: BuildMeta,
     preferenceDataStoreFactory: PreferenceDataStoreFactory,

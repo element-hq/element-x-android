@@ -17,7 +17,6 @@ import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallType
@@ -90,7 +89,6 @@ interface ActiveCallManager {
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultActiveCallManager(
     @ApplicationContext context: Context,
     @AppCoroutineScope

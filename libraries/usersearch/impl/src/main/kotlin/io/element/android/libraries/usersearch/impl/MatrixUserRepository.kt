@@ -8,7 +8,6 @@
 package io.element.android.libraries.usersearch.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
@@ -23,7 +22,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class MatrixUserRepository(
     private val client: MatrixClient,
     private val dataSource: UserListDataSource

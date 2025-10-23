@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.impl.room
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.room.StateEventType
 import org.matrix.rustcomponents.sdk.FilterTimelineEventType
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
@@ -19,7 +18,6 @@ interface TimelineEventTypeFilterFactory {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class RustTimelineEventTypeFilterFactory : TimelineEventTypeFilterFactory {
     override fun create(listStateEventType: List<StateEventType>): TimelineEventTypeFilter {
         return TimelineEventTypeFilter.exclude(

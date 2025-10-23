@@ -14,14 +14,12 @@ import androidx.core.content.getSystemService
 import com.squareup.seismic.ShakeDetector
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.binding
 import io.element.android.libraries.di.annotations.ApplicationContext
 
 @SingleIn(AppScope::class)
 @ContributesBinding(scope = AppScope::class, binding = binding<RageShake>())
-@Inject
 class DefaultRageShake(
     @ApplicationContext context: Context,
 ) : ShakeDetector.Listener, RageShake {

@@ -13,7 +13,6 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.annotations.ApplicationContext
 
@@ -23,7 +22,6 @@ interface PipSupportProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPipSupportProvider(
     @ApplicationContext private val context: Context,
 ) : PipSupportProvider {

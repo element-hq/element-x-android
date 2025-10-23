@@ -11,7 +11,6 @@ import android.util.Log
 import android.webkit.ConsoleMessage
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import timber.log.Timber
 
 interface ConsoleMessageLogger {
@@ -22,7 +21,6 @@ interface ConsoleMessageLogger {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultConsoleMessageLogger : ConsoleMessageLogger {
     override fun log(
         tag: String,

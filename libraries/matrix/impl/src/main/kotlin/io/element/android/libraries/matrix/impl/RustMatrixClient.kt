@@ -286,7 +286,7 @@ class RustMatrixClient(
     override suspend fun getUrl(url: String): Result<ByteArray> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.getUrl(url)
-        }
+        }.mapFailure { it.mapClientException() }
     }
 
     override suspend fun getRoom(roomId: RoomId): BaseRoom? = withContext(sessionDispatcher) {

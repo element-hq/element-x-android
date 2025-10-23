@@ -10,6 +10,9 @@ package io.element.android.features.roomdetails.impl.securityandprivacy
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
@@ -38,6 +41,7 @@ class SecurityAndPrivacyPresenterTest {
                 assertThat(showRoomVisibilitySections).isFalse()
                 assertThat(showHistoryVisibilitySection).isFalse()
                 assertThat(showEncryptionSection).isFalse()
+                assertThat(isKnockEnabled).isFalse()
             }
             with(awaitItem()) {
                 assertThat(editedSettings).isEqualTo(savedSettings)
@@ -48,6 +52,7 @@ class SecurityAndPrivacyPresenterTest {
                 assertThat(showRoomVisibilitySections).isFalse()
                 assertThat(showHistoryVisibilitySection).isTrue()
                 assertThat(showEncryptionSection).isTrue()
+                assertThat(isKnockEnabled).isFalse()
             }
         }
     }
@@ -56,13 +61,13 @@ class SecurityAndPrivacyPresenterTest {
     fun `present - room info change updates saved and edited settings`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canSendStateResult = { _, _ -> Result.success(true) },
-            initialRoomInfo = aRoomInfo(
-                joinRule = JoinRule.Public,
-                historyVisibility = RoomHistoryVisibility.WorldReadable,
-                canonicalAlias = A_ROOM_ALIAS,
+                canSendStateResult = { _, _ -> Result.success(true) },
+                initialRoomInfo = aRoomInfo(
+                    joinRule = JoinRule.Public,
+                    historyVisibility = RoomHistoryVisibility.WorldReadable,
+                    canonicalAlias = A_ROOM_ALIAS,
+                )
             )
-        )
         )
         val presenter = createSecurityAndPrivacyPresenter(room = room)
         presenter.test {
@@ -163,10 +168,10 @@ class SecurityAndPrivacyPresenterTest {
     fun `present - room visibility loading and change`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canSendStateResult = { _, _ -> Result.success(true) },
-            getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
-            initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared)
-        )
+                canSendStateResult = { _, _ -> Result.success(true) },
+                getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
+                initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared)
+            )
         )
         val presenter = createSecurityAndPrivacyPresenter(room = room)
         presenter.test {
@@ -212,10 +217,10 @@ class SecurityAndPrivacyPresenterTest {
         val updateRoomHistoryVisibilityLambda = lambdaRecorder<RoomHistoryVisibility, Result<Unit>> { Result.success(Unit) }
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canSendStateResult = { _, _ -> Result.success(true) },
-            getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
-            initialRoomInfo = aRoomInfo(joinRule = JoinRule.Invite, historyVisibility = RoomHistoryVisibility.Shared)
-        ),
+                canSendStateResult = { _, _ -> Result.success(true) },
+                getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
+                initialRoomInfo = aRoomInfo(joinRule = JoinRule.Invite, historyVisibility = RoomHistoryVisibility.Shared)
+            ),
             enableEncryptionResult = enableEncryptionLambda,
             updateJoinRuleResult = updateJoinRuleLambda,
             updateRoomVisibilityResult = updateRoomVisibilityLambda,
@@ -279,10 +284,10 @@ class SecurityAndPrivacyPresenterTest {
         val updateRoomHistoryVisibilityLambda = lambdaRecorder<RoomHistoryVisibility, Result<Unit>> { Result.success(Unit) }
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-            canSendStateResult = { _, _ -> Result.success(true) },
-            getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
-            initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Private)
-        ),
+                canSendStateResult = { _, _ -> Result.success(true) },
+                getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
+                initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Private)
+            ),
             enableEncryptionResult = enableEncryptionLambda,
             updateJoinRuleResult = updateJoinRuleLambda,
             updateRoomVisibilityResult = updateRoomVisibilityLambda,
@@ -323,7 +328,8 @@ class SecurityAndPrivacyPresenterTest {
             )
             // Saved settings are updated 2 times to match the edited settings
             skipItems(3)
-            with(awaitItem()) {
+            val state = awaitItem()
+            with(state) {
                 assertThat(saveAction).isInstanceOf(AsyncAction.Failure::class.java)
                 assertThat(savedSettings.isVisibleInRoomDirectory).isNotEqualTo(editedSettings.isVisibleInRoomDirectory)
                 assertThat(canBeSaved).isTrue()
@@ -332,6 +338,26 @@ class SecurityAndPrivacyPresenterTest {
             assert(updateJoinRuleLambda).isCalledOnce()
             assert(updateRoomVisibilityLambda).isCalledOnce()
             assert(updateRoomHistoryVisibilityLambda).isCalledOnce()
+            // Clear error
+            state.eventSink(SecurityAndPrivacyEvents.DismissSaveError)
+            with(awaitItem()) {
+                assertThat(saveAction).isEqualTo(AsyncAction.Uninitialized)
+            }
+        }
+    }
+
+    @Test
+    fun `present - isKnockEnabled is true if the Knock feature flag is enabled`() = runTest {
+        val presenter = createSecurityAndPrivacyPresenter(
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(
+                    FeatureFlags.Knock.key to true,
+                )
+            )
+        )
+        presenter.test {
+            assertThat(awaitItem().isKnockEnabled).isFalse()
+            assertThat(awaitItem().isKnockEnabled).isTrue()
         }
     }
 
@@ -345,13 +371,15 @@ class SecurityAndPrivacyPresenterTest {
             ),
         ),
         navigator: SecurityAndPrivacyNavigator = FakeSecurityAndPrivacyNavigator(),
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     ): SecurityAndPrivacyPresenter {
         return SecurityAndPrivacyPresenter(
             room = room,
             matrixClient = FakeMatrixClient(
                 userIdServerNameLambda = { serverName },
             ),
-            navigator = navigator
+            navigator = navigator,
+            featureFlagService = featureFlagService,
         )
     }
 }

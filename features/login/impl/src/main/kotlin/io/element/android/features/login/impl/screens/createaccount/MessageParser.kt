@@ -9,7 +9,6 @@ package io.element.android.features.login.impl.screens.createaccount
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
@@ -23,7 +22,6 @@ interface MessageParser {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultMessageParser(
     private val accountProviderDataSource: AccountProviderDataSource,
     private val json: JsonProvider,

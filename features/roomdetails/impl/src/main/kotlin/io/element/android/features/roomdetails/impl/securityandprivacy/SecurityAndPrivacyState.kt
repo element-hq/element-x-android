@@ -19,6 +19,7 @@ data class SecurityAndPrivacyState(
     val editedSettings: SecurityAndPrivacySettings,
     val homeserverName: String,
     val showEnableEncryptionConfirmation: Boolean,
+    val isKnockEnabled: Boolean,
     val saveAction: AsyncAction<Unit>,
     private val permissions: SecurityAndPrivacyPermissions,
     val eventSink: (SecurityAndPrivacyEvents) -> Unit

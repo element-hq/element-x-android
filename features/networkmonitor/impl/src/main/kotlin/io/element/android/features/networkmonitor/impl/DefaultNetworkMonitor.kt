@@ -15,7 +15,6 @@ import android.net.Network
 import android.net.NetworkRequest
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
@@ -37,7 +36,6 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @ContributesBinding(scope = AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultNetworkMonitor(
     @ApplicationContext context: Context,
     @AppCoroutineScope

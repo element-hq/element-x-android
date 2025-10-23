@@ -8,7 +8,6 @@
 package io.element.android.libraries.mediaupload.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
@@ -16,7 +15,6 @@ import io.element.android.libraries.preferences.api.store.SessionPreferencesStor
 import kotlinx.coroutines.flow.first
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultMediaOptimizationConfigProvider(
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : MediaOptimizationConfigProvider {

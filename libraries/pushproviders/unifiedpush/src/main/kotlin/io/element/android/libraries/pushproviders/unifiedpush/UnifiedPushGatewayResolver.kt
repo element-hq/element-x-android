@@ -9,7 +9,6 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -33,7 +32,6 @@ interface UnifiedPushGatewayResolver {
 private val loggerTag = LoggerTag("DefaultUnifiedPushGatewayResolver")
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultUnifiedPushGatewayResolver(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,

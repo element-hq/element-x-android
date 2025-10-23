@@ -9,13 +9,11 @@ package io.element.android.libraries.matrix.impl.certificates
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.KeyStoreException
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultUserCertificatesProvider : UserCertificatesProvider {
     /**
      * Get additional user-installed certificates from the `AndroidCAStore` `Keystore`.

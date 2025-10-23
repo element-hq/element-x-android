@@ -10,7 +10,6 @@ package io.element.android.features.ftue.impl.state
 import android.Manifest
 import android.os.Build
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
@@ -35,7 +34,6 @@ import kotlinx.coroutines.launch
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-@Inject
 class DefaultFtueService(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,

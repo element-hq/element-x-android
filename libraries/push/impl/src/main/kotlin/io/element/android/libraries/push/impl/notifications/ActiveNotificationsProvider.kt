@@ -11,7 +11,6 @@ import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -28,7 +27,6 @@ interface ActiveNotificationsProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultActiveNotificationsProvider(
     private val notificationManager: NotificationManagerCompat,
 ) : ActiveNotificationsProvider {

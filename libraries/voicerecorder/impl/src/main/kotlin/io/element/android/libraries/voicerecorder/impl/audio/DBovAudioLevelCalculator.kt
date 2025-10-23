@@ -8,7 +8,6 @@
 package io.element.android.libraries.voicerecorder.impl.audio
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.RoomScope
 import kotlin.math.log10
 import kotlin.math.sqrt
@@ -20,7 +19,6 @@ import kotlin.math.sqrt
  * See: https://en.wikipedia.org/wiki/DBFS
  */
 @ContributesBinding(RoomScope::class)
-@Inject
 class DBovAudioLevelCalculator : AudioLevelCalculator {
     override fun calculateAudioLevel(buffer: ShortArray): Float {
         return buffer.rms().dBov().normalize().coerceIn(0f, 1f)

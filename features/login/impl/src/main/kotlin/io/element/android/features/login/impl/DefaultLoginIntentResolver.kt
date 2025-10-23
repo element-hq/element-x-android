@@ -10,12 +10,10 @@ package io.element.android.features.login.impl
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.login.api.LoginIntentResolver
 import io.element.android.features.login.api.LoginParams
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultLoginIntentResolver : LoginIntentResolver {
     override fun parse(uriString: String): LoginParams? {
         val uri = uriString.toUri()

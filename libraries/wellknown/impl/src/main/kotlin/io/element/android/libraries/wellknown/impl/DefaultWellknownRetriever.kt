@@ -9,47 +9,71 @@ package io.element.android.libraries.wellknown.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.network.RetrofitFactory
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.WellKnown
 import io.element.android.libraries.wellknown.api.WellknownRetriever
+import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
+import retrofit2.HttpException
 import timber.log.Timber
+import java.net.HttpURLConnection
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultWellknownRetriever(
     private val retrofitFactory: RetrofitFactory,
 ) : WellknownRetriever {
-    override suspend fun getWellKnown(baseUrl: String): WellKnown? {
-        val wellknownApi = buildWellknownApi(baseUrl) ?: return null
-        return try {
-            wellknownApi.getWellKnown().map()
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to retrieve well-known data for $baseUrl")
-            null
-        }
+    override suspend fun getWellKnown(baseUrl: String): WellknownRetrieverResult<WellKnown> {
+        return buildWellknownApi(baseUrl)
+            .map { wellknownApi ->
+                try {
+                    val result = wellknownApi.getWellKnown().map()
+                    WellknownRetrieverResult.Success(result)
+                } catch (e: Exception) {
+                    Timber.e(e, "Failed to retrieve well-known data for $baseUrl")
+                    if ((e as? HttpException)?.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+                        WellknownRetrieverResult.NotFound
+                    } else {
+                        WellknownRetrieverResult.Error(e)
+                    }
+                }
+            }
+            .fold(
+                onSuccess = { it },
+                onFailure = { WellknownRetrieverResult.Error(it as Exception) }
+            )
     }
 
-    override suspend fun getElementWellKnown(baseUrl: String): ElementWellKnown? {
-        val wellknownApi = buildWellknownApi(baseUrl) ?: return null
-        return try {
-            wellknownApi.getElementWellKnown().map()
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to retrieve Element well-known data for $baseUrl")
-            null
-        }
+    override suspend fun getElementWellKnown(baseUrl: String): WellknownRetrieverResult<ElementWellKnown> {
+        return buildWellknownApi(baseUrl)
+            .map { wellknownApi ->
+                try {
+                    val result = wellknownApi.getElementWellKnown().map()
+                    WellknownRetrieverResult.Success(result)
+                } catch (e: Exception) {
+                    // Is it a 404?
+                    Timber.e(e, "Failed to retrieve Element well-known data for $baseUrl")
+                    if ((e as? HttpException)?.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+                        WellknownRetrieverResult.NotFound
+                    } else {
+                        WellknownRetrieverResult.Error(e)
+                    }
+                }
+            }
+            .fold(
+                onSuccess = { it },
+                onFailure = { WellknownRetrieverResult.Error(it as Exception) }
+            )
     }
 
-    private fun buildWellknownApi(accountProviderUrl: String): WellknownAPI? {
-        return try {
+    private fun buildWellknownApi(accountProviderUrl: String): Result<WellknownAPI> {
+        return runCatchingExceptions {
             retrofitFactory.create(accountProviderUrl.ensureProtocol())
                 .create(WellknownAPI::class.java)
-        } catch (e: Exception) {
+        }.onFailure { e ->
             // If the base URL is not valid, we cannot retrieve the well-known data
             Timber.e(e, "Failed to create Retrofit instance for $accountProviderUrl")
-            null
         }
     }
 }

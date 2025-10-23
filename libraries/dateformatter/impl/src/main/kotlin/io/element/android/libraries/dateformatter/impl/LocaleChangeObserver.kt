@@ -14,7 +14,6 @@ import android.content.IntentFilter
 import android.os.Build
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.ApplicationContext
 
@@ -28,7 +27,6 @@ interface LocaleChangeListener {
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultLocaleChangeObserver(
     @ApplicationContext private val context: Context,
 ) : LocaleChangeObserver {

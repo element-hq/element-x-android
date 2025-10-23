@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.impl.auth
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
@@ -52,7 +51,6 @@ import uniffi.matrix_sdk.OAuthAuthorizationData
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class RustMatrixAuthenticationService(
     private val sessionPathsFactory: SessionPathsFactory,
     private val coroutineDispatchers: CoroutineDispatchers,

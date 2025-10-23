@@ -10,7 +10,6 @@ package io.element.android.features.preferences.impl.tasks
 import android.content.Context
 import coil3.SingletonImageLoader
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provider
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.preferences.impl.DefaultCacheService
@@ -28,7 +27,6 @@ interface ClearCacheUseCase {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultClearCacheUseCase(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,

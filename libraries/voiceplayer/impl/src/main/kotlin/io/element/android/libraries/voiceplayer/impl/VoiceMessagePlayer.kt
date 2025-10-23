@@ -8,7 +8,6 @@
 package io.element.android.libraries.voiceplayer.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
@@ -117,8 +116,7 @@ class DefaultVoiceMessagePlayer(
     filename: String?,
 ) : VoiceMessagePlayer {
     @ContributesBinding(RoomScope::class) // Scoped types can't use @Inject.
-    @Inject
-class Factory(
+    class Factory(
         private val mediaPlayer: MediaPlayer,
         private val voiceMessageMediaRepoFactory: VoiceMessageMediaRepo.Factory,
     ) : VoiceMessagePlayer.Factory {

@@ -10,7 +10,6 @@ package io.element.android.libraries.push.impl.notifications
 import android.app.Notification
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
@@ -36,7 +35,6 @@ interface SummaryGroupMessageCreator {
  * https://developer.android.com/training/notify-user/group
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultSummaryGroupMessageCreator(
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,

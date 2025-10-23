@@ -9,7 +9,6 @@ package io.element.android.libraries.dateformatter.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.safeCapitalize
 
 interface DateFormatterDay {
@@ -20,7 +19,6 @@ interface DateFormatterDay {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultDateFormatterDay(
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,

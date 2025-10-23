@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -21,7 +20,6 @@ interface RedactedVoiceMessageManager {
 }
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultRedactedVoiceMessageManager(
     private val dispatchers: CoroutineDispatchers,
     private val mediaPlayer: MediaPlayer,

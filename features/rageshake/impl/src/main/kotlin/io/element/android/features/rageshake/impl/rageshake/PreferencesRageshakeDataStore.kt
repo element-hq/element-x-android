@@ -12,7 +12,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +21,6 @@ private val enabledKey = booleanPreferencesKey("enabled")
 private val sensitivityKey = floatPreferencesKey("sensitivity")
 
 @ContributesBinding(AppScope::class)
-@Inject
 class PreferencesRageshakeDataStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : RageshakeDataStore {

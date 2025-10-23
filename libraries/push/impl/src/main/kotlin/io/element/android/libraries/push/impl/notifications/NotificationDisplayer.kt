@@ -15,7 +15,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
 
@@ -27,7 +26,6 @@ interface NotificationDisplayer {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultNotificationDisplayer(
     @ApplicationContext private val context: Context,
     private val notificationManager: NotificationManagerCompat

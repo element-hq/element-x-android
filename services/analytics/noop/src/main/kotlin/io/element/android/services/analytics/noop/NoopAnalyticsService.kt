@@ -9,7 +9,6 @@ package io.element.android.services.analytics.noop
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.flowOf
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class NoopAnalyticsService : AnalyticsService {
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
     override val userConsentFlow: Flow<Boolean> = flowOf(false)

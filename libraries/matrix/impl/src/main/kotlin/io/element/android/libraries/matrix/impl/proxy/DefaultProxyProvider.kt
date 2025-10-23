@@ -13,7 +13,6 @@ import android.provider.Settings
 import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
 
@@ -29,7 +28,6 @@ import timber.log.Timber
  * ```
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultProxyProvider(
     @ApplicationContext
     private val context: Context

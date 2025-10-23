@@ -8,7 +8,6 @@
 package io.element.android.features.invite.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -32,7 +31,6 @@ interface DeclineInvite {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultDeclineInvite(
     private val client: MatrixClient,
     private val notificationCleaner: NotificationCleaner,

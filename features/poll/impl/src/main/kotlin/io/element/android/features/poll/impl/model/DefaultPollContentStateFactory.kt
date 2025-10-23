@@ -8,7 +8,6 @@
 package io.element.android.features.poll.impl.model
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.poll.api.pollcontent.PollAnswerItem
 import io.element.android.features.poll.api.pollcontent.PollContentState
 import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
@@ -20,7 +19,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toImmutableList
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultPollContentStateFactory(
     private val matrixClient: MatrixClient,
 ) : PollContentStateFactory {

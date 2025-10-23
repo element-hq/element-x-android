@@ -11,7 +11,6 @@ import android.content.Context
 import androidx.work.WorkManager
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.workmanager.api.WorkManagerRequest
@@ -21,7 +20,6 @@ import io.element.android.libraries.workmanager.api.workManagerTag
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultWorkManagerScheduler(
     @ApplicationContext private val context: Context,
 ) : WorkManagerScheduler {

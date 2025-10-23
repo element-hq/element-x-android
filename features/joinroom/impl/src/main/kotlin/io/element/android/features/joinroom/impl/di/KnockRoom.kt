@@ -8,7 +8,6 @@
 package io.element.android.features.joinroom.impl.di
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -22,7 +21,6 @@ interface KnockRoom {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultKnockRoom(private val client: MatrixClient) : KnockRoom {
     override suspend fun invoke(
         roomIdOrAlias: RoomIdOrAlias,

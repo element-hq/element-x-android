@@ -8,7 +8,6 @@
 package io.element.android.libraries.eventformatter.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
@@ -45,7 +44,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultRoomLastMessageFormatter(
     private val sp: StringProvider,
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,

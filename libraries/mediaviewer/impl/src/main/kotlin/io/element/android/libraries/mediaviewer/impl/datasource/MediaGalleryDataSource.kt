@@ -8,7 +8,6 @@
 package io.element.android.libraries.mediaviewer.impl.datasource
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.di.RoomScope
@@ -39,7 +38,6 @@ interface MediaGalleryDataSource {
 
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-@Inject
 class TimelineMediaGalleryDataSource(
     private val room: BaseRoom,
     private val mediaTimeline: MediaTimeline,

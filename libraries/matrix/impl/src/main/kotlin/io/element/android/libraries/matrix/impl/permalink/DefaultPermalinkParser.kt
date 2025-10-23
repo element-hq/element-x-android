@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.impl.permalink
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -32,7 +31,6 @@ import org.matrix.rustcomponents.sdk.parseMatrixEntityFrom
  * or matrix: permalinks (e.g. matrix:u/chagai95:matrix.org)
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPermalinkParser(
     private val matrixToConverter: MatrixToConverter
 ) : PermalinkParser {

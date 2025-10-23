@@ -9,7 +9,6 @@ package io.element.android.libraries.push.impl.push
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
 
 interface MutableBatteryOptimizationStore {
@@ -19,7 +18,6 @@ interface MutableBatteryOptimizationStore {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultMutableBatteryOptimizationStore(
     private val defaultPushDataStore: DefaultPushDataStore,
 ) : MutableBatteryOptimizationStore {

@@ -9,12 +9,10 @@ package io.element.android.libraries.matrix.impl.room.alias
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultRoomAliasHelper : RoomAliasHelper {
     override fun roomAliasNameFromRoomDisplayName(name: String): String {
         return org.matrix.rustcomponents.sdk.roomAliasNameFromRoomDisplayName(name)

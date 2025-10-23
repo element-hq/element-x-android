@@ -11,14 +11,12 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.di.SessionScope
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultMessagesEntryPoint : MessagesEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): MessagesEntryPoint.NodeBuilder {
         val nodeFactories = parentNode.bindings<NodeFactoriesBindings>().nodeFactories()

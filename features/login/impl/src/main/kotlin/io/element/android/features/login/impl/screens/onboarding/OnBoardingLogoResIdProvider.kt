@@ -11,7 +11,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 
 fun interface OnBoardingLogoResIdProvider {
@@ -19,7 +18,6 @@ fun interface OnBoardingLogoResIdProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultOnBoardingLogoResIdProvider(
     @ApplicationContext private val context: Context,
 ) : OnBoardingLogoResIdProvider {

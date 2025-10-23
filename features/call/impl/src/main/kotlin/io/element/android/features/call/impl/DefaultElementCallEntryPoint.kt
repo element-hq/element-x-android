@@ -10,7 +10,6 @@ package io.element.android.features.call.impl
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.call.impl.notifications.CallNotificationData
@@ -21,7 +20,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultElementCallEntryPoint(
     @ApplicationContext private val context: Context,
     private val activeCallManager: ActiveCallManager,

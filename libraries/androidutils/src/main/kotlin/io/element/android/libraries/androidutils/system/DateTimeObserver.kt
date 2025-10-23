@@ -13,7 +13,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.system.DateTimeObserver.Event
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -32,7 +31,6 @@ interface DateTimeObserver {
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultDateTimeObserver(
     @ApplicationContext context: Context
 ) : DateTimeObserver {

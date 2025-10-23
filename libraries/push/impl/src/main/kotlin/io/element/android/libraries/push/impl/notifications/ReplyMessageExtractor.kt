@@ -11,14 +11,12 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
 interface ReplyMessageExtractor {
     fun getReplyMessage(intent: Intent): String?
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AndroidReplyMessageExtractor : ReplyMessageExtractor {
     override fun getReplyMessage(intent: Intent): String? {
         return RemoteInput.getResultsFromIntent(intent)

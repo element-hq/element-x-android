@@ -10,17 +10,18 @@ package io.element.android.features.wellknown.test
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.WellKnown
 import io.element.android.libraries.wellknown.api.WellknownRetriever
+import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.simulateLongTask
 
 class FakeWellknownRetriever(
-    private val getWellKnownResult: (String) -> WellKnown? = { null },
-    private val getElementWellKnownResult: (String) -> ElementWellKnown? = { null },
+    private val getWellKnownResult: (String) -> WellknownRetrieverResult<WellKnown> = { WellknownRetrieverResult.NotFound },
+    private val getElementWellKnownResult: (String) -> WellknownRetrieverResult<ElementWellKnown> = { WellknownRetrieverResult.NotFound },
 ) : WellknownRetriever {
-    override suspend fun getWellKnown(baseUrl: String): WellKnown? = simulateLongTask {
+    override suspend fun getWellKnown(baseUrl: String): WellknownRetrieverResult<WellKnown> = simulateLongTask {
         getWellKnownResult(baseUrl)
     }
 
-    override suspend fun getElementWellKnown(baseUrl: String): ElementWellKnown? = simulateLongTask {
+    override suspend fun getElementWellKnown(baseUrl: String): WellknownRetrieverResult<ElementWellKnown> = simulateLongTask {
         getElementWellKnownResult(baseUrl)
     }
 }

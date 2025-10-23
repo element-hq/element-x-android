@@ -9,7 +9,6 @@ package io.element.android.features.call.impl.utils
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.api.CurrentCallService
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultCurrentCallService : CurrentCallService {
     override val currentCall = MutableStateFlow<CurrentCall>(CurrentCall.None)
 

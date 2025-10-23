@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.WellknownRetriever
+import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -114,9 +115,11 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server element pro required error`() = runTest {
-        val getElementWellKnownResult = lambdaRecorder<String, ElementWellKnown> {
-            anElementWellKnown(
-                enforceElementPro = true,
+        val getElementWellKnownResult = lambdaRecorder<String, WellknownRetrieverResult<ElementWellKnown>> {
+            WellknownRetrieverResult.Success(
+                anElementWellKnown(
+                    enforceElementPro = true,
+                )
             )
         }
         createPresenter(

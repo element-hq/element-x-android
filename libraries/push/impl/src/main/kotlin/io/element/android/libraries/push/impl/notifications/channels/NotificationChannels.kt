@@ -20,7 +20,6 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -62,7 +61,6 @@ private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSI
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultNotificationChannels(
     private val notificationManager: NotificationManagerCompat,
     private val stringProvider: StringProvider,

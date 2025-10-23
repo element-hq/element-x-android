@@ -8,7 +8,6 @@ package io.element.android.libraries.push.impl.pushgateway
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
@@ -26,7 +25,6 @@ interface PushGatewayNotifyRequest {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPushGatewayNotifyRequest(
     private val pushGatewayApiFactory: PushGatewayApiFactory,
 ) : PushGatewayNotifyRequest {

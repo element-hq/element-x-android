@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.timeline
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.binding
 import io.element.android.features.messages.impl.timeline.di.LiveTimeline
@@ -44,7 +43,6 @@ import java.util.Optional
  */
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class, binding = binding<TimelineProvider>())
-@Inject
 class TimelineController(
     private val room: JoinedRoom,
     @LiveTimeline private val liveTimeline: Timeline,

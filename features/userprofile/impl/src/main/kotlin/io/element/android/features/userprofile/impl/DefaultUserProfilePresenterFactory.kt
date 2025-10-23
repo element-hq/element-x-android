@@ -8,7 +8,6 @@
 package io.element.android.features.userprofile.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
@@ -17,7 +16,6 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.UserId
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultUserProfilePresenterFactory(
     private val factory: UserProfilePresenter.Factory,
 ) : UserProfilePresenterFactory {

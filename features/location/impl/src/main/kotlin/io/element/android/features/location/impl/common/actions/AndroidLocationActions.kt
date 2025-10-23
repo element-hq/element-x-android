@@ -14,7 +14,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.location.api.Location
 import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -23,7 +22,6 @@ import timber.log.Timber
 import java.util.Locale
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AndroidLocationActions(
     @ApplicationContext private val context: Context
 ) : LocationActions {

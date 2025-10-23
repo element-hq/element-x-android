@@ -9,7 +9,6 @@ package io.element.android.features.rageshake.impl.reporter
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.RageshakeConfig
 
 fun interface BugReportAppNameProvider {
@@ -17,7 +16,6 @@ fun interface BugReportAppNameProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultBugReportAppNameProvider : BugReportAppNameProvider {
     override fun provide(): String = RageshakeConfig.BUG_REPORT_APP_NAME
 }

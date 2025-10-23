@@ -9,7 +9,6 @@ package io.element.android.features.preferences.impl.root
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -19,7 +18,6 @@ interface VersionFormatter {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultVersionFormatter(
     private val stringProvider: StringProvider,
     private val buildMeta: BuildMeta,

@@ -30,7 +30,8 @@ open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAn
             aSecurityAndPrivacyState(
                 savedSettings = aSecurityAndPrivacySettings(
                     roomAccess = SecurityAndPrivacyRoomAccess.SpaceMember
-                )
+                ),
+                isKnockEnabled = false,
             ),
             aSecurityAndPrivacyState(
                 editedSettings = aSecurityAndPrivacySettings(
@@ -53,6 +54,12 @@ open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAn
             ),
             aSecurityAndPrivacyState(
                 saveAction = AsyncAction.Loading
+            ),
+            aSecurityAndPrivacyState(
+                savedSettings = aSecurityAndPrivacySettings(
+                    roomAccess = SecurityAndPrivacyRoomAccess.AskToJoin
+                ),
+                isKnockEnabled = false,
             ),
         )
 }
@@ -83,6 +90,7 @@ fun aSecurityAndPrivacyState(
         canChangeEncryption = true,
         canChangeRoomVisibility = true
     ),
+    isKnockEnabled: Boolean = true,
     eventSink: (SecurityAndPrivacyEvents) -> Unit = {}
 ) = SecurityAndPrivacyState(
     editedSettings = editedSettings,
@@ -90,6 +98,7 @@ fun aSecurityAndPrivacyState(
     homeserverName = homeserverName,
     showEnableEncryptionConfirmation = showEncryptionConfirmation,
     saveAction = saveAction,
+    isKnockEnabled = isKnockEnabled,
     permissions = permissions,
     eventSink = eventSink
 )

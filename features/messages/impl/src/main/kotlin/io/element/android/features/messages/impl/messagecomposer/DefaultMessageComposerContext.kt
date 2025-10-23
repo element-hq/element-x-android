@@ -11,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.di.RoomScope
@@ -19,7 +18,6 @@ import io.element.android.libraries.textcomposer.model.MessageComposerMode
 
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultMessageComposerContext : MessageComposerContext {
     override var composerMode: MessageComposerMode by mutableStateOf(MessageComposerMode.Normal)
         internal set

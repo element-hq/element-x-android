@@ -20,7 +20,7 @@ lifecycle = "2.9.2"
 activity = "1.11.0"
 media3 = "1.8.0"
 camera = "1.5.1"
-work = "2.10.5"
+work = "2.11.0"
 
 # Compose
 compose_bom = "2025.07.00"
@@ -50,7 +50,7 @@ telephoto = "0.18.0"
 haze = "1.6.10"
 
 # Dependency analysis
-dependencyAnalysis = "3.1.0"
+dependencyAnalysis = "3.2.0"
 
 # DI
 metro = "0.7.2"
@@ -80,7 +80,7 @@ google_firebase_bom = "com.google.firebase:firebase-bom:34.4.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-google_tink = "com.google.crypto.tink:tink-android:1.18.0"
+google_tink = "com.google.crypto.tink:tink-android:1.19.0"
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -210,8 +210,8 @@ haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = 
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.24.0"
-sentry = "io.sentry:sentry-android:8.23.0"
+posthog = "com.posthog:posthog-android:3.25.0"
+sentry = "io.sentry:sentry-android:8.24.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 

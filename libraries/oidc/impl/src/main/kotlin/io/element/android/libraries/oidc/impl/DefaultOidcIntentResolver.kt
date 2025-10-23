@@ -10,12 +10,10 @@ package io.element.android.libraries.oidc.impl
 import android.content.Intent
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcIntentResolver
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultOidcIntentResolver(
     private val oidcUrlParser: OidcUrlParser,
 ) : OidcIntentResolver {

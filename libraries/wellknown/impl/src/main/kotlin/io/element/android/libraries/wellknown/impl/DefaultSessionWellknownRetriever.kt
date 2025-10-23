@@ -8,47 +8,58 @@
 package io.element.android.libraries.wellknown.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.SessionWellknownRetriever
 import io.element.android.libraries.wellknown.api.WellKnown
+import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import timber.log.Timber
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultSessionWellknownRetriever(
     private val matrixClient: MatrixClient,
     private val json: JsonProvider,
 ) : SessionWellknownRetriever {
     private val domain by lazy { matrixClient.userIdServerName() }
 
-    override suspend fun getWellKnown(): WellKnown? {
+    override suspend fun getWellKnown(): WellknownRetrieverResult<WellKnown> {
         val url = "https://$domain/.well-known/matrix/client"
         return matrixClient
             .getUrl(url)
             .mapCatchingExceptions {
                 val data = String(it)
-                json().decodeFromString(InternalWellKnown.serializer(), data)
+                json().decodeFromString<InternalWellKnown>(data).map()
             }
-            .onFailure { Timber.e(it, "Failed to retrieve .well-known from $domain") }
-            .map { it.map() }
-            .getOrNull()
+            .toWellknownRetrieverResult()
     }
 
-    override suspend fun getElementWellKnown(): ElementWellKnown? {
+    override suspend fun getElementWellKnown(): WellknownRetrieverResult<ElementWellKnown> {
         val url = "https://$domain/.well-known/element/element.json"
         return matrixClient
             .getUrl(url)
             .mapCatchingExceptions {
                 val data = String(it)
-                json().decodeFromString(InternalElementWellKnown.serializer(), data)
+                json().decodeFromString<InternalElementWellKnown>(data).map()
             }
-            .onFailure { Timber.e(it, "Failed to retrieve Element .well-known from $domain") }
-            .map { it.map() }
-            .getOrNull()
+            .toWellknownRetrieverResult()
     }
+
+    private fun <T> Result<T>.toWellknownRetrieverResult(): WellknownRetrieverResult<T> = fold(
+        onSuccess = {
+            WellknownRetrieverResult.Success(it)
+        },
+        onFailure = {
+            Timber.e(it, "Failed to retrieve Element .well-known from $domain")
+            // This check on message value is not ideal but this is what we got from the SDK.
+            if ((it as? ClientException.Generic)?.message?.contains("404") == true) {
+                WellknownRetrieverResult.NotFound
+            } else {
+                WellknownRetrieverResult.Error(it as Exception)
+            }
+        }
+    )
 }

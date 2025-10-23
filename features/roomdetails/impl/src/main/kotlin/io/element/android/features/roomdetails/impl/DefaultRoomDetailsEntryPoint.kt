@@ -12,14 +12,12 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint.InitialTarget
 import io.element.android.features.roomdetails.impl.RoomDetailsFlowNode.NavTarget
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultRoomDetailsEntryPoint : RoomDetailsEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDetailsEntryPoint.NodeBuilder {
         return object : RoomDetailsEntryPoint.NodeBuilder {

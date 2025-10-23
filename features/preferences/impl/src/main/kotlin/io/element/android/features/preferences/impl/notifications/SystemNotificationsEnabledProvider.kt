@@ -10,7 +10,6 @@ package io.element.android.features.preferences.impl.notifications
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 
 interface SystemNotificationsEnabledProvider {
@@ -19,7 +18,6 @@ interface SystemNotificationsEnabledProvider {
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultSystemNotificationsEnabledProvider(
     private val notificationManager: NotificationManagerCompat,
 ) : SystemNotificationsEnabledProvider {

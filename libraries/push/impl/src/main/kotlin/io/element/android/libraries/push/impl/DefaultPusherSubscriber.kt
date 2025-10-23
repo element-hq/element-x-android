@@ -9,7 +9,6 @@ package io.element.android.libraries.push.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.PushConfig
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -30,7 +29,6 @@ internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 private val loggerTag = LoggerTag("DefaultPusherSubscriber", LoggerTag.PushLoggerTag)
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPusherSubscriber(
     private val buildMeta: BuildMeta,
     private val pushClientSecret: PushClientSecret,

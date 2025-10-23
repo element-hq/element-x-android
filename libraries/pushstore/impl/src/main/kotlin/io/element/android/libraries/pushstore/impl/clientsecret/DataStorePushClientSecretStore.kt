@@ -11,14 +11,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 import kotlinx.coroutines.flow.first
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DataStorePushClientSecretStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : PushClientSecretStore {

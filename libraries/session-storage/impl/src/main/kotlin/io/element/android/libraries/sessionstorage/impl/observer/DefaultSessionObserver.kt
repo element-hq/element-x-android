@@ -9,7 +9,6 @@ package io.element.android.libraries.sessionstorage.impl.observer
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.annotations.AppCoroutineScope
@@ -27,7 +26,6 @@ import java.util.concurrent.CopyOnWriteArraySet
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultSessionObserver(
     private val sessionStore: SessionStore,
     @AppCoroutineScope

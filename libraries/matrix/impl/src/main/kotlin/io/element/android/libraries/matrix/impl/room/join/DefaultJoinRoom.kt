@@ -8,7 +8,6 @@
 package io.element.android.libraries.matrix.impl.room.join
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.SessionScope
@@ -21,7 +20,6 @@ import io.element.android.libraries.matrix.impl.analytics.toAnalyticsJoinedRoom
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultJoinRoom(
     private val client: MatrixClient,
     private val analyticsService: AnalyticsService,

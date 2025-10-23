@@ -11,13 +11,11 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultRoomSelectEntryPoint : RoomSelectEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomSelectEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()

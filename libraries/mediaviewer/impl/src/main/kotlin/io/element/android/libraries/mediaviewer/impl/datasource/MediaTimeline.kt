@@ -8,7 +8,6 @@
 package io.element.android.libraries.mediaviewer.impl.datasource
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -36,7 +35,6 @@ interface MediaTimeline {
  */
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
-@Inject
 class LiveMediaTimeline(
     private val room: JoinedRoom,
 ) : MediaTimeline {

@@ -12,7 +12,6 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -78,7 +77,6 @@ interface NotifiableEventResolver {
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultNotifiableEventResolver(
     private val stringProvider: StringProvider,
     private val matrixClientProvider: MatrixClientProvider,

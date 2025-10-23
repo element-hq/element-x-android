@@ -13,7 +13,6 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
@@ -30,7 +29,6 @@ interface FileShare {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultFileShare(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,

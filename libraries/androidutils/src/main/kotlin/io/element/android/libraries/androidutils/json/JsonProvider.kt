@@ -9,7 +9,6 @@ package io.element.android.libraries.androidutils.json
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.json.Json
@@ -21,7 +20,6 @@ interface JsonProvider : Provider<Json>
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultJsonProvider : JsonProvider {
     private val json: Json by lazy { Json { ignoreUnknownKeys = true } }
     override fun invoke() = json

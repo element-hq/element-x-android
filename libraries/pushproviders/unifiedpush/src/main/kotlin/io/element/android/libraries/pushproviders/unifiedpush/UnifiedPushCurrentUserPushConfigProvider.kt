@@ -9,7 +9,6 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -20,7 +19,6 @@ interface UnifiedPushCurrentUserPushConfigProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultUnifiedPushCurrentUserPushConfigProvider(
     private val pushClientSecret: PushClientSecret,
     private val unifiedPushStore: UnifiedPushStore,

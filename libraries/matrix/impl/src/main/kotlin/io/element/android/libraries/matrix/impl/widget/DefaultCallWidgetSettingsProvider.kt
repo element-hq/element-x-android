@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.impl.widget
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsProvider
@@ -25,7 +24,6 @@ import uniffi.matrix_sdk.VirtualElementCallWidgetProperties
 import uniffi.matrix_sdk.Intent as CallIntent
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultCallWidgetSettingsProvider(
     private val buildMeta: BuildMeta,
     private val callAnalyticsCredentialsProvider: CallAnalyticCredentialsProvider,

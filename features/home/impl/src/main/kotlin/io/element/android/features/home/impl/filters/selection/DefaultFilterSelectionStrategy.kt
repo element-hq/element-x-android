@@ -8,13 +8,11 @@
 package io.element.android.features.home.impl.filters.selection
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.home.impl.filters.RoomListFilter
 import io.element.android.libraries.di.SessionScope
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultFilterSelectionStrategy : FilterSelectionStrategy {
     private val selectedFilters = LinkedHashSet<RoomListFilter>()
 

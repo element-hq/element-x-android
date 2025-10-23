@@ -9,7 +9,6 @@ package io.element.android.libraries.pushproviders.firebase
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -30,7 +29,6 @@ interface FirebaseNewTokenHandler {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultFirebaseNewTokenHandler(
     private val pusherSubscriber: PusherSubscriber,
     private val sessionStore: SessionStore,

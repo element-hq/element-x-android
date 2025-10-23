@@ -8,7 +8,6 @@
 package io.element.android.features.login.impl.qrcode
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.login.impl.di.QrCodeLoginScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 @SingleIn(QrCodeLoginScope::class)
 @ContributesBinding(QrCodeLoginScope::class)
-@Inject
 class DefaultQrCodeLoginManager(
     private val authenticationService: MatrixAuthenticationService,
 ) : QrCodeLoginManager {

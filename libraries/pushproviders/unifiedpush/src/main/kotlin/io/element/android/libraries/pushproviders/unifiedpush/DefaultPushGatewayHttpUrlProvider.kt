@@ -9,7 +9,6 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.EnterpriseService
 
 interface DefaultPushGatewayHttpUrlProvider {
@@ -17,7 +16,6 @@ interface DefaultPushGatewayHttpUrlProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultDefaultPushGatewayHttpUrlProvider(
     private val enterpriseService: EnterpriseService,
 ) : DefaultPushGatewayHttpUrlProvider {

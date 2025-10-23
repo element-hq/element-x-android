@@ -8,12 +8,10 @@
 package io.element.android.features.enterprise.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.libraries.di.SessionScope
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultSessionEnterpriseService : SessionEnterpriseService {
     override suspend fun init() = Unit
     override suspend fun isElementCallAvailable(): Boolean = true

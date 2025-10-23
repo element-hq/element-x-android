@@ -12,7 +12,6 @@ import android.graphics.Bitmap
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.bitmap.writeBitmap
 import io.element.android.libraries.androidutils.file.safeDelete
@@ -21,7 +20,6 @@ import java.io.File
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultScreenshotHolder(
     @ApplicationContext private val context: Context,
 ) : ScreenshotHolder {

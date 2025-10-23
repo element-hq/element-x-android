@@ -9,7 +9,6 @@ package io.element.android.libraries.push.impl.notifications
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.di.annotations.AppCoroutineScope
@@ -43,7 +42,6 @@ interface NotificationResolverQueue {
 @OptIn(ExperimentalCoroutinesApi::class)
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultNotificationResolverQueue(
     private val notifiableEventResolver: NotifiableEventResolver,
     @AppCoroutineScope

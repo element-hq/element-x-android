@@ -9,7 +9,6 @@ package io.element.android.features.preferences.impl.tasks
 
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -23,7 +22,6 @@ interface ComputeCacheSizeUseCase {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultComputeCacheSizeUseCase(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,

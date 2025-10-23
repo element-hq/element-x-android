@@ -11,7 +11,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -45,7 +44,6 @@ private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultNotificationDrawerManager(
     private val notificationManager: NotificationManagerCompat,
     private val notificationRenderer: NotificationRenderer,

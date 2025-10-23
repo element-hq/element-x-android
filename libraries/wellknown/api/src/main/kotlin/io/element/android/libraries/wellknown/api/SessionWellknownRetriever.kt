@@ -8,6 +8,6 @@
 package io.element.android.libraries.wellknown.api
 
 interface SessionWellknownRetriever {
-    suspend fun getWellKnown(): WellKnown?
-    suspend fun getElementWellKnown(): ElementWellKnown?
+    suspend fun getWellKnown(): WellknownRetrieverResult<WellKnown>
+    suspend fun getElementWellKnown(): WellknownRetrieverResult<ElementWellKnown>
 }

@@ -12,12 +12,10 @@ import android.os.Build
 import android.text.format.Formatter
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AndroidFileSizeFormatter(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider,

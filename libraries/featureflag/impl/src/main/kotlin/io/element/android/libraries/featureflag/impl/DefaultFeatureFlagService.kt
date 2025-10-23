@@ -9,7 +9,6 @@ package io.element.android.libraries.featureflag.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.Feature
@@ -19,7 +18,6 @@ import kotlinx.coroutines.flow.flowOf
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultFeatureFlagService(
     private val providers: Set<@JvmSuppressWildcards FeatureFlagProvider>,
     private val buildMeta: BuildMeta,

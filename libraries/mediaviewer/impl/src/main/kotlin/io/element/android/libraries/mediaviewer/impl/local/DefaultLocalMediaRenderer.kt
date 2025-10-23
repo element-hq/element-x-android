@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
@@ -22,7 +21,6 @@ import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultLocalMediaRenderer(
     private val textFileViewer: TextFileViewer,
     private val audioFocus: AudioFocus,

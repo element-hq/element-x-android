@@ -16,7 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionPresenter
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionState
@@ -30,7 +29,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultRageshakeDetectionPresenter(
     private val screenshotHolder: ScreenshotHolder,
     private val rageShake: RageShake,

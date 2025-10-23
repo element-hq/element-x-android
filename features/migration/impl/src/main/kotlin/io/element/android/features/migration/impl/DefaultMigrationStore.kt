@@ -11,7 +11,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,7 +18,6 @@ import kotlinx.coroutines.flow.map
 private val applicationMigrationVersion = intPreferencesKey("applicationMigrationVersion")
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultMigrationStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : MigrationStore {

@@ -14,7 +14,6 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getFileName
@@ -50,7 +49,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AndroidMediaPreProcessor(
     @ApplicationContext private val context: Context,
     private val thumbnailFactory: ThumbnailFactory,

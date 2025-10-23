@@ -16,7 +16,6 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.core.coroutine.withPreviousValue
@@ -46,7 +45,6 @@ import timber.log.Timber
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultNotificationConversationService(
     @ApplicationContext private val context: Context,
     private val intentProvider: IntentProvider,

@@ -9,7 +9,6 @@ package io.element.android.features.viewfolder.impl.folder
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.viewfolder.impl.model.Item
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -21,7 +20,6 @@ interface FolderExplorer {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultFolderExplorer(
     private val fileSizeFormatter: FileSizeFormatter,
     private val dispatchers: CoroutineDispatchers,

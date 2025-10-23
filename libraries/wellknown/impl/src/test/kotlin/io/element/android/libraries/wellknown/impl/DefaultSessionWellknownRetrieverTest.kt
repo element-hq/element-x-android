@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.WellKnown
 import io.element.android.libraries.wellknown.api.WellKnownBaseConfig
+import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
@@ -29,9 +30,11 @@ class DefaultSessionWellknownRetrieverTest {
             getUrlLambda = getUrlLambda,
         )
         assertThat(sut.getWellKnown()).isEqualTo(
-            WellKnown(
-                homeServer = null,
-                identityServer = null,
+            WellknownRetrieverResult.Success(
+                WellKnown(
+                    homeServer = null,
+                    identityServer = null,
+                )
             )
         )
         getUrlLambda.assertions().isCalledOnce()
@@ -55,13 +58,15 @@ class DefaultSessionWellknownRetrieverTest {
             }
         )
         assertThat(sut.getWellKnown()).isEqualTo(
-            WellKnown(
-                homeServer = WellKnownBaseConfig(
-                    baseURL = "https://example.org",
-                ),
-                identityServer = WellKnownBaseConfig(
-                    baseURL = "https://identity.example.org",
-                ),
+            WellknownRetrieverResult.Success(
+                WellKnown(
+                    homeServer = WellKnownBaseConfig(
+                        baseURL = "https://example.org",
+                    ),
+                    identityServer = WellKnownBaseConfig(
+                        baseURL = "https://identity.example.org",
+                    ),
+                )
             )
         )
     }
@@ -81,13 +86,15 @@ class DefaultSessionWellknownRetrieverTest {
             }
         )
         assertThat(sut.getWellKnown()).isEqualTo(
-            WellKnown(
-                homeServer = WellKnownBaseConfig(
-                    baseURL = "https://example.org",
-                ),
-                identityServer = WellKnownBaseConfig(
-                    baseURL = null,
-                ),
+            WellknownRetrieverResult.Success(
+                WellKnown(
+                    homeServer = WellKnownBaseConfig(
+                        baseURL = "https://example.org",
+                    ),
+                    identityServer = WellKnownBaseConfig(
+                        baseURL = null,
+                    ),
+                )
             )
         )
     }
@@ -110,13 +117,15 @@ class DefaultSessionWellknownRetrieverTest {
             },
         )
         assertThat(sut.getWellKnown()).isEqualTo(
-            WellKnown(
-                homeServer = WellKnownBaseConfig(
-                    baseURL = "https://example.org",
-                ),
-                identityServer = WellKnownBaseConfig(
-                    baseURL = "https://identity.example.org",
-                ),
+            WellknownRetrieverResult.Success(
+                WellKnown(
+                    homeServer = WellKnownBaseConfig(
+                        baseURL = "https://example.org",
+                    ),
+                    identityServer = WellKnownBaseConfig(
+                        baseURL = "https://identity.example.org",
+                    ),
+                )
             )
         )
     }
@@ -135,7 +144,7 @@ class DefaultSessionWellknownRetrieverTest {
                 )
             }
         )
-        assertThat(sut.getWellKnown()).isNull()
+        assertThat(sut.getWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
     }
 
     @Test
@@ -145,7 +154,7 @@ class DefaultSessionWellknownRetrieverTest {
                 Result.failure(AN_EXCEPTION)
             }
         )
-        assertThat(sut.getWellKnown()).isNull()
+        assertThat(sut.getWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
     }
 
     @Test
@@ -157,11 +166,13 @@ class DefaultSessionWellknownRetrieverTest {
             getUrlLambda = getUrlLambda,
         )
         assertThat(sut.getElementWellKnown()).isEqualTo(
-            ElementWellKnown(
-                registrationHelperUrl = null,
-                enforceElementPro = null,
-                rageshakeUrl = null,
-                brandColor = null,
+            WellknownRetrieverResult.Success(
+                ElementWellKnown(
+                    registrationHelperUrl = null,
+                    enforceElementPro = null,
+                    rageshakeUrl = null,
+                    brandColor = null,
+                )
             )
         )
         getUrlLambda.assertions().isCalledOnce()
@@ -183,11 +194,13 @@ class DefaultSessionWellknownRetrieverTest {
             }
         )
         assertThat(sut.getElementWellKnown()).isEqualTo(
-            ElementWellKnown(
-                registrationHelperUrl = "a_registration_url",
-                enforceElementPro = true,
-                rageshakeUrl = "a_rageshake_url",
-                brandColor = "#FF0000",
+            WellknownRetrieverResult.Success(
+                ElementWellKnown(
+                    registrationHelperUrl = "a_registration_url",
+                    enforceElementPro = true,
+                    rageshakeUrl = "a_rageshake_url",
+                    brandColor = "#FF0000",
+                )
             )
         )
     }
@@ -207,11 +220,13 @@ class DefaultSessionWellknownRetrieverTest {
             },
         )
         assertThat(sut.getElementWellKnown()).isEqualTo(
-            ElementWellKnown(
-                registrationHelperUrl = "a_registration_url",
-                enforceElementPro = true,
-                rageshakeUrl = "a_rageshake_url",
-                brandColor = null,
+            WellknownRetrieverResult.Success(
+                ElementWellKnown(
+                    registrationHelperUrl = "a_registration_url",
+                    enforceElementPro = true,
+                    rageshakeUrl = "a_rageshake_url",
+                    brandColor = null,
+                )
             )
         )
     }
@@ -228,7 +243,7 @@ class DefaultSessionWellknownRetrieverTest {
                 )
             }
         )
-        assertThat(sut.getElementWellKnown()).isNull()
+        assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
     }
 
     @Test
@@ -238,7 +253,7 @@ class DefaultSessionWellknownRetrieverTest {
                 Result.failure(AN_EXCEPTION)
             }
         )
-        assertThat(sut.getElementWellKnown()).isNull()
+        assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
     }
 
     private fun createDefaultSessionWellknownRetriever(

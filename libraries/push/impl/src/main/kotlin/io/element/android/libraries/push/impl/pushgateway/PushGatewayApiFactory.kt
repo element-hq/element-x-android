@@ -9,7 +9,6 @@ package io.element.android.libraries.push.impl.pushgateway
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.network.RetrofitFactory
 
 interface PushGatewayApiFactory {
@@ -17,7 +16,6 @@ interface PushGatewayApiFactory {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPushGatewayApiFactory(
     private val retrofitFactory: RetrofitFactory,
 ) : PushGatewayApiFactory {

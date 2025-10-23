@@ -9,7 +9,6 @@ package io.element.android.features.lockscreen.impl.pin
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
@@ -22,7 +21,6 @@ private const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_PIN_CODE"
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultPinCodeManager(
     private val secretKeyRepository: SecretKeyRepository,
     private val encryptionDecryptionService: EncryptionDecryptionService,
