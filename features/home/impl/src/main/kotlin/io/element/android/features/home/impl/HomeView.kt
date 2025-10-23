@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -194,11 +192,24 @@ private fun HomeScaffold(
         },
         bottomBar = {
             if (state.showNavigationBar) {
+                val coroutineScope = rememberCoroutineScope()
                 HomeNavigationBar(
                     hazeState = hazeState,
                     state = state,
-                    roomsLazyListState = roomsLazyListState,
-                    spacesLazyListState = spacesLazyListState,
+                    onItemReselect = { item ->
+                        val targetLazyListState = when (item) {
+                            HomeNavigationBarItem.Chats -> roomsLazyListState
+                            HomeNavigationBarItem.Spaces -> spacesLazyListState
+                        }
+                        coroutineScope.launch {
+                            if (targetLazyListState.firstVisibleItemIndex > 10) {
+                                targetLazyListState.scrollToItem(10)
+                            }
+                            // Force heightOffset to 0 as it's not triggered by scrollToItem otherwise
+                            scrollBehavior.state.heightOffset = 0f
+                            targetLazyListState.animateScrollToItem(0)
+                        }
+                    }
                 )
             }
         },
@@ -225,26 +236,26 @@ private fun HomeScaffold(
                             // top = padding.calculateTopPadding()
                         ),
                         modifier = Modifier
-                                .padding(
-                                        PaddingValues(
-                                                start = padding.calculateStartPadding(LocalLayoutDirection.current),
-                                                end = padding.calculateEndPadding(LocalLayoutDirection.current),
-                                                // Remove these two lines once https://issuetracker.google.com/issues/436432313 has been fixed
-                                                bottom = padding.calculateBottomPadding(),
-                                                top = padding.calculateTopPadding()
-                                        )
+                            .padding(
+                                PaddingValues(
+                                    start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                                    end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                                    // Remove these two lines once https://issuetracker.google.com/issues/436432313 has been fixed
+                                    bottom = padding.calculateBottomPadding(),
+                                    top = padding.calculateTopPadding()
                                 )
-                                .consumeWindowInsets(padding)
-                                .hazeSource(state = hazeState)
+                            )
+                            .consumeWindowInsets(padding)
+                            .hazeSource(state = hazeState)
                     )
                 }
                 HomeNavigationBarItem.Spaces -> {
                     HomeSpacesView(
                         modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding)
-                                .consumeWindowInsets(padding)
-                                .hazeSource(state = hazeState),
+                            .fillMaxSize()
+                            .padding(padding)
+                            .consumeWindowInsets(padding)
+                            .hazeSource(state = hazeState),
                         state = state.homeSpacesState,
                         lazyListState = spacesLazyListState,
                         onSpaceClick = { spaceId ->
@@ -270,14 +281,13 @@ private fun HomeScaffold(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeNavigationBar(
     hazeState: HazeState,
     state: HomeState,
-    roomsLazyListState: LazyListState,
-    spacesLazyListState: LazyListState,
+    onItemReselect: (HomeNavigationBarItem) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     NavigationBar(
         containerColor = Color.Transparent,
         modifier = Modifier
@@ -291,15 +301,7 @@ private fun HomeNavigationBar(
             NavigationBarItem(
                 selected = isSelected,
                 onClick = {
-                    if (isSelected) {
-                        val targetLazyListState = when (item) {
-                            HomeNavigationBarItem.Chats -> roomsLazyListState
-                            HomeNavigationBarItem.Spaces -> spacesLazyListState
-                        }
-                        coroutineScope.launch {
-                            targetLazyListState.scrollToItem(0)
-                        }
-                    }
+                    if (isSelected) onItemReselect(item)
                     state.eventSink(HomeEvents.SelectHomeNavigationBarItem(item))
                 },
                 icon = {
