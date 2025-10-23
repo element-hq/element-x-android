@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -181,7 +182,8 @@ class DefaultNotificationDrawerManager(
      * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
      */
     private fun onEnteringThread(sessionId: SessionId, roomId: RoomId, threadId: ThreadId) {
-        notificationManager.cancel("$roomId|$threadId", NotificationIdProvider.getRoomMessagesNotificationId(sessionId))
+        val tag = NotificationCreator.messageTag(roomId, threadId)
+        notificationManager.cancel(tag, NotificationIdProvider.getRoomMessagesNotificationId(sessionId))
         clearSummaryNotificationIfNeeded(sessionId)
     }
 

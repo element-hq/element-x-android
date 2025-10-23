@@ -15,6 +15,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -64,11 +65,10 @@ class NotificationRenderer(
         }
 
         roomNotifications.forEach { notificationData ->
-            val tag = if (notificationData.threadId != null) {
-                "${notificationData.roomId}|${notificationData.threadId}"
-            } else {
-                notificationData.roomId.value
-            }
+            val tag = NotificationCreator.messageTag(
+                roomId = notificationData.roomId,
+                threadId = notificationData.threadId
+            )
             notificationDisplayer.showNotificationMessage(
                 tag = tag,
                 id = NotificationIdProvider.getRoomMessagesNotificationId(currentUser.userId),

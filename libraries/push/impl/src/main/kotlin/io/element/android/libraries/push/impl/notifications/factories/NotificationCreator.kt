@@ -20,6 +20,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -86,6 +87,17 @@ interface NotificationCreator {
     fun createDiagnosticNotification(
         @ColorInt color: Int,
     ): Notification
+
+    companion object {
+        /**
+         * Creates a tag for a message notification given its [roomId] and optional [threadId].
+         */
+        fun messageTag(roomId: RoomId, threadId: ThreadId?): String = if (threadId != null) {
+            "$roomId|$threadId"
+        } else {
+            roomId.value
+        }
+    }
 }
 
 @ContributesBinding(AppScope::class)
