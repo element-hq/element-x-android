@@ -183,9 +183,9 @@ class DefaultPushHandler(
                     }
                 }
 
-                // Process redactions of messages
+                // Process redactions of messages in background to not block operations with higher priority
                 if (redactions.isNotEmpty()) {
-                    onRedactedEventReceived.onRedactedEventsReceived(redactions)
+                    appCoroutineScope.launch { onRedactedEventReceived.onRedactedEventsReceived(redactions) }
                 }
 
                 // Find and process ringing call notifications separately

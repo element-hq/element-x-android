@@ -14,11 +14,20 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import timber.log.Timber
 
 interface ActiveNotificationsProvider {
-    fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification>
+    /**
+     * Gets the displayed notifications for the combination of [sessionId], [roomId] and [threadId].
+     */
+    fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId, threadId: ThreadId?): List<StatusBarNotification>
+
+    /**
+     * Gets all displayed notifications associated to [sessionId] and [roomId]. These will include all thread notifications as well.
+     */
+    fun getAllMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification>
     fun getNotificationsForSession(sessionId: SessionId): List<StatusBarNotification>
     fun getMembershipNotificationForSession(sessionId: SessionId): List<StatusBarNotification>
     fun getMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification>
@@ -44,9 +53,19 @@ class DefaultActiveNotificationsProvider(
         return getNotificationsForSession(sessionId).filter { it.id == notificationId }
     }
 
-    override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
+    override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId, threadId: ThreadId?): List<StatusBarNotification> {
         val notificationId = NotificationIdProvider.getRoomMessagesNotificationId(sessionId)
-        return getNotificationsForSession(sessionId).filter { it.id == notificationId && it.tag == roomId.value }
+        val expectedTag = if (threadId != null) {
+            "${roomId.value}|${threadId.value}"
+        } else {
+            roomId.value
+        }
+        return getNotificationsForSession(sessionId).filter { it.id == notificationId && it.tag == expectedTag }
+    }
+
+    override fun getAllMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
+        val notificationId = NotificationIdProvider.getRoomMessagesNotificationId(sessionId)
+        return getNotificationsForSession(sessionId).filter { it.id == notificationId && it.tag.startsWith(roomId.value) }
     }
 
     override fun getMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {

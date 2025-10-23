@@ -16,7 +16,6 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.impl.notifications.ActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.NotificationDisplayer
@@ -24,71 +23,63 @@ import io.element.android.libraries.push.impl.notifications.factories.DefaultNot
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 interface OnRedactedEventReceived {
-    fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>)
+    suspend fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>)
 }
 
 @ContributesBinding(AppScope::class)
 class DefaultOnRedactedEventReceived(
     private val activeNotificationsProvider: ActiveNotificationsProvider,
     private val notificationDisplayer: NotificationDisplayer,
-    @AppCoroutineScope
-    private val coroutineScope: CoroutineScope,
     @ApplicationContext private val context: Context,
     private val stringProvider: StringProvider,
 ) : OnRedactedEventReceived {
-    override fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>) {
-        coroutineScope.launch {
-            val redactionsBySessionIdAndRoom = redactions.groupBy { redaction ->
-                redaction.sessionId to redaction.roomId
+    override suspend fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>) {
+        val redactionsBySessionIdAndRoom = redactions.groupBy { redaction ->
+            redaction.sessionId to redaction.roomId
+        }
+        for ((keys, roomRedactions) in redactionsBySessionIdAndRoom) {
+            val (sessionId, roomId) = keys
+            // Get all notifications for the room, including those for threads
+            val notifications = activeNotificationsProvider.getAllMessageNotificationsForRoom(sessionId, roomId)
+            if (notifications.isEmpty()) {
+                Timber.d("No notifications found for redacted event")
             }
-            for ((keys, roomRedactions) in redactionsBySessionIdAndRoom) {
-                val (sessionId, roomId) = keys
-                val notifications = activeNotificationsProvider.getMessageNotificationsForRoom(
-                    sessionId,
-                    roomId,
+            notifications.forEach { statusBarNotification ->
+                val notification = statusBarNotification.notification
+                val messagingStyle = MessagingStyle.extractMessagingStyleFromNotification(notification)
+                if (messagingStyle == null) {
+                    Timber.w("Unable to retrieve messaging style from notification")
+                    return@forEach
+                }
+                val messageToRedactIndex = messagingStyle.messages.indexOfFirst { message ->
+                    roomRedactions.any { it.redactedEventId.value == message.extras.getString(DefaultNotificationCreator.MESSAGE_EVENT_ID) }
+                }
+                if (messageToRedactIndex == -1) {
+                    Timber.d("Unable to find the message to remove from notification")
+                    return@forEach
+                }
+                val oldMessage = messagingStyle.messages[messageToRedactIndex]
+                val content = buildSpannedString {
+                    inSpans(StyleSpan(Typeface.ITALIC)) {
+                        append(stringProvider.getString(CommonStrings.common_message_removed))
+                    }
+                }
+                val newMessage = MessagingStyle.Message(
+                    content,
+                    oldMessage.timestamp,
+                    oldMessage.person
                 )
-                if (notifications.isEmpty()) {
-                    Timber.d("No notifications found for redacted event")
-                }
-                notifications.forEach { statusBarNotification ->
-                    val notification = statusBarNotification.notification
-                    val messagingStyle = MessagingStyle.extractMessagingStyleFromNotification(notification)
-                    if (messagingStyle == null) {
-                        Timber.w("Unable to retrieve messaging style from notification")
-                        return@forEach
-                    }
-                    val messageToRedactIndex = messagingStyle.messages.indexOfFirst { message ->
-                        roomRedactions.any { it.redactedEventId.value == message.extras.getString(DefaultNotificationCreator.MESSAGE_EVENT_ID) }
-                    }
-                    if (messageToRedactIndex == -1) {
-                        Timber.d("Unable to find the message to remove from notification")
-                        return@forEach
-                    }
-                    val oldMessage = messagingStyle.messages[messageToRedactIndex]
-                    val content = buildSpannedString {
-                        inSpans(StyleSpan(Typeface.ITALIC)) {
-                            append(stringProvider.getString(CommonStrings.common_message_removed))
-                        }
-                    }
-                    val newMessage = MessagingStyle.Message(
-                        content,
-                        oldMessage.timestamp,
-                        oldMessage.person
-                    )
-                    messagingStyle.messages[messageToRedactIndex] = newMessage
-                    notificationDisplayer.showNotificationMessage(
-                        statusBarNotification.tag,
-                        statusBarNotification.id,
-                        NotificationCompat.Builder(context, notification)
-                            .setStyle(messagingStyle)
-                            .build()
-                    )
-                }
+                messagingStyle.messages[messageToRedactIndex] = newMessage
+                notificationDisplayer.showNotificationMessage(
+                    statusBarNotification.tag,
+                    statusBarNotification.id,
+                    NotificationCompat.Builder(context, notification)
+                        .setStyle(messagingStyle)
+                        .build()
+                )
             }
         }
     }
