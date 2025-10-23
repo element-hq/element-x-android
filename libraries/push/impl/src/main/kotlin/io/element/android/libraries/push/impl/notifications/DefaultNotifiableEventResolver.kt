@@ -17,6 +17,8 @@ import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -85,6 +87,7 @@ class DefaultNotifiableEventResolver(
     private val permalinkParser: PermalinkParser,
     private val callNotificationEventResolver: CallNotificationEventResolver,
     private val fallbackNotificationFactory: FallbackNotificationFactory,
+    private val featureFlagService: FeatureFlagService,
 ) : NotifiableEventResolver {
     override suspend fun resolveEvents(
         sessionId: SessionId,
@@ -141,7 +144,7 @@ class DefaultNotifiableEventResolver(
                     senderId = content.senderId,
                     roomId = roomId,
                     eventId = eventId,
-                    threadId = threadId,
+                    threadId = threadId.takeIf { featureFlagService.isFeatureEnabled(FeatureFlags.Threads) },
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,

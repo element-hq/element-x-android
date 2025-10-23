@@ -12,6 +12,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
@@ -41,8 +42,7 @@ class NotificationMapper(
                 NotificationData(
                     sessionId = sessionId,
                     eventId = eventId,
-                    // FIXME once the `NotificationItem` in the SDK returns the thread id
-                    threadId = null,
+                    threadId = item.threadId?.let(::ThreadId),
                     roomId = roomId,
                     senderAvatarUrl = item.senderInfo.avatarUrl,
                     senderDisplayName = item.senderInfo.displayName,

@@ -47,6 +47,7 @@ object NotificationIdProvider {
     private const val ROOM_INVITATION_NOTIFICATION_ID = 3
 
     private const val FOREGROUND_SERVICE_NOTIFICATION_ID = 4
+    private const val ROOM_CALL_NOTIFICATION_ID = 5
 }
 
 enum class ForegroundServiceType(val id: Int) {

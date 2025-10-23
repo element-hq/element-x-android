@@ -64,8 +64,13 @@ class NotificationRenderer(
         }
 
         roomNotifications.forEach { notificationData ->
+            val tag = if (notificationData.threadId != null) {
+                "${notificationData.roomId}|${notificationData.threadId}"
+            } else {
+                notificationData.roomId.value
+            }
             notificationDisplayer.showNotificationMessage(
-                tag = notificationData.roomId.value,
+                tag = tag,
                 id = NotificationIdProvider.getRoomMessagesNotificationId(currentUser.userId),
                 notification = notificationData.notification
             )

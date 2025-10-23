@@ -14,6 +14,7 @@ import coil3.ImageLoader
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.R
@@ -27,6 +28,7 @@ interface RoomGroupMessageCreator {
         currentUser: MatrixUser,
         events: List<NotifiableMessageEvent>,
         roomId: RoomId,
+        threadId: ThreadId?,
         imageLoader: ImageLoader,
         existingNotification: Notification?,
         @ColorInt color: Int,
@@ -43,6 +45,7 @@ class DefaultRoomGroupMessageCreator(
         currentUser: MatrixUser,
         events: List<NotifiableMessageEvent>,
         roomId: RoomId,
+        threadId: ThreadId?,
         imageLoader: ImageLoader,
         existingNotification: Notification?,
         @ColorInt color: Int,
@@ -73,7 +76,7 @@ class DefaultRoomGroupMessageCreator(
                 customSound = events.last().soundName,
                 isUpdated = events.last().isUpdated,
             ),
-            threadId = lastKnownRoomEvent.threadId,
+            threadId = threadId,
             largeIcon = largeBitmap,
             lastMessageTimestamp = lastMessageTimestamp,
             tickerText = tickerText,
