@@ -180,10 +180,9 @@ class DefaultNotificationDrawerManager(
      * Should be called when the application is currently opened and showing timeline for the given threadId.
      * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
      */
-    @Suppress("UNUSED_PARAMETER")
     private fun onEnteringThread(sessionId: SessionId, roomId: RoomId, threadId: ThreadId) {
-        // TODO maybe we'll have to embed more data in the tag to get a threadId
-        // Do nothing for now
+        notificationManager.cancel("$roomId|$threadId", NotificationIdProvider.getRoomMessagesNotificationId(sessionId))
+        clearSummaryNotificationIfNeeded(sessionId)
     }
 
     private suspend fun renderEvents(eventsToRender: List<NotifiableEvent>) {

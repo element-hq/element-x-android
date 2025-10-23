@@ -64,6 +64,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -85,6 +86,7 @@ class ThreadedMessagesNode(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
+    private val appNavigationStateService: AppNavigationStateService,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val callbacks = plugins<Callback>()
 
@@ -130,6 +132,12 @@ class ThreadedMessagesNode(
         lifecycle.subscribe(
             onCreate = {
                 sessionCoroutineScope.launch { analyticsService.capture(room.toAnalyticsViewRoom()) }
+            },
+            onStart = {
+                appNavigationStateService.onNavigateToThread(id, inputs.threadRootEventId)
+            },
+            onStop = {
+                appNavigationStateService.onLeavingThread(id)
             },
             onDestroy = {
                 mediaPlayer.close()
