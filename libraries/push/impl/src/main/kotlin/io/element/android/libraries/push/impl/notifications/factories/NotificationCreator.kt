@@ -120,7 +120,7 @@ class DefaultNotificationCreator(
         val eventId = events.firstOrNull()?.eventId
         val openIntent = when {
             threadId != null -> pendingIntentFactory.createOpenThreadPendingIntent(roomInfo, eventId, threadId)
-            else -> pendingIntentFactory.createOpenRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId)
+            else -> pendingIntentFactory.createOpenRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId, eventId)
         }
         val smallIcon = CommonDrawables.ic_notification
         val containsMissedCall = events.any { it.type == EventType.RTC_NOTIFICATION }
@@ -239,7 +239,7 @@ class DefaultNotificationCreator(
                 addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
                 addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
                 // Build the pending intent for when the notification is clicked
-                setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(inviteNotifiableEvent.sessionId, inviteNotifiableEvent.roomId))
+                setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(inviteNotifiableEvent.sessionId, inviteNotifiableEvent.roomId, null))
 
                 if (inviteNotifiableEvent.noisy) {
                     // Compat
@@ -279,7 +279,7 @@ class DefaultNotificationCreator(
             .setSmallIcon(smallIcon)
             .setColor(color)
             .setAutoCancel(true)
-            .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(simpleNotifiableEvent.sessionId, simpleNotifiableEvent.roomId))
+            .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(simpleNotifiableEvent.sessionId, simpleNotifiableEvent.roomId, null))
             .apply {
                 if (simpleNotifiableEvent.noisy) {
                     // Compat

@@ -35,8 +35,8 @@ class PendingIntentFactory(
         return createRoomPendingIntent(sessionId = sessionId, roomId = null, eventId = null, threadId = null)
     }
 
-    fun createOpenRoomPendingIntent(sessionId: SessionId, roomId: RoomId): PendingIntent? {
-        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, eventId = null, threadId = null)
+    fun createOpenRoomPendingIntent(sessionId: SessionId, roomId: RoomId, eventId: EventId?): PendingIntent? {
+        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = null)
     }
 
     fun createOpenThreadPendingIntent(roomInfo: RoomEventGroupInfo, eventId: EventId?, threadId: ThreadId): PendingIntent? {
