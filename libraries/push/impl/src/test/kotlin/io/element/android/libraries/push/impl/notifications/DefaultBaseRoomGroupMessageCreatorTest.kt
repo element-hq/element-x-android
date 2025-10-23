@@ -53,6 +53,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
             existingNotification = null,
+            threadId = null,
             color = A_COLOR_INT,
         )
         assertThat(result.number).isEqualTo(1)
@@ -76,6 +77,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
             existingNotification = null,
+            threadId = null,
             color = A_COLOR_INT,
         )
         @Suppress("DEPRECATION")
@@ -141,6 +143,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
             existingNotification = null,
+            threadId = null,
             color = A_COLOR_INT,
         )
         assertThat(result.number).isEqualTo(1)
@@ -160,6 +163,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
             existingNotification = null,
+            threadId = null,
             color = A_COLOR_INT,
         )
         assertThat(result.number).isEqualTo(2)
@@ -189,6 +193,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
             existingNotification = null,
+            threadId = null,
             color = A_COLOR_INT,
         )
         val actionTitles = result.actions?.map { it.title }
@@ -214,6 +219,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
             existingNotification = null,
+            threadId = null,
             color = A_COLOR_INT,
         )
         assertThat(result.number).isEqualTo(1)

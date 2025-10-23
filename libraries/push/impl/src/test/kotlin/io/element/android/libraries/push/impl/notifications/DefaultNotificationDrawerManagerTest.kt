@@ -64,7 +64,7 @@ class DefaultNotificationDrawerManagerTest {
         // For now just call all the API. Later, add more valuable tests.
         val matrixUser = aMatrixUser(id = A_SESSION_ID.value, displayName = "alice", avatarUrl = "mxc://data")
         val mockRoomGroupMessageCreator = FakeRoomGroupMessageCreator(
-            createRoomMessageResult = lambdaRecorder { user, _, roomId, _, existingNotification ->
+            createRoomMessageResult = lambdaRecorder { user, _, roomId, _, _, existingNotification ->
                 assertThat(user).isEqualTo(matrixUser)
                 assertThat(roomId).isEqualTo(A_ROOM_ID)
                 assertThat(existingNotification).isNull()
@@ -144,9 +144,16 @@ class DefaultNotificationDrawerManagerTest {
         messageCreator.createRoomMessageResult.assertions()
             .isCalledExactly(3)
             .withSequence(
-                listOf(value(aMatrixUser(id = A_SESSION_ID.value, displayName = "alice")), any(), any(), any(), any()),
-                listOf(value(aMatrixUser(id = A_SESSION_ID.value, displayName = A_SESSION_ID.value)), any(), any(), any(), any()),
-                listOf(value(aMatrixUser(id = A_SESSION_ID.value, displayName = A_SESSION_ID.value, avatarUrl = AN_AVATAR_URL)), any(), any(), any(), any()),
+                listOf(value(aMatrixUser(id = A_SESSION_ID.value, displayName = "alice")), any(), any(), any(), any(), any()),
+                listOf(value(aMatrixUser(id = A_SESSION_ID.value, displayName = A_SESSION_ID.value)), any(), any(), any(), any(), any()),
+                listOf(
+                    value(aMatrixUser(id = A_SESSION_ID.value, displayName = A_SESSION_ID.value, avatarUrl = AN_AVATAR_URL)),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any()
+                ),
             )
 
         defaultNotificationDrawerManager.destroy()

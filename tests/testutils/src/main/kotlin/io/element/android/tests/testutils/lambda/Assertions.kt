@@ -51,7 +51,7 @@ class ParametersAssertions internal constructor(
         }
         parametersSequence.zip(matchersSequence).forEachIndexed { invocationIndex, (parameters, matchers) ->
             if (parameters.size != matchers.size) {
-                throw AssertionError("Expected ${matchers.size} parameters, but got ${parameters.size} parameters during invocation #$invocationIndex")
+                throw AssertionError("Expected ${parameters.size} parameters, but got ${matchers.size} parameters during invocation #$invocationIndex")
             }
             parameters.zip(matchers).forEachIndexed { paramIndex, (param, matcher) ->
                 if (!matcher.match(param)) {

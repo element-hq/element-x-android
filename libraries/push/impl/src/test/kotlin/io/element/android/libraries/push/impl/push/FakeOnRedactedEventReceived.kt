@@ -13,7 +13,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 class FakeOnRedactedEventReceived(
     private val onRedactedEventsReceivedResult: (List<ResolvedPushEvent.Redaction>) -> Unit = { lambdaError() },
 ) : OnRedactedEventReceived {
-    override fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>) {
+    override suspend fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>) {
         onRedactedEventsReceivedResult(redactions)
     }
 }

@@ -32,6 +32,7 @@ import io.element.android.libraries.push.impl.notifications.factories.action.Acc
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
+import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
@@ -249,7 +250,7 @@ class DefaultNotificationCreatorTest {
             currentUser = aMatrixUser(),
             existingNotification = null,
             imageLoader = FakeImageLoader().getImageLoader(),
-            events = emptyList(),
+            events = listOf(aNotifiableMessageEvent()),
             color = A_COLOR_INT,
         )
         result.commonAssertions()
@@ -276,7 +277,7 @@ class DefaultNotificationCreatorTest {
             currentUser = aMatrixUser(),
             existingNotification = null,
             imageLoader = FakeImageLoader().getImageLoader(),
-            events = emptyList(),
+            events = listOf(aNotifiableMessageEvent()),
             color = A_COLOR_INT,
         )
         result.commonAssertions()

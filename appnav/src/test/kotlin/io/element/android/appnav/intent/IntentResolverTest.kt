@@ -17,6 +17,7 @@ import io.element.android.features.login.test.FakeLoginIntentResolver
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
@@ -67,6 +68,7 @@ class IntentResolverTest {
                 sessionId = A_SESSION_ID,
                 roomId = A_ROOM_ID,
                 threadId = null,
+                eventId = null,
             )
         )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
@@ -79,6 +81,7 @@ class IntentResolverTest {
                     sessionId = A_SESSION_ID,
                     roomId = A_ROOM_ID,
                     threadId = null,
+                    eventId = null,
                 )
             )
         )
@@ -91,6 +94,7 @@ class IntentResolverTest {
                 sessionId = A_SESSION_ID,
                 roomId = A_ROOM_ID,
                 threadId = A_THREAD_ID,
+                eventId = null,
             )
         )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
@@ -103,6 +107,59 @@ class IntentResolverTest {
                     sessionId = A_SESSION_ID,
                     roomId = A_ROOM_ID,
                     threadId = A_THREAD_ID,
+                    eventId = null,
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `test resolve navigation intent event`() {
+        val sut = createIntentResolver(
+            deeplinkParserResult = DeeplinkData.Room(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                threadId = null,
+                eventId = AN_EVENT_ID,
+            )
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_VIEW
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isEqualTo(
+            ResolvedIntent.Navigation(
+                deeplinkData = DeeplinkData.Room(
+                    sessionId = A_SESSION_ID,
+                    roomId = A_ROOM_ID,
+                    threadId = null,
+                    eventId = AN_EVENT_ID,
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `test resolve navigation intent thread and event`() {
+        val sut = createIntentResolver(
+            deeplinkParserResult = DeeplinkData.Room(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                threadId = A_THREAD_ID,
+                eventId = AN_EVENT_ID,
+            )
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_VIEW
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isEqualTo(
+            ResolvedIntent.Navigation(
+                deeplinkData = DeeplinkData.Room(
+                    sessionId = A_SESSION_ID,
+                    roomId = A_ROOM_ID,
+                    threadId = A_THREAD_ID,
+                    eventId = AN_EVENT_ID,
                 )
             )
         )

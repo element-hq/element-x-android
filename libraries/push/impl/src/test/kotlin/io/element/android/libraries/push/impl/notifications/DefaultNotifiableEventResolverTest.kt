@@ -9,6 +9,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -854,7 +855,8 @@ class DefaultNotifiableEventResolverTest {
             fallbackNotificationFactory = FallbackNotificationFactory(
                 clock = FakeSystemClock(),
                 stringProvider = FakeStringProvider(defaultResult = "You have new messages.")
-            )
+            ),
+            featureFlagService = FakeFeatureFlagService(),
         )
     }
 }

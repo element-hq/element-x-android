@@ -11,25 +11,29 @@ import android.app.Notification
 import androidx.annotation.ColorInt
 import coil3.ImageLoader
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.RoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.A_NOTIFICATION
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
-import io.element.android.tests.testutils.lambda.LambdaFiveParamsRecorder
+import io.element.android.tests.testutils.lambda.LambdaSixParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 
+// We just can't make the param types fit
+@Suppress("MaxLineLength", "ktlint:standard:max-line-length", "ktlint:standard:parameter-wrapping")
 class FakeRoomGroupMessageCreator(
-    var createRoomMessageResult: LambdaFiveParamsRecorder<MatrixUser, List<NotifiableMessageEvent>, RoomId, ImageLoader, Notification?, Notification> =
-        lambdaRecorder { _, _, _, _, _ -> A_NOTIFICATION }
+    var createRoomMessageResult: LambdaSixParamsRecorder<MatrixUser, List<NotifiableMessageEvent>, RoomId, ThreadId?, ImageLoader, Notification?, Notification> =
+        lambdaRecorder { _, _, _, _, _, _ -> A_NOTIFICATION }
 ) : RoomGroupMessageCreator {
     override suspend fun createRoomMessage(
         currentUser: MatrixUser,
         events: List<NotifiableMessageEvent>,
         roomId: RoomId,
+        threadId: ThreadId?,
         imageLoader: ImageLoader,
         existingNotification: Notification?,
         @ColorInt color: Int,
     ): Notification {
-        return createRoomMessageResult(currentUser, events, roomId, imageLoader, existingNotification)
+        return createRoomMessageResult(currentUser, events, roomId, threadId, imageLoader, existingNotification)
     }
 }

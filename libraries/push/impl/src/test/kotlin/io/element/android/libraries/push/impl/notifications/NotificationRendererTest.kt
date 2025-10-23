@@ -71,7 +71,7 @@ class NotificationRendererTest {
 
     @Test
     fun `given a room message group notification is added when rendering then show the message notification and update summary`() = runTest {
-        roomGroupMessageCreator.createRoomMessageResult = lambdaRecorder { _, _, _, _, _ -> A_NOTIFICATION }
+        roomGroupMessageCreator.createRoomMessageResult = lambdaRecorder { _, _, _, _, _, _ -> A_NOTIFICATION }
 
         renderEventsAsNotifications(listOf(aNotifiableMessageEvent()))
 

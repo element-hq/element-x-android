@@ -11,6 +11,7 @@ import android.content.Intent
 import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.deeplink.api.DeeplinkData
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
@@ -28,6 +29,10 @@ class DefaultDeeplinkParserTest {
             "elementx://open/@alice:server.org/!aRoomId:domain"
         const val A_URI_WITH_ROOM_WITH_THREAD =
             "elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId"
+        const val A_URI_WITH_ROOM_WITH_THREAD_AND_EVENT =
+            "elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId/\$anEventId"
+        const val A_URI_WITH_ROOM_WITH_EVENT_AND_NO_THREAD =
+            "elementx://open/@alice:server.org/!aRoomId:domain//\$anEventId"
     }
 
     @Test
@@ -36,9 +41,13 @@ class DefaultDeeplinkParserTest {
         assertThat(sut.getFromIntent(createIntent(A_URI)))
             .isEqualTo(DeeplinkData.Root(A_SESSION_ID))
         assertThat(sut.getFromIntent(createIntent(A_URI_WITH_ROOM)))
-            .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, null))
+            .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, null, null))
         assertThat(sut.getFromIntent(createIntent(A_URI_WITH_ROOM_WITH_THREAD)))
-            .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID))
+            .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID, null))
+        assertThat(sut.getFromIntent(createIntent(A_URI_WITH_ROOM_WITH_THREAD_AND_EVENT)))
+            .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID, AN_EVENT_ID))
+        assertThat(sut.getFromIntent(createIntent(A_URI_WITH_ROOM_WITH_EVENT_AND_NO_THREAD)))
+            .isEqualTo(DeeplinkData.Room(A_SESSION_ID, A_ROOM_ID, null, AN_EVENT_ID))
     }
 
     @Test

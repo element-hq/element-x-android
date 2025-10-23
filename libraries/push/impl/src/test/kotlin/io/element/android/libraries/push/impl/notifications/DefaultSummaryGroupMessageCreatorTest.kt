@@ -43,6 +43,7 @@ class DefaultSummaryGroupMessageCreatorTest {
                     messageCount = 1,
                     latestTimestamp = A_FAKE_TIMESTAMP + 10,
                     shouldBing = true,
+                    threadId = null,
                 )
             ),
             invitationNotifications = emptyList(),

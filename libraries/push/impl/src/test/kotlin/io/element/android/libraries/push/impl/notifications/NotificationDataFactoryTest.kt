@@ -97,6 +97,7 @@ class NotificationDataFactoryTest {
                 currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
                 events = events,
                 roomId = A_ROOM_ID,
+                threadId = null,
                 imageLoader = FakeImageLoader().getImageLoader(),
                 existingNotification = null,
                 color = A_COLOR_INT,
@@ -105,7 +106,8 @@ class NotificationDataFactoryTest {
             summaryLine = "A room name: Bob Hello world!",
             messageCount = events.size,
             latestTimestamp = events.maxOf { it.timestamp },
-            shouldBing = events.any { it.noisy }
+            shouldBing = events.any { it.noisy },
+            threadId = null,
         )
         val roomWithMessage = listOf(A_MESSAGE_EVENT)
 
@@ -152,6 +154,7 @@ class NotificationDataFactoryTest {
                 currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
                 events = withRedactedRemoved,
                 roomId = A_ROOM_ID,
+                threadId = null,
                 imageLoader = FakeImageLoader().getImageLoader(),
                 existingNotification = null,
                 color = A_COLOR_INT,
@@ -160,7 +163,8 @@ class NotificationDataFactoryTest {
             summaryLine = "A room name: Bob Hello world!",
             messageCount = withRedactedRemoved.size,
             latestTimestamp = withRedactedRemoved.maxOf { it.timestamp },
-            shouldBing = withRedactedRemoved.any { it.noisy }
+            shouldBing = withRedactedRemoved.any { it.noisy },
+            threadId = null,
         )
 
         val fakeImageLoader = FakeImageLoader()
