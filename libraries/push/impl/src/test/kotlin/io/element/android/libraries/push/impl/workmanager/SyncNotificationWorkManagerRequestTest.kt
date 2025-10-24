@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.push.impl.workmanager
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.OneTimeWorkRequest
 import androidx.work.hasKeyWithValueOfType
 import com.google.common.truth.Truth.assertThat
@@ -19,10 +20,14 @@ import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
+@RunWith(AndroidJUnit4::class)
 class SyncNotificationWorkManagerRequestTest {
+    @Config(sdk = [33])
     @Test
-    fun `build - success`() = runTest {
+    fun `build - success API 33`() = runTest {
         val request = createSyncNotificationWorkManagerRequest(
             sessionId = A_SESSION_ID,
             notificationEventRequests = listOf(aNotificationEventRequest())
@@ -33,7 +38,27 @@ class SyncNotificationWorkManagerRequestTest {
         result.getOrNull()!!.run {
             assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
             assertThat(workSpec.input.hasKeyWithValueOfType<String>("requests")).isTrue()
+            // True in API 33+
             assertThat(workSpec.expedited).isTrue()
+            assertThat(workSpec.traceTag).isEqualTo(workManagerTag(A_SESSION_ID, WorkManagerRequestType.NOTIFICATION_SYNC))
+        }
+    }
+
+    @Config(sdk = [32])
+    @Test
+    fun `build - success API 32 and lower`() = runTest {
+        val request = createSyncNotificationWorkManagerRequest(
+            sessionId = A_SESSION_ID,
+            notificationEventRequests = listOf(aNotificationEventRequest())
+        )
+
+        val result = request.build()
+        assertThat(result.isSuccess).isTrue()
+        result.getOrNull()!!.run {
+            assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
+            assertThat(workSpec.input.hasKeyWithValueOfType<String>("requests")).isTrue()
+            // False before API 33
+            assertThat(workSpec.expedited).isFalse()
             assertThat(workSpec.traceTag).isEqualTo(workManagerTag(A_SESSION_ID, WorkManagerRequestType.NOTIFICATION_SYNC))
         }
     }

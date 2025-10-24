@@ -34,6 +34,7 @@ import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.api.di.WorkerKey
@@ -126,9 +127,8 @@ class FetchNotificationsWorker(
         val notification = NotificationCompat.Builder(context, notificationChannelId)
             .setSmallIcon(CommonDrawables.ic_notification)
             .setOngoing(true)
-            .setTicker("Fetching notifications...")
-            .setContentTitle("Fetching notifications...")
-            .setContentText("Loading the events associated with received notifications.")
+            .setTicker(context.getString(CommonStrings.common_android_notification_sync_notifications_foreground_service_title))
+            .setContentTitle(context.getString(CommonStrings.common_android_notification_sync_notifications_foreground_service_title))
             .build()
         val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.NOTIFICATION_FETCHING)
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
