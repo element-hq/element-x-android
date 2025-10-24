@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.push.impl.workmanager
 
+import android.os.Build
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
@@ -36,7 +37,14 @@ class SyncNotificationWorkManagerRequest(
         return Result.success(
             OneTimeWorkRequestBuilder<FetchNotificationsWorker>()
                 .setInputData(data)
-                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .apply {
+                    // Expedited workers aren't needed Android 12 or lower:
+                    // They force displaying a foreground sync notification for no good reason, since they sync almost immediately anyway
+                    // See https://developer.android.com/develop/background-work/background-tasks/persistent/getting-started/define-work#backwards-compat
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                    }
+                }
                 .setTraceTag(workManagerTag(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC))
                 // TODO investigate using this instead of the resolver queue
                 // .setInputMerger()

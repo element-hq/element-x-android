@@ -122,7 +122,6 @@ class FetchNotificationsWorker(
     }
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
-        Timber.d("Called getForegroundInfo")
         val notificationChannelId = notificationChannels.getChannelIdForMessage(false)
         val notification = NotificationCompat.Builder(context, notificationChannelId)
             .setSmallIcon(CommonDrawables.ic_notification)
