@@ -21,23 +21,19 @@ class DefaultDeepLinkCreator : DeepLinkCreator {
         return buildString {
             append("$SCHEME://$HOST/")
             append(sessionId.value)
-            if (roomId != null) {
-                append("/")
-                append(roomId.value)
-                if (threadId != null) {
-                    append("/")
-                    append(threadId.value)
-                }
-
-                if (eventId != null) {
-                    if (threadId == null) {
-                        // Add extra separator to mark the thread slot as empty
-                        append("/")
-                    }
-                    append("/")
-                    append(eventId.value)
-                }
-            }
+            append("/")
+            append(roomId?.value.orEmpty())
+            append("/")
+            append(threadId?.value.orEmpty())
+            append("/")
+            append(eventId?.value.orEmpty())
         }
+            // Remove all possible trailing '/' characters:
+            // No event id
+            .removeSuffix("/")
+            // No thread id
+            .removeSuffix("/")
+            // No room id
+            .removeSuffix("/")
     }
 }
