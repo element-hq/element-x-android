@@ -38,6 +38,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.api.di.WorkerKey
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -57,6 +58,7 @@ class FetchNotificationsWorker(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val notificationChannels: NotificationChannels,
     private val workerDataConverter: WorkerDataConverter,
+    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = withContext(coroutineDispatchers.io) {
         Timber.d("FetchNotificationsWorker started")
@@ -98,6 +100,7 @@ class FetchNotificationsWorker(
                         sessionId = failedSessionId,
                         notificationEventRequests = requestsToRetry,
                         workerDataConverter = workerDataConverter,
+                        buildVersionSdkIntProvider = buildVersionSdkIntProvider,
                     )
                 )
             }

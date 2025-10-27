@@ -18,6 +18,7 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.libraries.push.impl.workmanager.SyncNotificationWorkManagerRequest
 import io.element.android.libraries.push.impl.workmanager.WorkerDataConverter
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -49,6 +50,7 @@ class DefaultNotificationResolverQueue(
     private val workManagerScheduler: WorkManagerScheduler,
     private val featureFlagService: FeatureFlagService,
     private val workerDataConverter: WorkerDataConverter,
+    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : NotificationResolverQueue {
     companion object {
         private const val BATCH_WINDOW_MS = 250L
@@ -100,6 +102,7 @@ class DefaultNotificationResolverQueue(
                             sessionId = sessionId,
                             notificationEventRequests = requests,
                             workerDataConverter = workerDataConverter,
+                            buildVersionSdkIntProvider = buildVersionSdkIntProvider,
                         )
                     )
                 }

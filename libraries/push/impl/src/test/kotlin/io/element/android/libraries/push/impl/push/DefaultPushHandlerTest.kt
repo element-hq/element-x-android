@@ -55,6 +55,7 @@ import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushSto
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
 import io.element.android.libraries.workmanager.api.WorkManagerRequest
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
+import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.any
@@ -717,6 +718,7 @@ class DefaultPushHandlerTest {
                 workManagerScheduler = workManagerScheduler,
                 featureFlagService = featureFlagService,
                 workerDataConverter = WorkerDataConverter(DefaultJsonProvider()),
+                buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
             ),
             appCoroutineScope = backgroundScope,
             fallbackNotificationFactory = FallbackNotificationFactory(

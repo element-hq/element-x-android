@@ -16,6 +16,7 @@ import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.workmanager.api.WorkManagerRequest
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import timber.log.Timber
@@ -25,6 +26,7 @@ class SyncNotificationWorkManagerRequest(
     private val sessionId: SessionId,
     private val notificationEventRequests: List<NotificationEventRequest>,
     private val workerDataConverter: WorkerDataConverter,
+    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : WorkManagerRequest {
     override fun build(): Result<WorkRequest> {
         if (notificationEventRequests.isEmpty()) {
@@ -41,7 +43,7 @@ class SyncNotificationWorkManagerRequest(
                     // Expedited workers aren't needed on Android 12 or lower:
                     // They force displaying a foreground sync notification for no good reason, since they sync almost immediately anyway
                     // See https://developer.android.com/develop/background-work/background-tasks/persistent/getting-started/define-work#backwards-compat
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
                         setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                     }
                 }
