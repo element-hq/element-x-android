@@ -10,6 +10,7 @@ package io.element.android.libraries.push.impl.notifications.conversations
 import android.content.Context
 import android.content.pm.ShortcutInfo
 import android.content.res.Configuration
+import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -85,7 +86,9 @@ class DefaultNotificationConversationService(
             return
         }
 
-        val categories = setOfNotNull(ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION)
+        val categories = setOfNotNull(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION else null
+        )
 
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return
         val imageLoader = imageLoaderHolder.get(client)
