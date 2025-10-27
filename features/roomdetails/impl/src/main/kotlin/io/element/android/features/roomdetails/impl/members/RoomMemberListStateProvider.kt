@@ -41,7 +41,8 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
                         ),
                         banned = persistentListOf(),
                     )
-                )
+                ),
+                moderationState = aRoomMemberModerationState(canBan = true)
             ),
             aRoomMemberListState(roomMembers = AsyncData.Loading()),
             aRoomMemberListState().copy(canInvite = true),
