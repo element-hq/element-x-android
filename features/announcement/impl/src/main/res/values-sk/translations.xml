@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Zobraziť priestory, ktoré ste vytvorili alebo ku ktorým ste sa pripojili"</string>
+  <string name="screen_space_announcement_item2">"Prijímať alebo odmietať pozvánky do priestorov"</string>
+  <string name="screen_space_announcement_item3">"Objaviť všetky miestnosti, do ktorých sa môžete pripojiť vo svojich priestoroch"</string>
+  <string name="screen_space_announcement_item4">"Pripojiť sa k verejnému priestoru"</string>
+  <string name="screen_space_announcement_item5">"Opustiť akékoľvek priestory, ku ktorým ste sa pridali"</string>
+  <string name="screen_space_announcement_notice">"Filtrovanie, vytváranie a správa priestorov bude čoskoro k dispozícii."</string>
+  <string name="screen_space_announcement_subtitle">"Vitajte v beta verzii priestorov! S touto prvou verziou môžete:"</string>
+  <string name="screen_space_announcement_title">"Predstavujeme priestory"</string>
+</resources>

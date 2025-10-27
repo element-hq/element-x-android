@@ -71,7 +71,10 @@
   <string name="troubleshoot_notifications_test_blocked_users_title">"Blokovaní uživatelé"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Získat název aktuálního poskytovatele."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nebyli vybráni žádní push poskytovatelé."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Aktuální poskytovatel push oznámení: %1$s a současný distributor: %2$s. Ale distributor %3$s nebyl nalezen. Možná byla aplikace odinstalována?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Aktuální poskytovatel push oznámení: %1$s , ale nebyli nakonfigurováni žádní distributoři."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Aktuální push poskytovatel: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Aktuální poskytovatel push oznámení: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Aktuální push poskytovatel"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Ujistěte se, že aplikace má alespoň jednoho push poskytovatele."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nebyli nalezeni žádní push poskytovatelé."</string>
