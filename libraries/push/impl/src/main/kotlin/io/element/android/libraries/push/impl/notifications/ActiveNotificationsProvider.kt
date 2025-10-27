@@ -56,7 +56,7 @@ class DefaultActiveNotificationsProvider(
 
     override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId, threadId: ThreadId?): List<StatusBarNotification> {
         val notificationId = NotificationIdProvider.getRoomMessagesNotificationId(sessionId)
-        val expectedTag =NotificationCreator.messageTag(roomId, threadId)
+        val expectedTag = NotificationCreator.messageTag(roomId, threadId)
         return getNotificationsForSession(sessionId).filter { it.id == notificationId && it.tag == expectedTag }
     }
 
