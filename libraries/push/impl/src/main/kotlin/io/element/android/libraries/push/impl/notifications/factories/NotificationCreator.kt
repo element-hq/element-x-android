@@ -132,7 +132,7 @@ class DefaultNotificationCreator(
         // Build the pending intent for when the notification is clicked
         val eventId = events.firstOrNull()?.eventId
         val openIntent = when {
-            threadId != null -> pendingIntentFactory.createOpenThreadPendingIntent(roomInfo, eventId, threadId)
+            threadId != null -> pendingIntentFactory.createOpenThreadPendingIntent(roomInfo.sessionId, roomInfo.roomId, eventId, threadId)
             else -> pendingIntentFactory.createOpenRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId, eventId)
         }
         val smallIcon = CommonDrawables.ic_notification
@@ -145,11 +145,11 @@ class DefaultNotificationCreator(
         val builder = if (existingNotification != null) {
             NotificationCompat.Builder(context, existingNotification)
         } else {
-            NotificationCompat.Builder(context, channelId).apply {
+            NotificationCompat.Builder(context, channelId)
                 // A category allows groups of notifications to be ranked and filtered – per user or system settings.
                 // For example, alarm notifications should display before promo notifications, or message from known contact
                 // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
-                setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 // ID of the corresponding shortcut, for conversation features under API 30+
                 // Must match those created in the ShortcutInfoCompat.Builder()
                 // for the notification to appear as a "Conversation":
@@ -161,13 +161,12 @@ class DefaultNotificationCreator(
                 }
                 // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
                 // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
-                setGroup(roomInfo.sessionId.value)
-                setGroupSummary(false)
+                .setGroup(roomInfo.sessionId.value)
+                .setGroupSummary(false)
                 // In order to avoid notification making sound twice (due to the summary notification)
-                setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
                 // Remove notification after opening it or using an action
-                setAutoCancel(true)
-            }
+                .setAutoCancel(true)
         }
 
         val messagingStyle = existingNotification?.let {
