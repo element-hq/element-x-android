@@ -9,6 +9,7 @@
 
 package io.element.android.features.roomdetails.impl.edit
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,11 +31,13 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -50,7 +53,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomDetailsEditView(
     state: RoomDetailsEditState,
-    onBackClick: () -> Unit,
     onRoomEditSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -62,12 +64,21 @@ fun RoomDetailsEditView(
         isAvatarActionsSheetVisible.value = true
     }
 
+    BackHandler {
+        state.eventSink(RoomDetailsEditEvents.OnBackPress)
+    }
     Scaffold(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             TopAppBar(
                 titleStr = stringResource(id = R.string.screen_room_details_edit_room_title),
-                navigationIcon = { BackButton(onClick = onBackClick) },
+                navigationIcon = {
+                    BackButton(
+                        onClick = {
+                            state.eventSink(RoomDetailsEditEvents.OnBackPress)
+                        }
+                    )
+                },
                 actions = {
                     TextButton(
                         text = stringResource(CommonStrings.action_save),
@@ -126,14 +137,20 @@ fun RoomDetailsEditView(
             )
         }
     }
-
     AvatarActionBottomSheet(
         actions = state.avatarActions,
         isVisible = isAvatarActionsSheetVisible.value,
         onDismiss = { isAvatarActionsSheetVisible.value = false },
         onSelectAction = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
     )
-
+    if (state.leaveAction == AsyncAction.ConfirmingNoParams) {
+        ConfirmationDialog(
+            title = stringResource(CommonStrings.dialog_unsaved_changes_title),
+            content = stringResource(CommonStrings.dialog_unsaved_changes_description_android),
+            onSubmitClick = { state.eventSink(RoomDetailsEditEvents.OnBackPress) },
+            onDismiss = { state.eventSink(RoomDetailsEditEvents.CloseDialog) }
+        )
+    }
     AsyncActionView(
         async = state.saveAction,
         progressDialog = {
@@ -156,7 +173,6 @@ fun RoomDetailsEditView(
 internal fun RoomDetailsEditViewPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) = ElementPreview {
     RoomDetailsEditView(
         state = state,
-        onBackClick = {},
         onRoomEditSuccess = {},
     )
 }

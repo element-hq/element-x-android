@@ -24,6 +24,7 @@ data class RoomDetailsEditState(
     val canChangeAvatar: Boolean,
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonEnabled: Boolean,
+    val leaveAction: AsyncAction<Unit>,
     val saveAction: AsyncAction<Unit>,
     val cameraPermissionState: PermissionsState,
     val eventSink: (RoomDetailsEditEvents) -> Unit

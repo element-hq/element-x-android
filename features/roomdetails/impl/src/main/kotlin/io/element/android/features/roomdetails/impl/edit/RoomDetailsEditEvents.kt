@@ -13,6 +13,8 @@ sealed interface RoomDetailsEditEvents {
     data class HandleAvatarAction(val action: AvatarAction) : RoomDetailsEditEvents
     data class UpdateRoomName(val name: String) : RoomDetailsEditEvents
     data class UpdateRoomTopic(val topic: String) : RoomDetailsEditEvents
+    data object OnBackPress : RoomDetailsEditEvents
+    data object CloseDialog : RoomDetailsEditEvents
     data object Save : RoomDetailsEditEvents
     data object CancelSaveChanges : RoomDetailsEditEvents
 }
