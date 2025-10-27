@@ -20,7 +20,7 @@ interface IntentProvider {
     fun getViewRoomIntent(
         sessionId: SessionId,
         roomId: RoomId?,
-        eventId: EventId?,
         threadId: ThreadId?,
+        eventId: EventId?,
     ): Intent
 }

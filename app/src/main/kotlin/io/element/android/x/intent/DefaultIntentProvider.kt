@@ -29,8 +29,8 @@ class DefaultIntentProvider(
     override fun getViewRoomIntent(
         sessionId: SessionId,
         roomId: RoomId?,
-        eventId: EventId?,
         threadId: ThreadId?,
+        eventId: EventId?,
     ): Intent {
         return Intent(context, MainActivity::class.java).apply {
             action = Intent.ACTION_VIEW
