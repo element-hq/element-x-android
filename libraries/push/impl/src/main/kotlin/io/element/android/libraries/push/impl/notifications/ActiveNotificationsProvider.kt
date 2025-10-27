@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import timber.log.Timber
 
 interface ActiveNotificationsProvider {
@@ -55,11 +56,7 @@ class DefaultActiveNotificationsProvider(
 
     override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId, threadId: ThreadId?): List<StatusBarNotification> {
         val notificationId = NotificationIdProvider.getRoomMessagesNotificationId(sessionId)
-        val expectedTag = if (threadId != null) {
-            "${roomId.value}|${threadId.value}"
-        } else {
-            roomId.value
-        }
+        val expectedTag =NotificationCreator.messageTag(roomId, threadId)
         return getNotificationsForSession(sessionId).filter { it.id == notificationId && it.tag == expectedTag }
     }
 
