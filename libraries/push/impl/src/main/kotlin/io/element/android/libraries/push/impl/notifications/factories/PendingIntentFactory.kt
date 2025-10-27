@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationBroadcastReceiver
-import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.TestNotificationReceiver
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
@@ -39,8 +38,8 @@ class PendingIntentFactory(
         return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = null)
     }
 
-    fun createOpenThreadPendingIntent(roomInfo: RoomEventGroupInfo, eventId: EventId?, threadId: ThreadId): PendingIntent? {
-        return createRoomPendingIntent(sessionId = roomInfo.sessionId, roomId = roomInfo.roomId, eventId = eventId, threadId = threadId)
+    fun createOpenThreadPendingIntent(sessionId: SessionId, roomId: RoomId, eventId: EventId?, threadId: ThreadId): PendingIntent? {
+        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = threadId)
     }
 
     private fun createRoomPendingIntent(sessionId: SessionId, roomId: RoomId?, eventId: EventId?, threadId: ThreadId?): PendingIntent? {
