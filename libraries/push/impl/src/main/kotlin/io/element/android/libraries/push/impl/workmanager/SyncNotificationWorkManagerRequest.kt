@@ -38,7 +38,7 @@ class SyncNotificationWorkManagerRequest(
             OneTimeWorkRequestBuilder<FetchNotificationsWorker>()
                 .setInputData(data)
                 .apply {
-                    // Expedited workers aren't needed Android 12 or lower:
+                    // Expedited workers aren't needed on Android 12 or lower:
                     // They force displaying a foreground sync notification for no good reason, since they sync almost immediately anyway
                     // See https://developer.android.com/develop/background-work/background-tasks/persistent/getting-started/define-work#backwards-compat
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

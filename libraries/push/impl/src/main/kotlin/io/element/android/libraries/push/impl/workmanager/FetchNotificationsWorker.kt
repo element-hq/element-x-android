@@ -122,6 +122,9 @@ class FetchNotificationsWorker(
         }
     }
 
+    // This code technically *should* never run because the expedited scheduling is disabled in Android versions
+    // which would call this. However, some custom OS versions like MIUI have some unexpected behaviours, so we're
+    // keeping this method for those OS in case they force us to display this foreground service notification
     override suspend fun getForegroundInfo(): ForegroundInfo {
         val notificationChannelId = notificationChannels.getChannelIdForMessage(false)
         val notification = NotificationCompat.Builder(context, notificationChannelId)
