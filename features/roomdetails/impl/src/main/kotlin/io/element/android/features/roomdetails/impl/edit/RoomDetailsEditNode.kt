@@ -17,7 +17,6 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
-import io.element.android.libraries.core.navigation.BackNavigator
 import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
 
@@ -26,12 +25,9 @@ import io.element.android.services.analytics.api.AnalyticsService
 class RoomDetailsEditNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenterFactory: RoomDetailsEditPresenter.Factory,
+    private val presenter: RoomDetailsEditPresenter,
     private val analyticsService: AnalyticsService,
-) : Node(buildContext, plugins = plugins),
-    BackNavigator {
-    val presenter = presenterFactory.create(this)
-
+) : Node(buildContext, plugins = plugins) {
     init {
         lifecycle.subscribe(
             onResume = {
@@ -40,16 +36,12 @@ class RoomDetailsEditNode(
         )
     }
 
-    override fun navigateBack() {
-        navigateUp()
-    }
-
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         RoomDetailsEditView(
             state = state,
-            onRoomEditSuccess = ::navigateUp,
+            onDone = ::navigateUp,
             modifier = modifier,
         )
     }

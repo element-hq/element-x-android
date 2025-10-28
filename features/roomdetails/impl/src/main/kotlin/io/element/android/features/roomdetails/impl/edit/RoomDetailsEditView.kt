@@ -53,7 +53,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomDetailsEditView(
     state: RoomDetailsEditState,
-    onRoomEditSuccess: () -> Unit,
+    onDone: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -143,14 +143,6 @@ fun RoomDetailsEditView(
         onDismiss = { isAvatarActionsSheetVisible.value = false },
         onSelectAction = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
     )
-    if (state.leaveAction == AsyncAction.ConfirmingNoParams) {
-        ConfirmationDialog(
-            title = stringResource(CommonStrings.dialog_unsaved_changes_title),
-            content = stringResource(CommonStrings.dialog_unsaved_changes_description_android),
-            onSubmitClick = { state.eventSink(RoomDetailsEditEvents.OnBackPress) },
-            onDismiss = { state.eventSink(RoomDetailsEditEvents.CloseDialog) }
-        )
-    }
     AsyncActionView(
         async = state.saveAction,
         progressDialog = {
@@ -158,9 +150,19 @@ fun RoomDetailsEditView(
                 progressText = stringResource(R.string.screen_room_details_updating_room),
             )
         },
-        onSuccess = { onRoomEditSuccess() },
+        confirmationDialog = {
+            if (state.saveAction == AsyncAction.ConfirmingCancellation) {
+                ConfirmationDialog(
+                    title = stringResource(CommonStrings.dialog_unsaved_changes_title),
+                    content = stringResource(CommonStrings.dialog_unsaved_changes_description_android),
+                    onSubmitClick = { state.eventSink(RoomDetailsEditEvents.OnBackPress) },
+                    onDismiss = { state.eventSink(RoomDetailsEditEvents.CloseDialog) }
+                )
+            }
+        },
+        onSuccess = { onDone() },
         errorMessage = { stringResource(R.string.screen_room_details_edition_error) },
-        onErrorDismiss = { state.eventSink(RoomDetailsEditEvents.CancelSaveChanges) }
+        onErrorDismiss = { state.eventSink(RoomDetailsEditEvents.CloseDialog) }
     )
 
     PermissionsView(
@@ -173,6 +175,6 @@ fun RoomDetailsEditView(
 internal fun RoomDetailsEditViewPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) = ElementPreview {
     RoomDetailsEditView(
         state = state,
-        onRoomEditSuccess = {},
+        onDone = {},
     )
 }

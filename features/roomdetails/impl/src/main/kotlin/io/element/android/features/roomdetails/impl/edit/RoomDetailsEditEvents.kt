@@ -14,7 +14,6 @@ sealed interface RoomDetailsEditEvents {
     data class UpdateRoomName(val name: String) : RoomDetailsEditEvents
     data class UpdateRoomTopic(val topic: String) : RoomDetailsEditEvents
     data object OnBackPress : RoomDetailsEditEvents
-    data object CloseDialog : RoomDetailsEditEvents
     data object Save : RoomDetailsEditEvents
-    data object CancelSaveChanges : RoomDetailsEditEvents
+    data object CloseDialog : RoomDetailsEditEvents
 }

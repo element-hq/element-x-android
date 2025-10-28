@@ -33,6 +33,11 @@ sealed interface AsyncAction<out T> {
     data object ConfirmingNoParams : Confirming
 
     /**
+     * User cancels the action, use this object to ask for confirmation.
+     */
+    data object ConfirmingCancellation : Confirming
+
+    /**
      * Represents an operation that is currently ongoing.
      */
     data object Loading : AsyncAction<Nothing>

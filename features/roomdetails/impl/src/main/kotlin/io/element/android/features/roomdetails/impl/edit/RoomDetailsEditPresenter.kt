@@ -20,16 +20,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
-import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.core.navigation.BackNavigator
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
@@ -47,10 +44,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@AssistedInject
+@Inject
 class RoomDetailsEditPresenter(
-    @Assisted
-    private val backNavigator: BackNavigator,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
@@ -58,11 +53,6 @@ class RoomDetailsEditPresenter(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<RoomDetailsEditState> {
-    @AssistedFactory
-    fun interface Factory {
-        fun create(backNavigator: BackNavigator): RoomDetailsEditPresenter
-    }
-
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
 
@@ -148,7 +138,6 @@ class RoomDetailsEditPresenter(
             }
         }
 
-        val leaveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
         fun handleEvents(event: RoomDetailsEditEvents) {
@@ -180,17 +169,12 @@ class RoomDetailsEditPresenter(
 
                 is RoomDetailsEditEvents.UpdateRoomName -> roomRawNameEdited = event.name
                 is RoomDetailsEditEvents.UpdateRoomTopic -> roomTopicEdited = event.topic
-                RoomDetailsEditEvents.CancelSaveChanges -> saveAction.value = AsyncAction.Uninitialized
-                RoomDetailsEditEvents.OnBackPress -> if (saveButtonEnabled.not() || leaveAction.value == AsyncAction.ConfirmingNoParams) {
+                RoomDetailsEditEvents.CloseDialog -> saveAction.value = AsyncAction.Uninitialized
+                RoomDetailsEditEvents.OnBackPress -> if (saveButtonEnabled.not() || saveAction.value == AsyncAction.ConfirmingCancellation) {
                     // Unsaved change or already confirming exit without saving
-                    // Dismiss dialog immediately
-                    leaveAction.value = AsyncAction.Uninitialized
-                    backNavigator.navigateBack()
+                    saveAction.value = AsyncAction.Success(Unit)
                 } else {
-                    leaveAction.value = AsyncAction.ConfirmingNoParams
-                }
-                RoomDetailsEditEvents.CloseDialog -> {
-                    leaveAction.value = AsyncAction.Uninitialized
+                    saveAction.value = AsyncAction.ConfirmingCancellation
                 }
             }
         }
@@ -205,7 +189,6 @@ class RoomDetailsEditPresenter(
             canChangeAvatar = canChangeAvatar,
             avatarActions = avatarActions,
             saveButtonEnabled = saveButtonEnabled,
-            leaveAction = leaveAction.value,
             saveAction = saveAction.value,
             cameraPermissionState = cameraPermissionState,
             eventSink = ::handleEvents,

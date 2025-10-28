@@ -54,7 +54,7 @@ class RoomDetailsEditViewTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvents>()
         rule.setRoomDetailsEditView(
             aRoomDetailsEditState(
-                leaveAction = AsyncAction.ConfirmingNoParams,
+                saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
@@ -67,7 +67,7 @@ class RoomDetailsEditViewTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvents>()
         rule.setRoomDetailsEditView(
             aRoomDetailsEditState(
-                leaveAction = AsyncAction.ConfirmingNoParams,
+                saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
@@ -84,7 +84,7 @@ class RoomDetailsEditViewTest {
                     eventSink = eventsRecorder,
                     saveAction = AsyncAction.Success(Unit)
                 ),
-                onRoomEdited = callback,
+                onDone = callback,
             )
         }
     }
@@ -233,18 +233,18 @@ class RoomDetailsEditViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(RoomDetailsEditEvents.CancelSaveChanges)
+        eventsRecorder.assertSingle(RoomDetailsEditEvents.CloseDialog)
     }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomDetailsEditView(
     state: RoomDetailsEditState,
-    onRoomEdited: () -> Unit = EnsureNeverCalled(),
+    onDone: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsEditView(
             state = state,
-            onRoomEditSuccess = onRoomEdited,
+            onDone = onDone,
         )
     }
 }

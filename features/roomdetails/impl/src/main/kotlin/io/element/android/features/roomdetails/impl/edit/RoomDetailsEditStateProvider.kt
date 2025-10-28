@@ -26,7 +26,7 @@ open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEd
             aRoomDetailsEditState(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
             aRoomDetailsEditState(saveAction = AsyncAction.Loading),
             aRoomDetailsEditState(saveAction = AsyncAction.Failure(RuntimeException("Whelp"))),
-            aRoomDetailsEditState(leaveAction = AsyncAction.ConfirmingNoParams),
+            aRoomDetailsEditState(saveAction = AsyncAction.ConfirmingCancellation),
         )
 }
 
@@ -40,7 +40,6 @@ fun aRoomDetailsEditState(
     canChangeAvatar: Boolean = true,
     avatarActions: List<AvatarAction> = emptyList(),
     saveButtonEnabled: Boolean = true,
-    leaveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     cameraPermissionState: PermissionsState = aPermissionsState(showDialog = false),
     eventSink: (RoomDetailsEditEvents) -> Unit = {},
@@ -54,7 +53,6 @@ fun aRoomDetailsEditState(
     canChangeAvatar = canChangeAvatar,
     avatarActions = avatarActions.toImmutableList(),
     saveButtonEnabled = saveButtonEnabled,
-    leaveAction = leaveAction,
     saveAction = saveAction,
     cameraPermissionState = cameraPermissionState,
     eventSink = eventSink,

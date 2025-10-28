@@ -14,7 +14,6 @@ import io.element.android.features.roomdetails.impl.aJoinedRoom
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.core.navigation.BackNavigator
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -78,14 +77,12 @@ class RoomDetailsEditPresenterTest {
     }
 
     private fun createRoomDetailsEditPresenter(
-        backNavigator: BackNavigator = BackNavigator { lambdaError() },
         room: JoinedRoom,
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ): RoomDetailsEditPresenter {
         return RoomDetailsEditPresenter(
-            backNavigator = backNavigator,
             room = room,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
@@ -120,7 +117,6 @@ class RoomDetailsEditPresenterTest {
                 AvatarAction.Remove
             )
             assertThat(initialState.saveButtonEnabled).isFalse()
-            assertThat(initialState.leaveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             assertThat(initialState.saveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
         }
     }
@@ -653,7 +649,7 @@ class RoomDetailsEditPresenterTest {
             initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(3)
             assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
-            initialState.eventSink(RoomDetailsEditEvents.CancelSaveChanges)
+            initialState.eventSink(RoomDetailsEditEvents.CloseDialog)
             assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
         }
     }
@@ -679,11 +675,11 @@ class RoomDetailsEditPresenterTest {
                 eventSink(RoomDetailsEditEvents.OnBackPress)
             }
             awaitItem().apply {
-                assertThat(leaveAction).isEqualTo(AsyncAction.ConfirmingNoParams)
+                assertThat(saveAction).isEqualTo(AsyncAction.ConfirmingCancellation)
                 eventSink(RoomDetailsEditEvents.CloseDialog)
             }
             awaitItem().apply {
-                assertThat(leaveAction).isEqualTo(AsyncAction.Uninitialized)
+                assertThat(saveAction).isEqualTo(AsyncAction.Uninitialized)
             }
         }
     }
@@ -694,17 +690,15 @@ class RoomDetailsEditPresenterTest {
             displayName = "Name",
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        val onBackPressed = lambdaRecorder<Unit> { }
         val presenter = createRoomDetailsEditPresenter(
-            backNavigator = onBackPressed,
             room = room,
-            temporaryUriDeleter = FakeTemporaryUriDeleter({}),
+            temporaryUriDeleter = FakeTemporaryUriDeleter {},
         )
         presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.saveButtonEnabled).isFalse()
             initialState.eventSink(RoomDetailsEditEvents.OnBackPress)
-            onBackPressed.assertions().isCalledOnce()
+            assertThat(awaitItem().saveAction).isEqualTo(AsyncAction.Success(Unit))
         }
     }
 
@@ -714,9 +708,7 @@ class RoomDetailsEditPresenterTest {
             displayName = "Name",
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        val onBackPressed = lambdaRecorder<Unit> { }
         val presenter = createRoomDetailsEditPresenter(
-            backNavigator = onBackPressed,
             room = room,
             temporaryUriDeleter = FakeTemporaryUriDeleter({}),
         )
@@ -730,13 +722,12 @@ class RoomDetailsEditPresenterTest {
                 eventSink(RoomDetailsEditEvents.OnBackPress)
             }
             awaitItem().apply {
-                assertThat(leaveAction).isEqualTo(AsyncAction.ConfirmingNoParams)
+                assertThat(saveAction).isEqualTo(AsyncAction.ConfirmingCancellation)
                 eventSink(RoomDetailsEditEvents.OnBackPress)
             }
             awaitItem().apply {
-                assertThat(leaveAction).isEqualTo(AsyncAction.Uninitialized)
+                assertThat(saveAction).isEqualTo(AsyncAction.Success(Unit))
             }
-            onBackPressed.assertions().isCalledOnce()
         }
     }
 
