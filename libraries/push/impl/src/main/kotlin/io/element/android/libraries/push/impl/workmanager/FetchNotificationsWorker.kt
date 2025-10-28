@@ -8,11 +8,7 @@
 package io.element.android.libraries.push.impl.workmanager
 
 import android.content.Context
-import android.content.pm.ServiceInfo
-import android.os.Build
-import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
-import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
@@ -24,17 +20,13 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.push.api.notifications.ForegroundServiceType
-import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.api.di.WorkerKey
@@ -122,25 +114,6 @@ class FetchNotificationsWorker(
             }.onFailure {
                 Timber.e(it, "Failed to sync on notifiable events for session $sessionId")
             }
-        }
-    }
-
-    // This code technically *should* never run because the expedited scheduling is disabled in Android versions
-    // which would call this. However, some custom OS versions like MIUI have some unexpected behaviours, so we're
-    // keeping this method for those OS in case they force us to display this foreground service notification
-    override suspend fun getForegroundInfo(): ForegroundInfo {
-        val notificationChannelId = notificationChannels.getChannelIdForMessage(false)
-        val notification = NotificationCompat.Builder(context, notificationChannelId)
-            .setSmallIcon(CommonDrawables.ic_notification)
-            .setOngoing(true)
-            .setTicker(context.getString(CommonStrings.common_android_notification_sync_notifications_foreground_service_title))
-            .setContentTitle(context.getString(CommonStrings.common_android_notification_sync_notifications_foreground_service_title))
-            .build()
-        val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.NOTIFICATION_FETCHING)
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ForegroundInfo(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING)
-        } else {
-            ForegroundInfo(notificationId, notification)
         }
     }
 
