@@ -31,6 +31,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.di.MatrixSessionCache
 import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.intent.ResolvedIntent
+import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
@@ -49,7 +50,10 @@ import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.oidc.api.OidcAction
@@ -392,10 +396,9 @@ class RootFlowNode(
                     roomIdOrAlias = permalinkData.roomIdOrAlias,
                     trigger = JoinedRoom.Trigger.MobilePermalink,
                     serverNames = permalinkData.viaParameters,
-                    eventId = permalinkData.eventId,
-                    threadId = permalinkData.threadId,
+                    eventId = focusedEventId,
                     clearBackstack = true
-                )
+                ).maybeAttachThread(permalinkData.threadId, permalinkData.eventId)
             }
             is PermalinkData.UserLink -> {
                 attachUser(permalinkData.userId)
@@ -403,17 +406,22 @@ class RootFlowNode(
         }
     }
 
+    private suspend fun RoomFlowNode.maybeAttachThread(threadId: ThreadId?, focusedEventId: EventId?) {
+        if (threadId != null) {
+            attachThread(threadId, focusedEventId)
+        }
+    }
+
     private suspend fun navigateTo(deeplinkData: DeeplinkData) {
         Timber.d("Navigating to $deeplinkData")
-        attachSession(deeplinkData.sessionId).apply {
+        attachSession(deeplinkData.sessionId).let { loggedInFlowNode ->
             when (deeplinkData) {
                 is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
-                is DeeplinkData.Room -> attachRoom(
+                is DeeplinkData.Room -> loggedInFlowNode.attachRoom(
                     roomIdOrAlias = deeplinkData.roomId.toRoomIdOrAlias(),
-                    eventId = deeplinkData.eventId,
-                    threadId = deeplinkData.threadId,
+                    eventId = if (deeplinkData.threadId != null) deeplinkData.threadId?.asEventId() else deeplinkData.eventId,
                     clearBackstack = true
-                )
+                ).maybeAttachThread(deeplinkData.threadId, deeplinkData.eventId)
             }
         }
     }

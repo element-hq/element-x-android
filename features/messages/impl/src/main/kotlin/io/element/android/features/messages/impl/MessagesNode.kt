@@ -97,7 +97,6 @@ class MessagesNode(
 
     data class Inputs(
         val focusedEventId: EventId?,
-        val openThreadId: ThreadId?,
     ) : NodeInputs
 
     private val inputs = inputs<Inputs>()
@@ -338,20 +337,10 @@ class MessagesNode(
             var focusedEventId by rememberSaveable {
                 mutableStateOf(inputs.focusedEventId)
             }
-            var openThreadId by rememberSaveable {
-                mutableStateOf(inputs.openThreadId)
-            }
-            LaunchedEffect(Unit) {
-                when {
-                    openThreadId != null -> {
-                        state.timelineState.eventSink(TimelineEvents.OpenThread(threadRootEventId = openThreadId!!, focusedEventId))
-                        openThreadId = null
-                        focusedEventId = null
-                    }
-                    focusedEventId != null -> {
-                        state.timelineState.eventSink(TimelineEvents.FocusOnEvent(focusedEventId!!))
-                        focusedEventId = null
-                    }
+            LaunchedEffect(focusedEventId) {
+                if (focusedEventId != null) {
+                    state.timelineState.eventSink(TimelineEvents.FocusOnEvent(focusedEventId!!))
+                    focusedEventId = null
                 }
             }
         }

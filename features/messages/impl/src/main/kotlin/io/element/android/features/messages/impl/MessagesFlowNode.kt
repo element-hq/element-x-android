@@ -126,11 +126,12 @@ class MessagesFlowNode(
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
-    plugins = plugins
-) {
+    plugins = plugins,
+),
+    MessagesEntryPointNode {
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data class Messages(val focusedEventId: EventId?, val inThreadId: ThreadId?) : NavTarget
+        data class Messages(val focusedEventId: EventId?) : NavTarget
 
         @Parcelize
         data class MediaViewer(
@@ -290,7 +291,7 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.OpenThread(threadRootId, focusedEventId))
                     }
                 }
-                val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId, navTarget.inThreadId)
+                val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
             }
             is NavTarget.MediaViewer -> {
@@ -601,6 +602,16 @@ class MessagesFlowNode(
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
         )
+    }
+
+    override suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?) {
+        // Wait until we have the UI for the main timeline attached
+        waitForChildAttached<MessagesNode>()
+        // Give enough time for the items in the main timeline to be received, otherwise loading the focused thread root id won't work
+        // (look at TimelineItemIndexer and firstProcessLatch for more info)
+        delay(10.milliseconds)
+        // Then push the new threads screen on top
+        backstack.push(NavTarget.Thread(threadId, focusedEventId))
     }
 
     @Composable

@@ -25,7 +25,6 @@ interface MessagesEntryPoint : FeatureEntryPoint {
         @Parcelize
         data class Messages(
             val focusedEventId: EventId?,
-            val inThreadId: ThreadId?,
         ) : InitialTarget
 
         @Parcelize
@@ -49,4 +48,8 @@ interface MessagesEntryPoint : FeatureEntryPoint {
     data class Params(val initialTarget: InitialTarget) : NodeInputs
 
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
+}
+
+interface MessagesEntryPointNode {
+    suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?)
 }

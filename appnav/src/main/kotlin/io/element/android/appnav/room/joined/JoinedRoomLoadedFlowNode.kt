@@ -25,12 +25,14 @@ import io.element.android.appnav.di.RoomGraphFactory
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
+import io.element.android.features.messages.api.MessagesEntryPointNode
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
@@ -228,7 +230,7 @@ class JoinedRoomLoadedFlowNode(
             }
         }
         val params = MessagesEntryPoint.Params(
-            MessagesEntryPoint.InitialTarget.Messages(navTarget.focusedEventId, navTarget.inThreadId)
+            MessagesEntryPoint.InitialTarget.Messages(navTarget.focusedEventId)
         )
         return messagesEntryPoint.nodeBuilder(this, buildContext)
             .params(params)
@@ -243,7 +245,6 @@ class JoinedRoomLoadedFlowNode(
         @Parcelize
         data class Messages(
             val focusedEventId: EventId? = null,
-            val inThreadId: ThreadId? = null,
         ) : NavTarget
 
         @Parcelize
@@ -260,6 +261,13 @@ class JoinedRoomLoadedFlowNode(
 
         @Parcelize
         data object RoomNotificationSettings : NavTarget
+    }
+
+    suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?) {
+        val messageNode = waitForChildAttached<Node, NavTarget> { navTarget ->
+            navTarget is NavTarget.Messages
+        }
+        (messageNode as? MessagesEntryPointNode)?.attachThread(threadId, focusedEventId)
     }
 
     @Composable

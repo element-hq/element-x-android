@@ -39,9 +39,11 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
@@ -209,6 +211,11 @@ class RoomFlowNode(
                     .build()
             }
         }
+    }
+
+    suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?) {
+        waitForChildAttached<JoinedRoomFlowNode>()
+            .attachThread(threadId, focusedEventId)
     }
 
     private fun loadingNode(buildContext: BuildContext) = node(buildContext) { modifier ->

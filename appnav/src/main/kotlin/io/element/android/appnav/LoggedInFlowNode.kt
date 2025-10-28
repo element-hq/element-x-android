@@ -496,19 +496,17 @@ class LoggedInFlowNode(
         serverNames: List<String> = emptyList(),
         trigger: JoinedRoom.Trigger? = null,
         eventId: EventId? = null,
-        threadId: ThreadId? = null,
         clearBackstack: Boolean,
-    ) {
+    ): RoomFlowNode {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.Home
         }
-        attachChild<RoomFlowNode> {
+        return attachChild<RoomFlowNode> {
             val roomNavTarget = NavTarget.Room(
                 roomIdOrAlias = roomIdOrAlias,
                 serverNames = serverNames,
                 trigger = trigger,
                 initialElement = RoomNavigationTarget.Root(eventId = eventId,
-                    inThreadId = threadId,
                 )
             )
             backstack.accept(AttachRoomOperation(roomNavTarget, clearBackstack))
