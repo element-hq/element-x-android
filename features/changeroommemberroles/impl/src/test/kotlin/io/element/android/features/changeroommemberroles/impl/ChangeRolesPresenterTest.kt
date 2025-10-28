@@ -52,7 +52,6 @@ class ChangeRolesPresenterTest {
                 assertThat(searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
                 assertThat(selectedUsers).isEmpty()
                 assertThat(hasPendingChanges).isFalse()
-                assertThat(exitState).isEqualTo(AsyncAction.Uninitialized)
                 assertThat(savingState).isEqualTo(AsyncAction.Uninitialized)
             }
             cancelAndIgnoreRemainingEvents()
@@ -266,7 +265,7 @@ class ChangeRolesPresenterTest {
     }
 
     @Test
-    fun `present - Exit will display success if no pending changes`() = runTest {
+    fun `present - Exit will display success false if no pending changes`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
@@ -278,15 +277,15 @@ class ChangeRolesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.hasPendingChanges).isFalse()
-            assertThat(initialState.exitState).isEqualTo(AsyncAction.Uninitialized)
+            assertThat(initialState.savingState).isEqualTo(AsyncAction.Uninitialized)
 
             initialState.eventSink(ChangeRolesEvent.Exit)
-            assertThat(awaitItem().exitState).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(false))
         }
     }
 
     @Test
-    fun `present - CancelExit will remove exit confirmation`() = runTest {
+    fun `present - CloseDialog will remove exit confirmation`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
@@ -298,16 +297,16 @@ class ChangeRolesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.hasPendingChanges).isFalse()
-            assertThat(initialState.exitState).isEqualTo(AsyncAction.Uninitialized)
+            assertThat(initialState.savingState).isEqualTo(AsyncAction.Uninitialized)
 
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Exit)
             val confirmingState = awaitItem()
-            assertThat(confirmingState.exitState).isEqualTo(AsyncAction.ConfirmingNoParams)
+            assertThat(confirmingState.savingState).isEqualTo(AsyncAction.ConfirmingCancellation)
 
-            confirmingState.eventSink(ChangeRolesEvent.CancelExit)
-            assertThat(awaitItem().exitState).isEqualTo(AsyncAction.Uninitialized)
+            confirmingState.eventSink(ChangeRolesEvent.CloseDialog)
+            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Uninitialized)
         }
     }
 
@@ -324,7 +323,7 @@ class ChangeRolesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.hasPendingChanges).isFalse()
-            assertThat(initialState.exitState).isEqualTo(AsyncAction.Uninitialized)
+            assertThat(initialState.savingState).isEqualTo(AsyncAction.Uninitialized)
 
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
             val updatedState = awaitItem()
@@ -332,10 +331,10 @@ class ChangeRolesPresenterTest {
             skipItems(1)
 
             updatedState.eventSink(ChangeRolesEvent.Exit)
-            assertThat(awaitItem().exitState).isEqualTo(AsyncAction.ConfirmingNoParams)
+            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.ConfirmingCancellation)
 
             updatedState.eventSink(ChangeRolesEvent.Exit)
-            assertThat(awaitItem().exitState).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(false))
         }
     }
 
@@ -367,12 +366,12 @@ class ChangeRolesPresenterTest {
             assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
             skipItems(1)
 
-            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(true))
         }
     }
 
     @Test
-    fun `present - CancelSave will remove the confirmation dialog`() = runTest {
+    fun `present - CloseDialog will remove the confirmation dialog`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(roomPowerLevels = roomPowerLevelsWithRole(RoomMember.Role.Admin)))
@@ -391,7 +390,7 @@ class ChangeRolesPresenterTest {
             val confirmingState = awaitItem()
             assertThat(confirmingState.savingState).isEqualTo(AsyncAction.ConfirmingNoParams)
 
-            confirmingState.eventSink(ChangeRolesEvent.CancelSave)
+            confirmingState.eventSink(ChangeRolesEvent.CloseDialog)
             assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Uninitialized)
         }
     }
@@ -426,7 +425,7 @@ class ChangeRolesPresenterTest {
             assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
             skipItems(1)
 
-            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(true))
             assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.Moderator))
         }
     }
@@ -504,13 +503,13 @@ class ChangeRolesPresenterTest {
             assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
             skipItems(1)
 
-            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(true))
             assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.User))
         }
     }
 
     @Test
-    fun `present - Save can handle failures and ClearError clears them`() = runTest {
+    fun `present - Save can handle failures and CloseDialog clears them`() = runTest {
         val room = FakeJoinedRoom(
             updateUserRoleResult = { Result.failure(IllegalStateException("Failed")) }
         ).apply {
@@ -534,7 +533,7 @@ class ChangeRolesPresenterTest {
             val failedState = awaitItem()
             assertThat(failedState.savingState).isInstanceOf(AsyncAction.Failure::class.java)
 
-            failedState.eventSink(ChangeRolesEvent.ClearError)
+            failedState.eventSink(ChangeRolesEvent.CloseDialog)
             assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Uninitialized)
         }
     }

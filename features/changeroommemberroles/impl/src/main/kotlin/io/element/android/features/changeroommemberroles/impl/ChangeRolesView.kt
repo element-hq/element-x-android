@@ -29,7 +29,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
@@ -41,7 +40,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
@@ -52,7 +50,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Checkbox
@@ -172,61 +169,59 @@ fun ChangeRolesView(
         AsyncIndicatorHost(modifier = Modifier.statusBarsPadding(), asyncIndicatorState)
 
         AsyncActionView(
-            async = state.exitState,
-            onSuccess = { latestNavigateUp() },
-            confirmationDialog = {
-                ConfirmationDialog(
-                    title = stringResource(CommonStrings.dialog_unsaved_changes_title),
-                    content = stringResource(CommonStrings.dialog_unsaved_changes_description_android),
-                    onSubmitClick = { state.eventSink(ChangeRolesEvent.Exit) },
-                    onDismiss = { state.eventSink(ChangeRolesEvent.CancelExit) }
-                )
-            },
-            onErrorDismiss = { /* Cannot happen */ },
-        )
-
-        when (state.savingState) {
-            is AsyncAction.Confirming -> {
-                when (state.role) {
-                    is RoomMember.Role.Owner -> {
-                        ConfirmationDialog(
-                            title = stringResource(R.string.screen_room_change_role_confirm_change_owners_title),
-                            content = stringResource(R.string.screen_room_change_role_confirm_change_owners_description),
-                            submitText = stringResource(CommonStrings.action_continue),
-                            onSubmitClick = { state.eventSink(ChangeRolesEvent.Save) },
-                            onDismiss = { state.eventSink(ChangeRolesEvent.ClearError) },
-                            destructiveSubmit = true,
-                        )
-                    }
-                    is RoomMember.Role.Admin -> {
-                        ConfirmationDialog(
-                            title = stringResource(R.string.screen_room_change_role_confirm_add_admin_title),
-                            content = stringResource(R.string.screen_room_change_role_confirm_add_admin_description),
-                            onSubmitClick = { state.eventSink(ChangeRolesEvent.Save) },
-                            onDismiss = { state.eventSink(ChangeRolesEvent.ClearError) }
-                        )
-                    }
-                    else -> Unit // No confirmation needed for Moderator or User roles
-                }
-            }
-            is AsyncAction.Loading -> {
-                ProgressDialog()
-            }
-            is AsyncAction.Failure -> {
-                ErrorDialog(
-                    content = stringResource(CommonStrings.error_unknown),
-                    onSubmit = { state.eventSink(ChangeRolesEvent.ClearError) }
-                )
-            }
-            is AsyncAction.Success -> {
-                LaunchedEffect(state.savingState) {
+            async = state.savingState,
+            onSuccess = { changeSaved ->
+                if (changeSaved) {
                     asyncIndicatorState.enqueue(durationMs = AsyncIndicator.DURATION_SHORT) {
                         AsyncIndicator.Custom(text = stringResource(CommonStrings.common_saved_changes))
                     }
+                } else {
+                    latestNavigateUp()
                 }
-            }
-            else -> Unit
-        }
+            },
+            confirmationDialog = { confirming ->
+                when (confirming) {
+                    is AsyncAction.ConfirmingCancellation -> {
+                        ConfirmationDialog(
+                            title = stringResource(CommonStrings.dialog_unsaved_changes_title),
+                            content = stringResource(CommonStrings.dialog_unsaved_changes_description_android),
+                            onSubmitClick = { state.eventSink(ChangeRolesEvent.Exit) },
+                            onDismiss = { state.eventSink(ChangeRolesEvent.CloseDialog) }
+                        )
+                    }
+                    else -> {
+                        when (state.role) {
+                            is RoomMember.Role.Owner -> {
+                                ConfirmationDialog(
+                                    title = stringResource(R.string.screen_room_change_role_confirm_change_owners_title),
+                                    content = stringResource(R.string.screen_room_change_role_confirm_change_owners_description),
+                                    submitText = stringResource(CommonStrings.action_continue),
+                                    onSubmitClick = { state.eventSink(ChangeRolesEvent.Save) },
+                                    onDismiss = { state.eventSink(ChangeRolesEvent.CloseDialog) },
+                                    destructiveSubmit = true,
+                                )
+                            }
+                            is RoomMember.Role.Admin -> {
+                                ConfirmationDialog(
+                                    title = stringResource(R.string.screen_room_change_role_confirm_add_admin_title),
+                                    content = stringResource(R.string.screen_room_change_role_confirm_add_admin_description),
+                                    onSubmitClick = { state.eventSink(ChangeRolesEvent.Save) },
+                                    onDismiss = { state.eventSink(ChangeRolesEvent.CloseDialog) }
+                                )
+                            }
+                            // No confirmation needed for Moderator or User roles
+                            else -> Unit
+                        }
+                    }
+                }
+            },
+            errorMessage = {
+                stringResource(CommonStrings.error_unknown)
+            },
+            onErrorDismiss = {
+                state.eventSink(ChangeRolesEvent.CloseDialog)
+            },
+        )
     }
 }
 

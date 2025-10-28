@@ -135,7 +135,7 @@ class ChangeRolesViewTest {
         rule.setChangeRolesContent(
             state = aChangeRolesState(
                 isSearchActive = true,
-                exitState = AsyncAction.ConfirmingNoParams,
+                savingState = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
@@ -151,14 +151,14 @@ class ChangeRolesViewTest {
         rule.setChangeRolesContent(
             state = aChangeRolesState(
                 isSearchActive = true,
-                exitState = AsyncAction.ConfirmingNoParams,
+                savingState = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
 
         rule.clickOn(CommonStrings.action_cancel)
 
-        eventsRecorder.assertSingle(ChangeRolesEvent.CancelExit)
+        eventsRecorder.assertSingle(ChangeRolesEvent.CloseDialog)
     }
 
     @Test
@@ -209,7 +209,7 @@ class ChangeRolesViewTest {
 
         rule.clickOn(CommonStrings.action_cancel)
 
-        eventsRecorder.assertSingle(ChangeRolesEvent.ClearError)
+        eventsRecorder.assertSingle(ChangeRolesEvent.CloseDialog)
     }
 
     @Test
@@ -225,7 +225,7 @@ class ChangeRolesViewTest {
 
         rule.clickOn(CommonStrings.action_ok)
 
-        eventsRecorder.assertSingle(ChangeRolesEvent.ClearError)
+        eventsRecorder.assertSingle(ChangeRolesEvent.CloseDialog)
     }
 
     @Test
