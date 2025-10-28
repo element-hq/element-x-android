@@ -22,7 +22,6 @@ import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
-import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.test.notifications.FakeNotificationResolverQueue
@@ -178,7 +177,6 @@ class FetchNotificationWorkerTest {
         syncOnNotifiableEvent = syncOnNotifiableEvent,
         coroutineDispatchers = testCoroutineDispatchers(),
         workerDataConverter = WorkerDataConverter(DefaultJsonProvider()),
-        notificationChannels = FakeNotificationChannels(),
         buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
     )
 
