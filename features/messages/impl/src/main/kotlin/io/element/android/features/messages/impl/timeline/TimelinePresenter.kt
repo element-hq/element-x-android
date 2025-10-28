@@ -86,6 +86,7 @@ class TimelinePresenter(
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<TimelineState> {
+    private val tag = "TimelinePresenter"
     @AssistedFactory
     interface Factory {
         fun create(
@@ -102,13 +103,13 @@ class TimelinePresenter(
     )
     private var timelineItems by mutableStateOf<ImmutableList<TimelineItem>>(persistentListOf())
 
+    private val focusRequestState: MutableState<FocusRequestState> = mutableStateOf(FocusRequestState.None)
+
     @Composable
     override fun present(): TimelineState {
         val localScope = rememberCoroutineScope()
 
         val timelineMode = remember { timelineController.mainTimelineMode() }
-
-        var focusRequestState: FocusRequestState by remember { mutableStateOf(FocusRequestState.None) }
 
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
@@ -155,7 +156,7 @@ class TimelinePresenter(
                         if (event.firstIndex == 0) {
                             newEventState.value = NewEventState.None
                         }
-                        Timber.d("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
+                        Timber.tag(tag).d("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
                         sessionCoroutineScope.sendReadReceiptIfNeeded(
                             firstVisibleIndex = event.firstIndex,
                             timelineItems = timelineItems,
@@ -186,14 +187,17 @@ class TimelinePresenter(
                 is TimelineEvents.EditPoll -> {
                     navigator.onEditPollClick(event.pollStartId)
                 }
-                is TimelineEvents.FocusOnEvent -> {
-                    focusRequestState = FocusRequestState.Requested(event.eventId, event.debounce)
-                }
+                is TimelineEvents.FocusOnEvent -> sessionCoroutineScope.launch {
+                    focusRequestState.value = FocusRequestState.Requested(event.eventId, event.debounce)
+                    delay(event.debounce)
+                    Timber.tag(tag).d("Started focus on ${event.eventId}")
+                    focusOnEvent(event.eventId, focusRequestState)
+                }.start()
                 is TimelineEvents.OnFocusEventRender -> {
-                    focusRequestState = focusRequestState.onFocusEventRender()
+                    focusRequestState.value = focusRequestState.value.onFocusEventRender()
                 }
                 is TimelineEvents.ClearFocusRequestState -> {
-                    focusRequestState = FocusRequestState.None
+                    focusRequestState.value = FocusRequestState.None
                 }
                 is TimelineEvents.JumpToLive -> {
                     timelineController.focusOnLive()
@@ -236,69 +240,19 @@ class TimelinePresenter(
                 .launchIn(this)
         }
 
-        LaunchedEffect(focusRequestState) {
-            Timber.d("## focusRequestState: $focusRequestState")
-            when (val currentFocusRequestState = focusRequestState) {
-                is FocusRequestState.Requested -> {
-                    delay(currentFocusRequestState.debounce)
-                    if (timelineItemIndexer.isKnown(currentFocusRequestState.eventId)) {
-                        val index = timelineItemIndexer.indexOf(currentFocusRequestState.eventId)
-                        focusRequestState = FocusRequestState.Success(eventId = currentFocusRequestState.eventId, index = index)
-                    } else {
-                        focusRequestState = FocusRequestState.Loading(eventId = currentFocusRequestState.eventId)
-                    }
-                }
-                is FocusRequestState.Loading -> {
-                    val eventId = currentFocusRequestState.eventId
-                    val threadId = room.threadRootIdForEvent(eventId).getOrElse {
-                        focusRequestState = FocusRequestState.Failure(it)
-                        return@LaunchedEffect
-                    }
-
-                    if (timelineController.mainTimelineMode() is Timeline.Mode.Thread && threadId == null) {
-                        // We are in a thread timeline, and the event isn't part of a thread, we need to navigate back to the room
-                        focusRequestState = FocusRequestState.None
-                        navigator.onNavigateToRoom(room.roomId, eventId, calculateServerNamesForRoom(room))
-                    } else {
-                        timelineController.focusOnEvent(eventId, threadId)
-                            .onSuccess { result ->
-                                when (result) {
-                                    is EventFocusResult.FocusedOnLive -> {
-                                        focusRequestState = FocusRequestState.Success(eventId = eventId)
-                                    }
-                                    is EventFocusResult.IsInThread -> {
-                                        val currentThreadId = (timelineController.mainTimelineMode() as? Timeline.Mode.Thread)?.threadRootId
-                                        if (currentThreadId == result.threadId) {
-                                            // It's the same thread, we just focus on the event
-                                            focusRequestState = FocusRequestState.Success(eventId = eventId)
-                                        } else {
-                                            focusRequestState = FocusRequestState.Success(eventId = result.threadId.asEventId())
-                                            // It's part of a thread we're not in, let's open it in another timeline
-                                            navigator.onOpenThread(result.threadId, eventId)
-                                        }
-                                    }
-                                }
-                            }
-                            .onFailure {
-                                focusRequestState = FocusRequestState.Failure(it)
-                            }
-                    }
-                }
-                else -> Unit
-            }
-        }
-
         LaunchedEffect(timelineItems.size) {
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
         }
 
-        LaunchedEffect(timelineItems.size, focusRequestState) {
-            val currentFocusRequestState = focusRequestState
+        LaunchedEffect(timelineItems.size, focusRequestState.value) {
+            val currentFocusRequestState = focusRequestState.value
             if (currentFocusRequestState is FocusRequestState.Success && !currentFocusRequestState.rendered) {
                 val eventId = currentFocusRequestState.eventId
                 if (timelineItemIndexer.isKnown(eventId)) {
                     val index = timelineItemIndexer.indexOf(eventId)
-                    focusRequestState = FocusRequestState.Success(eventId = eventId, index = index)
+                    focusRequestState.value = FocusRequestState.Success(eventId = eventId, index = index)
+                } else {
+                    Timber.w("Unknown timeline item for focused item, can't render focus")
                 }
             }
         }
@@ -319,6 +273,11 @@ class TimelinePresenter(
                 )
             }
         }
+
+        LaunchedEffect(focusRequestState.value) {
+            Timber.tag(tag).d("Timeline: $timelineMode | focus state: ${focusRequestState.value}")
+        }
+
         return TimelineState(
             timelineItems = timelineItems,
             timelineMode = timelineMode,
@@ -326,12 +285,61 @@ class TimelinePresenter(
             renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,
             isLive = isLive,
-            focusRequestState = focusRequestState,
+            focusRequestState = focusRequestState.value,
             messageShield = messageShield.value,
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
             eventSink = { handleEvents(it) }
         )
+    }
+
+    private suspend fun focusOnEvent(
+        eventId: EventId,
+        focusRequestState: MutableState<FocusRequestState>,
+    ) {
+        if (timelineItemIndexer.isKnown(eventId)) {
+            val index = timelineItemIndexer.indexOf(eventId)
+            focusRequestState.value = FocusRequestState.Success(eventId = eventId, index = index)
+            return
+        }
+
+        Timber.tag(tag).d("Event $eventId not found in the loaded timeline, loading a focused timeline")
+        focusRequestState.value = FocusRequestState.Loading(eventId = eventId)
+
+        val threadId = room.threadRootIdForEvent(eventId).getOrElse {
+            focusRequestState.value = FocusRequestState.Failure(it)
+            return
+        }
+
+        if (timelineController.mainTimelineMode() is Timeline.Mode.Thread && threadId == null) {
+            // We are in a thread timeline, and the event isn't part of a thread, we need to navigate back to the room
+            focusRequestState.value = FocusRequestState.None
+            navigator.onNavigateToRoom(room.roomId, eventId, calculateServerNamesForRoom(room))
+        } else {
+            Timber.tag(tag).d("Focusing on event $eventId - thread $threadId")
+            timelineController.focusOnEvent(eventId, threadId)
+                .onSuccess { result ->
+                    when (result) {
+                        is EventFocusResult.FocusedOnLive -> {
+                            focusRequestState.value = FocusRequestState.Success(eventId = eventId)
+                        }
+                        is EventFocusResult.IsInThread -> {
+                            val currentThreadId = (timelineController.mainTimelineMode() as? Timeline.Mode.Thread)?.threadRootId
+                            if (currentThreadId == result.threadId) {
+                                // It's the same thread, we just focus on the event
+                                focusRequestState.value = FocusRequestState.Success(eventId = eventId)
+                            } else {
+                                focusRequestState.value = FocusRequestState.Success(eventId = result.threadId.asEventId())
+                                // It's part of a thread we're not in, let's open it in another timeline
+                                navigator.onOpenThread(result.threadId, eventId)
+                            }
+                        }
+                    }
+                }
+                .onFailure {
+                    focusRequestState.value = FocusRequestState.Failure(it)
+                }
+        }
     }
 
     /**

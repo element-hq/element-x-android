@@ -46,6 +46,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.rememberDelegateTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
+import io.element.android.libraries.architecture.waitForNavTargetAttached
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -392,6 +393,12 @@ class RootFlowNode(
             is PermalinkData.FallbackLink -> Unit
             is PermalinkData.RoomEmailInviteLink -> Unit
             is PermalinkData.RoomLink -> {
+                // If there is a thread id, focus on it in the main timeline
+                val focusedEventId = if (permalinkData.threadId != null) {
+                    permalinkData.threadId?.asEventId()
+                } else {
+                    permalinkData.eventId
+                }
                 attachRoom(
                     roomIdOrAlias = permalinkData.roomIdOrAlias,
                     trigger = JoinedRoom.Trigger.MobilePermalink,
@@ -408,6 +415,7 @@ class RootFlowNode(
 
     private suspend fun RoomFlowNode.maybeAttachThread(threadId: ThreadId?, focusedEventId: EventId?) {
         if (threadId != null) {
+            waitForNavTargetAttached { it is RoomFlowNode.NavTarget.JoinedRoom }
             attachThread(threadId, focusedEventId)
         }
     }
@@ -417,11 +425,13 @@ class RootFlowNode(
         attachSession(deeplinkData.sessionId).let { loggedInFlowNode ->
             when (deeplinkData) {
                 is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
-                is DeeplinkData.Room -> loggedInFlowNode.attachRoom(
-                    roomIdOrAlias = deeplinkData.roomId.toRoomIdOrAlias(),
-                    eventId = if (deeplinkData.threadId != null) deeplinkData.threadId?.asEventId() else deeplinkData.eventId,
-                    clearBackstack = true
-                ).maybeAttachThread(deeplinkData.threadId, deeplinkData.eventId)
+                is DeeplinkData.Room -> {
+                    loggedInFlowNode.attachRoom(
+                        roomIdOrAlias = deeplinkData.roomId.toRoomIdOrAlias(),
+                        eventId = if (deeplinkData.threadId != null) deeplinkData.threadId?.asEventId() else deeplinkData.eventId,
+                        clearBackstack = true,
+                    ).maybeAttachThread(deeplinkData.threadId, deeplinkData.eventId)
+                }
             }
         }
     }

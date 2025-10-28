@@ -33,6 +33,7 @@ import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
+import io.element.android.features.messages.api.MessagesEntryPointNode
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
@@ -87,10 +88,12 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpanUpdater
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesNode(RoomScope::class)
 @AssistedInject
@@ -176,7 +179,7 @@ class MessagesFlowNode(
         data object KnockRequestsList : NavTarget
 
         @Parcelize
-        data class OpenThread(val threadRootId: ThreadId, val focusedEventId: EventId?) : NavTarget
+        data class Thread(val threadRootId: ThreadId, val focusedEventId: EventId?) : NavTarget
     }
 
     private val callbacks = plugins<MessagesEntryPoint.Callback>()
@@ -288,7 +291,7 @@ class MessagesFlowNode(
                     }
 
                     override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
-                        backstack.push(NavTarget.OpenThread(threadRootId, focusedEventId))
+                        backstack.push(NavTarget.Thread(threadRootId, focusedEventId))
                     }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
@@ -421,7 +424,7 @@ class MessagesFlowNode(
             NavTarget.KnockRequestsList -> {
                 knockRequestsListEntryPoint.createNode(this, buildContext)
             }
-            is NavTarget.OpenThread -> {
+            is NavTarget.Thread -> {
                 val inputs = ThreadedMessagesNode.Inputs(
                     threadRootEventId = navTarget.threadRootId,
                     focusedEventId = navTarget.focusedEventId,
@@ -486,7 +489,7 @@ class MessagesFlowNode(
                     }
 
                     override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
-                        backstack.push(NavTarget.OpenThread(threadRootId, focusedEventId))
+                        backstack.push(NavTarget.Thread(threadRootId, focusedEventId))
                     }
                 }
                 createNode<ThreadedMessagesNode>(buildContext, listOf(inputs, callback))
@@ -607,7 +610,7 @@ class MessagesFlowNode(
     override suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?) {
         // Wait until we have the UI for the main timeline attached
         waitForChildAttached<MessagesNode>()
-        // Give enough time for the items in the main timeline to be received, otherwise loading the focused thread root id won't work
+        // Give some time for the items in the main timeline to be received, otherwise loading the focused thread root id won't work
         // (look at TimelineItemIndexer and firstProcessLatch for more info)
         delay(10.milliseconds)
         // Then push the new threads screen on top

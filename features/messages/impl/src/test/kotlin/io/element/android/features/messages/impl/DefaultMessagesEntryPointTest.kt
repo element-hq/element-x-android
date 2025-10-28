@@ -32,7 +32,6 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
@@ -123,7 +122,7 @@ class DefaultMessagesEntryPointTest {
             override fun forwardEvent(eventId: EventId) = lambdaError()
             override fun openRoom(roomId: RoomId) = lambdaError()
         }
-        val initialTarget = MessagesEntryPoint.InitialTarget.Messages(focusedEventId = AN_EVENT_ID, inThreadId = null)
+        val initialTarget = MessagesEntryPoint.InitialTarget.Messages(focusedEventId = AN_EVENT_ID)
         val params = MessagesEntryPoint.Params(initialTarget)
         val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
             .params(params)
@@ -136,8 +135,8 @@ class DefaultMessagesEntryPointTest {
 
     @Test
     fun `test initial target to nav target mapping`() {
-        assertThat(MessagesEntryPoint.InitialTarget.Messages(focusedEventId = AN_EVENT_ID, inThreadId = A_THREAD_ID).toNavTarget())
-            .isEqualTo(MessagesFlowNode.NavTarget.Messages(focusedEventId = AN_EVENT_ID, inThreadId = A_THREAD_ID))
+        assertThat(MessagesEntryPoint.InitialTarget.Messages(focusedEventId = AN_EVENT_ID).toNavTarget())
+            .isEqualTo(MessagesFlowNode.NavTarget.Messages(focusedEventId = AN_EVENT_ID))
         assertThat(MessagesEntryPoint.InitialTarget.PinnedMessages.toNavTarget())
             .isEqualTo(MessagesFlowNode.NavTarget.PinnedMessagesList)
     }

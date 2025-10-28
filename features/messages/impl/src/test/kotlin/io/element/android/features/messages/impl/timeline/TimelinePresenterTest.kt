@@ -563,9 +563,7 @@ class TimelinePresenterTest {
 
     @Test
     fun `present - focus on known event retrieves the event from cache`() = runTest {
-        val timelineItemIndexer = TimelineItemIndexer().apply {
-            process(listOf(aMessageEvent(eventId = AN_EVENT_ID)))
-        }
+        val timelineItemIndexer = TimelineItemIndexer()
         val presenter = createTimelinePresenter(
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline(
@@ -578,7 +576,10 @@ class TimelinePresenterTest {
                         )
                     )
                 ),
-                baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
+                baseRoom = FakeBaseRoom(
+                    canUserSendMessageResult = { _, _ -> Result.success(true) },
+                    threadRootIdForEventResult = { Result.success(null) },
+                ),
             ),
             timelineItemIndexer = timelineItemIndexer,
         )
@@ -586,6 +587,12 @@ class TimelinePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
+
+            advanceUntilIdle()
+
+            // Pre-populate the indexer after the first items have been retrieved
+            timelineItemIndexer.process(listOf(aMessageEvent(eventId = AN_EVENT_ID)))
+
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
