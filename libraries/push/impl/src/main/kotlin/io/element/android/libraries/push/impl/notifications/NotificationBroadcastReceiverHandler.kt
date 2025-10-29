@@ -72,8 +72,12 @@ class NotificationBroadcastReceiverHandler(
                 notificationCleaner.clearEvent(sessionId, eventId)
             }
             actionIds.markRoomRead -> if (roomId != null) {
-                notificationCleaner.clearMessagesForRoom(sessionId, roomId)
-                handleMarkAsRead(sessionId, roomId)
+                if (threadId == null) {
+                    notificationCleaner.clearMessagesForRoom(sessionId, roomId)
+                } else {
+                    notificationCleaner.clearMessagesForThread(sessionId, roomId, threadId)
+                }
+                handleMarkAsRead(sessionId, roomId, threadId)
             }
             actionIds.join -> if (roomId != null) {
                 notificationCleaner.clearMembershipNotificationForRoom(sessionId, roomId)
@@ -96,7 +100,8 @@ class NotificationBroadcastReceiverHandler(
         client.getRoom(roomId)?.leave()
     }
 
-    private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId) = appCoroutineScope.launch {
+    private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId, threadId: ThreadId?) = appCoroutineScope.launch {
+        // TODO Use threadId at some point.
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
         val isSendPublicReadReceiptsEnabled = sessionPreferencesStore.get(sessionId, this).isSendPublicReadReceiptsEnabled().first()
         val receiptType = if (isSendPublicReadReceiptsEnabled) {

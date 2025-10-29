@@ -94,10 +94,10 @@ class DefaultNotificationDrawerManager(
                 )
             }
             is NavigationState.Thread -> {
-                onEnteringThread(
-                    navigationState.parentRoom.parentSpace.parentSession.sessionId,
-                    navigationState.parentRoom.roomId,
-                    navigationState.threadId
+                clearMessagesForThread(
+                    sessionId = navigationState.parentRoom.parentSpace.parentSession.sessionId,
+                    roomId = navigationState.parentRoom.roomId,
+                    threadId = navigationState.threadId,
                 )
             }
         }
@@ -146,6 +146,16 @@ class DefaultNotificationDrawerManager(
         clearSummaryNotificationIfNeeded(sessionId)
     }
 
+    /**
+     * Should be called when the application is currently opened and showing timeline for the given threadId.
+     * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
+     */
+    override fun clearMessagesForThread(sessionId: SessionId, roomId: RoomId, threadId: ThreadId) {
+        val tag = NotificationCreator.messageTag(roomId, threadId)
+        notificationManager.cancel(tag, NotificationIdProvider.getRoomMessagesNotificationId(sessionId))
+        clearSummaryNotificationIfNeeded(sessionId)
+    }
+
     override fun clearMembershipNotificationForSession(sessionId: SessionId) {
         activeNotificationsProvider.getMembershipNotificationForSession(sessionId)
             .forEach { notificationManager.cancel(it.tag, it.id) }
@@ -175,16 +185,6 @@ class DefaultNotificationDrawerManager(
         if (summaryNotification != null && activeNotificationsProvider.count(sessionId) == 1) {
             notificationManager.cancel(null, summaryNotification.id)
         }
-    }
-
-    /**
-     * Should be called when the application is currently opened and showing timeline for the given threadId.
-     * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
-     */
-    private fun onEnteringThread(sessionId: SessionId, roomId: RoomId, threadId: ThreadId) {
-        val tag = NotificationCreator.messageTag(roomId, threadId)
-        notificationManager.cancel(tag, NotificationIdProvider.getRoomMessagesNotificationId(sessionId))
-        clearSummaryNotificationIfNeeded(sessionId)
     }
 
     private suspend fun renderEvents(eventsToRender: List<NotifiableEvent>) {
