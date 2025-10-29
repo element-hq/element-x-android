@@ -100,6 +100,7 @@ class NotificationBroadcastReceiverHandler(
         client.getRoom(roomId)?.leave()
     }
 
+    @Suppress("unused")
     private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId, threadId: ThreadId?) = appCoroutineScope.launch {
         // TODO Use threadId at some point.
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch

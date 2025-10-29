@@ -46,7 +46,6 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.rememberDelegateTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
-import io.element.android.libraries.architecture.waitForNavTargetAttached
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -415,7 +414,6 @@ class RootFlowNode(
 
     private suspend fun RoomFlowNode.maybeAttachThread(threadId: ThreadId?, focusedEventId: EventId?) {
         if (threadId != null) {
-            waitForNavTargetAttached { it is RoomFlowNode.NavTarget.JoinedRoom }
             attachThread(threadId, focusedEventId)
         }
     }
