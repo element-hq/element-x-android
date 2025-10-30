@@ -210,10 +210,7 @@ class DefaultNotificationCreator(
                 clearActions()
                 // Add actions and notification intents
                 // Mark room/thread as read
-                // TODO Add this action for thread at some point.
-                if (threadId == null) {
-                    addAction(markAsReadActionFactory.create(roomInfo, threadId))
-                }
+                addAction(markAsReadActionFactory.create(roomInfo, threadId))
                 // Quick reply
                 if (!roomInfo.hasSmartReplyError) {
                     val latestEventId = events.lastOrNull()?.eventId
