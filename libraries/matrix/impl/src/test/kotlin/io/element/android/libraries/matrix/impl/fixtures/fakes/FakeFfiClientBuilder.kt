@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import uniffi.matrix_sdk.BackupDownloadStrategy
@@ -19,7 +19,7 @@ import uniffi.matrix_sdk_crypto.DecryptionSettings
 
 class FakeFfiClientBuilder(
     val buildResult: () -> Client = { FakeFfiClient(withUtdHook = {}) }
-) : ClientBuilder(NoPointer) {
+) : ClientBuilder(NoHandle) {
     override fun addRootCertificates(certificates: List<ByteArray>) = this
     override fun autoEnableBackups(autoEnableBackups: Boolean) = this
     override fun autoEnableCrossSigning(autoEnableCrossSigning: Boolean) = this

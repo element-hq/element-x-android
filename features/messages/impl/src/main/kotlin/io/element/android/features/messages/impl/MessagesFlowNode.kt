@@ -18,6 +18,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
@@ -25,6 +26,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
+import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.LocationService
@@ -33,7 +35,6 @@ import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
-import io.element.android.features.messages.impl.forward.ForwardMessagesNode
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
@@ -103,6 +104,7 @@ class MessagesFlowNode(
     private val createPollEntryPoint: CreatePollEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
+    private val forwardEntryPoint: ForwardEntryPoint,
     private val analyticsService: AnalyticsService,
     private val locationService: LocationService,
     private val room: BaseRoom,
@@ -149,7 +151,10 @@ class MessagesFlowNode(
         data class EventDebugInfo(val eventId: EventId?, val debugInfo: TimelineItemDebugInfo) : NavTarget
 
         @Parcelize
-        data class ForwardEvent(val eventId: EventId, val fromPinnedEvents: Boolean) : NavTarget
+        data class ForwardEvent(
+            val eventId: EventId,
+            val fromPinnedEvents: Boolean,
+        ) : NavTarget
 
         @Parcelize
         data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
@@ -305,6 +310,11 @@ class MessagesFlowNode(
                     override fun onViewInTimeline(eventId: EventId) {
                         viewInTimeline(eventId)
                     }
+
+                    override fun onForwardEvent(eventId: EventId) {
+                        // Need to go to the parent because of the overlay
+                        forwardEvent(eventId)
+                    }
                 }
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)
                     .params(params)
@@ -333,13 +343,19 @@ class MessagesFlowNode(
                 } else {
                     timelineController
                 }
-                val inputs = ForwardMessagesNode.Inputs(navTarget.eventId, timelineProvider)
-                val callback = object : ForwardMessagesNode.Callback {
-                    override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
+                val params = ForwardEntryPoint.Params(navTarget.eventId, timelineProvider)
+                val callback = object : ForwardEntryPoint.Callback {
+                    override fun onDone(roomIds: List<RoomId>) {
+                        backstack.pop()
+                        roomIds.singleOrNull()?.let { roomId ->
+                            callbacks.forEach { it.openRoom(roomId) }
+                        }
                     }
                 }
-                createNode<ForwardMessagesNode>(buildContext, listOf(inputs, callback))
+                forwardEntryPoint.nodeBuilder(this, buildContext)
+                    .params(params)
+                    .callback(callback)
+                    .build()
             }
             is NavTarget.ReportMessage -> {
                 val inputs = ReportMessageNode.Inputs(navTarget.eventId, navTarget.senderId)
@@ -483,6 +499,10 @@ class MessagesFlowNode(
             eventId = eventId,
         )
         callbacks.forEach { it.onPermalinkClick(permalinkData, pushToBackstack = false) }
+    }
+
+    private fun forwardEvent(eventId: EventId) {
+        callbacks.forEach { it.forwardEvent(eventId) }
     }
 
     private fun processEventClick(

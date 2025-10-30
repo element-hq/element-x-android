@@ -159,6 +159,12 @@ class RustTimeline(
         }
     }
 
+    override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.markAsRead(receiptType.toRustReceiptType())
+        }
+    }
+
     private fun updatePaginationStatus(direction: Timeline.PaginationDirection, update: (Timeline.PaginationStatus) -> Timeline.PaginationStatus) {
         when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backwardPaginationStatus.getAndUpdate(update)
@@ -201,10 +207,12 @@ class RustTimeline(
         backwardPaginationStatus,
         forwardPaginationStatus,
         joinedRoom.roomInfoFlow.map { it.creators to it.isDm }.distinctUntilChanged(),
-    ) { timelineItems,
+    ) {
+        timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        (roomCreators, isDm) ->
+        (roomCreators, isDm),
+        ->
         withContext(dispatcher) {
             timelineItems
                 .let { items ->
@@ -583,6 +591,12 @@ class RustTimeline(
     override suspend fun unpinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
         runCatchingExceptions {
             inner.unpinEvent(eventId = eventId.value)
+        }
+    }
+
+    override suspend fun getLatestEventId(): Result<EventId?> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.latestEventId()?.let(::EventId)
         }
     }
 

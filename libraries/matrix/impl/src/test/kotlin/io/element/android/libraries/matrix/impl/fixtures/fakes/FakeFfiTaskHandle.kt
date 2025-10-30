@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.TaskHandle
 
-class FakeFfiTaskHandle : TaskHandle(NoPointer) {
+class FakeFfiTaskHandle : TaskHandle(NoHandle) {
     override fun cancel() = Unit
     override fun destroy() = Unit
 }

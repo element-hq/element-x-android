@@ -34,14 +34,14 @@ class DefaultDeclineInviteTest {
     private val notificationCleaner =
         FakeNotificationCleaner(clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda)
 
-    private val successLeaveRoomLambda = lambdaRecorder<Result<Unit>> { -> Result.success(Unit) }
+    private val successLeaveRoomLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
     private val successIgnoreUserLambda =
         lambdaRecorder<UserId, Result<Unit>> { _ -> Result.success(Unit) }
     private val successReportRoomLambda =
         lambdaRecorder<String?, Result<Unit>> { _ -> Result.success(Unit) }
 
     private val failureLeaveRoomLambda =
-        lambdaRecorder<Result<Unit>> { -> Result.failure(Exception("Leave room error")) }
+        lambdaRecorder<Result<Unit>> { Result.failure(Exception("Leave room error")) }
     private val failureIgnoreUserLambda =
         lambdaRecorder<UserId, Result<Unit>> { _ -> Result.failure(Exception("Ignore user error")) }
     private val failureReportRoomLambda =

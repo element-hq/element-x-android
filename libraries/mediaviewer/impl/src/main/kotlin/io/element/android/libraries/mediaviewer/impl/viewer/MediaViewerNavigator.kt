@@ -11,5 +11,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 
 interface MediaViewerNavigator {
     fun onViewInTimelineClick(eventId: EventId)
+    fun onForwardClick(eventId: EventId)
     fun onItemDeleted()
 }

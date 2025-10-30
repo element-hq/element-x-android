@@ -15,7 +15,5 @@ sealed interface ChangeRolesEvent {
     data class UserSelectionToggled(val matrixUser: MatrixUser) : ChangeRolesEvent
     data object Save : ChangeRolesEvent
     data object Exit : ChangeRolesEvent
-    data object CancelExit : ChangeRolesEvent
-    data object ClearError : ChangeRolesEvent
-    data object CancelSave : ChangeRolesEvent
+    data object CloseDialog : ChangeRolesEvent
 }

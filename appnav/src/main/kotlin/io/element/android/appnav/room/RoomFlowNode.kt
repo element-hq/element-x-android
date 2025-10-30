@@ -9,7 +9,6 @@ package io.element.android.appnav.room
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
@@ -37,7 +36,6 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -49,11 +47,11 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -130,7 +128,6 @@ class RoomFlowNode(
 
     private fun subscribeToRoomInfoFlow(roomId: RoomId, serverNames: List<String>) {
         val roomInfoFlow = client.getRoomInfoFlow(roomId)
-        val isSpaceFlow = roomInfoFlow.map { it.getOrNull()?.isSpace.orFalse() }.distinctUntilChanged()
 
         // This observes the local membership changes for the room
         val membershipUpdateFlow = membershipObserver.updates
@@ -143,14 +140,10 @@ class RoomFlowNode(
             .map { it.getOrNull()?.currentUserMembership }
             .distinctUntilChanged()
             .withPreviousValue()
-        combine(currentMembershipFlow, isSpaceFlow) { (previousMembership, membership), isSpace ->
+        currentMembershipFlow.onEach { (previousMembership, membership) ->
             Timber.d("Room membership: $membership")
             if (membership == CurrentUserMembership.JOINED) {
-                if (isSpace) {
-                    backstack.newRoot(NavTarget.JoinedSpace(spaceId = roomId))
-                } else {
-                    backstack.newRoot(NavTarget.JoinedRoom(roomId))
-                }
+                backstack.newRoot(NavTarget.JoinedRoom(roomId))
             } else {
                 val leavingFromCurrentDevice =
                     membership == CurrentUserMembership.LEFT &&

@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 
-class FakeFfiSessionVerificationController : SessionVerificationController(NoPointer) {
+class FakeFfiSessionVerificationController : SessionVerificationController(NoHandle) {
     override fun setDelegate(delegate: SessionVerificationControllerDelegate?) {}
 }

@@ -37,12 +37,13 @@ class DefaultMediaGalleryEntryPointTest {
                 plugins = plugins,
                 mediaViewerEntryPoint = object : MediaViewerEntryPoint {
                     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext) = lambdaError()
-                }
+                },
             )
         }
         val callback = object : MediaGalleryEntryPoint.Callback {
             override fun onBackClick() = lambdaError()
             override fun onViewInTimeline(eventId: EventId) = lambdaError()
+            override fun forwardEvent(eventId: EventId) = lambdaError()
         }
         val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
             .callback(callback)

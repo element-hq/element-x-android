@@ -34,7 +34,7 @@ class FakeNotificationCreator(
     var createFallbackNotificationResult: LambdaOneParamRecorder<FallbackNotifiableEvent, Notification> = lambdaRecorder { _ -> A_NOTIFICATION },
     var createSummaryListNotificationResult: LambdaFourParamsRecorder<MatrixUser, String, Boolean, Long, Notification> =
         lambdaRecorder { _, _, _, _ -> A_NOTIFICATION },
-    var createDiagnosticNotificationResult: LambdaNoParamRecorder<Notification> = lambdaRecorder { -> A_NOTIFICATION },
+    var createDiagnosticNotificationResult: LambdaNoParamRecorder<Notification> = lambdaRecorder<Notification> { A_NOTIFICATION },
 ) : NotificationCreator {
     override suspend fun createMessagesListNotification(
         roomInfo: RoomEventGroupInfo,

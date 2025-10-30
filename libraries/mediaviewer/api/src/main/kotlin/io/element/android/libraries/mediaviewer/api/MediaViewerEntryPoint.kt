@@ -31,6 +31,7 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun onDone()
         fun onViewInTimeline(eventId: EventId)
+        fun onForwardEvent(eventId: EventId)
     }
 
     data class Params(

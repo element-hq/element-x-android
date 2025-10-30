@@ -101,6 +101,10 @@ class UserProfileFlowNode(
                     override fun onViewInTimeline(eventId: EventId) {
                         // Cannot happen
                     }
+
+                    override fun onForwardEvent(eventId: EventId) {
+                        // Cannot happen
+                    }
                 }
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)
                     .avatar(

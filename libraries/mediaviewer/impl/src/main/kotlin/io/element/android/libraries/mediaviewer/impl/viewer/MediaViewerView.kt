@@ -247,6 +247,9 @@ fun MediaViewerView(
                         state.eventSink(MediaViewerEvents.Share(currentData))
                     }
                 },
+                onForward = {
+                    state.eventSink(MediaViewerEvents.Forward(it))
+                },
                 onDownload = {
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
                         state.eventSink(MediaViewerEvents.SaveOnDisk(currentData))

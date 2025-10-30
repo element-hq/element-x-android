@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RoomListService
 import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.SyncServiceStateObserver
@@ -15,7 +15,7 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 
 class FakeFfiSyncService(
     private val roomListService: RoomListService = FakeFfiRoomListService(),
-) : SyncService(NoPointer) {
+) : SyncService(NoHandle) {
     override fun roomListService(): RoomListService = roomListService
     override fun state(listener: SyncServiceStateObserver): TaskHandle {
         return FakeFfiTaskHandle()

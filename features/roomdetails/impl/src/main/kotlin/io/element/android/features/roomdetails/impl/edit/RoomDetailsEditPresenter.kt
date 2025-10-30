@@ -169,7 +169,13 @@ class RoomDetailsEditPresenter(
 
                 is RoomDetailsEditEvents.UpdateRoomName -> roomRawNameEdited = event.name
                 is RoomDetailsEditEvents.UpdateRoomTopic -> roomTopicEdited = event.topic
-                RoomDetailsEditEvents.CancelSaveChanges -> saveAction.value = AsyncAction.Uninitialized
+                RoomDetailsEditEvents.CloseDialog -> saveAction.value = AsyncAction.Uninitialized
+                RoomDetailsEditEvents.OnBackPress -> if (saveButtonEnabled.not() || saveAction.value == AsyncAction.ConfirmingCancellation) {
+                    // No changes to save or already confirming exit without saving
+                    saveAction.value = AsyncAction.Success(Unit)
+                } else {
+                    saveAction.value = AsyncAction.ConfirmingCancellation
+                }
             }
         }
 

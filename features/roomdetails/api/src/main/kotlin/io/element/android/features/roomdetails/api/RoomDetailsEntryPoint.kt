@@ -13,6 +13,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -22,6 +23,9 @@ interface RoomDetailsEntryPoint : FeatureEntryPoint {
     sealed interface InitialTarget : Parcelable {
         @Parcelize
         data object RoomDetails : InitialTarget
+
+        @Parcelize
+        data object RoomMemberList : InitialTarget
 
         @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : InitialTarget
@@ -36,7 +40,7 @@ interface RoomDetailsEntryPoint : FeatureEntryPoint {
         fun onOpenGlobalNotificationSettings()
         fun onOpenRoom(roomId: RoomId, serverNames: List<String>)
         fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
-        fun onForwardedToSingleRoom(roomId: RoomId)
+        fun forwardEvent(eventId: EventId)
     }
 
     interface NodeBuilder {

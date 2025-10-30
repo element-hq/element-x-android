@@ -11,9 +11,14 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeMediaGalleryNavigator(
-    private val onViewInTimelineClickLambda: (EventId) -> Unit = { lambdaError() }
+    private val onViewInTimelineClickLambda: (EventId) -> Unit = { lambdaError() },
+    private val onForwardClickLambda: (EventId) -> Unit = { lambdaError() },
 ) : MediaGalleryNavigator {
     override fun onViewInTimelineClick(eventId: EventId) {
         onViewInTimelineClickLambda(eventId)
+    }
+
+    override fun onForwardClick(eventId: EventId) {
+        onForwardClickLambda(eventId)
     }
 }

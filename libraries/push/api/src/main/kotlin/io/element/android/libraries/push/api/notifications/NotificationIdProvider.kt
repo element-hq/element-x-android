@@ -31,10 +31,6 @@ object NotificationIdProvider {
         return getOffset(sessionId) + FALLBACK_NOTIFICATION_ID
     }
 
-    fun getCallNotificationId(sessionId: SessionId): Int {
-        return getOffset(sessionId) + ROOM_CALL_NOTIFICATION_ID
-    }
-
     fun getForegroundServiceNotificationId(type: ForegroundServiceType): Int {
         return type.id * 10 + FOREGROUND_SERVICE_NOTIFICATION_ID
     }
@@ -49,7 +45,6 @@ object NotificationIdProvider {
     private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
     private const val ROOM_EVENT_NOTIFICATION_ID = 2
     private const val ROOM_INVITATION_NOTIFICATION_ID = 3
-    private const val ROOM_CALL_NOTIFICATION_ID = 3
 
     private const val FOREGROUND_SERVICE_NOTIFICATION_ID = 4
 }

@@ -7,13 +7,13 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
 
 class FakeFfiRoomMembersIterator(
     private var members: List<RoomMember>? = null
-) : RoomMembersIterator(NoPointer) {
+) : RoomMembersIterator(NoHandle) {
     override fun len(): UInt {
         return members?.size?.toUInt() ?: 0u
     }

@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListService
 import org.matrix.rustcomponents.sdk.RoomListServiceStateListener
@@ -15,7 +15,7 @@ import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicatorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 
-class FakeFfiRoomListService : RoomListService(NoPointer) {
+class FakeFfiRoomListService : RoomListService(NoHandle) {
     override suspend fun allRooms(): RoomList {
         return FakeFfiRoomList()
     }

@@ -23,8 +23,7 @@ data class ChangeRolesState(
     val searchResults: SearchBarResultState<MembersByRole>,
     val selectedUsers: ImmutableList<MatrixUser>,
     val hasPendingChanges: Boolean,
-    val exitState: AsyncAction<Unit>,
-    val savingState: AsyncAction<Unit>,
+    val savingState: AsyncAction<Boolean>,
     val canChangeMemberRole: (UserId) -> Boolean,
     val eventSink: (ChangeRolesEvent) -> Unit,
 )
@@ -36,10 +35,10 @@ data class MembersByRole(
     val members: ImmutableList<RoomMember>,
 ) {
     constructor(members: List<RoomMember>) : this(
-            owners = members.filter { it.role is RoomMember.Role.Owner }.sorted(),
-            admins = members.filter { it.role == RoomMember.Role.Admin }.sorted(),
-            moderators = members.filter { it.role == RoomMember.Role.Moderator }.sorted(),
-            members = members.filter { it.role == RoomMember.Role.User }.sorted(),
+        owners = members.filter { it.role is RoomMember.Role.Owner }.sorted(),
+        admins = members.filter { it.role == RoomMember.Role.Admin }.sorted(),
+        moderators = members.filter { it.role == RoomMember.Role.Moderator }.sorted(),
+        members = members.filter { it.role == RoomMember.Role.User }.sorted(),
     )
 
     fun isEmpty() = owners.isEmpty() && admins.isEmpty() && moderators.isEmpty() && members.isEmpty()

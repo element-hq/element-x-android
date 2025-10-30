@@ -87,8 +87,10 @@ class HomeFlowNode(
                 analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.Home))
             }
         )
-        whenChildAttached { commonLifecycle: Lifecycle,
-                            changeRoomMemberRolesNode: ChangeRoomMemberRolesEntryPoint.NodeProxy ->
+        whenChildAttached {
+            commonLifecycle: Lifecycle,
+            changeRoomMemberRolesNode: ChangeRoomMemberRolesEntryPoint.NodeProxy,
+            ->
             commonLifecycle.coroutineScope.launch {
                 changeRoomMemberRolesNode.waitForRoleChanged()
                 withContext(NonCancellable) {

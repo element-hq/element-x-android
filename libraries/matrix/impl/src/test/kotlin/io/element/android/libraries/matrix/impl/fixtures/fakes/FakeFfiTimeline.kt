@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.PaginationStatusListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.Timeline
@@ -15,7 +15,7 @@ import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
 import uniffi.matrix_sdk.RoomPaginationStatus
 
-class FakeFfiTimeline : Timeline(NoPointer) {
+class FakeFfiTimeline : Timeline(NoHandle) {
     private var listener: TimelineListener? = null
     override suspend fun addListener(listener: TimelineListener): TaskHandle {
         this.listener = listener

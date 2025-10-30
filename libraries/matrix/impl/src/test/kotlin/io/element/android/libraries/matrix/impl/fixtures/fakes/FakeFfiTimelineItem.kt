@@ -8,14 +8,14 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import org.matrix.rustcomponents.sdk.EventTimelineItem
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineUniqueId
 import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 
 class FakeFfiTimelineItem(
     private val asEventResult: EventTimelineItem? = null,
-) : TimelineItem(NoPointer) {
+) : TimelineItem(NoHandle) {
     override fun asEvent(): EventTimelineItem? = asEventResult
     override fun asVirtual(): VirtualTimelineItem? = null
     override fun fmtDebug(): String = "fmtDebug"

@@ -40,6 +40,7 @@ class MediaGalleryNode(
         fun onBackClick()
         fun onItemClick(item: MediaItem.Event)
         fun onViewInTimeline(eventId: EventId)
+        fun onForward(eventId: EventId)
     }
 
     private fun onBackClick() {
@@ -51,6 +52,12 @@ class MediaGalleryNode(
     override fun onViewInTimelineClick(eventId: EventId) {
         plugins<Callback>().forEach {
             it.onViewInTimeline(eventId)
+        }
+    }
+
+    override fun onForwardClick(eventId: EventId) {
+        plugins<Callback>().forEach {
+            it.onForward(eventId)
         }
     }
 

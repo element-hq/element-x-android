@@ -71,10 +71,7 @@ public fun MapLibreMap(
     uiSettings: MapUiSettings = DefaultMapUiSettings,
     symbolManagerSettings: MapSymbolManagerSettings = DefaultMapSymbolManagerSettings,
     locationSettings: MapLocationSettings = DefaultMapLocationSettings,
-    content: (
-        @Composable @MapLibreMapComposable
-        () -> Unit
-    )? = null,
+    content: (@Composable @MapLibreMapComposable () -> Unit)? = null,
 ) {
     // When in preview, early return a Box with the received modifier preserving layout
     if (LocalInspectionMode.current) {

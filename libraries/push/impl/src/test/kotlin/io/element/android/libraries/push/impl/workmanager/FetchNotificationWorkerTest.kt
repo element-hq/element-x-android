@@ -28,6 +28,7 @@ import io.element.android.libraries.push.test.notifications.FakeNotificationReso
 import io.element.android.libraries.workmanager.api.WorkManagerRequest
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
+import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -176,6 +177,7 @@ class FetchNotificationWorkerTest {
         syncOnNotifiableEvent = syncOnNotifiableEvent,
         coroutineDispatchers = testCoroutineDispatchers(),
         workerDataConverter = WorkerDataConverter(DefaultJsonProvider()),
+        buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
     )
 
     private fun TestScope.createWorkerParams(

@@ -71,6 +71,12 @@ class MediaViewerNode(
         }
     }
 
+    override fun onForwardClick(eventId: EventId) {
+        plugins<MediaViewerEntryPoint.Callback>().forEach {
+            it.onForwardEvent(eventId)
+        }
+    }
+
     override fun onItemDeleted() {
         onDone()
     }

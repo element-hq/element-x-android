@@ -41,8 +41,7 @@ class RoomDetailsEditNode(
         val state = presenter.present()
         RoomDetailsEditView(
             state = state,
-            onBackClick = ::navigateUp,
-            onRoomEditSuccess = ::navigateUp,
+            onDone = ::navigateUp,
             modifier = modifier,
         )
     }

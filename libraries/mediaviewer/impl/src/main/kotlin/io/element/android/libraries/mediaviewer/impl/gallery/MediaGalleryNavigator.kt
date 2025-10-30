@@ -11,4 +11,5 @@ import io.element.android.libraries.matrix.api.core.EventId
 
 interface MediaGalleryNavigator {
     fun onViewInTimelineClick(eventId: EventId)
+    fun onForwardClick(eventId: EventId)
 }

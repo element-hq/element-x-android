@@ -26,7 +26,11 @@ ktlint_standard_annotation = disabled
 ktlint_standard_parameter-list-wrapping = disabled
 ktlint_standard_indent = disabled
 ktlint_standard_blank-line-before-declaration = disabled
-ktlint_function_naming_ignore_when_annotated_with=Composable
+ktlint_function_naming_ignore_when_annotated_with = Composable
+# Added when upgrading to 1.7.1
+ktlint_standard_function-expression-body = disabled
+ktlint_standard_chain-method-continuation = disabled
+ktlint_standard_class-signature = disabled
 
 [*.java]
 ij_java_align_consecutive_assignments = false

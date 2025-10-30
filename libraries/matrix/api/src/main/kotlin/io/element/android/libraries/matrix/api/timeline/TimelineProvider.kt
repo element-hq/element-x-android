@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.first
  * It could be the live timeline, a pinned timeline or a detached timeline.
  * By default, the active timeline is the live timeline.
  */
-interface TimelineProvider {
+fun interface TimelineProvider {
     fun activeTimelineFlow(): StateFlow<Timeline?>
 }
 

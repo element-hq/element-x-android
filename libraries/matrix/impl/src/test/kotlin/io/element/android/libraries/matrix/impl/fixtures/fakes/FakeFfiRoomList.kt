@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RoomList
 
-class FakeFfiRoomList : RoomList(NoPointer)
+class FakeFfiRoomList : RoomList(NoHandle)

@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.SpaceListUpdate
 import org.matrix.rustcomponents.sdk.SpaceRoom
 import org.matrix.rustcomponents.sdk.SpaceRoomList
@@ -22,7 +22,7 @@ class FakeFfiSpaceRoomList(
     private val paginateResult: () -> Unit = { lambdaError() },
     private val paginationStateResult: () -> SpaceRoomListPaginationState = { lambdaError() },
     private val roomsResult: () -> List<SpaceRoom> = { lambdaError() },
-) : SpaceRoomList(NoPointer) {
+) : SpaceRoomList(NoHandle) {
     private var spaceRoomListPaginationStateListener: SpaceRoomListPaginationStateListener? = null
     private var spaceRoomListEntriesListener: SpaceRoomListEntriesListener? = null
 

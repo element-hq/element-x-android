@@ -27,9 +27,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
@@ -40,17 +38,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -181,7 +178,13 @@ class DefaultActiveCallManager(
 
         val previousActiveCall = activeCall.value ?: return
         val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
-        removeCurrentCall()
+        activeCall.value = null
+        if (activeWakeLock?.isHeld == true) {
+            Timber.tag(tag).d("Releasing partial wakelock after timeout")
+            activeWakeLock.release()
+        }
+
+        cancelIncomingCallNotification()
 
         if (displayMissedCallNotification) {
             displayMissedCallNotification(notificationData)
@@ -206,38 +209,29 @@ class DefaultActiveCallManager(
                 ?.declineCall(notificationData.eventId)
         }
 
-        removeCurrentCall()
+        cancelIncomingCallNotification()
+        if (activeWakeLock?.isHeld == true) {
+            Timber.tag(tag).d("Releasing partial wakelock after hang up")
+            activeWakeLock.release()
+        }
+        timedOutCallJob?.cancel()
+        activeCall.value = null
     }
 
-    /**
-     * Removes the current active call and any associated UI, cancelling the timeouts and wakelocks.
-     */
     override suspend fun joinedCall(callType: CallType) = mutex.withLock {
         Timber.tag(tag).d("Joined call: $callType")
 
-        removeCurrentCall()
+        cancelIncomingCallNotification()
+        if (activeWakeLock?.isHeld == true) {
+            Timber.tag(tag).d("Releasing partial wakelock after joining call")
+            activeWakeLock.release()
+        }
+        timedOutCallJob?.cancel()
 
         activeCall.value = ActiveCall(
             callType = callType,
             callState = CallState.InCall,
         )
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal fun removeCurrentCall() {
-        // Cancel and remove the timeout call job, if any
-        timedOutCallJob?.cancel()
-        timedOutCallJob = null
-
-        // Remove the active call and cancel the notification
-        activeCall.value = null
-        cancelIncomingCallNotification()
-
-        // Also remove any wake locks that may be held
-        if (activeWakeLock?.isHeld == true) {
-            Timber.tag(tag).d("Releasing partial wakelock after call declined from another session")
-            activeWakeLock.release()
-        }
     }
 
     @SuppressLint("MissingPermission")
@@ -285,75 +279,73 @@ class DefaultActiveCallManager(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeRingingCall() {
-        val roomForActiveCallFlow: Flow<Pair<BaseRoom, EventId>?> = activeCall.mapLatest { activeCall ->
-            val callType = activeCall?.callType as? CallType.RoomCall ?: return@mapLatest null
-            val ringingInfo = activeCall.callState as? CallState.Ringing ?: return@mapLatest null
-            val client = matrixClientProvider.getOrRestore(callType.sessionId).getOrNull() ?: run {
-                Timber.tag(tag).d("Couldn't find session for incoming call: $activeCall")
-                return@mapLatest null
-            }
-            val room = client.getRoom(callType.roomId) ?: run {
-                Timber.tag(tag).d("Couldn't find room for incoming call: $activeCall")
-                return@mapLatest null
-            }
+        activeCall
+            .filterNotNull()
+            .filter { it.callState is CallState.Ringing && it.callType is CallType.RoomCall }
+            .flatMapLatest { activeCall ->
+                val callType = activeCall.callType as CallType.RoomCall
+                val ringingInfo = activeCall.callState as CallState.Ringing
+                val client = matrixClientProvider.getOrRestore(callType.sessionId).getOrNull() ?: run {
+                    Timber.tag(tag).d("Couldn't find session for incoming call: $activeCall")
+                    return@flatMapLatest flowOf()
+                }
+                val room = client.getRoom(callType.roomId) ?: run {
+                    Timber.tag(tag).d("Couldn't find room for incoming call: $activeCall")
+                    return@flatMapLatest flowOf()
+                }
 
-            Timber.tag(tag).d("Found room for ringing call: ${room.roomId}")
-
-            val eventId = ringingInfo.notificationData.eventId
-            room to eventId
-        }
-
-        roomForActiveCallFlow
-            .flatMapLatest { pair ->
-                val (room, eventId) = pair
-                    // This will cancel the previous iteration of flatMapLatest if the active call is now null
-                    ?: return@flatMapLatest flowOf()
+                Timber.tag(tag).d("Found room for ringing call: ${room.roomId}")
 
                 // If we have declined from another phone we want to stop ringing.
-                room.subscribeToCallDecline(eventId)
+                room.subscribeToCallDecline(ringingInfo.notificationData.eventId)
                     .filter { decliner ->
                         Timber.tag(tag).d("Call: $activeCall was declined by $decliner")
                         // only want to listen if the call was declined from another of my sessions,
                         // (we are ringing for an incoming call in a DM)
-                        decliner == room.sessionId
+                        decliner == client.sessionId
                     }
             }
             .onEach { decliner ->
                 Timber.tag(tag).d("Call: $activeCall was declined by user from another session")
-                removeCurrentCall()
+                // Remove the active call and cancel the notification
+                activeCall.value = null
+                if (activeWakeLock?.isHeld == true) {
+                    Timber.tag(tag).d("Releasing partial wakelock after call declined from another session")
+                    activeWakeLock.release()
+                }
+                cancelIncomingCallNotification()
             }
             .launchIn(coroutineScope)
-
         // This will observe ringing calls and ensure they're terminated if the room call is cancelled or if the user
         // has joined the call from another session.
-        roomForActiveCallFlow
-            .flatMapLatest { pair ->
-                val (room, _) = pair
-                // This will cancel the previous iteration of flatMapLatest if the active call is now null
-                    ?: return@flatMapLatest flowOf()
-
-                // We now observe the room info for changes to the active call state and the call participants
+        activeCall
+            .filterNotNull()
+            .filter { it.callState is CallState.Ringing && it.callType is CallType.RoomCall }
+            .flatMapLatest { activeCall ->
+                val callType = activeCall.callType as CallType.RoomCall
+                // Get a flow of updated `hasRoomCall` and `activeRoomCallParticipants` values for the room
+                val room = matrixClientProvider.getOrRestore(callType.sessionId).getOrNull()?.getRoom(callType.roomId) ?: run {
+                    Timber.tag(tag).d("Couldn't find room for incoming call: $activeCall")
+                    return@flatMapLatest flowOf()
+                }
                 room.roomInfoFlow.map {
-                    val participants = it.activeRoomCallParticipants
-                    Timber.tag(tag).d("Room call status changed for ringing call | hasRoomCall: ${it.hasRoomCall} | participants: $participants")
-                    val userIsInTheCall = room.sessionId in participants
-                    it.hasRoomCall to userIsInTheCall
+                    Timber.tag(tag).d("Has room call status changed for ringing call: ${it.hasRoomCall}")
+                    it.hasRoomCall to (callType.sessionId in it.activeRoomCallParticipants)
                 }
             }
-            // Filter out duplicate values
+            // We only want to check if the room active call status changes
             .distinctUntilChanged()
             // Skip the first one, we're not interested in it (if the check below passes, it had to be active anyway)
             .drop(1)
             .onEach { (roomHasActiveCall, userIsInTheCall) ->
                 if (!roomHasActiveCall) {
-                    val notificationData = (activeCall.value?.callState as? CallState.Ringing)?.notificationData
-                    removeCurrentCall()
-
-                    if (notificationData != null) {
-                        displayMissedCallNotification(notificationData)
-                    }
+                    // The call was cancelled
+                    timedOutCallJob?.cancel()
+                    incomingCallTimedOut(displayMissedCallNotification = true)
                 } else if (userIsInTheCall) {
-                    removeCurrentCall()
+                    // The user joined the call from another session
+                    timedOutCallJob?.cancel()
+                    incomingCallTimedOut(displayMissedCallNotification = false)
                 }
             }
             .launchIn(coroutineScope)

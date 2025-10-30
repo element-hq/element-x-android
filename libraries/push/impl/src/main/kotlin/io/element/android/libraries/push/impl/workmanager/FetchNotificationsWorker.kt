@@ -29,6 +29,7 @@ import io.element.android.libraries.push.impl.notifications.NotificationResolver
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.api.di.WorkerKey
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -39,7 +40,7 @@ import kotlin.time.Duration.Companion.seconds
 @AssistedInject
 class FetchNotificationsWorker(
     @Assisted workerParams: WorkerParameters,
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
     private val networkMonitor: NetworkMonitor,
     private val eventResolver: NotifiableEventResolver,
     private val queue: NotificationResolverQueue,
@@ -47,6 +48,7 @@ class FetchNotificationsWorker(
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val workerDataConverter: WorkerDataConverter,
+    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = withContext(coroutineDispatchers.io) {
         Timber.d("FetchNotificationsWorker started")
@@ -88,6 +90,7 @@ class FetchNotificationsWorker(
                         sessionId = failedSessionId,
                         notificationEventRequests = requestsToRetry,
                         workerDataConverter = workerDataConverter,
+                        buildVersionSdkIntProvider = buildVersionSdkIntProvider,
                     )
                 )
             }

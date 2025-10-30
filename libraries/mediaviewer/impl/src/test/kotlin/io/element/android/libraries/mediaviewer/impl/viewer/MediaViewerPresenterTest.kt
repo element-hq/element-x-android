@@ -759,7 +759,7 @@ class MediaViewerPresenterTest {
     }
 
     @Test
-    fun `present - view in timeline hide the bottom sheet and invokes the navigator`() = runTest {
+    fun `present - view in timeline hides the bottom sheet and invokes the navigator`() = runTest {
         val onViewInTimelineClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMediaViewerNavigator(
             onViewInTimelineClickLambda = onViewInTimelineClickLambda,
@@ -780,6 +780,31 @@ class MediaViewerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onViewInTimelineClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
+        }
+    }
+
+    @Test
+    fun `present - forward hides the bottom sheet and invokes the navigator`() = runTest {
+        val onForwardClickLambda = lambdaRecorder<EventId, Unit> { }
+        val navigator = FakeMediaViewerNavigator(
+            onForwardClickLambda = onForwardClickLambda,
+        )
+        val presenter = createMediaViewerPresenter(
+            localMediaFactory = localMediaFactory,
+            mediaViewerNavigator = navigator,
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(canRedactOwnResult = { Result.success(true) }),
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MediaViewerEvents.OpenInfo(aMediaViewerPageData()))
+            val withBottomSheetState = awaitItem()
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            initialState.eventSink(MediaViewerEvents.Forward(AN_EVENT_ID))
+            val finalState = awaitItem()
+            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+            onForwardClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
     }
 

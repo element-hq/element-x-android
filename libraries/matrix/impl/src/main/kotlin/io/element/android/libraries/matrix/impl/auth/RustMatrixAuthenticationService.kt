@@ -289,10 +289,13 @@ class RustMatrixAuthenticationService(
                     qrCodeData = sdkQrCodeLoginData,
                 )
                 client.loginWithQrCode(
-                    qrCodeData = qrCodeData.rustQrCodeData,
                     oidcConfiguration = oidcConfiguration,
-                    progressListener = progressListener,
-                )
+                ).use {
+                    it.scan(
+                        qrCodeData = qrCodeData.rustQrCodeData,
+                        progressListener = progressListener,
+                    )
+                }
                 // Ensure that the user is not already logged in with the same account
                 ensureNotAlreadyLoggedIn(client)
                 val sessionData = client.session()

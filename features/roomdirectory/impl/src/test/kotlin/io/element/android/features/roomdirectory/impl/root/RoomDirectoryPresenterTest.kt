@@ -105,9 +105,7 @@ class RoomDirectoryPresenterTest {
 
     @Test
     fun `present - emit load more event`() = runTest {
-        val loadMoreLambda = lambdaRecorder { ->
-            Result.success(Unit)
-        }
+        val loadMoreLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val roomDirectoryList = FakeRoomDirectoryList(loadMoreLambda = loadMoreLambda)
         val roomDirectoryService = FakeRoomDirectoryService { roomDirectoryList }
         val presenter = createRoomDirectoryPresenter(roomDirectoryService = roomDirectoryService)

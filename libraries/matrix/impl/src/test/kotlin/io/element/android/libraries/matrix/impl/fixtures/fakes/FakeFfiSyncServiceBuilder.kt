@@ -7,11 +7,11 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 
-class FakeFfiSyncServiceBuilder : SyncServiceBuilder(NoPointer) {
+class FakeFfiSyncServiceBuilder : SyncServiceBuilder(NoHandle) {
     override fun withOfflineMode(): SyncServiceBuilder = this
     override fun withSharePos(enable: Boolean): SyncServiceBuilder = this
     override suspend fun finish(): SyncService = FakeFfiSyncService()

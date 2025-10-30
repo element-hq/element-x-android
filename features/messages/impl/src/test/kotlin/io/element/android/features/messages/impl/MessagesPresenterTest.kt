@@ -23,6 +23,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.timeline.FakeMarkAsFullyRead
+import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineState
@@ -178,7 +180,11 @@ class MessagesPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(joinedRoom = room, coroutineDispatchers = coroutineDispatchers)
+        val presenter = createMessagesPresenter(
+            timeline = timeline,
+            joinedRoom = room,
+            coroutineDispatchers = coroutineDispatchers
+        )
         presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialState = awaitItem()
@@ -220,7 +226,11 @@ class MessagesPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(joinedRoom = room, coroutineDispatchers = coroutineDispatchers)
+        val presenter = createMessagesPresenter(
+            timeline = timeline,
+            joinedRoom = room,
+            coroutineDispatchers = coroutineDispatchers
+        )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
@@ -509,6 +519,7 @@ class MessagesPresenterTest {
         val redactEventLambda = lambdaRecorder { _: EventOrTransactionId, _: String? -> Result.success(Unit) }
         liveTimeline.redactEventLambda = redactEventLambda
         val presenter = createMessagesPresenter(
+            timeline = liveTimeline,
             joinedRoom = joinedRoom,
             coroutineDispatchers = coroutineDispatchers,
         )
@@ -920,6 +931,7 @@ class MessagesPresenterTest {
             typingNoticeResult = { Result.success(Unit) },
         )
         val presenter = createMessagesPresenter(
+            timeline = timeline,
             joinedRoom = room,
             analyticsService = analyticsService,
         )
@@ -962,7 +974,11 @@ class MessagesPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(joinedRoom = room, analyticsService = analyticsService)
+        val presenter = createMessagesPresenter(
+            timeline = timeline,
+            joinedRoom = room,
+            analyticsService = analyticsService
+        )
         presenter.testWithLifecycleOwner {
             val messageEvent = aMessageEvent(
                 content = aTimelineItemTextContent()
@@ -1236,8 +1252,57 @@ class MessagesPresenterTest {
         }
     }
 
+    @Test
+    fun `present - handle MarkAsFullyReadAndExit marks the room as fully read and navigates up`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val markAsFullyReadUseCase = FakeMarkAsFullyRead(markAsFullyReadRecorder)
+        val onNavigateUpRecorder = lambdaRecorder<Unit> {}
+        val navigator = FakeMessagesNavigator(onNavigateUpLambda = onNavigateUpRecorder)
+
+        val presenter = createMessagesPresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.success(AN_EVENT_ID) }),
+            markAsFullyRead = markAsFullyReadUseCase,
+            navigator = navigator,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.MarkAsFullyReadAndExit)
+
+            runCurrent()
+
+            markAsFullyReadRecorder.assertions().isCalledOnce()
+            onNavigateUpRecorder.assertions().isCalledOnce()
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - handle MarkAsFullyReadAndExit still navigates up if marking as read fails`() = runTest {
+        val markAsFullyReadUseCase = FakeMarkAsFullyRead { _, _ -> error("boom") }
+        val onNavigateUpRecorder = lambdaRecorder<Unit> {}
+        val navigator = FakeMessagesNavigator(onNavigateUpLambda = onNavigateUpRecorder)
+
+        val presenter = createMessagesPresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.success(AN_EVENT_ID) }),
+            markAsFullyRead = markAsFullyReadUseCase,
+            navigator = navigator,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.MarkAsFullyReadAndExit)
+
+            runCurrent()
+
+            onNavigateUpRecorder.assertions().isCalledOnce()
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+        timeline: Timeline = FakeTimeline(),
         joinedRoom: FakeJoinedRoom = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
@@ -1248,10 +1313,9 @@ class MessagesPresenterTest {
             ).apply {
                 givenRoomInfo(aRoomInfo(id = roomId, name = ""))
             },
-            liveTimeline = FakeTimeline(),
+            liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         ),
-        timeline: Timeline = joinedRoom.liveTimeline,
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
@@ -1270,6 +1334,7 @@ class MessagesPresenterTest {
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
         actionListEventSink: (ActionListEvents) -> Unit = {},
         addRecentEmoji: AddRecentEmoji = AddRecentEmoji(FakeMatrixClient(), testCoroutineDispatchers()),
+        markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead(),
     ): MessagesPresenter {
         return MessagesPresenter(
             navigator = navigator,
@@ -1298,6 +1363,8 @@ class MessagesPresenterTest {
             encryptionService = encryptionService,
             featureFlagService = featureFlagService,
             addRecentEmoji = addRecentEmoji,
+            markAsFullyRead = markAsFullyRead,
+            sessionCoroutineScope = backgroundScope,
         )
     }
 }

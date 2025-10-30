@@ -38,7 +38,8 @@ interface MessagesEntryPoint : FeatureEntryPoint {
         fun onRoomDetailsClick()
         fun onUserDataClick(userId: UserId)
         fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
-        fun onForwardedToSingleRoom(roomId: RoomId)
+        fun forwardEvent(eventId: EventId)
+        fun openRoom(roomId: RoomId)
     }
 
     data class Params(val initialTarget: InitialTarget) : NodeInputs

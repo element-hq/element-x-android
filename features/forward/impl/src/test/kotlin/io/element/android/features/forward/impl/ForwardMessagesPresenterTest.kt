@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.forward
+package io.element.android.features.forward.impl
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -32,7 +32,7 @@ class ForwardMessagesPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = aForwardMessagesPresenter()
+        val presenter = createForwardMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -50,7 +50,7 @@ class ForwardMessagesPresenterTest {
             this.forwardEventLambda = forwardEventLambda
         }
         val room = FakeJoinedRoom(liveTimeline = timeline)
-        val presenter = aForwardMessagesPresenter(fakeRoom = room)
+        val presenter = createForwardMessagesPresenter(fakeRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -74,7 +74,7 @@ class ForwardMessagesPresenterTest {
             this.forwardEventLambda = forwardEventLambda
         }
         val room = FakeJoinedRoom(liveTimeline = timeline)
-        val presenter = aForwardMessagesPresenter(fakeRoom = room)
+        val presenter = createForwardMessagesPresenter(fakeRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -90,13 +90,13 @@ class ForwardMessagesPresenterTest {
             forwardEventLambda.assertions().isCalledOnce()
         }
     }
-
-    private fun TestScope.aForwardMessagesPresenter(
-        eventId: EventId = AN_EVENT_ID,
-        fakeRoom: FakeJoinedRoom = FakeJoinedRoom(),
-    ) = ForwardMessagesPresenter(
-        eventId = eventId.value,
-        timelineProvider = LiveTimelineProvider(fakeRoom),
-        sessionCoroutineScope = this,
-    )
 }
+
+fun TestScope.createForwardMessagesPresenter(
+    eventId: EventId = AN_EVENT_ID,
+    fakeRoom: FakeJoinedRoom = FakeJoinedRoom(),
+) = ForwardMessagesPresenter(
+    eventId = eventId.value,
+    timelineProvider = LiveTimelineProvider(fakeRoom),
+    sessionCoroutineScope = this,
+)

@@ -166,6 +166,9 @@ fun MediaGalleryView(
                 onShare = { eventId ->
                     state.eventSink(MediaGalleryEvents.Share(eventId))
                 },
+                onForward = { eventId ->
+                    state.eventSink(MediaGalleryEvents.Forward(eventId))
+                },
                 onDownload = { eventId ->
                     state.eventSink(MediaGalleryEvents.SaveOnDisk(eventId))
                 },

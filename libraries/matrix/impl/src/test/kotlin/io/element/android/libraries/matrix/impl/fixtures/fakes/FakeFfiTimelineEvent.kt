@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustTimelineEventTypeMessageLike
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventType
 
@@ -18,7 +18,7 @@ open class FakeFfiTimelineEvent(
     val timestamp: ULong = A_FAKE_TIMESTAMP.toULong(),
     val timelineEventType: TimelineEventType = aRustTimelineEventTypeMessageLike(),
     val senderId: String = A_USER_ID_2.value,
-) : TimelineEvent(NoPointer) {
+) : TimelineEvent(NoHandle) {
     override fun timestamp(): ULong = timestamp
     override fun eventType(): TimelineEventType = timelineEventType
     override fun senderId(): String = senderId

@@ -22,10 +22,12 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Ignore
 import org.junit.Test
 import java.io.File
 
 class RustMatrixAuthenticationServiceTest {
+    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
     @Test
     fun `setHomeserver is successful`() = runTest {
         val sut = createRustMatrixAuthenticationService(

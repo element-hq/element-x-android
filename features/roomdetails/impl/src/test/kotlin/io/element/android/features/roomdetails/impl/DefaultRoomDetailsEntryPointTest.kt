@@ -97,7 +97,7 @@ class DefaultRoomDetailsEntryPointTest {
             override fun onOpenGlobalNotificationSettings() = lambdaError()
             override fun onOpenRoom(roomId: RoomId, serverNames: List<String>) = lambdaError()
             override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) = lambdaError()
-            override fun onForwardedToSingleRoom(roomId: RoomId) = lambdaError()
+            override fun forwardEvent(eventId: EventId) = lambdaError()
         }
         val params = RoomDetailsEntryPoint.Params(
             initialElement = RoomDetailsEntryPoint.InitialTarget.RoomDetails,

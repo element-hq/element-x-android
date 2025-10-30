@@ -15,10 +15,12 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Ignore
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.NotificationSettings
 
 class RustNotificationSettingsServiceTest {
+    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
     @Test
     fun test() = runTest {
         val sut = createRustNotificationSettingsService()

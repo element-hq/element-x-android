@@ -105,6 +105,10 @@ class MediaGalleryPresenter(
                         share(it)
                     }
                 }
+                is MediaGalleryEvents.Forward -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    navigator.onForwardClick(event.eventId)
+                }
                 is MediaGalleryEvents.ViewInTimeline -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onViewInTimelineClick(event.eventId)

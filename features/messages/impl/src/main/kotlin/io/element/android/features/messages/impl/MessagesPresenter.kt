@@ -36,6 +36,7 @@ import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
+import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -65,6 +66,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.toThreadId
@@ -93,6 +95,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 @AssistedInject
 class MessagesPresenter(
@@ -122,6 +125,8 @@ class MessagesPresenter(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val addRecentEmoji: AddRecentEmoji,
+    private val markAsFullyRead: MarkAsFullyRead,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<MessagesState> {
     @AssistedFactory
     interface Factory {
@@ -138,10 +143,13 @@ class MessagesPresenter(
         timelineMode = timelineController.mainTimelineMode()
     )
 
+    private val markingAsReadAndExiting = AtomicBoolean(false)
+
     @Composable
     override fun present(): MessagesState {
         htmlConverterProvider.Update()
 
+        val coroutineScope = rememberCoroutineScope()
         val roomInfo by room.roomInfoFlow.collectAsState()
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()
@@ -238,6 +246,22 @@ class MessagesPresenter(
                 is MessagesEvents.Dismiss -> actionListState.eventSink(ActionListEvents.Clear)
                 is MessagesEvents.OnUserClicked -> {
                     roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.user))
+                }
+                is MessagesEvents.MarkAsFullyReadAndExit -> coroutineScope.launch {
+                    if (!markingAsReadAndExiting.getAndSet(true)) {
+                        val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
+                            Timber.w(it, "Failed to get latest event id to mark as fully read")
+                            navigator.onNavigateUp()
+                            return@launch
+                        }
+                        latestEventId?.let { eventId ->
+                            sessionCoroutineScope.launch {
+                                markAsFullyRead(room.roomId, eventId)
+                            }
+                        }
+                        navigator.onNavigateUp()
+                        markingAsReadAndExiting.set(false)
+                    }
                 }
             }
         }

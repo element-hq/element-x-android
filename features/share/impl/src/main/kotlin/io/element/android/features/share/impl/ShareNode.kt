@@ -61,7 +61,7 @@ class ShareNode(
             }
 
             override fun onCancel() {
-                navigateUp()
+                onShareDone(emptyList())
             }
         }
 
@@ -82,12 +82,12 @@ class ShareNode(
             val state = presenter.present()
             ShareView(
                 state = state,
-                onShareSuccess = ::onShareSuccess,
+                onShareSuccess = ::onShareDone,
             )
         }
     }
 
-    private fun onShareSuccess(roomIds: List<RoomId>) {
+    private fun onShareDone(roomIds: List<RoomId>) {
         callbacks.forEach { it.onDone(roomIds) }
     }
 }

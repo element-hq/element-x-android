@@ -8,14 +8,14 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import org.matrix.rustcomponents.sdk.BatchNotificationResult
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationItemsRequest
 
 class FakeFfiNotificationClient(
     var notificationItemResult: Map<String, BatchNotificationResult> = emptyMap(),
     val closeResult: () -> Unit = { }
-) : NotificationClient(NoPointer) {
+) : NotificationClient(NoHandle) {
     override suspend fun getNotifications(requests: List<NotificationItemsRequest>): Map<String, BatchNotificationResult> {
         return notificationItemResult
     }

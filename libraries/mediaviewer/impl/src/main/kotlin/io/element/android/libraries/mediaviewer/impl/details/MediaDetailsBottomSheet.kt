@@ -49,6 +49,7 @@ fun MediaDetailsBottomSheet(
     state: MediaBottomSheetState.MediaDetailsBottomSheetState,
     onViewInTimeline: (EventId) -> Unit,
     onShare: (EventId) -> Unit,
+    onForward: (EventId) -> Unit,
     onDownload: (EventId) -> Unit,
     onDelete: (EventId) -> Unit,
     onDismiss: () -> Unit,
@@ -100,6 +101,14 @@ fun MediaDetailsBottomSheet(
                         style = ListItemStyle.Primary,
                         onClick = {
                             onShare(state.eventId)
+                        }
+                    )
+                    ListItem(
+                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
+                        headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
+                        style = ListItemStyle.Primary,
+                        onClick = {
+                            onForward(state.eventId)
                         }
                     )
                     ListItem(
@@ -216,6 +225,7 @@ internal fun MediaDetailsBottomSheetPreview() = ElementPreview {
         state = aMediaDetailsBottomSheetState(),
         onViewInTimeline = {},
         onShare = {},
+        onForward = {},
         onDownload = {},
         onDelete = {},
         onDismiss = {},

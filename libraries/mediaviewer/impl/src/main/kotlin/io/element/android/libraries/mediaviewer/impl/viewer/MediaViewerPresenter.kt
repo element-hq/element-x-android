@@ -117,6 +117,10 @@ class MediaViewerPresenter(
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onViewInTimelineClick(event.eventId)
                 }
+                is MediaViewerEvents.Forward -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    navigator.onForwardClick(event.eventId)
+                }
                 is MediaViewerEvents.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
                         eventId = event.data.eventId,

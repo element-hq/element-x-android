@@ -5,11 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import java.net.URI
-
 pluginManagement {
     repositories {
-                includeBuild("plugins")
+        includeBuild("plugins")
         gradlePluginPortal()
         google()
         mavenCentral()
@@ -18,13 +16,16 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-                google()
-        mavenCentral()
         maven {
-            url = URI("https://www.jitpack.io")
+            url = uri("https://www.jitpack.io")
             content {
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
             }
+        }
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://repo1.maven.org/maven2/")
         }
         flatDir {
             dirs("libraries/matrix/libs")

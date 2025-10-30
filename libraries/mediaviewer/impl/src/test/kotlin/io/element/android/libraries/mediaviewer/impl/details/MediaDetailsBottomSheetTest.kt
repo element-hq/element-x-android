@@ -58,6 +58,19 @@ class MediaDetailsBottomSheetTest {
 
     @Test
     @Config(qualifiers = "h1024dp")
+    fun `clicking on Forward invokes expected callback`() {
+        val state = aMediaDetailsBottomSheetState()
+        ensureCalledOnceWithParam(state.eventId) { callback ->
+            rule.setMediaDetailsBottomSheet(
+                state = state,
+                onForward = callback,
+            )
+            rule.clickOn(CommonStrings.action_forward)
+        }
+    }
+
+    @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on Save invokes expected callback`() {
         val state = aMediaDetailsBottomSheetState()
         ensureCalledOnceWithParam(state.eventId) { callback ->
@@ -100,6 +113,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
     state: MediaBottomSheetState.MediaDetailsBottomSheetState,
     onViewInTimeline: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onShare: (EventId) -> Unit = EnsureNeverCalledWithParam(),
+    onForward: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onDownload: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onDelete: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onDismiss: () -> Unit = EnsureNeverCalled(),
@@ -109,6 +123,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
             state = state,
             onViewInTimeline = onViewInTimeline,
             onShare = onShare,
+            onForward = onForward,
             onDownload = onDownload,
             onDelete = onDelete,
             onDismiss = onDismiss,

@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.tests.testutils.simulateLongTask
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import org.matrix.rustcomponents.sdk.RoomDirectorySearchEntriesListener
 import org.matrix.rustcomponents.sdk.RoomDirectorySearchEntryUpdate
@@ -16,7 +16,7 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 
 class FakeFfiRoomDirectorySearch(
     var isAtLastPage: Boolean = false,
-) : RoomDirectorySearch(NoPointer) {
+) : RoomDirectorySearch(NoHandle) {
     override suspend fun isAtLastPage(): Boolean {
         return isAtLastPage
     }

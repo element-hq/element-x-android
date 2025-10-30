@@ -62,7 +62,6 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.share.api.ShareEntryPoint
-import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.verifysession.api.IncomingVerificationEntryPoint
@@ -256,7 +255,7 @@ class LoggedInFlowNode(
             val serverNames: List<String> = emptyList(),
             val trigger: JoinedRoom.Trigger? = null,
             val roomDescription: RoomDescription? = null,
-            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
+            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Root(),
             val targetId: UUID = UUID.randomUUID(),
         ) : NavTarget
 
@@ -343,10 +342,6 @@ class LoggedInFlowNode(
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), serverNames))
                     }
 
-                    override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        sessionCoroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias(), clearBackstack = false) }
-                    }
-
                     override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
                         when (data) {
                             is PermalinkData.UserLink -> {
@@ -358,7 +353,7 @@ class LoggedInFlowNode(
                                     roomIdOrAlias = data.roomIdOrAlias,
                                     serverNames = data.viaParameters,
                                     trigger = JoinedRoom.Trigger.Timeline,
-                                    initialElement = RoomNavigationTarget.Messages(data.eventId),
+                                    initialElement = RoomNavigationTarget.Root(data.eventId),
                                 )
                                 if (pushToBackstack) {
                                     backstack.push(target)
@@ -377,11 +372,6 @@ class LoggedInFlowNode(
                         backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationSettings))
                     }
                 }
-                val spaceCallback = object : SpaceEntryPoint.Callback {
-                    override fun onOpenRoom(roomId: RoomId, viaParameters: List<String>) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), serverNames = viaParameters))
-                    }
-                }
                 val inputs = RoomFlowNode.Inputs(
                     roomIdOrAlias = navTarget.roomIdOrAlias,
                     roomDescription = Optional.ofNullable(navTarget.roomDescription),
@@ -389,7 +379,7 @@ class LoggedInFlowNode(
                     trigger = Optional.ofNullable(navTarget.trigger),
                     initialElement = navTarget.initialElement
                 )
-                createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, joinedRoomCallback, spaceCallback))
+                createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, joinedRoomCallback))
             }
             is NavTarget.UserProfile -> {
                 val callback = object : UserProfileEntryPoint.Callback {
@@ -421,7 +411,7 @@ class LoggedInFlowNode(
                     }
 
                     override fun navigateTo(roomId: RoomId, eventId: EventId) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Messages(eventId)))
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Root(eventId)))
                     }
                 }
                 val inputs = PreferencesEntryPoint.Params(navTarget.initialElement)
@@ -479,9 +469,8 @@ class LoggedInFlowNode(
                     .callback(object : ShareEntryPoint.Callback {
                         override fun onDone(roomIds: List<RoomId>) {
                             navigateUp()
-                            if (roomIds.size == 1) {
-                                val targetRoomId = roomIds.first()
-                                backstack.push(NavTarget.Room(targetRoomId.toRoomIdOrAlias()))
+                            roomIds.singleOrNull()?.let { roomId ->
+                                backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                             }
                         }
                     })
@@ -516,9 +505,7 @@ class LoggedInFlowNode(
                 roomIdOrAlias = roomIdOrAlias,
                 serverNames = serverNames,
                 trigger = trigger,
-                initialElement = RoomNavigationTarget.Messages(
-                    focusedEventId = eventId
-                )
+                initialElement = RoomNavigationTarget.Root(eventId = eventId)
             )
             backstack.accept(AttachRoomOperation(roomNavTarget, clearBackstack))
         }

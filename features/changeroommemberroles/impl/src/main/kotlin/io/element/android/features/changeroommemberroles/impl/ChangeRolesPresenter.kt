@@ -69,20 +69,19 @@ class ChangeRolesPresenter(
         val selectedUsers = remember {
             mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf())
         }
-        val exitState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
-        val saveState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val saveState: MutableState<AsyncAction<Boolean>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val usersWithRole = produceState<ImmutableList<MatrixUser>>(initialValue = persistentListOf()) {
             room.usersWithRole(role).map { members -> members.map { it.toMatrixUser() } }
-                    .onEach { users ->
-                        val previous = value
-                        value = users.toImmutableList()
-                        // Users who were selected but didn't have the role, so their role change was pending
-                        val toAdd = selectedUsers.value.filter { user -> users.none { it.userId == user.userId } && previous.none { it.userId == user.userId } }
-                        // Users who no longer have the role
-                        val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }.toSet()
-                        selectedUsers.value = (users + toAdd - toRemove).toImmutableList()
-                    }
-                    .launchIn(this)
+                .onEach { users ->
+                    val previous = value
+                    value = users.toImmutableList()
+                    // Users who were selected but didn't have the role, so their role change was pending
+                    val toAdd = selectedUsers.value.filter { user -> users.none { it.userId == user.userId } && previous.none { it.userId == user.userId } }
+                    // Users who no longer have the role
+                    val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }.toSet()
+                    selectedUsers.value = (users + toAdd - toRemove).toImmutableList()
+                }
+                .launchIn(this)
         }
 
         val roomMemberState by room.membersStateFlow.collectAsState()
@@ -147,22 +146,16 @@ class ChangeRolesPresenter(
                         }
                     }
                 }
-                is ChangeRolesEvent.ClearError -> {
-                    saveState.value = AsyncAction.Uninitialized
-                }
                 is ChangeRolesEvent.Exit -> {
-                    exitState.value = if (exitState.value.isUninitialized() && hasPendingChanges) {
+                    saveState.value = if (saveState.value.isUninitialized() && hasPendingChanges) {
                         // Has pending changes, confirm exit
-                        AsyncAction.ConfirmingNoParams
+                        AsyncAction.ConfirmingCancellation
                     } else {
                         // No pending changes, exit immediately
-                        AsyncAction.Success(Unit)
+                        AsyncAction.Success(false)
                     }
                 }
-                is ChangeRolesEvent.CancelExit -> {
-                    exitState.value = AsyncAction.Uninitialized
-                }
-                is ChangeRolesEvent.CancelSave -> {
+                is ChangeRolesEvent.CloseDialog -> {
                     saveState.value = AsyncAction.Uninitialized
                 }
             }
@@ -174,7 +167,6 @@ class ChangeRolesPresenter(
             searchResults = searchResults,
             selectedUsers = selectedUsers.value,
             hasPendingChanges = hasPendingChanges,
-            exitState = exitState.value,
             savingState = saveState.value,
             canChangeMemberRole = ::canChangeMemberRole,
             eventSink = ::handleEvent,
@@ -198,7 +190,7 @@ class ChangeRolesPresenter(
     private fun CoroutineScope.save(
         usersWithRole: ImmutableList<MatrixUser>,
         selectedUsers: MutableState<ImmutableList<MatrixUser>>,
-        saveState: MutableState<AsyncAction<Unit>>,
+        saveState: MutableState<AsyncAction<Boolean>>,
     ) = launch {
         saveState.value = AsyncAction.Loading
 
@@ -221,7 +213,7 @@ class ChangeRolesPresenter(
                 saveState.value = AsyncAction.Failure(it)
             }
             .onSuccess {
-                saveState.value = AsyncAction.Success(Unit)
+                saveState.value = AsyncAction.Success(true)
                 // Asynchronously reload the room members
                 launch { room.updateMembers() }
             }

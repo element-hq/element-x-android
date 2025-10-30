@@ -7,14 +7,14 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RoomPowerLevels
 import org.matrix.rustcomponents.sdk.RoomPowerLevelsValues
 
 class FakeFfiRoomPowerLevels(
     private val values: RoomPowerLevelsValues = defaultFfiRoomPowerLevelValues(),
     private val users: Map<String, Long> = emptyMap(),
-) : RoomPowerLevels(NoPointer) {
+) : RoomPowerLevels(NoHandle) {
     override fun values(): RoomPowerLevelsValues = values
     override fun userPowerLevels(): Map<String, Long> = users
 }

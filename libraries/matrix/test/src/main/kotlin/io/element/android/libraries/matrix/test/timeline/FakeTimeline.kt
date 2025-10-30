@@ -49,6 +49,14 @@ class FakeTimeline(
     override val membershipChangeEventReceived: Flow<Unit> = MutableSharedFlow(),
     private val cancelSendResult: (TransactionId) -> Result<Unit> = { lambdaError() },
     override val mode: Timeline.Mode = Timeline.Mode.Live,
+    private val markAsReadResult: (ReceiptType) -> Result<Unit> = { lambdaError() },
+    private val getLatestEventIdResult: () -> Result<EventId?> = { lambdaError() },
+    var sendReadReceiptLambda: (
+        eventId: EventId,
+        receiptType: ReceiptType,
+    ) -> Result<Unit> = { _, _ ->
+        lambdaError()
+    }
 ) : Timeline {
     var sendMessageLambda: (
         body: String,
@@ -397,17 +405,14 @@ class FakeTimeline(
         )
     }
 
-    var sendReadReceiptLambda: (
-        eventId: EventId,
-        receiptType: ReceiptType,
-    ) -> Result<Unit> = { _, _ ->
-        lambdaError()
-    }
-
     override suspend fun sendReadReceipt(
         eventId: EventId,
         receiptType: ReceiptType,
     ): Result<Unit> = sendReadReceiptLambda(eventId, receiptType)
+
+    override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> {
+        return markAsReadResult(receiptType)
+    }
 
     var paginateLambda: (direction: Timeline.PaginationDirection) -> Result<Boolean> = {
         Result.success(false)
@@ -429,6 +434,10 @@ class FakeTimeline(
     var unpinEventLambda: (eventId: EventId) -> Result<Boolean> = { lambdaError() }
     override suspend fun unpinEvent(eventId: EventId): Result<Boolean> {
         return unpinEventLambda(eventId)
+    }
+
+    override suspend fun getLatestEventId(): Result<EventId?> {
+        return getLatestEventIdResult()
     }
 
     var closeCounter = 0

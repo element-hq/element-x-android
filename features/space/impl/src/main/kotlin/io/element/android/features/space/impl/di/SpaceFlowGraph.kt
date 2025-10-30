@@ -11,12 +11,12 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.GraphExtension
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.NodeFactoriesBindings
-import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
 
 @GraphExtension(SpaceFlowScope::class)
 interface SpaceFlowGraph : NodeFactoriesBindings {
-    @ContributesTo(SessionScope::class)
+    @ContributesTo(RoomScope::class)
     @GraphExtension.Factory
     interface Factory {
         fun create(@Provides spaceRoomList: SpaceRoomList): SpaceFlowGraph

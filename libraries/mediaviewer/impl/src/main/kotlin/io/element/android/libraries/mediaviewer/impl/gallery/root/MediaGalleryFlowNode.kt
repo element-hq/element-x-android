@@ -44,7 +44,7 @@ import kotlinx.parcelize.Parcelize
 class MediaGalleryFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val mediaViewerEntryPoint: MediaViewerEntryPoint
+    private val mediaViewerEntryPoint: MediaViewerEntryPoint,
 ) : BaseFlowNode<MediaGalleryFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -82,6 +82,12 @@ class MediaGalleryFlowNode(
         }
     }
 
+    private fun forwardEvent(eventId: EventId) {
+        plugins<MediaGalleryEntryPoint.Callback>().forEach {
+            it.forwardEvent(eventId)
+        }
+    }
+
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
@@ -92,6 +98,10 @@ class MediaGalleryFlowNode(
 
                     override fun onViewInTimeline(eventId: EventId) {
                         this@MediaGalleryFlowNode.onViewInTimeline(eventId)
+                    }
+
+                    override fun onForward(eventId: EventId) {
+                        forwardEvent(eventId)
                     }
 
                     override fun onItemClick(item: MediaItem.Event) {
@@ -123,6 +133,11 @@ class MediaGalleryFlowNode(
 
                     override fun onViewInTimeline(eventId: EventId) {
                         this@MediaGalleryFlowNode.onViewInTimeline(eventId)
+                    }
+
+                    override fun onForwardEvent(eventId: EventId) {
+                        // Need to go to the parent because of the overlay
+                        forwardEvent(eventId)
                     }
                 }
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)

@@ -17,7 +17,9 @@ internal fun ComposerDraft.into(): RustComposerDraft {
     return RustComposerDraft(
         plainText = plainText,
         htmlText = htmlText,
-        draftType = draftType.into()
+        draftType = draftType.into(),
+        // TODO add media attachments to the draft
+        attachments = emptyList(),
     )
 }
 

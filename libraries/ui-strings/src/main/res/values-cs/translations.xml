@@ -97,6 +97,7 @@
   <string name="action_forgot_password">"Zapomněli jste heslo?"</string>
   <string name="action_forward">"Přeposlat"</string>
   <string name="action_go_back">"Přejít zpět"</string>
+  <string name="action_go_to_settings">"Přejít do nastavení"</string>
   <string name="action_ignore">"Ignorovat"</string>
   <string name="action_invite">"Pozvat"</string>
   <string name="action_invite_friends">"Pozvat přátele"</string>
@@ -113,6 +114,7 @@
   <string name="action_manage_account">"Spravovat účet"</string>
   <string name="action_manage_devices">"Spravovat zařízení"</string>
   <string name="action_message">"Zpráva"</string>
+  <string name="action_minimize">"Minimalizovat"</string>
   <string name="action_next">"Další"</string>
   <string name="action_no">"Ne"</string>
   <string name="action_not_now">"Teď ne"</string>
@@ -176,10 +178,12 @@
   <string name="common_advanced_settings">"Pokročilá nastavení"</string>
   <string name="common_an_image">"obrázek"</string>
   <string name="common_analytics">"Analytika"</string>
+  <string name="common_android_notification_sync_notifications_foreground_service_title">"Načítání oznámení…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Opustili jste místnost"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Byli jste odhlášeni z relace"</string>
   <string name="common_appearance">"Vzhled"</string>
   <string name="common_audio">"Zvuk"</string>
+  <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blokovaní uživatelé"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_call_started">"Hovor zahájen"</string>
@@ -228,6 +232,7 @@ Důvod: %1$s."</string>
   <string name="common_install_apk_android">"Nainstalovat APK"</string>
   <string name="common_invite_unknown_profile">"Tento Matrix identifikátor nelze najít, takže pozvánka nemusí být přijata."</string>
   <string name="common_leaving_room">"Opuštění místnosti"</string>
+  <string name="common_leaving_space">"Opuštění prostoru"</string>
   <string name="common_light">"Světlý"</string>
   <string name="common_line_copied_to_clipboard">"Řádek zkopírován do schránky"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
@@ -319,6 +324,7 @@ Důvod: %1$s."</string>
   <string name="common_settings">"Nastavení"</string>
   <string name="common_share_space">"Sdílet prostor"</string>
   <string name="common_shared_location">"Sdílená poloha"</string>
+  <string name="common_shared_space">"Sdílený prostor"</string>
   <string name="common_signing_out">"Odhlašování"</string>
   <string name="common_something_went_wrong">"Něco se nepovedlo"</string>
   <string name="common_something_went_wrong_message">"Narazili jsme na problém. Zkuste to prosím znovu."</string>
@@ -421,6 +427,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="invite_friends_rich_title">"🔐️ Připojte se ke mně na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
   <string name="screen_bug_report_a11y_screenshot">"Snímek obrazovky"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
@@ -468,6 +475,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"%1$s prostor"</string>
   <string name="screen_space_list_title">"Prostory"</string>
+  <string name="screen_space_menu_action_members">"Zobrazit členy"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení."</string>

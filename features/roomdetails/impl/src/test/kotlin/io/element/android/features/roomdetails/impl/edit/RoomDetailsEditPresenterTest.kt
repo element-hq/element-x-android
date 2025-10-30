@@ -649,8 +649,85 @@ class RoomDetailsEditPresenterTest {
             initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(3)
             assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
-            initialState.eventSink(RoomDetailsEditEvents.CancelSaveChanges)
+            initialState.eventSink(RoomDetailsEditEvents.CloseDialog)
             assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
+        }
+    }
+
+    @Test
+    fun `present - leave without saving - cancel`() = runTest {
+        val room = aJoinedRoom(
+            displayName = "Name",
+            canSendStateResult = { _, _ -> Result.success(true) }
+        )
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.saveButtonEnabled).isFalse()
+            // Once a change is made, the save button is enabled
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("Name edited"))
+            awaitItem().apply {
+                assertThat(saveButtonEnabled).isTrue()
+                eventSink(RoomDetailsEditEvents.OnBackPress)
+            }
+            awaitItem().apply {
+                assertThat(saveAction).isEqualTo(AsyncAction.ConfirmingCancellation)
+                eventSink(RoomDetailsEditEvents.CloseDialog)
+            }
+            awaitItem().apply {
+                assertThat(saveAction).isEqualTo(AsyncAction.Uninitialized)
+            }
+        }
+    }
+
+    @Test
+    fun `present - leave no changes, no confirmation`() = runTest {
+        val room = aJoinedRoom(
+            displayName = "Name",
+            canSendStateResult = { _, _ -> Result.success(true) }
+        )
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter {},
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.saveButtonEnabled).isFalse()
+            initialState.eventSink(RoomDetailsEditEvents.OnBackPress)
+            assertThat(awaitItem().saveAction).isEqualTo(AsyncAction.Success(Unit))
+        }
+    }
+
+    @Test
+    fun `present - leave without saving - confirm`() = runTest {
+        val room = aJoinedRoom(
+            displayName = "Name",
+            canSendStateResult = { _, _ -> Result.success(true) }
+        )
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter({}),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.saveButtonEnabled).isFalse()
+            // Once a change is made, the save button is enabled
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("Name edited"))
+            awaitItem().apply {
+                assertThat(saveButtonEnabled).isTrue()
+                eventSink(RoomDetailsEditEvents.OnBackPress)
+            }
+            awaitItem().apply {
+                assertThat(saveAction).isEqualTo(AsyncAction.ConfirmingCancellation)
+                eventSink(RoomDetailsEditEvents.OnBackPress)
+            }
+            awaitItem().apply {
+                assertThat(saveAction).isEqualTo(AsyncAction.Success(Unit))
+            }
         }
     }
 

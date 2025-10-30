@@ -20,21 +20,27 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appnav.di.RoomGraphFactory
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
+import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.libraries.architecture.childNode
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class JoinedRoomLoadedFlowNodeTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -98,29 +104,66 @@ class JoinedRoomLoadedFlowNodeTest {
         }
     }
 
+    private class FakeSpaceEntryPoint : SpaceEntryPoint {
+        var nodeId: String? = null
+
+        override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): SpaceEntryPoint.NodeBuilder {
+            return object : SpaceEntryPoint.NodeBuilder {
+                override fun inputs(inputs: SpaceEntryPoint.Inputs): SpaceEntryPoint.NodeBuilder {
+                    return this
+                }
+
+                override fun callback(callback: SpaceEntryPoint.Callback): SpaceEntryPoint.NodeBuilder {
+                    return this
+                }
+
+                override fun build(): Node {
+                    return node(buildContext) {}.also {
+                        nodeId = it.id
+                    }
+                }
+            }
+        }
+    }
+
+    private class FakeForwardEntryPoint : ForwardEntryPoint {
+        override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): ForwardEntryPoint.NodeBuilder {
+            return object : ForwardEntryPoint.NodeBuilder {
+                override fun params(params: ForwardEntryPoint.Params) = this
+                override fun callback(callback: ForwardEntryPoint.Callback) = this
+                override fun build() = node(buildContext) {}
+            }
+        }
+    }
+
     private fun TestScope.createJoinedRoomLoadedFlowNode(
         plugins: List<Plugin>,
         messagesEntryPoint: MessagesEntryPoint = FakeMessagesEntryPoint(),
         roomDetailsEntryPoint: RoomDetailsEntryPoint = FakeRoomDetailsEntryPoint(),
+        spaceEntryPoint: SpaceEntryPoint = FakeSpaceEntryPoint(),
+        forwardEntryPoint: ForwardEntryPoint = FakeForwardEntryPoint(),
         activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
+        matrixClient: FakeMatrixClient = FakeMatrixClient(),
     ) = JoinedRoomLoadedFlowNode(
         buildContext = BuildContext.root(savedStateMap = null),
         plugins = plugins,
         messagesEntryPoint = messagesEntryPoint,
         roomDetailsEntryPoint = roomDetailsEntryPoint,
+        spaceEntryPoint = spaceEntryPoint,
+        forwardEntryPoint = forwardEntryPoint,
         appNavigationStateService = FakeAppNavigationStateService(),
-        sessionCoroutineScope = this,
+        sessionCoroutineScope = backgroundScope,
         roomGraphFactory = FakeRoomGraphFactory(),
-        matrixClient = FakeMatrixClient(),
+        matrixClient = matrixClient,
         activeRoomsHolder = activeRoomsHolder,
     )
 
     @Test
-    fun `given a room flow node when initialized then it loads messages entry point`() = runTest {
+    fun `given a room flow node when initialized then it loads messages entry point if room is not space`() = runTest {
         // GIVEN
-        val room = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {}))
+        val room = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {}, initialRoomInfo = aRoomInfo(isSpace = false)))
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
-        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Root())
         val roomFlowNode = createJoinedRoomLoadedFlowNode(
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,
@@ -136,12 +179,32 @@ class JoinedRoomLoadedFlowNodeTest {
     }
 
     @Test
+    fun `given a room flow node when initialized then it loads space entry point if room is space`() = runTest {
+        // GIVEN
+        val room = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {}, initialRoomInfo = aRoomInfo(isSpace = true)))
+        val spaceEntryPoint = FakeSpaceEntryPoint()
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Root())
+        val roomFlowNode = createJoinedRoomLoadedFlowNode(
+            plugins = listOf(inputs),
+            spaceEntryPoint = spaceEntryPoint,
+        )
+        // WHEN
+        val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
+
+        // THEN
+        assertThat(roomFlowNode.backstack.activeElement).isEqualTo(JoinedRoomLoadedFlowNode.NavTarget.Space)
+        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.Space, Lifecycle.State.CREATED)
+        val spaceNode = roomFlowNode.childNode(JoinedRoomLoadedFlowNode.NavTarget.Space)!!
+        assertThat(spaceNode.id).isEqualTo(spaceEntryPoint.nodeId)
+    }
+
+    @Test
     fun `given a room flow node when callback on room details is triggered then it loads room details entry point`() = runTest {
         // GIVEN
         val room = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {}))
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
-        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Root())
         val roomFlowNode = createJoinedRoomLoadedFlowNode(
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,
@@ -162,7 +225,7 @@ class JoinedRoomLoadedFlowNodeTest {
         val room = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {}))
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
-        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Root())
         val activeRoomsHolder = ActiveRoomsHolder()
         val roomFlowNode = createJoinedRoomLoadedFlowNode(
             plugins = listOf(inputs),
@@ -185,7 +248,7 @@ class JoinedRoomLoadedFlowNodeTest {
         val room = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {}))
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
-        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Root())
         val activeRoomsHolder = ActiveRoomsHolder().apply {
             addRoom(room)
         }

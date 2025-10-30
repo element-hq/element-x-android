@@ -8,14 +8,14 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomNotificationSettings
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
 import org.matrix.rustcomponents.sdk.RoomNotificationSettings
 
 class FakeFfiNotificationSettings(
     private val roomNotificationSettings: RoomNotificationSettings = aRustRoomNotificationSettings(),
-) : NotificationSettings(NoPointer) {
+) : NotificationSettings(NoHandle) {
     private var delegate: NotificationSettingsDelegate? = null
 
     override fun setDelegate(delegate: NotificationSettingsDelegate?) {

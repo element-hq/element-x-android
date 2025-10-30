@@ -9,12 +9,15 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -22,34 +25,30 @@ import org.junit.Test
 
 class DefaultMarkAsFullyReadTest {
     @Test
-    fun `When room is not found, then no exception is thrown`() = runTest {
+    fun `When marking as read fails, no exception is thrown`() = runTest {
         val markAsFullyRead = DefaultMarkAsFullyRead(
-            FakeMatrixClient(
-                sessionCoroutineScope = backgroundScope,
+            matrixClient = FakeMatrixClient(
+                markRoomAsFullyReadResult = { _, _ -> Result.failure(IllegalStateException("Room not found")) },
             ).apply {
                 givenGetRoomResult(A_ROOM_ID, null)
-            }
+            },
+            coroutineDispatchers = testCoroutineDispatchers(),
         )
-        markAsFullyRead.invoke(A_ROOM_ID)
+        assertThat(markAsFullyRead.invoke(A_ROOM_ID, AN_EVENT_ID).isFailure).isTrue()
         runCurrent()
     }
 
     @Test
-    fun `When room is found, the expected method is invoked`() = runTest {
-        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
-        val baseRoom = FakeBaseRoom(
-            markAsReadResult = markAsReadResult
-        )
+    fun `When marking as read is successful, the expected method is invoked`() = runTest {
+        val markAsFullyReadResult = lambdaRecorder<RoomId, EventId, Result<Unit>> { _, _ -> Result.success(Unit) }
         val markAsFullyRead = DefaultMarkAsFullyRead(
-            FakeMatrixClient(
-                sessionCoroutineScope = backgroundScope,
-            ).apply {
-                givenGetRoomResult(A_ROOM_ID, baseRoom)
-            }
+            matrixClient = FakeMatrixClient(
+                markRoomAsFullyReadResult = markAsFullyReadResult,
+            ),
+            coroutineDispatchers = testCoroutineDispatchers(),
         )
-        markAsFullyRead.invoke(A_ROOM_ID)
+        assertThat(markAsFullyRead.invoke(A_ROOM_ID, AN_EVENT_ID).isSuccess).isTrue()
         runCurrent()
-        markAsReadResult.assertions().isCalledOnce().with(value(ReceiptType.FULLY_READ))
-        baseRoom.assertDestroyed()
+        markAsFullyReadResult.assertions().isCalledOnce().with(value(A_ROOM_ID), value(AN_EVENT_ID))
     }
 }

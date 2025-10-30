@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Pridať reakciu: %1$s"</string>
   <string name="a11y_avatar">"Obrázok"</string>
+  <string name="a11y_collapse_message_text_field">"Minimalizovať textové pole správy"</string>
   <string name="a11y_delete">"Vymazať"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d zadaná číslica"</item>
@@ -11,6 +12,7 @@
   <string name="a11y_edit_avatar">"Upraviť obrázok"</string>
   <string name="a11y_edit_room_address_hint">"Celá adresa bude %1$s"</string>
   <string name="a11y_encryption_details">"Podrobnosti o šifrovaní"</string>
+  <string name="a11y_expand_message_text_field">"Rozbaliť textové pole správy"</string>
   <string name="a11y_hide_password">"Skryť heslo"</string>
   <string name="a11y_join_call">"Pripojiť sa k hovoru"</string>
   <string name="a11y_jump_to_bottom">"Prejsť na spodok"</string>
@@ -42,7 +44,7 @@
   <string name="a11y_remove_reaction_with">"Odstrániť reakciu s %1$s"</string>
   <string name="a11y_room_avatar">"Obrázok miestnosti"</string>
   <string name="a11y_send_files">"Odoslať súbory"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje sa časovo obmedzená akcia"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje sa časovo obmedzená akcia, na overenie máte jednu minútu"</string>
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_start_call">"Začať hovor"</string>
   <string name="a11y_tombstoned_room">"Opustená miestnosť"</string>
@@ -80,6 +82,7 @@
   <string name="action_decline">"Odmietnuť"</string>
   <string name="action_decline_and_block">"Odmietnuť a zablokovať"</string>
   <string name="action_delete_poll">"Odstrániť anketu"</string>
+  <string name="action_deselect_all">"Zrušiť výber všetkých"</string>
   <string name="action_disable">"Vypnúť"</string>
   <string name="action_discard">"Zahodiť"</string>
   <string name="action_dismiss">"Zamietnuť"</string>
@@ -94,6 +97,7 @@
   <string name="action_forgot_password">"Zabudnuté heslo?"</string>
   <string name="action_forward">"Preposlať"</string>
   <string name="action_go_back">"Ísť späť"</string>
+  <string name="action_go_to_settings">"Prejsť na nastavenia"</string>
   <string name="action_ignore">"Ignorovať"</string>
   <string name="action_invite">"Pozvať"</string>
   <string name="action_invite_friends">"Pozvať ľudí"</string>
@@ -105,10 +109,12 @@
   <string name="action_leave">"Opustiť"</string>
   <string name="action_leave_conversation">"Opustiť konverzáciu"</string>
   <string name="action_leave_room">"Opustiť miestnosť"</string>
+  <string name="action_leave_space">"Opustiť priestor"</string>
   <string name="action_load_more">"Načítať viac"</string>
   <string name="action_manage_account">"Spravovať účet"</string>
   <string name="action_manage_devices">"Spravovať zariadenia"</string>
   <string name="action_message">"Poslať správu"</string>
+  <string name="action_minimize">"Minimalizovať"</string>
   <string name="action_next">"Ďalej"</string>
   <string name="action_no">"Nie"</string>
   <string name="action_not_now">"Teraz nie"</string>
@@ -137,6 +143,7 @@
   <string name="action_retry_decryption">"Opakovať dešifrovanie"</string>
   <string name="action_save">"Uložiť"</string>
   <string name="action_search">"Hľadať"</string>
+  <string name="action_select_all">"Vybrať všetko"</string>
   <string name="action_send">"Odoslať"</string>
   <string name="action_send_edited_message">"Odoslať upravenú správa"</string>
   <string name="action_send_message">"Odoslať správu"</string>
@@ -165,14 +172,18 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Aktualizácia je k dispozícii"</string>
   <string name="common_about">"O aplikácii"</string>
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
+  <string name="common_add_account">"Pridať účet"</string>
+  <string name="common_add_another_account">"Pridať ďalší účet"</string>
   <string name="common_adding_caption">"Pridáva sa titulok"</string>
   <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
   <string name="common_an_image">"obrázok"</string>
   <string name="common_analytics">"Analytika"</string>
+  <string name="common_android_notification_sync_notifications_foreground_service_title">"Načítavajú sa upozornenia…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Opustili ste miestnosť"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Boli ste odhlásení zo relácie."</string>
   <string name="common_appearance">"Vzhľad"</string>
   <string name="common_audio">"Zvuk"</string>
+  <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blokovaní používatelia"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_call_started">"Hovor sa začal"</string>
@@ -182,9 +193,11 @@
   <string name="common_creating_room">"Vytváranie miestnosti…"</string>
   <string name="common_current_user_canceled_knock">"Žiadosť bola zrušená"</string>
   <string name="common_current_user_left_room">"Opustil/a miestnosť"</string>
+  <string name="common_current_user_left_space">"Opustil priestor"</string>
   <string name="common_current_user_rejected_invite">"Pozvánka bola odmietnutá"</string>
   <string name="common_dark">"Tmavý"</string>
   <string name="common_decryption_error">"Chyba dešifrovania"</string>
+  <string name="common_description">"Popis"</string>
   <string name="common_developer_options">"Možnosti pre vývojárov"</string>
   <string name="common_device_id">"ID zariadenia"</string>
   <string name="common_direct_chat">"Priama konverzácia"</string>
@@ -219,6 +232,7 @@ Dôvod: %1$s."</string>
   <string name="common_install_apk_android">"Inštalovať APK"</string>
   <string name="common_invite_unknown_profile">"Toto Matrix ID sa nedá nájsť, takže pozvánka nemusí byť prijatá."</string>
   <string name="common_leaving_room">"Opustenie miestnosti"</string>
+  <string name="common_leaving_space">"Opúšťanie priestoru"</string>
   <string name="common_light">"Svetlý"</string>
   <string name="common_line_copied_to_clipboard">"Riadok skopírovaný do schránky"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
@@ -243,6 +257,7 @@ Dôvod: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Žiadne výsledky"</string>
   <string name="common_no_room_name">"Žiadny názov miestnosti"</string>
+  <string name="common_no_space_name">"Žiadny názov priestoru"</string>
   <string name="common_not_encrypted">"Nešifrované"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Licencie s otvoreným zdrojom"</string>
@@ -299,15 +314,19 @@ Dôvod: %1$s."</string>
   <string name="common_search_results">"Výsledky hľadania"</string>
   <string name="common_security">"Bezpečnosť"</string>
   <string name="common_seen_by">"Videné"</string>
+  <string name="common_select_account">"Vyberte účet"</string>
   <string name="common_send_to">"Odoslať"</string>
   <string name="common_sending">"Odosiela sa…"</string>
   <string name="common_sending_failed">"Odoslanie zlyhalo"</string>
   <string name="common_sent">"Odoslané"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Server nie je podporovaný"</string>
+  <string name="common_server_unreachable">"Server je nedostupný"</string>
   <string name="common_server_url">"URL adresa servera"</string>
   <string name="common_settings">"Nastavenia"</string>
+  <string name="common_share_space">"Zdieľať priestor"</string>
   <string name="common_shared_location">"Zdieľaná poloha"</string>
+  <string name="common_shared_space">"Zdieľaný priestor"</string>
   <string name="common_signing_out">"Odhlasovanie"</string>
   <string name="common_something_went_wrong">"Niečo sa pokazilo"</string>
   <string name="common_something_went_wrong_message">"Vyskytol sa problém. Skúste to prosím znova."</string>
@@ -382,6 +401,8 @@ Naozaj chcete pokračovať?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maximálna povolená veľkosť súboru je: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vyberte kvalitu videa, ktoré chcete nahrať."</string>
   <string name="dialog_video_quality_selector_title">"Vyberte kvalitu nahrávania videa"</string>
+  <string name="emoji_picker_search_placeholder">"Hľadať emotikony"</string>
+  <string name="error_account_already_logged_in">"Už ste prihlásený/á na tomto zariadení ako %1$s ."</string>
   <string name="error_account_creation_not_possible">"Váš domovský server musí byť aktualizovaný tak, aby podporoval Matrix Authentication Service a vytvorenie účtu."</string>
   <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>
   <string name="error_failed_loading_map">"%1$s nedokázal načítať mapu. Skúste to prosím neskôr."</string>
@@ -408,6 +429,7 @@ Naozaj chcete pokračovať?"</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
   <string name="screen_bug_report_a11y_screenshot">"Snímka obrazovky"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
@@ -453,7 +475,9 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_share_this_location_action">"Zdieľajte túto polohu"</string>
   <string name="screen_space_list_description">"Priestory, ktoré ste vytvorili alebo ku ktorým ste sa pripojili."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s priestor"</string>
   <string name="screen_space_list_title">"Priestory"</string>
+  <string name="screen_space_menu_action_members">"Zobraziť členov"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$s."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Správa nebola odoslaná, pretože %1$s neoveril/a všetky zariadenia."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Správa nebola odoslaná, pretože ste neoverili jedno alebo viac svojich zariadení."</string>

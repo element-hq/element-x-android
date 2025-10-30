@@ -151,19 +151,21 @@ class TimelinePresenterTest {
         isSendPublicReadReceiptsEnabled: Boolean,
         expectedReceiptType: ReceiptType,
     ) = runTest(StandardTestDispatcher()) {
+        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
+        val sendReadReceiptLambda = lambdaRecorder<EventId, ReceiptType, Result<Unit>> { _, _ -> Result.success(Unit) }
         val timeline = FakeTimeline(
             timelineItems = flowOf(
                 listOf(
                     MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem())
                 )
-            )
+            ),
+            markAsReadResult = markAsReadResult,
+            sendReadReceiptLambda = sendReadReceiptLambda,
         )
-        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
         val room = FakeJoinedRoom(
             liveTimeline = timeline,
             baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
-                markAsReadResult = markAsReadResult,
             )
         )
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = isSendPublicReadReceiptsEnabled)
@@ -183,25 +185,6 @@ class TimelinePresenterTest {
                 .with(value(expectedReceiptType))
             cancelAndIgnoreRemainingEvents()
         }
-    }
-
-    @Test
-    fun `present - once presenter is disposed, room is marked as fully read`() = runTest {
-        val invokeResult = lambdaRecorder<RoomId, Unit> { }
-        val presenter = createTimelinePresenter(
-            room = FakeJoinedRoom(
-                baseRoom = FakeBaseRoom(
-                    canUserSendMessageResult = { _, _ -> Result.success(true) },
-                )
-            ),
-            markAsFullyRead = FakeMarkAsFullyRead(
-                invokeResult = invokeResult,
-            )
-        )
-        presenter.test {
-            awaitFirstItem()
-        }
-        invokeResult.assertions().isCalledOnce().with(value(A_ROOM_ID))
     }
 
     @Test
@@ -258,10 +241,10 @@ class TimelinePresenterTest {
                         )
                     )
                 )
-            )
-        ).apply {
-            this.sendReadReceiptLambda = sendReadReceiptsLambda
-        }
+            ),
+            markAsReadResult = { Result.success(Unit) },
+            sendReadReceiptLambda = sendReadReceiptsLambda,
+        )
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
         val presenter = createTimelinePresenter(
             timeline = timeline,
@@ -349,7 +332,10 @@ class TimelinePresenterTest {
     @Test
     fun `present - covers newEventState scenarios`() = runTest {
         val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
-        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val timeline = FakeTimeline(
+            timelineItems = timelineItems,
+            markAsReadResult = { Result.success(Unit) },
+        )
         val presenter = createTimelinePresenter(timeline)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -1039,7 +1025,6 @@ class TimelinePresenterTest {
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
-        markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
     ): TimelinePresenter {
         return TimelinePresenter(
@@ -1057,7 +1042,6 @@ class TimelinePresenterTest {
             resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
             typingNotificationPresenter = { aTypingNotificationState() },
             roomCallStatePresenter = { aStandByCallState() },
-            markAsFullyRead = markAsFullyRead,
             featureFlagService = featureFlagService,
         )
     }

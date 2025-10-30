@@ -15,6 +15,7 @@ import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
+import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
@@ -90,6 +91,9 @@ class DefaultMessagesEntryPointTest {
                 mediaViewerEntryPoint = object : MediaViewerEntryPoint {
                     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext) = lambdaError()
                 },
+                forwardEntryPoint = object : ForwardEntryPoint {
+                    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext) = lambdaError()
+                },
                 analyticsService = FakeAnalyticsService(),
                 locationService = FakeLocationService(),
                 room = FakeBaseRoom(),
@@ -115,7 +119,8 @@ class DefaultMessagesEntryPointTest {
             override fun onRoomDetailsClick() = lambdaError()
             override fun onUserDataClick(userId: UserId) = lambdaError()
             override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) = lambdaError()
-            override fun onForwardedToSingleRoom(roomId: RoomId) = lambdaError()
+            override fun forwardEvent(eventId: EventId) = lambdaError()
+            override fun openRoom(roomId: RoomId) = lambdaError()
         }
         val initialTarget = MessagesEntryPoint.InitialTarget.Messages(focusedEventId = AN_EVENT_ID)
         val params = MessagesEntryPoint.Params(initialTarget)
