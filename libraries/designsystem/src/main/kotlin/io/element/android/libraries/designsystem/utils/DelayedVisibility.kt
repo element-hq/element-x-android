@@ -11,6 +11,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,9 +28,11 @@ fun DelayedVisibility(
     duration: Duration = 300.milliseconds,
     block: @Composable () -> Unit,
 ) {
+    // Technically this shouldn't be needed because `LocalInspectionMode` won't change, but let's make the linter happy
+    val movableBlock = remember { movableContentOf { block() } }
     if (LocalInspectionMode.current) {
         // Just allow the contents to be displayed in the previews/screenshot tests
-        block()
+        movableBlock()
     } else {
         var shouldDisplay by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -37,7 +40,7 @@ fun DelayedVisibility(
             shouldDisplay = true
         }
         AnimatedVisibility(shouldDisplay) {
-            block()
+            movableBlock()
         }
     }
 }
