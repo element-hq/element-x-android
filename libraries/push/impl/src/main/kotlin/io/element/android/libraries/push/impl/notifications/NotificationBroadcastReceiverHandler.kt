@@ -125,6 +125,9 @@ class NotificationBroadcastReceiverHandler(
                     Timber.d("Marked room $roomId as read with receipt type $receiptType")
                 }
             }
+            ?.onFailure {
+                Timber.e(it, "Fails to mark as read with receipt type $receiptType")
+            }
         if (timeline?.mode != Timeline.Mode.Live) {
             timeline?.close()
         }
