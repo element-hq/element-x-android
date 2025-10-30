@@ -594,6 +594,9 @@ class TimelinePresenterTest {
             timelineItemIndexer.process(listOf(aMessageEvent(eventId = AN_EVENT_ID)))
 
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
+
+            advanceUntilIdle()
+
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Requested(AN_EVENT_ID, Duration.ZERO))
