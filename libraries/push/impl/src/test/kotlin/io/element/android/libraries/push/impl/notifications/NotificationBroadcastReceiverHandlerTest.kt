@@ -222,10 +222,11 @@ class NotificationBroadcastReceiverHandlerTest {
         )
         val clearMessagesForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
         val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
+        val timeline = FakeTimeline(markAsReadResult = markAsReadResult)
         val joinedRoom = FakeJoinedRoom(
-            baseRoom = FakeBaseRoom(
-                markAsReadResult = markAsReadResult,
-            ),
+            baseRoom = FakeBaseRoom(),
+            liveTimeline = timeline,
+            createTimelineResult = { Result.success(timeline) },
         )
         val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMessagesForRoomLambda = clearMessagesForRoomLambda,
