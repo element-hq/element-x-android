@@ -27,14 +27,17 @@ fun DelayedVisibility(
     duration: Duration = 300.milliseconds,
     block: @Composable () -> Unit,
 ) {
-    val isPreview = LocalInspectionMode.current
-    var shouldDisplay by remember { mutableStateOf(!isPreview) }
-    LaunchedEffect(Unit) {
-        delay(duration)
-        shouldDisplay = true
-    }
-
-    AnimatedVisibility(shouldDisplay) {
+    if (LocalInspectionMode.current) {
+        // Just allow the contents to be displayed in the previews/screenshot tests
         block()
+    } else {
+        var shouldDisplay by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            delay(duration)
+            shouldDisplay = true
+        }
+        AnimatedVisibility(shouldDisplay) {
+            block()
+        }
     }
 }
