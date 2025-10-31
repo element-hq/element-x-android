@@ -25,7 +25,6 @@ import io.element.android.appnav.di.RoomGraphFactory
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
-import io.element.android.features.messages.api.MessagesEntryPointNode
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.libraries.architecture.BackstackView
@@ -276,7 +275,7 @@ class JoinedRoomLoadedFlowNode(
         val messageNode = waitForChildAttached<Node, NavTarget> { navTarget ->
             navTarget is NavTarget.Messages
         }
-        (messageNode as? MessagesEntryPointNode)?.attachThread(threadId, focusedEventId)
+        (messageNode as? MessagesEntryPoint.NodeProxy)?.attachThread(threadId, focusedEventId)
     }
 
     @Composable

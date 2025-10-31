@@ -32,7 +32,6 @@ import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
-import io.element.android.features.messages.api.MessagesEntryPointNode
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
@@ -130,8 +129,7 @@ class MessagesFlowNode(
     ),
     buildContext = buildContext,
     plugins = plugins,
-),
-    MessagesEntryPointNode {
+), MessagesEntryPoint.NodeProxy {
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data class Messages(val focusedEventId: EventId?) : NavTarget

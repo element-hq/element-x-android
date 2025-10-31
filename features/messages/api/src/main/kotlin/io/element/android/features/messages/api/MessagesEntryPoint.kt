@@ -47,8 +47,8 @@ interface MessagesEntryPoint : FeatureEntryPoint {
         params: Params,
         callback: Callback,
     ): Node
-}
 
-interface MessagesEntryPointNode {
-    suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?)
+    interface NodeProxy {
+        suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?)
+    }
 }
