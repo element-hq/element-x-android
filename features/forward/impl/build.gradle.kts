@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.roomselect.api)
+    implementation(projects.libraries.uiStrings)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)

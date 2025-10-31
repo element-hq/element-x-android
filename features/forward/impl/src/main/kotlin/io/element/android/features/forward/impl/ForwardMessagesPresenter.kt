@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.getActiveTimeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AssistedInject
 class ForwardMessagesPresenter(
@@ -63,7 +64,11 @@ class ForwardMessagesPresenter(
         roomIds: List<RoomId>,
     ) = launch {
         suspend {
-            timelineProvider.getActiveTimeline().forwardEvent(eventId, roomIds).getOrThrow()
+            timelineProvider.getActiveTimeline().forwardEvent(eventId, roomIds)
+                .onFailure {
+                    Timber.e(it, "Error while forwarding event")
+                }
+                .getOrThrow()
             roomIds
         }.runCatchingUpdatingState(forwardingActionState)
     }
