@@ -114,8 +114,7 @@ enum class FeatureFlags(
         title = "Sync notifications with WorkManager",
         description = "Use WorkManager to schedule notification sync tasks when a push is received." +
             " This should improve reliability and battery usage.",
-        // Enable by default on nightly and debug builds so we can get feedback before enabling it for everyone.
-        defaultValue = { meta -> meta.buildType != BuildType.RELEASE },
+        defaultValue = { true },
         isFinished = false,
     ),
 }
