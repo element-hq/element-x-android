@@ -394,6 +394,7 @@
   <string name="screen_share_open_google_maps">"Άνοιγμα στο Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Άνοιγμα στο OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Κοινή χρήση αυτής της τοποθεσίας"</string>
+  <string name="screen_space_settings_security_and_privacy">"Ασφάλεια &amp; απόρρητο"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Το μήνυμα δεν στάλθηκε γιατί έγινε επαναφορά της επαληθευμένης ταυτότητας του χρήστη %1$s."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$s δεν έχει επαληθεύσει όλες τις συσκευές."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Το μήνυμα δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου."</string>

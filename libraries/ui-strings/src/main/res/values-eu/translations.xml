@@ -375,6 +375,7 @@ Ziur jarraitu nahi duzula?"</string>
   <string name="screen_share_open_google_maps">"Ireki Google Maps-en"</string>
   <string name="screen_share_open_osm_maps">"Ireki OpenStreetMap-en"</string>
   <string name="screen_share_this_location_action">"Partekatu kokapen hau"</string>
+  <string name="screen_space_settings_security_and_privacy">"Segurtasuna eta pribatutasuna"</string>
   <string name="screen_view_location_title">"Kokapena"</string>
   <string name="settings_version_number">"Bertsioa: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"eu"</string>

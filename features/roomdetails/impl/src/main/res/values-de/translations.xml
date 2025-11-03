@@ -70,7 +70,7 @@
   <string name="screen_room_details_title">"Informationen"</string>
   <string name="screen_room_details_topic_title">"Thema"</string>
   <string name="screen_room_details_updating_room">"Chat wird aktualisiert…"</string>
-  <string name="screen_room_member_list_banned_empty">"In diesem Chat gibt es keine gesperrten Nutzer."</string>
+  <string name="screen_room_member_list_banned_empty">"Es gibt keine gesperrten Nutzer."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d Person"</item>
     <item quantity="other">"%1$d Personen"</item>

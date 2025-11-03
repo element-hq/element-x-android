@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"افزودن پیوست"</string>
   <string name="rich_text_editor_bullet_list">"تغییر وضعیت سیاههٔ گلوله‌ای"</string>
-  <string name="rich_text_editor_close_formatting_options">"بستن گزینه‌های قالب‌بندی"</string>
+  <string name="rich_text_editor_close_formatting_options">"لغو و بستن قالب‌بندی متن"</string>
   <string name="rich_text_editor_code_block">"تغییر حالت بلوک کد"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"افزودن عنوان"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"پیام رمزنگاری شده…"</string>

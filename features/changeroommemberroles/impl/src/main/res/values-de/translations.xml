@@ -33,7 +33,7 @@
   <string name="screen_room_change_role_section_users">"Mitglieder"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Du hast nicht gespeicherte Änderungen."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Änderungen speichern?"</string>
-  <string name="screen_room_member_list_banned_empty">"In diesem Chat gibt es keine gesperrten Nutzer."</string>
+  <string name="screen_room_member_list_banned_empty">"Es gibt keine gesperrten Nutzer."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d Person"</item>
     <item quantity="other">"%1$d Personen"</item>

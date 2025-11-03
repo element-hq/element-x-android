@@ -383,6 +383,8 @@
   <string name="screen_space_list_parent_space">"‏%1$s فضا"</string>
   <string name="screen_space_list_title">"فضاها"</string>
   <string name="screen_space_menu_action_members">"دیدن اعضا"</string>
+  <string name="screen_space_settings_leave_space">"ترک فضا"</string>
+  <string name="screen_space_settings_security_and_privacy">"امنیت و محرمانگی"</string>
   <string name="screen_view_location_title">"مکان"</string>
   <string name="settings_version_number">"نگارش : %1$s (%2$s)"</string>
   <string name="test_language_identifier">"fa"</string>

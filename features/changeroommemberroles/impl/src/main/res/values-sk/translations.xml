@@ -33,7 +33,7 @@
   <string name="screen_room_change_role_section_users">"Členovia"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Máte neuložené zmeny."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Uložiť zmeny?"</string>
-  <string name="screen_room_member_list_banned_empty">"V tejto miestnosti nie sú žiadni zakázaní používatelia."</string>
+  <string name="screen_room_member_list_banned_empty">"Neexistujú žiadni zablokovaní používatelia."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d osoba"</item>
     <item quantity="few">"%1$d osoby"</item>

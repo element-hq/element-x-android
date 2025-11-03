@@ -399,6 +399,7 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="screen_share_open_google_maps">"Buka di Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Buka di OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Bagikan lokasi ini"</string>
+  <string name="screen_space_settings_security_and_privacy">"Keamanan &amp; privasi"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Pesan tidak terkirim karena identitas terverifikasi %1$s telah diatur ulang."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Pesan tidak terkirim karena %1$s belum memverifikasi semua perangkat."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Pesan tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda."</string>

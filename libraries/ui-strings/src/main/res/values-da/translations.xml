@@ -466,6 +466,8 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_space_list_parent_space">"%1$s gruppe"</string>
   <string name="screen_space_list_title">"Grupper"</string>
   <string name="screen_space_menu_action_members">"Vis medlemmer"</string>
+  <string name="screen_space_settings_leave_space">"Forlad gruppe"</string>
+  <string name="screen_space_settings_security_and_privacy">"Sikkerhed og privatliv"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Beskeden blev ikke sendt fordi %1$s s bekræftede identitet blev nulstillet."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meddelelsen er ikke sendt, fordi %1$s ikke har bekræftet alle enheder."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Beskeden er ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder."</string>

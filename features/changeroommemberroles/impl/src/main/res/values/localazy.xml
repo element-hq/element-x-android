@@ -33,7 +33,7 @@
   <string name="screen_room_change_role_section_users">"Members"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"You have unsaved changes."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Save changes?"</string>
-  <string name="screen_room_member_list_banned_empty">"There are no banned users in this room."</string>
+  <string name="screen_room_member_list_banned_empty">"There are no banned users."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d people"</item>

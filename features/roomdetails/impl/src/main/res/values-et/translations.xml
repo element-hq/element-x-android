@@ -70,7 +70,7 @@
   <string name="screen_room_details_title">"Jututoa teave"</string>
   <string name="screen_room_details_topic_title">"Teema"</string>
   <string name="screen_room_details_updating_room">"Uuendame jututuba…"</string>
-  <string name="screen_room_member_list_banned_empty">"Jututoas pole suhtluskeeluga kasutajaid"</string>
+  <string name="screen_room_member_list_banned_empty">"Suhtluskeeluga kasutajaid pole"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d osaleja"</item>
     <item quantity="other">"%1$d osalejat"</item>

@@ -33,7 +33,7 @@
   <string name="screen_room_change_role_section_users">"成員"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"您有尚未儲存的變更"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"是否儲存變更？"</string>
-  <string name="screen_room_member_list_banned_empty">"此聊天室沒有黑名單。"</string>
+  <string name="screen_room_member_list_banned_empty">"沒有被封鎖的使用者。"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="other">"%1$d 位夥伴"</item>
   </plurals>
