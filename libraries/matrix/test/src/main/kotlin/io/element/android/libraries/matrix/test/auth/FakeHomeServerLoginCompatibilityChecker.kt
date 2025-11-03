@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.test.auth
 
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
 
-class FakeHomeserverLoginCompatibilityChecker(
+class FakeHomeServerLoginCompatibilityChecker(
     private val checkResult: (String) -> Result<Unit>,
 ) : HomeServerLoginCompatibilityChecker {
     override suspend fun check(url: String): Result<Unit> {

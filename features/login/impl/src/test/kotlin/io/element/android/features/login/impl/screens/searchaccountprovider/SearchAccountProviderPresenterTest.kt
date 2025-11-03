@@ -14,7 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.changeserver.aChangeServerState
 import io.element.android.features.login.impl.resolver.HomeserverResolver
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.test.auth.FakeHomeserverLoginCompatibilityChecker
+import io.element.android.libraries.matrix.test.auth.FakeHomeServerLoginCompatibilityChecker
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -29,7 +29,7 @@ class SearchAccountProviderPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val fakeLoginCompatibilityChecker = FakeHomeserverLoginCompatibilityChecker(checkResult = { Result.success(Unit) })
+        val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = { Result.success(Unit) })
         val presenter = SearchAccountProviderPresenter(
             homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
             changeServerPresenter = { aChangeServerState() }
@@ -45,7 +45,7 @@ class SearchAccountProviderPresenterTest {
 
     @Test
     fun `present - error while checking login compatibility`() = runTest {
-        val fakeLoginCompatibilityChecker = FakeHomeserverLoginCompatibilityChecker(checkResult = { Result.failure(IllegalStateException("Oops")) })
+        val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = { Result.failure(IllegalStateException("Oops")) })
         val presenter = SearchAccountProviderPresenter(
             homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
             changeServerPresenter = { aChangeServerState() }
@@ -80,7 +80,7 @@ class SearchAccountProviderPresenterTest {
                 else -> error("should not happen")
             }
         }
-        val fakeLoginCompatibilityChecker = FakeHomeserverLoginCompatibilityChecker(checkResult = checkResult)
+        val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = checkResult)
         val presenter = SearchAccountProviderPresenter(
             homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
             changeServerPresenter = { aChangeServerState() }
@@ -122,7 +122,7 @@ class SearchAccountProviderPresenterTest {
                 else -> error("should not happen")
             }
         }
-        val fakeLoginCompatibilityChecker = FakeHomeserverLoginCompatibilityChecker(checkResult = checkResult)
+        val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = checkResult)
         val presenter = SearchAccountProviderPresenter(
             homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
             changeServerPresenter = { aChangeServerState() }
