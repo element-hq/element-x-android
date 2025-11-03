@@ -12,10 +12,12 @@ import org.matrix.rustcomponents.sdk.NoHandle
 
 class FakeFfiHomeserverLoginDetails(
     private val url: String = "https://example.org",
-    private val supportsPasswordLogin: Boolean = true,
-    private val supportsOidcLogin: Boolean = false
+    private val supportsPasswordLogin: Boolean = false,
+    private val supportsOidcLogin: Boolean = false,
+    private val supportsSsoLogin: Boolean = false,
 ) : HomeserverLoginDetails(NoHandle) {
     override fun url(): String = url
     override fun supportsOidcLogin(): Boolean = supportsOidcLogin
     override fun supportsPasswordLogin(): Boolean = supportsPasswordLogin
+    override fun supportsSsoLogin(): Boolean = supportsSsoLogin
 }

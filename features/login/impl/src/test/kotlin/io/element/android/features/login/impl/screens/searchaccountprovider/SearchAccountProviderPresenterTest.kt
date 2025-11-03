@@ -13,12 +13,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.changeserver.aChangeServerState
 import io.element.android.features.login.impl.resolver.HomeserverResolver
-import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
-import io.element.android.libraries.wellknown.api.WellKnown
-import io.element.android.libraries.wellknown.api.WellKnownBaseConfig
-import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
+import io.element.android.libraries.matrix.test.auth.FakeHomeserverLoginCompatibilityChecker
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -33,9 +29,9 @@ class SearchAccountProviderPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val fakeWellknownRetriever = FakeWellknownRetriever()
+        val fakeLoginCompatibilityChecker = FakeHomeserverLoginCompatibilityChecker(checkResult = { Result.success(Unit) })
         val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRetriever),
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
             changeServerPresenter = { aChangeServerState() }
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -48,30 +44,10 @@ class SearchAccountProviderPresenterTest {
     }
 
     @Test
-    fun `present - enter text no result`() = runTest {
-        val fakeWellknownRetriever = FakeWellknownRetriever()
+    fun `present - error while checking login compatibility`() = runTest {
+        val fakeLoginCompatibilityChecker = FakeHomeserverLoginCompatibilityChecker(checkResult = { Result.failure(IllegalStateException("Oops")) })
         val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRetriever),
-            changeServerPresenter = { aChangeServerState() }
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            initialState.eventSink.invoke(SearchAccountProviderEvents.UserInput("test"))
-            val withInputState = awaitItem()
-            assertThat(withInputState.userInput).isEqualTo("test")
-            assertThat(initialState.userInputResult).isEqualTo(AsyncData.Uninitialized)
-            assertThat(awaitItem().userInputResult).isInstanceOf(AsyncData.Loading::class.java)
-            assertThat(awaitItem().userInputResult).isEqualTo(AsyncData.Uninitialized)
-        }
-    }
-
-    @Test
-    fun `present - enter valid url no wellknown`() = runTest {
-        val fakeWellknownRetriever = FakeWellknownRetriever()
-        val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRetriever),
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
             changeServerPresenter = { aChangeServerState() }
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -95,20 +71,18 @@ class SearchAccountProviderPresenterTest {
 
     @Test
     fun `present - enter text one result with wellknown`() = runTest {
-        val getWellKnownResult = lambdaRecorder<String, WellknownRetrieverResult<WellKnown>> {
+        val checkResult = lambdaRecorder<String, Result<Unit>> {
             when (it) {
-                "https://test.org" -> WellknownRetrieverResult.NotFound
-                "https://test.com" -> WellknownRetrieverResult.NotFound
-                "https://test.io" -> WellknownRetrieverResult.Success(aWellKnown())
-                "https://test" -> WellknownRetrieverResult.NotFound
+                "https://test.org" -> Result.failure(IllegalStateException("Not found"))
+                "https://test.com" -> Result.failure(IllegalStateException("Not found"))
+                "https://test.io" -> Result.success(Unit)
+                "https://test" -> Result.failure(IllegalStateException("Not found"))
                 else -> error("should not happen")
             }
         }
-        val fakeWellknownRetriever = FakeWellknownRetriever(
-            getWellKnownResult = getWellKnownResult,
-        )
+        val fakeLoginCompatibilityChecker = FakeHomeserverLoginCompatibilityChecker(checkResult = checkResult)
         val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRetriever),
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
             changeServerPresenter = { aChangeServerState() }
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -127,7 +101,7 @@ class SearchAccountProviderPresenterTest {
                     )
                 )
             )
-            getWellKnownResult.assertions().isCalledExactly(4)
+            checkResult.assertions().isCalledExactly(4)
                 .withSequence(
                     listOf(value("https://test.org")),
                     listOf(value("https://test.com")),
@@ -139,20 +113,18 @@ class SearchAccountProviderPresenterTest {
 
     @Test
     fun `present - enter text two results with wellknown`() = runTest {
-        val getWellKnownResult = lambdaRecorder<String, WellknownRetrieverResult<WellKnown>> {
+        val checkResult = lambdaRecorder<String, Result<Unit>> {
             when (it) {
-                "https://test.org" -> WellknownRetrieverResult.Success(aWellKnown())
-                "https://test.com" -> WellknownRetrieverResult.NotFound
-                "https://test.io" -> WellknownRetrieverResult.Success(aWellKnown())
-                "https://test" -> WellknownRetrieverResult.NotFound
+                "https://test.org" -> Result.success(Unit)
+                "https://test.com" -> Result.failure(IllegalStateException("Not found"))
+                "https://test.io" -> Result.success(Unit)
+                "https://test" -> Result.failure(IllegalStateException("Not found"))
                 else -> error("should not happen")
             }
         }
-        val fakeWellknownRetriever = FakeWellknownRetriever(
-            getWellKnownResult = getWellKnownResult,
-        )
+        val fakeLoginCompatibilityChecker = FakeHomeserverLoginCompatibilityChecker(checkResult = checkResult)
         val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRetriever),
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
             changeServerPresenter = { aChangeServerState() }
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -179,7 +151,7 @@ class SearchAccountProviderPresenterTest {
                     )
                 )
             )
-            getWellKnownResult.assertions().isCalledExactly(4)
+            checkResult.assertions().isCalledExactly(4)
                 .withSequence(
                     listOf(value("https://test.org")),
                     listOf(value("https://test.com")),
@@ -187,16 +159,5 @@ class SearchAccountProviderPresenterTest {
                     listOf(value("https://test")),
                 )
         }
-    }
-
-    private fun aWellKnown(): WellKnown {
-        return WellKnown(
-            homeServer = WellKnownBaseConfig(
-                baseURL = A_HOMESERVER_URL
-            ),
-            identityServer = WellKnownBaseConfig(
-                baseURL = A_HOMESERVER_URL
-            ),
-        )
     }
 }
