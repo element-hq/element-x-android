@@ -256,12 +256,21 @@ class MediaViewerPresenterTest {
             updatedState.eventSink(
                 MediaViewerEvents.OpenInfo(
                     aMediaViewerPageData(
-                        mediaSource = MediaSource(aUrl)
+                        mediaInfo = anImage.mediaInfo,
+                        mediaSource = MediaSource(aUrl),
                     )
                 )
             )
             val withInfoState = awaitItem()
-            assertThat(withInfoState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            assertThat(withInfoState.mediaBottomSheetState).isEqualTo(
+                MediaBottomSheetState.MediaDetailsBottomSheetState(
+                    eventId = null,
+                    canForward = true,
+                    canDelete = false,
+                    mediaInfo = anImage.mediaInfo,
+                    thumbnailSource = null,
+                )
+            )
             withInfoState.eventSink(
                 MediaViewerEvents.CloseBottomSheet
             )
