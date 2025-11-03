@@ -280,6 +280,56 @@ class MediaViewerPresenterTest {
     }
 
     @Test
+    fun `present - open info - cannot forward from pinned event timeline`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.PinnedEvents),
+            localMediaFactory = localMediaFactory,
+            mediaGalleryDataSource = mediaGalleryDataSource,
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    canRedactOwnResult = { Result.success(true) },
+                )
+            )
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.OpenInfo(
+                    aMediaViewerPageData(
+                        mediaInfo = anImage.mediaInfo,
+                        mediaSource = MediaSource(aUrl),
+                    )
+                )
+            )
+            val withInfoState = awaitItem()
+            assertThat(withInfoState.mediaBottomSheetState).isEqualTo(
+                MediaBottomSheetState.MediaDetailsBottomSheetState(
+                    eventId = null,
+                    canForward = false,
+                    canDelete = false,
+                    mediaInfo = anImage.mediaInfo,
+                    thumbnailSource = null,
+                )
+            )
+        }
+    }
+
+    @Test
     fun `present - clear loading error`() = runTest {
         val mediaGalleryDataSource = FakeMediaGalleryDataSource(
             startLambda = { },
