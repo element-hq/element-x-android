@@ -17,6 +17,7 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.Collections
 
 /**
@@ -37,17 +38,22 @@ class HomeserverResolver(
         // Run all the requests in parallel
         withContext(dispatchers.io) {
             list.parallelMap { url ->
-                homeServerLoginCompatibilityChecker.check(url).getOrNull() ?: return@parallelMap
+                val isValid = homeServerLoginCompatibilityChecker.check(url)
+                    .onFailure { Timber.w(it, "Failed to check compatibility with homeserver $url") }
+                    .getOrNull()
+                    ?: return@parallelMap
 
                 // Emit the list as soon as possible
-                currentList.add(
-                    HomeserverData(
-                        homeserverUrl = url,
-                        isWellknownValid = true,
+                if (isValid) {
+                    currentList.add(
+                        HomeserverData(
+                            homeserverUrl = url,
+                            isWellknownValid = true,
+                        )
                     )
-                )
-                withContext(flowContext) {
-                    emit(currentList.toList())
+                    withContext(flowContext) {
+                        emit(currentList.toList())
+                    }
                 }
             }
         }

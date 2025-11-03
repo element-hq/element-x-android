@@ -10,9 +10,9 @@ package io.element.android.libraries.matrix.test.auth
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
 
 class FakeHomeServerLoginCompatibilityChecker(
-    private val checkResult: (String) -> Result<Unit>,
+    private val checkResult: (String) -> Result<Boolean>,
 ) : HomeServerLoginCompatibilityChecker {
-    override suspend fun check(url: String): Result<Unit> {
+    override suspend fun check(url: String): Result<Boolean> {
         return checkResult(url)
     }
 }

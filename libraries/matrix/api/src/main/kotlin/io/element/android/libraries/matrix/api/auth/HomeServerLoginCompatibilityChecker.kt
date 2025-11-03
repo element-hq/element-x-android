@@ -7,6 +7,13 @@
 
 package io.element.android.libraries.matrix.api.auth
 
+/**
+ * Checks the homeserver's compatibility with Element X.
+ */
 interface HomeServerLoginCompatibilityChecker {
-    suspend fun check(url: String): Result<Unit>
+    /**
+     * Performs the compatibility check given the homeserver's [url].
+     * @return a `true` value if the homeserver is compatible, `false` if not, or a failure result if the check unexpectedly failed.
+     */
+    suspend fun check(url: String): Result<Boolean>
 }

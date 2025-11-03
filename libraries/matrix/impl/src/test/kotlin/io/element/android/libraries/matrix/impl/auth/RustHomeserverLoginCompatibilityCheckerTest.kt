@@ -21,25 +21,25 @@ class RustHomeserverLoginCompatibilityCheckerTest {
     @Test
     fun `check - is valid if it supports OIDC login`() = runTest {
         val sut = createChecker { FakeFfiHomeserverLoginDetails(supportsOidcLogin = true) }
-        assertThat(sut.check("https://matrix.host.org").isSuccess).isTrue()
+        assertThat(sut.check("https://matrix.host.org").getOrNull()).isTrue()
     }
 
     @Test
     fun `check - is valid if it supports password login`() = runTest {
         val sut = createChecker { FakeFfiHomeserverLoginDetails(supportsPasswordLogin = true) }
-        assertThat(sut.check("https://matrix.host.org").isSuccess).isTrue()
+        assertThat(sut.check("https://matrix.host.org").getOrNull()).isTrue()
     }
 
     @Test
     fun `check - is not valid if it only supports SSO login`() = runTest {
         val sut = createChecker { FakeFfiHomeserverLoginDetails(supportsSsoLogin = true) }
-        assertThat(sut.check("https://matrix.host.org").isSuccess).isFalse()
+        assertThat(sut.check("https://matrix.host.org").getOrNull()).isFalse()
     }
 
     @Test
     fun `check - is not valid if fetching the data fails`() = runTest {
         val sut = createChecker { error("Unexpected error!") }
-        assertThat(sut.check("https://matrix.host.org").isSuccess).isFalse()
+        assertThat(sut.check("https://matrix.host.org").isFailure).isTrue()
     }
 
     private fun createChecker(

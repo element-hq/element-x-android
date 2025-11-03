@@ -19,14 +19,12 @@ import io.element.android.libraries.matrix.impl.ClientBuilderProvider
 class RustHomeServerLoginCompatibilityChecker(
     private val clientBuilderProvider: ClientBuilderProvider,
 ) : HomeServerLoginCompatibilityChecker {
-    override suspend fun check(url: String): Result<Unit> = runCatchingExceptions {
+    override suspend fun check(url: String): Result<Boolean> = runCatchingExceptions {
         val client = clientBuilderProvider.provide().homeserverUrl(url).build()
         client.use {
             it.homeserverLoginDetails()
         }.use {
-            assert(it.supportsOidcLogin() || it.supportsPasswordLogin()) {
-                "Homeserver $url does not support either OIDC login or password login. It can't be used with this app."
-            }
+            it.supportsOidcLogin() || it.supportsPasswordLogin()
         }
     }
 }

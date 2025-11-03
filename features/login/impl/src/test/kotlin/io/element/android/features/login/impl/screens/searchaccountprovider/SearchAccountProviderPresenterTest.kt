@@ -29,7 +29,7 @@ class SearchAccountProviderPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = { Result.success(Unit) })
+        val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = { Result.success(true) })
         val presenter = SearchAccountProviderPresenter(
             homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
             changeServerPresenter = { aChangeServerState() }
@@ -70,13 +70,33 @@ class SearchAccountProviderPresenterTest {
     }
 
     @Test
+    fun `present - enter text no result`() = runTest {
+        val fakeWellknownRetriever = FakeHomeServerLoginCompatibilityChecker(checkResult = { Result.success(false) })
+        val presenter = SearchAccountProviderPresenter(
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRetriever),
+            changeServerPresenter = { aChangeServerState() }
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(SearchAccountProviderEvents.UserInput("test"))
+            val withInputState = awaitItem()
+            assertThat(withInputState.userInput).isEqualTo("test")
+            assertThat(initialState.userInputResult).isEqualTo(AsyncData.Uninitialized)
+            assertThat(awaitItem().userInputResult).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(awaitItem().userInputResult).isEqualTo(AsyncData.Uninitialized)
+        }
+    }
+
+    @Test
     fun `present - enter text one result with wellknown`() = runTest {
-        val checkResult = lambdaRecorder<String, Result<Unit>> {
+        val checkResult = lambdaRecorder<String, Result<Boolean>> {
             when (it) {
-                "https://test.org" -> Result.failure(IllegalStateException("Not found"))
-                "https://test.com" -> Result.failure(IllegalStateException("Not found"))
-                "https://test.io" -> Result.success(Unit)
-                "https://test" -> Result.failure(IllegalStateException("Not found"))
+                "https://test.org" -> Result.success(false)
+                "https://test.com" -> Result.success(false)
+                "https://test.io" -> Result.success(true)
+                "https://test" -> Result.success(false)
                 else -> error("should not happen")
             }
         }
@@ -113,12 +133,12 @@ class SearchAccountProviderPresenterTest {
 
     @Test
     fun `present - enter text two results with wellknown`() = runTest {
-        val checkResult = lambdaRecorder<String, Result<Unit>> {
+        val checkResult = lambdaRecorder<String, Result<Boolean>> {
             when (it) {
-                "https://test.org" -> Result.success(Unit)
-                "https://test.com" -> Result.failure(IllegalStateException("Not found"))
-                "https://test.io" -> Result.success(Unit)
-                "https://test" -> Result.failure(IllegalStateException("Not found"))
+                "https://test.org" -> Result.success(true)
+                "https://test.com" -> Result.success(false)
+                "https://test.io" -> Result.success(true)
+                "https://test" -> Result.success(false)
                 else -> error("should not happen")
             }
         }
