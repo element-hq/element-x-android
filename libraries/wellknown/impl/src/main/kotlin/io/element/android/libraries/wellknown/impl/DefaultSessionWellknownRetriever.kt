@@ -15,7 +15,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.SessionWellknownRetriever
-import io.element.android.libraries.wellknown.api.WellKnown
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import timber.log.Timber
 
@@ -25,17 +24,6 @@ class DefaultSessionWellknownRetriever(
     private val json: JsonProvider,
 ) : SessionWellknownRetriever {
     private val domain by lazy { matrixClient.userIdServerName() }
-
-    override suspend fun getWellKnown(): WellknownRetrieverResult<WellKnown> {
-        val url = "https://$domain/.well-known/matrix/client"
-        return matrixClient
-            .getUrl(url)
-            .mapCatchingExceptions {
-                val data = String(it)
-                json().decodeFromString<InternalWellKnown>(data).map()
-            }
-            .toWellknownRetrieverResult()
-    }
 
     override suspend fun getElementWellKnown(): WellknownRetrieverResult<ElementWellKnown> {
         val url = "https://$domain/.well-known/element/element.json"
