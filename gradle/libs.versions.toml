@@ -52,7 +52,7 @@ haze = "1.6.10"
 dependencyAnalysis = "3.4.1"
 
 # DI
-metro = "0.7.2"
+metro = "0.7.3"
 
 # Auto service
 autoservice = "1.1.1"
