@@ -13,6 +13,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
+import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
 @Inject
@@ -20,11 +21,16 @@ class RustHomeServerLoginCompatibilityChecker(
     private val clientBuilderProvider: ClientBuilderProvider,
 ) : HomeServerLoginCompatibilityChecker {
     override suspend fun check(url: String): Result<Boolean> = runCatchingExceptions {
-        val client = clientBuilderProvider.provide().homeserverUrl(url).build()
-        client.use {
-            it.homeserverLoginDetails()
-        }.use {
-            it.supportsOidcLogin() || it.supportsPasswordLogin()
-        }
+        clientBuilderProvider.provide()
+            .inMemoryStore()
+            .serverNameOrHomeserverUrl(url)
+            .build()
+            .use {
+                it.homeserverLoginDetails()
+            }
+            .use {
+                Timber.d("Homeserver $url | OIDC: ${it.supportsOidcLogin()} | Password: ${it.supportsPasswordLogin()} | SSO: ${it.supportsSsoLogin()}")
+                it.supportsOidcLogin() || it.supportsPasswordLogin()
+            }
     }
 }
