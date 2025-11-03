@@ -52,5 +52,11 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
 
         @Parcelize
         data class TimelineFilesAndAudios(val timelineMode: Timeline.Mode) : MediaViewerMode
+
+        fun timelineMode(): Timeline.Mode? = when (this) {
+            is TimelineImagesAndVideos -> timelineMode
+            is TimelineFilesAndAudios -> timelineMode
+            else -> null
+        }
     }
 }

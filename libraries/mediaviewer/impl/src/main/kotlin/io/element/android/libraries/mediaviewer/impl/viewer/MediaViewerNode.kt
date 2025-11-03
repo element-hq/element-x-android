@@ -81,11 +81,7 @@ class MediaViewerNode(
             timelineMediaGalleryDataSource
         } else {
             // Can we use a specific timeline?
-            val timelineMode = when (val mode = inputs.mode) {
-                is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> mode.timelineMode
-                is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> mode.timelineMode
-                else -> null
-            }
+            val timelineMode = inputs.mode.timelineMode()
             when (timelineMode) {
                 null -> timelineMediaGalleryDataSource
                 Timeline.Mode.Live,
