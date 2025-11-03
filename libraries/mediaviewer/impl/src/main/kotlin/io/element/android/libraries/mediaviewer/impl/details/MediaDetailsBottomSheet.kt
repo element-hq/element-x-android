@@ -103,14 +103,16 @@ fun MediaDetailsBottomSheet(
                             onShare(state.eventId)
                         }
                     )
-                    ListItem(
-                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
-                        style = ListItemStyle.Primary,
-                        onClick = {
-                            onForward(state.eventId)
-                        }
-                    )
+                    if (state.canForward) {
+                        ListItem(
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
+                            headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
+                            style = ListItemStyle.Primary,
+                            onClick = {
+                                onForward(state.eventId)
+                            }
+                        )
+                    }
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
                         headlineContent = { Text(stringResource(CommonStrings.action_save)) },

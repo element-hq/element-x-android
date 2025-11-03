@@ -116,6 +116,7 @@ class MediaGalleryPresenter(
                 is MediaGalleryEvents.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
                         eventId = event.mediaItem.eventId(),
+                        canForward = true,
                         canDelete = when (event.mediaItem.mediaInfo().senderId) {
                             null -> false
                             room.sessionId -> room.canRedactOwn().getOrElse { false } && event.mediaItem.eventId() != null

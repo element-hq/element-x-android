@@ -69,6 +69,18 @@ class MediaDetailsBottomSheetTest {
         }
     }
 
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `Forward is not present if canForward is false`() {
+        val state = aMediaDetailsBottomSheetState(
+            canForward = false,
+        )
+        rule.setMediaDetailsBottomSheet(
+            state = state,
+        )
+        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_forward)).assertDoesNotExist()
+    }
+
     @Test
     @Config(qualifiers = "h1024dp")
     fun `clicking on Save invokes expected callback`() {

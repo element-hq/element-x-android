@@ -124,6 +124,7 @@ class MediaGalleryPresenterTest {
             assertThat(state.mediaBottomSheetState).isEqualTo(
                 MediaBottomSheetState.MediaDetailsBottomSheetState(
                     eventId = AN_EVENT_ID,
+                    canForward = true,
                     canDelete = canDeleteOwn,
                     mediaInfo = item.mediaInfo,
                     thumbnailSource = item.mediaSource,
@@ -169,6 +170,7 @@ class MediaGalleryPresenterTest {
             assertThat(state.mediaBottomSheetState).isEqualTo(
                 MediaBottomSheetState.MediaDetailsBottomSheetState(
                     eventId = AN_EVENT_ID,
+                    canForward = true,
                     canDelete = canDeleteOther,
                     mediaInfo = item.mediaInfo,
                     thumbnailSource = item.mediaSource,

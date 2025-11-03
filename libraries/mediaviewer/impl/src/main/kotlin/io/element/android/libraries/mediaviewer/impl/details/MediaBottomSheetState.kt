@@ -22,6 +22,7 @@ sealed interface MediaBottomSheetState {
 
     data class MediaDetailsBottomSheetState(
         val eventId: EventId?,
+        val canForward: Boolean,
         val canDelete: Boolean,
         val mediaInfo: MediaInfo,
         val thumbnailSource: MediaSource?,

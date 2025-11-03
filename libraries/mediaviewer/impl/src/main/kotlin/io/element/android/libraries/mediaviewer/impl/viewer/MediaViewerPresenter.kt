@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
@@ -124,6 +125,7 @@ class MediaViewerPresenter(
                 is MediaViewerEvents.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
                         eventId = event.data.eventId,
+                        canForward = inputs.mode.timelineMode() != Timeline.Mode.PinnedEvents,
                         canDelete = when (event.data.mediaInfo.senderId) {
                             null -> false
                             room.sessionId -> room.canRedactOwn().getOrElse { false } && event.data.eventId != null
