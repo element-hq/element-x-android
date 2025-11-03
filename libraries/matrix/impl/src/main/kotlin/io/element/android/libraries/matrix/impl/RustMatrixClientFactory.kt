@@ -33,6 +33,7 @@ import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
+import org.matrix.rustcomponents.sdk.SqliteStoreBuilder
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_crypto.CollectStrategy
@@ -105,12 +106,13 @@ class RustMatrixClientFactory(
         slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
-            .sessionPaths(
-                dataPath = sessionPaths.fileDirectory.absolutePath,
-                cachePath = sessionPaths.cacheDirectory.absolutePath,
+            .sqliteStore(
+                SqliteStoreBuilder(
+                    dataPath = sessionPaths.fileDirectory.absolutePath,
+                    cachePath = sessionPaths.cacheDirectory.absolutePath,
+                ).passphrase(passphrase)
             )
             .setSessionDelegate(sessionDelegate)
-            .sessionPassphrase(passphrase)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)

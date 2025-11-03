@@ -285,7 +285,6 @@ class RustMatrixAuthenticationService(
             runCatchingExceptions {
                 val client = makeQrCodeLoginClient(
                     sessionPaths = emptySessionPaths,
-                    passphrase = pendingPassphrase,
                     qrCodeData = sdkQrCodeLoginData,
                 )
                 client.loginWithQrCode(
@@ -344,7 +343,6 @@ class RustMatrixAuthenticationService(
 
     private suspend fun makeQrCodeLoginClient(
         sessionPaths: SessionPaths,
-        passphrase: String?,
         qrCodeData: QrCodeData,
     ): Client {
         Timber.d("Creating client for QR Code login with simplified sliding sync")
@@ -354,7 +352,6 @@ class RustMatrixAuthenticationService(
                 passphrase = pendingPassphrase,
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
             )
-            .sessionPassphrase(passphrase)
             .serverNameOrHomeserverUrl(qrCodeData.serverName()!!)
             .build()
     }
