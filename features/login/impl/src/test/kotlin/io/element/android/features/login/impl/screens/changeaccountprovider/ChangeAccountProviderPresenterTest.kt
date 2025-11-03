@@ -46,7 +46,6 @@ class ChangeAccountProviderPresenterTest {
                         subtitle = null,
                         isPublic = true,
                         isMatrixOrg = true,
-                        isValid = true,
                     )
                 )
             )
@@ -76,7 +75,6 @@ class ChangeAccountProviderPresenterTest {
                         subtitle = null,
                         isPublic = true,
                         isMatrixOrg = true,
-                        isValid = true,
                     ),
                     AccountProvider(
                         url = "https://element.io",
@@ -84,7 +82,6 @@ class ChangeAccountProviderPresenterTest {
                         subtitle = null,
                         isPublic = false,
                         isMatrixOrg = false,
-                        isValid = true,
                     )
                 )
             )
@@ -114,7 +111,6 @@ class ChangeAccountProviderPresenterTest {
                         subtitle = null,
                         isPublic = true,
                         isMatrixOrg = true,
-                        isValid = true,
                     )
                 )
             )

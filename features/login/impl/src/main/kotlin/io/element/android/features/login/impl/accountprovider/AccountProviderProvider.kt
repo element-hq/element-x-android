@@ -15,7 +15,7 @@ open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
         get() = sequenceOf(
             anAccountProvider(),
             anAccountProvider().copy(subtitle = null),
-            anAccountProvider().copy(subtitle = null, title = "invalid", isValid = false),
+            anAccountProvider().copy(subtitle = null, title = "invalid"),
             anAccountProvider().copy(subtitle = null, title = "Other", isPublic = false, isMatrixOrg = false),
             // Add other state here
         )
@@ -26,11 +26,9 @@ fun anAccountProvider(
     subtitle: String? = "Matrix.org is an open network for secure, decentralized communication.",
     isPublic: Boolean = true,
     isMatrixOrg: Boolean = true,
-    isValid: Boolean = true,
 ) = AccountProvider(
     url = url,
     subtitle = subtitle,
     isPublic = isPublic,
     isMatrixOrg = isMatrixOrg,
-    isValid = isValid,
 )

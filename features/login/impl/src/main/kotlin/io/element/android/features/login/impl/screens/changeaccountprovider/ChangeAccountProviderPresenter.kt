@@ -37,7 +37,6 @@ class ChangeAccountProviderPresenter(
                         subtitle = null,
                         isPublic = url == AuthenticationConfig.MATRIX_ORG_URL,
                         isMatrixOrg = url == AuthenticationConfig.MATRIX_ORG_URL,
-                        isValid = true,
                     )
                 }
                 .toImmutableList()

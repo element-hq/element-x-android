@@ -33,7 +33,6 @@ class AccountProviderDataSourceTest {
                     subtitle = null,
                     isPublic = true,
                     isMatrixOrg = true,
-                    isValid = false,
                 )
             )
         }
@@ -55,7 +54,6 @@ class AccountProviderDataSourceTest {
                     subtitle = null,
                     isPublic = true,
                     isMatrixOrg = true,
-                    isValid = false,
                 )
             )
         }
@@ -77,7 +75,6 @@ class AccountProviderDataSourceTest {
                     subtitle = null,
                     isPublic = true,
                     isMatrixOrg = true,
-                    isValid = false,
                 )
             )
         }
@@ -98,7 +95,6 @@ class AccountProviderDataSourceTest {
                     subtitle = null,
                     isPublic = false,
                     isMatrixOrg = false,
-                    isValid = false,
                 )
             )
             sut.reset()

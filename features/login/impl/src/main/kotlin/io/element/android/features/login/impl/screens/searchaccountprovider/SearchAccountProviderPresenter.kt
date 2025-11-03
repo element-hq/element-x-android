@@ -57,7 +57,7 @@ class SearchAccountProviderPresenter(
             userInput = userInput,
             userInputResult = data.value,
             changeServerState = changeServerState,
-            eventSink = { handleEvents(it) },
+            eventSink = ::handleEvents,
         )
     }
 

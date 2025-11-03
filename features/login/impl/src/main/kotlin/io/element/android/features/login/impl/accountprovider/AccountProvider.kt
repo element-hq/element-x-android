@@ -13,5 +13,4 @@ data class AccountProvider(
     val subtitle: String? = null,
     val isPublic: Boolean = false,
     val isMatrixOrg: Boolean = false,
-    val isValid: Boolean = false,
 )

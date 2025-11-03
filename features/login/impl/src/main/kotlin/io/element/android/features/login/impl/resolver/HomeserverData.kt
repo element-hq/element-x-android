@@ -10,6 +10,4 @@ package io.element.android.features.login.impl.resolver
 data class HomeserverData(
     // The computed homeserver url, for which a wellknown file has been retrieved, or just a valid Url
     val homeserverUrl: String,
-    // True if a wellknown file has been found and is valid. If false, it means that the [homeserverUrl] is valid
-    val isWellknownValid: Boolean,
 )

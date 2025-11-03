@@ -192,7 +192,6 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
         // There is no need to know for other servers right now
         isPublic = isMatrixOrg,
         isMatrixOrg = isMatrixOrg,
-        isValid = isWellknownValid,
     )
 }
 

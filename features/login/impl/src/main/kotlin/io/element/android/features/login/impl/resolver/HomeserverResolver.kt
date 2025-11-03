@@ -45,12 +45,7 @@ class HomeserverResolver(
 
                 // Emit the list as soon as possible
                 if (isValid) {
-                    currentList.add(
-                        HomeserverData(
-                            homeserverUrl = url,
-                            isWellknownValid = true,
-                        )
-                    )
+                    currentList.add(HomeserverData(homeserverUrl = url))
                     withContext(flowContext) {
                         emit(currentList.toList())
                     }
@@ -59,14 +54,7 @@ class HomeserverResolver(
         }
         // If list is empty, and the user has entered an URL, do not block the user.
         if (currentList.isEmpty() && trimmedUserInput.isValidUrl()) {
-            emit(
-                listOf(
-                    HomeserverData(
-                        homeserverUrl = trimmedUserInput,
-                        isWellknownValid = false,
-                    )
-                )
-            )
+            emit(listOf(HomeserverData(homeserverUrl = trimmedUserInput)))
         }
     }
 

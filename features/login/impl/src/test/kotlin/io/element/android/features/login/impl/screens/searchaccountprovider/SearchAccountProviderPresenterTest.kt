@@ -62,7 +62,7 @@ class SearchAccountProviderPresenterTest {
             assertThat(awaitItem().userInputResult).isEqualTo(
                 AsyncData.Success(
                     listOf(
-                        aHomeserverData(homeserverUrl = "https://test.org", isWellknownValid = false)
+                        aHomeserverData(homeserverUrl = "https://test.org")
                     )
                 )
             )

@@ -37,14 +37,12 @@ class ChooseAccountProviderPresenterTest {
             subtitle = null,
             isPublic = false,
             isMatrixOrg = false,
-            isValid = true,
         )
         val accountProvider2 = AccountProvider(
             url = ACCOUNT_PROVIDER_FROM_CONFIG_2.ensureProtocol(),
             subtitle = null,
             isPublic = false,
             isMatrixOrg = false,
-            isValid = true,
         )
     }
 
