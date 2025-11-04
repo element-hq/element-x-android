@@ -64,7 +64,7 @@ class SearchAccountProviderPresenter(
     private fun CoroutineScope.onUserInput(userInput: String, data: MutableState<AsyncData<List<HomeserverData>>>) = launch {
         data.value = AsyncData.Uninitialized
         // Debounce
-        delay(300)
+        delay(500)
         data.value = AsyncData.Loading()
         homeserverResolver.resolve(userInput).collect {
             data.value = AsyncData.Success(it)
