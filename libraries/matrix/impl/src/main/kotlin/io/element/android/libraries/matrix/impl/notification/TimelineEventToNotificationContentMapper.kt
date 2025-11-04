@@ -25,8 +25,9 @@ class TimelineEventToNotificationContentMapper {
     fun map(timelineEvent: TimelineEvent): Result<NotificationContent> {
         return runCatchingExceptions {
             timelineEvent.use {
+                val senderId = UserId(timelineEvent.senderId())
                 timelineEvent.eventType().use { eventType ->
-                    eventType.toContent(senderId = UserId(timelineEvent.senderId()))
+                    eventType.toContent(senderId = senderId)
                 }
             }
         }

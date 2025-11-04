@@ -39,6 +39,7 @@ class NotificationMapper(
                     isDirect = item.roomInfo.isDirect,
                     activeMembersCount = item.roomInfo.joinedMembersCount.toInt(),
                 )
+                val timestamp = item.timestamp() ?: clock.epochMillis()
                 NotificationData(
                     sessionId = sessionId,
                     eventId = eventId,
@@ -53,8 +54,8 @@ class NotificationMapper(
                     isDm = isDm,
                     isEncrypted = item.roomInfo.isEncrypted.orFalse(),
                     isNoisy = item.isNoisy.orFalse(),
-                    timestamp = item.timestamp() ?: clock.epochMillis(),
-                    content = item.event.use { notificationContentMapper.map(it) }.getOrThrow(),
+                    timestamp = timestamp,
+                    content = notificationContentMapper.map(item.event).getOrThrow(),
                     hasMention = item.hasMention.orFalse(),
                 )
             }
