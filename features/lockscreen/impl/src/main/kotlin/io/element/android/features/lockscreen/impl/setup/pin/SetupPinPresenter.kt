@@ -20,6 +20,7 @@ import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.setup.pin.validation.PinValidator
 import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPinFailure
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.coroutines.delay
 
@@ -73,7 +74,7 @@ class SetupPinPresenter(
             }
         }
 
-        fun handleEvents(event: SetupPinEvents) {
+        val eventSink by rememberEventSink { event: SetupPinEvents ->
             when (event) {
                 is SetupPinEvents.OnPinEntryChanged -> {
                     // Use the fromConfirmationStep flag from ui to avoid race condition.
@@ -106,7 +107,7 @@ class SetupPinPresenter(
             isConfirmationStep = isConfirmationStep,
             setupPinFailure = setupPinFailure,
             appName = buildMeta.applicationName,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

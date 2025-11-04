@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.components.customreaction.icon
 import io.element.android.features.messages.impl.timeline.components.customreaction.title
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -90,7 +91,7 @@ class EmojiPickerPresenter(
         }
 
         val isInPreview = LocalInspectionMode.current
-        fun handleEvents(event: EmojiPickerEvents) {
+        val eventSink by rememberEventSink { event: EmojiPickerEvents ->
             when (event) {
                 // For some reason, in preview mode the SearchBar emits this event with an `isActive = true` value automatically
                 is EmojiPickerEvents.ToggleSearchActive -> if (!isInPreview) {
@@ -106,7 +107,7 @@ class EmojiPickerPresenter(
             searchQuery = searchQuery,
             isSearchActive = isSearchActive,
             searchResults = emojiResults,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

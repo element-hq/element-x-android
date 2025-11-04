@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -39,7 +40,7 @@ class QrCodeIntroPresenter(
             }
         }
 
-        fun handleEvents(event: QrCodeIntroEvents) {
+        val eventSink by rememberEventSink { event: QrCodeIntroEvents ->
             when (event) {
                 QrCodeIntroEvents.Continue -> if (cameraPermissionState.permissionGranted) {
                     canContinue = true
@@ -55,7 +56,7 @@ class QrCodeIntroPresenter(
             desktopAppName = buildMeta.desktopApplicationName,
             cameraPermissionState = cameraPermissionState,
             canContinue = canContinue,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

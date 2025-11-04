@@ -22,6 +22,7 @@ import io.element.android.features.securebackup.impl.loggerTagRoot
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -58,7 +59,7 @@ class SecureBackupRootPresenter(
             }
         }
 
-        fun handleEvents(event: SecureBackupRootEvents) {
+        val eventSink by rememberEventSink { event: SecureBackupRootEvents ->
             when (event) {
                 SecureBackupRootEvents.RetryKeyBackupState -> localCoroutineScope.getKeyBackupStatus(doesBackupExistOnServerAction)
                 SecureBackupRootEvents.EnableKeyStorage -> localCoroutineScope.enableBackup(enableAction)
@@ -78,7 +79,7 @@ class SecureBackupRootPresenter(
             appName = buildMeta.applicationName,
             displayKeyStorageDisabledError = displayKeyStorageDisabledError,
             snackbarMessage = snackbarMessage,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

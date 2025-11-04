@@ -21,6 +21,7 @@ import io.element.android.features.login.impl.resolver.HomeserverData
 import io.element.android.features.login.impl.resolver.HomeserverResolver
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -45,7 +46,7 @@ class SearchAccountProviderPresenter(
             onUserInput(userInput, data)
         }
 
-        fun handleEvents(event: SearchAccountProviderEvents) {
+        val eventSink by rememberEventSink { event: SearchAccountProviderEvents ->
             when (event) {
                 is SearchAccountProviderEvents.UserInput -> {
                     userInput = event.input
@@ -57,7 +58,7 @@ class SearchAccountProviderPresenter(
             userInput = userInput,
             userInputResult = data.value,
             changeServerState = changeServerState,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

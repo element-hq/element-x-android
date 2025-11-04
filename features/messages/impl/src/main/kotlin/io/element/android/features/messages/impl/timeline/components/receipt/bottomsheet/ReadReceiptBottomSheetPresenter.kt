@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 
 @Inject
 class ReadReceiptBottomSheetPresenter : Presenter<ReadReceiptBottomSheetState> {
@@ -22,7 +23,7 @@ class ReadReceiptBottomSheetPresenter : Presenter<ReadReceiptBottomSheetState> {
     override fun present(): ReadReceiptBottomSheetState {
         var selectedEvent: TimelineItem.Event? by remember { mutableStateOf(null) }
 
-        fun handleEvent(event: ReadReceiptBottomSheetEvents) {
+        val eventSink by rememberEventSink { event: ReadReceiptBottomSheetEvents ->
             @Suppress("LiftReturnOrAssignment")
             when (event) {
                 is ReadReceiptBottomSheetEvents.EventSelected -> {
@@ -36,7 +37,7 @@ class ReadReceiptBottomSheetPresenter : Presenter<ReadReceiptBottomSheetState> {
 
         return ReadReceiptBottomSheetState(
             selectedEvent = selectedEvent,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 }

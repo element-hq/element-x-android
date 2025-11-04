@@ -19,6 +19,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.CoroutineScope
@@ -41,7 +42,7 @@ class LoginPasswordPresenter(
         }
         val accountProvider by accountProviderDataSource.flow.collectAsState()
 
-        fun handleEvents(event: LoginPasswordEvents) {
+        val eventSink by rememberEventSink { event: LoginPasswordEvents ->
             when (event) {
                 is LoginPasswordEvents.SetLogin -> updateFormState(formState) {
                     copy(login = event.login)
@@ -60,7 +61,7 @@ class LoginPasswordPresenter(
             accountProvider = accountProvider,
             formState = formState.value,
             loginAction = loginAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

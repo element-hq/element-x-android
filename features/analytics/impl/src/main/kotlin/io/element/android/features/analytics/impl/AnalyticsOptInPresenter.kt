@@ -8,11 +8,13 @@
 package io.element.android.features.analytics.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.AnalyticsConfig
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +29,7 @@ class AnalyticsOptInPresenter(
     override fun present(): AnalyticsOptInState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        fun handleEvents(event: AnalyticsOptInEvents) {
+        val eventSink by rememberEventSink { event: AnalyticsOptInEvents ->
             when (event) {
                 is AnalyticsOptInEvents.EnableAnalytics -> localCoroutineScope.setIsEnabled(event.isEnabled)
             }
@@ -39,7 +41,7 @@ class AnalyticsOptInPresenter(
         return AnalyticsOptInState(
             applicationName = buildMeta.applicationName,
             hasPolicyLink = AnalyticsConfig.POLICY_LINK.isNotEmpty(),
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

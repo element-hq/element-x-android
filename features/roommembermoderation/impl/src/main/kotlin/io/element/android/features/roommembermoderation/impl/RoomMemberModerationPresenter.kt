@@ -23,6 +23,7 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.UserId
@@ -70,7 +71,7 @@ class RoomMemberModerationPresenter(
         }
         val moderationActions = remember { mutableStateOf<ImmutableList<ModerationActionState>>(persistentListOf()) }
 
-        fun handleEvent(event: RoomMemberModerationEvents) {
+        val eventSink by rememberEventSink { event: RoomMemberModerationEvents ->
             when (event) {
                 is RoomMemberModerationEvents.ShowActionsForUser -> {
                     selectedUser = event.user
@@ -140,7 +141,7 @@ class RoomMemberModerationPresenter(
             kickUserAsyncAction = kickUserAsyncAction.value,
             banUserAsyncAction = banUserAsyncAction.value,
             unbanUserAsyncAction = unbanUserAsyncAction.value,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

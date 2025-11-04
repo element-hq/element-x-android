@@ -9,11 +9,13 @@ package io.element.android.features.messages.impl.link
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.wysiwyg.link.Link
 
 @Inject
@@ -24,16 +26,16 @@ class LinkPresenter(
     override fun present(): LinkState {
         val linkClick: MutableState<AsyncAction<Link>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvents(linkEvents: LinkEvents) {
-            when (linkEvents) {
+        val eventSink by rememberEventSink { event: LinkEvents ->
+            when (event) {
                 is LinkEvents.OnLinkClick -> {
                     linkClick.value = AsyncAction.Loading
-                    val result = linkChecker.isSafe(linkEvents.link)
+                    val result = linkChecker.isSafe(event.link)
                     if (result) {
-                        linkClick.value = AsyncAction.Success(linkEvents.link)
+                        linkClick.value = AsyncAction.Success(event.link)
                     } else {
                         // Confirm first
-                        linkClick.value = ConfirmingLinkClick(linkEvents.link)
+                        linkClick.value = ConfirmingLinkClick(event.link)
                     }
                 }
                 LinkEvents.Confirm -> {
@@ -48,7 +50,7 @@ class LinkPresenter(
         }
         return LinkState(
             linkClick = linkClick.value,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

@@ -20,6 +20,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
@@ -63,7 +64,7 @@ class RoomSelectPresenter(
             }
         }
 
-        fun handleEvents(event: RoomSelectEvents) {
+        val eventSink by rememberEventSink { event: RoomSelectEvents ->
             when (event) {
                 is RoomSelectEvents.SetSelectedRoom -> {
                     selectedRooms = persistentListOf(event.room)
@@ -87,7 +88,7 @@ class RoomSelectPresenter(
             query = searchQuery,
             isSearchActive = isSearchActive,
             selectedRooms = selectedRooms,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import kotlinx.collections.immutable.persistentListOf
 
 @Inject
@@ -40,7 +41,7 @@ class RoomListSearchPresenter(
             dataSource.setSearchQuery(searchQuery)
         }
 
-        fun handleEvents(event: RoomListSearchEvents) {
+        val eventSink by rememberEventSink { event: RoomListSearchEvents ->
             when (event) {
                 RoomListSearchEvents.ClearQuery -> {
                     searchQuery = ""
@@ -61,7 +62,7 @@ class RoomListSearchPresenter(
             isSearchActive = isSearchActive,
             query = searchQuery,
             results = searchResults,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

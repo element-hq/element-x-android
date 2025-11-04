@@ -36,6 +36,7 @@ import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
@@ -130,7 +131,7 @@ class PinnedMessagesListPresenter(
             }
         )
 
-        fun handleEvents(event: PinnedMessagesListEvents) {
+        val eventSink by rememberEventSink { event: PinnedMessagesListEvents ->
             when (event) {
                 is PinnedMessagesListEvents.HandleAction -> sessionCoroutineScope.handleTimelineAction(event.action, event.event)
             }
@@ -143,7 +144,7 @@ class PinnedMessagesListPresenter(
             displayThreadSummaries = displayThreadSummaries,
             userEventPermissions = userEventPermissions,
             timelineItems = pinnedMessageItems,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

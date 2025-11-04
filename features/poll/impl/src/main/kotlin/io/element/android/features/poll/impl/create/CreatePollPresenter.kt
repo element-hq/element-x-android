@@ -26,6 +26,7 @@ import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.features.poll.impl.PollConstants.MAX_SELECTIONS
 import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.poll.isDisclosed
@@ -96,7 +97,7 @@ class CreatePollPresenter(
 
         val scope = rememberCoroutineScope()
 
-        fun handleEvents(event: CreatePollEvents) {
+        val eventSink by rememberEventSink { event: CreatePollEvents ->
             when (event) {
                 is CreatePollEvents.Save -> scope.launch {
                     if (canSave) {
@@ -124,12 +125,12 @@ class CreatePollPresenter(
                 }
                 is CreatePollEvents.Delete -> {
                     if (mode !is CreatePollMode.EditPoll) {
-                        return
+                        return@rememberEventSink
                     }
 
                     if (!event.confirmed) {
                         showDeleteConfirmation = true
-                        return
+                        return@rememberEventSink
                     }
 
                     scope.launch {
@@ -183,7 +184,7 @@ class CreatePollPresenter(
             pollKind = poll.pollKind,
             showBackConfirmation = showBackConfirmation,
             showDeleteConfirmation = showDeleteConfirmation,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

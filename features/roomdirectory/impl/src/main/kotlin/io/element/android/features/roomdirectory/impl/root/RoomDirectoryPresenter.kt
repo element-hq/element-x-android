@@ -20,6 +20,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.roomdirectory.impl.root.model.RoomDirectoryListState
 import io.element.android.features.roomdirectory.impl.root.model.toFeatureModel
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
@@ -62,7 +63,7 @@ class RoomDirectoryPresenter(
                 loadingMore = false
             }
         }
-        fun handleEvents(event: RoomDirectoryEvents) {
+        val eventSink by rememberEventSink { event: RoomDirectoryEvents ->
             when (event) {
                 RoomDirectoryEvents.LoadMore -> {
                     loadingMore = true
@@ -77,7 +78,7 @@ class RoomDirectoryPresenter(
             query = searchQuery.orEmpty(),
             roomDescriptions = listState.items,
             displayLoadMoreIndicator = listState.hasMoreToLoad,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

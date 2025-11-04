@@ -26,6 +26,7 @@ import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.firstInstanceOf
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -141,8 +142,8 @@ class AttachmentsPreviewPresenter(
             }
         }
 
-        fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
-            when (attachmentsPreviewEvents) {
+        val eventSink by rememberEventSink { event: AttachmentsPreviewEvents ->
+            when (event) {
                 is AttachmentsPreviewEvents.SendAttachment -> {
                     ongoingSendAttachmentJob.value = coroutineScope.launch {
                         // If the media optimization selector is displayed, we need to wait for the user to select the options
@@ -230,7 +231,7 @@ class AttachmentsPreviewPresenter(
             textEditorState = textEditorState,
             mediaOptimizationSelectorState = mediaOptimizationSelectorState,
             displayFileTooLargeError = displayFileTooLargeError,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

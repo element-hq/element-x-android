@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.call.impl.utils.PipController
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.log.logger.LoggerTag
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -35,7 +36,7 @@ class PictureInPicturePresenter(
         var isInPictureInPicture by remember { mutableStateOf(false) }
         var pipController by remember { mutableStateOf<PipController?>(null) }
 
-        fun handleEvent(event: PictureInPictureEvents) {
+        val eventSink by rememberEventSink { event: PictureInPictureEvents ->
             when (event) {
                 is PictureInPictureEvents.SetPipController -> {
                     pipController = event.pipController
@@ -60,7 +61,7 @@ class PictureInPicturePresenter(
         return PictureInPictureState(
             supportPip = isPipSupported,
             isInPictureInPicture = isInPictureInPicture,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

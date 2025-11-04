@@ -19,6 +19,7 @@ import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.UserId
@@ -72,7 +73,7 @@ class RolesAndPermissionsPresenter(
         val changeOwnRoleAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val resetPermissionsAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
-        fun handleEvent(event: RolesAndPermissionsEvents) {
+        val eventSink by rememberEventSink { event: RolesAndPermissionsEvents ->
             when (event) {
                 is RolesAndPermissionsEvents.ChangeOwnRole -> {
                     changeOwnRoleAction.value = AsyncAction.ConfirmingNoParams
@@ -100,7 +101,7 @@ class RolesAndPermissionsPresenter(
             canDemoteSelf = canDemoteSelf.value,
             changeOwnRoleAction = changeOwnRoleAction.value,
             resetPermissionsAction = resetPermissionsAction.value,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

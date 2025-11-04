@@ -9,12 +9,14 @@ package io.element.android.features.forward.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -47,7 +49,7 @@ class ForwardMessagesPresenter(
 
     @Composable
     override fun present(): ForwardMessagesState {
-        fun handleEvents(event: ForwardMessagesEvents) {
+        val eventSink by rememberEventSink { event: ForwardMessagesEvents ->
             when (event) {
                 ForwardMessagesEvents.ClearError -> forwardingActionState.value = AsyncAction.Uninitialized
             }
@@ -55,7 +57,7 @@ class ForwardMessagesPresenter(
 
         return ForwardMessagesState(
             forwardAction = forwardingActionState.value,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

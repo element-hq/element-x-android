@@ -22,6 +22,7 @@ import io.element.android.features.startchat.impl.userlist.UserListPresenter
 import io.element.android.features.startchat.impl.userlist.UserListPresenterArgs
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -57,7 +58,7 @@ class StartChatPresenter(
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomDirectorySearch)
         }.collectAsState(initial = false)
 
-        fun handleEvents(event: StartChatEvents) {
+        val eventSink by rememberEventSink { event: StartChatEvents ->
             when (event) {
                 is StartChatEvents.StartDM -> localCoroutineScope.launch {
                     startDMAction.execute(
@@ -75,7 +76,7 @@ class StartChatPresenter(
             userListState = userListState,
             startDmAction = startDmActionState.value,
             isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

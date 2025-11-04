@@ -36,6 +36,7 @@ import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
@@ -140,12 +141,12 @@ class TimelinePresenter(
             value = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         }
 
-        fun handleEvents(event: TimelineEvents) {
+        val eventSink by rememberEventSink { event: TimelineEvents ->
             when (event) {
                 is TimelineEvents.LoadMore -> {
                     if (event.direction == Timeline.PaginationDirection.FORWARDS && timelineMode is Timeline.Mode.Thread) {
                         // Do not paginate forwards in thread mode, as it's not supported
-                        return
+                        return@rememberEventSink
                     }
                     localScope.launch {
                         timelineController.paginate(direction = event.direction)
@@ -289,7 +290,7 @@ class TimelinePresenter(
             messageShield = messageShield.value,
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

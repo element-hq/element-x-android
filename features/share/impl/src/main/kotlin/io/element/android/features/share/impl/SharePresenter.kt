@@ -10,12 +10,14 @@ package io.element.android.features.share.impl
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
@@ -55,7 +57,7 @@ class SharePresenter(
 
     @Composable
     override fun present(): ShareState {
-        fun handleEvents(event: ShareEvents) {
+        val eventSink by rememberEventSink { event: ShareEvents ->
             when (event) {
                 ShareEvents.ClearError -> shareActionState.value = AsyncAction.Uninitialized
             }
@@ -63,7 +65,7 @@ class SharePresenter(
 
         return ShareState(
             shareAction = shareActionState.value,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

@@ -10,6 +10,7 @@ package io.element.android.features.roomaliasresolver.impl
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -17,6 +18,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -44,7 +46,7 @@ class RoomAliasResolverPresenter(
             resolveAlias(resolveState)
         }
 
-        fun handleEvents(event: RoomAliasResolverEvents) {
+        val eventSink by rememberEventSink { event: RoomAliasResolverEvents ->
             when (event) {
                 RoomAliasResolverEvents.Retry -> coroutineScope.resolveAlias(resolveState)
                 RoomAliasResolverEvents.DismissError -> resolveState.value = AsyncData.Uninitialized
@@ -54,7 +56,7 @@ class RoomAliasResolverPresenter(
         return RoomAliasResolverState(
             roomAlias = roomAlias,
             resolveState = resolveState.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

@@ -24,6 +24,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsE
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.meta.BuildMeta
 
 @AssistedInject
@@ -56,7 +57,7 @@ class ShowLocationPresenter(
             }
         }
 
-        fun handleEvents(event: ShowLocationEvents) {
+        val eventSink by rememberEventSink { event: ShowLocationEvents ->
             when (event) {
                 ShowLocationEvents.Share -> locationActions.share(location, description)
                 is ShowLocationEvents.TrackMyLocation -> {
@@ -86,7 +87,7 @@ class ShowLocationPresenter(
             hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,
             appName = appName,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

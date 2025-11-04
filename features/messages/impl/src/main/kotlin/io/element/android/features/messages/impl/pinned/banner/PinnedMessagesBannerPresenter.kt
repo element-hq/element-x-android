@@ -21,6 +21,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.pinned.DefaultPinnedEventsTimelineProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -57,7 +58,7 @@ class PinnedMessagesBannerPresenter(
             },
         )
 
-        fun handleEvent(event: PinnedMessagesBannerEvents) {
+        val eventSink by rememberEventSink { event: PinnedMessagesBannerEvents ->
             when (event) {
                 is PinnedMessagesBannerEvents.MoveToNextPinned -> {
                     val loadedCount = pinnedItems.value.dataOrNull().orEmpty().size
@@ -70,7 +71,7 @@ class PinnedMessagesBannerPresenter(
             expectedPinnedMessagesCount = expectedPinnedMessagesCount,
             pinnedItems = pinnedItems.value,
             currentPinnedMessageIndex = currentPinnedMessageIndex,
-            eventSink = ::handleEvent
+            eventSink = eventSink,
         )
     }
 

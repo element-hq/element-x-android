@@ -24,6 +24,7 @@ import io.element.android.features.poll.impl.history.model.PollHistoryFilter
 import io.element.android.features.poll.impl.history.model.PollHistoryItems
 import io.element.android.features.poll.impl.history.model.PollHistoryItemsFactory
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -62,7 +63,7 @@ class PollHistoryPresenter(
             }
         }
         val coroutineScope = rememberCoroutineScope()
-        fun handleEvents(event: PollHistoryEvents) {
+        val eventSink by rememberEventSink { event: PollHistoryEvents ->
             when (event) {
                 is PollHistoryEvents.LoadMore -> {
                     coroutineScope.loadMore(timeline)
@@ -88,7 +89,7 @@ class PollHistoryPresenter(
             hasMoreToLoad = paginationState.hasMoreToLoad,
             pollHistoryItems = pollHistoryItems,
             activeFilter = activeFilter,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

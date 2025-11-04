@@ -25,6 +25,7 @@ import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -85,7 +86,7 @@ class HomePresenter(
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
         val directLogoutState = logoutPresenter.present()
 
-        fun handleEvents(event: HomeEvents) {
+        val eventSink by rememberEventSink { event: HomeEvents ->
             when (event) {
                 is HomeEvents.SelectHomeNavigationBarItem -> coroutineState.launch {
                     if (event.item == HomeNavigationBarItem.Spaces) {
@@ -117,7 +118,7 @@ class HomePresenter(
             canReportBug = canReportBug,
             directLogoutState = directLogoutState,
             isSpaceFeatureEnabled = isSpaceFeatureEnabled,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

@@ -20,6 +20,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.startchat.StartChatNavigator
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -48,7 +49,7 @@ class JoinRoomByAddressPresenter(
         var internalAddressState by remember { mutableStateOf<RoomAddressState>(RoomAddressState.Unknown) }
         var validateAddress: Boolean by remember { mutableStateOf(false) }
 
-        fun handleEvents(event: JoinRoomByAddressEvents) {
+        val eventSink by rememberEventSink { event: JoinRoomByAddressEvents ->
             when (event) {
                 JoinRoomByAddressEvents.Continue -> {
                     when (val currentState = internalAddressState) {
@@ -88,7 +89,7 @@ class JoinRoomByAddressPresenter(
         return JoinRoomByAddressState(
             address = address,
             addressState = addressState,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

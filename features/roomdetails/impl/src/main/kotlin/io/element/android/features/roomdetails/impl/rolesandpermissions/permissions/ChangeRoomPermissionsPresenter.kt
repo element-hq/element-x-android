@@ -21,6 +21,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.roomdetails.impl.analytics.trackPermissionChangeAnalytics
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.services.analytics.api.AnalyticsService
@@ -77,7 +78,7 @@ class ChangeRoomPermissionsPresenter(
             derivedStateOf { initialPermissions != currentPermissions }
         }
 
-        fun handleEvent(event: ChangeRoomPermissionsEvent) {
+        val eventSink by rememberEventSink { event: ChangeRoomPermissionsEvent ->
             when (event) {
                 is ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction -> {
                     currentPermissions = when (event.action) {
@@ -112,7 +113,7 @@ class ChangeRoomPermissionsPresenter(
             hasChanges = hasChanges,
             saveAction = saveAction,
             confirmExitAction = confirmExitAction,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

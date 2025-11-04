@@ -23,6 +23,7 @@ import io.element.android.features.rageshake.impl.crash.CrashDataStore
 import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -82,7 +83,7 @@ class BugReportPresenter(
         }
         val uploadListener = BugReporterUploadListener(sendingProgress, sendingAction)
 
-        fun handleEvents(event: BugReportEvents) {
+        val eventSink by rememberEventSink { event: BugReportEvents ->
             when (event) {
                 BugReportEvents.SendBugReport -> {
                     if (formState.value.description.length < 10) {
@@ -121,7 +122,7 @@ class BugReportPresenter(
             sending = sendingAction.value,
             formState = formState.value,
             screenshotUri = screenshotUri.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

@@ -29,6 +29,7 @@ import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -99,7 +100,7 @@ class UserProfilePresenter(
         }
         val userProfile by produceState<MatrixUser?>(null) { value = client.getProfile(userId).getOrNull() }
 
-        fun handleEvents(event: UserProfileEvents) {
+        val eventSink by rememberEventSink { event: UserProfileEvents ->
             when (event) {
                 is UserProfileEvents.BlockUser -> {
                     if (event.needsConfirmation) {
@@ -151,7 +152,7 @@ class UserProfilePresenter(
             dmRoomId = dmRoomId,
             canCall = canCall,
             snackbarMessage = null,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

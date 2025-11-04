@@ -8,6 +8,7 @@
 package io.element.android.features.location.impl.common.permissions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -16,6 +17,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.architecture.events.rememberEventSink
 
 @Suppress("unused")
 @AssistedInject
@@ -33,7 +35,7 @@ class DefaultPermissionsPresenter(
     override fun present(): PermissionsState {
         val multiplePermissionsState = rememberMultiplePermissionsState(permissions = permissions)
 
-        fun handleEvents(event: PermissionsEvents) {
+        val eventSink by rememberEventSink { event: PermissionsEvents ->
             when (event) {
                 PermissionsEvents.RequestPermissions -> multiplePermissionsState.launchMultiplePermissionRequest()
             }
@@ -46,7 +48,7 @@ class DefaultPermissionsPresenter(
                 else -> PermissionsState.Permissions.NoneGranted
             },
             shouldShowRationale = multiplePermissionsState.shouldShowRationale,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

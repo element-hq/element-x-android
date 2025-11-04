@@ -18,6 +18,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.securebackup.impl.loggerTagDisable
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -36,7 +37,7 @@ class SecureBackupDisablePresenter(
         Timber.tag(loggerTagDisable.value).d("backupState: $backupState")
         val disableAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val coroutineScope = rememberCoroutineScope()
-        fun handleEvents(event: SecureBackupDisableEvents) {
+        val eventSink by rememberEventSink { event: SecureBackupDisableEvents ->
             when (event) {
                 is SecureBackupDisableEvents.DisableBackup -> coroutineScope.disableBackup(disableAction)
                 SecureBackupDisableEvents.DismissDialogs -> {
@@ -49,7 +50,7 @@ class SecureBackupDisablePresenter(
             backupState = backupState,
             disableAction = disableAction.value,
             appName = buildMeta.applicationName,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

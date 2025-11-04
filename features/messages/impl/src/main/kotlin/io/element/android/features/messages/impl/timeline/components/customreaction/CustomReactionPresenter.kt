@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.recentemojis.api.EmojibaseProvider
 import io.element.android.libraries.recentemojis.api.GetRecentEmojis
 import kotlinx.collections.immutable.ImmutableList
@@ -53,7 +54,7 @@ class CustomReactionPresenter(
             target.value = CustomReactionState.Target.None
         }
 
-        fun handleEvents(event: CustomReactionEvents) {
+        val eventSink by rememberEventSink { event: CustomReactionEvents ->
             when (event) {
                 is CustomReactionEvents.ShowCustomReactionSheet -> handleShowCustomReactionSheet(event.event)
                 is CustomReactionEvents.DismissCustomReactionSheet -> handleDismissCustomReactionSheet()
@@ -71,7 +72,7 @@ class CustomReactionPresenter(
             target = target.value,
             selectedEmoji = selectedEmoji,
             recentEmojis = recentEmojis,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

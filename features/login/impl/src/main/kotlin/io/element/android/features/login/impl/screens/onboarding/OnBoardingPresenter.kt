@@ -26,6 +26,7 @@ import io.element.android.features.login.impl.accesscontrol.DefaultAccountProvid
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.utils.MultipleTapToUnlock
@@ -95,7 +96,7 @@ class OnBoardingPresenter(
 
         val loginMode by loginHelper.collectLoginMode()
 
-        fun handleEvent(event: OnBoardingEvents) {
+        val eventSink by rememberEventSink { event: OnBoardingEvents ->
             when (event) {
                 is OnBoardingEvents.OnSignIn -> loginHelper.submit(
                     coroutineScope = localCoroutineScope,
@@ -125,7 +126,7 @@ class OnBoardingPresenter(
             loginMode = loginMode,
             version = buildMeta.versionName,
             onBoardingLogoResId = onBoardingLogoResId,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 }

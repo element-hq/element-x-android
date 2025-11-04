@@ -23,6 +23,7 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteS
 import io.element.android.features.invite.api.toInviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -93,7 +94,7 @@ class SpacePresenter(
 
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
 
-        fun handleEvents(event: SpaceEvents) {
+        val eventSink by rememberEventSink { event: SpaceEvents ->
             when (event) {
                 SpaceEvents.LoadMore -> localCoroutineScope.paginate()
                 is SpaceEvents.Join -> {
@@ -128,7 +129,7 @@ class SpacePresenter(
             joinActions = joinActions.toImmutableMap(),
             acceptDeclineInviteState = acceptDeclineInviteState,
             topicViewerState = topicViewerState,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

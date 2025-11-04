@@ -21,6 +21,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -92,7 +93,7 @@ class OutgoingVerificationPresenter(
             observeVerificationService()
         }
 
-        fun handleEvents(event: OutgoingVerificationViewEvents) {
+        val eventSink by rememberEventSink { event: OutgoingVerificationViewEvents ->
             Timber.d("Verification user action: ${event::class.simpleName}")
             when (event) {
                 // Just relay the event to the state machine
@@ -109,7 +110,7 @@ class OutgoingVerificationPresenter(
         return OutgoingVerificationState(
             step = step,
             request = verificationRequest,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

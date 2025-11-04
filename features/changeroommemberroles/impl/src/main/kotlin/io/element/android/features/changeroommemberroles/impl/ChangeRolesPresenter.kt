@@ -24,6 +24,7 @@ import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
@@ -109,7 +110,7 @@ class ChangeRolesPresenter(
             return currentUserRole.powerLevel > otherUserRole.powerLevel
         }
 
-        fun handleEvent(event: ChangeRolesEvent) {
+        val eventSink by rememberEventSink { event: ChangeRolesEvent ->
             when (event) {
                 is ChangeRolesEvent.ToggleSearchActive -> {
                     searchActive = !searchActive
@@ -169,7 +170,7 @@ class ChangeRolesPresenter(
             hasPendingChanges = hasPendingChanges,
             savingState = saveState.value,
             canChangeMemberRole = ::canChangeMemberRole,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

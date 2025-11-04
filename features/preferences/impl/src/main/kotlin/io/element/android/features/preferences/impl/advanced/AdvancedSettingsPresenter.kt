@@ -17,6 +17,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -82,7 +83,7 @@ class AdvancedSettingsPresenter(
             }.collect()
         }
 
-        fun handleEvents(event: AdvancedSettingsEvents) {
+        val eventSink by rememberEventSink { event: AdvancedSettingsEvents ->
             when (event) {
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> sessionCoroutineScope.launch {
                     appPreferencesStore.setDeveloperModeEnabled(event.enabled)
@@ -117,7 +118,7 @@ class AdvancedSettingsPresenter(
             mediaOptimizationState = mediaOptimizationState,
             theme = themeOption,
             mediaPreviewConfigState = mediaPreviewConfigState,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

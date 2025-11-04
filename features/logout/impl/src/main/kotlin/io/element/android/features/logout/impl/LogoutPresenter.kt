@@ -20,6 +20,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -73,7 +74,7 @@ class LogoutPresenter(
             }
         }
 
-        fun handleEvents(event: LogoutEvents) {
+        val eventSink by rememberEventSink { event: LogoutEvents ->
             when (event) {
                 is LogoutEvents.Logout -> {
                     if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
@@ -96,7 +97,7 @@ class LogoutPresenter(
             backupUploadState = backupUploadState,
             waitingForALongTime = waitingForALongTime,
             logoutAction = logoutAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

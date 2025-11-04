@@ -22,6 +22,7 @@ import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -122,7 +123,7 @@ class PreferencesRootPresenter(
 
         val showDeveloperSettings by showDeveloperSettingsProvider.showDeveloperSettings.collectAsState()
 
-        fun handleEvent(event: PreferencesRootEvents) {
+        val eventSink by rememberEventSink { event: PreferencesRootEvents ->
             when (event) {
                 is PreferencesRootEvents.OnVersionInfoClick -> {
                     showDeveloperSettingsProvider.unlockDeveloperSettings(coroutineScope)
@@ -151,7 +152,7 @@ class PreferencesRootPresenter(
             showLabsItem = showLabsItem,
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

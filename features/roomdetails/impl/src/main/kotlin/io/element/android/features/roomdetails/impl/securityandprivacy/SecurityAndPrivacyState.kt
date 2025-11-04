@@ -22,7 +22,7 @@ data class SecurityAndPrivacyState(
     val isKnockEnabled: Boolean,
     val saveAction: AsyncAction<Unit>,
     private val permissions: SecurityAndPrivacyPermissions,
-    val eventSink: (SecurityAndPrivacyEvents) -> Unit
+    val eventSink: (SecurityAndPrivacyEvents) -> Any,
 ) {
     val canBeSaved = savedSettings != editedSettings
 

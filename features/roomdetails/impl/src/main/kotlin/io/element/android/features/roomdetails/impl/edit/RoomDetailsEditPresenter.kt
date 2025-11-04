@@ -24,6 +24,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -140,7 +141,7 @@ class RoomDetailsEditPresenter(
 
         val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
-        fun handleEvents(event: RoomDetailsEditEvents) {
+        val eventSink by rememberEventSink { event: RoomDetailsEditEvents ->
             when (event) {
                 is RoomDetailsEditEvents.Save -> localCoroutineScope.saveChanges(
                     currentNameTrimmed = roomRawNameTrimmed,
@@ -191,7 +192,7 @@ class RoomDetailsEditPresenter(
             saveButtonEnabled = saveButtonEnabled,
             saveAction = saveAction.value,
             cameraPermissionState = cameraPermissionState,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

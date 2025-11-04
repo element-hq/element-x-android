@@ -13,6 +13,7 @@ import androidx.compose.runtime.produceState
 import dev.zacsweers.metro.Inject
 import io.element.android.features.home.impl.filters.selection.FilterSelectionStrategy
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.map
@@ -27,7 +28,7 @@ class RoomListFiltersPresenter(
 
     @Composable
     override fun present(): RoomListFiltersState {
-        fun handleEvents(event: RoomListFiltersEvents) {
+        val eventSink by rememberEventSink { event: RoomListFiltersEvents ->
             when (event) {
                 RoomListFiltersEvents.ClearSelectedFilters -> {
                     filterSelectionStrategy.clear()
@@ -63,7 +64,7 @@ class RoomListFiltersPresenter(
 
         return RoomListFiltersState(
             filterSelectionStates = filters,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

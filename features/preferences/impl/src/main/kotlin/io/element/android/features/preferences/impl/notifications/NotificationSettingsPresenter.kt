@@ -22,6 +22,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
@@ -129,7 +130,7 @@ class NotificationSettingsPresenter(
                 )
         }
 
-        fun handleEvents(event: NotificationSettingsEvents) {
+        val eventSink by rememberEventSink { event: NotificationSettingsEvents ->
             when (event) {
                 is NotificationSettingsEvents.SetAtRoomNotificationsEnabled -> {
                     localCoroutineScope.setAtRoomNotificationsEnabled(event.enabled, changeNotificationSettingAction)
@@ -167,7 +168,7 @@ class NotificationSettingsPresenter(
             availablePushDistributors = availableDistributors,
             showChangePushProviderDialog = showChangePushProviderDialog,
             fullScreenIntentPermissionsState = key(refreshFullScreenIntentSettings) { fullScreenIntentPermissionsPresenter.present() },
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

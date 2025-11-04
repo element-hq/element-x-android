@@ -25,6 +25,7 @@ import io.element.android.features.invitepeople.api.InvitePeoplePresenter
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.map
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
@@ -103,7 +104,7 @@ class DefaultInvitePeoplePresenter(
             )
         }
 
-        fun handleEvents(event: InvitePeopleEvents) {
+        val eventSink by rememberEventSink { event: InvitePeopleEvents ->
             when (event) {
                 is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
                     searchActive = event.active
@@ -139,7 +140,7 @@ class DefaultInvitePeoplePresenter(
             searchResults = searchResults.value,
             showSearchLoader = showSearchLoader.value,
             sendInvitesAction = sendInvitesAction.value,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

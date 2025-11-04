@@ -8,12 +8,14 @@
 package io.element.android.features.announcement.impl.spaces
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.impl.store.AnnouncementStatus
 import io.element.android.features.announcement.impl.store.AnnouncementStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import kotlinx.coroutines.launch
 
 @Inject
@@ -24,7 +26,7 @@ class SpaceAnnouncementPresenter(
     override fun present(): SpaceAnnouncementState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        fun handleEvents(event: SpaceAnnouncementEvents) {
+        val eventSink by rememberEventSink { event: SpaceAnnouncementEvents ->
             when (event) {
                 SpaceAnnouncementEvents.Continue -> localCoroutineScope.launch {
                     announcementStore.setAnnouncementStatus(Announcement.Space, AnnouncementStatus.Shown)
@@ -33,7 +35,7 @@ class SpaceAnnouncementPresenter(
         }
 
         return SpaceAnnouncementState(
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

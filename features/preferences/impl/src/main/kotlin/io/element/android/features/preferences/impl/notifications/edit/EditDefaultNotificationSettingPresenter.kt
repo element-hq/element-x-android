@@ -20,6 +20,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -70,7 +71,7 @@ class EditDefaultNotificationSettingPresenter(
             displayMentionsOnlyDisclaimer = !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
-        fun handleEvents(event: EditDefaultNotificationSettingStateEvents) {
+        val eventSink by rememberEventSink { event: EditDefaultNotificationSettingStateEvents ->
             when (event) {
                 is EditDefaultNotificationSettingStateEvents.SetNotificationMode -> {
                     localCoroutineScope.setDefaultNotificationMode(event.mode, changeNotificationSettingAction)
@@ -85,7 +86,7 @@ class EditDefaultNotificationSettingPresenter(
             roomsWithUserDefinedMode = roomsWithUserDefinedMode.value.toImmutableList(),
             changeNotificationSettingAction = changeNotificationSettingAction.value,
             displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

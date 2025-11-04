@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
@@ -46,7 +47,7 @@ class TimelineProtectionPresenter(
             }
         }
 
-        fun handleEvent(event: TimelineProtectionEvent) {
+        val eventSink by rememberEventSink { event: TimelineProtectionEvent ->
             when (event) {
                 is TimelineProtectionEvent.ShowContent -> {
                     allowedEvents.value = allowedEvents.value + setOfNotNull(event.eventId)
@@ -56,7 +57,7 @@ class TimelineProtectionPresenter(
 
         return TimelineProtectionState(
             protectionState = protectionState,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 }

@@ -25,6 +25,7 @@ import io.element.android.features.roomdetails.impl.securityandprivacy.permissio
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -107,7 +108,7 @@ class SecurityAndPrivacyPresenter(
         var showEnableEncryptionConfirmation by remember(savedSettings.isEncrypted) { mutableStateOf(false) }
         val permissions by room.securityAndPrivacyPermissionsAsState(syncUpdateFlow.value)
 
-        fun handleEvents(event: SecurityAndPrivacyEvents) {
+        val eventSink by rememberEventSink { event: SecurityAndPrivacyEvents ->
             when (event) {
                 SecurityAndPrivacyEvents.Save -> {
                     coroutineScope.save(
@@ -158,7 +159,7 @@ class SecurityAndPrivacyPresenter(
             isKnockEnabled = isKnockEnabled,
             saveAction = saveAction.value,
             permissions = permissions,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
 
         // If the history visibility is not available for the current access, use the fallback.

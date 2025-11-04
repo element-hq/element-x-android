@@ -12,10 +12,12 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.api.PermissionsEvents
@@ -51,7 +53,7 @@ class NotificationsOptInPresenter(
     override fun present(): NotificationsOptInState {
         val notificationsPermissionsState = postNotificationPermissionsPresenter.present()
 
-        fun handleEvents(event: NotificationsOptInEvents) {
+        val eventSink by rememberEventSink { event: NotificationsOptInEvents ->
             when (event) {
                 NotificationsOptInEvents.ContinueClicked -> {
                     if (notificationsPermissionsState.permissionGranted) {
@@ -78,7 +80,7 @@ class NotificationsOptInPresenter(
 
         return NotificationsOptInState(
             notificationsPermissionState = notificationsPermissionsState,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

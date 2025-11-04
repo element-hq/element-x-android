@@ -22,6 +22,7 @@ import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -116,7 +117,7 @@ class ConfigureRoomPresenter(
             localCoroutineScope.createRoom(config, createRoomAction)
         }
 
-        fun handleEvents(event: ConfigureRoomEvents) {
+        val eventSink by rememberEventSink { event: ConfigureRoomEvents ->
             when (event) {
                 is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
                 is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
@@ -149,7 +150,7 @@ class ConfigureRoomPresenter(
             cameraPermissionState = cameraPermissionState,
             homeserverName = homeserverName,
             roomAddressValidity = roomAddressValidity.value,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

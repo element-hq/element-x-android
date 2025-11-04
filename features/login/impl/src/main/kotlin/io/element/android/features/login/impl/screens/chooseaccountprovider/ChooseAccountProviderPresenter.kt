@@ -20,6 +20,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.uri.ensureProtocol
 import kotlinx.collections.immutable.toImmutableList
 
@@ -35,7 +36,7 @@ class ChooseAccountProviderPresenter(
 
         var selectedAccountProvider: AccountProvider? by remember { mutableStateOf(null) }
 
-        fun handleEvent(event: ChooseAccountProviderEvents) {
+        val eventSink by rememberEventSink { event: ChooseAccountProviderEvents ->
             when (event) {
                 ChooseAccountProviderEvents.Continue -> {
                     selectedAccountProvider?.let {
@@ -76,7 +77,7 @@ class ChooseAccountProviderPresenter(
             accountProviders = staticAccountProviderList,
             selectedAccountProvider = selectedAccountProvider,
             loginMode = loginMode,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 }

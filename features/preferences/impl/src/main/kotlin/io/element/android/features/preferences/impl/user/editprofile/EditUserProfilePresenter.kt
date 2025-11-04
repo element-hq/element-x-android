@@ -25,6 +25,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -100,7 +101,7 @@ class EditUserProfilePresenter(
 
         val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
-        fun handleEvents(event: EditUserProfileEvents) {
+        val eventSink by rememberEventSink { event: EditUserProfileEvents ->
             when (event) {
                 is EditUserProfileEvents.Save -> localCoroutineScope.saveChanges(
                     name = userDisplayName,
@@ -143,7 +144,7 @@ class EditUserProfilePresenter(
             saveButtonEnabled = canSave && saveAction.value !is AsyncAction.Loading,
             saveAction = saveAction.value,
             cameraPermissionState = cameraPermissionState,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

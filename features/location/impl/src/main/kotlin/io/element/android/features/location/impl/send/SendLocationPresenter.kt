@@ -26,6 +26,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsP
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
@@ -78,7 +79,7 @@ class SendLocationPresenter(
             }
         }
 
-        fun handleEvents(event: SendLocationEvents) {
+        val eventSink by rememberEventSink { event: SendLocationEvents ->
             when (event) {
                 is SendLocationEvents.SendLocation -> scope.launch {
                     sendLocation(event, mode)
@@ -103,7 +104,7 @@ class SendLocationPresenter(
             mode = mode,
             hasLocationPermission = permissionsState.isAnyGranted,
             appName = appName,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

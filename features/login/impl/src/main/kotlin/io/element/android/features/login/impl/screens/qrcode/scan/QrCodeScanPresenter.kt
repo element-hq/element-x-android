@@ -20,6 +20,7 @@ import io.element.android.features.login.impl.accesscontrol.DefaultAccountProvid
 import io.element.android.features.login.impl.qrcode.QrCodeLoginManager
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
@@ -53,7 +54,7 @@ class QrCodeScanPresenter(
             authenticationAction.value = AsyncAction.Failure(it)
         }
 
-        fun handleEvents(event: QrCodeScanEvents) {
+        val eventSink by rememberEventSink { event: QrCodeScanEvents ->
             when (event) {
                 QrCodeScanEvents.TryAgain -> {
                     isScanning = true
@@ -69,7 +70,7 @@ class QrCodeScanPresenter(
         return QrCodeScanState(
             isScanning = isScanning,
             authenticationAction = authenticationAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

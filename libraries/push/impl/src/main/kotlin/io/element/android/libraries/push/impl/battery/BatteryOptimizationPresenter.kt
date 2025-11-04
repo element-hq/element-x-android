@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.push.api.battery.BatteryOptimizationEvents
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
@@ -47,7 +48,7 @@ class BatteryOptimizationPresenter(
             onPauseOrDispose {}
         }
 
-        fun handleEvents(event: BatteryOptimizationEvents) {
+        val eventSink by rememberEventSink { event: BatteryOptimizationEvents ->
             when (event) {
                 BatteryOptimizationEvents.Dismiss -> coroutineScope.launch {
                     mutableBatteryOptimizationStore.onOptimizationBannerDismissed()
@@ -66,7 +67,7 @@ class BatteryOptimizationPresenter(
 
         return BatteryOptimizationState(
             shouldDisplayBanner = localShouldDisplayBanner && storeShouldDisplayBanner && !isSystemIgnoringBatteryOptimizations,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

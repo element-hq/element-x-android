@@ -30,6 +30,7 @@ import io.element.android.features.call.impl.utils.WidgetMessageInterceptor
 import io.element.android.features.call.impl.utils.WidgetMessageSerializer
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.annotations.AppCoroutineScope
@@ -161,7 +162,7 @@ class CallScreenPresenter(
             }
         }
 
-        fun handleEvents(event: CallScreenEvents) {
+        val eventSink by rememberEventSink { event: CallScreenEvents ->
             when (event) {
                 is CallScreenEvents.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
@@ -201,7 +202,7 @@ class CallScreenPresenter(
             userAgent = userAgent,
             isCallActive = isWidgetLoaded,
             isInWidgetMode = isInWidgetMode,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

@@ -22,6 +22,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationState.Step
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
@@ -107,7 +108,7 @@ class IncomingVerificationPresenter(
             }
         }
 
-        fun handleEvents(event: IncomingVerificationViewEvents) {
+        val eventSink by rememberEventSink { event: IncomingVerificationViewEvents ->
             Timber.d("Verification user action: ${event::class.simpleName}")
             when (event) {
                 IncomingVerificationViewEvents.StartVerification ->
@@ -141,7 +142,7 @@ class IncomingVerificationPresenter(
         return IncomingVerificationState(
             step = step,
             request = verificationRequest,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

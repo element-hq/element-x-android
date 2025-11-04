@@ -37,6 +37,7 @@ import io.element.android.features.messages.impl.timeline.model.event.canBeCopie
 import io.element.android.features.messages.impl.timeline.model.event.canBeForwarded
 import io.element.android.features.messages.impl.timeline.model.event.canReact
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.di.RoomScope
@@ -106,7 +107,7 @@ class DefaultActionListPresenter(
 
         val isThreadsEnabled = featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(false)
 
-        fun handleEvents(event: ActionListEvents) {
+        val eventSink by rememberEventSink { event: ActionListEvents ->
             when (event) {
                 ActionListEvents.Clear -> target.value = ActionListState.Target.None
                 is ActionListEvents.ComputeForMessage -> localCoroutineScope.computeForMessage(
@@ -122,7 +123,7 @@ class DefaultActionListPresenter(
 
         return ActionListState(
             target = target.value,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

@@ -9,6 +9,7 @@ package io.element.android.features.login.impl.changeserver
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,6 +20,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +40,7 @@ class ChangeServerPresenter(
             mutableStateOf(AsyncData.Uninitialized)
         }
 
-        fun handleEvents(event: ChangeServerEvents) {
+        val eventSink by rememberEventSink { event: ChangeServerEvents ->
             when (event) {
                 is ChangeServerEvents.ChangeServer -> localCoroutineScope.changeServer(event.accountProvider, changeServerAction)
                 ChangeServerEvents.ClearError -> changeServerAction.value = AsyncData.Uninitialized
@@ -47,7 +49,7 @@ class ChangeServerPresenter(
 
         return ChangeServerState(
             changeServerAction = changeServerAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

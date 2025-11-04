@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -84,7 +85,7 @@ class VoiceMessagePresenter(
             }
         }
 
-        fun handleEvent(event: VoiceMessageEvents) {
+        val eventSink by rememberEventSink { event: VoiceMessageEvents ->
             when (event) {
                 is VoiceMessageEvents.PlayPause -> {
                     if (playerState.isPlaying) {
@@ -119,7 +120,7 @@ class VoiceMessagePresenter(
             progress = progress,
             time = time,
             showCursor = showCursor,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 }

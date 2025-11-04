@@ -26,6 +26,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -99,7 +100,7 @@ class DefaultPermissionsPresenter(
 
         val showDialog = rememberSaveable { mutableStateOf(false) }
 
-        fun handleEvents(event: PermissionsEvents) {
+        val eventSink by rememberEventSink { event: PermissionsEvents ->
             when (event) {
                 PermissionsEvents.CloseDialog -> {
                     showDialog.value = false
@@ -125,7 +126,7 @@ class DefaultPermissionsPresenter(
             showDialog = showDialog.value,
             permissionAlreadyAsked = isAlreadyAsked,
             permissionAlreadyDenied = isAlreadyDenied,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

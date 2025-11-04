@@ -10,6 +10,7 @@ package io.element.android.features.rageshake.impl.detection
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,6 +25,7 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.features.rageshake.api.screenshot.ImageResult
 import io.element.android.features.rageshake.impl.rageshake.RageShake
 import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
+import io.element.android.libraries.architecture.events.rememberEventSink
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -48,7 +50,7 @@ class DefaultRageshakeDetectionPresenter(
             mutableStateOf(false)
         }
 
-        fun handleEvents(event: RageshakeDetectionEvents) {
+        val eventSink by rememberEventSink { event: RageshakeDetectionEvents ->
             when (event) {
                 RageshakeDetectionEvents.Disable -> {
                     preferencesState.eventSink(RageshakePreferencesEvents.SetIsEnabled(false))
@@ -67,7 +69,7 @@ class DefaultRageshakeDetectionPresenter(
                 takeScreenshot = takeScreenshot.value,
                 showDialog = showDialog.value,
                 preferenceState = preferencesState,
-                eventSink = ::handleEvents
+                eventSink = eventSink,
             )
         }
 

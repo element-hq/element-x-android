@@ -22,6 +22,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.map
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -97,7 +98,7 @@ class LeaveSpacePresenter(
             }
         }
 
-        fun handleEvents(event: LeaveSpaceEvents) {
+        val eventSink by rememberEventSink { event: LeaveSpaceEvents ->
             when (event) {
                 LeaveSpaceEvents.Retry -> {
                     leaveSpaceRooms = AsyncData.Loading()
@@ -134,7 +135,7 @@ class LeaveSpacePresenter(
             isLastAdmin = leaveSpaceRooms.dataOrNull()?.current?.isLastAdmin == true,
             selectableSpaceRooms = selectableSpaceRooms,
             leaveSpaceAction = leaveSpaceAction.value,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -64,7 +65,7 @@ class BlockedUsersPresenter(
             }
         }
 
-        fun handleEvents(event: BlockedUsersEvents) {
+        val eventSink by rememberEventSink { event: BlockedUsersEvents ->
             when (event) {
                 is BlockedUsersEvents.Unblock -> {
                     pendingUserToUnblock = event.userId
@@ -85,7 +86,7 @@ class BlockedUsersPresenter(
         return BlockedUsersState(
             blockedUsers = ignoredMatrixUser.toImmutableList(),
             unblockUserAction = unblockUserAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

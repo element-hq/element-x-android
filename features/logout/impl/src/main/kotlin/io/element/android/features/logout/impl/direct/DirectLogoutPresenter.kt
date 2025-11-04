@@ -20,6 +20,7 @@ import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.impl.tools.isBackingUp
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
@@ -47,7 +48,7 @@ class DirectLogoutPresenter(
 
         val isLastDevice by encryptionService.isLastDevice.collectAsState()
 
-        fun handleEvents(event: DirectLogoutEvents) {
+        val eventSink by rememberEventSink { event: DirectLogoutEvents ->
             when (event) {
                 is DirectLogoutEvents.Logout -> {
                     if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
@@ -66,7 +67,7 @@ class DirectLogoutPresenter(
             canDoDirectSignOut = !isLastDevice &&
                 !backupUploadState.isBackingUp(),
             logoutAction = logoutAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

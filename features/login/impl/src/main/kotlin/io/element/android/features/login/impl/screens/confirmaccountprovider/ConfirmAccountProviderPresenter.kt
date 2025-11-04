@@ -17,6 +17,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 
 @AssistedInject
 class ConfirmAccountProviderPresenter(
@@ -40,7 +41,7 @@ class ConfirmAccountProviderPresenter(
 
         val loginMode by loginHelper.collectLoginMode()
 
-        fun handleEvents(event: ConfirmAccountProviderEvents) {
+        val eventSink by rememberEventSink { event: ConfirmAccountProviderEvents ->
             when (event) {
                 ConfirmAccountProviderEvents.Continue -> {
                     loginHelper.submit(
@@ -58,7 +59,7 @@ class ConfirmAccountProviderPresenter(
             accountProvider = accountProvider,
             isAccountCreation = params.isAccountCreation,
             loginMode = loginMode,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

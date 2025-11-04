@@ -19,6 +19,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -132,7 +133,7 @@ class DefaultMediaOptimizationSelectorPresenter(
             )
         }
 
-        fun handleEvent(event: MediaOptimizationSelectorEvent) {
+        val eventSink by rememberEventSink { event: MediaOptimizationSelectorEvent ->
             when (event) {
                 is MediaOptimizationSelectorEvent.SelectImageOptimization -> {
                     selectedImageOptimization = AsyncData.Success(event.enabled)
@@ -143,15 +144,15 @@ class DefaultMediaOptimizationSelectorPresenter(
                         val preset = estimations.find { it.preset == event.preset }
                         if (preset == null) {
                             Timber.e("Selected video preset ${event.preset} is not available in the estimations")
-                            return
+                            return@rememberEventSink
                         }
                         if (!preset.canUpload) {
                             Timber.w("Selected video preset ${event.preset} exceeds max upload size")
-                            return
+                            return@rememberEventSink
                         }
                     } else {
                         Timber.e("Video size estimations are not available")
-                        return
+                        return@rememberEventSink
                     }
                     selectedVideoOptimizationPreset = AsyncData.Success(event.preset)
                     displayVideoPresetSelectorDialog = false
@@ -172,7 +173,7 @@ class DefaultMediaOptimizationSelectorPresenter(
             selectedVideoPreset = selectedVideoOptimizationPreset.dataOrNull(),
             displayMediaSelectorViews = displayMediaSelectorViews,
             displayVideoPresetSelectorDialog = displayVideoPresetSelectorDialog,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

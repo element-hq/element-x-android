@@ -22,6 +22,7 @@ import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
@@ -96,7 +97,7 @@ class LoggedInPresenter(
             }.launchIn(this)
         }
 
-        fun handleEvent(event: LoggedInEvents) {
+        val eventSink by rememberEventSink { event: LoggedInEvents ->
             when (event) {
                 is LoggedInEvents.CloseErrorDialog -> {
                     pusherRegistrationState.value = AsyncData.Uninitialized
@@ -122,7 +123,7 @@ class LoggedInPresenter(
             ignoreRegistrationError = ignoreRegistrationError,
             forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
             appName = buildMeta.applicationName,
-            eventSink = ::handleEvent
+            eventSink = eventSink,
         )
     }
 

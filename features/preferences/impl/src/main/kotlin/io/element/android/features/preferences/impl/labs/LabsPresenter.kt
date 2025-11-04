@@ -23,6 +23,7 @@ import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.model.EnabledFeature
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -53,7 +54,7 @@ class LabsPresenter(
         var isApplyingChanges by remember { mutableStateOf(false) }
         val featureUiModels = createUiModels(enabledFeatures)
 
-        fun handleEvent(event: LabsEvents) {
+        val eventSink by rememberEventSink { event: LabsEvents ->
             when (event) {
                 is LabsEvents.ToggleFeature -> coroutineScope.launch {
                     val featureIndex = enabledFeatures.indexOfFirst { it.feature.key == event.feature.key }.takeIf { it != -1 } ?: return@launch
@@ -76,7 +77,7 @@ class LabsPresenter(
         return LabsState(
             features = featureUiModels,
             isApplyingChanges = isApplyingChanges,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

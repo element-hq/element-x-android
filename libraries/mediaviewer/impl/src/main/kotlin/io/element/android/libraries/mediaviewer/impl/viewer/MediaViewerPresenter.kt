@@ -26,6 +26,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
@@ -90,7 +91,7 @@ class MediaViewerPresenter(
         }
         localMediaActions.Configure()
 
-        fun handleEvents(event: MediaViewerEvents) {
+        val eventSink by rememberEventSink { event: MediaViewerEvents ->
             when (event) {
                 is MediaViewerEvents.LoadMedia -> {
                     coroutineScope.downloadMedia(data = event.data)
@@ -163,7 +164,7 @@ class MediaViewerPresenter(
             snackbarMessage = snackbarMessage,
             canShowInfo = inputs.canShowInfo,
             mediaBottomSheetState = mediaBottomSheetState,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

@@ -22,6 +22,7 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
@@ -159,7 +160,7 @@ class RoomMemberListPresenter(
             }
         }
 
-        fun handleEvents(event: RoomMemberListEvents) {
+        val eventSink by rememberEventSink { event: RoomMemberListEvents ->
             when (event) {
                 is RoomMemberListEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is RoomMemberListEvents.UpdateSearchQuery -> searchQuery = event.query
@@ -179,7 +180,7 @@ class RoomMemberListPresenter(
             isSearchActive = isSearchActive,
             canInvite = canInvite,
             moderationState = roomModerationState,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

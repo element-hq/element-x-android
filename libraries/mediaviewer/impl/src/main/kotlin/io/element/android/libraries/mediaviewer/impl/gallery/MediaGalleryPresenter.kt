@@ -22,6 +22,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -82,7 +83,7 @@ class MediaGalleryPresenter(
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         localMediaActions.Configure()
 
-        fun handleEvents(event: MediaGalleryEvents) {
+        val eventSink by rememberEventSink { event: MediaGalleryEvents ->
             when (event) {
                 is MediaGalleryEvents.ChangeMode -> {
                     mode = event.mode
@@ -150,7 +151,7 @@ class MediaGalleryPresenter(
             groupedMediaItems = groupedMediaItems,
             mediaBottomSheetState = mediaBottomSheetState,
             snackbarMessage = snackbarMessage,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

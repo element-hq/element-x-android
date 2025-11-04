@@ -16,6 +16,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -42,7 +43,7 @@ class SignedOutPresenter(
         }.collectAsState(initial = null)
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvents(event: SignedOutEvents) {
+        val eventSink by rememberEventSink { event: SignedOutEvents ->
             when (event) {
                 SignedOutEvents.SignInAgain -> coroutineScope.launch {
                     sessionStore.removeSession(sessionId.value)
@@ -53,7 +54,7 @@ class SignedOutPresenter(
         return SignedOutState(
             appName = buildMeta.applicationName,
             signedOutSession = signedOutSession,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

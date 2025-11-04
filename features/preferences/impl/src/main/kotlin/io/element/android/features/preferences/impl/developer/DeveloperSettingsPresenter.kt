@@ -31,6 +31,7 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
@@ -112,13 +113,15 @@ class DeveloperSettingsPresenter(
             computeCacheSize(cacheSize)
         }
 
-        fun handleEvents(event: DeveloperSettingsEvents) {
+        val eventSink by rememberEventSink { event: DeveloperSettingsEvents ->
             when (event) {
                 is DeveloperSettingsEvents.UpdateEnabledFeature -> coroutineScope.updateEnabledFeature(
                     enabledFeatures = enabledFeatures,
                     featureKey = event.feature.key,
                     enabled = event.isEnabled,
-                    triggerClearCache = { handleEvents(DeveloperSettingsEvents.ClearCache) }
+                    triggerClearCache = {
+                        coroutineScope.clearCache(clearCacheAction)
+                    }
                 )
                 is DeveloperSettingsEvents.SetCustomElementCallBaseUrl -> coroutineScope.launch {
                     val urlToSave = event.baseUrl.takeIf { !it.isNullOrEmpty() }
@@ -161,7 +164,7 @@ class DeveloperSettingsPresenter(
             tracingLogPacks = tracingLogPacks,
             isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
             showColorPicker = showColorPicker,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

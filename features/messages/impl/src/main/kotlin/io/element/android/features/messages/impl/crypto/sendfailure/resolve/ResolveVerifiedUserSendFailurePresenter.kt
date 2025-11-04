@@ -19,6 +19,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailureFactory
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
@@ -47,7 +48,7 @@ class ResolveVerifiedUserSendFailurePresenter(
         }
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvents(event: ResolveVerifiedUserSendFailureEvents) {
+        val eventSink by rememberEventSink { event: ResolveVerifiedUserSendFailureEvents ->
             when (event) {
                 is ResolveVerifiedUserSendFailureEvents.ComputeForMessage -> {
                     val sendState = event.messageEvent.localSendState as? LocalEventSendState.Failed.VerifiedUser
@@ -92,7 +93,7 @@ class ResolveVerifiedUserSendFailurePresenter(
             verifiedUserSendFailure = verifiedUserSendFailure,
             resolveAction = resolveAction.value,
             retryAction = retryAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

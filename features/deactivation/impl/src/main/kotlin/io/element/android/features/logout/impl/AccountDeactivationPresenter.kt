@@ -9,12 +9,14 @@ package io.element.android.features.logout.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +35,7 @@ class AccountDeactivationPresenter(
 
         val formState = remember { mutableStateOf(DeactivateFormState.Default) }
 
-        fun handleEvents(event: AccountDeactivationEvents) {
+        val eventSink by rememberEventSink { event: AccountDeactivationEvents ->
             when (event) {
                 is AccountDeactivationEvents.SetEraseData -> {
                     updateFormState(formState) {
@@ -63,7 +65,7 @@ class AccountDeactivationPresenter(
         return AccountDeactivationState(
             deactivateFormState = formState.value,
             accountDeactivationAction = action.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

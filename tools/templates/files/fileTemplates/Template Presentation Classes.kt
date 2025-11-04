@@ -10,14 +10,14 @@ class ${NAME}Presenter() : Presenter<${NAME}State> {
     @Composable
     override fun present(): ${NAME}State {
 
-        fun handleEvents(event: ${NAME}Events) {
+        val eventSink by rememberEventSink { event: ${NAME}Events ->
             when (event) {
                 ${NAME}Events.MyEvent -> Unit
             }
         }
 
         return ${NAME}State(
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

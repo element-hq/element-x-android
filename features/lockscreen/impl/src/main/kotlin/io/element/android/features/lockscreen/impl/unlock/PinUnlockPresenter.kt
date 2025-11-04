@@ -25,6 +25,7 @@ import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.annotations.AppCoroutineScope
@@ -94,7 +95,7 @@ class PinUnlockPresenter(
             isUnlocked.value = true
         }
 
-        fun handleEvents(event: PinUnlockEvents) {
+        val eventSink by rememberEventSink { event: PinUnlockEvents ->
             when (event) {
                 is PinUnlockEvents.OnPinKeypadPressed -> {
                     pinEntryState.value = pinEntry.process(event.pinKeypadModel)
@@ -129,7 +130,7 @@ class PinUnlockPresenter(
             showBiometricUnlock = biometricUnlock.isActive,
             biometricUnlockResult = biometricUnlockResult,
             isUnlocked = isUnlocked.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

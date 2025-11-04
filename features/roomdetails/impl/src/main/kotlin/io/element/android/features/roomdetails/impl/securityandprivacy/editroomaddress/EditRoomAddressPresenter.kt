@@ -22,6 +22,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyNavigator
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -62,7 +63,7 @@ class EditRoomAddressPresenter(
             )
         }
 
-        fun handleEvents(event: EditRoomAddressEvents) {
+        val eventSink by rememberEventSink { event: EditRoomAddressEvents ->
             when (event) {
                 EditRoomAddressEvents.Save -> coroutineScope.save(
                     saveAction = saveAction,
@@ -92,7 +93,7 @@ class EditRoomAddressPresenter(
             roomAddressValidity = roomAddressValidity.value,
             roomAddress = newRoomAddress,
             saveAction = saveAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

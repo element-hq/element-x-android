@@ -18,6 +18,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
 import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import kotlinx.collections.immutable.toImmutableList
@@ -52,7 +53,7 @@ class KnockRequestsBannerPresenter(
             }
         }
 
-        fun handleEvents(event: KnockRequestsBannerEvents) {
+        val eventSink by rememberEventSink { event: KnockRequestsBannerEvents ->
             when (event) {
                 is KnockRequestsBannerEvents.AcceptSingleRequest -> {
                     sessionCoroutineScope.acceptSingleKnockRequest(
@@ -73,7 +74,7 @@ class KnockRequestsBannerPresenter(
             displayAcceptError = showAcceptError.value,
             canAccept = permissions.canAccept,
             isVisible = shouldShowBanner,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

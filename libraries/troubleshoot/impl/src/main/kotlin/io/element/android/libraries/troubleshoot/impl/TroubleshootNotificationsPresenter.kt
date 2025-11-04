@@ -16,6 +16,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import kotlinx.coroutines.launch
 
@@ -37,7 +38,7 @@ class TroubleshootNotificationsPresenter(
         }
 
         val testSuiteState by troubleshootTestSuite.state.collectAsState()
-        fun handleEvents(event: TroubleshootNotificationsEvents) {
+        val eventSink by rememberEventSink { event: TroubleshootNotificationsEvents ->
             when (event) {
                 TroubleshootNotificationsEvents.StartTests -> coroutineScope.launch {
                     troubleshootTestSuite.runTestSuite(this)
@@ -57,7 +58,7 @@ class TroubleshootNotificationsPresenter(
 
         return TroubleshootNotificationsState(
             testSuiteState = testSuiteState,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

@@ -19,6 +19,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -43,7 +44,7 @@ class ViewFilePresenter(
         val coroutineScope = rememberCoroutineScope()
         val colorationMode = remember { name.toColorationMode() }
 
-        fun handleEvent(event: ViewFileEvents) {
+        val eventSink by rememberEventSink { event: ViewFileEvents ->
             when (event) {
                 ViewFileEvents.Share -> coroutineScope.share(path)
                 ViewFileEvents.SaveOnDisk -> coroutineScope.save(path)
@@ -61,7 +62,7 @@ class ViewFilePresenter(
             name = name,
             lines = lines,
             colorationMode = colorationMode,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

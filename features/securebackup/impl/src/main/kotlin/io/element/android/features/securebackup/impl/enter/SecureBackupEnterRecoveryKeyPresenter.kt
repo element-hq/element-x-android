@@ -21,6 +21,7 @@ import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyTools
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
@@ -44,7 +45,7 @@ class SecureBackupEnterRecoveryKeyPresenter(
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
-        fun handleEvents(event: SecureBackupEnterRecoveryKeyEvents) {
+        val eventSink by rememberEventSink { event: SecureBackupEnterRecoveryKeyEvents ->
             when (event) {
                 SecureBackupEnterRecoveryKeyEvents.ClearDialog -> {
                     submitAction.value = AsyncAction.Uninitialized
@@ -78,7 +79,7 @@ class SecureBackupEnterRecoveryKeyPresenter(
             ),
             isSubmitEnabled = recoveryKey.isNotEmpty() && submitAction.value.isUninitialized(),
             submitAction = submitAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

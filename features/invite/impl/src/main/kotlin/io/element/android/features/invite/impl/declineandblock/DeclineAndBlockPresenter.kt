@@ -22,6 +22,7 @@ import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.impl.DeclineInvite
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -48,7 +49,7 @@ class DeclineAndBlockPresenter(
 
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvents(event: DeclineAndBlockEvents) {
+        val eventSink by rememberEventSink { event: DeclineAndBlockEvents ->
             when (event) {
                 DeclineAndBlockEvents.ClearDeclineAction -> declineAction.value = AsyncAction.Uninitialized
                 DeclineAndBlockEvents.Decline -> coroutineScope.decline(reportReason, blockUser, reportRoom, declineAction)
@@ -63,7 +64,7 @@ class DeclineAndBlockPresenter(
             reportReason = reportReason,
             blockUser = blockUser,
             declineAction = declineAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

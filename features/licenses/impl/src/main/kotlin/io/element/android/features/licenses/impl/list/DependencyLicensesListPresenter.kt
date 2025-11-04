@@ -18,6 +18,7 @@ import io.element.android.features.licenses.impl.LicensesProvider
 import io.element.android.features.licenses.impl.model.DependencyLicenseItem
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -56,10 +57,10 @@ class DependencyLicensesListPresenter(
             }
         }
 
-        fun handleEvent(dependencyLicensesListEvent: DependencyLicensesListEvent) {
-            when (dependencyLicensesListEvent) {
+        val eventSink by rememberEventSink { event: DependencyLicensesListEvent ->
+            when (event) {
                 is DependencyLicensesListEvent.SetFilter -> {
-                    filter = dependencyLicensesListEvent.filter
+                    filter = event.filter
                 }
             }
         }
@@ -67,7 +68,7 @@ class DependencyLicensesListPresenter(
         return DependencyLicensesListState(
             licenses = filteredLicenses,
             filter = filter,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 }

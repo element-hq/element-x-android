@@ -13,6 +13,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -34,7 +35,7 @@ class IdentityChangeStatePresenter(
             room.roomMemberIdentityStateChange(waitForEncryption = true).collect { value = it }
         }
 
-        fun handleEvent(event: IdentityChangeEvent) {
+        val eventSink by rememberEventSink { event: IdentityChangeEvent ->
             when (event) {
                 is IdentityChangeEvent.WithdrawVerification -> {
                     coroutineScope.withdrawVerification(event.userId)
@@ -47,7 +48,7 @@ class IdentityChangeStatePresenter(
 
         return IdentityChangeState(
             roomMemberIdentityStateChanges = roomMemberIdentityStateChange,
-            eventSink = ::handleEvent,
+            eventSink = eventSink,
         )
     }
 

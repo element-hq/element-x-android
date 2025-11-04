@@ -18,6 +18,7 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricAuthentica
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import kotlinx.coroutines.launch
 
 @Inject
@@ -34,7 +35,7 @@ class SetupBiometricPresenter(
         val coroutineScope = rememberCoroutineScope()
         val biometricUnlock = biometricAuthenticatorManager.rememberConfirmBiometricAuthenticator()
 
-        fun handleEvents(event: SetupBiometricEvents) {
+        val eventSink by rememberEventSink { event: SetupBiometricEvents ->
             when (event) {
                 SetupBiometricEvents.AllowBiometric -> coroutineScope.launch {
                     biometricUnlock.setup()
@@ -52,7 +53,7 @@ class SetupBiometricPresenter(
 
         return SetupBiometricState(
             isBiometricSetupDone = isBiometricSetupDone,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

@@ -19,6 +19,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -61,7 +62,7 @@ class PushHistoryPresenter(
         var resetAction: AsyncAction<Unit> by remember { mutableStateOf(AsyncAction.Uninitialized) }
         var showNotSameAccountError by remember { mutableStateOf(false) }
 
-        fun handleEvents(event: PushHistoryEvents) {
+        val eventSink by rememberEventSink { event: PushHistoryEvents ->
             when (event) {
                 is PushHistoryEvents.SetShowOnlyErrors -> {
                     showOnlyErrors = event.showOnlyErrors
@@ -97,7 +98,7 @@ class PushHistoryPresenter(
             showOnlyErrors = showOnlyErrors,
             resetAction = resetAction,
             showNotSameAccountError = showNotSameAccountError,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
 import kotlinx.collections.immutable.persistentListOf
@@ -38,7 +39,7 @@ class HomeSpacesPresenter(
             seenInvitesStore.seenRoomIds().map { it.toImmutableSet() }
         }.collectAsState(persistentSetOf())
 
-        fun handleEvents(event: HomeSpacesEvents) {
+        val eventSink by rememberEventSink { event: HomeSpacesEvents ->
             // when (event) { }
         }
 
@@ -47,7 +48,7 @@ class HomeSpacesPresenter(
             spaceRooms = spaceRooms,
             seenSpaceInvites = seenSpaceInvites,
             hideInvitesAvatar = hideInvitesAvatar,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 }

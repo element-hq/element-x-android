@@ -21,6 +21,7 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricAuthentica
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -50,7 +51,7 @@ class LockScreenSettingsPresenter(
 
         val biometricUnlock = biometricAuthenticatorManager.rememberConfirmBiometricAuthenticator()
 
-        fun handleEvents(event: LockScreenSettingsEvents) {
+        val eventSink by rememberEventSink { event: LockScreenSettingsEvents ->
             when (event) {
                 LockScreenSettingsEvents.CancelRemovePin -> showRemovePinConfirmation = false
                 LockScreenSettingsEvents.ConfirmRemovePin -> {
@@ -82,7 +83,7 @@ class LockScreenSettingsPresenter(
             isBiometricEnabled = isBiometricEnabled,
             showRemovePinConfirmation = showRemovePinConfirmation,
             showToggleBiometric = biometricAuthenticatorManager.isDeviceSecured,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 }

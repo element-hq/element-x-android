@@ -34,6 +34,7 @@ import io.element.android.features.joinroom.impl.di.KnockRoom
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -151,7 +152,7 @@ class JoinRoomPresenter(
             contentState.markRoomInviteAsSeen()
         }
 
-        fun handleEvents(event: JoinRoomEvents) {
+        val eventSink by rememberEventSink { event: JoinRoomEvents ->
             when (event) {
                 JoinRoomEvents.JoinRoom -> coroutineScope.joinRoom(joinAction)
                 is JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction, knockMessage)
@@ -197,7 +198,7 @@ class JoinRoomPresenter(
             knockMessage = knockMessage,
             hideInviteAvatars = hideInviteAvatars,
             canReportRoom = canReportRoom,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

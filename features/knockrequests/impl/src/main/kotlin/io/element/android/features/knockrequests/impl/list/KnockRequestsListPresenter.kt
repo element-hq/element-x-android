@@ -20,6 +20,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,7 +39,7 @@ class KnockRequestsListPresenter(
 
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvents(event: KnockRequestsListEvents) {
+        val eventSink by rememberEventSink { event: KnockRequestsListEvents ->
             when (event) {
                 KnockRequestsListEvents.AcceptAll -> {
                     currentAction = KnockRequestsAction.AcceptAll
@@ -73,7 +74,7 @@ class KnockRequestsListPresenter(
             currentAction = currentAction,
             permissions = permissions,
             asyncAction = asyncAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

@@ -23,6 +23,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.suspendWithMinimumDuration
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -99,7 +100,7 @@ class RoomNotificationSettingsPresenter(
                 !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
-        fun handleEvents(event: RoomNotificationSettingsEvents) {
+        val eventSink by rememberEventSink { event: RoomNotificationSettingsEvents ->
             when (event) {
                 is RoomNotificationSettingsEvents.ChangeRoomNotificationMode -> {
                     localCoroutineScope.setRoomNotificationMode(event.mode, pendingRoomNotificationMode, pendingSetDefault, setNotificationSettingAction)
@@ -135,7 +136,7 @@ class RoomNotificationSettingsPresenter(
             setNotificationSettingAction = setNotificationSettingAction.value,
             restoreDefaultAction = restoreDefaultAction.value,
             displayMentionsOnlyDisclaimer = shouldDisplayMentionsOnlyDisclaimer,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

@@ -20,6 +20,7 @@ import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
 import io.element.android.features.rageshake.api.crash.CrashDetectionState
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,7 +48,7 @@ class DefaultCrashDetectionPresenter(
                 }
         }.collectAsState(false)
 
-        fun handleEvents(event: CrashDetectionEvents) {
+        val eventSink by rememberEventSink { event: CrashDetectionEvents ->
             when (event) {
                 CrashDetectionEvents.ResetAllCrashData -> localCoroutineScope.resetAll()
                 CrashDetectionEvents.ResetAppHasCrashed -> localCoroutineScope.resetAppHasCrashed()
@@ -57,7 +58,7 @@ class DefaultCrashDetectionPresenter(
         return CrashDetectionState(
             appName = buildMeta.applicationName,
             crashDetected = crashDetected,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

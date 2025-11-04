@@ -20,6 +20,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +44,7 @@ class ReportRoomPresenter(
 
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvents(event: ReportRoomEvents) {
+        val eventSink by rememberEventSink { event: ReportRoomEvents ->
             when (event) {
                 ReportRoomEvents.Report -> coroutineScope.reportRoom(reason, leaveRoom, reportAction)
                 ReportRoomEvents.ToggleLeaveRoom -> {
@@ -61,7 +62,7 @@ class ReportRoomPresenter(
             reason = reason,
             leaveRoom = leaveRoom,
             reportAction = reportAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

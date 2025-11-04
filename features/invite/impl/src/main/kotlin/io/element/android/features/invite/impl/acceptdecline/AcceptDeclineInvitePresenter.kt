@@ -9,6 +9,7 @@ package io.element.android.features.invite.impl.acceptdecline
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,6 +22,7 @@ import io.element.android.features.invite.impl.AcceptInvite
 import io.element.android.features.invite.impl.DeclineInvite
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +41,7 @@ class AcceptDeclineInvitePresenter(
         val declinedAction: MutableState<AsyncAction<RoomId>> =
             remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvents(event: AcceptDeclineInviteEvents) {
+        val eventSink by rememberEventSink { event: AcceptDeclineInviteEvents ->
             when (event) {
                 is AcceptDeclineInviteEvents.AcceptInvite -> {
                     localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
@@ -70,7 +72,7 @@ class AcceptDeclineInvitePresenter(
         return AcceptDeclineInviteState(
             acceptAction = acceptedAction.value,
             declineAction = declinedAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

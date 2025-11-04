@@ -9,6 +9,7 @@ package io.element.android.features.login.impl.screens.createaccount
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +19,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -50,14 +52,14 @@ class CreateAccountPresenter(
         val pageProgress: MutableState<Int> = remember { mutableIntStateOf(0) }
         val createAction: MutableState<AsyncAction<SessionId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvents(event: CreateAccountEvents) {
+        val eventSink by rememberEventSink { event: CreateAccountEvents ->
             when (event) {
                 is CreateAccountEvents.SetPageProgress -> {
                     pageProgress.value = event.progress
                 }
                 is CreateAccountEvents.OnMessageReceived -> {
                     // Ignore unexpected message
-                    if (event.message.contains("isTrusted")) return
+                    if (event.message.contains("isTrusted")) return@rememberEventSink
                     coroutineScope.importSession(event.message, createAction)
                 }
             }
@@ -68,7 +70,7 @@ class CreateAccountPresenter(
             pageProgress = pageProgress.value,
             isDebugBuild = buildMeta.isDebuggable,
             createAction = createAction.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

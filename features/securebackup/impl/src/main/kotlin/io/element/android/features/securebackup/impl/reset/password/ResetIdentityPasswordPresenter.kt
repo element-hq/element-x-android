@@ -9,11 +9,13 @@ package io.element.android.features.securebackup.impl.reset.password
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
@@ -30,7 +32,7 @@ class ResetIdentityPasswordPresenter(
 
         val resetAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
-        fun handleEvent(event: ResetIdentityPasswordEvent) {
+        val eventSink by rememberEventSink { event: ResetIdentityPasswordEvent ->
             when (event) {
                 is ResetIdentityPasswordEvent.Reset -> coroutineScope.reset(event.password, resetAction)
                 ResetIdentityPasswordEvent.DismissError -> resetAction.value = AsyncAction.Uninitialized
@@ -39,7 +41,7 @@ class ResetIdentityPasswordPresenter(
 
         return ResetIdentityPasswordState(
             resetAction = resetAction.value,
-            eventSink = ::handleEvent
+            eventSink = eventSink,
         )
     }
 

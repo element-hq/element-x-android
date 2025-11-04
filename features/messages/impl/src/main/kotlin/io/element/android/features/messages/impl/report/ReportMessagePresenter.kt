@@ -20,6 +20,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -53,7 +54,7 @@ class ReportMessagePresenter(
         var blockUser by rememberSaveable { mutableStateOf(false) }
         var result: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvents(event: ReportMessageEvents) {
+        val eventSink by rememberEventSink { event: ReportMessageEvents ->
             when (event) {
                 is ReportMessageEvents.UpdateReason -> reason = event.reason
                 ReportMessageEvents.ToggleBlockUser -> blockUser = !blockUser
@@ -66,7 +67,7 @@ class ReportMessagePresenter(
             reason = reason,
             blockUser = blockUser,
             result = result.value,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

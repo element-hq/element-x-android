@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
@@ -36,7 +37,7 @@ class ReactionSummaryPresenter(
         }
         val targetWithAvatars = populateSenderAvatars(members = membersState.roomMembers().orEmpty().toImmutableList(), summary = target.value)
 
-        fun handleEvents(event: ReactionSummaryEvents) {
+        val eventSink by rememberEventSink { event: ReactionSummaryEvents ->
             when (event) {
                 is ReactionSummaryEvents.ShowReactionSummary -> target.value = ReactionSummaryState.Summary(
                     reactions = event.reactions.toImmutableList(),
@@ -48,7 +49,7 @@ class ReactionSummaryPresenter(
         }
         return ReactionSummaryState(
             target = targetWithAvatars.value,
-            eventSink = ::handleEvents,
+            eventSink = eventSink,
         )
     }
 

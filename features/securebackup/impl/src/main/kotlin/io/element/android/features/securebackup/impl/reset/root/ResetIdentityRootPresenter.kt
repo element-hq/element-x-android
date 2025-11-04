@@ -13,13 +13,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 
 class ResetIdentityRootPresenter : Presenter<ResetIdentityRootState> {
     @Composable
     override fun present(): ResetIdentityRootState {
         var displayConfirmDialog by remember { mutableStateOf(false) }
 
-        fun handleEvent(event: ResetIdentityRootEvent) {
+        val eventSink by rememberEventSink { event: ResetIdentityRootEvent ->
             displayConfirmDialog = when (event) {
                 ResetIdentityRootEvent.Continue -> true
                 ResetIdentityRootEvent.DismissDialog -> false
@@ -28,7 +29,7 @@ class ResetIdentityRootPresenter : Presenter<ResetIdentityRootState> {
 
         return ResetIdentityRootState(
             displayConfirmationDialog = displayConfirmDialog,
-            eventSink = ::handleEvent
+            eventSink = eventSink,
         )
     }
 }

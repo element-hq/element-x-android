@@ -25,6 +25,7 @@ import io.element.android.features.securebackup.impl.loggerTagSetup
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
@@ -52,7 +53,7 @@ class SecureBackupSetupPresenter(
         }
         var showSaveConfirmationDialog by remember { mutableStateOf(false) }
 
-        fun handleEvents(event: SecureBackupSetupEvents) {
+        val eventSink by rememberEventSink { event: SecureBackupSetupEvents ->
             when (event) {
                 SecureBackupSetupEvents.CreateRecoveryKey -> {
                     coroutineScope.createOrChangeRecoveryKey(stateAndDispatch)
@@ -81,7 +82,7 @@ class SecureBackupSetupPresenter(
             recoveryKeyViewState = recoveryKeyViewState,
             setupState = setupState,
             showSaveConfirmationDialog = showSaveConfirmationDialog,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 

@@ -23,6 +23,7 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.features.rageshake.impl.rageshake.RageShake
 import io.element.android.features.rageshake.impl.rageshake.RageshakeDataStore
+import io.element.android.libraries.architecture.events.rememberEventSink
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -47,7 +48,7 @@ class DefaultRageshakePreferencesPresenter(
             rageshakeDataStore.sensitivity()
         }.collectAsState(initial = 0f)
 
-        fun handleEvents(event: RageshakePreferencesEvents) {
+        val eventSink by rememberEventSink { event: RageshakePreferencesEvents ->
             when (event) {
                 is RageshakePreferencesEvents.SetIsEnabled -> localCoroutineScope.setIsEnabled(event.isEnabled)
                 is RageshakePreferencesEvents.SetSensitivity -> localCoroutineScope.setSensitivity(event.sensitivity)
@@ -59,7 +60,7 @@ class DefaultRageshakePreferencesPresenter(
             isEnabled = isEnabled,
             isSupported = isSupported.value,
             sensitivity = sensitivity,
-            eventSink = ::handleEvents
+            eventSink = eventSink,
         )
     }
 
