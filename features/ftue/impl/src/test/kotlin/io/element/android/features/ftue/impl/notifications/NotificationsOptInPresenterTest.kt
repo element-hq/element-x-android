@@ -54,8 +54,16 @@ class NotificationsOptInPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            val initialPermissionState = initialState.notificationsPermissionState
+            assertThat(initialPermissionState.showDialog).isFalse()
+            assertThat(initialPermissionState.permissionAlreadyAsked).isFalse()
             initialState.eventSink(NotificationsOptInEvents.ContinueClicked)
-            assertThat(awaitItem().notificationsPermissionState.showDialog).isTrue()
+            val permissionState = awaitItem().notificationsPermissionState
+            assertThat(permissionState.showDialog).isTrue()
+            assertThat(permissionState.permissionAlreadyAsked).isTrue()
+            val finalPermissionState = awaitItem().notificationsPermissionState
+            assertThat(finalPermissionState.showDialog).isTrue()
+            assertThat(finalPermissionState.permissionAlreadyAsked).isTrue()
         }
     }
 
