@@ -14,6 +14,8 @@ import io.element.android.features.messages.api.timeline.voicemessages.composer.
 import io.element.android.features.messages.api.timeline.voicemessages.composer.aVoiceMessagePreviewState
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
+import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleState
+import io.element.android.features.messages.impl.crypto.historyvisible.aHistoryVisibleState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
 import io.element.android.features.messages.impl.link.LinkState
@@ -103,6 +105,7 @@ fun aMessagesState(
     ),
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
     identityChangeState: IdentityChangeState = anIdentityChangeState(),
+    historyVisibleState: HistoryVisibleState = aHistoryVisibleState(),
     linkState: LinkState = aLinkState(),
     readReceiptBottomSheetState: ReadReceiptBottomSheetState = aReadReceiptBottomSheetState(),
     actionListState: ActionListState = anActionListState(),
@@ -125,6 +128,7 @@ fun aMessagesState(
     voiceMessageComposerState = voiceMessageComposerState,
     timelineProtectionState = timelineProtectionState,
     identityChangeState = identityChangeState,
+    historyVisibleState = historyVisibleState,
     linkState = linkState,
     timelineState = timelineState,
     readReceiptBottomSheetState = readReceiptBottomSheetState,

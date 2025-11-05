@@ -32,6 +32,7 @@ import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
@@ -107,6 +108,7 @@ class MessagesPresenter(
     @Assisted private val timelinePresenter: Presenter<TimelineState>,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
+    private val historyVisibleStatePresenter: Presenter<HistoryVisibleState>,
     private val linkPresenter: Presenter<LinkState>,
     @Assisted private val actionListPresenter: Presenter<ActionListState>,
     private val customReactionPresenter: Presenter<CustomReactionState>,
@@ -158,6 +160,7 @@ class MessagesPresenter(
         val timelineState = timelinePresenter.present()
         val timelineProtectionState = timelineProtectionPresenter.present()
         val identityChangeState = identityChangeStatePresenter.present()
+        val historyVisibleState = historyVisibleStatePresenter.present()
         val actionListState = actionListPresenter.present()
         val linkState = linkPresenter.present()
         val customReactionState = customReactionPresenter.present()
@@ -278,6 +281,7 @@ class MessagesPresenter(
             timelineState = timelineState,
             timelineProtectionState = timelineProtectionState,
             identityChangeState = identityChangeState,
+            historyVisibleState = historyVisibleState,
             linkState = linkState,
             actionListState = actionListState,
             customReactionState = customReactionState,
