@@ -12,17 +12,17 @@ import androidx.compose.runtime.Composable
 class FakePermissionsPresenter : PermissionsPresenter {
     val events = mutableListOf<PermissionsEvents>()
 
-    private val eventSink by rememberEventSink { event: PermissionsEvents ->
+    private fun handleEvent(event: PermissionsEvents) {
         events += event
     }
 
     private var state = PermissionsState(
         permissions = PermissionsState.Permissions.NoneGranted,
         shouldShowRationale = false,
-        eventSink = eventSink,
+        eventSink = ::handleEvent,
     )
         set(value) {
-            field = value.copy(eventSink = eventSink,)
+            field = value.copy(eventSink = ::handleEvent)
         }
 
     fun givenState(state: PermissionsState) {
