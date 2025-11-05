@@ -395,11 +395,6 @@ class MessageComposerPresenter(
         LaunchedEffect(Unit) {
             val currentUserId = room.sessionId
 
-            suspend fun canSendRoomMention(): Boolean {
-                val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
-                return !room.isDm() && userCanSendAtRoom
-            }
-
             // This will trigger a search immediately when `@` is typed
             val mentionStartTrigger = suggestionSearchTrigger.filter { it?.text.isNullOrEmpty() }
             // This will start a search when the user changes the text after the `@` with a debounce to prevent too much wasted work
@@ -417,7 +412,10 @@ class MessageComposerPresenter(
                     roomMembersState = roomMembersState,
                     roomAliasSuggestions = roomAliasSuggestions,
                     currentUserId = currentUserId,
-                    canSendRoomMention = ::canSendRoomMention,
+                    canSendRoomMention = {
+                        val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
+                        !room.isDm() && userCanSendAtRoom
+                    },
                 )
                 suggestions.clear()
                 suggestions.addAll(result)

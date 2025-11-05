@@ -22,6 +22,7 @@ import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
@@ -111,7 +112,7 @@ class RoomMemberDetailsPresenter(
             }
         }
 
-        fun eventSink(event: UserProfileEvents) {
+        val eventSink by rememberEventSink { event: UserProfileEvents ->
             when (event) {
                 UserProfileEvents.WithdrawVerification -> coroutineScope.launch {
                     encryptionService.withdrawVerification(roomMemberId)
@@ -129,7 +130,7 @@ class RoomMemberDetailsPresenter(
             avatarUrl = roomUserAvatar ?: userProfileState.avatarUrl,
             verificationState = verificationState,
             snackbarMessage = snackbarMessage,
-            eventSink = ::eventSink
+            eventSink = eventSink,
         )
     }
 }

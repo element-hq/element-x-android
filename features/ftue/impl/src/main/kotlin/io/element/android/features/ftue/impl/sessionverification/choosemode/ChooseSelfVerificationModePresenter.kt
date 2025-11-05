@@ -17,6 +17,7 @@ import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.events.rememberEventSink
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -59,7 +60,7 @@ class ChooseSelfVerificationModePresenter(
 
         val directLogoutState = directLogoutPresenter.present()
 
-        fun eventHandler(event: ChooseSelfVerificationModeEvent) {
+        val eventSink by rememberEventSink { event: ChooseSelfVerificationModeEvent ->
             when (event) {
                 ChooseSelfVerificationModeEvent.SignOut -> directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
             }
@@ -68,7 +69,7 @@ class ChooseSelfVerificationModePresenter(
         return ChooseSelfVerificationModeState(
             buttonsState = buttonsState,
             directLogoutState = directLogoutState,
-            eventSink = ::eventHandler,
+            eventSink = eventSink,
         )
     }
 }
