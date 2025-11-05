@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
@@ -103,11 +104,11 @@ class ChangeRolesPresenter(
         val hasPendingChanges = usersWithRole.value != selectedUsers.value
 
         val roomInfo by room.roomInfoFlow.collectAsState()
-        fun canChangeMemberRole(userId: UserId): Boolean {
+        val canChangeMemberRole by rememberUpdatedState { userId: UserId ->
             // This is used to group the
             val currentUserRole = roomInfo.roleOf(room.sessionId)
             val otherUserRole = roomInfo.roleOf(userId)
-            return currentUserRole.powerLevel > otherUserRole.powerLevel
+            currentUserRole.powerLevel > otherUserRole.powerLevel
         }
 
         val eventSink by rememberEventSink { event: ChangeRolesEvent ->
@@ -169,7 +170,7 @@ class ChangeRolesPresenter(
             selectedUsers = selectedUsers.value,
             hasPendingChanges = hasPendingChanges,
             savingState = saveState.value,
-            canChangeMemberRole = ::canChangeMemberRole,
+            canChangeMemberRole = canChangeMemberRole,
             eventSink = eventSink,
         )
     }

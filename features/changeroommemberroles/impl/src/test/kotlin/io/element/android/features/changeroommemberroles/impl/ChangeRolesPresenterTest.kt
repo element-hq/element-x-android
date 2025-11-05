@@ -228,9 +228,11 @@ class ChangeRolesPresenterTest {
             assertThat(initialState.selectedUsers).hasSize(1)
 
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
+            skipItems(1)
             assertThat(awaitItem().selectedUsers).hasSize(2)
 
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
+            skipItems(1)
             assertThat(awaitItem().selectedUsers).hasSize(1)
         }
     }
@@ -251,6 +253,7 @@ class ChangeRolesPresenterTest {
             assertThat(initialState.selectedUsers).hasSize(1)
 
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
+            skipItems(1)
             with(awaitItem()) {
                 assertThat(selectedUsers).hasSize(2)
                 assertThat(hasPendingChanges).isTrue()
@@ -261,6 +264,7 @@ class ChangeRolesPresenterTest {
                 assertThat(selectedUsers).hasSize(1)
                 assertThat(hasPendingChanges).isFalse()
             }
+            skipItems(1)
         }
     }
 
@@ -302,6 +306,7 @@ class ChangeRolesPresenterTest {
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Exit)
+            skipItems(1)
             val confirmingState = awaitItem()
             assertThat(confirmingState.savingState).isEqualTo(AsyncAction.ConfirmingCancellation)
 
@@ -357,6 +362,7 @@ class ChangeRolesPresenterTest {
 
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
             awaitItem().eventSink(ChangeRolesEvent.Save)
+            skipItems(1)
             val confirmingState = awaitItem()
             assertThat(confirmingState.savingState).isEqualTo(AsyncAction.ConfirmingNoParams)
 
@@ -387,6 +393,7 @@ class ChangeRolesPresenterTest {
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
+            skipItems(1)
             val confirmingState = awaitItem()
             assertThat(confirmingState.savingState).isEqualTo(AsyncAction.ConfirmingNoParams)
 
@@ -420,7 +427,7 @@ class ChangeRolesPresenterTest {
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
-
+            skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
             skipItems(1)
@@ -463,7 +470,7 @@ class ChangeRolesPresenterTest {
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
-
+            skipItems(1)
             assertThat(awaitItem().savingState.isConfirming()).isTrue()
         }
     }
@@ -498,7 +505,7 @@ class ChangeRolesPresenterTest {
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
-
+            skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
             skipItems(1)
@@ -527,6 +534,7 @@ class ChangeRolesPresenterTest {
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
+            skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
             skipItems(1)
