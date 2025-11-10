@@ -18,13 +18,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
-import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertLevel
+import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun HistoryVisibleStateView(

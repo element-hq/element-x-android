@@ -19,7 +19,7 @@ class FakeHistoryVisibleAcknowledgementRepository : HistoryVisibleAcknowledgemen
     }
 
     override suspend fun setAcknowledged(roomId: RoomId, value: Boolean) {
-        val flow = acknowledgements.getOrPut(roomId) { MutableSharedFlow()  }
+        val flow = acknowledgements.getOrPut(roomId) { MutableSharedFlow() }
         flow.emit(value)
     }
 }
