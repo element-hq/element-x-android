@@ -13,20 +13,15 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 class HistoryVisibleStateProvider : PreviewParameterProvider<HistoryVisibleState> {
     override val values: Sequence<HistoryVisibleState>
         get() = sequenceOf(
-            aHistoryVisibleState(RoomHistoryVisibility.Joined, roomIsEncrypted = false, acknowledged = false),
-            aHistoryVisibleState(RoomHistoryVisibility.Shared, roomIsEncrypted = true, acknowledged = false),
-            aHistoryVisibleState(RoomHistoryVisibility.Shared, roomIsEncrypted = true, acknowledged = true)
+            aHistoryVisibleState(showAlert = false),
+            aHistoryVisibleState(showAlert = true),
         )
 }
 
 internal fun aHistoryVisibleState(
-    roomHistoryVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
-    roomIsEncrypted: Boolean = false,
-    acknowledged: Boolean = false,
+    showAlert: Boolean = false,
     eventSink: (HistoryVisibleEvent) -> Unit = {},
 ) = HistoryVisibleState(
-    roomHistoryVisibility = roomHistoryVisibility,
-    roomIsEncrypted = roomIsEncrypted,
-    acknowledged = acknowledged,
+    showAlert,
     eventSink = eventSink,
 )

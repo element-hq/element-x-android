@@ -23,7 +23,6 @@ import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertL
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -32,18 +31,7 @@ fun HistoryVisibleStateView(
     onLinkClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Ignore non-encrypted rooms.
-    if (!state.roomIsEncrypted) {
-        return
-    }
-
-    // Ignore rooms with `history_visibility = joined`.
-    if (state.roomHistoryVisibility == RoomHistoryVisibility.Joined) {
-        return
-    }
-
-    // Ignore non-joined rooms we have acknowledged.
-    if (state.acknowledged) {
+    if (!state.showAlert) {
         return
     }
 

@@ -38,9 +38,7 @@ class HistoryVisibleStatePresenter(
         }
 
         return HistoryVisibleState(
-            roomHistoryVisibility = roomInfo.historyVisibility,
-            roomIsEncrypted = roomInfo.isEncrypted == true,
-            acknowledged = acknowledged,
+            showAlert = roomInfo.historyVisibility != RoomHistoryVisibility.Joined && roomInfo.isEncrypted == true && !acknowledged,
             eventSink = { event ->
                 when (event) {
                     is HistoryVisibleEvent.Acknowledge ->

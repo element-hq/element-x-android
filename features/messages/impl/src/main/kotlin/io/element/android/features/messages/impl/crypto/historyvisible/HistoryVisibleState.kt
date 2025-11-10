@@ -7,11 +7,7 @@
 
 package io.element.android.features.messages.impl.crypto.historyvisible
 
-import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
-
 data class HistoryVisibleState(
-    val roomHistoryVisibility: RoomHistoryVisibility,
-    val roomIsEncrypted: Boolean,
-    val acknowledged: Boolean,
+    val showAlert: Boolean,
     val eventSink: (HistoryVisibleEvent) -> Unit,
 )

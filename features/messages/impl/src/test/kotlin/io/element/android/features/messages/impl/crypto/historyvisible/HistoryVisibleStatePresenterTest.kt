@@ -22,35 +22,98 @@ class HistoryVisibleStatePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
+
+@Test
+fun `present - initial with room shared, unencrypted`() = runTest {
+    val room = FakeJoinedRoom()
+    room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, isEncrypted = false))
+    val presenter = createHistoryVisibleStatePresenter(room)
+    presenter.test {
+        val initialState = awaitItem()
+        assertThat(initialState.showAlert).isFalse()
+        val nextState = awaitItem()
+        assertThat(nextState.showAlert).isFalse()
+    }
+}
+
     @Test
-    fun `present - initial state`() = runTest {
-        val presenter = createHistoryVisibleStatePresenter()
+    fun `present - initial with room joined, encrypted`() = runTest {
+        val room = FakeJoinedRoom()
+        room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Joined, isEncrypted = false))
+        val presenter = createHistoryVisibleStatePresenter(room)
         presenter.test {
             val initialState = awaitItem()
-            assertThat(initialState.acknowledged).isFalse()
-            assertThat(initialState.roomHistoryVisibility).isEqualTo(RoomHistoryVisibility.Joined)
+            assertThat(initialState.showAlert).isFalse()
+            val nextState = awaitItem()
+            assertThat(nextState.showAlert).isFalse()
         }
     }
 
     @Test
-    fun `present - when the room history visibility changes, the presenter emits a new state`() = runTest {
+    fun `present - initial with room shared, encrypted, unacknowledged`() = runTest {
         val room = FakeJoinedRoom()
-        val presenter = createHistoryVisibleStatePresenter(room)
+        room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, isEncrypted = true))
+        val presenter = createHistoryVisibleStatePresenter(room, acknowledged = false)
         presenter.test {
             val initialState = awaitItem()
-            assertThat(initialState.roomHistoryVisibility).isEqualTo(RoomHistoryVisibility.Joined)
-            room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared))
+            assertThat(initialState.showAlert).isFalse()
             val nextState = awaitItem()
-            assertThat(nextState.roomHistoryVisibility).isEqualTo(RoomHistoryVisibility.Shared)
+            assertThat(nextState.showAlert).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - initial with room shared, encrypted, acknowledged`() = runTest {
+        val room = FakeJoinedRoom()
+        room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, isEncrypted = true))
+        val presenter = createHistoryVisibleStatePresenter(room, acknowledged = true)
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.showAlert).isFalse()
+            // we do not expect a next state here, since the room info matches the initial state and does not get re-emitted.
+        }
+    }
+
+    @Test
+    fun `present - transition from joined + unencrypted, to shared + encrypted`() = runTest {
+        val room = FakeJoinedRoom()
+        val repository = FakeHistoryVisibleAcknowledgementRepository()
+
+        room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Joined, isEncrypted = false))
+
+        val presenter = HistoryVisibleStatePresenter(
+            repository,
+            room,
+        )
+
+        presenter.test {
+            // initial state
+            assertThat(awaitItem().showAlert).isFalse()
+
+            // emitted state from room info assignment
+            assertThat(awaitItem().showAlert).isFalse()
+
+            // room is marked as encrypted
+            room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Joined, isEncrypted = true))
+            assertThat(awaitItem().showAlert).isFalse()
+
+            // room history visibility is changed to shared
+            room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, isEncrypted = true))
+            assertThat(awaitItem().showAlert).isTrue()
+
+            // alert is acknowledged
+            repository.setAcknowledged(room.roomId, true)
+            assertThat(awaitItem().showAlert).isFalse()
         }
     }
 
     private fun createHistoryVisibleStatePresenter(
         room: JoinedRoom = FakeJoinedRoom(),
+        acknowledged: Boolean = false
     ): HistoryVisibleStatePresenter {
         return HistoryVisibleStatePresenter(
             room = room,
-            repository = FakeHistoryVisibleAcknowledgementRepository()
+            repository = FakeHistoryVisibleAcknowledgementRepository.withRoom(room.roomId, acknowledged)
         )
     }
 }
