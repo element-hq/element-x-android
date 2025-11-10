@@ -468,8 +468,6 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_space_list_parent_space">"%1$s Space"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_space_menu_action_members">"Mitglieder anzeigen"</string>
-  <string name="screen_space_settings_leave_space">"Space verlassen"</string>
-  <string name="screen_space_settings_security_and_privacy">"Sicherheit &amp; Datenschutz"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$s geändert hat."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Die Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Die Nachricht wurde nicht gesendet, weil du eines oder mehrere deiner Geräte nicht verifiziert hast."</string>

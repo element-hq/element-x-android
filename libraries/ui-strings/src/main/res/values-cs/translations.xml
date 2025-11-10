@@ -476,9 +476,6 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_space_list_parent_space">"%1$s prostor"</string>
   <string name="screen_space_list_title">"Prostory"</string>
   <string name="screen_space_menu_action_members">"Zobrazit členy"</string>
-  <string name="screen_space_settings_leave_space">"Opustit prostor"</string>
-  <string name="screen_space_settings_roles_and_permissions">"Role a oprávnění"</string>
-  <string name="screen_space_settings_security_and_privacy">"Zabezpečení a soukromí"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení."</string>

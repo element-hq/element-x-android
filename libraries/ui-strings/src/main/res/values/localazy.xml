@@ -469,9 +469,6 @@ Are you sure you want to continue?"</string>
   <string name="screen_space_list_parent_space">"%1$s space"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_space_menu_action_members">"View members"</string>
-  <string name="screen_space_settings_leave_space">"Leave space"</string>
-  <string name="screen_space_settings_roles_and_permissions">"Roles &amp; permissions"</string>
-  <string name="screen_space_settings_security_and_privacy">"Security &amp; privacy"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not verified one or more of your devices."</string>

@@ -465,8 +465,6 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_space_list_parent_space">"%1$s område"</string>
   <string name="screen_space_list_title">"Områder"</string>
   <string name="screen_space_menu_action_members">"Vis medlemmer"</string>
-  <string name="screen_space_settings_leave_space">"Forlat område"</string>
-  <string name="screen_space_settings_security_and_privacy">"Sikkerhet og personvern"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meldingen ble ikke sendt fordi %1$ss verifiserte identitet er tilbakestilt."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meldingen ble ikke sendt fordi %1$s ikke har verifisert alle enheter."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine."</string>

@@ -447,7 +447,6 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_space_list_description">"Spazi che hai creato o a cui hai aderito."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_title">"Spazi"</string>
-  <string name="screen_space_settings_security_and_privacy">"Sicurezza e privacy"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Messaggio non inviato perché l\'identità verificata di %1$s è stata reimpostata."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Messaggio non inviato perché %1$s non ha verificato tutti i dispositivi."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Messaggio non inviato perché non hai verificato uno o più dispositivi."</string>

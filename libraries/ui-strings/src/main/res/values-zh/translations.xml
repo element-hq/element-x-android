@@ -452,8 +452,6 @@
   <string name="screen_space_list_description">"您创建或加入的空间。"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_title">"空间"</string>
-  <string name="screen_space_settings_leave_space">"离开空间"</string>
-  <string name="screen_space_settings_security_and_privacy">"安全与隐私"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未发送，因为%1$s的已验证身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未发送，因为%1$s尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未发送，因为您有尚未验证的设备。"</string>

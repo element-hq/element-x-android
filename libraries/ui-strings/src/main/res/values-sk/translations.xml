@@ -478,9 +478,6 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_space_list_parent_space">"%1$s priestor"</string>
   <string name="screen_space_list_title">"Priestory"</string>
   <string name="screen_space_menu_action_members">"Zobraziť členov"</string>
-  <string name="screen_space_settings_leave_space">"Opustiť priestor"</string>
-  <string name="screen_space_settings_roles_and_permissions">"Roly a oprávnenia"</string>
-  <string name="screen_space_settings_security_and_privacy">"Bezpečnosť a súkromie"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$s."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Správa nebola odoslaná, pretože %1$s neoveril/a všetky zariadenia."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Správa nebola odoslaná, pretože ste neoverili jedno alebo viac svojich zariadení."</string>

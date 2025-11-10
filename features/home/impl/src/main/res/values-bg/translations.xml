@@ -4,6 +4,7 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Въведете ключа си за възстановяване"</string>
   <string name="confirm_recovery_key_banner_title">"Хранилището ви за ключове не е синхронизирано"</string>
   <string name="screen_home_tab_chats">"Всички чатове"</string>
+  <string name="screen_home_tab_spaces">"Пространства"</string>
   <string name="screen_invites_decline_chat_message">"Сигурни ли сте, че искате да отхвърлите поканата за присъединяване в %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Отказване на покана"</string>
   <string name="screen_invites_decline_direct_chat_message">"Сигурни ли сте, че искате да откажете този личен чат с %1$s?"</string>

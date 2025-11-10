@@ -10,4 +10,6 @@
   <string name="screen_leave_space_subtitle_only_last_admin">"Du vil ikke bli fjernet fra følgende rom fordi du er den eneste administratoren:"</string>
   <string name="screen_leave_space_title">"Forlat %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Du er den eneste administratoren for %1$s"</string>
+  <string name="screen_space_settings_leave_space">"Forlat område"</string>
+  <string name="screen_space_settings_security_and_privacy">"Sikkerhet og personvern"</string>
 </resources>

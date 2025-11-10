@@ -377,7 +377,6 @@ Motivo: %1$s."</string>
   <string name="screen_share_open_google_maps">"Abrir en Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Abrir en OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Compartir esta ubicación"</string>
-  <string name="screen_space_settings_security_and_privacy">"Seguridad y privacidad"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mensaje no enviado porque la identidad verificada de %1$s fue restablecida."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Mensaje no enviado porque %1$s no ha verificado todos los dispositivos."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Mensaje no enviado porque no has verificado uno o más de tus dispositivos."</string>

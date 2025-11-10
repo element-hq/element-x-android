@@ -459,8 +459,6 @@
   <string name="screen_space_list_parent_space">"%1$s 空間"</string>
   <string name="screen_space_list_title">"空間"</string>
   <string name="screen_space_menu_action_members">"檢視成員"</string>
-  <string name="screen_space_settings_leave_space">"離開空間"</string>
-  <string name="screen_space_settings_security_and_privacy">"安全與隱私"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"因為 %1$s 的驗證身份已重設，因此未傳送訊息。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"訊息未傳送，因為 %1$s 尚未驗證所有裝置。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"因為您尚未驗證一個或多個裝置，因此未傳送訊息"</string>

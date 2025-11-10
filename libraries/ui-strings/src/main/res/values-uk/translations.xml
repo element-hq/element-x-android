@@ -461,7 +461,6 @@
   <string name="screen_space_list_description">"Простори, які ви створили або до яких приєдналися."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_title">"Простори"</string>
-  <string name="screen_space_settings_security_and_privacy">"Безпека й приватність"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки підтверджену особистість %1$s скинуто."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв."</string>

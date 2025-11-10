@@ -469,9 +469,6 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_space_list_parent_space">"Kogukond: %1$s"</string>
   <string name="screen_space_list_title">"Kogukonnad"</string>
   <string name="screen_space_menu_action_members">"Vaata liikmeid"</string>
-  <string name="screen_space_settings_leave_space">"Lahku kogukonnast"</string>
-  <string name="screen_space_settings_roles_and_permissions">"Rollid ja õigused"</string>
-  <string name="screen_space_settings_security_and_privacy">"Turvalisus ja privaatsus"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on lähtestatud."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>

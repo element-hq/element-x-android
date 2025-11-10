@@ -365,7 +365,6 @@ Devam etmek istediğinizden emin misiniz?"</string>
   <string name="screen_share_open_google_maps">"Google Maps\'te aç"</string>
   <string name="screen_share_open_osm_maps">"OpenStreetMap\'te aç"</string>
   <string name="screen_share_this_location_action">"Bu konumu paylaş"</string>
-  <string name="screen_space_settings_security_and_privacy">"Güvenlik ve gizlilik"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"%1$s kullanıcısının doğrulanmış kimliği değiştiği için ileti gönderilmedi."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"%1$s tüm cihazları doğrulamadığı için mesaj gönderilmedi."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Bir veya daha fazla cihazınızı doğrulamadığınız için mesaj gönderilmedi."</string>

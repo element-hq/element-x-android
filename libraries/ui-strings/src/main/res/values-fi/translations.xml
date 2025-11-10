@@ -467,8 +467,6 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_space_list_parent_space">"%1$s tila"</string>
   <string name="screen_space_list_title">"Tilat"</string>
   <string name="screen_space_menu_action_members">"Näytä jäsenet"</string>
-  <string name="screen_space_settings_leave_space">"Poistu tilasta"</string>
-  <string name="screen_space_settings_security_and_privacy">"Turvallisuus ja yksityisyys"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Viestiä ei lähetetty, koska käyttäjän %1$s vahvistettu identiteetti nollattiin."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Viestiä ei lähetetty, koska %1$s ei ole vahvistanut kaikkia laitteitaan."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Viestiä ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi."</string>

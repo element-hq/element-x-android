@@ -11,4 +11,6 @@
   <string name="screen_leave_space_subtitle_only_last_admin">"Вы не будете удалены из следующих комнат, поскольку вы являетесь единственным администратором:"</string>
   <string name="screen_leave_space_title">"Выйти из %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Вы единственный администратор для %1$s"</string>
+  <string name="screen_space_settings_leave_space">"Покинуть пространство"</string>
+  <string name="screen_space_settings_security_and_privacy">"Безопасность и конфиденциальность"</string>
 </resources>

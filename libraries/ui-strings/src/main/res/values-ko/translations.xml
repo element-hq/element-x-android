@@ -440,7 +440,6 @@
   <string name="screen_space_list_description">"당신이 스페이스를 만들거나 가입했습니다."</string>
   <string name="screen_space_list_details">"%1$s•%2$s"</string>
   <string name="screen_space_list_title">"스페이스"</string>
-  <string name="screen_space_settings_security_and_privacy">"보안 및 개인정보 보호"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"%1$s의 인증된 신원이 재설정되어 메시지가 전송되지 않았습니다."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"%1$s 이 모든 장치를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"하나 이상의 기기를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다."</string>

@@ -67,5 +67,6 @@
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Obnoviť oprávnenia?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roly"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Podrobnosti o miestnosti"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Podrobnosti o priestore"</string>
   <string name="screen_room_roles_and_permissions_title">"Roly a povolenia"</string>
 </resources>

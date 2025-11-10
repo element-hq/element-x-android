@@ -7,4 +7,6 @@
   </plurals>
   <string name="screen_leave_space_subtitle">"Também irás sair de todas as salas deste espaço."</string>
   <string name="screen_leave_space_title">"Sair de %1$s?"</string>
+  <string name="screen_space_settings_leave_space">"Sair do espaço"</string>
+  <string name="screen_space_settings_security_and_privacy">"Segurança e privacidade"</string>
 </resources>
