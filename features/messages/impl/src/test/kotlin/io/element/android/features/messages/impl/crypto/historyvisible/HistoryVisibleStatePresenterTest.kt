@@ -22,18 +22,15 @@ class HistoryVisibleStatePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-@Test
-fun `present - initial with room shared, unencrypted`() = runTest {
-    val room = FakeJoinedRoom()
-    room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, isEncrypted = false))
-    val presenter = createHistoryVisibleStatePresenter(room)
-    presenter.test {
-        val initialState = awaitItem()
-        assertThat(initialState.showAlert).isFalse()
-        val nextState = awaitItem()
-        assertThat(nextState.showAlert).isFalse()
+    @Test
+    fun `present - initial with room shared, unencrypted`() = runTest {
+        val room = FakeJoinedRoom()
+        room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, isEncrypted = false))
+        val presenter = createHistoryVisibleStatePresenter(room)
+        presenter.test {
+            assertThat(awaitItem().showAlert).isFalse()
+        }
     }
-}
 
     @Test
     fun `present - initial with room joined, encrypted`() = runTest {
@@ -41,10 +38,7 @@ fun `present - initial with room shared, unencrypted`() = runTest {
         room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Joined, isEncrypted = false))
         val presenter = createHistoryVisibleStatePresenter(room)
         presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.showAlert).isFalse()
-            val nextState = awaitItem()
-            assertThat(nextState.showAlert).isFalse()
+            assertThat(awaitItem().showAlert).isFalse()
         }
     }
 
@@ -86,9 +80,6 @@ fun `present - initial with room shared, unencrypted`() = runTest {
         )
 
         presenter.test {
-            // initial state
-            assertThat(awaitItem().showAlert).isFalse()
-
             // emitted state from room info assignment
             assertThat(awaitItem().showAlert).isFalse()
 
