@@ -22,7 +22,6 @@ class HistoryVisibleStatePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-
 @Test
 fun `present - initial with room shared, unencrypted`() = runTest {
     val room = FakeJoinedRoom()

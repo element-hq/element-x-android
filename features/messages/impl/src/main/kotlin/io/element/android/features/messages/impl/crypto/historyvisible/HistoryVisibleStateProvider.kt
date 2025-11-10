@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.crypto.historyvisible
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 
 class HistoryVisibleStateProvider : PreviewParameterProvider<HistoryVisibleState> {
     override val values: Sequence<HistoryVisibleState>
