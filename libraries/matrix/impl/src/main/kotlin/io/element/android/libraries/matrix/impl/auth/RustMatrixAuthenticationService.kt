@@ -282,7 +282,7 @@ class RustMatrixAuthenticationService(
                     sessionPaths = emptySessionPaths,
                     qrCodeData = sdkQrCodeLoginData,
                 )
-                client.loginWithQrCode(
+                client.newLoginWithQrCodeHandler(
                     oidcConfiguration = oidcConfiguration,
                 ).use {
                     it.scan(
