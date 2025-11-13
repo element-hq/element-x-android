@@ -89,7 +89,7 @@ fun RoomSelectView(
     fun onBackButton(state: RoomSelectState) {
         if (state.isSearchActive) {
             state.eventSink(RoomSelectEvents.ToggleSearchActive)
-        } else {
+        } else if (canHandleBack) {
             canHandleBack = false
             onDismiss()
         }
@@ -109,7 +109,10 @@ fun RoomSelectView(
                     RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                 },
                 navigationIcon = {
-                    BackButton(onClick = { onBackButton(state) })
+                    BackButton(
+                        enabled = canHandleBack,
+                        onClick = { onBackButton(state) }
+                    )
                 },
                 actions = {
                     TextButton(
