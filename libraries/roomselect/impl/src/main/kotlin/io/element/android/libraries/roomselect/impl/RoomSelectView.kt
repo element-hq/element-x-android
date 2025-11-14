@@ -25,6 +25,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -81,15 +85,20 @@ fun RoomSelectView(
         )
     }
 
+    var canHandleBack by remember { mutableStateOf(true) }
     fun onBackButton(state: RoomSelectState) {
         if (state.isSearchActive) {
             state.eventSink(RoomSelectEvents.ToggleSearchActive)
-        } else {
+        } else if (canHandleBack) {
+            canHandleBack = false
             onDismiss()
         }
     }
 
-    BackHandler(onBack = { onBackButton(state) })
+    BackHandler(
+        enabled = canHandleBack,
+        onBack = { onBackButton(state) }
+    )
 
     Scaffold(
         modifier = modifier,
@@ -100,7 +109,10 @@ fun RoomSelectView(
                     RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                 },
                 navigationIcon = {
-                    BackButton(onClick = { onBackButton(state) })
+                    BackButton(
+                        enabled = canHandleBack,
+                        onClick = { onBackButton(state) }
+                    )
                 },
                 actions = {
                     TextButton(

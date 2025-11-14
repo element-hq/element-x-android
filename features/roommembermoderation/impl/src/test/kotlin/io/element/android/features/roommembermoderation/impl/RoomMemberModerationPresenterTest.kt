@@ -291,7 +291,7 @@ class RoomMemberModerationPresenterTest {
                 )
             )
             skipItems(2)
-            initialState.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser)
+            initialState.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser("Reason"))
             skipItems(1)
             val loadingState = awaitState()
             assertThat(loadingState.unbanUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)

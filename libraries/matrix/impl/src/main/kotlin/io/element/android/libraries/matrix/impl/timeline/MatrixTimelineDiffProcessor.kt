@@ -8,9 +8,10 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
+import androidx.compose.ui.util.fastForEach
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
-import kotlinx.coroutines.flow.Flow
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
@@ -21,58 +22,60 @@ import timber.log.Timber
 
 internal class MatrixTimelineDiffProcessor(
     private val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>>,
-    private val timelineItemFactory: MatrixTimelineItemMapper,
+    private val membershipChangeEventReceivedFlow: MutableSharedFlow<Unit>,
+    private val syncedEventReceivedFlow: MutableSharedFlow<Unit>,
+    private val timelineItemMapper: MatrixTimelineItemMapper,
 ) {
     private val mutex = Mutex()
 
-    private val _membershipChangeEventReceived = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-    val membershipChangeEventReceived: Flow<Unit> = _membershipChangeEventReceived
-
     suspend fun postDiffs(diffs: List<TimelineDiff>) {
-        updateTimelineItems {
+        mutex.withLock {
             Timber.v("Update timeline items from postDiffs (with ${diffs.size} items) on ${Thread.currentThread()}")
-            diffs.forEach { diff ->
-                applyDiff(diff)
+            val result = processDiffs(diffs)
+            timelineItems.emit(result.items())
+            if (result.hasNewEventsFromSync) {
+                syncedEventReceivedFlow.emit(Unit)
+            }
+            if (result.hasMembershipChangeEventFromSync) {
+                membershipChangeEventReceivedFlow.emit(Unit)
             }
         }
     }
 
-    private suspend fun updateTimelineItems(block: MutableList<MatrixTimelineItem>.() -> Unit) =
-        mutex.withLock {
-            val mutableTimelineItems = if (timelineItems.replayCache.isNotEmpty()) {
-                timelineItems.first().toMutableList()
-            } else {
-                mutableListOf()
-            }
-            block(mutableTimelineItems)
-            timelineItems.tryEmit(mutableTimelineItems)
+    private suspend fun processDiffs(diffs: List<TimelineDiff>): DiffingResult {
+        val timelineItems = if (timelineItems.replayCache.isNotEmpty()) {
+            timelineItems.first()
+        } else {
+            emptyList()
         }
+        val result = DiffingResult(timelineItems)
+        diffs.forEach { diff ->
+            result.applyDiff(diff)
+        }
+        return result
+    }
 
-    private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
+    private fun DiffingResult.applyDiff(diff: TimelineDiff) {
         when (diff) {
             is TimelineDiff.Append -> {
-                val items = diff.values.map { it.asMatrixTimelineItem() }
-                addAll(items)
+                diff.values.fastForEach { item ->
+                    add(item.map())
+                }
             }
             is TimelineDiff.PushBack -> {
-                val item = diff.value.asMatrixTimelineItem()
-                if (item is MatrixTimelineItem.Event && item.event.content is RoomMembershipContent) {
-                    // TODO - This is a temporary solution to notify the room screen about membership changes
-                    // Ideally, this should be implemented by the Rust SDK
-                    _membershipChangeEventReceived.tryEmit(Unit)
-                }
+                val item = diff.value.map()
                 add(item)
             }
             is TimelineDiff.PushFront -> {
-                val item = diff.value.asMatrixTimelineItem()
+                val item = diff.value.map()
                 add(0, item)
             }
             is TimelineDiff.Set -> {
-                val item = diff.value.asMatrixTimelineItem()
+                val item = diff.value.map()
                 set(diff.index.toInt(), item)
             }
             is TimelineDiff.Insert -> {
-                val item = diff.value.asMatrixTimelineItem()
+                val item = diff.value.map()
                 add(diff.index.toInt(), item)
             }
             is TimelineDiff.Remove -> {
@@ -80,25 +83,91 @@ internal class MatrixTimelineDiffProcessor(
             }
             is TimelineDiff.Reset -> {
                 clear()
-                val items = diff.values.map { it.asMatrixTimelineItem() }
-                addAll(items)
+                diff.values.fastForEach { item ->
+                    add(item.map())
+                }
             }
             TimelineDiff.PopFront -> {
-                removeFirstOrNull()
+                removeFirst()
             }
             TimelineDiff.PopBack -> {
-                removeLastOrNull()
+                removeLast()
             }
             TimelineDiff.Clear -> {
                 clear()
             }
             is TimelineDiff.Truncate -> {
-                subList(diff.length.toInt(), size).clear()
+                truncate(diff.length.toInt())
             }
         }
     }
 
-    private fun TimelineItem.asMatrixTimelineItem(): MatrixTimelineItem {
-        return timelineItemFactory.map(this)
+    private fun TimelineItem.map(): MatrixTimelineItem {
+        return timelineItemMapper.map(this)
+    }
+}
+
+private class DiffingResult(initialItems: List<MatrixTimelineItem>) {
+    private val items = initialItems.toMutableList()
+    var hasNewEventsFromSync: Boolean = false
+        private set
+    var hasMembershipChangeEventFromSync: Boolean = false
+        private set
+
+    fun items(): List<MatrixTimelineItem> = items
+
+    fun add(item: MatrixTimelineItem) {
+        processItem(item)
+        items.add(item)
+    }
+
+    fun add(index: Int, item: MatrixTimelineItem) {
+        processItem(item)
+        items.add(index, item)
+    }
+
+    fun set(index: Int, item: MatrixTimelineItem) {
+        processItem(item)
+        items[index] = item
+    }
+
+    fun removeAt(index: Int) {
+        items.removeAt(index)
+    }
+
+    fun removeFirst() {
+        items.removeFirstOrNull()
+    }
+
+    fun removeLast() {
+        items.removeLastOrNull()
+    }
+
+    fun truncate(length: Int) {
+        items.subList(length, items.size).clear()
+    }
+
+    fun clear() {
+        items.clear()
+    }
+
+    private fun processItem(item: MatrixTimelineItem) {
+        if (skipProcessing()) return
+        when (item) {
+            is MatrixTimelineItem.Event -> {
+                if (item.event.origin == TimelineItemEventOrigin.SYNC) {
+                    hasNewEventsFromSync = true
+                    when (item.event.content) {
+                        is RoomMembershipContent -> hasMembershipChangeEventFromSync = true
+                        else -> Unit
+                    }
+                }
+            }
+            else -> Unit
+        }
+    }
+
+    private fun skipProcessing(): Boolean {
+        return hasNewEventsFromSync && hasMembershipChangeEventFromSync
     }
 }

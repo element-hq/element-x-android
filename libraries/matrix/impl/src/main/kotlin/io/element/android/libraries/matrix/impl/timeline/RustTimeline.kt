@@ -81,15 +81,17 @@ private const val PAGINATION_SIZE = 50
 class RustTimeline(
     private val inner: InnerTimeline,
     override val mode: Timeline.Mode,
-    systemClock: SystemClock,
+    private val systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val roomContentForwarder: RoomContentForwarder,
-    onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val _timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
         MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
+
+    private val _membershipChangeEventReceived = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    private val _onSyncedEventReceived: MutableSharedFlow<Unit> = MutableSharedFlow(extraBufferCapacity = 1)
 
     private val timelineEventContentMapper = TimelineEventContentMapper()
     private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
@@ -99,18 +101,19 @@ class RustTimeline(
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
         eventTimelineItemMapper = EventTimelineItemMapper(
             contentMapper = timelineEventContentMapper
-        )
+        ),
     )
     private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
         timelineItems = _timelineItems,
-        timelineItemFactory = timelineItemMapper,
+        membershipChangeEventReceivedFlow = _membershipChangeEventReceived,
+        syncedEventReceivedFlow = _onSyncedEventReceived,
+        timelineItemMapper = timelineItemMapper,
     )
     private val timelineItemsSubscriber = TimelineItemsSubscriber(
         timeline = inner,
         timelineCoroutineScope = coroutineScope,
         timelineDiffProcessor = timelineDiffProcessor,
         dispatcher = dispatcher,
-        onNewSyncedEvent = onNewSyncedEvent,
     )
 
     private val roomBeginningPostProcessor = RoomBeginningPostProcessor(mode)
@@ -152,7 +155,13 @@ class RustTimeline(
             .launchIn(this)
     }
 
-    override val membershipChangeEventReceived: Flow<Unit> = timelineDiffProcessor.membershipChangeEventReceived
+    override val membershipChangeEventReceived: Flow<Unit> = _membershipChangeEventReceived
+        .onStart { timelineItemsSubscriber.subscribeIfNeeded() }
+        .onCompletion { timelineItemsSubscriber.unsubscribeIfNeeded() }
+
+    override val onSyncedEventReceived: Flow<Unit> = _onSyncedEventReceived
+        .onStart { timelineItemsSubscriber.subscribeIfNeeded() }
+        .onCompletion { timelineItemsSubscriber.unsubscribeIfNeeded() }
 
     override suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {

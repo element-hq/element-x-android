@@ -25,6 +25,7 @@ import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.rolesandpermissions.impl.RoomMemberListDataSource
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.di.annotations.RoomCoroutineScope
@@ -193,37 +194,27 @@ class ChangeRolesPresenter(
         selectedUsers: MutableState<ImmutableList<MatrixUser>>,
         saveState: MutableState<AsyncAction<Boolean>>,
     ) = launch {
-        saveState.value = AsyncAction.Loading
-
-        val toAdd = selectedUsers.value - usersWithRole
-        val toRemove = usersWithRole - selectedUsers.value
-
-        val changes: List<UserRoleChange> = buildList {
-            for (selectedUser in toAdd) {
-                analyticsService.capture(RoomModeration(RoomModeration.Action.ChangeMemberRole, role.toAnalyticsMemberRole()))
-                add(UserRoleChange(selectedUser.userId, role))
+        runUpdatingState(saveState) {
+            val toAdd = selectedUsers.value - usersWithRole
+            val toRemove = usersWithRole - selectedUsers.value
+            val changes: List<UserRoleChange> = buildList {
+                for (selectedUser in toAdd) {
+                    analyticsService.capture(RoomModeration(RoomModeration.Action.ChangeMemberRole, role.toAnalyticsMemberRole()))
+                    add(UserRoleChange(selectedUser.userId, role))
+                }
+                for (selectedUser in toRemove) {
+                    analyticsService.capture(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.User))
+                    add(UserRoleChange(selectedUser.userId, RoomMember.Role.User))
+                }
             }
-            for (selectedUser in toRemove) {
-                analyticsService.capture(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.User))
-                add(UserRoleChange(selectedUser.userId, RoomMember.Role.User))
-            }
+            room.updateUsersRoles(changes).map { true }
         }
-
-        room.updateUsersRoles(changes)
-            .onFailure {
-                saveState.value = AsyncAction.Failure(it)
-            }
-            .onSuccess {
-                // Asynchronously reload the room members
-                launch { room.updateMembers() }
-                saveState.value = AsyncAction.Success(true)
-            }
     }
-}
 
-internal fun RoomMember.Role.toAnalyticsMemberRole(): RoomModeration.Role = when (this) {
-    is RoomMember.Role.Owner -> RoomModeration.Role.Administrator // TODO - distinguish creator from admin
-    RoomMember.Role.Admin -> RoomModeration.Role.Administrator
-    RoomMember.Role.Moderator -> RoomModeration.Role.Moderator
-    RoomMember.Role.User -> RoomModeration.Role.User
+    internal fun RoomMember.Role.toAnalyticsMemberRole(): RoomModeration.Role = when (this) {
+        is RoomMember.Role.Owner -> RoomModeration.Role.Administrator // TODO - distinguish creator from admin
+        RoomMember.Role.Admin -> RoomModeration.Role.Administrator
+        RoomMember.Role.Moderator -> RoomModeration.Role.Moderator
+        RoomMember.Role.User -> RoomModeration.Role.User
+    }
 }

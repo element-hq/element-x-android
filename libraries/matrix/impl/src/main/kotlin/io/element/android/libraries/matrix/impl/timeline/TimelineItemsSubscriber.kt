@@ -12,13 +12,11 @@ import io.element.android.libraries.core.coroutine.childScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.rustcomponents.sdk.Timeline
-import uniffi.matrix_sdk_ui.EventItemOrigin
 
 /**
  * This class is responsible for subscribing to a timeline and post the items/diffs to the timelineDiffProcessor.
@@ -29,7 +27,6 @@ internal class TimelineItemsSubscriber(
     dispatcher: CoroutineDispatcher,
     private val timeline: Timeline,
     private val timelineDiffProcessor: MatrixTimelineDiffProcessor,
-    private val onNewSyncedEvent: () -> Unit,
 ) {
     private var subscriptionCount = 0
     private val mutex = Mutex()
@@ -44,9 +41,6 @@ internal class TimelineItemsSubscriber(
         if (subscriptionCount == 0) {
             timeline.timelineDiffFlow()
                 .onEach { diffs ->
-                    if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
-                        onNewSyncedEvent()
-                    }
                     timelineDiffProcessor.postDiffs(diffs)
                 }
                 .launchIn(coroutineScope)

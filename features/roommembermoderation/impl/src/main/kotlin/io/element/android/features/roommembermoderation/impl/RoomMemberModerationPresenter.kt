@@ -119,7 +119,7 @@ class RoomMemberModerationPresenter(
                 }
                 is InternalRoomMemberModerationEvents.DoUnbanUser -> {
                     selectedUser?.let {
-                        coroutineScope.unbanUser(it.userId, unbanUserAsyncAction)
+                        coroutineScope.unbanUser(it.userId, event.reason, unbanUserAsyncAction)
                     }
                     selectedUser = null
                 }
@@ -198,10 +198,14 @@ class RoomMemberModerationPresenter(
 
     private fun CoroutineScope.unbanUser(
         userId: UserId,
+        reason: String,
         unbanUserAction: MutableState<AsyncAction<Unit>>,
     ) = runActionAndWaitForMembershipChange(unbanUserAction) {
         analyticsService.capture(RoomModeration(RoomModeration.Action.UnbanMember))
-        room.unbanUser(userId = userId)
+        room.unbanUser(
+            userId = userId,
+            reason = reason.takeIf { it.isNotBlank() },
+        )
     }
 
     private fun <T> CoroutineScope.runActionAndWaitForMembershipChange(

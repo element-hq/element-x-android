@@ -40,7 +40,6 @@ import io.element.android.libraries.designsystem.components.async.rememberAsyncI
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.TextFieldDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -93,12 +92,13 @@ private fun RoomMemberAsyncActions(
                 TextFieldDialog(
                     title = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_title),
                     submitText = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_action),
+                    destructiveSubmit = true,
+                    minLines = 2,
                     onSubmit = { reason ->
                         state.eventSink(InternalRoomMemberModerationEvents.DoKickUser(reason = reason))
                     },
                     onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
-                    label = stringResource(id = CommonStrings.common_reason),
                     content = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_description),
                     value = "",
                 )
@@ -132,12 +132,13 @@ private fun RoomMemberAsyncActions(
                 TextFieldDialog(
                     title = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_title),
                     submitText = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_action),
+                    destructiveSubmit = true,
+                    minLines = 2,
                     onSubmit = { reason ->
                         state.eventSink(InternalRoomMemberModerationEvents.DoBanUser(reason = reason))
                     },
                     onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
-                    label = stringResource(id = CommonStrings.common_reason),
                     content = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_description),
                     value = "",
                 )
@@ -167,18 +168,22 @@ private fun RoomMemberAsyncActions(
         }
         when (val action = state.unbanUserAsyncAction) {
             is AsyncAction.Confirming -> {
-                ConfirmationDialog(
+                TextFieldDialog(
                     title = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_title),
-                    content = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_description),
                     submitText = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_action),
-                    onSubmitClick = {
+                    destructiveSubmit = true,
+                    minLines = 2,
+                    onSubmit = { reason ->
                         val userDisplayName = selectedUser?.getBestName().orEmpty()
                         asyncIndicatorState.enqueue {
                             AsyncIndicator.Loading(text = stringResource(R.string.screen_bottom_sheet_manage_room_member_unbanning_user, userDisplayName))
                         }
-                        state.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser)
+                        state.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser(reason = reason))
                     },
-                    onDismiss = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                    placeholder = stringResource(id = CommonStrings.common_reason),
+                    content = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_description),
+                    value = "",
                 )
             }
             is AsyncAction.Failure -> {

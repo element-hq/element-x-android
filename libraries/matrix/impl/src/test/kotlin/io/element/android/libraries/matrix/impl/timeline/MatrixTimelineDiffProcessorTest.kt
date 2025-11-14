@@ -169,10 +169,12 @@ class MatrixTimelineDiffProcessorTest {
 }
 
 internal fun TestScope.createMatrixTimelineDiffProcessor(
-    timelineItems: MutableSharedFlow<List<MatrixTimelineItem>>,
-): MatrixTimelineDiffProcessor {
+    timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> = MutableSharedFlow(),
+    membershipChangeEventReceivedFlow: MutableSharedFlow<Unit> = MutableSharedFlow(),
+    syncedEventReceivedFlow: MutableSharedFlow<Unit> = MutableSharedFlow(),
+    ): MatrixTimelineDiffProcessor {
     val timelineEventContentMapper = TimelineEventContentMapper()
-    val timelineItemMapper = MatrixTimelineItemMapper(
+    val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = { _ -> Result.success(Unit) },
         coroutineScope = this,
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
@@ -182,6 +184,8 @@ internal fun TestScope.createMatrixTimelineDiffProcessor(
     )
     return MatrixTimelineDiffProcessor(
         timelineItems = timelineItems,
-        timelineItemFactory = timelineItemMapper,
+        membershipChangeEventReceivedFlow = membershipChangeEventReceivedFlow,
+        syncedEventReceivedFlow = syncedEventReceivedFlow,
+        timelineItemMapper = timelineItemFactory,
     )
 }
