@@ -14,31 +14,35 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import kotlinx.coroutines.launch
 
 @Inject
 class HistoryVisibleStatePresenter(
+    private val featureFlagService: FeatureFlagService,
     private val repository: HistoryVisibleAcknowledgementRepository,
     private val room: JoinedRoom,
 ) : Presenter<HistoryVisibleState> {
     @Composable
     override fun present(): HistoryVisibleState {
+        val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.EnableKeyShareOnInvite).collectAsState(initial = false)
         val roomInfo by room.roomInfoFlow.collectAsState()
-        // Implicitly acknowledge the initial event to avoid flashes in UI.
+        // Implicitly assume the alert is initially acknowledged to avoid flashes in UI.
         val acknowledged by repository.hasAcknowledged(room.roomId).collectAsState(initial = true)
 
         val coroutineScope = rememberCoroutineScope()
 
         LaunchedEffect(roomInfo.historyVisibility) {
-            if (roomInfo.historyVisibility == RoomHistoryVisibility.Joined && acknowledged) {
+            if (isFeatureEnabled && roomInfo.historyVisibility == RoomHistoryVisibility.Joined && acknowledged) {
                 repository.setAcknowledged(room.roomId, false)
             }
         }
 
         return HistoryVisibleState(
-            showAlert = roomInfo.historyVisibility != RoomHistoryVisibility.Joined && roomInfo.isEncrypted == true && !acknowledged,
+            showAlert = isFeatureEnabled && roomInfo.historyVisibility != RoomHistoryVisibility.Joined && roomInfo.isEncrypted == true && !acknowledged,
             eventSink = { event ->
                 when (event) {
                     is HistoryVisibleEvent.Acknowledge ->
