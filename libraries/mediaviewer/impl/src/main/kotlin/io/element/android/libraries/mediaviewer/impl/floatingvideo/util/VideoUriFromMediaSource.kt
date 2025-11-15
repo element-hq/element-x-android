@@ -7,15 +7,17 @@
 
 package io.element.android.libraries.mediaviewer.impl.floatingvideo.util
 
+
 import android.net.Uri
 import androidx.core.net.toUri
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerPageData
 import timber.log.Timber
 import java.io.File
 
-fun MediaSource.getVideoUriFromMediaSource () : Uri{
+fun MediaSource.getUri(): Uri {
     return try {
-        val url = this.url
         when {
             url.startsWith("http://") || url.startsWith("https://") -> {
                 // Remote URL
@@ -27,7 +29,7 @@ fun MediaSource.getVideoUriFromMediaSource () : Uri{
             }
             url.startsWith("/") -> {
                 // Local file path, convert to file URI
-                Uri.fromFile(File(url))
+                File(url).toUri()
             }
             url.startsWith("content://") -> {
                 // Content URI (from MediaStore, etc.)
@@ -42,4 +44,20 @@ fun MediaSource.getVideoUriFromMediaSource () : Uri{
         Timber.tag("Uri Parsing").e(e)
         Uri.EMPTY
     }
+}
+
+//    currentVideoData?.let { data ->
+//        resolvedUri = when (val downloadedState = data.downloadedMedia.value) {
+//            is AsyncData.Success -> downloadedState.data.uri
+//            else -> data.mediaSource.getUri()
+//        }
+//    }
+//MediaViewerPageData.MediaViewerData?
+fun MediaViewerPageData.MediaViewerData?.getUri(): Uri {
+    return this?.let { data ->
+        when (val downloadedState = data.downloadedMedia.value) {
+            is AsyncData.Success -> downloadedState.data.uri
+            else -> data.mediaSource.getUri()
+        }
+    } ?: Uri.EMPTY
 }

@@ -210,9 +210,14 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
                     },
                     floatingView = floatingView,
                     isMaximized = isMaximized,
-                    currentVideoData = currentVideoData,
-                    windowManager = windowManager,
-                    windowLayoutParams = windowLayoutParams
+                    uri = currentVideoData.getUri(),
+                   // some other thing
+                    movePosition = { x, y ->
+                        movePosition(x = x, y = y, windowLayoutParams = windowLayoutParams, floatingView = floatingView, windowManager = windowManager)
+                    }
+//                    currentVideoData = currentVideoData,
+//                    windowManager = windowManager,
+//                    windowLayoutParams = windowLayoutParams
                 )
             }
         }

@@ -31,3 +31,28 @@ fun WindowManager?.getScreenHeight() : Int {
         displayMetrics.heightPixels
     }
 }
+
+fun updateWindowSize(aspectRatio: Float, isMaximized: Boolean, windowManager: WindowManager?, windowLayoutParams: WindowManager.LayoutParams, floatingView: View?) {
+    val widthFrac = if (aspectRatio > 1f) 0.6f else 0.3f
+    val width = if (isMaximized) {
+        (windowManager.getScreenWidth() * widthFrac).toInt()
+    } else {
+        (windowManager.getScreenWidth() * 0.9f).toInt()
+    }
+    val height = (width / aspectRatio).toInt()
+
+
+    windowLayoutParams.width = width
+    windowLayoutParams.height = height
+    windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+    windowManager?.updateViewLayout(floatingView, windowLayoutParams)
+}
+
+fun movePosition(x: Int, y: Int, windowLayoutParams: WindowManager.LayoutParams, floatingView: View?, windowManager: WindowManager?) {
+    val newX = windowLayoutParams.x + x
+    val newY = windowLayoutParams.y + y
+    windowLayoutParams.x = newX
+    windowLayoutParams.y = newY
+    windowManager?.updateViewLayout(floatingView, windowLayoutParams)
+}
