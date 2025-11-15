@@ -43,6 +43,9 @@ import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScree
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenWidth
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getUri
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.movePosition
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.updateWindowSize
 
 class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, SavedStateRegistryOwner {
     private var windowManager: WindowManager? = null
@@ -208,7 +211,16 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
                         removeFloatingView()
                         stopSelf()
                     },
-                    floatingView = floatingView,
+                    updateAspectRatio = {
+                        updateWindowSize(
+                            aspectRatio = it,
+                            isMaximized = isMaximized,
+                            floatingView = floatingView,
+                            windowManager = windowManager,
+                            windowLayoutParams = windowLayoutParams
+                        )
+                    },
+//                    floatingView = floatingView,
                     isMaximized = isMaximized,
                     uri = currentVideoData.getUri(),
                    // some other thing
@@ -259,6 +271,7 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         viewModelStore.clear()
     }
+
 
     private fun toggleFullScreen(aspectRatio: Float) {
         val layoutParams = windowLayoutParams

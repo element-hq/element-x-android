@@ -41,60 +41,51 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenWidth
-import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getVideoUriFromMediaSource
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getUri
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerPageData
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun FloatingVideoOverlay(
+    uri : Uri = Uri.EMPTY ,
     onClose: () -> Unit,
-    onToggleFullScreen: (Float) -> Unit,
-    currentVideoData : MediaViewerPageData.MediaViewerData?,
+    onToggleFullScreen: () -> Unit,
+    updateAspectRatio: (Float) -> Unit,
+    movePosition: (Int , Int) -> Unit,
+//    currentVideoData : MediaViewerPageData.MediaViewerData?,
     isMaximized : Boolean,
-    windowManager : WindowManager?,
-    windowLayoutParams : WindowManager.LayoutParams,
-    floatingView : View?,
-    onCompleted : () -> Unit
+//    windowManager : WindowManager?,
+//    windowLayoutParams : WindowManager.LayoutParams,
+//    floatingView : View?,
+    onCompleted : () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var currentAspectRatio by remember { mutableFloatStateOf(16f / 9f) }
     val videoViewRef = remember { mutableStateOf<VideoView?>(null) }
 
 
 
-    var resolvedUri: Uri = Uri.EMPTY
-    currentVideoData?.let { data ->
-        resolvedUri = when (val downloadedState = data.downloadedMedia.value) {
-            is AsyncData.Success -> downloadedState.data.uri
-            else -> data.mediaSource.getVideoUriFromMediaSource()
-        }
-    }
+    var resolvedUri: Uri by remember { mutableStateOf(uri) }
+//    = Uri.EMPTY
+//    currentVideoData?.let { data ->
+//        resolvedUri = when (val downloadedState = data.downloadedMedia.value) {
+//            is AsyncData.Success -> downloadedState.data.uri
+//            else -> data.mediaSource.getUri()
+//        }
+//    }
 
     // Function to update window size directly
-    fun updateWindowSize(aspectRatio: Float) {
-        val widthFrac = if (aspectRatio > 1f) 0.6f else 0.3f
-        val width = if (isMaximized) {
-            (windowManager.getScreenWidth() * widthFrac).toInt()
-        } else {
-            (windowManager.getScreenWidth() * 0.9f).toInt()
-        }
-        val height = (width / aspectRatio).toInt()
 
-
-        windowLayoutParams.width = width
-        windowLayoutParams.height = height
-        windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        windowManager?.updateViewLayout(floatingView, windowLayoutParams)
-    }
 
     // Initial window size (16:9)
     LaunchedEffect(Unit) {
-        updateWindowSize(16f / 9f)
+//        updateWindowSize(16f / 9f)
+        updateAspectRatio(16f / 9f)
     }
 
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = Color.Black).pointerInput(Unit) {
                 var dragStarted = false
@@ -132,7 +123,8 @@ fun FloatingVideoOverlay(
                             // Store the aspect ratio and update window size
                             android.os.Handler(android.os.Looper.getMainLooper()).post {
                                 currentAspectRatio = newAspectRatio
-                                updateWindowSize(newAspectRatio)
+                                updateAspectRatio(newAspectRatio)
+//                                updateWindowSize(newAspectRatio)
                             }
                         }
                         start()
@@ -159,11 +151,8 @@ fun FloatingVideoOverlay(
                 .pointerInput(Unit) {
                     detectDragGestures { change, dragAmount ->
                         change.consume()
-                        val newX = windowLayoutParams.x + dragAmount.x.toInt()
-                        val newY = windowLayoutParams.y + dragAmount.y.toInt()
-                        windowLayoutParams.x = newX
-                        windowLayoutParams.y = newY
-                        windowManager?.updateViewLayout(floatingView, windowLayoutParams)
+                        movePosition( dragAmount.x.toInt() , dragAmount.y.toInt() )
+
                     }
                 }
         )
@@ -185,7 +174,8 @@ fun FloatingVideoOverlay(
         ) {
             IconButton(
                 onClick = {
-                    onToggleFullScreen ( currentAspectRatio )
+                    onToggleFullScreen()
+                    updateAspectRatio(currentAspectRatio)
                 },
                 //it seems the CompoundIcons.Expand() is bigger than the CompoundIcons.Close(),
                 modifier = Modifier.size(28.dp)

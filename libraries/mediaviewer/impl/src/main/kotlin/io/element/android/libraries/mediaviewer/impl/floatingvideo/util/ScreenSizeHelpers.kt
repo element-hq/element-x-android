@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.floatingvideo.util
 
 import android.os.Build
 import android.util.DisplayMetrics
+import android.view.View
 import android.view.WindowManager
 
 fun WindowManager?.getScreenWidth() : Int {
