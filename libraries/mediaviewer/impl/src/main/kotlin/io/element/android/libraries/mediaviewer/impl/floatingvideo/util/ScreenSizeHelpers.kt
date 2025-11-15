@@ -12,7 +12,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 
-fun WindowManager?.getScreenWidth() : Int {
+fun WindowManager?.getScreenWidth(): Int {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         val windowMetrics = this?.currentWindowMetrics
         windowMetrics?.bounds?.width() ?: 0
@@ -22,7 +22,8 @@ fun WindowManager?.getScreenWidth() : Int {
         displayMetrics.widthPixels
     }
 }
-fun WindowManager?.getScreenHeight() : Int {
+
+fun WindowManager?.getScreenHeight(): Int {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         val windowMetrics = this?.currentWindowMetrics
         windowMetrics?.bounds?.height() ?: 0
