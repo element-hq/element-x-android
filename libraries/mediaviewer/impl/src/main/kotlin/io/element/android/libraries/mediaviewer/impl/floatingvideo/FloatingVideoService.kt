@@ -24,10 +24,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.setViewTreeLifecycleOwner
-import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerPageData
 import timber.log.Timber
 import androidx.savedstate.SavedStateRegistry
@@ -37,7 +34,6 @@ import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import androidx.core.net.toUri
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.ui.FloatingVideoOverlay
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenHeight
-import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenWidth
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getUri
@@ -46,7 +42,7 @@ import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.minimize
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.movePosition
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.updateWindowSize
 
-class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, SavedStateRegistryOwner {
+class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     private var windowManager: WindowManager? = null
     private var floatingView: View? = null
     private var videoView: VideoView? = null
@@ -83,11 +79,9 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
                 return
             }
 
-            // Generate unique ID for this video session
-            val videoId = "floating_video_${System.currentTimeMillis()}"
 
             // Store the video data in repository via DI
-            context.bindings<FloatingVideoServiceBindings>().videoDataRepository().storeVideoData(videoId, videoData)
+            val videoId = context.bindings<FloatingVideoServiceBindings>().videoDataRepository().storeVideoData(videoData)
 
             val intent = Intent(context, FloatingVideoService::class.java).apply {
                 action = ACTION_START_FLOATING
@@ -102,7 +96,6 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    override val viewModelStore = ViewModelStore()
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val savedStateRegistryController = SavedStateRegistryController.create(this)
     override val lifecycle: Lifecycle
@@ -194,7 +187,6 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
 
         val composeView = ComposeView(this).apply {
             setViewTreeLifecycleOwner(this@FloatingVideoService)
-            setViewTreeViewModelStoreOwner(this@FloatingVideoService)
             setViewTreeSavedStateRegistryOwner(this@FloatingVideoService)
             setContent {
                 FloatingVideoOverlay(
@@ -258,14 +250,13 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
         onVideoComplete()
     }
 
-    private fun dpToPx(dp: Int): Int {
+    private  fun dpToPx(dp: Int): Int {
         return (dp * resources.displayMetrics.density).toInt()
     }
 
     private fun onVideoComplete() {
         removeFloatingView()
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-        viewModelStore.clear()
     }
 
     private fun minimizeWindow(aspectRatio: Float) {

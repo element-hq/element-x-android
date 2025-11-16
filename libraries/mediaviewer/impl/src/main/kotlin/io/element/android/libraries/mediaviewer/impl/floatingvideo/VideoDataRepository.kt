@@ -11,6 +11,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerPageData
+import java.util.UUID
 
 @SingleIn(AppScope::class)
 @Inject
@@ -18,8 +19,10 @@ class VideoDataRepository {
 
     private val videoDataMap = mutableMapOf<String, MediaViewerPageData.MediaViewerData>()
 
-    fun storeVideoData(videoId: String, data: MediaViewerPageData.MediaViewerData) {
-        videoDataMap[videoId] = data
+    fun storeVideoData(data: MediaViewerPageData.MediaViewerData) : String{
+        val id = UUID.randomUUID().toString()
+        videoDataMap[id] = data
+        return id
     }
 
     fun getVideoData(videoId: String): MediaViewerPageData.MediaViewerData? {

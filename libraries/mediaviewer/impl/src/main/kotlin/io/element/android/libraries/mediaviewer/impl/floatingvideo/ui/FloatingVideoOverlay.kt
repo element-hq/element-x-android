@@ -8,8 +8,6 @@
 package io.element.android.libraries.mediaviewer.impl.floatingvideo.ui
 
 import android.net.Uri
-import android.view.View
-import android.view.WindowManager
 import android.widget.VideoView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -37,31 +35,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenWidth
-import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getUri
-import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerPageData
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun FloatingVideoOverlay(
-    uri : Uri = Uri.EMPTY ,
+    modifier: Modifier = Modifier,
+    uri: Uri = Uri.EMPTY,
     onClose: () -> Unit,
     onToggleFullScreen: (Float) -> Unit,
     updateAspectRatio: (Float) -> Unit,
-    movePosition: (Int , Int) -> Unit,
-    onCompleted : () -> Unit,
-    modifier: Modifier = Modifier
+    movePosition: (Int, Int) -> Unit,
+    onCompleted: () -> Unit,
 ) {
     var currentAspectRatio by remember { mutableFloatStateOf(16f / 9f) }
     val videoViewRef = remember { mutableStateOf<VideoView?>(null) }
 
-
-
     var resolvedUri: Uri by remember { mutableStateOf(uri) }
-
 
     // Initial window size (16:9)
     LaunchedEffect(Unit) {
@@ -71,26 +62,27 @@ fun FloatingVideoOverlay(
 
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .background(color = Color.Black).pointerInput(Unit) {
-                var dragStarted = false
-                detectTapGestures(
-                    onPress = {
-                        dragStarted = false
-                    },
-                    onTap = {
-                        if (!dragStarted) {
-                            videoViewRef.value?.let { video ->
-                                if (video.isPlaying) {
-                                    video.pause()
-                                } else {
-                                    video.start()
+                .fillMaxSize()
+                .background(color = Color.Black)
+                .pointerInput(Unit) {
+                    var dragStarted = false
+                    detectTapGestures(
+                            onPress = {
+                                dragStarted = false
+                            },
+                            onTap = {
+                                if (!dragStarted) {
+                                    videoViewRef.value?.let { video ->
+                                        if (video.isPlaying) {
+                                            video.pause()
+                                        } else {
+                                            video.start()
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
-                )
-            }
+                    )
+                }
     ) {
         // Video layer
         AndroidView(
@@ -132,29 +124,29 @@ fun FloatingVideoOverlay(
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectDragGestures { change, dragAmount ->
-                        change.consume()
-                        movePosition( dragAmount.x.toInt() , dragAmount.y.toInt() )
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectDragGestures { change, dragAmount ->
+                            change.consume()
+                            movePosition(dragAmount.x.toInt(), dragAmount.y.toInt())
 
+                        }
                     }
-                }
         )
 
         Row(
             modifier = Modifier
-                .align(Alignment.TopCenter)
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                           Color.Black.copy(alpha = 0.6f),
-                            Color.Transparent
-                        )
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .background(
+                            brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                            Color.Black.copy(alpha = 0.6f),
+                                            Color.Transparent
+                                    )
+                            )
                     )
-                )
-                .padding(4.dp),
+                    .padding(4.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             IconButton(
