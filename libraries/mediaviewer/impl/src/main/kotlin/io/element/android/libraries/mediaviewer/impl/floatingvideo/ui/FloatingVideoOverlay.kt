@@ -49,14 +49,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun FloatingVideoOverlay(
     uri : Uri = Uri.EMPTY ,
     onClose: () -> Unit,
-    onToggleFullScreen: () -> Unit,
+    onToggleFullScreen: (Float) -> Unit,
     updateAspectRatio: (Float) -> Unit,
     movePosition: (Int , Int) -> Unit,
-//    currentVideoData : MediaViewerPageData.MediaViewerData?,
-    isMaximized : Boolean,
-//    windowManager : WindowManager?,
-//    windowLayoutParams : WindowManager.LayoutParams,
-//    floatingView : View?,
     onCompleted : () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -66,20 +61,10 @@ fun FloatingVideoOverlay(
 
 
     var resolvedUri: Uri by remember { mutableStateOf(uri) }
-//    = Uri.EMPTY
-//    currentVideoData?.let { data ->
-//        resolvedUri = when (val downloadedState = data.downloadedMedia.value) {
-//            is AsyncData.Success -> downloadedState.data.uri
-//            else -> data.mediaSource.getUri()
-//        }
-//    }
-
-    // Function to update window size directly
 
 
     // Initial window size (16:9)
     LaunchedEffect(Unit) {
-//        updateWindowSize(16f / 9f)
         updateAspectRatio(16f / 9f)
     }
 
@@ -174,15 +159,12 @@ fun FloatingVideoOverlay(
         ) {
             IconButton(
                 onClick = {
-                    onToggleFullScreen()
-                    updateAspectRatio(currentAspectRatio)
+                    onToggleFullScreen(currentAspectRatio)
                 },
-                //it seems the CompoundIcons.Expand() is bigger than the CompoundIcons.Close(),
                 modifier = Modifier.size(28.dp)
             ) {
                 Icon(
                     imageVector = CompoundIcons.Expand(),
-                    //action full screen needs to be added to CommonsString
                     contentDescription = stringResource(CommonStrings.a11y_expand_message_text_field),
                     tint = Color.White,
                     modifier = Modifier.padding(4.dp)

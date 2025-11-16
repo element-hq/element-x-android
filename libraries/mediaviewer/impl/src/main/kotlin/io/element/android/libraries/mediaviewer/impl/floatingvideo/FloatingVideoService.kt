@@ -11,12 +11,9 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.os.Build
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.provider.Settings
 import android.view.Gravity
 import android.view.View
@@ -44,6 +41,8 @@ import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScree
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getUri
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.maximizeWindowHelper
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.minimizeWindowHelper
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.movePosition
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.updateWindowSize
 
@@ -53,7 +52,7 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
     private var videoView: VideoView? = null
     private var currentVideoData: MediaViewerPageData.MediaViewerData? = null
     private var currentPosition: Long = 0L
-    private var isMaximized = true
+    private var isMinimized = true
 
     private lateinit var windowLayoutParams: WindowManager.LayoutParams
 
@@ -203,9 +202,12 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
                         removeFloatingView()
                         stopSelf()
                     },
-                    onToggleFullScreen = {
-                        Timber.tag("onToggleFullScreen").d(isMaximized.toString())
-                        this@FloatingVideoService.toggleFullScreen(it)
+                    onToggleFullScreen = {aspectRatio ->
+                        if (isMinimized) {
+                            maximizeWindow(aspectRatio)
+                        } else {
+                            minimizeWindow(aspectRatio)
+                        }
                     },
                     onCompleted = {
                         removeFloatingView()
@@ -214,22 +216,16 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
                     updateAspectRatio = {
                         updateWindowSize(
                             aspectRatio = it,
-                            isMaximized = isMaximized,
+                            isMinimized = isMinimized,
                             floatingView = floatingView,
                             windowManager = windowManager,
                             windowLayoutParams = windowLayoutParams
                         )
                     },
-//                    floatingView = floatingView,
-                    isMaximized = isMaximized,
                     uri = currentVideoData.getUri(),
-                   // some other thing
                     movePosition = { x, y ->
                         movePosition(x = x, y = y, windowLayoutParams = windowLayoutParams, floatingView = floatingView, windowManager = windowManager)
                     }
-//                    currentVideoData = currentVideoData,
-//                    windowManager = windowManager,
-//                    windowLayoutParams = windowLayoutParams
                 )
             }
         }
@@ -272,52 +268,22 @@ class FloatingVideoService : Service(), LifecycleOwner, ViewModelStoreOwner, Sav
         viewModelStore.clear()
     }
 
-
-    private fun toggleFullScreen(aspectRatio: Float) {
-        val layoutParams = windowLayoutParams
-        val wm = windowManager ?: return
-        val view = floatingView ?: return
-
-        isMaximized = !isMaximized
-
-        if (view.parent == null) return
-
-        val widthFrac = if (aspectRatio > 1f) 0.6f else 0.3f
-        val width = if (isMaximized) {
-            (windowManager.getScreenWidth() * widthFrac).toInt()
-        } else {
-            (windowManager.getScreenWidth() * 0.9f).toInt()
-        }
-        val height = (width / aspectRatio).toInt()
-
-
-
-
-        if (isMaximized) {
-            // Go full screen
-            val margin = dpToPx(24)
-            val screenWidth = Resources.getSystem().displayMetrics.widthPixels
-            layoutParams.width = screenWidth - margin * 2
-            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-            layoutParams.x = margin
-            layoutParams.y = margin
-        } else {
-            // Minimized
-            val scaledWidth = wm.getScreenWidth() * 0.3f
-            layoutParams.width = scaledWidth.toInt()
-            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-            layoutParams.x = 0
-            layoutParams.y = 0
-        }
-
-        windowLayoutParams.width = width
-        windowLayoutParams.height = height
-        windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        windowManager?.updateViewLayout(floatingView, windowLayoutParams)
-
-        Handler(Looper.getMainLooper()).post {
-            wm.updateViewLayout(view, layoutParams)
-        }
+    private fun minimizeWindow(aspectRatio: Float) {
+        isMinimized = true
+        minimizeWindowHelper(
+            aspectRatio = aspectRatio,
+            windowManager = windowManager,
+            windowLayoutParams = windowLayoutParams,
+            floatingView = floatingView
+        )
+    }
+    private fun maximizeWindow(aspectRatio: Float) {
+        isMinimized = false
+        maximizeWindowHelper(
+            aspectRatio = aspectRatio,
+            windowManager = windowManager,
+            windowLayoutParams = windowLayoutParams,
+            floatingView = floatingView
+        )
     }
 }
