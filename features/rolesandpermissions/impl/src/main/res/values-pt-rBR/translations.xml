@@ -3,14 +3,11 @@
   <string name="screen_room_change_permissions_administrators">"Somente administradores"</string>
   <string name="screen_room_change_permissions_ban_people">"Banir pessoas"</string>
   <string name="screen_room_change_permissions_delete_messages">"Remover mensagens"</string>
-  <string name="screen_room_change_permissions_everyone">"Todos"</string>
   <string name="screen_room_change_permissions_invite_people">"Convide pessoas e aceite solicitações de entrada"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderação de membros"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mensagens e conteúdo"</string>
   <string name="screen_room_change_permissions_moderators">"Administradores e moderadores"</string>
   <string name="screen_room_change_permissions_remove_people">"Remover pessoas e recusar solicitações de entrada"</string>
   <string name="screen_room_change_permissions_room_avatar">"Alterar avatar da sala"</string>
-  <string name="screen_room_change_permissions_room_details">"Detalhes da sala"</string>
   <string name="screen_room_change_permissions_room_name">"Alterar nome da sala"</string>
   <string name="screen_room_change_permissions_room_topic">"Alterar tópico da sala"</string>
   <string name="screen_room_change_permissions_send_messages">"Enviar mensagens"</string>
@@ -60,7 +57,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mensagens e conteúdo"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderadores"</string>
   <string name="screen_room_roles_and_permissions_owners">"Proprietários"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Permissões"</string>
   <string name="screen_room_roles_and_permissions_reset">"Redefinir permissões"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Depois de redefinir as permissões, você perderá as configurações atuais."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Redefinir permissões?"</string>

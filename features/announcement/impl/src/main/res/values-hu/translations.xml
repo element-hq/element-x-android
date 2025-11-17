@@ -7,4 +7,5 @@
   <string name="screen_space_announcement_item5">"Terek elhagyása"</string>
   <string name="screen_space_announcement_notice">"Terek szűrése, készítése és kezelése hamarosan érkezik."</string>
   <string name="screen_space_announcement_subtitle">"Üdvözöljük a tér béta verziójában! Ezzel az első verzióval a következőket teheti:"</string>
+  <string name="screen_space_announcement_title">"Bemutatkoznak a terek"</string>
 </resources>

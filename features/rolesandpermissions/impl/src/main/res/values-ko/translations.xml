@@ -3,14 +3,11 @@
   <string name="screen_room_change_permissions_administrators">"관리자 전용"</string>
   <string name="screen_room_change_permissions_ban_people">"사용자 차단"</string>
   <string name="screen_room_change_permissions_delete_messages">"메시지 삭제"</string>
-  <string name="screen_room_change_permissions_everyone">"모두"</string>
   <string name="screen_room_change_permissions_invite_people">"사람들을 초대하고 가입 요청을 수락합니다"</string>
-  <string name="screen_room_change_permissions_member_moderation">"회원 조정"</string>
   <string name="screen_room_change_permissions_messages_and_content">"메시지 및 콘텐츠"</string>
   <string name="screen_room_change_permissions_moderators">"관리자 및 중재자"</string>
   <string name="screen_room_change_permissions_remove_people">"사람들을 제거하고 가입 요청을 거부합니다"</string>
   <string name="screen_room_change_permissions_room_avatar">"방 아바타 변경"</string>
-  <string name="screen_room_change_permissions_room_details">"방 세부 정보"</string>
   <string name="screen_room_change_permissions_room_name">"방 이름 변경"</string>
   <string name="screen_room_change_permissions_room_topic">"방 화제 변경"</string>
   <string name="screen_room_change_permissions_send_messages">"메시지 보내기"</string>
@@ -59,7 +56,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"메시지 및 콘텐츠"</string>
   <string name="screen_room_roles_and_permissions_moderators">"중재자"</string>
   <string name="screen_room_roles_and_permissions_owners">"소유자"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"권한"</string>
   <string name="screen_room_roles_and_permissions_reset">"권한 재설정"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"권한을 재설정하면 현재 설정이 모두 삭제됩니다."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"권한을 재설정하시겠습니까?"</string>

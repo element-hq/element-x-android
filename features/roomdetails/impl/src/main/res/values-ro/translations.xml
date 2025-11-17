@@ -8,14 +8,11 @@
   <string name="screen_room_change_permissions_administrators">"Doar administratori"</string>
   <string name="screen_room_change_permissions_ban_people">"Interziceți persoane"</string>
   <string name="screen_room_change_permissions_delete_messages">"Ștergeți mesajele"</string>
-  <string name="screen_room_change_permissions_everyone">"Toți"</string>
   <string name="screen_room_change_permissions_invite_people">"Invitați persoane și acceptați cereri de alaturare"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderarea membrilor"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mesaje și conținut"</string>
   <string name="screen_room_change_permissions_moderators">"Administratori și moderatori"</string>
   <string name="screen_room_change_permissions_remove_people">"Îndepărtați persoane și refuzați cereri de alăturare"</string>
   <string name="screen_room_change_permissions_room_avatar">"Schimbați avatarul camerei"</string>
-  <string name="screen_room_change_permissions_room_details">"Detaliile camerei"</string>
   <string name="screen_room_change_permissions_room_name">"Schimbă numele camerei"</string>
   <string name="screen_room_change_permissions_room_topic">"Schimbați subiectul camerei"</string>
   <string name="screen_room_change_permissions_send_messages">"Trimiteți mesaje"</string>
@@ -111,7 +108,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mesaje și conținut"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatori"</string>
   <string name="screen_room_roles_and_permissions_owners">"Proprietari"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Permisiuni"</string>
   <string name="screen_room_roles_and_permissions_reset">"Resetați permisiunile"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"După ce resetați permisiunile, veți pierde setările curente."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Resetați permisiunile?"</string>
@@ -130,14 +126,12 @@ Nu recomandăm activarea criptării pentru camerele pe care oricine le poate gă
   <string name="screen_security_and_privacy_encryption_section_header">"Criptare"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Activați criptarea end-to-end"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Oricine poate găsi și alătura camerei"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Oricine"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Persoanele se pot alătura numai dacă invitate"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Doar pe bază de invitație"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Acces la cameră"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Spațiile nu sunt momentan suportate."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Membrii spațiului"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Veți avea nevoie de o adresă de cameră pentru a o face vizibilă în directorul de camere."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Adresa camerei"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Permiteți găsirea acestei camere prin căutarea în directorul de camere publice al %1$s"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Vizibilă în directorul de camere publice"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Oricine"</string>

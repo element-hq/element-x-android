@@ -3,14 +3,11 @@
   <string name="screen_room_change_permissions_administrators">"Doar administratori"</string>
   <string name="screen_room_change_permissions_ban_people">"Interziceți persoane"</string>
   <string name="screen_room_change_permissions_delete_messages">"Ștergeți mesajele"</string>
-  <string name="screen_room_change_permissions_everyone">"Toți"</string>
   <string name="screen_room_change_permissions_invite_people">"Invitați persoane și acceptați cereri de alaturare"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderarea membrilor"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mesaje și conținut"</string>
   <string name="screen_room_change_permissions_moderators">"Administratori și moderatori"</string>
   <string name="screen_room_change_permissions_remove_people">"Îndepărtați persoane și refuzați cereri de alăturare"</string>
   <string name="screen_room_change_permissions_room_avatar">"Schimbați avatarul camerei"</string>
-  <string name="screen_room_change_permissions_room_details">"Detaliile camerei"</string>
   <string name="screen_room_change_permissions_room_name">"Schimbă numele camerei"</string>
   <string name="screen_room_change_permissions_room_topic">"Schimbați subiectul camerei"</string>
   <string name="screen_room_change_permissions_send_messages">"Trimiteți mesaje"</string>
@@ -60,7 +57,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mesaje și conținut"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatori"</string>
   <string name="screen_room_roles_and_permissions_owners">"Proprietari"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Permisiuni"</string>
   <string name="screen_room_roles_and_permissions_reset">"Resetați permisiunile"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"După ce resetați permisiunile, veți pierde setările curente."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Resetați permisiunile?"</string>

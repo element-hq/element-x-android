@@ -6,14 +6,11 @@
   <string name="screen_room_change_permissions_administrators">"მხოლოდ ადმინისტრატორები"</string>
   <string name="screen_room_change_permissions_ban_people">"მომხმარებლების დაბლოკვა"</string>
   <string name="screen_room_change_permissions_delete_messages">"შეტყობინებების წაშლა"</string>
-  <string name="screen_room_change_permissions_everyone">"ყველა"</string>
   <string name="screen_room_change_permissions_invite_people">"მომხმარებლების მოწვევა და გაწევრიანების მოთხოვნების დადასტურება"</string>
-  <string name="screen_room_change_permissions_member_moderation">"წევრების მოდერირება"</string>
   <string name="screen_room_change_permissions_messages_and_content">"შეტყობინებები და შინაარსი"</string>
   <string name="screen_room_change_permissions_moderators">"ადმინისტრატორები და მოდერატორები"</string>
   <string name="screen_room_change_permissions_remove_people">"მომხმარებლების გაგდება და გაწევრიანების მოთხოვნების უარყოფა"</string>
   <string name="screen_room_change_permissions_room_avatar">"ოთახის სურათის შეცვლა"</string>
-  <string name="screen_room_change_permissions_room_details">"ოთახის დეტალები"</string>
   <string name="screen_room_change_permissions_room_name">"ოთახის სახელის შეცვლა"</string>
   <string name="screen_room_change_permissions_room_topic">"ოთახის თემის შეცვლა"</string>
   <string name="screen_room_change_permissions_send_messages">"შეტყობინებების გაგზავნა"</string>
@@ -92,7 +89,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"წევრების მოდერირება"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"შეტყობინებები და შინაარსი"</string>
   <string name="screen_room_roles_and_permissions_moderators">"მოდერატორები"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"ნებართვები"</string>
   <string name="screen_room_roles_and_permissions_reset">"ნებართვების გადაყენება"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"ნებართვების გადაყენების შემთხვევაში მიმდინარე პარამეტრებს დაკარგავთ."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"გადავაყენოთ ცვლილებები?"</string>

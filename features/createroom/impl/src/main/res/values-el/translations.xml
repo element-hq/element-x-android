@@ -14,7 +14,7 @@
   <string name="screen_create_room_room_access_section_knocking_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στην αίθουσα, αλλά ένας διαχειριστής ή ένας συντονιστής θα πρέπει να αποδεχτεί το αίτημα"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Αίτημα συμμετοχής"</string>
   <string name="screen_create_room_room_address_section_footer">"Για να είναι ορατή αυτή η αίθουσα στον δημόσιο κατάλογο αιθουσών, θα χρειαστείτε μια διεύθυνση αίθουσας."</string>
-  <string name="screen_create_room_room_address_section_title">"Διεύθυνση αίθουσας"</string>
+  <string name="screen_create_room_room_address_section_title">"Διεύθυνση δωματίου"</string>
   <string name="screen_create_room_room_name_label">"Όνομα αίθουσας"</string>
   <string name="screen_create_room_room_visibility_section_title">"Ορατότητα αίθουσας"</string>
   <string name="screen_create_room_title">"Δημιουργία αίθουσας"</string>

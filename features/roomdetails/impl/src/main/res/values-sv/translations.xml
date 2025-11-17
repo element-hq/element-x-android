@@ -8,14 +8,11 @@
   <string name="screen_room_change_permissions_administrators">"Endast administratörer"</string>
   <string name="screen_room_change_permissions_ban_people">"Banna personer"</string>
   <string name="screen_room_change_permissions_delete_messages">"Ta bort meddelanden"</string>
-  <string name="screen_room_change_permissions_everyone">"Alla"</string>
   <string name="screen_room_change_permissions_invite_people">"Bjuda in personer och acceptera förfrågningar om att gå med"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Medlemsmoderering"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Meddelanden och innehåll"</string>
   <string name="screen_room_change_permissions_moderators">"Administratörer och moderatorer"</string>
   <string name="screen_room_change_permissions_remove_people">"Ta bort personer och avslå förfrågningar om att gå med"</string>
   <string name="screen_room_change_permissions_room_avatar">"Byt rumsavatar"</string>
-  <string name="screen_room_change_permissions_room_details">"Rumsdetaljer"</string>
   <string name="screen_room_change_permissions_room_name">"Byt rumsnamn"</string>
   <string name="screen_room_change_permissions_room_topic">"Byt rumsämne"</string>
   <string name="screen_room_change_permissions_send_messages">"Skicka meddelanden"</string>
@@ -109,7 +106,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Meddelanden och innehåll"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorer"</string>
   <string name="screen_room_roles_and_permissions_owners">"Ägare"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Behörigheter"</string>
   <string name="screen_room_roles_and_permissions_reset">"Återställ behörigheter"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"När du har återställt behörigheterna kommer du att förlora de aktuella inställningarna."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Återställ behörigheter?"</string>
@@ -135,7 +131,6 @@ Vi rekommenderar inte att aktivera kryptering för rum som vem som helst kan hit
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Utrymmen stöds för närvarande inte"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Utrymmesmedlemmar"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du behöver en rumsadress för att göra den synlig i rumskatalogen."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Rumsadress"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Tillåt att detta rum hittas genom att söka i den offentliga rumskatalogen på %1$s"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Synlig i katalogen för offentliga rum"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Vem som helst"</string>

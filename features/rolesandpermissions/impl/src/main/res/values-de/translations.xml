@@ -3,14 +3,11 @@
   <string name="screen_room_change_permissions_administrators">"Nur Admins"</string>
   <string name="screen_room_change_permissions_ban_people">"Mitglieder sperren"</string>
   <string name="screen_room_change_permissions_delete_messages">"Nachrichten entfernen"</string>
-  <string name="screen_room_change_permissions_everyone">"Alle"</string>
   <string name="screen_room_change_permissions_invite_people">"Personen einladen und Beitrittsanfragen annehmen"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderation der Mitglieder"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Nachrichten senden &amp; löschen"</string>
   <string name="screen_room_change_permissions_moderators">"Admins und Moderatoren"</string>
   <string name="screen_room_change_permissions_remove_people">"Personen entfernen und Beitrittsanfragen ablehnen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Avatar ändern"</string>
-  <string name="screen_room_change_permissions_room_details">"Chat-Details anpassen"</string>
   <string name="screen_room_change_permissions_room_name">"Chat-Namen ändern"</string>
   <string name="screen_room_change_permissions_room_topic">"Chat Thema ändern"</string>
   <string name="screen_room_change_permissions_send_messages">"Nachrichten senden"</string>
@@ -60,7 +57,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Nachrichten senden &amp; löschen"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatoren"</string>
   <string name="screen_room_roles_and_permissions_owners">"Eigentümer"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Berechtigungen"</string>
   <string name="screen_room_roles_and_permissions_reset">"Rollen und Berechtigungen zurücksetzen"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Sobald du die Berechtigungen zurücksetzt, verlierst du die aktuellen Einstellungen."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Berechtigungen zurücksetzen?"</string>

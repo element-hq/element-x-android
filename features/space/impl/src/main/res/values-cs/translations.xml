@@ -12,6 +12,6 @@
   <string name="screen_leave_space_title">"Opustit %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Jste jediným administrátorem pro %1$s"</string>
   <string name="screen_space_settings_leave_space">"Opustit prostor"</string>
-  <string name="screen_space_settings_roles_and_permissions">"Role a oprávnění"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Role a oprávnění"</string>
   <string name="screen_space_settings_security_and_privacy">"Zabezpečení a soukromí"</string>
 </resources>

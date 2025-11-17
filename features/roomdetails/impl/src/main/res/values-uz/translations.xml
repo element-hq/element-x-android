@@ -6,14 +6,11 @@
   <string name="screen_room_change_permissions_administrators">"Faqat adminlar"</string>
   <string name="screen_room_change_permissions_ban_people">"Odamlarni taqiqlash"</string>
   <string name="screen_room_change_permissions_delete_messages">"Xabarlarni olib tashlash"</string>
-  <string name="screen_room_change_permissions_everyone">"Har kim"</string>
   <string name="screen_room_change_permissions_invite_people">"Odamlarni taklif qiling va qo‘shilish so‘rovlarini qabul qiling"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Aʻzo moderatsiyasi"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Xabarlar va kontent"</string>
   <string name="screen_room_change_permissions_moderators">"Adminlar va moderatorlar"</string>
   <string name="screen_room_change_permissions_remove_people">"Odamlarni olib tashlash va qoʻshilish soʻrovlarini rad etish"</string>
   <string name="screen_room_change_permissions_room_avatar">"Xona avatarini oʻzgartirish"</string>
-  <string name="screen_room_change_permissions_room_details">"Xona tafsilotlari"</string>
   <string name="screen_room_change_permissions_room_name">"Xona nomini oʻzgartirish"</string>
   <string name="screen_room_change_permissions_room_topic">"Xona mavzusini almashtirish"</string>
   <string name="screen_room_change_permissions_send_messages">"Xabarlar yuborish"</string>
@@ -97,7 +94,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Aʻzo moderatsiyasi"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Xabarlar va kontent"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorlar"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Ruxsatlar"</string>
   <string name="screen_room_roles_and_permissions_reset">"Ruxsatlarni tiklash"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Ruxsatlarni asliga qaytargach, joriy sozlamalarni yoʻqotasiz."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Ruxsatlar asliga qaytarilsinmi?"</string>
@@ -106,7 +102,6 @@
   <string name="screen_room_roles_and_permissions_title">"Rollar va ruxsatlar"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Qo‘shilishni so‘rang"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Shifrlash"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Har kim"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Har kim"</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Xonaning ko‘rinishi"</string>
 </resources>

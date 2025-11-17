@@ -14,7 +14,6 @@ Du kan endre dette når som helst i rominnstillingene."</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Alle kan be om å få bli med i rommet, men en administrator eller moderator må godta forespørselen"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Be om å bli med"</string>
   <string name="screen_create_room_room_address_section_footer">"For at dette rommet skal være synlig i den offentlige romkatalogen, trenger du en romadresse."</string>
-  <string name="screen_create_room_room_address_section_title">"Romadresse"</string>
   <string name="screen_create_room_room_name_label">"Romnavn"</string>
   <string name="screen_create_room_room_visibility_section_title">"Romsynlighet"</string>
   <string name="screen_create_room_title">"Opprett et rom"</string>

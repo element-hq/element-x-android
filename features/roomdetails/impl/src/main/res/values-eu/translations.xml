@@ -7,14 +7,11 @@
   <string name="screen_room_change_permissions_administrators">"Administratzaileak soilik"</string>
   <string name="screen_room_change_permissions_ban_people">"Jarri debekua jendeari"</string>
   <string name="screen_room_change_permissions_delete_messages">"Kendu mezuak"</string>
-  <string name="screen_room_change_permissions_everyone">"Guztiak"</string>
   <string name="screen_room_change_permissions_invite_people">"Gonbidatu jendea"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Kideen moderazioa"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mezuak eta edukiak"</string>
   <string name="screen_room_change_permissions_moderators">"Administratzaileak eta moderatzaileak"</string>
   <string name="screen_room_change_permissions_remove_people">"Kendu jendea"</string>
   <string name="screen_room_change_permissions_room_avatar">"Aldatu gelaren abatarra"</string>
-  <string name="screen_room_change_permissions_room_details">"Gelaren xehetasunak"</string>
   <string name="screen_room_change_permissions_room_name">"Aldatu gelaren izena"</string>
   <string name="screen_room_change_permissions_room_topic">"Aldatu gelako mintzagaia"</string>
   <string name="screen_room_change_permissions_send_messages">"Bidali mezuak"</string>
@@ -98,7 +95,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mezuak eta edukiak"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatzaileak"</string>
   <string name="screen_room_roles_and_permissions_owners">"Jabeak"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Baimenak"</string>
   <string name="screen_room_roles_and_permissions_reset">"Berrezarri baimenak"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Baimenak berrezarritakoan, uneko ezarpenak galduko dituzu."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Baimenak berrezarri?"</string>
@@ -109,7 +105,6 @@
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Bai, gaitu zifratzea"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Zifratzea"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Edonork aurkitu eta bat egin dezake"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Edonork"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Gonbidatutako pertsonak bakarrik sartu ahal izango dira"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Gonbidapen bidez"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Gelarako sarbidea"</string>

@@ -8,14 +8,11 @@
   <string name="screen_room_change_permissions_administrators">"Kun admins"</string>
   <string name="screen_room_change_permissions_ban_people">"Spær brugere"</string>
   <string name="screen_room_change_permissions_delete_messages">"Fjern beskeder"</string>
-  <string name="screen_room_change_permissions_everyone">"Alle"</string>
   <string name="screen_room_change_permissions_invite_people">"Invitér personer og acceptér anmodninger om at deltage"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderation af medlemmer"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Beskeder og indhold"</string>
   <string name="screen_room_change_permissions_moderators">"Admins og moderatorer"</string>
   <string name="screen_room_change_permissions_remove_people">"Fjern personer og afvis anmodninger om at deltage"</string>
   <string name="screen_room_change_permissions_room_avatar">"Skift rummets avatar"</string>
-  <string name="screen_room_change_permissions_room_details">"Detaljer om rummet"</string>
   <string name="screen_room_change_permissions_room_name">"Skift rummets navn"</string>
   <string name="screen_room_change_permissions_room_topic">"Skift emne for rummet"</string>
   <string name="screen_room_change_permissions_send_messages">"Send beskeder"</string>
@@ -111,7 +108,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Beskeder og indhold"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorer"</string>
   <string name="screen_room_roles_and_permissions_owners">"Ejere"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Tilladelser"</string>
   <string name="screen_room_roles_and_permissions_reset">"Nulstil tilladelser"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Når du nulstiller tilladelserne, mister du de nuværende indstillinger."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Nulstil tilladelser?"</string>
@@ -130,14 +126,12 @@ Vi anbefaler ikke at aktivere kryptering for rum, som alle kan finde og deltage 
   <string name="screen_security_and_privacy_encryption_section_header">"Kryptering"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktivér end-to-end-kryptering"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle kan finde og deltage"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Enhver"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Andre kan kun deltage, hvis de bliver inviteret"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Kun med invitation"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Adgang til rummet"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Grupper understøttes ikke i øjeblikket"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Medlemmer af gruppen"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du skal bruge en adresse til rummet, for at gøre den synlig i rum-registeret."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Rummets adresse"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Tillad, at dette rum kan findes ved at søge i %1$s fortegnelse over offentlige rum"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Synlig i det offentlige register over rum"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Enhver"</string>

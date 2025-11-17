@@ -8,14 +8,11 @@
   <string name="screen_room_change_permissions_administrators">"Administrateurs seulement"</string>
   <string name="screen_room_change_permissions_ban_people">"Bannir des participants"</string>
   <string name="screen_room_change_permissions_delete_messages">"Supprimer des messages"</string>
-  <string name="screen_room_change_permissions_everyone">"Tout le monde"</string>
   <string name="screen_room_change_permissions_invite_people">"Inviter des personnes et accepter les demandes pour rejoindre"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Administration des membres"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Messages et contenus"</string>
   <string name="screen_room_change_permissions_moderators">"Administrateurs et modérateurs"</string>
   <string name="screen_room_change_permissions_remove_people">"Retirer des personnes et refuser les demandes pour rejoindre"</string>
   <string name="screen_room_change_permissions_room_avatar">"Changer l’avatar du salon"</string>
-  <string name="screen_room_change_permissions_room_details">"Détails du salon"</string>
   <string name="screen_room_change_permissions_room_name">"Changer le nom du salon"</string>
   <string name="screen_room_change_permissions_room_topic">"Changer le sujet du salon"</string>
   <string name="screen_room_change_permissions_send_messages">"Envoyer des messages"</string>
@@ -111,7 +108,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Messages et contenus"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Modérateurs"</string>
   <string name="screen_room_roles_and_permissions_owners">"Propriétaires"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Autorisations"</string>
   <string name="screen_room_roles_and_permissions_reset">"Réinitialisation des autorisations"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"La réinitialisation des autorisations entraîne la perte des réglages actuels."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Réinitialisation des autorisations ?"</string>

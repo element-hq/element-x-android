@@ -13,6 +13,7 @@
     <item quantity="one">"%d teavitus"</item>
     <item quantity="other">"%d teavitust"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"UnifiedPushi levitajas registreerimine ei õnnestunud ja seega sa ei saa enam teavitusi. Palun kontrolli selle rakenduse teavituste seadistusi ja tõuketeenuste levitaja olekut."</string>
   <string name="notification_fallback_content">"Sulle on uusi sõnumeid."</string>
   <string name="notification_incoming_call">"📹 Sissetulev kõne"</string>
   <string name="notification_inline_reply_failed">"** Saatmine ei õnnestunud - palun ava jututoa täisvaade"</string>

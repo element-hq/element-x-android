@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Csak adminisztrátorok"</string>
+  <string name="screen_room_change_permissions_administrators">"Adminisztrátor"</string>
   <string name="screen_room_change_permissions_ban_people">"Emberek kitiltása"</string>
   <string name="screen_room_change_permissions_delete_messages">"Üzenetek eltávolítása"</string>
-  <string name="screen_room_change_permissions_everyone">"Mindenki"</string>
-  <string name="screen_room_change_permissions_invite_people">"Személyek meghívása és csatlakozási kérések elfogadása"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Tagok moderálása"</string>
+  <string name="screen_room_change_permissions_everyone">"Tag"</string>
+  <string name="screen_room_change_permissions_invite_people">"Emberek meghívása"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Tagok kezelése"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Üzenetek és tartalom"</string>
-  <string name="screen_room_change_permissions_moderators">"Adminisztrátorok és moderátorok"</string>
-  <string name="screen_room_change_permissions_remove_people">"Emberek eltávolítása és a csatlakozási kérések elutasítása"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderátor"</string>
+  <string name="screen_room_change_permissions_remove_people">"Emberek eltávolítása"</string>
   <string name="screen_room_change_permissions_room_avatar">"Szoba profilképének módosítása"</string>
-  <string name="screen_room_change_permissions_room_details">"Szoba részletei"</string>
+  <string name="screen_room_change_permissions_room_details">"Részletek szerkesztése"</string>
   <string name="screen_room_change_permissions_room_name">"Szoba nevének módosítása"</string>
   <string name="screen_room_change_permissions_room_topic">"Szoba témájának módosítása"</string>
   <string name="screen_room_change_permissions_send_messages">"Üzenetek küldése"</string>
@@ -66,5 +66,6 @@
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Jogosultságok visszaállítása?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Szerepkörök"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Szoba részletei"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Tér részletei"</string>
   <string name="screen_room_roles_and_permissions_title">"Szerepkörök és jogosultságok"</string>
 </resources>

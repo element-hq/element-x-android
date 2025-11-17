@@ -8,14 +8,11 @@
   <string name="screen_room_change_permissions_administrators">"Μόνο διαχειριστές"</string>
   <string name="screen_room_change_permissions_ban_people">"Αποκλεισμός ατόμων"</string>
   <string name="screen_room_change_permissions_delete_messages">"Αφαίρεση μηνυμάτων"</string>
-  <string name="screen_room_change_permissions_everyone">"Όλοι"</string>
   <string name="screen_room_change_permissions_invite_people">"Προσκάλεσε άτομα και αποδέξου αιτήματα συμμετοχής"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Συντονισμός μελών"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Μηνύματα και περιεχόμενο"</string>
   <string name="screen_room_change_permissions_moderators">"Διαχειριστές και συντονιστές"</string>
   <string name="screen_room_change_permissions_remove_people">"Αφαίρεση ατόμων και απόρριψη αιτημάτων συμμετοχής"</string>
   <string name="screen_room_change_permissions_room_avatar">"Αλλαγή εικόνας προφίλ αίθουσας"</string>
-  <string name="screen_room_change_permissions_room_details">"Λεπτομέρειες αίθουσας"</string>
   <string name="screen_room_change_permissions_room_name">"Αλλαγή ονόματος αίθουσας"</string>
   <string name="screen_room_change_permissions_room_topic">"Αλλαγή θέματος αίθουσας"</string>
   <string name="screen_room_change_permissions_send_messages">"Αποστολή μηνυμάτων"</string>
@@ -102,7 +99,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Συντονισμός μελών"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Μηνύματα και περιεχόμενο"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Συντονιστές"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Άδειες"</string>
   <string name="screen_room_roles_and_permissions_reset">"Επαναφορά δικαιωμάτων"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Μόλις επαναφέρεις τα δικαιώματα, θα χάσεις τις τρέχουσες ρυθμίσεις."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Επαναφορά δικαιωμάτων;"</string>
@@ -128,7 +124,6 @@
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Οι χώροι δεν υποστηρίζονται προς το παρόν"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Μέλη χώρου"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Θα χρειαστείτε μια διεύθυνση αίθουσας για να την κάνετε ορατή στον κατάλογο αιθουσών."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Διεύθυνση αίθουσας"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Επιστρέψτε την εύρεση αυτής της αίθουσας με αναζήτηση στον κατάλογο %1$s δημοσίων αιθουσών"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Ορατή στον κατάλογο δημόσιων αιθουσών"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Οποιοσδήποτε"</string>

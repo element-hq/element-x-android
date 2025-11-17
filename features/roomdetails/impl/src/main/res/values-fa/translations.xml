@@ -105,7 +105,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"پیام‌ها و محتوا"</string>
   <string name="screen_room_roles_and_permissions_moderators">"ناظم‌ها"</string>
   <string name="screen_room_roles_and_permissions_owners">"مالکان"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"اجازه‌ها"</string>
   <string name="screen_room_roles_and_permissions_reset">"بازنشانی اجازه‌ها"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"بازنشانی اجازه‌ها؟"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"نقش‌ها"</string>

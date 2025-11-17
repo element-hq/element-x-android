@@ -3,14 +3,11 @@
   <string name="screen_room_change_permissions_administrators">"Hanya admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Cekal orang-orang"</string>
   <string name="screen_room_change_permissions_delete_messages">"Hilangkan pesan"</string>
-  <string name="screen_room_change_permissions_everyone">"Semua orang"</string>
   <string name="screen_room_change_permissions_invite_people">"Undang orang-orang dan terima permintaan untuk bergabung"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderasi anggota"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Pesan dan konten"</string>
   <string name="screen_room_change_permissions_moderators">"Admin dan moderator"</string>
   <string name="screen_room_change_permissions_remove_people">"Keluarkan orang-orang dan tolak permintaan untuk bergabung"</string>
   <string name="screen_room_change_permissions_room_avatar">"Ubah avatar ruangan"</string>
-  <string name="screen_room_change_permissions_room_details">"Detail ruangan"</string>
   <string name="screen_room_change_permissions_room_name">"Ubah nama ruangan"</string>
   <string name="screen_room_change_permissions_room_topic">"Ubah topik ruangan"</string>
   <string name="screen_room_change_permissions_send_messages">"Kirim pesan"</string>
@@ -52,7 +49,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Moderasi anggota"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Pesan dan konten"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderator"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Perizinan"</string>
   <string name="screen_room_roles_and_permissions_reset">"Atur ulang perizinan"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Setelah Anda mengatur ulang perizinan, Anda akan kehilangan pengaturan Anda saat ini."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Atur ulang perizinan?"</string>

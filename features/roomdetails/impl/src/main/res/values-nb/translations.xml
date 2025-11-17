@@ -8,14 +8,11 @@
   <string name="screen_room_change_permissions_administrators">"Kun for administratorer"</string>
   <string name="screen_room_change_permissions_ban_people">"Forby folk"</string>
   <string name="screen_room_change_permissions_delete_messages">"Fjern meldinger"</string>
-  <string name="screen_room_change_permissions_everyone">"Alle"</string>
   <string name="screen_room_change_permissions_invite_people">"Inviter folk og godta forespørsler om å bli med"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderering av medlemmer"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Meldinger og innhold"</string>
   <string name="screen_room_change_permissions_moderators">"Administratorer og moderatorer"</string>
   <string name="screen_room_change_permissions_remove_people">"Fjern folk og avslå forespørsler om å bli med"</string>
   <string name="screen_room_change_permissions_room_avatar">"Endre romavatar"</string>
-  <string name="screen_room_change_permissions_room_details">"Romdetaljer"</string>
   <string name="screen_room_change_permissions_room_name">"Endre romnavn"</string>
   <string name="screen_room_change_permissions_room_topic">"Endre temaet til rommet"</string>
   <string name="screen_room_change_permissions_send_messages">"Send meldinger"</string>
@@ -111,7 +108,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Meldinger og innhold"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorer"</string>
   <string name="screen_room_roles_and_permissions_owners">"Eiere"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Tillatelser"</string>
   <string name="screen_room_roles_and_permissions_reset">"Tilbakestill tillatelser"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Når du har tilbakestilt tillatelsene, mister du gjeldende innstillinger."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Vil du tilbakestille tillatelsene?"</string>
@@ -130,14 +126,12 @@ Vi anbefaler ikke å aktivere kryptering for rom som hvem som helst kan finne og
   <string name="screen_security_and_privacy_encryption_section_header">"Kryptering"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktiver ende-til-ende-kryptering"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle kan finne og bli med"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Alle"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Folk kan bare bli med hvis de er invitert"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Kun for inviterte"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Tilgang til rom"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Områder støttes ikke for øyeblikket"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Medlemmer av område"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du trenger en adresse til rommet for å gjøre rommet synlig i romkatalogen."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Romadresse"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Tillat at dette rommet blir funnet ved å søke %1$s offentlig romkatalog"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Synlig i offentlig romkatalog"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Alle"</string>

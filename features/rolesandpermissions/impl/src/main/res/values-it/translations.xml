@@ -3,14 +3,11 @@
   <string name="screen_room_change_permissions_administrators">"Solo amministratori"</string>
   <string name="screen_room_change_permissions_ban_people">"Escludi membri"</string>
   <string name="screen_room_change_permissions_delete_messages">"Rimuovi messaggi"</string>
-  <string name="screen_room_change_permissions_everyone">"Tutti"</string>
   <string name="screen_room_change_permissions_invite_people">"Invita persone e accetta richieste di partecipazione"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderazione dei membri"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Messaggi e contenuti"</string>
   <string name="screen_room_change_permissions_moderators">"Amministratori e moderatori"</string>
   <string name="screen_room_change_permissions_remove_people">"Rimuovi le persone e rifiuta le richieste di partecipazione"</string>
   <string name="screen_room_change_permissions_room_avatar">"Cambia avatar della stanza"</string>
-  <string name="screen_room_change_permissions_room_details">"Dettagli della stanza"</string>
   <string name="screen_room_change_permissions_room_name">"Cambia il nome della stanza"</string>
   <string name="screen_room_change_permissions_room_topic">"Cambiare l\'argomento della stanza"</string>
   <string name="screen_room_change_permissions_send_messages">"Inviare messaggi"</string>
@@ -60,7 +57,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Messaggi e contenuti"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatori"</string>
   <string name="screen_room_roles_and_permissions_owners">"Proprietari"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Autorizzazioni"</string>
   <string name="screen_room_roles_and_permissions_reset">"Reimpostare le autorizzazioni"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Una volta reimpostate le autorizzazioni, perderai le impostazioni correnti."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Reimpostare autorizzazioni?"</string>

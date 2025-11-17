@@ -3,14 +3,11 @@
   <string name="screen_room_change_permissions_administrators">"Solo administradores"</string>
   <string name="screen_room_change_permissions_ban_people">"Vetar personas"</string>
   <string name="screen_room_change_permissions_delete_messages">"Eliminar mensajes"</string>
-  <string name="screen_room_change_permissions_everyone">"Todos"</string>
   <string name="screen_room_change_permissions_invite_people">"Invitar personas y aceptar solicitudes de unión"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderación de miembros"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mensajes y contenido"</string>
   <string name="screen_room_change_permissions_moderators">"Administradores y moderadores"</string>
   <string name="screen_room_change_permissions_remove_people">"Eliminar personas y rechazar solicitudes de unión"</string>
   <string name="screen_room_change_permissions_room_avatar">"Cambiar el avatar de la sala"</string>
-  <string name="screen_room_change_permissions_room_details">"Detalles de la sala"</string>
   <string name="screen_room_change_permissions_room_name">"Cambiar el nombre de la sala"</string>
   <string name="screen_room_change_permissions_room_topic">"Cambiar el tema de la sala"</string>
   <string name="screen_room_change_permissions_send_messages">"Enviar mensajes"</string>
@@ -53,7 +50,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Moderación de miembros"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mensajes y contenido"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderadores"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Permisos"</string>
   <string name="screen_room_roles_and_permissions_reset">"Restablecer permisos"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Una vez que restablezca los permisos, perderá la configuración actual."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"¿Restablecer los permisos?"</string>
