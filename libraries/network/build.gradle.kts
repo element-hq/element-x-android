@@ -28,6 +28,7 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.preferences.api)
     implementation(platform(libs.network.okhttp.bom))
     implementation(libs.network.okhttp)
     implementation(libs.network.okhttp.logging)
