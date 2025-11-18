@@ -193,7 +193,6 @@ private fun SessionData.toSession() = Session(
     refreshToken = refreshToken,
     userId = userId,
     deviceId = deviceId,
-    homeserverUrl = homeserverUrl,
     slidingSyncVersion = SlidingSyncVersion.NATIVE,
     oidcData = oidcData,
 )

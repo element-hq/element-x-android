@@ -210,7 +210,6 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.RoomEncryption -> OtherState.RoomEncryption
         RustOtherState.RoomGuestAccess -> OtherState.RoomGuestAccess
         RustOtherState.RoomHistoryVisibility -> OtherState.RoomHistoryVisibility
-        RustOtherState.RoomJoinRules -> OtherState.RoomJoinRules
         is RustOtherState.RoomName -> OtherState.RoomName(name)
         is RustOtherState.RoomPinnedEvents -> OtherState.RoomPinnedEvents(change.map())
         is RustOtherState.RoomPowerLevels -> OtherState.RoomUserPowerLevels(users)
@@ -222,6 +221,7 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.SpaceParent -> OtherState.SpaceParent
         is RustOtherState.RoomCreate -> OtherState.RoomCreate
         is RustOtherState.RoomHistoryVisibility -> OtherState.RoomHistoryVisibility
+        is RustOtherState.RoomJoinRules -> OtherState.RoomJoinRules
     }
 }
 

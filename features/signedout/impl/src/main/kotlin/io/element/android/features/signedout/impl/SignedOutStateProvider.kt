@@ -35,7 +35,6 @@ private fun aSessionData(
         deviceId = "aDeviceId",
         accessToken = "anAccessToken",
         refreshToken = "aRefreshToken",
-        homeserverUrl = "aHomeserverUrl",
         oidcData = null,
         slidingSyncProxy = null,
         loginTimestamp = null,

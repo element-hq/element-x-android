@@ -19,7 +19,8 @@ internal fun SessionData.toDbModel(): DbSessionData {
         deviceId = deviceId,
         accessToken = accessToken,
         refreshToken = refreshToken,
-        homeserverUrl = homeserverUrl,
+        // TODO remove this field and the associated DB column
+        homeserverUrl = "",
         oidcData = oidcData,
         slidingSyncProxy = slidingSyncProxy,
         loginTimestamp = loginTimestamp?.time,
@@ -41,7 +42,6 @@ internal fun DbSessionData.toApiModel(): SessionData {
         deviceId = deviceId,
         accessToken = accessToken,
         refreshToken = refreshToken,
-        homeserverUrl = homeserverUrl,
         oidcData = oidcData,
         slidingSyncProxy = slidingSyncProxy,
         loginTimestamp = loginTimestamp?.let { Date(it) },

@@ -22,8 +22,6 @@ data class SessionData(
     val accessToken: String,
     /** The optional current refresh token of the session. */
     val refreshToken: String?,
-    /** The homeserver URL of the session. */
-    val homeserverUrl: String,
     /** The Open ID Connect info for this session, if any. */
     val oidcData: String?,
     /** The Sliding Sync Proxy URL for this session, if any. */
