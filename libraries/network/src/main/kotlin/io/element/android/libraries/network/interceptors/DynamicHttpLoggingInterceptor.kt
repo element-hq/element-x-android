@@ -7,6 +7,9 @@
 
 package io.element.android.libraries.network.interceptors
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.first
@@ -14,23 +17,21 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level
 
 /**
  * HTTP logging interceptor that decides whether to display the HTTP logs or not based on the current log level.
  */
+@Inject
+@SingleIn(AppScope::class)
 class DynamicHttpLoggingInterceptor(
     private val appPreferencesStore: AppPreferencesStore,
     private val loggingInterceptor: HttpLoggingInterceptor,
 ) : Interceptor by loggingInterceptor {
-    private fun shouldDisplayLogs(currentLogLevel: LogLevel): Boolean = currentLogLevel >= LogLevel.DEBUG
-
     override fun intercept(chain: Interceptor.Chain): Response {
         // This is called in a separate thread, so calling `runBlocking` here should be fine, it should be also instant after the value is cached
-        val intercept = runBlocking { shouldDisplayLogs(appPreferencesStore.getTracingLogLevelFlow().first()) }
-        return if (intercept) {
-            loggingInterceptor.intercept(chain)
-        } else {
-            chain.proceed(chain.request())
-        }
+        val logLevel = runBlocking { appPreferencesStore.getTracingLogLevelFlow().first() }
+        loggingInterceptor.level = if (logLevel >= LogLevel.DEBUG) Level.BODY else Level.NONE
+        return loggingInterceptor.intercept(chain)
     }
 }
