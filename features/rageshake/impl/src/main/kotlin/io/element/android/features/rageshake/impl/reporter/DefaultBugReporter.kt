@@ -409,8 +409,6 @@ class DefaultBugReporter(
             file.writer().use {
                 getLogCatError(it)
             }
-        } catch (error: OutOfMemoryError) {
-            Timber.e(error, "## saveLogCat() : fail to write logcat OOM")
         } catch (e: Exception) {
             Timber.e(e, "## saveLogCat() : fail to write logcat")
         }
