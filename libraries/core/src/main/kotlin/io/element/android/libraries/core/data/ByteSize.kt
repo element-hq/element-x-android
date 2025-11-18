@@ -7,25 +7,21 @@
 
 package io.element.android.libraries.core.data
 
-private const val kilo = 1024L
-private const val mega = kilo * kilo
-private const val giga = mega * kilo
-
-enum class ByteUnit(val multiplier: Long) {
-    BYTES(1L),
-    KB(kilo),
-    MB(mega),
-    GB(giga)
+enum class ByteUnit(val bitShift: Int) {
+    BYTES(0),
+    KB(10),
+    MB(20),
+    GB(30)
 }
 
 class ByteSize internal constructor(val value: Long, val unit: ByteUnit) {
     fun to(dest: ByteUnit): Long {
         if (unit == dest) return value
-        return (value * unit.multiplier) / dest.multiplier
+        return value shl unit.bitShift shr dest.bitShift
     }
 }
 
-val Number.gigaBytes get()= ByteSize(toLong(), ByteUnit.GB)
-val Number.megaBytes get()= ByteSize(toLong(), ByteUnit.MB)
-val Number.kiloBytes get()= ByteSize(toLong(), ByteUnit.KB)
-val Number.bytes get()= ByteSize(toLong(), ByteUnit.BYTES)
+val Number.gigaBytes get() = ByteSize(toLong(), ByteUnit.GB)
+val Number.megaBytes get() = ByteSize(toLong(), ByteUnit.MB)
+val Number.kiloBytes get() = ByteSize(toLong(), ByteUnit.KB)
+val Number.bytes get() = ByteSize(toLong(), ByteUnit.BYTES)
