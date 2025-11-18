@@ -71,6 +71,7 @@ class RustMatrixClientFactory(
             passphrase = sessionData.passphrase,
             slidingSyncType = ClientBuilderSlidingSync.Restored,
         )
+            .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .use { it.build() }
 
