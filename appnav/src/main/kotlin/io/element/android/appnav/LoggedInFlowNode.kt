@@ -90,6 +90,8 @@ import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.ui.common.nodes.emptyNode
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -136,6 +138,7 @@ class LoggedInFlowNode(
     private val appPreferencesStore: AppPreferencesStore,
     private val buildMeta: BuildMeta,
     snackbarDispatcher: SnackbarDispatcher,
+    private val analyticsService: AnalyticsService,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -211,6 +214,8 @@ class LoggedInFlowNode(
                     networkMonitor.connectivity.first { networkStatus -> networkStatus == NetworkStatus.Connected }
                     matrixClient.getMaxFileUploadSize()
                 }
+
+                analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.FirstRoomsDisplayed)
 
                 ftueService.state
                     .onEach { ftueState ->

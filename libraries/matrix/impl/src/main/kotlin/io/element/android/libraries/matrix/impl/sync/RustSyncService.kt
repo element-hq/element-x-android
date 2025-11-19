@@ -30,7 +30,7 @@ import org.matrix.rustcomponents.sdk.SyncService as InnerSyncService
 class RustSyncService(
     private val inner: InnerSyncService,
     private val dispatcher: CoroutineDispatcher,
-    sessionCoroutineScope: CoroutineScope
+    sessionCoroutineScope: CoroutineScope,
 ) : SyncService {
     private val isServiceReady = AtomicBoolean(true)
 
@@ -71,10 +71,10 @@ class RustSyncService(
     override val syncState: StateFlow<SyncState> =
         inner.stateFlow()
             .map(SyncServiceState::toSyncState)
+            .distinctUntilChanged()
             .onEach { state ->
                 Timber.i("Sync state=$state")
             }
-            .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, SyncState.Idle)
 
     override val isOnline: StateFlow<Boolean> = syncState.mapState { it != SyncState.Offline }
