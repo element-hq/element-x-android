@@ -73,7 +73,7 @@ internal class RoomListFactory(
                     initialFilterKind = RoomListEntriesDynamicFilterKind.All(ROOM_LIST_RUST_FILTERS),
                 ).onEach { update ->
                     if (!firstRoomsTransaction.isFinished()) {
-                        analyticsService.stopLongRunningTransaction(AnalyticsLongRunningTransaction.FirstRoomsDisplayed)
+                        analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.FirstRoomsDisplayed)?.finish()
                         firstRoomsTransaction.finish()
                     }
                     processor.postUpdate(update)

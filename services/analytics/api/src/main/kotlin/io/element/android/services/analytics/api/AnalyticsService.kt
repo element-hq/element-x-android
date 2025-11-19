@@ -55,9 +55,20 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
      */
     fun startTransaction(name: String, operation: String? = null): AnalyticsTransaction
 
-    fun startLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction)
+    /**
+     * Starts an [AnalyticsLongRunningTransaction], that can be shared with other components.
+     */
+    fun startLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction
 
-    fun stopLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction)
+    /**
+     * Gets an ongoing [AnalyticsLongRunningTransaction], if it exists.
+     */
+    fun getLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction?
+
+    /**
+     * Removes an ongoing [AnalyticsLongRunningTransaction] so it's no longer shared.
+     */
+    fun removeLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction?
 }
 
 inline fun <T> AnalyticsService.recordTransaction(name: String, operation: String, block: (AnalyticsTransaction) -> T): T {

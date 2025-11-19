@@ -31,6 +31,7 @@ class FakeAnalyticsService(
     val screenEvents = mutableListOf<VectorAnalyticsScreen>()
     val trackedErrors = mutableListOf<Throwable>()
     val capturedUserProperties = mutableListOf<UserProperties>()
+    val longRunningTransactions = mutableMapOf<AnalyticsLongRunningTransaction, AnalyticsTransaction>()
 
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
 
@@ -70,6 +71,16 @@ class FakeAnalyticsService(
     }
 
     override fun startTransaction(name: String, operation: String?): AnalyticsTransaction = NoopAnalyticsTransaction
-    override fun startLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction) {}
-    override fun stopLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction) {}
+    override fun startLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction {
+        longRunningTransactions[longRunningTransaction] = NoopAnalyticsTransaction
+        return NoopAnalyticsTransaction
+    }
+
+    override fun getLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction? {
+        return longRunningTransactions[longRunningTransaction]
+    }
+
+    override fun removeLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction? {
+        return longRunningTransactions.remove(longRunningTransaction)
+    }
 }
