@@ -14,13 +14,7 @@ interface AnalyticsTransaction {
     fun finish()
 }
 
-fun <T> AnalyticsTransaction.run(block: AnalyticsTransaction.() -> T): T {
-    val result = block()
-    finish()
-    return result
-}
-
-fun <T> AnalyticsTransaction.recordTransaction(operation: String, description: String? = null, block: AnalyticsTransaction.() -> T): T {
+inline fun <T> AnalyticsTransaction.recordTransaction(operation: String, description: String? = null, block: AnalyticsTransaction.() -> T): T {
     val child = startChild(operation, description)
     try {
         val result = child.block()
@@ -30,7 +24,7 @@ fun <T> AnalyticsTransaction.recordTransaction(operation: String, description: S
     }
 }
 
-suspend fun <T> AnalyticsTransaction.recordAsyncTransaction(operation: String, description: String?, block: suspend AnalyticsTransaction.() -> T): T {
+suspend inline fun <T> AnalyticsTransaction.recordAsyncTransaction(operation: String, description: String?, block: suspend AnalyticsTransaction.() -> T): T {
     val child = startChild(operation, description)
     try {
         val result = child.block()
