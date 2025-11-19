@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.edit
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -23,9 +24,10 @@ interface HistoryVisibleAcknowledgementRepository {
 
 @ContributesBinding(SessionScope::class)
 class DefaultHistoryVisibleAcknowledgementRepository(
+    sessionId: SessionId,
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : HistoryVisibleAcknowledgementRepository {
-    val store = preferenceDataStoreFactory.create("elementx_historyvisible")
+    val store = preferenceDataStoreFactory.create("elementx_historyvisible_$sessionId")
 
     override fun hasAcknowledged(roomId: RoomId): Flow<Boolean> {
         return store.data.map { prefs ->
