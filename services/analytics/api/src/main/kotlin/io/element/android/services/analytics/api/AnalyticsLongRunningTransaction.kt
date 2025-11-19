@@ -12,4 +12,5 @@ sealed class AnalyticsLongRunningTransaction(
     val operation: String?,
 ) {
     data object FirstRoomsDisplayed : AnalyticsLongRunningTransaction("First rooms displayed after login or restoration", null)
+    data object ResumeAppUntilNewRoomsReceived : AnalyticsLongRunningTransaction("App was resumed and new room list items arrived", null)
 }

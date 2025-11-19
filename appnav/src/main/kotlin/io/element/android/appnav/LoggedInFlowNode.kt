@@ -41,6 +41,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.annotations.ContributesNode
+import io.element.android.appnav.analytics.AnalyticsRoomListStateWatcher
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.loggedin.MediaPreviewConfigMigration
 import io.element.android.appnav.loggedin.SendQueues
@@ -139,6 +140,7 @@ class LoggedInFlowNode(
     private val buildMeta: BuildMeta,
     snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
+    private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -202,6 +204,7 @@ class LoggedInFlowNode(
         }
         lifecycle.subscribe(
             onCreate = {
+                analyticsRoomListStateWatcher.start()
                 appNavigationStateService.onNavigateToSession(id, matrixClient.sessionId)
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
@@ -238,6 +241,7 @@ class LoggedInFlowNode(
                 appNavigationStateService.onLeavingSession(id)
                 loggedInFlowProcessor.stopObserving()
                 matrixClient.sessionVerificationService.setListener(null)
+                analyticsRoomListStateWatcher.stop()
             }
         )
         setupSendingQueue()
