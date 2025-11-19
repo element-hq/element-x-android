@@ -136,8 +136,6 @@ class RustRoomFactory(
                         )
                     }
 
-                    setData("loaded_joined_room", true)
-
                     GetRoomResult.Joined(
                         JoinedRustRoom(
                             baseRoom = getBaseRoom(sdkRoom),
@@ -161,8 +159,6 @@ class RustRoomFactory(
                         Timber.e(e, "Failed to get room preview for $roomId")
                         return@recordAsyncTransaction null
                     }
-
-                    setData("loaded_joined_room", false)
 
                     GetRoomResult.NotJoined(
                         NotJoinedRustRoom(
