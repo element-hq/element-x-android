@@ -41,6 +41,8 @@ class FakeNotificationCreator(
         > = lambdaRecorder { _, _, _, _, _ -> A_NOTIFICATION },
     var createDiagnosticNotificationResult: LambdaOneParamRecorder<Int, Notification> =
         lambdaRecorder<Int, Notification> { _ -> A_NOTIFICATION },
+    val createUnregistrationNotificationResult: LambdaOneParamRecorder<NotificationAccountParams, Notification> =
+        lambdaRecorder { _ -> A_NOTIFICATION },
 ) : NotificationCreator {
     override suspend fun createMessagesListNotification(
         notificationAccountParams: NotificationAccountParams,
@@ -92,5 +94,9 @@ class FakeNotificationCreator(
         @ColorInt color: Int,
     ): Notification {
         return createDiagnosticNotificationResult(color)
+    }
+
+    override fun createUnregistrationNotification(notificationAccountParams: NotificationAccountParams): Notification {
+        return createUnregistrationNotificationResult(notificationAccountParams)
     }
 }

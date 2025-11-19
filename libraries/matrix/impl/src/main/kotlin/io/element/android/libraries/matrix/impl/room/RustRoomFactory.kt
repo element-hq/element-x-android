@@ -23,6 +23,9 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.recordTransaction
+import io.element.android.services.analyticsproviders.api.recordChildTransaction
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
@@ -54,6 +57,7 @@ class RustRoomFactory(
     private val featureFlagService: FeatureFlagService,
     private val roomMembershipObserver: RoomMembershipObserver,
     private val roomInfoMapper: RoomInfoMapper,
+    private val analyticsService: AnalyticsService,
 ) {
     private val dispatcher = dispatchers.io.limitedParallelism(1)
     private val mutex = Mutex()
@@ -106,48 +110,64 @@ class RustRoomFactory(
                 Timber.d("Room factory is destroyed, returning null for $roomId")
                 return@withContext null
             }
-            val sdkRoom = awaitRoomInRoomList(roomId) ?: return@withContext null
+
+            val sdkRoom = awaitRoomInRoomList(roomId) ?: return@withLock null
 
             if (sdkRoom.membership() == Membership.JOINED) {
-                val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
-                // Init the live timeline in the SDK from the Room
-                val timeline = sdkRoom.timelineWithConfiguration(
-                    TimelineConfiguration(
-                        focus = TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents),
-                        filter = eventFilters?.let(TimelineFilter::EventTypeFilter) ?: TimelineFilter.All,
-                        internalIdPrefix = "live",
-                        dateDividerMode = DateDividerMode.DAILY,
-                        trackReadReceipts = true,
-                        reportUtds = true,
-                    )
-                )
+                analyticsService.recordTransaction(
+                    name = "Get joined room",
+                    operation = "RustRoomFactory.getJoinedRoomOrPreview",
+                ) { transaction ->
+                    val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
+                    // Init the live timeline in the SDK from the Room
+                    val timeline = transaction.recordChildTransaction(
+                        operation = "sdkRoom.timelineWithConfiguration",
+                        description = "Get timeline from the SDK",
+                    ) {
+                        sdkRoom.timelineWithConfiguration(
+                            TimelineConfiguration(
+                                focus = TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents),
+                                filter = eventFilters?.let(TimelineFilter::EventTypeFilter) ?: TimelineFilter.All,
+                                internalIdPrefix = "live",
+                                dateDividerMode = DateDividerMode.DAILY,
+                                trackReadReceipts = true,
+                                reportUtds = true,
+                            )
+                        )
+                    }
 
-                GetRoomResult.Joined(
-                    JoinedRustRoom(
-                        baseRoom = getBaseRoom(sdkRoom),
-                        notificationSettingsService = notificationSettingsService,
-                        roomContentForwarder = roomContentForwarder,
-                        liveInnerTimeline = timeline,
-                        coroutineDispatchers = dispatchers,
-                        systemClock = systemClock,
-                        featureFlagService = featureFlagService,
+                    GetRoomResult.Joined(
+                        JoinedRustRoom(
+                            baseRoom = getBaseRoom(sdkRoom),
+                            notificationSettingsService = notificationSettingsService,
+                            roomContentForwarder = roomContentForwarder,
+                            liveInnerTimeline = timeline,
+                            coroutineDispatchers = dispatchers,
+                            systemClock = systemClock,
+                            featureFlagService = featureFlagService,
+                        )
                     )
-                )
-            } else {
-                val preview = try {
-                    sdkRoom.previewRoom(via = serverNames)
-                } catch (e: Exception) {
-                    Timber.e(e, "Failed to get room preview for $roomId")
-                    return@withContext null
                 }
+            } else {
+                analyticsService.recordTransaction(
+                    name = "Get preview of room",
+                    operation = "RustRoomFactory.getJoinedRoomOrPreview",
+                ) {
+                    val preview = try {
+                        sdkRoom.previewRoom(via = serverNames)
+                    } catch (e: Exception) {
+                        Timber.e(e, "Failed to get room preview for $roomId")
+                        return@recordTransaction null
+                    }
 
-                GetRoomResult.NotJoined(
-                    NotJoinedRustRoom(
-                        sessionId = sessionId,
-                        localRoom = getBaseRoom(sdkRoom),
-                        previewInfo = RoomPreviewInfoMapper.map(preview.info()),
+                    GetRoomResult.NotJoined(
+                        NotJoinedRustRoom(
+                            sessionId = sessionId,
+                            localRoom = getBaseRoom(sdkRoom),
+                            previewInfo = RoomPreviewInfoMapper.map(preview.info()),
+                        )
                     )
-                )
+                }
             }
         }
     }

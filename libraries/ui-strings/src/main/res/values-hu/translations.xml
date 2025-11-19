@@ -95,6 +95,7 @@
   <string name="action_forgot_password">"Elfelejtette a jelszót?"</string>
   <string name="action_forward">"Tovább"</string>
   <string name="action_go_back">"Visszalépés"</string>
+  <string name="action_go_to_roles_and_permissions">"Ugrás a szerepkörökre és jogosultságokra"</string>
   <string name="action_go_to_settings">"Ugrás a beállításokhoz"</string>
   <string name="action_ignore">"Mellőzés"</string>
   <string name="action_invite">"Meghívás"</string>
@@ -443,6 +444,10 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Az üzenet nem lett elküldve, mert %1$s nem ellenőrizte az összes eszközét"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Egy vagy több eszköze nincs ellenőrizve. Így is elküldheti az üzenetet, vagy egyelőre megszakíthatja, és később, az összes eszköz ellenőrzése után újrapróbálkozhat."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte"</string>
+  <string name="screen_room_change_permissions_change_settings">"Beállítások módosítása"</string>
+  <string name="screen_room_change_permissions_manage_space">"Tér kezelése"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Szobák kezelése"</string>
+  <string name="screen_room_change_permissions_title">"Jogosultságok"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Adminisztrátorok vagy tulajdonosok szerkesztése"</string>
   <string name="screen_room_error_failed_processing_media">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nem sikerült letölteni a felhasználói adatokat"</string>
@@ -465,6 +470,7 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"%1$s tér"</string>
   <string name="screen_space_list_title">"Terek"</string>
+  <string name="screen_space_menu_action_members">"Tagok megtekintése"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Az üzenet nem lett elküldve, mert %1$s ellenőrzött személyazonossága megváltozott."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Az üzenet nem lett elküldve, mert %1$s nem ellenőrizte az összes eszközét."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte."</string>

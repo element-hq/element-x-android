@@ -64,6 +64,7 @@ dependencies {
     testImplementation(projects.features.forward.test)
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.features.rageshake.test)
+    testImplementation(projects.services.appnavstate.impl)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)

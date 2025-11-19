@@ -8,63 +8,36 @@
 
 package io.element.android.services.appnavstate.api
 
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Holds the active rooms for a given session so they can be reused instead of instantiating new ones.
  */
-@SingleIn(AppScope::class)
-@Inject
-class ActiveRoomsHolder {
-    private val rooms = ConcurrentHashMap<SessionId, MutableSet<JoinedRoom>>()
-
+interface ActiveRoomsHolder {
     /**
      * Adds a new held room for the given sessionId.
      */
-    fun addRoom(room: JoinedRoom) {
-        val roomsForSessionId = rooms.getOrPut(key = room.sessionId, defaultValue = { mutableSetOf() })
-        if (roomsForSessionId.none { it.roomId == room.roomId }) {
-            // We don't want to add the same room multiple times
-            roomsForSessionId.add(room)
-        }
-    }
+    fun addRoom(room: JoinedRoom)
 
     /**
      * Returns the last room added for the given [sessionId] or null if no room was added.
      */
-    fun getActiveRoom(sessionId: SessionId): JoinedRoom? {
-        return rooms[sessionId]?.lastOrNull()
-    }
+    fun getActiveRoom(sessionId: SessionId): JoinedRoom?
 
     /**
      * Returns an active room associated to the given [sessionId], with the given [roomId], or null if none match.
      */
-    fun getActiveRoomMatching(sessionId: SessionId, roomId: RoomId): JoinedRoom? {
-        return rooms[sessionId]?.find { it.roomId == roomId }
-    }
+    fun getActiveRoomMatching(sessionId: SessionId, roomId: RoomId): JoinedRoom?
 
     /**
      * Removes any room matching the provided [sessionId] and [roomId].
      */
-    fun removeRoom(sessionId: SessionId, roomId: RoomId) {
-        val roomsForSessionId = rooms[sessionId] ?: return
-        roomsForSessionId.removeIf { it.roomId == roomId }
-    }
+    fun removeRoom(sessionId: SessionId, roomId: RoomId)
 
     /**
      * Clears all the rooms for the given sessionId.
      */
-    fun clear(sessionId: SessionId) {
-        val activeRooms = rooms.remove(sessionId) ?: return
-        for (room in activeRooms) {
-            // Destroy the room to reset the live timelines
-            room.destroy()
-        }
-    }
+    fun clear(sessionId: SessionId)
 }

@@ -30,7 +30,7 @@ internal class FormattedJsonHttpLogger(
      */
     @Synchronized
     override fun log(message: String) {
-        Timber.v(message.ellipsize(200_000))
+        Timber.d(message.ellipsize(200_000))
 
         // Try to log formatted Json only if there is a chance that [message] contains Json.
         // It can be only the case if we log the bodies of Http requests.

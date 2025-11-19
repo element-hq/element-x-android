@@ -8,17 +8,6 @@
 
 package io.element.android.libraries.recentemojis.api
 
-import dev.zacsweers.metro.Inject
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.MatrixClient
-import kotlinx.coroutines.withContext
-
-@Inject
-class AddRecentEmoji(
-    private val client: MatrixClient,
-    private val dispatchers: CoroutineDispatchers,
-) {
-    suspend operator fun invoke(emoji: String): Result<Unit> = withContext(dispatchers.io) {
-        client.addRecentEmoji(emoji)
-    }
+fun interface AddRecentEmoji {
+    suspend operator fun invoke(emoji: String): Result<Unit>
 }

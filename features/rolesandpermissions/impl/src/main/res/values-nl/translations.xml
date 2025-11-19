@@ -3,14 +3,11 @@
   <string name="screen_room_change_permissions_administrators">"Alleen beheerders"</string>
   <string name="screen_room_change_permissions_ban_people">"Personen verbannen"</string>
   <string name="screen_room_change_permissions_delete_messages">"Berichten verwijderen"</string>
-  <string name="screen_room_change_permissions_everyone">"Iedereen"</string>
   <string name="screen_room_change_permissions_invite_people">"Nodig personen uit en accepteer verzoeken om deel te nemen"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderatie van leden"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Berichten en inhoud"</string>
   <string name="screen_room_change_permissions_moderators">"Beheerders en moderators"</string>
   <string name="screen_room_change_permissions_remove_people">"Verwijder personen en weiger verzoeken om deel te nemen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Kamerafbeelding wijzigen"</string>
-  <string name="screen_room_change_permissions_room_details">"Kamergegevens"</string>
   <string name="screen_room_change_permissions_room_name">"Kamernaam wijzigen"</string>
   <string name="screen_room_change_permissions_room_topic">"Kameronderwerp wijzigen"</string>
   <string name="screen_room_change_permissions_send_messages">"Berichten verzenden"</string>
@@ -53,7 +50,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Moderatie van leden"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Berichten en inhoud"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderators"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Rechten"</string>
   <string name="screen_room_roles_and_permissions_reset">"Rechten opnieuw instellen"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Als je de rechten opnieuw instelt, raak je de huidige instellingen kwijt."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Rechten opnieuw instellen?"</string>

@@ -65,6 +65,14 @@ class InternalRoomMemberModerationStateProvider : PreviewParameterProvider<Inter
                 selectedUser = anAlice(),
                 banUserAsyncAction = AsyncAction.Loading,
             ),
+            aRoomMembersModerationState(
+                selectedUser = anAlice(),
+                unbanUserAsyncAction = AsyncAction.ConfirmingNoParams,
+            ),
+            aRoomMembersModerationState(
+                selectedUser = anAlice(),
+                unbanUserAsyncAction = AsyncAction.Loading,
+            ),
         )
 }
 

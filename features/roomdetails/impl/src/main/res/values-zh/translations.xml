@@ -8,14 +8,11 @@
   <string name="screen_room_change_permissions_administrators">"仅限管理员"</string>
   <string name="screen_room_change_permissions_ban_people">"封禁成员"</string>
   <string name="screen_room_change_permissions_delete_messages">"移除消息"</string>
-  <string name="screen_room_change_permissions_everyone">"所有人"</string>
   <string name="screen_room_change_permissions_invite_people">"邀请他人及接受加入请求"</string>
-  <string name="screen_room_change_permissions_member_moderation">"成员权限"</string>
   <string name="screen_room_change_permissions_messages_and_content">"消息和内容"</string>
   <string name="screen_room_change_permissions_moderators">"管理员和协管员"</string>
   <string name="screen_room_change_permissions_remove_people">"移除成员及拒绝加入请求"</string>
   <string name="screen_room_change_permissions_room_avatar">"更改聊天室头像"</string>
-  <string name="screen_room_change_permissions_room_details">"聊天室详情"</string>
   <string name="screen_room_change_permissions_room_name">"更改聊天室名称"</string>
   <string name="screen_room_change_permissions_room_topic">"更改聊天室主题"</string>
   <string name="screen_room_change_permissions_send_messages">"发送消息"</string>
@@ -110,7 +107,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"消息和内容"</string>
   <string name="screen_room_roles_and_permissions_moderators">"协管员"</string>
   <string name="screen_room_roles_and_permissions_owners">"所有者"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"权限"</string>
   <string name="screen_room_roles_and_permissions_reset">"重置权限"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"重置权限后，您将丢失当前设置。"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"重置权限？"</string>

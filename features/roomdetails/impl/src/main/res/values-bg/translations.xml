@@ -5,13 +5,10 @@
   <string name="screen_polls_history_title">"Анкети"</string>
   <string name="screen_room_change_permissions_administrators">"Само администратори"</string>
   <string name="screen_room_change_permissions_delete_messages">"Премахване на съобщения"</string>
-  <string name="screen_room_change_permissions_everyone">"Всеки"</string>
   <string name="screen_room_change_permissions_invite_people">"Поканване на хора и приемане на заявки за присъединяване"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Модериране на членове"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Съобщения и съдържание"</string>
   <string name="screen_room_change_permissions_moderators">"Администратори и модератори"</string>
   <string name="screen_room_change_permissions_remove_people">"Премахване на хора и отхвърляне на заявки за присъединяване"</string>
-  <string name="screen_room_change_permissions_room_details">"Подробности за стаята"</string>
   <string name="screen_room_change_permissions_room_name">"Промяна на името на стаята"</string>
   <string name="screen_room_change_permissions_room_topic">"Промяна на темата на стаята"</string>
   <string name="screen_room_change_permissions_send_messages">"Изпращане на съобщения"</string>
@@ -77,7 +74,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Модериране на членове"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Съобщения и съдържание"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Модератори"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Разрешения"</string>
   <string name="screen_room_roles_and_permissions_reset">"Нулиране на разрешенията"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Роли"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Подробности за стаята"</string>
@@ -89,7 +85,6 @@
   <string name="screen_security_and_privacy_encryption_section_header">"Шифроване"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Включване на шифроване от край до край"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Всеки може да намери и да се присъедини"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Всеки"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Хората могат да се присъединят само ако са поканени"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Само с покана"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Достъп до стаята"</string>

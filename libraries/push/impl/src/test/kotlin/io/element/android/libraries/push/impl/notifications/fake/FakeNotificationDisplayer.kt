@@ -24,6 +24,7 @@ class FakeNotificationDisplayer(
     var cancelNotificationResult: LambdaTwoParamsRecorder<String?, Int, Unit> = lambdaRecorder { _, _ -> },
     var displayDiagnosticNotificationResult: LambdaOneParamRecorder<Notification, Boolean> = lambdaRecorder { _ -> true },
     var dismissDiagnosticNotificationResult: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
+    var displayUnregistrationNotificationResult: LambdaOneParamRecorder<Notification, Boolean> = lambdaRecorder { _ -> true },
 ) : NotificationDisplayer {
     override fun showNotification(tag: String?, id: Int, notification: Notification): Boolean {
         return showNotificationResult(tag, id, notification)
@@ -39,6 +40,10 @@ class FakeNotificationDisplayer(
 
     override fun dismissDiagnosticNotification() {
         return dismissDiagnosticNotificationResult()
+    }
+
+    override fun displayUnregistrationNotification(notification: Notification): Boolean {
+        return displayUnregistrationNotificationResult(notification)
     }
 
     fun verifySummaryCancelled(times: Int = 1) {

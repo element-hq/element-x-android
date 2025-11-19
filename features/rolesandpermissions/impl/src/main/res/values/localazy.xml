@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Admins only"</string>
+  <string name="screen_room_change_permissions_administrators">"Admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Ban people"</string>
   <string name="screen_room_change_permissions_delete_messages">"Remove messages"</string>
-  <string name="screen_room_change_permissions_everyone">"Everyone"</string>
-  <string name="screen_room_change_permissions_invite_people">"Invite people and accept requests to join"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Member moderation"</string>
+  <string name="screen_room_change_permissions_everyone">"Member"</string>
+  <string name="screen_room_change_permissions_invite_people">"Invite people"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Manage members"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Messages and content"</string>
-  <string name="screen_room_change_permissions_moderators">"Admins and moderators"</string>
-  <string name="screen_room_change_permissions_remove_people">"Remove people and decline requests to join"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderator"</string>
+  <string name="screen_room_change_permissions_remove_people">"Remove people"</string>
   <string name="screen_room_change_permissions_room_avatar">"Change avatar"</string>
-  <string name="screen_room_change_permissions_room_details">"Room details"</string>
+  <string name="screen_room_change_permissions_room_details">"Edit details"</string>
   <string name="screen_room_change_permissions_room_name">"Change name"</string>
   <string name="screen_room_change_permissions_room_topic">"Change topic"</string>
   <string name="screen_room_change_permissions_send_messages">"Send messages"</string>
@@ -67,5 +67,5 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Room details"</string>
   <string name="screen_room_roles_and_permissions_space_details">"Space details"</string>
-  <string name="screen_room_roles_and_permissions_title">"Roles and permissions"</string>
+  <string name="screen_room_roles_and_permissions_title">"Roles &amp; permissions"</string>
 </resources>

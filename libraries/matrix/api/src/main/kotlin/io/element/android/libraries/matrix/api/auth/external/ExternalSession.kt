@@ -17,5 +17,4 @@ data class ExternalSession(
     val accessToken: String,
     val refreshToken: String?,
     val homeserverUrl: String,
-    val slidingSyncProxy: String?
 )

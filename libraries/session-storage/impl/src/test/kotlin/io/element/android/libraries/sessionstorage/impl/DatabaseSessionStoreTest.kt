@@ -220,7 +220,6 @@ class DatabaseSessionStoreTest {
             accessToken = "accessToken",
             refreshToken = "refreshToken",
             homeserverUrl = "homeserverUrl",
-            slidingSyncProxy = "slidingSyncProxy",
             loginTimestamp = 1,
             oidcData = "aOidcData",
             isTokenValid = 1,
@@ -239,7 +238,6 @@ class DatabaseSessionStoreTest {
             accessToken = "accessTokenAltered",
             refreshToken = "refreshTokenAltered",
             homeserverUrl = "homeserverUrlAltered",
-            slidingSyncProxy = "slidingSyncProxyAltered",
             loginTimestamp = 2,
             oidcData = "aOidcDataAltered",
             isTokenValid = 1,
@@ -266,7 +264,6 @@ class DatabaseSessionStoreTest {
         assertThat(alteredSession.accessToken).isEqualTo(secondSessionData.accessToken)
         assertThat(alteredSession.refreshToken).isEqualTo(secondSessionData.refreshToken)
         assertThat(alteredSession.homeserverUrl).isEqualTo(secondSessionData.homeserverUrl)
-        assertThat(alteredSession.slidingSyncProxy).isEqualTo(secondSessionData.slidingSyncProxy)
         // Check that alteredSession.loginTimestamp is not altered, so equal to firstSessionData.loginTimestamp
         assertThat(alteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
         assertThat(alteredSession.oidcData).isEqualTo(secondSessionData.oidcData)
@@ -286,7 +283,6 @@ class DatabaseSessionStoreTest {
             accessToken = "accessToken",
             refreshToken = "refreshToken",
             homeserverUrl = "homeserverUrl",
-            slidingSyncProxy = "slidingSyncProxy",
             loginTimestamp = 1,
             oidcData = "aOidcData",
             isTokenValid = 1,
@@ -305,7 +301,6 @@ class DatabaseSessionStoreTest {
             accessToken = "accessTokenAltered",
             refreshToken = "refreshTokenAltered",
             homeserverUrl = "homeserverUrlAltered",
-            slidingSyncProxy = "slidingSyncProxyAltered",
             loginTimestamp = 2,
             oidcData = "aOidcDataAltered",
             isTokenValid = 1,

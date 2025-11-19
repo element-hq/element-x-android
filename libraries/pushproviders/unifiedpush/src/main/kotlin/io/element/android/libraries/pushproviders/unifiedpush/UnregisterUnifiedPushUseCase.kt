@@ -19,14 +19,21 @@ import timber.log.Timber
 
 interface UnregisterUnifiedPushUseCase {
     /**
-     * Unregister the app from the homeserver, then from UnifiedPush.
+     * Unregister the app from the homeserver, then from UnifiedPush if [unregisterUnifiedPush] is true.
      */
-    suspend fun unregister(matrixClient: MatrixClient, clientSecret: String): Result<Unit>
+    suspend fun unregister(
+        matrixClient: MatrixClient,
+        clientSecret: String,
+        unregisterUnifiedPush: Boolean = true,
+    ): Result<Unit>
 
     /**
      * Cleanup any remaining data for the given client secret and unregister the app from UnifiedPush.
      */
-    fun cleanup(clientSecret: String)
+    fun cleanup(
+        clientSecret: String,
+        unregisterUnifiedPush: Boolean = true,
+    )
 }
 
 @ContributesBinding(AppScope::class)
@@ -35,7 +42,11 @@ class DefaultUnregisterUnifiedPushUseCase(
     private val unifiedPushStore: UnifiedPushStore,
     private val pusherSubscriber: PusherSubscriber,
 ) : UnregisterUnifiedPushUseCase {
-    override suspend fun unregister(matrixClient: MatrixClient, clientSecret: String): Result<Unit> {
+    override suspend fun unregister(
+        matrixClient: MatrixClient,
+        clientSecret: String,
+        unregisterUnifiedPush: Boolean,
+    ): Result<Unit> {
         val endpoint = unifiedPushStore.getEndpoint(clientSecret)
         val gateway = unifiedPushStore.getPushGateway(clientSecret)
         if (endpoint == null || gateway == null) {
@@ -46,13 +57,15 @@ class DefaultUnregisterUnifiedPushUseCase(
         }
         return pusherSubscriber.unregisterPusher(matrixClient, endpoint, gateway)
             .onSuccess {
-                cleanup(clientSecret)
+                cleanup(clientSecret, unregisterUnifiedPush)
             }
     }
 
-    override fun cleanup(clientSecret: String) {
+    override fun cleanup(clientSecret: String, unregisterUnifiedPush: Boolean) {
         unifiedPushStore.storeUpEndpoint(clientSecret, null)
         unifiedPushStore.storePushGateway(clientSecret, null)
-        UnifiedPush.unregister(context, clientSecret)
+        if (unregisterUnifiedPush) {
+            UnifiedPush.unregister(context, clientSecret)
+        }
     }
 }

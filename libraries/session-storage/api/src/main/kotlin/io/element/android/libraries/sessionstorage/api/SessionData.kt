@@ -26,8 +26,6 @@ data class SessionData(
     val homeserverUrl: String,
     /** The Open ID Connect info for this session, if any. */
     val oidcData: String?,
-    /** The Sliding Sync Proxy URL for this session, if any. */
-    val slidingSyncProxy: String?,
     /** The timestamp of the last login. May be `null` in very old sessions. */
     val loginTimestamp: Date?,
     /** Whether the [accessToken] is valid or not. */

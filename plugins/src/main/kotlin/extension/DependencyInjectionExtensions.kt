@@ -22,6 +22,10 @@ import org.gradle.plugin.use.PluginDependency
 fun Project.setupDependencyInjection(
     generateNodeFactories: Boolean = shouldApplyAppyxCodegen(),
 ) {
+    if (project.path.endsWith(":api")) {
+        error("api module should not use setupDependencyInjection(). Move the implementation to `:impl` module")
+    }
+
     val libs = the<LibrariesForLibs>()
 
     // Apply Metro plugin and configure it

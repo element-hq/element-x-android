@@ -75,8 +75,9 @@ import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.mediaupload.impl.DefaultMediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
@@ -1551,20 +1552,18 @@ class MessageComposerPresenterTest {
         mediaPickerProvider = pickerProvider,
         sessionPreferencesStore = sessionPreferencesStore,
         localMediaFactory = localMediaFactory,
-        mediaSenderFactory = object : MediaSender.Factory {
-            override fun create(timelineMode: Timeline.Mode): MediaSender {
-                return MediaSender(
-                    preProcessor = mediaPreProcessor,
-                    room = room,
-                    timelineMode = timelineMode,
-                    mediaOptimizationConfigProvider = {
-                        MediaOptimizationConfig(
+        mediaSenderFactory = MediaSenderFactory { timelineMode ->
+            DefaultMediaSender(
+                preProcessor = mediaPreProcessor,
+                room = room,
+                timelineMode = timelineMode,
+                mediaOptimizationConfigProvider = {
+                    MediaOptimizationConfig(
                         compressImages = true,
                         videoCompressionPreset = VideoCompressionPreset.STANDARD
                     )
-                    }
-                )
-            }
+                }
+            )
         },
         snackbarDispatcher = snackbarDispatcher,
         analyticsService = analyticsService,

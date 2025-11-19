@@ -12,6 +12,8 @@ import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +38,7 @@ private val ROOM_LIST_RUST_FILTERS = listOf(
 internal class RoomListFactory(
     private val innerRoomListService: RoomListService,
     private val sessionCoroutineScope: CoroutineScope,
+    private val analyticsService: AnalyticsService,
 ) {
     private val roomSummaryDetailsFactory: RoomSummaryFactory = RoomSummaryFactory()
 
@@ -59,6 +62,8 @@ internal class RoomListFactory(
         val loadedPages = MutableStateFlow(1)
         var innerRoomList: InnerRoomList? = null
 
+        val firstRoomsTransaction = analyticsService.startTransaction("Load first set of rooms", "innerRoomList.entriesFlow")
+
         coroutineScope.launch(coroutineContext) {
             innerRoomList = innerProvider()
             innerRoomList.let { innerRoomList ->
@@ -67,6 +72,10 @@ internal class RoomListFactory(
                     roomListDynamicEvents = dynamicEvents,
                     initialFilterKind = RoomListEntriesDynamicFilterKind.All(ROOM_LIST_RUST_FILTERS),
                 ).onEach { update ->
+                    if (!firstRoomsTransaction.isFinished()) {
+                        analyticsService.stopLongRunningTransaction(AnalyticsLongRunningTransaction.FirstRoomsDisplayed)
+                        firstRoomsTransaction.finish()
+                    }
                     processor.postUpdate(update)
                 }.launchIn(this)
 

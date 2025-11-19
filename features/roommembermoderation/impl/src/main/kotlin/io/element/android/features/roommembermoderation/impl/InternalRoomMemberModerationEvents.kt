@@ -13,6 +13,6 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 sealed interface InternalRoomMemberModerationEvents : RoomMemberModerationEvents {
     data class DoKickUser(val reason: String) : InternalRoomMemberModerationEvents
     data class DoBanUser(val reason: String) : InternalRoomMemberModerationEvents
-    data object DoUnbanUser : InternalRoomMemberModerationEvents
+    data class DoUnbanUser(val reason: String) : InternalRoomMemberModerationEvents
     data object Reset : InternalRoomMemberModerationEvents
 }

@@ -32,7 +32,7 @@ import io.element.android.features.messages.api.timeline.voicemessages.composer.
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
@@ -57,7 +57,7 @@ class DefaultVoiceMessageComposerPresenter(
     @Assisted private val timelineMode: Timeline.Mode,
     private val voiceRecorder: VoiceRecorder,
     private val analyticsService: AnalyticsService,
-    mediaSenderFactory: MediaSender.Factory,
+    mediaSenderFactory: MediaSenderFactory,
     private val player: VoiceMessageComposerPlayer,
     private val messageComposerContext: MessageComposerContext,
     permissionsPresenterFactory: PermissionsPresenter.Factory

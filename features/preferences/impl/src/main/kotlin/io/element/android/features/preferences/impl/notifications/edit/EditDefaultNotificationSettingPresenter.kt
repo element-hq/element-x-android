@@ -23,6 +23,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -47,6 +48,10 @@ class EditDefaultNotificationSettingPresenter(
     @AssistedFactory
     interface Factory {
         fun create(oneToOne: Boolean): EditDefaultNotificationSettingPresenter
+    }
+
+    private val collator = Collator.getInstance().apply {
+        decomposition = Collator.CANONICAL_DECOMPOSITION
     }
 
     @Composable
@@ -121,10 +126,10 @@ class EditDefaultNotificationSettingPresenter(
         summaries: List<RoomSummary>,
         roomsWithUserDefinedMode: MutableState<List<EditNotificationSettingRoomInfo>>
     ) {
-        val roomWithUserDefinedRules: Set<String> = notificationSettingsService.getRoomsWithUserDefinedRules().getOrDefault(emptyList()).toSet()
+        val roomWithUserDefinedRules: Set<RoomId> = notificationSettingsService.getRoomsWithUserDefinedRules().getOrDefault(emptyList()).toSet()
         roomsWithUserDefinedMode.value = summaries
             .filter { roomSummary ->
-                roomWithUserDefinedRules.contains(roomSummary.roomId.value) && roomSummary.isOneToOne == isOneToOne
+                roomWithUserDefinedRules.contains(roomSummary.roomId) && roomSummary.isOneToOne == isOneToOne
             }
             .map { roomSummary ->
                 EditNotificationSettingRoomInfo(
@@ -138,7 +143,12 @@ class EditDefaultNotificationSettingPresenter(
                 )
             }
             // locale sensitive sorting
-            .sortedWith(compareBy(Collator.getInstance()) { roomSummary -> roomSummary.name })
+            .sortedWith(
+                compareBy(collator) { roomSummary ->
+                    // Collator does not handle null values, so we provide a fallback
+                    roomSummary.name ?: roomSummary.roomId.value
+                }
+            )
     }
 
     private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode, action: MutableState<AsyncAction<Unit>>) = launch {

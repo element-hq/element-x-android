@@ -42,4 +42,7 @@ dependencies {
 
     testCommonDependencies(libs)
     testImplementation(projects.services.toolbox.test)
+    testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.mediaupload.test)
 }

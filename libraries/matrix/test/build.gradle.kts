@@ -19,6 +19,7 @@ dependencies {
     api(projects.libraries.matrix.api)
     api(libs.coroutines.core)
     implementation(libs.coroutines.test)
+    implementation(projects.libraries.matrix.impl)
     implementation(projects.services.analytics.api)
     implementation(projects.tests.testutils)
     implementation(libs.kotlinx.collections.immutable)

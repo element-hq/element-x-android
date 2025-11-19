@@ -115,6 +115,7 @@ dependencies {
     testImplementation(projects.libraries.indicator.test)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.services.appnavstate.impl)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
 }

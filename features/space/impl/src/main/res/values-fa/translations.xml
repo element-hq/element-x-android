@@ -6,5 +6,6 @@
   <string name="screen_leave_space_title">"ترک %1$s؟"</string>
   <string name="screen_leave_space_title_last_admin">"تنها مدیر %1$s هستید"</string>
   <string name="screen_space_settings_leave_space">"ترک فضا"</string>
+  <string name="screen_space_settings_roles_and_permissions">"نقش‌ها و اجازه‌ها"</string>
   <string name="screen_space_settings_security_and_privacy">"امنیت و محرمانگی"</string>
 </resources>

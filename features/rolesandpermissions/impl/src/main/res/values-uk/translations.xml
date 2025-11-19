@@ -3,14 +3,11 @@
   <string name="screen_room_change_permissions_administrators">"Тільки для адміністраторів"</string>
   <string name="screen_room_change_permissions_ban_people">"Заблоковувати людей"</string>
   <string name="screen_room_change_permissions_delete_messages">"Вилучати повідомлення"</string>
-  <string name="screen_room_change_permissions_everyone">"Усі"</string>
   <string name="screen_room_change_permissions_invite_people">"Запрошувати людей і приймати запити на приєднання"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Модерація учасників"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Повідомлення та зміст"</string>
   <string name="screen_room_change_permissions_moderators">"Адміністратори та модератори"</string>
   <string name="screen_room_change_permissions_remove_people">"Вилучати людей і відхиляти запити на приєднання"</string>
   <string name="screen_room_change_permissions_room_avatar">"Змінювати аватар кімнати"</string>
-  <string name="screen_room_change_permissions_room_details">"Деталі кімнати"</string>
   <string name="screen_room_change_permissions_room_name">"Змінювати назву кімнати"</string>
   <string name="screen_room_change_permissions_room_topic">"Змінювати тему кімнати"</string>
   <string name="screen_room_change_permissions_send_messages">"Надсилати повідомлення"</string>
@@ -61,7 +58,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Повідомлення та зміст"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Модератори"</string>
   <string name="screen_room_roles_and_permissions_owners">"Власники"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Дозволи"</string>
   <string name="screen_room_roles_and_permissions_reset">"Скинути дозволи"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Після скидання дозволів ви втратите поточні налаштування."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Скинути дозволи?"</string>

@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.impl.auth
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
@@ -18,7 +17,6 @@ import io.element.android.libraries.matrix.impl.certificates.UserCertificatesPro
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
 class RustHomeServerLoginCompatibilityChecker(
     private val clientBuilderProvider: ClientBuilderProvider,
     private val userCertificatesProvider: UserCertificatesProvider,

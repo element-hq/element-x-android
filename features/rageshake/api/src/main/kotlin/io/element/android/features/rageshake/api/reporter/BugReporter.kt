@@ -45,5 +45,5 @@ interface BugReporter {
     /**
      * Save the logcat.
      */
-    fun saveLogCat()
+    fun saveLogCat(): File?
 }

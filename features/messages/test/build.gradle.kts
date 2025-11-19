@@ -25,4 +25,5 @@ dependencies {
     implementation(projects.libraries.voicerecorder.test)
     implementation(projects.services.analytics.test)
     implementation(projects.tests.testutils)
+    implementation(projects.libraries.mediaupload.impl)
 }

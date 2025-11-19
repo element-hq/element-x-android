@@ -10,6 +10,8 @@ package io.element.android.libraries.matrix.impl
 
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.ByteUnit
+import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -37,10 +39,13 @@ import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import org.matrix.rustcomponents.sdk.SqliteStoreBuilder
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
+import uniffi.matrix_sdk_base.MediaRetentionPolicy
 import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.DecryptionSettings
 import uniffi.matrix_sdk_crypto.TrustRequirement
 import java.io.File
+import kotlin.time.Duration.Companion.days
+import kotlin.time.toJavaDuration
 
 @Inject
 class RustMatrixClientFactory(
@@ -70,6 +75,19 @@ class RustMatrixClientFactory(
             .username(sessionData.userId)
             .use { it.build() }
 
+        client.setMediaRetentionPolicy(
+            MediaRetentionPolicy(
+                // Make this 500MB instead of 400MB
+                maxCacheSize = 500.megaBytes.to(ByteUnit.BYTES).toULong(),
+                // This is the default value, but let's make it explicit
+                maxFileSize = 20.megaBytes.to(ByteUnit.BYTES).toULong(),
+                // Use 30 days instead of 60
+                lastAccessExpiry = 30.days.toJavaDuration(),
+                // This is the default value, but let's make it explicit
+                cleanupFrequency = 1.days.toJavaDuration(),
+            )
+        )
+
         client.restoreSession(sessionData.toSession())
 
         create(client)
@@ -96,6 +114,7 @@ class RustMatrixClientFactory(
             clock = clock,
             timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
             featureFlagService = featureFlagService,
+            analyticsService = analyticsService,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }

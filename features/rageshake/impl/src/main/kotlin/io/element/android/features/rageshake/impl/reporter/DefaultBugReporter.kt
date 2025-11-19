@@ -95,8 +95,6 @@ class DefaultBugReporter(
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
     private var currentTracingLogLevel: String? = null
 
-    private val logCatErrFile: File
-        get() = File(logDirectory(), LOG_CAT_FILENAME)
     private val baseLogDirectory = File(context.cacheDir, LOG_DIRECTORY_NAME)
     private var currentLogDirectory: File = baseLogDirectory
 
@@ -160,10 +158,14 @@ class DefaultBugReporter(
                 }
                 if (withCrashLogs || withDevicesLogs) {
                     saveLogCat()
-                    val gzippedLogcat = compressFile(logCatErrFile)
-                    if (gzippedLogcat != null) {
-                        gzippedFiles.add(0, gzippedLogcat)
-                    }
+                        ?.let { logCatFile ->
+                            compressFile(logCatFile).also {
+                                logCatFile.safeDelete()
+                            }
+                        }
+                        ?.let { gzippedLogcat ->
+                            gzippedFiles.add(0, gzippedLogcat)
+                        }
                 }
                 val sessionData = sessionStore.getLatestSession()
                 val numberOfAccounts = sessionStore.numberOfSessions()
@@ -387,7 +389,8 @@ class DefaultBugReporter(
             onException = { Timber.e(it, "## getLogFiles() failed") }
         ) {
             val logDirectory = logDirectory()
-            logDirectory.listFiles()?.toList()
+            logDirectory.listFiles()
+                ?.filter { it.isFile && !it.name.endsWith(LOG_CAT_FILENAME) }
         }.orEmpty()
     }
 
@@ -400,19 +403,19 @@ class DefaultBugReporter(
      *
      * @return the file if the operation succeeds
      */
-    override fun saveLogCat() {
-        val file = logCatErrFile
+    override fun saveLogCat(): File? {
+        val file = File(baseLogDirectory, LOG_CAT_FILENAME)
         if (file.exists()) {
             file.safeDelete()
         }
-        try {
+        return try {
             file.writer().use {
-                getLogCatError(it)
+                getLogCatContent(it)
             }
-        } catch (error: OutOfMemoryError) {
-            Timber.e(error, "## saveLogCat() : fail to write logcat OOM")
+            file
         } catch (e: Exception) {
             Timber.e(e, "## saveLogCat() : fail to write logcat")
+            null
         }
     }
 
@@ -421,15 +424,10 @@ class DefaultBugReporter(
      *
      * @param streamWriter the stream writer
      */
-    private fun getLogCatError(streamWriter: OutputStreamWriter) {
-        val logcatProcess: Process
-
-        try {
-            logcatProcess = Runtime.getRuntime().exec(logcatCommandDebug)
-        } catch (e1: IOException) {
-            return
-        }
-
+    private fun getLogCatContent(streamWriter: OutputStreamWriter) {
+        val logcatProcess = tryOrNull {
+            Runtime.getRuntime().exec(logcatCommandDebug)
+        } ?: return
         try {
             val separator = System.lineSeparator()
             logcatProcess.inputStream
@@ -440,7 +438,7 @@ class DefaultBugReporter(
                     streamWriter.append(separator)
                 }
         } catch (e: IOException) {
-            Timber.e(e, "getLog fails")
+            Timber.e(e, "getLogCatContent fails")
         }
     }
 }

@@ -14,7 +14,7 @@ ij_smart_tabs = false
 ij_visual_guides = none
 ij_wrap_on_typing = false
 
-# Ktlint rule, for more information see https://pinterest.github.io/ktlint/1.1.1/faq/#how-do-i-enable-or-disable-a-rule
+# Ktlint rule, for more information see https://pinterest.github.io/ktlint/latest/faq/#how-do-i-enable-or-disable-a-rule
 ktlint_standard_wrapping = disabled
 ktlint_standard_trailing-comma-on-call-site = disabled
 ktlint_standard_trailing-comma-on-declaration-site = disabled
@@ -31,6 +31,10 @@ ktlint_function_naming_ignore_when_annotated_with = Composable
 ktlint_standard_function-expression-body = disabled
 ktlint_standard_chain-method-continuation = disabled
 ktlint_standard_class-signature = disabled
+# Added when upgrading to 1.8.0
+ktlint_standard_when-entry-bracing = disabled
+ktlint_standard_blank-line-between-when-conditions = disabled
+ktlint_standard_mixed-condition-operators = disabled
 
 [*.java]
 ij_java_align_consecutive_assignments = false

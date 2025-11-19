@@ -22,6 +22,7 @@ data class RoomPowerLevelsValues(
     val roomName: Long,
     val roomAvatar: Long,
     val roomTopic: Long,
+    val spaceChild: Long,
 )
 
 /**

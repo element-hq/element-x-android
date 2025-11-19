@@ -39,7 +39,7 @@ class DefaultUnifiedPushNewGatewayHandler(
         val userId = pushClientSecret.getUserIdFromSecret(clientSecret) ?: return Result.failure<Unit>(
             IllegalStateException("Unable to retrieve session")
         ).also {
-            Timber.w("Unable to retrieve session")
+            Timber.tag(loggerTag.value).w("Unable to retrieve session")
         }
         val userDataStore = userPushStoreFactory.getOrCreate(userId)
         return if (userDataStore.getPushProviderName() == UnifiedPushConfig.NAME) {
@@ -47,6 +47,9 @@ class DefaultUnifiedPushNewGatewayHandler(
                 .getOrRestore(userId)
                 .flatMap { client ->
                     pusherSubscriber.registerPusher(client, endpoint, pushGateway)
+                }
+                .onFailure {
+                    Timber.tag(loggerTag.value).w(it, "Unable to register pusher")
                 }
         } else {
             Timber.tag(loggerTag.value).d("This session is not using UnifiedPush pusher")

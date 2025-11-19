@@ -429,7 +429,6 @@ Naozaj chcete pokračovať?"</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
   <string name="screen_bug_report_a11y_screenshot">"Snímka obrazovky"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>

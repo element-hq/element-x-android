@@ -19,15 +19,19 @@ import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.NoopAnalyticsTransaction
 import io.element.android.services.analytics.impl.log.analyticsTag
 import io.element.android.services.analytics.impl.store.AnalyticsStore
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
+import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
 @SingleIn(AppScope::class)
@@ -40,6 +44,8 @@ class DefaultAnalyticsService(
     private val coroutineScope: CoroutineScope,
     private val sessionObserver: SessionObserver,
 ) : AnalyticsService, SessionListener {
+    private val pendingLongRunningTransactions = ConcurrentHashMap<AnalyticsLongRunningTransaction, AnalyticsTransaction>()
+
     // Cache for the store values
     private val userConsent = AtomicBoolean(false)
 
@@ -137,5 +143,21 @@ class DefaultAnalyticsService(
         if (userConsent.get()) {
             analyticsProviders.onEach { it.trackError(throwable) }
         }
+    }
+
+    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction {
+        return if (userConsent.get()) {
+            analyticsProviders.firstNotNullOfOrNull { it.startTransaction(name, operation) }
+        } else {
+            null
+        } ?: NoopAnalyticsTransaction
+    }
+
+    override fun startLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction) {
+        pendingLongRunningTransactions[longRunningTransaction] = startTransaction(longRunningTransaction.name, longRunningTransaction.operation)
+    }
+
+    override fun stopLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction) {
+        pendingLongRunningTransactions.remove(longRunningTransaction)?.finish()
     }
 }

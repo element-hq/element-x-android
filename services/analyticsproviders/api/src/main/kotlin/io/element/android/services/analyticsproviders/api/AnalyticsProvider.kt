@@ -20,4 +20,6 @@ interface AnalyticsProvider : AnalyticsTracker, ErrorTracker {
     fun init()
 
     fun stop()
+
+    fun startTransaction(name: String, operation: String? = null): AnalyticsTransaction?
 }

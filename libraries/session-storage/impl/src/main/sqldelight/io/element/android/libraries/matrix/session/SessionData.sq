@@ -14,7 +14,6 @@ CREATE TABLE SessionData (
     accessToken TEXT NOT NULL,
     refreshToken TEXT,
     homeserverUrl TEXT NOT NULL,
-    slidingSyncProxy TEXT,
     -- added in version 2
     loginTimestamp INTEGER,
     -- added in version 3

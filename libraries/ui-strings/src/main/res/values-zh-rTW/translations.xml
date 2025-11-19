@@ -412,7 +412,6 @@
   <string name="invite_friends_rich_title">"🔐️ 在 %1$s 上加入我"</string>
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="notification_thread_in_room">"在 %1$s 的討論串"</string>
   <string name="preference_rageshake">"憤怒搖晃以回報臭蟲"</string>
   <string name="screen_bug_report_a11y_screenshot">"螢幕截圖"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s：%2$s"</string>

@@ -12,5 +12,6 @@
   <string name="screen_leave_space_subtitle">"Dewiswch yr ystafelloedd yr hoffech chi eu gadael nad chi yw\'r unig weinyddwr ar eu cyfer:"</string>
   <string name="screen_leave_space_title">"Gadael %1$s ?"</string>
   <string name="screen_space_settings_leave_space">"Gadael y gofod"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Rolau a chaniatâd"</string>
   <string name="screen_space_settings_security_and_privacy">"Diogelwch a phreifatrwydd"</string>
 </resources>

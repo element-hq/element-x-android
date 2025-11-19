@@ -10,6 +10,7 @@ package io.element.android.libraries.push.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -35,6 +36,15 @@ interface PushService {
         matrixClient: MatrixClient,
         pushProvider: PushProvider,
         distributor: Distributor,
+    ): Result<Unit>
+
+    /**
+     * Ensure that the pusher with the current push provider and distributor is registered.
+     * If there is no current config, the default push provider with the default distributor will be used.
+     * Error can be [PusherRegistrationFailure].
+     */
+    suspend fun ensurePusherIsRegistered(
+        matrixClient: MatrixClient,
     ): Result<Unit>
 
     /**
@@ -73,4 +83,9 @@ interface PushService {
      * Reset the battery optimization state.
      */
     suspend fun resetBatteryOptimizationState()
+
+    /**
+     * Notify the user that the service is un-registered.
+     */
+    suspend fun onServiceUnregistered(userId: UserId)
 }

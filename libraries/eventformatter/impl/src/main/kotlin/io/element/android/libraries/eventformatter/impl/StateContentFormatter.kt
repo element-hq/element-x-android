@@ -154,7 +154,7 @@ class StateContentFormatter(
                     "RoomHistoryVisibility"
                 }
             }
-            OtherState.RoomJoinRules -> when (renderingMode) {
+            is OtherState.RoomJoinRules -> when (renderingMode) {
                 RenderingMode.RoomList -> {
                     Timber.v("Filtering timeline item for room state change: $content")
                     null

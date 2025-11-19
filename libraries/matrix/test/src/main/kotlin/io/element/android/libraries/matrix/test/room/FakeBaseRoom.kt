@@ -260,5 +260,6 @@ fun defaultRoomPowerLevelValues() = RoomPowerLevelsValues(
     redactEvents = 50,
     roomName = 100,
     roomAvatar = 100,
-    roomTopic = 100
+    roomTopic = 100,
+    spaceChild = 100,
 )

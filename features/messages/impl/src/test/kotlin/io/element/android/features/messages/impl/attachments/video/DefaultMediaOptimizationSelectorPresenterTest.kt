@@ -21,7 +21,6 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.mediaupload.api.MaxUploadSizeProvider
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
@@ -206,7 +205,7 @@ class DefaultMediaOptimizationSelectorPresenterTest {
     @Test
     fun `present - max upload size will default to 100MB if we can't get it`() = runTest {
         val presenter = createDefaultMediaOptimizationSelectorPresenter(
-            maxUploadSizeProvider = MaxUploadSizeProvider(FakeMatrixClient(getMaxUploadSizeResult = { Result.failure(AN_EXCEPTION) }))
+            maxUploadSizeProvider = MaxUploadSizeProvider { Result.failure(AN_EXCEPTION) }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -233,9 +232,7 @@ class DefaultMediaOptimizationSelectorPresenterTest {
 
     private fun createDefaultMediaOptimizationSelectorPresenter(
         localMedia: LocalMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
-        maxUploadSizeProvider: MaxUploadSizeProvider = MaxUploadSizeProvider(
-            FakeMatrixClient(getMaxUploadSizeResult = { Result.success(1_000L) }),
-        ),
+        maxUploadSizeProvider: MaxUploadSizeProvider = MaxUploadSizeProvider { Result.success(1_000L) },
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SelectableMediaQuality.key to true)),
         mediaExtractorFactory: FakeVideoMetadataExtractorFactory = FakeVideoMetadataExtractorFactory(),

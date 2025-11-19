@@ -12,8 +12,8 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.mxc.MxcTools
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
+import io.element.android.libraries.matrix.test.mxc.FakeMxcTools
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -131,7 +131,7 @@ private fun createDefaultVoiceMessageMediaRepo(
     mxcUri: String = MXC_URI,
 ) = DefaultVoiceMessageMediaRepo(
     cacheDir = temporaryFolder.root,
-    mxcTools = MxcTools(),
+    mxcTools = FakeMxcTools(),
     matrixMediaLoader = matrixMediaLoader,
     mediaSource = MediaSource(
         url = mxcUri,

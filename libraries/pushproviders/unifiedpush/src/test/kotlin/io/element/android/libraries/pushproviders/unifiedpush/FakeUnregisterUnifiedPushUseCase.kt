@@ -12,14 +12,21 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeUnregisterUnifiedPushUseCase(
-    private val unregisterLambda: (MatrixClient, String) -> Result<Unit> = { _, _ -> lambdaError() },
-    private val cleanupLambda: (String) -> Unit = { lambdaError() },
+    private val unregisterLambda: (MatrixClient, String, Boolean) -> Result<Unit> = { _, _, _ -> lambdaError() },
+    private val cleanupLambda: (String, Boolean) -> Unit = { _, _ -> lambdaError() },
 ) : UnregisterUnifiedPushUseCase {
-    override suspend fun unregister(matrixClient: MatrixClient, clientSecret: String): Result<Unit> {
-        return unregisterLambda(matrixClient, clientSecret)
+    override suspend fun unregister(
+        matrixClient: MatrixClient,
+        clientSecret: String,
+        unregisterUnifiedPush: Boolean,
+    ): Result<Unit> {
+        return unregisterLambda(matrixClient, clientSecret, unregisterUnifiedPush)
     }
 
-    override fun cleanup(clientSecret: String) {
-        cleanupLambda(clientSecret)
+    override fun cleanup(
+        clientSecret: String,
+        unregisterUnifiedPush: Boolean,
+    ) {
+        cleanupLambda(clientSecret, unregisterUnifiedPush)
     }
 }

@@ -9,6 +9,7 @@
 package io.element.android.services.analytics.api
 
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
+import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.element.android.services.analyticsproviders.api.trackers.AnalyticsTracker
 import io.element.android.services.analyticsproviders.api.trackers.ErrorTracker
 import kotlinx.coroutines.flow.Flow
@@ -48,4 +49,23 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
      * Update analyticsId from the AccountData.
      */
     suspend fun setAnalyticsId(analyticsId: String)
+
+    /**
+     * Starts a transaction to measure the performance of an operation.
+     */
+    fun startTransaction(name: String, operation: String? = null): AnalyticsTransaction
+
+    fun startLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction)
+
+    fun stopLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction)
+}
+
+inline fun <T> AnalyticsService.recordTransaction(name: String, operation: String, block: (AnalyticsTransaction) -> T): T {
+    val transaction = startTransaction(name, operation)
+    try {
+        val result = block(transaction)
+        return result
+    } finally {
+        transaction.finish()
+    }
 }

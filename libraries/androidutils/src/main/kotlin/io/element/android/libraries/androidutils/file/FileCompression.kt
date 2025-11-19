@@ -39,8 +39,5 @@ fun compressFile(file: File): File? {
     } catch (e: Exception) {
         Timber.e(e, "## compressFile() failed")
         null
-    } catch (oom: OutOfMemoryError) {
-        Timber.e(oom, "## compressFile() failed")
-        null
     }
 }

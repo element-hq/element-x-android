@@ -1,5 +1,3 @@
-import extension.setupDependencyInjection
-
 /*
  * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
@@ -15,8 +13,6 @@ plugins {
 android {
     namespace = "io.element.android.libraries.recentemojis.api"
 }
-
-setupDependencyInjection()
 
 dependencies {
     implementation(projects.libraries.architecture)

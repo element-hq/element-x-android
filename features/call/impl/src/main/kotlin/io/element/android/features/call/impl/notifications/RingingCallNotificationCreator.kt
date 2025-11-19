@@ -72,7 +72,7 @@ class RingingCallNotificationCreator(
     ): Notification? {
         val matrixClient = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val imageLoader = imageLoaderHolder.get(matrixClient)
-        val largeIcon = notificationBitmapLoader.getUserIcon(
+        val userIcon = notificationBitmapLoader.getUserIcon(
             avatarData = AvatarData(
                 id = roomId.value,
                 name = roomName,
@@ -84,7 +84,7 @@ class RingingCallNotificationCreator(
 
         val caller = Person.Builder()
             .setName(senderDisplayName)
-            .setIcon(largeIcon)
+            .setIcon(userIcon)
             .setImportant(true)
             .build()
 
@@ -133,12 +133,8 @@ class RingingCallNotificationCreator(
             .setWhen(timestamp)
             .setOngoing(true)
             .setShowWhen(false)
-            .apply {
-                if (textContent != null) {
-                    setContentText(textContent)
-                    // Else the content text is set by the style (will be "Incoming call")
-                }
-            }
+            // If textContent is null, the content text is set by the style (will be "Incoming call")
+            .setContentText(textContent)
             .setSound(Settings.System.DEFAULT_RINGTONE_URI, AudioManager.STREAM_RING)
             .setTimeoutAfter(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds.inWholeMilliseconds)
             .setContentIntent(answerIntent)

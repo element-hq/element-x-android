@@ -17,6 +17,7 @@ import io.element.android.features.messages.impl.link.aLinkState
 import io.element.android.features.messages.impl.pinned.DefaultPinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
+import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
@@ -319,6 +320,7 @@ class PinnedMessagesListPresenterTest {
             analyticsService = analyticsService,
             featureFlagService = featureFlagService,
             sessionCoroutineScope = this,
+            htmlConverterProvider = FakeHtmlConverterProvider(),
         )
     }
 }

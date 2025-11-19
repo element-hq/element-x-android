@@ -39,7 +39,6 @@ class DefaultMessageParser(
             accessToken = accessToken,
             deviceId = deviceId,
             refreshToken = null,
-            slidingSyncProxy = null
         )
     }
 }

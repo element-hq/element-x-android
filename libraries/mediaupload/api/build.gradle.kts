@@ -1,4 +1,3 @@
-import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
 /*
@@ -13,8 +12,6 @@ plugins {
     id("io.element.android-library")
 }
 
-setupDependencyInjection()
-
 android {
     namespace = "io.element.android.libraries.mediaupload.api"
 }
@@ -27,9 +24,4 @@ dependencies {
     api(projects.libraries.matrix.api)
     api(projects.libraries.preferences.api)
     implementation(libs.coroutines.core)
-
-    testCommonDependencies(libs)
-    testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.preferences.test)
-    testImplementation(projects.libraries.mediaupload.test)
 }

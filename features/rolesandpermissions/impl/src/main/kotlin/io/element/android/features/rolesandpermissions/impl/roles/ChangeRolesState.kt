@@ -13,8 +13,8 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.room.PowerLevelRoomMemberComparator
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 data class ChangeRolesState(
@@ -30,21 +30,24 @@ data class ChangeRolesState(
 )
 
 data class MembersByRole(
-    val owners: ImmutableList<RoomMember>,
-    val admins: ImmutableList<RoomMember>,
-    val moderators: ImmutableList<RoomMember>,
-    val members: ImmutableList<RoomMember>,
+    val owners: ImmutableList<RoomMember> = persistentListOf(),
+    val admins: ImmutableList<RoomMember> = persistentListOf(),
+    val moderators: ImmutableList<RoomMember> = persistentListOf(),
+    val members: ImmutableList<RoomMember> = persistentListOf(),
 ) {
-    constructor(members: List<RoomMember>) : this(
-        owners = members.filter { it.role is RoomMember.Role.Owner }.sorted(),
-        admins = members.filter { it.role == RoomMember.Role.Admin }.sorted(),
-        moderators = members.filter { it.role == RoomMember.Role.Moderator }.sorted(),
-        members = members.filter { it.role == RoomMember.Role.User }.sorted(),
+    constructor(members: List<RoomMember>, comparator: Comparator<RoomMember>) : this(
+        owners = members.filterAndSort(comparator) { it.role is RoomMember.Role.Owner },
+        admins = members.filterAndSort(comparator) { it.role == RoomMember.Role.Admin },
+        moderators = members.filterAndSort(comparator) { it.role == RoomMember.Role.Moderator },
+        members = members.filterAndSort(comparator) { it.role == RoomMember.Role.User },
     )
 
     fun isEmpty() = owners.isEmpty() && admins.isEmpty() && moderators.isEmpty() && members.isEmpty()
 }
 
-private fun Iterable<RoomMember>.sorted(): ImmutableList<RoomMember> {
-    return sortedWith(PowerLevelRoomMemberComparator()).toImmutableList()
+private fun Iterable<RoomMember>.filterAndSort(
+    comparator: Comparator<RoomMember>,
+    predicate: (RoomMember) -> Boolean,
+): ImmutableList<RoomMember> {
+    return filter(predicate).sortedWith(comparator).toImmutableList()
 }

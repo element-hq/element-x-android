@@ -19,7 +19,6 @@ internal fun aDbSessionData(
     accessToken = "accessToken",
     refreshToken = "refreshToken",
     homeserverUrl = "homeserverUrl",
-    slidingSyncProxy = null,
     loginTimestamp = null,
     oidcData = "aOidcData",
     isTokenValid = 1,

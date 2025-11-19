@@ -84,5 +84,4 @@ internal fun anExternalSession(
     accessToken = "access_token",
     deviceId = "device_id",
     refreshToken = null,
-    slidingSyncProxy = null
 )

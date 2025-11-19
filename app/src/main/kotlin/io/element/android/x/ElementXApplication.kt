@@ -12,11 +12,11 @@ import android.app.Application
 import androidx.startup.AppInitializer
 import androidx.work.Configuration
 import dev.zacsweers.metro.createGraphFactory
-import io.element.android.features.cachecleaner.api.CacheCleanerInitializer
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.x.di.AppGraph
 import io.element.android.x.info.logApplicationInfo
+import io.element.android.x.initializer.CacheCleanerInitializer
 import io.element.android.x.initializer.CrashInitializer
 import io.element.android.x.initializer.PlatformInitializer
 
@@ -24,8 +24,8 @@ class ElementXApplication : Application(), DependencyInjectionGraphOwner, Config
     override val graph: AppGraph = createGraphFactory<AppGraph.Factory>().create(this)
 
     override val workManagerConfiguration: Configuration = Configuration.Builder()
-            .setWorkerFactory(MetroWorkerFactory(graph.workerProviders))
-            .build()
+        .setWorkerFactory(MetroWorkerFactory(graph.workerProviders))
+        .build()
 
     override fun onCreate() {
         super.onCreate()

@@ -131,9 +131,9 @@ class RustNotificationSettingsService(
         }
     }
 
-    override suspend fun getRoomsWithUserDefinedRules(): Result<List<String>> =
+    override suspend fun getRoomsWithUserDefinedRules(): Result<List<RoomId>> =
         runCatchingExceptions {
-            notificationSettings.await().getRoomsWithUserDefinedRules(enabled = true)
+            notificationSettings.await().getRoomsWithUserDefinedRules(enabled = true).map(::RoomId)
         }
 
     override suspend fun canHomeServerPushEncryptedEventsToDevice(): Result<Boolean> =

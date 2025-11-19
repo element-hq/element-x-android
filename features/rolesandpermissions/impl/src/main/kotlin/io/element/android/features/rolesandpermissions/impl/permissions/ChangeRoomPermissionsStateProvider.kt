@@ -58,5 +58,7 @@ private fun previewPermissions(): RoomPowerLevelsValues {
         roomName = RoomMember.Role.Admin.powerLevel,
         roomAvatar = RoomMember.Role.Moderator.powerLevel,
         roomTopic = RoomMember.Role.User.powerLevel,
+        // SpaceManagement section
+        spaceChild = RoomMember.Role.Moderator.powerLevel,
     )
 }

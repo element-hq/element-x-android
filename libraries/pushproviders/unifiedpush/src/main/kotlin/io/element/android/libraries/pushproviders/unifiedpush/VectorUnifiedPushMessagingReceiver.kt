@@ -35,7 +35,9 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var unifiedPushGatewayResolver: UnifiedPushGatewayResolver
     @Inject lateinit var unifiedPushGatewayUrlResolver: UnifiedPushGatewayUrlResolver
     @Inject lateinit var newGatewayHandler: UnifiedPushNewGatewayHandler
+    @Inject lateinit var removedGatewayHandler: UnifiedPushRemovedGatewayHandler
     @Inject lateinit var endpointRegistrationHandler: EndpointRegistrationHandler
+
     @AppCoroutineScope
     @Inject lateinit var coroutineScope: CoroutineScope
 
@@ -104,30 +106,23 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      */
     override fun onRegistrationFailed(context: Context, reason: FailedReason, instance: String) {
         Timber.tag(loggerTag.value).e("onRegistrationFailed for $instance, reason: $reason")
-        /*
-        Toast.makeText(context, "Push service registration failed", Toast.LENGTH_SHORT).show()
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        pushDataStore.setFdroidSyncBackgroundMode(mode)
-        guardServiceStarter.start()
-         */
+        coroutineScope.launch {
+            endpointRegistrationHandler.registrationDone(
+                RegistrationResult(
+                    clientSecret = instance,
+                    result = Result.failure(Exception("Registration failed. Reason: $reason")),
+                )
+            )
+        }
     }
 
     /**
      * Called when this application is unregistered from receiving push messages.
      */
     override fun onUnregistered(context: Context, instance: String) {
-        Timber.tag(loggerTag.value).w("UnifiedPush: Unregistered")
-        /*
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        pushDataStore.setFdroidSyncBackgroundMode(mode)
-        guardServiceStarter.start()
-        runBlocking {
-            try {
-                pushersManager.unregisterPusher(unifiedPushHelper.getEndpointOrToken().orEmpty())
-            } catch (e: Exception) {
-                Timber.tag(loggerTag.value).d("Probably unregistering a non existing pusher")
-            }
+        Timber.tag(loggerTag.value).w("onUnregistered $instance")
+        coroutineScope.launch {
+            removedGatewayHandler.handle(instance)
         }
-         */
     }
 }

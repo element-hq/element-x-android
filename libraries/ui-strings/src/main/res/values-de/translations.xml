@@ -420,7 +420,6 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="invite_friends_rich_title">"🔐️ Begleite mich auf %1$s"</string>
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="notification_thread_in_room">"Thread in %1$s"</string>
   <string name="preference_rageshake">"Heftiges Schütteln um Fehler zu melden"</string>
   <string name="screen_bug_report_a11y_screenshot">"Bildschirmfoto"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>

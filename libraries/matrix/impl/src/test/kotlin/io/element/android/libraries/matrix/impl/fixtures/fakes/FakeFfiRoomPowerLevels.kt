@@ -31,4 +31,5 @@ fun defaultFfiRoomPowerLevelValues() = RoomPowerLevelsValues(
     roomTopic = 100,
     stateDefault = 0,
     usersDefault = 0,
+    spaceChild = 100,
 )

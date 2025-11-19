@@ -97,6 +97,7 @@ class ChangeRoomPermissionsPresenterTest {
             presenter.present()
         }.test {
             val state = awaitUpdatedItem()
+            val initialPermissions = defaultPermissions()
 
             state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.INVITE, SelectableRole.Moderator))
             state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.KICK, SelectableRole.Moderator))
@@ -120,6 +121,7 @@ class ChangeRoomPermissionsPresenterTest {
                         roomName = Moderator.powerLevel,
                         roomAvatar = Moderator.powerLevel,
                         roomTopic = Moderator.powerLevel,
+                        spaceChild = initialPermissions.spaceChild
                     )
                 )
             }

@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.api.timeline.item.event
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 
 @Immutable
 sealed interface OtherState {
@@ -22,7 +23,7 @@ sealed interface OtherState {
     data object RoomEncryption : OtherState
     data object RoomGuestAccess : OtherState
     data object RoomHistoryVisibility : OtherState
-    data object RoomJoinRules : OtherState
+    data class RoomJoinRules(val joinRule: JoinRule?) : OtherState
     data class RoomName(val name: String?) : OtherState
     data class RoomPinnedEvents(val change: Change) : OtherState {
         enum class Change {

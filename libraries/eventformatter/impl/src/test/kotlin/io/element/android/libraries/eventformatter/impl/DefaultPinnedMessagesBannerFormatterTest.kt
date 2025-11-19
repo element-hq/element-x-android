@@ -601,7 +601,7 @@ class DefaultPinnedMessagesBannerFormatterTest {
             OtherState.RoomCanonicalAlias,
             OtherState.RoomGuestAccess,
             OtherState.RoomHistoryVisibility,
-            OtherState.RoomJoinRules,
+            OtherState.RoomJoinRules(null),
             OtherState.RoomPinnedEvents(OtherState.RoomPinnedEvents.Change.CHANGED),
             OtherState.RoomUserPowerLevels(emptyMap()),
             OtherState.RoomServerAcl,

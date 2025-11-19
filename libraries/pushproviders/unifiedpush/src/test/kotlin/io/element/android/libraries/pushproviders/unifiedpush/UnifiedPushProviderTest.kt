@@ -118,7 +118,7 @@ class UnifiedPushProviderTest {
     fun `unregister ok`() = runTest {
         val matrixClient = FakeMatrixClient()
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val unregisterLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.success(Unit) }
+        val unregisterLambda = lambdaRecorder<MatrixClient, String, Boolean, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = getSecretForUserResultLambda,
@@ -134,14 +134,14 @@ class UnifiedPushProviderTest {
             .with(value(A_SESSION_ID))
         unregisterLambda.assertions()
             .isCalledOnce()
-            .with(value(matrixClient), value(A_SECRET))
+            .with(value(matrixClient), value(A_SECRET), value(true))
     }
 
     @Test
     fun `unregister ko`() = runTest {
         val matrixClient = FakeMatrixClient()
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val unregisterLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.failure(AN_EXCEPTION) }
+        val unregisterLambda = lambdaRecorder<MatrixClient, String, Boolean, Result<Unit>> { _, _, _ -> Result.failure(AN_EXCEPTION) }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = getSecretForUserResultLambda,
@@ -157,7 +157,7 @@ class UnifiedPushProviderTest {
             .with(value(A_SESSION_ID))
         unregisterLambda.assertions()
             .isCalledOnce()
-            .with(value(matrixClient), value(A_SECRET))
+            .with(value(matrixClient), value(A_SECRET), value(true))
     }
 
     @Test
@@ -230,7 +230,7 @@ class UnifiedPushProviderTest {
 
     @Test
     fun `onSessionDeleted should do the cleanup`() = runTest {
-        val cleanupLambda = lambdaRecorder<String, Unit> { }
+        val cleanupLambda = lambdaRecorder<String, Boolean, Unit> { _, _ -> }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = { A_SECRET }
@@ -240,7 +240,7 @@ class UnifiedPushProviderTest {
             ),
         )
         unifiedPushProvider.onSessionDeleted(A_SESSION_ID)
-        cleanupLambda.assertions().isCalledOnce().with(value(A_SECRET))
+        cleanupLambda.assertions().isCalledOnce().with(value(A_SECRET), value(true))
     }
 
     private fun createUnifiedPushProvider(

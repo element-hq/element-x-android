@@ -8,14 +8,11 @@
   <string name="screen_room_change_permissions_administrators">"Tylko administratorzy"</string>
   <string name="screen_room_change_permissions_ban_people">"Banowanie osób"</string>
   <string name="screen_room_change_permissions_delete_messages">"Usuń wiadomości"</string>
-  <string name="screen_room_change_permissions_everyone">"Wszyscy"</string>
   <string name="screen_room_change_permissions_invite_people">"Zapraszanie osób i akceptowanie próśb o dołączenie"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderacja członków"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Wiadomości i zawartość"</string>
   <string name="screen_room_change_permissions_moderators">"Administratorzy i moderatorzy"</string>
   <string name="screen_room_change_permissions_remove_people">"Usuwanie osób i odrzucanie próśb o dołączenie"</string>
   <string name="screen_room_change_permissions_room_avatar">"Zmień awatar pokoju"</string>
-  <string name="screen_room_change_permissions_room_details">"Szczegóły pokoju"</string>
   <string name="screen_room_change_permissions_room_name">"Zmień nazwę pokoju"</string>
   <string name="screen_room_change_permissions_room_topic">"Zmień temat pokoju"</string>
   <string name="screen_room_change_permissions_send_messages">"Wysyłanie wiadomości"</string>
@@ -112,7 +109,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Wiadomości i zawartość"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorzy"</string>
   <string name="screen_room_roles_and_permissions_owners">"Właściciele"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Uprawnienia"</string>
   <string name="screen_room_roles_and_permissions_reset">"Resetuj uprawnienia"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Po zresetowaniu uprawnień utracisz bieżące ustawienia."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Zresetować uprawnienia?"</string>
@@ -131,7 +127,7 @@ Odradzamy włączanie szyfrowania dla pokoi, które każdy może znaleźć i do 
   <string name="screen_security_and_privacy_encryption_section_header">"Szyfrowanie"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Włącz szyfrowanie end-to-end"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Każdy może znaleźć i dołączyć"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Wszyscy"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Każdy"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Tylko osoby z zaproszeniem mogą dołączyć"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Tylko zaproszenie"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Dostęp do pokoju"</string>

@@ -48,4 +48,5 @@ dependencies {
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.roomselect.test)
+    testImplementation(projects.services.appnavstate.impl)
 }

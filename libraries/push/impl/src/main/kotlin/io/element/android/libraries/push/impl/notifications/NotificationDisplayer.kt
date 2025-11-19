@@ -24,6 +24,7 @@ interface NotificationDisplayer {
     fun cancelNotification(tag: String?, id: Int)
     fun displayDiagnosticNotification(notification: Notification): Boolean
     fun dismissDiagnosticNotification()
+    fun displayUnregistrationNotification(notification: Notification): Boolean
 }
 
 @ContributesBinding(AppScope::class)
@@ -60,6 +61,14 @@ class DefaultNotificationDisplayer(
         )
     }
 
+    override fun displayUnregistrationNotification(notification: Notification): Boolean {
+        return showNotification(
+            tag = TAG_DIAGNOSTIC,
+            id = NOTIFICATION_ID_UNREGISTRATION,
+            notification = notification,
+        )
+    }
+
     companion object {
         private const val TAG_DIAGNOSTIC = "DIAGNOSTIC"
 
@@ -67,5 +76,6 @@ class DefaultNotificationDisplayer(
          * IDs for notifications
          * ========================================================================================== */
         private const val NOTIFICATION_ID_DIAGNOSTIC = 888
+        private const val NOTIFICATION_ID_UNREGISTRATION = 889
     }
 }

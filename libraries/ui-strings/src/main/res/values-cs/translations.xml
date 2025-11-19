@@ -427,7 +427,6 @@ Opravdu chcete pokračovat?"</string>
   <string name="invite_friends_rich_title">"🔐️ Připojte se ke mně na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
   <string name="screen_bug_report_a11y_screenshot">"Snímek obrazovky"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>

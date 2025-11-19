@@ -97,6 +97,7 @@ dependencies {
     testImplementation(projects.libraries.matrixmedia.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.services.analytics.test)
+    testImplementation(projects.services.appnavstate.impl)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.toolbox.test)
 }

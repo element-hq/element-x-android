@@ -23,6 +23,7 @@ import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -51,10 +52,17 @@ class VectorUnifiedPushMessagingReceiverTest {
     }
 
     @Test
-    fun `onUnregistered does nothing`() = runTest {
+    fun `onUnregistered invokes the removedGatewayHandler`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver()
+        val handleResult = lambdaRecorder<String, Result<Unit>> {
+            Result.success(Unit)
+        }
+        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
+            removedGatewayHandler = UnifiedPushRemovedGatewayHandler { handleResult(it) },
+        )
         vectorUnifiedPushMessagingReceiver.onUnregistered(context, A_SECRET)
+        advanceUntilIdle()
+        handleResult.assertions().isCalledOnce().with(value(A_SECRET))
     }
 
     @Test
@@ -199,6 +207,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         unifiedPushGatewayUrlResolver: UnifiedPushGatewayUrlResolver = FakeUnifiedPushGatewayUrlResolver(),
         unifiedPushNewGatewayHandler: UnifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(),
         endpointRegistrationHandler: EndpointRegistrationHandler = EndpointRegistrationHandler(),
+        removedGatewayHandler: UnifiedPushRemovedGatewayHandler = UnifiedPushRemovedGatewayHandler { lambdaError() },
     ): VectorUnifiedPushMessagingReceiver {
         return VectorUnifiedPushMessagingReceiver().apply {
             this.pushParser = unifiedPushParser
@@ -208,6 +217,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             this.unifiedPushGatewayResolver = unifiedPushGatewayResolver
             this.unifiedPushGatewayUrlResolver = unifiedPushGatewayUrlResolver
             this.newGatewayHandler = unifiedPushNewGatewayHandler
+            this.removedGatewayHandler = removedGatewayHandler
             this.endpointRegistrationHandler = endpointRegistrationHandler
             this.coroutineScope = this@createVectorUnifiedPushMessagingReceiver
         }

@@ -6,14 +6,11 @@
   <string name="screen_room_change_permissions_administrators">"Толькі адміністратары"</string>
   <string name="screen_room_change_permissions_ban_people">"Заблакіраваць людзей"</string>
   <string name="screen_room_change_permissions_delete_messages">"Выдаліць паведамленні"</string>
-  <string name="screen_room_change_permissions_everyone">"Усе"</string>
   <string name="screen_room_change_permissions_invite_people">"Запрашайце людзей і прымайце запыты на далучэнне"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Мадэрацыя ўдзельнікаў"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Паведамленні і змест"</string>
   <string name="screen_room_change_permissions_moderators">"Адміністратары і мадэратары"</string>
   <string name="screen_room_change_permissions_remove_people">"Выдаляйце людзей і адхіляйце запыты на далучэнне"</string>
   <string name="screen_room_change_permissions_room_avatar">"Змяніць аватар пакоя"</string>
-  <string name="screen_room_change_permissions_room_details">"Дэталі пакоя"</string>
   <string name="screen_room_change_permissions_room_name">"Змяніць назву пакоя"</string>
   <string name="screen_room_change_permissions_room_topic">"Змяніць тэму пакоя"</string>
   <string name="screen_room_change_permissions_send_messages">"Адправіць паведамленні"</string>
@@ -98,7 +95,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Мадэрацыя ўдзельнікаў"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Паведамленні і змест"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Мадэратары"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Дазволы"</string>
   <string name="screen_room_roles_and_permissions_reset">"Скінуць дазволы"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Пасля скіду дазволаў вы страціце бягучыя налады."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Скінуць дазволы?"</string>
@@ -106,6 +102,5 @@
   <string name="screen_room_roles_and_permissions_room_details">"Дэталі пакоя"</string>
   <string name="screen_room_roles_and_permissions_title">"Ролі і дазволы"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Папрасіце далучыцца"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Хто заўгодна"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Хто заўгодна"</string>
 </resources>

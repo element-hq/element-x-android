@@ -208,7 +208,7 @@ class DeveloperSettingsPresenterTest {
             assertThat(awaitItem().showColorPicker).isFalse()
             skipItems(1)
             overrideBrandColorResult.assertions().isCalledOnce()
-                .with(value(A_SESSION_ID), value("00FF00"))
+                .with(value(A_SESSION_ID), value("#00FF00"))
         }
     }
 

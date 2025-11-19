@@ -389,13 +389,17 @@ class TimelinePresenter(
     ) = launch(dispatchers.computation) {
         // If we are at the bottom of timeline, we mark the room as read.
         if (firstVisibleIndex == 0) {
-            room.liveTimeline.markAsRead(receiptType = readReceiptType)
+            timelineController.invokeOnCurrentTimeline {
+                markAsRead(receiptType = readReceiptType)
+            }
         } else {
             // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
             val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
             if (eventId != null && eventId != lastReadReceiptId.value) {
                 lastReadReceiptId.value = eventId
-                room.liveTimeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
+                timelineController.invokeOnCurrentTimeline {
+                    sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
+                }
             }
         }
     }

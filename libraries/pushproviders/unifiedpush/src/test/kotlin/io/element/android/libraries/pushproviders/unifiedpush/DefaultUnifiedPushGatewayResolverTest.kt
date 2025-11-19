@@ -119,10 +119,40 @@ class DefaultUnifiedPushGatewayResolverTest {
     }
 
     @Test
-    fun `when a custom url is forbidden (403), Error is returned`() = runTest {
+    fun `when a custom url is forbidden (403), NoMatrixGateway is returned`() = runTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = {
                 throw HttpException(Response.error<Unit>(HttpURLConnection.HTTP_FORBIDDEN, "".toResponseBody()))
+            }
+        )
+        val sut = createDefaultUnifiedPushGatewayResolver(
+            unifiedPushApiFactory = unifiedPushApiFactory
+        )
+        val result = sut.getGateway("http://custom.url")
+        assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("http://custom.url")
+        assertThat(result).isEqualTo(UnifiedPushGatewayResolverResult.NoMatrixGateway)
+    }
+
+    @Test
+    fun `when a custom url is not acceptable (406), NoMatrixGateway is returned`() = runTest {
+        val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
+            discoveryResponse = {
+                throw HttpException(Response.error<Unit>(HttpURLConnection.HTTP_NOT_ACCEPTABLE, "".toResponseBody()))
+            }
+        )
+        val sut = createDefaultUnifiedPushGatewayResolver(
+            unifiedPushApiFactory = unifiedPushApiFactory
+        )
+        val result = sut.getGateway("http://custom.url")
+        assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("http://custom.url")
+        assertThat(result).isEqualTo(UnifiedPushGatewayResolverResult.NoMatrixGateway)
+    }
+
+    @Test
+    fun `when a custom url is internal error (500), Error is returned`() = runTest {
+        val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
+            discoveryResponse = {
+                throw HttpException(Response.error<Unit>(HttpURLConnection.HTTP_INTERNAL_ERROR, "".toResponseBody()))
             }
         )
         val sut = createDefaultUnifiedPushGatewayResolver(

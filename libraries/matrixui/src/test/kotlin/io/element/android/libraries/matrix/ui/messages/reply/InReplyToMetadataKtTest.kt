@@ -510,7 +510,7 @@ class InReplyToMetadataKtTest {
     fun `state content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetailsReady(
-                eventContent = StateContent("", OtherState.RoomJoinRules)
+                eventContent = StateContent("", OtherState.RoomJoinRules(null))
             ).metadata(hideImage = false)
         }.test {
             awaitItem().let {

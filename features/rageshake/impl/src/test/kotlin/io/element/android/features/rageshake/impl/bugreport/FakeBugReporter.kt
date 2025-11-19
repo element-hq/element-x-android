@@ -59,7 +59,7 @@ class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
         // No op
     }
 
-    override fun saveLogCat() {
-        // No op
+    override fun saveLogCat(): File? {
+        return null
     }
 }

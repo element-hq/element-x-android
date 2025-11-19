@@ -27,12 +27,13 @@ if [ -d tmpCompound ]; then
 fi
 mkdir tmpCompound
 pushd tmpCompound
-git clone --branch "${BRANCH}" https://github.com/vector-im/compound-design-tokens
+git clone --branch "${BRANCH}" https://github.com/element-hq/compound-design-tokens
 
 echo "Copying files from tokens repository..."
 rm -R ../libraries/compound/src/main/res/drawable
 cp -R compound-design-tokens/assets/android/res/drawable ../libraries/compound/src/main/res/
 cp -R compound-design-tokens/assets/android/src/* ../libraries/compound/src/main/kotlin/io/element/android/compound/tokens/generated/
+cp -R compound-design-tokens/assets/android/res/theme.iife.js ../libraries/compound/src/main/assets/theme.iife.js
 popd
 
 echo "Adding autoMirrored attribute..."

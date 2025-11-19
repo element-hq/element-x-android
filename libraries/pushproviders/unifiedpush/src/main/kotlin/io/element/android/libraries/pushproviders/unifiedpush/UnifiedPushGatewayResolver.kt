@@ -64,8 +64,9 @@ class DefaultUnifiedPushGatewayResolver(
                         UnifiedPushGatewayResolverResult.NoMatrixGateway
                     }
                 } catch (throwable: Throwable) {
-                    if ((throwable as? HttpException)?.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-                        Timber.tag(loggerTag.value).i("Checking for UnifiedPush endpoint yielded 404, using fallback")
+                    val code = (throwable as? HttpException)?.code()
+                    if (code in NoMatrixGatewayResp) {
+                        Timber.tag(loggerTag.value).i("Checking for UnifiedPush endpoint yielded $code, using fallback")
                         UnifiedPushGatewayResolverResult.NoMatrixGateway
                     } else {
                         Timber.tag(loggerTag.value).e(throwable, "Error checking for UnifiedPush endpoint")
@@ -74,5 +75,15 @@ class DefaultUnifiedPushGatewayResolver(
                 }
             }
         }
+    }
+
+    companion object {
+        private val NoMatrixGatewayResp = listOf<Int>(
+            HttpURLConnection.HTTP_UNAUTHORIZED,
+            HttpURLConnection.HTTP_FORBIDDEN,
+            HttpURLConnection.HTTP_NOT_FOUND,
+            HttpURLConnection.HTTP_BAD_METHOD,
+            HttpURLConnection.HTTP_NOT_ACCEPTABLE
+        )
     }
 }

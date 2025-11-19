@@ -64,6 +64,21 @@ class DefaultNotificationCreatorTest {
     }
 
     @Test
+    fun `test createUnregistrationNotification`() {
+        val sut = createNotificationCreator()
+        val matrixUser = aMatrixUser()
+        val result = sut.createUnregistrationNotification(
+            notificationAccountParams = aNotificationAccountParams(
+                user = matrixUser,
+            ),
+        )
+        result.commonAssertions(
+            expectedGroup = matrixUser.userId.value,
+            expectedCategory = NotificationCompat.CATEGORY_ERROR,
+        )
+    }
+
+    @Test
     fun `test createFallbackNotification`() {
         val sut = createNotificationCreator()
         val result = sut.createFallbackNotification(

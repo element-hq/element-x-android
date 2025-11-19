@@ -17,6 +17,7 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
+import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.element.android.services.analyticsproviders.posthog.log.analyticsTag
 import timber.log.Timber
 
@@ -122,6 +123,8 @@ class PosthogAnalyticsProvider(
         }
         return withSuperProperties.takeIf { it.isEmpty().not() }
     }
+
+    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction? = null
 }
 
 private fun Map<String, Any?>.keepOnlyNonNullValues(): Map<String, Any> {

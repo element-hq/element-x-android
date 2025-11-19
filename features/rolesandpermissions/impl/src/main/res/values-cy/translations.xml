@@ -64,7 +64,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Negeseuon a chynnwys"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Cymedrolwyr"</string>
   <string name="screen_room_roles_and_permissions_owners">"Perchnogion"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Caniatâd"</string>
   <string name="screen_room_roles_and_permissions_reset">"Ailosod caniatâd"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Ar ôl i chi ailosod caniatâd, byddwch yn colli\'r gosodiadau cyfredol."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Ailosod caniatâd?"</string>

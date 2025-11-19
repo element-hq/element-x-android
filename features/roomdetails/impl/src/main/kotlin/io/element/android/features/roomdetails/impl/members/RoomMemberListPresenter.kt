@@ -18,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
@@ -34,17 +33,15 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.toMatrixUser
+import io.element.android.libraries.matrix.ui.room.PowerLevelRoomMemberComparator
 import io.element.android.libraries.matrix.ui.room.canInviteAsState
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
@@ -56,9 +53,11 @@ class RoomMemberListPresenter(
     private val roomMembersModerationPresenter: Presenter<RoomMemberModerationState>,
     private val encryptionService: EncryptionService,
 ) : Presenter<RoomMemberListState> {
+    private var roomMembers: AsyncData<RoomMembers> by mutableStateOf(AsyncData.Loading())
+    private val powerLevelRoomMemberComparator = PowerLevelRoomMemberComparator()
+
     @Composable
     override fun present(): RoomMemberListState {
-        var roomMembers: AsyncData<RoomMembers> by remember { mutableStateOf(AsyncData.Loading()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults by remember {
             mutableStateOf<SearchBarResultState<AsyncData<RoomMembers>>>(SearchBarResultState.Initial())
@@ -78,13 +77,9 @@ class RoomMemberListPresenter(
                 .launchIn(this)
         }
 
-        // Update the room members when the screen is loaded or the active member count changes
+        // Update the room members when the screen is loaded
         LaunchedEffect(Unit) {
-            room.roomInfoFlow.map { it.activeMembersCount }
-                .distinctUntilChanged()
-                .collectLatest {
-                    room.updateMembers()
-                }
+            room.updateMembers()
         }
 
         LaunchedEffect(membersState, roomMemberIdentityStates) {
@@ -110,7 +105,7 @@ class RoomMemberListPresenter(
                         .map { it.withIdentityState(roomMemberIdentityStates) }
                         .toImmutableList(),
                     joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList())
-                        .sortedWith(PowerLevelRoomMemberComparator())
+                        .sortedWith(powerLevelRoomMemberComparator)
                         .map { it.withIdentityState(roomMemberIdentityStates) }
                         .toImmutableList(),
                     banned = members.getOrDefault(RoomMembershipState.BAN, emptyList())
@@ -140,7 +135,7 @@ class RoomMemberListPresenter(
                                 .map { it.withIdentityState(roomMemberIdentityStates) }
                                 .toImmutableList(),
                             joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList())
-                                .sortedWith(PowerLevelRoomMemberComparator())
+                                .sortedWith(powerLevelRoomMemberComparator)
                                 .map { it.withIdentityState(roomMemberIdentityStates) }
                                 .toImmutableList(),
                             banned = results.getOrDefault(RoomMembershipState.BAN, emptyList())
@@ -165,11 +160,7 @@ class RoomMemberListPresenter(
                 is RoomMemberListEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is RoomMemberListEvents.UpdateSearchQuery -> searchQuery = event.query
                 is RoomMemberListEvents.RoomMemberSelected ->
-                    if (event.roomMember.membership == RoomMembershipState.BAN) {
-                        roomModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(ModerationAction.UnbanUser, event.roomMember.toMatrixUser()))
-                    } else {
-                        roomModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.roomMember.toMatrixUser()))
-                    }
+                    roomModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.roomMember.toMatrixUser()))
             }
         }
 

@@ -6,14 +6,11 @@
   <string name="screen_room_change_permissions_administrators">"صرف منتظمین"</string>
   <string name="screen_room_change_permissions_ban_people">"لوگوں کو محظور کریں"</string>
   <string name="screen_room_change_permissions_delete_messages">"پیغامات ہٹائیں"</string>
-  <string name="screen_room_change_permissions_everyone">"ہر کوئی"</string>
   <string name="screen_room_change_permissions_invite_people">"لوگوں کو مدعو کریں اور شمولیت کی درخواستیں قبول کریں"</string>
-  <string name="screen_room_change_permissions_member_moderation">"ارکان کا اعتدال"</string>
   <string name="screen_room_change_permissions_messages_and_content">"پیغامات اور مواد"</string>
   <string name="screen_room_change_permissions_moderators">"منتظمین اور ناظمین"</string>
   <string name="screen_room_change_permissions_remove_people">"لوگوں کو ہٹا دیں اور شمولیت کی درخواستیں مسترد کریں"</string>
   <string name="screen_room_change_permissions_room_avatar">"کمرے کا اوتار بدلیں"</string>
-  <string name="screen_room_change_permissions_room_details">"کمرے کی تفصیلات"</string>
   <string name="screen_room_change_permissions_room_name">"کمرے کا نام بدلیں"</string>
   <string name="screen_room_change_permissions_room_topic">"کمرے کا موضوع بدلیں"</string>
   <string name="screen_room_change_permissions_send_messages">"پیغامات بھیجیں"</string>
@@ -97,7 +94,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"ارکان کا اعتدال"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"پیغامات اور مواد"</string>
   <string name="screen_room_roles_and_permissions_moderators">"ناظمین"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"اجازتیں"</string>
   <string name="screen_room_roles_and_permissions_reset">"اجازتیں بحال کریں"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"ایک بار جب آپ اجازتیں بحال کردیں گے، آپ موجودہ ترتیبات کھو دیں گے۔"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"اجازتیں بحال کریں؟"</string>

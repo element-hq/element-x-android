@@ -24,6 +24,7 @@ object RoomPowerLevelsValuesMapper {
             roomName = values.roomName,
             roomAvatar = values.roomAvatar,
             roomTopic = values.roomTopic,
+            spaceChild = values.spaceChild,
         )
     }
 }

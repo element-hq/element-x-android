@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.graphics.toArgb
 import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.preferences.impl.developer.tracing.toLogLevel
@@ -140,7 +141,11 @@ class DeveloperSettingsPresenter(
                 }
                 is DeveloperSettingsEvents.ChangeBrandColor -> coroutineScope.launch {
                     showColorPicker = false
-                    val color = event.color?.value?.toHexString(HexFormat.UpperCase)?.substring(2, 8)
+                    val color = event.color
+                        ?.toArgb()
+                        ?.toHexString(HexFormat.UpperCase)
+                        ?.substring(2, 8)
+                        ?.padStart(7, '#')
                     enterpriseService.overrideBrandColor(sessionId, color)
                 }
                 is DeveloperSettingsEvents.SetShowColorPicker -> {

@@ -17,18 +17,17 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
+import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
 import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
-import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.mediaupload.test.FakeMediaSender
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
+import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.TestScope
@@ -37,7 +36,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 class SharePresenterTest {
@@ -121,18 +119,16 @@ class SharePresenterTest {
 
     @Test
     fun `present - send media ok`() = runTest {
-        val sendFileResult =
-            lambdaRecorder<File, FileInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
-            Result.success(FakeMediaUploadHandler())
-        }
+        val sendMediaResult = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val joinedRoom = FakeJoinedRoom(
-            liveTimeline = FakeTimeline().apply {
-                sendFileLambda = sendFileResult
-            },
+            liveTimeline = FakeTimeline(),
         )
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, joinedRoom)
         }
+        val mediaSender = FakeMediaSender(
+            sendMediaResult = sendMediaResult,
+        )
         val presenter = createSharePresenter(
             matrixClient = matrixClient,
             shareIntentHandler = FakeShareIntentHandler { _, onFile, _ ->
@@ -144,7 +140,8 @@ class SharePresenterTest {
                         )
                     )
                 )
-            }
+            },
+            mediaSenderRoomFactory = MediaSenderRoomFactory { mediaSender },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -156,7 +153,7 @@ class SharePresenterTest {
             val success = awaitItem()
             assertThat(success.shareAction.isSuccess()).isTrue()
             assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
-            sendFileResult.assertions().isCalledOnce()
+            sendMediaResult.assertions().isCalledOnce()
         }
     }
 }
@@ -165,17 +162,17 @@ internal fun TestScope.createSharePresenter(
     intent: Intent = Intent(),
     shareIntentHandler: ShareIntentHandler = FakeShareIntentHandler(),
     matrixClient: MatrixClient = FakeMatrixClient(),
-    mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
-    activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
-    mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+    activeRoomsHolder: ActiveRoomsHolder = DefaultActiveRoomsHolder(),
+    mediaSenderRoomFactory: MediaSenderRoomFactory = MediaSenderRoomFactory { FakeMediaSender() },
+    mediaOptimizationConfigProvider: MediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
 ): SharePresenter {
     return SharePresenter(
         intent = intent,
         sessionCoroutineScope = this,
         shareIntentHandler = shareIntentHandler,
         matrixClient = matrixClient,
-        mediaPreProcessor = mediaPreProcessor,
         activeRoomsHolder = activeRoomsHolder,
+        mediaSenderRoomFactory = mediaSenderRoomFactory,
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
     )
 }

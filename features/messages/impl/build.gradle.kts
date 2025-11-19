@@ -91,6 +91,7 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.libraries.featureflag.test)
+    testImplementation(projects.libraries.mediaupload.impl)
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.libraries.permissions.test)

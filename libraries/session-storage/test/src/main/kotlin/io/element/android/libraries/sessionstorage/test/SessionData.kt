@@ -31,7 +31,6 @@ fun aSessionData(
         refreshToken = refreshToken,
         homeserverUrl = "aHomeserverUrl",
         oidcData = null,
-        slidingSyncProxy = null,
         loginTimestamp = null,
         isTokenValid = isTokenValid,
         loginType = LoginType.UNKNOWN,
