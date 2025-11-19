@@ -60,20 +60,10 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     fun stopLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction)
 }
 
-inline fun <T> AnalyticsService.recordTransaction(name: String, operation: String, block: AnalyticsTransaction.() -> T): T {
+inline fun <T> AnalyticsService.recordTransaction(name: String, operation: String, block: (AnalyticsTransaction) -> T): T {
     val transaction = startTransaction(name, operation)
     try {
-        val result = transaction.block()
-        return result
-    } finally {
-        transaction.finish()
-    }
-}
-
-suspend inline fun <T> AnalyticsService.recordAsyncTransaction(name: String, operation: String, block: suspend AnalyticsTransaction.() -> T): T {
-    val transaction = startTransaction(name, operation)
-    try {
-        val result = transaction.block()
+        val result = block(transaction)
         return result
     } finally {
         transaction.finish()

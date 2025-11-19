@@ -24,8 +24,8 @@ import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.analytics.api.recordAsyncTransaction
-import io.element.android.services.analyticsproviders.api.recordAsyncTransaction
+import io.element.android.services.analytics.api.recordTransaction
+import io.element.android.services.analyticsproviders.api.recordChildTransaction
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
@@ -114,13 +114,13 @@ class RustRoomFactory(
             val sdkRoom = awaitRoomInRoomList(roomId) ?: return@withLock null
 
             if (sdkRoom.membership() == Membership.JOINED) {
-                analyticsService.recordAsyncTransaction(
+                analyticsService.recordTransaction(
                     name = "Get joined room",
                     operation = "RustRoomFactory.getJoinedRoomOrPreview",
-                ) {
+                ) { transaction ->
                     val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
                     // Init the live timeline in the SDK from the Room
-                    val timeline = recordAsyncTransaction(
+                    val timeline = transaction.recordChildTransaction(
                         operation = "sdkRoom.timelineWithConfiguration",
                         description = "Get timeline from the SDK",
                     ) {
@@ -149,7 +149,7 @@ class RustRoomFactory(
                     )
                 }
             } else {
-                analyticsService.recordAsyncTransaction(
+                analyticsService.recordTransaction(
                     name = "Get preview of room",
                     operation = "RustRoomFactory.getJoinedRoomOrPreview",
                 ) {
@@ -157,7 +157,7 @@ class RustRoomFactory(
                         sdkRoom.previewRoom(via = serverNames)
                     } catch (e: Exception) {
                         Timber.e(e, "Failed to get room preview for $roomId")
-                        return@recordAsyncTransaction null
+                        return@recordTransaction null
                     }
 
                     GetRoomResult.NotJoined(

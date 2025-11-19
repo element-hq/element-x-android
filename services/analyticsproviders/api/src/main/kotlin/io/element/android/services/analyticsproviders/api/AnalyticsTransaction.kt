@@ -14,20 +14,10 @@ interface AnalyticsTransaction {
     fun finish()
 }
 
-inline fun <T> AnalyticsTransaction.recordTransaction(operation: String, description: String? = null, block: AnalyticsTransaction.() -> T): T {
+inline fun <T> AnalyticsTransaction.recordChildTransaction(operation: String, description: String? = null, block: (AnalyticsTransaction) -> T): T {
     val child = startChild(operation, description)
     try {
-        val result = child.block()
-        return result
-    } finally {
-        child.finish()
-    }
-}
-
-suspend inline fun <T> AnalyticsTransaction.recordAsyncTransaction(operation: String, description: String?, block: suspend AnalyticsTransaction.() -> T): T {
-    val child = startChild(operation, description)
-    try {
-        val result = child.block()
+        val result = block(child)
         return result
     } finally {
         child.finish()
