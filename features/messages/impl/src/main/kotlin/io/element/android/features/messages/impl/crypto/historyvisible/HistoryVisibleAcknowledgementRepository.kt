@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.crypto.historyvisible
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -27,7 +28,10 @@ class DefaultHistoryVisibleAcknowledgementRepository(
     sessionId: SessionId,
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : HistoryVisibleAcknowledgementRepository {
-    val store = preferenceDataStoreFactory.create("elementx_historyvisible_$sessionId")
+    val store =
+        sessionId.value.hash().take(16).let { hash ->
+            preferenceDataStoreFactory.create("elementx_historyvisible_$hash")
+        }
 
     override fun hasAcknowledged(roomId: RoomId): Flow<Boolean> {
         return store.data.map { prefs ->
