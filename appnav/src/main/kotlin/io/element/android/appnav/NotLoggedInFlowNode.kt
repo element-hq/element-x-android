@@ -24,6 +24,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.appnav.analytics.AnalyticsColdStartWatcher
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.libraries.architecture.BackstackView
@@ -43,6 +44,7 @@ class NotLoggedInFlowNode(
     @Assisted plugins: List<Plugin>,
     private val loginEntryPoint: LoginEntryPoint,
     private val imageLoaderHolder: ImageLoaderHolder,
+    private val analyticsColdStartWatcher: AnalyticsColdStartWatcher,
 ) : BaseFlowNode<NotLoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -65,6 +67,7 @@ class NotLoggedInFlowNode(
 
     override fun onBuilt() {
         super.onBuilt()
+        analyticsColdStartWatcher.whenLoggingIn()
         lifecycle.subscribe(
             onResume = {
                 SingletonImageLoader.setUnsafe(imageLoaderHolder.get())

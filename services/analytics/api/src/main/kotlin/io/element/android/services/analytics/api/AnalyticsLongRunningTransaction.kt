@@ -11,6 +11,7 @@ sealed class AnalyticsLongRunningTransaction(
     val name: String,
     val operation: String?,
 ) {
+    data object ColdStartUntilCachedRoomList : AnalyticsLongRunningTransaction("Cold start until cached room list is displayed", null)
     data object FirstRoomsDisplayed : AnalyticsLongRunningTransaction("First rooms displayed after login or restoration", null)
     data object ResumeAppUntilNewRoomsReceived : AnalyticsLongRunningTransaction("App was resumed and new room list items arrived", null)
     data object NotificationTapOpensTimeline : AnalyticsLongRunningTransaction("A notification was tapped and it opened a timeline", null)

@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.appnav.analytics.AnalyticsColdStartWatcher
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
@@ -86,6 +87,7 @@ class RoomListPresenter(
     private val appPreferencesStore: AppPreferencesStore,
     private val seenInvitesStore: SeenInvitesStore,
     private val announcementService: AnnouncementService,
+    private val coldStartWatcher: AnalyticsColdStartWatcher,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
 
@@ -236,6 +238,8 @@ class RoomListPresenter(
             )
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
+                coldStartWatcher.onRoomListVisible()
+
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     showNewNotificationSoundBanner = showNewNotificationSoundBanner,

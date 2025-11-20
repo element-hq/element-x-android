@@ -29,6 +29,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.annotations.ContributesNode
+import io.element.android.appnav.analytics.AnalyticsColdStartWatcher
 import io.element.android.appnav.di.MatrixSessionCache
 import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.intent.ResolvedIntent
@@ -89,6 +90,7 @@ class RootFlowNode(
     private val featureFlagService: FeatureFlagService,
     private val announcementService: AnnouncementService,
     private val analyticsService: AnalyticsService,
+    private val analyticsColdStartWatcher: AnalyticsColdStartWatcher,
 ) : BaseFlowNode<RootFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.SplashScreen,
@@ -98,6 +100,7 @@ class RootFlowNode(
     plugins = plugins
 ) {
     override fun onBuilt() {
+        analyticsColdStartWatcher.start()
         matrixSessionCache.restoreWithSavedState(buildContext.savedStateMap)
         super.onBuilt()
         observeNavState()

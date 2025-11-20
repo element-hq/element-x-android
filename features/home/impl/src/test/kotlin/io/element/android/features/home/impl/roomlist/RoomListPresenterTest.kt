@@ -13,6 +13,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.appnav.analytics.AnalyticsColdStartWatcher
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.FakeDateTimeObserver
@@ -673,5 +674,14 @@ class RoomListPresenterTest {
         appPreferencesStore = appPreferencesStore,
         seenInvitesStore = seenInvitesStore,
         announcementService = announcementService,
+        coldStartWatcher = FakeAnalyticsColdStartWatcher(),
     )
+}
+
+private class FakeAnalyticsColdStartWatcher : AnalyticsColdStartWatcher {
+    override fun start() {}
+
+    override fun whenLoggingIn() {}
+
+    override fun onRoomListVisible() {}
 }

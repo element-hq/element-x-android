@@ -28,6 +28,7 @@ setupDependencyInjection()
 
 dependencies {
     implementation(projects.appconfig)
+    implementation(projects.appnav)
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
