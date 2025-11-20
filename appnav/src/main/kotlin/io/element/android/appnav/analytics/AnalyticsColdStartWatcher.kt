@@ -12,6 +12,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.catch
@@ -44,7 +45,7 @@ class DefaultAnalyticsColdStartWatcher(
                 if (hasConsent) {
                     if (isColdStart.get()) {
                         Timber.d("Starting cold start check")
-                        analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList)
+                        analyticsService.startLongRunningTransaction(ColdStartUntilCachedRoomList)
                     } else {
                         error("The app is no longer in a cold start state")
                     }
@@ -56,6 +57,7 @@ class DefaultAnalyticsColdStartWatcher(
 
     override fun whenLoggingIn() {
         if (isColdStart.getAndSet(false)) {
+            analyticsService.removeLongRunningTransaction(ColdStartUntilCachedRoomList)
             Timber.d("Canceled cold start check: user is logging in")
         }
     }
@@ -63,7 +65,7 @@ class DefaultAnalyticsColdStartWatcher(
     override fun onRoomListVisible() {
         if (isColdStart.getAndSet(false)) {
             Timber.d("Room list is visible, finishing cold start check")
-            analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList)?.finish()
+            analyticsService.removeLongRunningTransaction(ColdStartUntilCachedRoomList)?.finish()
         }
     }
 }

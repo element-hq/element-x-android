@@ -71,7 +71,10 @@ class FakeAnalyticsService(
     }
 
     override fun startTransaction(name: String, operation: String?): AnalyticsTransaction = NoopAnalyticsTransaction
-    override fun startLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction {
+    override fun startLongRunningTransaction(
+        longRunningTransaction: AnalyticsLongRunningTransaction,
+        parentTransaction: AnalyticsTransaction?
+    ): AnalyticsTransaction {
         longRunningTransactions[longRunningTransaction] = NoopAnalyticsTransaction
         return NoopAnalyticsTransaction
     }

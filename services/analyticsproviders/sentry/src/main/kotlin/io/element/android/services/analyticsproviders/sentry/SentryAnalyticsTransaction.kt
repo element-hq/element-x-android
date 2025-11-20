@@ -9,7 +9,9 @@ package io.element.android.services.analyticsproviders.sentry
 
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.sentry.ISpan
+import io.sentry.ITransaction
 import io.sentry.Sentry
+import timber.log.Timber
 
 class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTransaction {
     constructor(name: String, operation: String?) : this(Sentry.startTransaction(name, operation.orEmpty()))
@@ -20,5 +22,9 @@ class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTra
     )
     override fun setData(key: String, value: Any) = inner.setData(key, value)
     override fun isFinished(): Boolean = inner.isFinished
-    override fun finish() = inner.finish()
+    override fun finish() {
+        val name = if (inner is ITransaction) inner.name else inner.operation
+        Timber.d("Finishing transaction: $name")
+        inner.finish()
+    }
 }

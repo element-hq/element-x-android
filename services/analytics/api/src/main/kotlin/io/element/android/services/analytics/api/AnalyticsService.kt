@@ -58,7 +58,10 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     /**
      * Starts an [AnalyticsLongRunningTransaction], that can be shared with other components.
      */
-    fun startLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction
+    fun startLongRunningTransaction(
+        longRunningTransaction: AnalyticsLongRunningTransaction,
+        parentTransaction: AnalyticsTransaction? = null
+    ): AnalyticsTransaction
 
     /**
      * Gets an ongoing [AnalyticsLongRunningTransaction], if it exists.
@@ -71,8 +74,14 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     fun removeLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction?
 }
 
-inline fun <T> AnalyticsService.recordTransaction(name: String, operation: String, block: (AnalyticsTransaction) -> T): T {
-    val transaction = startTransaction(name, operation)
+inline fun <T> AnalyticsService.recordTransaction(
+    name: String,
+    operation: String,
+    parentTransaction: AnalyticsTransaction? = null,
+    block: (AnalyticsTransaction) -> T
+): T {
+    val transaction = parentTransaction?.startChild(name, operation)
+        ?: startTransaction(name, operation)
     try {
         val result = block(transaction)
         return result

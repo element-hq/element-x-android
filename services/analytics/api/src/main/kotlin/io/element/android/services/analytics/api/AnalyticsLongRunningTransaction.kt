@@ -16,4 +16,7 @@ sealed class AnalyticsLongRunningTransaction(
     data object ResumeAppUntilNewRoomsReceived : AnalyticsLongRunningTransaction("App was resumed and new room list items arrived", null)
     data object NotificationTapOpensTimeline : AnalyticsLongRunningTransaction("A notification was tapped and it opened a timeline", null)
     data object OpenRoom : AnalyticsLongRunningTransaction("Open a room and see loaded items in the timeline", null)
+    data object LoadJoinedRoomFlow : AnalyticsLongRunningTransaction("Load joined room UI", "ui.load")
+    data object LoadMessagesUi : AnalyticsLongRunningTransaction("Load messages UI", "ui.load")
+    data object DisplayFirstTimelineItems : AnalyticsLongRunningTransaction("Get and display first timeline items", null)
 }

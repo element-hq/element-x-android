@@ -45,6 +45,10 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadJoinedRoomFlow
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadMessagesUi
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
+import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -66,6 +70,7 @@ class JoinedRoomLoadedFlowNode(
     private val sessionCoroutineScope: CoroutineScope,
     private val matrixClient: MatrixClient,
     private val activeRoomsHolder: ActiveRoomsHolder,
+    private val analyticsService: AnalyticsService,
     roomGraphFactory: RoomGraphFactory,
 ) : BaseFlowNode<JoinedRoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
@@ -93,6 +98,8 @@ class JoinedRoomLoadedFlowNode(
     init {
         lifecycle.subscribe(
             onCreate = {
+                val parent = analyticsService.getLongRunningTransaction(OpenRoom)
+                analyticsService.startLongRunningTransaction(LoadMessagesUi, parent)
                 Timber.v("OnCreate => ${inputs.room.roomId}")
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 activeRoomsHolder.addRoom(inputs.room)
@@ -100,6 +107,7 @@ class JoinedRoomLoadedFlowNode(
                 trackVisitedRoom()
             },
             onResume = {
+                analyticsService.removeLongRunningTransaction(LoadJoinedRoomFlow)?.finish()
                 sessionCoroutineScope.launch {
                     inputs.room.subscribeToSync()
                 }

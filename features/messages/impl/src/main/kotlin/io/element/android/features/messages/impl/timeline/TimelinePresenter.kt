@@ -55,7 +55,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.DisplayFirstTimelineItems
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationTapOpensTimeline
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -111,6 +113,11 @@ class TimelinePresenter(
 
     @Composable
     override fun present(): TimelineState {
+        LaunchedEffect(Unit) {
+            val parent = analyticsService.getLongRunningTransaction(OpenRoom)
+            analyticsService.startLongRunningTransaction(DisplayFirstTimelineItems, parent)
+        }
+
         val localScope = rememberCoroutineScope()
 
         val timelineMode = remember { timelineController.mainTimelineMode() }
@@ -228,18 +235,26 @@ class TimelinePresenter(
         LaunchedEffect(Unit) {
             timelineItemsFactory.timelineItems
                 .onEach { newTimelineItems ->
-                    analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.NotificationTapOpensTimeline)?.finish()
-                    analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.OpenRoom)?.finish()
                     timelineItemIndexer.process(newTimelineItems)
                     timelineItems = newTimelineItems
+
+                    analyticsService.run {
+                        removeLongRunningTransaction(DisplayFirstTimelineItems)?.finish()
+                        removeLongRunningTransaction(OpenRoom)?.finish()
+                        removeLongRunningTransaction(NotificationTapOpensTimeline)?.finish()
+                    }
                 }
                 .launchIn(this)
 
             combine(timelineController.timelineItems(), room.membersStateFlow) { items, membersState ->
+                val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
+                val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
+                transaction?.setData("items", items.count())
                 timelineItemsFactory.replaceWith(
                     timelineItems = items,
                     roomMembers = membersState.roomMembers().orEmpty()
                 )
+                transaction?.finish()
                 items
             }
                 .onEach(redactedVoiceMessageManager::onEachMatrixTimelineItem)

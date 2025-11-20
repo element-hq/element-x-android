@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.recordTransaction
 import io.element.android.services.analyticsproviders.api.recordChildTransaction
@@ -113,10 +114,13 @@ class RustRoomFactory(
 
             val sdkRoom = awaitRoomInRoomList(roomId) ?: return@withLock null
 
+            val parentTransaction = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.OpenRoom)
+
             if (sdkRoom.membership() == Membership.JOINED) {
                 analyticsService.recordTransaction(
                     name = "Get joined room",
                     operation = "RustRoomFactory.getJoinedRoomOrPreview",
+                    parentTransaction = parentTransaction,
                 ) { transaction ->
                     val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
                     // Init the live timeline in the SDK from the Room
@@ -136,9 +140,10 @@ class RustRoomFactory(
                         )
                     }
 
+                    val baseRoom = transaction.recordChildTransaction(operation = "getBaseRoom", description = "Get room from SDK") { getBaseRoom(sdkRoom) }
                     GetRoomResult.Joined(
                         JoinedRustRoom(
-                            baseRoom = getBaseRoom(sdkRoom),
+                            baseRoom = baseRoom,
                             notificationSettingsService = notificationSettingsService,
                             roomContentForwarder = roomContentForwarder,
                             liveInnerTimeline = timeline,
@@ -152,6 +157,7 @@ class RustRoomFactory(
                 analyticsService.recordTransaction(
                     name = "Get preview of room",
                     operation = "RustRoomFactory.getJoinedRoomOrPreview",
+                    parentTransaction = parentTransaction,
                 ) {
                     val preview = try {
                         sdkRoom.previewRoom(via = serverNames)
