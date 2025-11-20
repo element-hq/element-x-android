@@ -12,5 +12,6 @@ object SentryConfig {
     const val NAME = "Sentry"
     const val DSN = BuildConfig.SENTRY_DSN
     const val ENV_DEBUG = "DEBUG"
+    const val ENV_NIGHTLY = "NIGHTLY"
     const val ENV_RELEASE = "RELEASE"
 }
