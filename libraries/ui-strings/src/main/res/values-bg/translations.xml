@@ -141,6 +141,7 @@
   <string name="common_chat_backup">"Резервно копие на чатовете"</string>
   <string name="common_copyright">"Авторски права"</string>
   <string name="common_creating_room">"Създаване на стая…"</string>
+  <string name="common_current_user_left_room">"Стаята е напусната"</string>
   <string name="common_dark">"Тъмен"</string>
   <string name="common_decryption_error">"Грешка при разшифроване"</string>
   <string name="common_description">"Описание"</string>

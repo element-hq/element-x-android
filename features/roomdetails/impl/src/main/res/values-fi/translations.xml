@@ -13,6 +13,7 @@
   <string name="screen_room_change_permissions_moderators">"Ylläpitäjät ja valvojat"</string>
   <string name="screen_room_change_permissions_remove_people">"Henkilöiden poistaminen ja liittymispyyntöjen hylkääminen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Huoneen avatarin vaihtaminen"</string>
+  <string name="screen_room_change_permissions_room_details">"Muokkaa huonetta"</string>
   <string name="screen_room_change_permissions_room_name">"Huoneen nimen vaihtaminen"</string>
   <string name="screen_room_change_permissions_room_topic">"Huoneen aiheen vaihtaminen"</string>
   <string name="screen_room_change_permissions_send_messages">"Viestien lähettäminen"</string>
@@ -76,12 +77,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Poista vain jäsen huoneesta"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Poista porttikielto"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"He voivat liittyä tähän huoneeseen uudelleen, jos heidät kutsutaan."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Poista käyttäjän porttikielto"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Poista porttikielto huoneesta"</string>
   <string name="screen_room_member_list_mode_banned">"Porttikiellot"</string>
   <string name="screen_room_member_list_mode_members">"Jäsenet"</string>
   <string name="screen_room_member_list_pending_header_title">"Kutsuttu"</string>
-  <string name="screen_room_member_list_role_administrator">"Ylläpitäjä"</string>
-  <string name="screen_room_member_list_role_moderator">"Valvoja"</string>
+  <string name="screen_room_member_list_role_administrator">"Vain ylläpitäjät"</string>
+  <string name="screen_room_member_list_role_moderator">"Ylläpitäjät ja valvojat"</string>
   <string name="screen_room_member_list_role_owner">"Omistaja"</string>
   <string name="screen_room_member_list_room_members_header_title">"Huoneen jäsenet"</string>
   <string name="screen_room_member_list_unbanning_user">"Poistetaan käyttäjän %1$s porttikieltoa"</string>
@@ -132,7 +133,7 @@ Emme suosittele salauksen ottamista käyttöön huoneissa, jotka kuka tahansa vo
   <string name="screen_security_and_privacy_room_access_section_header">"Huoneeseen pääsy"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Tiloja ei tällä hetkellä tueta"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Tilan jäsenet"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Tarvitset huoneen osoitteen, jotta se näkyy huonehakemistossa."</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Tarvitset huoneen osoitteen, jotta se näkyy hakemistossa."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Huoneen osoite"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Salli tämän huoneen löytäminen hakemalla %1$s -palvelimen julkisesta huonehakemistosta."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Näkyy julkisessa huonehakemistossa"</string>
@@ -143,8 +144,7 @@ Emme suosittele salauksen ottamista käyttöön huoneissa, jotka kuka tahansa vo
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.
 Voit halutessasi julkaista huoneesi kotipalvelimesi julkisessa huonehakemistossa."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Huoneen julkaiseminen"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.
-Osoitetta tarvitaan myös, jotta huone näkyy %1$s -palvelimen julkisessa huonehakemistossa."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Huoneen näkyvyys"</string>
   <string name="screen_security_and_privacy_title">"Turvallisuus ja yksityisyys"</string>
 </resources>

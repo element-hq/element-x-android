@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"Administratörer och moderatorer"</string>
   <string name="screen_room_change_permissions_remove_people">"Ta bort personer och avslå förfrågningar om att gå med"</string>
   <string name="screen_room_change_permissions_room_avatar">"Byt rumsavatar"</string>
+  <string name="screen_room_change_permissions_room_details">"Redigera rummet"</string>
   <string name="screen_room_change_permissions_room_name">"Byt rumsnamn"</string>
   <string name="screen_room_change_permissions_room_topic">"Byt rumsämne"</string>
   <string name="screen_room_change_permissions_send_messages">"Skicka meddelanden"</string>
@@ -39,12 +40,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Ta bara bort medlem"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Avbanna"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Denne kommer kunna gå med i rummet igen om denne bjuds in"</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Avbanna användare"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Avbanna från rummet"</string>
   <string name="screen_room_member_list_mode_banned">"Bannade"</string>
   <string name="screen_room_member_list_mode_members">"Medlemmar"</string>
   <string name="screen_room_member_list_pending_header_title">"Väntar"</string>
-  <string name="screen_room_member_list_role_administrator">"Admin"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
+  <string name="screen_room_member_list_role_administrator">"Endast administratörer"</string>
+  <string name="screen_room_member_list_role_moderator">"Administratörer och moderatorer"</string>
   <string name="screen_room_member_list_role_owner">"Ägare"</string>
   <string name="screen_room_member_list_room_members_header_title">"Rumsmedlemmar"</string>
   <string name="screen_room_member_list_unbanning_user">"Avbannar %1$s"</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="a11y_add_reaction">"Добавить реакцию:%1$s"</string>
+  <string name="a11y_add_reaction">"Добавить реакцию: %1$s"</string>
   <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_collapse_message_text_field">"Свернуть поле текста сообщения"</string>
   <string name="a11y_delete">"Удалить"</string>
@@ -29,7 +29,7 @@
   <string name="a11y_pin_field">"Поле PIN-кода"</string>
   <string name="a11y_play">"Воспроизвести"</string>
   <string name="a11y_poll">"Опрос"</string>
-  <string name="a11y_poll_end">"Опрос завершен"</string>
+  <string name="a11y_poll_end">"Завершённый опрос"</string>
   <string name="a11y_react_with">"Реагировать вместе с %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Реакция с помощью эмодзи"</string>
   <string name="a11y_read_receipts_multiple">"Прочитано %1$s и %2$s"</string>
@@ -85,7 +85,7 @@
   <string name="action_deselect_all">"Отменить выбор"</string>
   <string name="action_disable">"Отключить"</string>
   <string name="action_discard">"Отменить"</string>
-  <string name="action_dismiss">"Отклонить"</string>
+  <string name="action_dismiss">"Закрыть"</string>
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редактировать"</string>
   <string name="action_edit_caption">"Изменить подпись"</string>
@@ -97,6 +97,8 @@
   <string name="action_forgot_password">"Забыли пароль?"</string>
   <string name="action_forward">"Переслать"</string>
   <string name="action_go_back">"Вернуться"</string>
+  <string name="action_go_to_roles_and_permissions">"Перейти к ролям и разрешениям"</string>
+  <string name="action_go_to_settings">"Перейти к настройкам"</string>
   <string name="action_ignore">"Игнорировать"</string>
   <string name="action_invite">"Пригласить"</string>
   <string name="action_invite_friends">"Пригласить в комнату"</string>
@@ -193,7 +195,7 @@
   <string name="common_current_user_left_room">"Покинул комнату"</string>
   <string name="common_current_user_left_space">"Покинуть пространство"</string>
   <string name="common_current_user_rejected_invite">"Приглашение отклонено"</string>
-  <string name="common_dark">"Тёмное"</string>
+  <string name="common_dark">"Темная"</string>
   <string name="common_decryption_error">"Ошибка расшифровки"</string>
   <string name="common_description">"Описание"</string>
   <string name="common_developer_options">"Для разработчика"</string>
@@ -229,7 +231,7 @@
   <string name="common_in_reply_to">"В ответ на %1$s"</string>
   <string name="common_install_apk_android">"Установить APK"</string>
   <string name="common_invite_unknown_profile">"Идентификатор Matrix ID не найден, приглашение может быть не получено."</string>
-  <string name="common_leaving_room">"Покидание комнаты"</string>
+  <string name="common_leaving_room">"Покидаем комнату"</string>
   <string name="common_leaving_space">"Покинуть пространство"</string>
   <string name="common_light">"Светлое"</string>
   <string name="common_line_copied_to_clipboard">"Строка скопирована в буфер обмена"</string>
@@ -324,10 +326,11 @@
   <string name="common_settings">"Настройки"</string>
   <string name="common_share_space">"Поделиться пространством"</string>
   <string name="common_shared_location">"Поделился местоположением"</string>
+  <string name="common_shared_space">"Общее пространство"</string>
   <string name="common_signing_out">"Выход…"</string>
   <string name="common_something_went_wrong">"Что-то пошло не так"</string>
   <string name="common_something_went_wrong_message">"Мы столкнулись с проблемой. Пожалуйста, попробуйте еще раз."</string>
-  <string name="common_space">"Подпространство"</string>
+  <string name="common_space">"Пространство"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Пространство"</item>
     <item quantity="few">"%1$d Пространств"</item>
@@ -451,6 +454,10 @@
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше сообщение не было отправлено, потому что %1$s не проверил одно или несколько устройств"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Одно или несколько ваших устройств не проверены. Вы можете отправить сообщение в любом случае или отменить его пока и повторить попытку позже, проверив все свои устройства."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше сообщение не было отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
+  <string name="screen_room_change_permissions_change_settings">"Изменить настройки"</string>
+  <string name="screen_room_change_permissions_manage_space">"Управление пространством"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Управление комнатами"</string>
+  <string name="screen_room_change_permissions_title">"Разрешения"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Редактировать роль владельца и администратора"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
@@ -473,6 +480,7 @@
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"%1$s пространство"</string>
   <string name="screen_space_list_title">"Пространства"</string>
+  <string name="screen_space_menu_action_members">"Просмотреть участников"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Сообщение не отправлено, потому что подтвержденная личность %1$s была сброшена."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Сообщение не отправлено, потому что %1$s не проверил одно или несколько устройств."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Сообщение не отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>

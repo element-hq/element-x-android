@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"Yöneticiler ve moderatörler"</string>
   <string name="screen_room_change_permissions_remove_people">"Kişileri kaldırma ve katılma isteklerini reddetme"</string>
   <string name="screen_room_change_permissions_room_avatar">"Oda resmini değiştir"</string>
+  <string name="screen_room_change_permissions_room_details">"Odayı Düzenle"</string>
   <string name="screen_room_change_permissions_room_name">"Oda adını değiştir"</string>
   <string name="screen_room_change_permissions_room_topic">"Oda konusunu değiştir"</string>
   <string name="screen_room_change_permissions_send_messages">"Mesaj gönder"</string>
@@ -35,12 +36,11 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Yalnızca üyeyi kaldır"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Yasağı Kaldır"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Davet edildikleri takdirde bu odaya tekrar katılabileceklerdir."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Kullanıcının yasağını kaldır"</string>
   <string name="screen_room_member_list_mode_banned">"Yasaklandı"</string>
   <string name="screen_room_member_list_mode_members">"Üyeler"</string>
   <string name="screen_room_member_list_pending_header_title">"Beklemede"</string>
-  <string name="screen_room_member_list_role_administrator">"Yönetici"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderatör"</string>
+  <string name="screen_room_member_list_role_administrator">"Yalnızca yöneticiler"</string>
+  <string name="screen_room_member_list_role_moderator">"Yöneticiler ve moderatörler"</string>
   <string name="screen_room_member_list_room_members_header_title">"Oda üyeleri"</string>
   <string name="screen_room_member_list_unbanning_user">"Yasak kaldırılıyor %1$s"</string>
   <string name="screen_room_roles_and_permissions_admins">"Yöneticiler"</string>

@@ -13,6 +13,7 @@
   <string name="screen_room_change_permissions_moderators">"Administradores y moderadores"</string>
   <string name="screen_room_change_permissions_remove_people">"Eliminar personas y rechazar solicitudes de unión"</string>
   <string name="screen_room_change_permissions_room_avatar">"Cambiar el avatar de la sala"</string>
+  <string name="screen_room_change_permissions_room_details">"Editar sala"</string>
   <string name="screen_room_change_permissions_room_name">"Cambiar el nombre de la sala"</string>
   <string name="screen_room_change_permissions_room_topic">"Cambiar el tema de la sala"</string>
   <string name="screen_room_change_permissions_send_messages">"Enviar mensajes"</string>
@@ -70,12 +71,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Solo eliminar miembro"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Quitar veto"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Podrá volver a unirse a esta sala si se le invita."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Quitar veto al usuario"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Eliminar veto en la sala"</string>
   <string name="screen_room_member_list_mode_banned">"Vetados"</string>
   <string name="screen_room_member_list_mode_members">"Miembros"</string>
   <string name="screen_room_member_list_pending_header_title">"Pendiente"</string>
-  <string name="screen_room_member_list_role_administrator">"Admin"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderador"</string>
+  <string name="screen_room_member_list_role_administrator">"Solo administradores"</string>
+  <string name="screen_room_member_list_role_moderator">"Administradores y moderadores"</string>
   <string name="screen_room_member_list_room_members_header_title">"Miembros de la sala"</string>
   <string name="screen_room_member_list_unbanning_user">"Levantando veto a %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Permitir configuración personalizada"</string>
@@ -117,12 +118,13 @@ No recomendamos habilitar el cifrado para las salas que cualquiera pueda encontr
   <string name="screen_security_and_privacy_encryption_section_header">"Cifrado"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Activar el cifrado de extremo a extremo"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Cualquiera puede encontrarla y unirse"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Cualquiera"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Las personas solo pueden unirse si están invitadas"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Solo por invitación"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Acceso a la sala"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"No se admiten los espacios por el momento."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Miembros del espacio"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Necesitarás una dirección de sala para que esta sea visible en el directorio de salas."</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Necesitarás una dirección de sala para que sea visible en el directorio."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Permite encontrar esta sala buscando en el directorio de salas públicas de %1$s"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Visible en el directorio de salas públicas"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Cualquiera"</string>
@@ -132,8 +134,6 @@ No recomendamos habilitar el cifrado para las salas que cualquiera pueda encontr
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Las direcciones de sala son formas de buscar salas y acceder a ellas. Esto también garantiza que puedas compartir fácilmente tu sala con otras personas.
 Puedes optar por publicar tu sala en el directorio de salas públicas de tu servidor base."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publicación de la sala"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Las direcciones de sala son un medio para buscar y acceder a salas. También te permiten compartir fácilmente tu sala con otras personas.
-La dirección también es necesaria para hacer visible la sala en el directorio de salas públicas de %1$s."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilidad de la sala"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Las direcciones de sala son un medio para buscar y acceder a salas. También te permiten compartir fácilmente tu sala con otras personas."</string>
   <string name="screen_security_and_privacy_title">"Seguridad y privacidad"</string>
 </resources>

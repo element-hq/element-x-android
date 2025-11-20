@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"管理員和版主"</string>
   <string name="screen_room_change_permissions_remove_people">"移除夥伴並拒絕加入請求"</string>
   <string name="screen_room_change_permissions_room_avatar">"變更聊天室大頭照"</string>
+  <string name="screen_room_change_permissions_room_details">"編輯聊天室"</string>
   <string name="screen_room_change_permissions_room_name">"變更聊天室名稱"</string>
   <string name="screen_room_change_permissions_room_topic">"變更聊天室主題"</string>
   <string name="screen_room_change_permissions_send_messages">"傳送訊息"</string>
@@ -38,12 +39,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"僅移除成員"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"解除黑名單"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"如果收到邀請，他們能再次加入聊天室。"</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"解除黑名單"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"從聊天室解除封鎖"</string>
   <string name="screen_room_member_list_mode_banned">"黑名單"</string>
   <string name="screen_room_member_list_mode_members">"成員"</string>
   <string name="screen_room_member_list_pending_header_title">"待定"</string>
-  <string name="screen_room_member_list_role_administrator">"管理員"</string>
-  <string name="screen_room_member_list_role_moderator">"版主"</string>
+  <string name="screen_room_member_list_role_administrator">"僅限管理員"</string>
+  <string name="screen_room_member_list_role_moderator">"管理員和版主"</string>
   <string name="screen_room_member_list_role_owner">"擁有者"</string>
   <string name="screen_room_member_list_room_members_header_title">"聊天室成員"</string>
   <string name="screen_room_member_list_unbanning_user">"正在解除黑名單 %1$s"</string>

@@ -11,6 +11,7 @@
   <string name="screen_room_change_permissions_moderators">"Адміністратары і мадэратары"</string>
   <string name="screen_room_change_permissions_remove_people">"Выдаляйце людзей і адхіляйце запыты на далучэнне"</string>
   <string name="screen_room_change_permissions_room_avatar">"Змяніць аватар пакоя"</string>
+  <string name="screen_room_change_permissions_room_details">"Рэдагаваць пакой"</string>
   <string name="screen_room_change_permissions_room_name">"Змяніць назву пакоя"</string>
   <string name="screen_room_change_permissions_room_topic">"Змяніць тэму пакоя"</string>
   <string name="screen_room_change_permissions_send_messages">"Адправіць паведамленні"</string>
@@ -66,12 +67,11 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Толькі выдаліць удзельніка"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Разблакіраваць"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Яны змогуць зноў далучыцца да гэтага пакоя, калі іх запросяць."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Разблакіраваць удзельніка"</string>
   <string name="screen_room_member_list_mode_banned">"Заблакіраваныя"</string>
   <string name="screen_room_member_list_mode_members">"Удзельнікі"</string>
   <string name="screen_room_member_list_pending_header_title">"У чаканні"</string>
-  <string name="screen_room_member_list_role_administrator">"Адміністратар"</string>
-  <string name="screen_room_member_list_role_moderator">"Мадэратар"</string>
+  <string name="screen_room_member_list_role_administrator">"Толькі адміністратары"</string>
+  <string name="screen_room_member_list_role_moderator">"Адміністратары і мадэратары"</string>
   <string name="screen_room_member_list_room_members_header_title">"Удзельнікі пакоя"</string>
   <string name="screen_room_member_list_unbanning_user">"Разблакіроўка %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Дазволіць уласную наладу"</string>
@@ -102,5 +102,6 @@
   <string name="screen_room_roles_and_permissions_room_details">"Дэталі пакоя"</string>
   <string name="screen_room_roles_and_permissions_title">"Ролі і дазволы"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Папрасіце далучыцца"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Хто заўгодна"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Хто заўгодна"</string>
 </resources>

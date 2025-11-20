@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"Administratorzy i moderatorzy"</string>
   <string name="screen_room_change_permissions_remove_people">"Usuwanie osób i odrzucanie próśb o dołączenie"</string>
   <string name="screen_room_change_permissions_room_avatar">"Zmień awatar pokoju"</string>
+  <string name="screen_room_change_permissions_room_details">"Edytuj pokój"</string>
   <string name="screen_room_change_permissions_room_name">"Zmień nazwę pokoju"</string>
   <string name="screen_room_change_permissions_room_topic">"Zmień temat pokoju"</string>
   <string name="screen_room_change_permissions_send_messages">"Wysyłanie wiadomości"</string>
@@ -40,12 +41,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Tylko usuń członka"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Odbanuj"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Będą mogli ponownie dołączyć do tego pokoju, jeśli zostaną zaproszeni."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Odbanuj użytkownika"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Odbanuj z pokoju"</string>
   <string name="screen_room_member_list_mode_banned">"Zbanowanych"</string>
   <string name="screen_room_member_list_mode_members">"Członków"</string>
   <string name="screen_room_member_list_pending_header_title">"Oczekujące"</string>
-  <string name="screen_room_member_list_role_administrator">"Administrator"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
+  <string name="screen_room_member_list_role_administrator">"Tylko administratorzy"</string>
+  <string name="screen_room_member_list_role_moderator">"Administratorzy i moderatorzy"</string>
   <string name="screen_room_member_list_role_owner">"Właściciel"</string>
   <string name="screen_room_member_list_room_members_header_title">"Członkowie pokoju"</string>
   <string name="screen_room_member_list_unbanning_user">"Odbanowanie %1$s"</string>

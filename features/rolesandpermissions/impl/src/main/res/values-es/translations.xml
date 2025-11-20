@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"Administradores y moderadores"</string>
   <string name="screen_room_change_permissions_remove_people">"Eliminar personas y rechazar solicitudes de unión"</string>
   <string name="screen_room_change_permissions_room_avatar">"Cambiar el avatar de la sala"</string>
+  <string name="screen_room_change_permissions_room_details">"Editar sala"</string>
   <string name="screen_room_change_permissions_room_name">"Cambiar el nombre de la sala"</string>
   <string name="screen_room_change_permissions_room_topic">"Cambiar el tema de la sala"</string>
   <string name="screen_room_change_permissions_send_messages">"Enviar mensajes"</string>
@@ -35,12 +36,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Solo eliminar miembro"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Quitar veto"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Podrá volver a unirse a esta sala si se le invita."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Quitar veto al usuario"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Eliminar veto en la sala"</string>
   <string name="screen_room_member_list_mode_banned">"Vetados"</string>
   <string name="screen_room_member_list_mode_members">"Miembros"</string>
   <string name="screen_room_member_list_pending_header_title">"Pendiente"</string>
-  <string name="screen_room_member_list_role_administrator">"Admin"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderador"</string>
+  <string name="screen_room_member_list_role_administrator">"Solo administradores"</string>
+  <string name="screen_room_member_list_role_moderator">"Administradores y moderadores"</string>
   <string name="screen_room_member_list_room_members_header_title">"Miembros de la sala"</string>
   <string name="screen_room_member_list_unbanning_user">"Levantando veto a %1$s"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administradores"</string>

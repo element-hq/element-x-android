@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"Administratzaileak eta moderatzaileak"</string>
   <string name="screen_room_change_permissions_remove_people">"Kendu jendea"</string>
   <string name="screen_room_change_permissions_room_avatar">"Aldatu gelaren abatarra"</string>
+  <string name="screen_room_change_permissions_room_details">"Editatu gela"</string>
   <string name="screen_room_change_permissions_room_name">"Aldatu gelaren izena"</string>
   <string name="screen_room_change_permissions_room_topic">"Aldatu gelako mintzagaia"</string>
   <string name="screen_room_change_permissions_send_messages">"Bidali mezuak"</string>
@@ -35,12 +36,11 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Kendu kidea eta ezarri debekua"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Kendu kidea soilik"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Kendu debekua"</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Kendu debekua erabiltzaileari"</string>
   <string name="screen_room_member_list_mode_banned">"Debekatuta"</string>
   <string name="screen_room_member_list_mode_members">"Kideak"</string>
   <string name="screen_room_member_list_pending_header_title">"Zain"</string>
-  <string name="screen_room_member_list_role_administrator">"Kudeatzailea"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderatzailea"</string>
+  <string name="screen_room_member_list_role_administrator">"Administratzaileak soilik"</string>
+  <string name="screen_room_member_list_role_moderator">"Administratzaileak eta moderatzaileak"</string>
   <string name="screen_room_member_list_role_owner">"Jabea"</string>
   <string name="screen_room_member_list_room_members_header_title">"Gelako kideak"</string>
   <string name="screen_room_member_list_unbanning_user">"%1$s(r)i debekua kentzen"</string>

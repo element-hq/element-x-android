@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Administrateurs seulement"</string>
+  <string name="screen_room_change_permissions_administrators">"Administrateurs"</string>
   <string name="screen_room_change_permissions_ban_people">"Bannir des participants"</string>
   <string name="screen_room_change_permissions_delete_messages">"Supprimer des messages"</string>
-  <string name="screen_room_change_permissions_invite_people">"Inviter des personnes et accepter les demandes pour rejoindre"</string>
+  <string name="screen_room_change_permissions_everyone">"Membre"</string>
+  <string name="screen_room_change_permissions_invite_people">"Inviter des personnes"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Gérer les membres"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Messages et contenus"</string>
-  <string name="screen_room_change_permissions_moderators">"Administrateurs et modérateurs"</string>
-  <string name="screen_room_change_permissions_remove_people">"Retirer des personnes et refuser les demandes pour rejoindre"</string>
+  <string name="screen_room_change_permissions_moderators">"Modérateurs"</string>
+  <string name="screen_room_change_permissions_remove_people">"Retirer des personnes"</string>
   <string name="screen_room_change_permissions_room_avatar">"Changer l’avatar du salon"</string>
+  <string name="screen_room_change_permissions_room_details">"Modifier les détails"</string>
   <string name="screen_room_change_permissions_room_name">"Changer le nom du salon"</string>
   <string name="screen_room_change_permissions_room_topic">"Changer le sujet du salon"</string>
   <string name="screen_room_change_permissions_send_messages">"Envoyer des messages"</string>
@@ -39,12 +42,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Retirer le membre uniquement"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Débannir"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Il pourra rejoindre le salon à nouveau si il est invité."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Débannir l’utilisateur"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Débannir du salon"</string>
   <string name="screen_room_member_list_mode_banned">"Bannis"</string>
   <string name="screen_room_member_list_mode_members">"Membres"</string>
   <string name="screen_room_member_list_pending_header_title">"En attente"</string>
-  <string name="screen_room_member_list_role_administrator">"Administrateur"</string>
-  <string name="screen_room_member_list_role_moderator">"Modérateur"</string>
+  <string name="screen_room_member_list_role_administrator">"Administrateurs"</string>
+  <string name="screen_room_member_list_role_moderator">"Modérateurs"</string>
   <string name="screen_room_member_list_role_owner">"Propriétaire"</string>
   <string name="screen_room_member_list_room_members_header_title">"Membres du salon"</string>
   <string name="screen_room_member_list_unbanning_user">"Débannissement de %1$s"</string>
@@ -57,11 +60,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Messages et contenus"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Modérateurs"</string>
   <string name="screen_room_roles_and_permissions_owners">"Propriétaires"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Autorisations"</string>
   <string name="screen_room_roles_and_permissions_reset">"Réinitialisation des autorisations"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"La réinitialisation des autorisations entraîne la perte des réglages actuels."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Réinitialisation des autorisations ?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Rôles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Détails du salon"</string>
   <string name="screen_room_roles_and_permissions_space_details">"Détails de l’espace"</string>
-  <string name="screen_room_roles_and_permissions_title">"Rôles et autorisations"</string>
+  <string name="screen_room_roles_and_permissions_title">"Rôles &amp; autorisations"</string>
 </resources>

@@ -13,6 +13,7 @@
   <string name="screen_room_change_permissions_moderators">"Διαχειριστές και συντονιστές"</string>
   <string name="screen_room_change_permissions_remove_people">"Αφαίρεση ατόμων και απόρριψη αιτημάτων συμμετοχής"</string>
   <string name="screen_room_change_permissions_room_avatar">"Αλλαγή εικόνας προφίλ αίθουσας"</string>
+  <string name="screen_room_change_permissions_room_details">"Επεξεργασία Αίθουσας"</string>
   <string name="screen_room_change_permissions_room_name">"Αλλαγή ονόματος αίθουσας"</string>
   <string name="screen_room_change_permissions_room_topic">"Αλλαγή θέματος αίθουσας"</string>
   <string name="screen_room_change_permissions_send_messages">"Αποστολή μηνυμάτων"</string>
@@ -70,12 +71,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Μόνο αφαίρεση μέλους"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Αναίρεση αποκλεισμού"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Θα μπορούν να συμμετάσχουν ξανά σε αυτή την αίθουσα, εάν προσκληθούν."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Άρση αποκλεισμού χρήστη"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Άρση αποκλεισμού από την αίθουσα"</string>
   <string name="screen_room_member_list_mode_banned">"Αποκλεισμένοι"</string>
   <string name="screen_room_member_list_mode_members">"Μέλη"</string>
   <string name="screen_room_member_list_pending_header_title">"Σε αναμονή"</string>
-  <string name="screen_room_member_list_role_administrator">"Διαχειριστής"</string>
-  <string name="screen_room_member_list_role_moderator">"Συντονιστής"</string>
+  <string name="screen_room_member_list_role_administrator">"Μόνο διαχειριστές"</string>
+  <string name="screen_room_member_list_role_moderator">"Διαχειριστές και συντονιστές"</string>
   <string name="screen_room_member_list_room_members_header_title">"Μέλη της αίθουσας"</string>
   <string name="screen_room_member_list_unbanning_user">"Άρση αποκλεισμού %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Να επιτρέπεται η προσαρμοσμένη ρύθμιση"</string>
@@ -123,7 +124,7 @@
   <string name="screen_security_and_privacy_room_access_section_header">"Πρόσβαση στην αίθουσα"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Οι χώροι δεν υποστηρίζονται προς το παρόν"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Μέλη χώρου"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Θα χρειαστείτε μια διεύθυνση αίθουσας για να την κάνετε ορατή στον κατάλογο αιθουσών."</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Θα χρειαστείτε μια διεύθυνση αίθουσας για να την κάνετε ορατή στον κατάλογο."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Επιστρέψτε την εύρεση αυτής της αίθουσας με αναζήτηση στον κατάλογο %1$s δημοσίων αιθουσών"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Ορατή στον κατάλογο δημόσιων αιθουσών"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Οποιοσδήποτε"</string>
@@ -133,8 +134,6 @@
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Οι διευθύνσεις αιθουσών είναι τρόποι εύρεσης και πρόσβασης σε αίθουσες. Αυτό διασφαλίζει επίσης ότι μπορείτε εύκολα να μοιραστείτε την αίθουσα με άλλους.
 Μπορείτε να επιλέξετε να δημοσιεύσετε την αίθουσά σας στον δημόσιο κατάλογο αιθουσών του αρχικού διακομιστή σας."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Δημοσίευση αίθουσας"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Οι διευθύνσεις αιθουσών είναι τρόποι εύρεσης και πρόσβασης σε αίθουσες. Αυτό εξασφαλίζει επίσης ότι μπορείτε εύκολα να μοιραστείτε την αίθουσα με άλλους.
-Η διεύθυνση απαιτείται επίσης για να γίνει η αίθουσα ορατή στον δημόσιο κατάλογο αιθουσών %1$s."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Ορατότητα αίθουσας"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Οι διευθύνσεις αιθουσών είναι τρόποι εύρεσης και πρόσβασης σε αίθουσες. Αυτό εξασφαλίζει επίσης ότι μπορείτε εύκολα να μοιραστείτε την αίθουσα με άλλους."</string>
   <string name="screen_security_and_privacy_title">"Ασφάλεια &amp; απόρρητο"</string>
 </resources>

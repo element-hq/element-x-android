@@ -11,6 +11,7 @@
   <string name="screen_room_change_permissions_moderators">"منتظمین اور ناظمین"</string>
   <string name="screen_room_change_permissions_remove_people">"لوگوں کو ہٹا دیں اور شمولیت کی درخواستیں مسترد کریں"</string>
   <string name="screen_room_change_permissions_room_avatar">"کمرے کا اوتار بدلیں"</string>
+  <string name="screen_room_change_permissions_room_details">"کمرے میں ترمیم کریں"</string>
   <string name="screen_room_change_permissions_room_name">"کمرے کا نام بدلیں"</string>
   <string name="screen_room_change_permissions_room_topic">"کمرے کا موضوع بدلیں"</string>
   <string name="screen_room_change_permissions_send_messages">"پیغامات بھیجیں"</string>
@@ -65,12 +66,11 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"رکن کو صرف ہٹائیں"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"غیر محظور کریں"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"اگر وہ مدعو کیا جائیں تو وہ دوبارہ اس کمرے میں شامل ہوسکیں گے۔"</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"صارف کو غیر محظور کریں"</string>
   <string name="screen_room_member_list_mode_banned">"محظور"</string>
   <string name="screen_room_member_list_mode_members">"اراکین"</string>
   <string name="screen_room_member_list_pending_header_title">"زیر التواء"</string>
-  <string name="screen_room_member_list_role_administrator">"منتظم"</string>
-  <string name="screen_room_member_list_role_moderator">"ناظم"</string>
+  <string name="screen_room_member_list_role_administrator">"صرف منتظمین"</string>
+  <string name="screen_room_member_list_role_moderator">"منتظمین اور ناظمین"</string>
   <string name="screen_room_member_list_room_members_header_title">"کمرے کے ارکان"</string>
   <string name="screen_room_member_list_unbanning_user">"%1$s کو غیر محظور کر رہا ہے"</string>
   <string name="screen_room_notification_settings_allow_custom">"حسب ضرورت ترتیب کی اجازت دیں"</string>

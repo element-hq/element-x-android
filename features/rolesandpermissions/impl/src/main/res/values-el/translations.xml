@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"Διαχειριστές και συντονιστές"</string>
   <string name="screen_room_change_permissions_remove_people">"Αφαίρεση ατόμων και απόρριψη αιτημάτων συμμετοχής"</string>
   <string name="screen_room_change_permissions_room_avatar">"Αλλαγή εικόνας προφίλ αίθουσας"</string>
+  <string name="screen_room_change_permissions_room_details">"Επεξεργασία Αίθουσας"</string>
   <string name="screen_room_change_permissions_room_name">"Αλλαγή ονόματος αίθουσας"</string>
   <string name="screen_room_change_permissions_room_topic">"Αλλαγή θέματος αίθουσας"</string>
   <string name="screen_room_change_permissions_send_messages">"Αποστολή μηνυμάτων"</string>
@@ -35,12 +36,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Μόνο αφαίρεση μέλους"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Αναίρεση αποκλεισμού"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Θα μπορούν να συμμετάσχουν ξανά σε αυτή την αίθουσα, εάν προσκληθούν."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Άρση αποκλεισμού χρήστη"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Άρση αποκλεισμού από την αίθουσα"</string>
   <string name="screen_room_member_list_mode_banned">"Αποκλεισμένοι"</string>
   <string name="screen_room_member_list_mode_members">"Μέλη"</string>
   <string name="screen_room_member_list_pending_header_title">"Σε αναμονή"</string>
-  <string name="screen_room_member_list_role_administrator">"Διαχειριστής"</string>
-  <string name="screen_room_member_list_role_moderator">"Συντονιστής"</string>
+  <string name="screen_room_member_list_role_administrator">"Μόνο διαχειριστές"</string>
+  <string name="screen_room_member_list_role_moderator">"Διαχειριστές και συντονιστές"</string>
   <string name="screen_room_member_list_room_members_header_title">"Μέλη της αίθουσας"</string>
   <string name="screen_room_member_list_unbanning_user">"Άρση αποκλεισμού %1$s"</string>
   <string name="screen_room_roles_and_permissions_admins">"Διαχειριστές"</string>

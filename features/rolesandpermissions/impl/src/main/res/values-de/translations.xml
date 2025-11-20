@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"Admins und Moderatoren"</string>
   <string name="screen_room_change_permissions_remove_people">"Personen entfernen und Beitrittsanfragen ablehnen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Avatar ändern"</string>
+  <string name="screen_room_change_permissions_room_details">"Chat bearbeiten"</string>
   <string name="screen_room_change_permissions_room_name">"Chat-Namen ändern"</string>
   <string name="screen_room_change_permissions_room_topic">"Chat Thema ändern"</string>
   <string name="screen_room_change_permissions_send_messages">"Nachrichten senden"</string>
@@ -39,12 +40,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Mitglied nur entfernen"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Sperre aufheben"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Die Nutzer können dem Chat wieder beitreten, wenn sie eingeladen werden."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Nutzer entsperren"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Sperre für diesen Chat aufheben"</string>
   <string name="screen_room_member_list_mode_banned">"Gesperrt"</string>
   <string name="screen_room_member_list_mode_members">"Mitglieder"</string>
   <string name="screen_room_member_list_pending_header_title">"Ausstehend"</string>
-  <string name="screen_room_member_list_role_administrator">"Admin"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
+  <string name="screen_room_member_list_role_administrator">"Nur Admins"</string>
+  <string name="screen_room_member_list_role_moderator">"Admins und Moderatoren"</string>
   <string name="screen_room_member_list_role_owner">"Eigentümer"</string>
   <string name="screen_room_member_list_room_members_header_title">"Mitglieder"</string>
   <string name="screen_room_member_list_unbanning_user">"%1$s wird entsperrt."</string>

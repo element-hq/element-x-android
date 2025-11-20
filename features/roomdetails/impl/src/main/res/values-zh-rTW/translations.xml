@@ -13,6 +13,7 @@
   <string name="screen_room_change_permissions_moderators">"管理員和版主"</string>
   <string name="screen_room_change_permissions_remove_people">"移除夥伴並拒絕加入請求"</string>
   <string name="screen_room_change_permissions_room_avatar">"變更聊天室大頭照"</string>
+  <string name="screen_room_change_permissions_room_details">"編輯聊天室"</string>
   <string name="screen_room_change_permissions_room_name">"變更聊天室名稱"</string>
   <string name="screen_room_change_permissions_room_topic">"變更聊天室主題"</string>
   <string name="screen_room_change_permissions_send_messages">"傳送訊息"</string>
@@ -75,12 +76,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"僅移除成員"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"解除黑名單"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"如果收到邀請，他們能再次加入聊天室。"</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"解除黑名單"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"從聊天室解除封鎖"</string>
   <string name="screen_room_member_list_mode_banned">"黑名單"</string>
   <string name="screen_room_member_list_mode_members">"成員"</string>
   <string name="screen_room_member_list_pending_header_title">"待定"</string>
-  <string name="screen_room_member_list_role_administrator">"管理員"</string>
-  <string name="screen_room_member_list_role_moderator">"版主"</string>
+  <string name="screen_room_member_list_role_administrator">"僅限管理員"</string>
+  <string name="screen_room_member_list_role_moderator">"管理員和版主"</string>
   <string name="screen_room_member_list_role_owner">"擁有者"</string>
   <string name="screen_room_member_list_room_members_header_title">"聊天室成員"</string>
   <string name="screen_room_member_list_unbanning_user">"正在解除黑名單 %1$s"</string>
@@ -131,7 +132,7 @@
   <string name="screen_security_and_privacy_room_access_section_header">"聊天室存取權"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"目前不支援空間"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"空間成員"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"您需要聊天室地址才能在聊天室目錄中顯示。"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"您需要聊天室地址才能在目錄中顯示它。"</string>
   <string name="screen_security_and_privacy_room_address_section_header">"聊天室地址"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"允許透過搜尋 %1$s 公開聊天室目錄找到此聊天室"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"在公開聊天室目錄中可見"</string>
@@ -142,8 +143,7 @@
   <string name="screen_security_and_privacy_room_publishing_section_footer">"聊天室地址是尋找與存取聊天室的方法。也確保您可以輕鬆與其他人分享聊天室。
 您可以選擇在家伺服器公開聊天室目錄中發佈您的聊天室。"</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"聊天室發佈"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"聊天室地址是尋找與存取聊天室的方法。也確保您可以輕鬆與其他人分享聊天室。
-若要讓聊天室在 %1$s 公開聊天室目錄中可見，地址也是必要的。"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"聊天室地址是尋找與存取聊天室的方法。也確保您可以輕鬆與其他人分享聊天室。"</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"聊天室能見度"</string>
   <string name="screen_security_and_privacy_title">"安全與隱私"</string>
 </resources>

@@ -13,6 +13,7 @@
   <string name="screen_room_change_permissions_moderators">"Адміністратори та модератори"</string>
   <string name="screen_room_change_permissions_remove_people">"Вилучати людей і відхиляти запити на приєднання"</string>
   <string name="screen_room_change_permissions_room_avatar">"Змінювати аватар кімнати"</string>
+  <string name="screen_room_change_permissions_room_details">"Редагувати кімнату"</string>
   <string name="screen_room_change_permissions_room_name">"Змінювати назву кімнати"</string>
   <string name="screen_room_change_permissions_room_topic">"Змінювати тему кімнати"</string>
   <string name="screen_room_change_permissions_send_messages">"Надсилати повідомлення"</string>
@@ -75,12 +76,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Лише вилучити учасника"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Розблокувати"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Вони зможуть знову приєднатися до цієї кімнати, якщо їх запросять."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Розблокувати користувача"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Розблокувати в кімнаті"</string>
   <string name="screen_room_member_list_mode_banned">"Заблоковані"</string>
   <string name="screen_room_member_list_mode_members">"Учасники"</string>
   <string name="screen_room_member_list_pending_header_title">"На розгляді"</string>
-  <string name="screen_room_member_list_role_administrator">"Адміністратор"</string>
-  <string name="screen_room_member_list_role_moderator">"Модератор"</string>
+  <string name="screen_room_member_list_role_administrator">"Тільки для адміністраторів"</string>
+  <string name="screen_room_member_list_role_moderator">"Адміністратори та модератори"</string>
   <string name="screen_room_member_list_role_owner">"Власник"</string>
   <string name="screen_room_member_list_room_members_header_title">"Учасники кімнати"</string>
   <string name="screen_room_member_list_unbanning_user">"Розблокування %1$s"</string>
@@ -125,13 +126,13 @@
   <string name="screen_security_and_privacy_encryption_section_header">"Шифрування"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Увімкнути наскрізне шифрування"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Будь-хто може знайти та приєднатися."</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Будь-хто"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Кожний"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Люди можуть приєднатися, лише якщо їх запросили"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Лише запрошені"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Доступ до кімнати"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Простори наразі не підтримуються"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Учасники простору"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Вам знадобиться адреса кімнати, щоб зробити її видимою в каталозі кімнат."</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Вам знадобиться адреса кімнати, щоб зробити її видимою в каталозі."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Адреса кімнати"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Дозвольте, щоб цю кімнату можна було знайти за допомогою пошуку в каталозі загальнодоступних кімнат %1$s "</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Видима в каталозі загальнодоступних кімнат"</string>
@@ -142,8 +143,7 @@
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Адреси кімнат — це спосіб знайти кімнату та отримати до неї доступ. Це також гарантує, що ви можете легко поділитися своєю кімнатою з іншими.
 Ви можете опублікувати свою кімнату в каталозі загальнодоступних кімнат вашого домашнього сервера."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Публікація в кімнаті"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Адреси кімнат — це спосіб знайти та отримати доступ до кімнат. Це також гарантує, що ви зможете легко поділитися своєю кімнатою з іншими.
-Адреса також необхідна, щоб зробити кімнату видимою в каталозі загальнодоступних кімнат %1$s."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Адреси кімнат — це спосіб знайти та отримати доступ до кімнат. Це також гарантує, що ви зможете легко поділитися своєю кімнатою з іншими."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Видимість кімнати"</string>
   <string name="screen_security_and_privacy_title">"Безпека й приватність"</string>
 </resources>

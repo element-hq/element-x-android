@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"Administratorer og moderatorer"</string>
   <string name="screen_room_change_permissions_remove_people">"Fjern folk og avslå forespørsler om å bli med"</string>
   <string name="screen_room_change_permissions_room_avatar">"Endre romavatar"</string>
+  <string name="screen_room_change_permissions_room_details">"Rediger rom"</string>
   <string name="screen_room_change_permissions_room_name">"Endre romnavn"</string>
   <string name="screen_room_change_permissions_room_topic">"Endre temaet til rommet"</string>
   <string name="screen_room_change_permissions_send_messages">"Send meldinger"</string>
@@ -39,12 +40,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Bare fjern medlem"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Opphev utestengelse"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"De vil kunne bli med i dette rommet igjen hvis de blir invitert."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Opphev utestengelse av bruker"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Fjern utestengelsen fra rommet"</string>
   <string name="screen_room_member_list_mode_banned">"Utestengt"</string>
   <string name="screen_room_member_list_mode_members">"Medlemmer"</string>
   <string name="screen_room_member_list_pending_header_title">"Venter"</string>
-  <string name="screen_room_member_list_role_administrator">"Administrator"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
+  <string name="screen_room_member_list_role_administrator">"Kun for administratorer"</string>
+  <string name="screen_room_member_list_role_moderator">"Administratorer og moderatorer"</string>
   <string name="screen_room_member_list_role_owner">"Eier"</string>
   <string name="screen_room_member_list_room_members_header_title">"Medlemmer av rommet"</string>
   <string name="screen_room_member_list_unbanning_user">"Oppheve utestengelsen av %1$s"</string>

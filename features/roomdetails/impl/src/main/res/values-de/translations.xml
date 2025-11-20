@@ -13,6 +13,7 @@
   <string name="screen_room_change_permissions_moderators">"Admins und Moderatoren"</string>
   <string name="screen_room_change_permissions_remove_people">"Personen entfernen und Beitrittsanfragen ablehnen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Avatar ändern"</string>
+  <string name="screen_room_change_permissions_room_details">"Chat bearbeiten"</string>
   <string name="screen_room_change_permissions_room_name">"Chat-Namen ändern"</string>
   <string name="screen_room_change_permissions_room_topic">"Chat Thema ändern"</string>
   <string name="screen_room_change_permissions_send_messages">"Nachrichten senden"</string>
@@ -76,12 +77,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Mitglied nur entfernen"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Sperre aufheben"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Die Nutzer können dem Chat wieder beitreten, wenn sie eingeladen werden."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Nutzer entsperren"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Sperre für diesen Chat aufheben"</string>
   <string name="screen_room_member_list_mode_banned">"Gesperrt"</string>
   <string name="screen_room_member_list_mode_members">"Mitglieder"</string>
   <string name="screen_room_member_list_pending_header_title">"Ausstehend"</string>
-  <string name="screen_room_member_list_role_administrator">"Admin"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
+  <string name="screen_room_member_list_role_administrator">"Nur Admins"</string>
+  <string name="screen_room_member_list_role_moderator">"Admins und Moderatoren"</string>
   <string name="screen_room_member_list_role_owner">"Eigentümer"</string>
   <string name="screen_room_member_list_room_members_header_title">"Mitglieder"</string>
   <string name="screen_room_member_list_unbanning_user">"%1$s wird entsperrt."</string>
@@ -126,7 +127,7 @@ Wir empfehlen keine Verschlüsselung für Chats zu aktivieren, die jeder finden 
   <string name="screen_security_and_privacy_encryption_section_header">"Verschlüsselung"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Ende-zu-Ende-Verschlüsselung aktivieren"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Jeder kann diesen Chat finden und ihm beitreten"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Alle"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Jeder"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Personen können nur beitreten, wenn sie eingeladen werden."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Nur auf Einladung"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Chat Zugang"</string>
@@ -143,8 +144,7 @@ Wir empfehlen keine Verschlüsselung für Chats zu aktivieren, die jeder finden 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen.
 Auf Wunsch kannst du deinen Chat im öffentlichen Verzeichnis deines Homeservers veröffentlichen."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Veröffentlichung von Chats"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen.
-Die Adresse ist auch erforderlich, um den Chat im öffentlichen Verzeichnis von %1$s zu veröffentlichen."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">" Sichtbarkeit des Chats"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Chatroomsichtbarkeit."</string>
   <string name="screen_security_and_privacy_title">"Sicherheit &amp; Datenschutz"</string>
 </resources>

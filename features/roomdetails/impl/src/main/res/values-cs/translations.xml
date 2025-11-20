@@ -13,6 +13,7 @@
   <string name="screen_room_change_permissions_moderators">"Správci a moderátoři"</string>
   <string name="screen_room_change_permissions_remove_people">"Odeberte lidi a odmítněte žádosti o připojení"</string>
   <string name="screen_room_change_permissions_room_avatar">"Změnit avatar místnosti"</string>
+  <string name="screen_room_change_permissions_room_details">"Upravit místnost"</string>
   <string name="screen_room_change_permissions_room_name">"Změnit název místnosti"</string>
   <string name="screen_room_change_permissions_room_topic">"Změnit téma místnosti"</string>
   <string name="screen_room_change_permissions_send_messages">"Odeslat zprávy"</string>
@@ -77,12 +78,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Pouze odebrat člena"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Zrušit vykázání"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Pokud budou pozváni, budou se moci do této místnosti znovu připojit."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Zrušit vykázání uživatele"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Zrušit vykázání z místnosti"</string>
   <string name="screen_room_member_list_mode_banned">"Vykázaní"</string>
   <string name="screen_room_member_list_mode_members">"Členové"</string>
   <string name="screen_room_member_list_pending_header_title">"Nevyřízeno"</string>
-  <string name="screen_room_member_list_role_administrator">"Správce"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
+  <string name="screen_room_member_list_role_administrator">"Pouze správci"</string>
+  <string name="screen_room_member_list_role_moderator">"Správci a moderátoři"</string>
   <string name="screen_room_member_list_role_owner">"Vlastník"</string>
   <string name="screen_room_member_list_room_members_header_title">"Členové místnosti"</string>
   <string name="screen_room_member_list_unbanning_user">"Rušení vykázání %1$s"</string>
@@ -133,7 +134,7 @@ Nedoporučujeme povolovat šifrování pro místnosti, které může kdokoli naj
   <string name="screen_security_and_privacy_room_access_section_header">"Přístup do místnosti"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Prostory nejsou aktuálně podporovány"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Členové prostoru"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Budete potřebovat adresu místnosti, aby byla viditelná v adresáři místností."</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Aby byla místnost v adresáři viditelná, je třeba zadat její adresu."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Adresa místnosti"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Umožněte nalezení této místnosti prohledáním adresáře veřejných místností na %1$s"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Viditelné v adresáři veřejných místností"</string>
@@ -144,8 +145,7 @@ Nedoporučujeme povolovat šifrování pro místnosti, které může kdokoli naj
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Adresy místností představují způsoby, jak najít místnosti a získat k nim přístup. Díky tomu můžete svoji místnost snadno sdílet s ostatními.
 Můžete se rozhodnout publikovat svou místnost ve veřejném adresáři místnosti vašeho domovského serveru."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publikování místnosti"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresy místností představují způsoby, jak najít místnosti a získat k nim přístup. Díky tomu můžete svoji místnost snadno sdílet s ostatními.
-Adresa je také vyžadována pro zobrazení místnosti v adresáři veřejných místností %1$s."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresy místností představují způsoby, jak najít místnosti a získat k nim přístup. Díky tomu můžete svoji místnost snadno sdílet s ostatními."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Viditelnost místnosti"</string>
   <string name="screen_security_and_privacy_title">"Zabezpečení a soukromí"</string>
 </resources>

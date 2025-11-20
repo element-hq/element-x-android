@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"Adminlar va moderatorlar"</string>
   <string name="screen_room_change_permissions_remove_people">"Odamlarni olib tashlash va qoʻshilish soʻrovlarini rad etish"</string>
   <string name="screen_room_change_permissions_room_avatar">"Xona avatarini oʻzgartirish"</string>
+  <string name="screen_room_change_permissions_room_details">"Xonani tahrirlash"</string>
   <string name="screen_room_change_permissions_room_name">"Xona nomini oʻzgartirish"</string>
   <string name="screen_room_change_permissions_room_topic">"Xona mavzusini almashtirish"</string>
   <string name="screen_room_change_permissions_send_messages">"Xabarlar yuborish"</string>
@@ -35,12 +36,11 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Faqat aʻzoni olib tashlash"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Taqiqni bekor qilish"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Agar taklif qilinsa, ular bu xonaga qayta qo‘shilishlari mumkin."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Foydalanuvchini blokdan chiqarish"</string>
   <string name="screen_room_member_list_mode_banned">"Taqiqlangan"</string>
   <string name="screen_room_member_list_mode_members">"Azolar"</string>
   <string name="screen_room_member_list_pending_header_title">"Kutilmoqda"</string>
-  <string name="screen_room_member_list_role_administrator">"Admin"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
+  <string name="screen_room_member_list_role_administrator">"Faqat adminlar"</string>
+  <string name="screen_room_member_list_role_moderator">"Adminlar va moderatorlar"</string>
   <string name="screen_room_member_list_room_members_header_title">"Xona a\'zolari"</string>
   <string name="screen_room_member_list_unbanning_user">"Taqiqni bekor qilish %1$s"</string>
   <string name="screen_room_roles_and_permissions_admins">"Adminlar"</string>

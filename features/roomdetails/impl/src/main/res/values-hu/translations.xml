@@ -79,7 +79,7 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Csak a tag eltávolítása"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Tiltás feloldása"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Ehhez a szobához is csatlakozhat, ha meghívják."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Felhasználó tiltásának feloldása"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Visszaengedés a szobába"</string>
   <string name="screen_room_member_list_mode_banned">"Kitiltva"</string>
   <string name="screen_room_member_list_mode_members">"Tagok"</string>
   <string name="screen_room_member_list_pending_header_title">"Függőben"</string>
@@ -130,14 +130,13 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_encryption_section_header">"Titkosítás"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Végpontok közötti titkosítás engedélyezése"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki csatlakozhat."</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Nyilvános"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Bárki"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Csak a meghívott emberek léphetnek be."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Privát"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Hozzáférés"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"A terek jelenleg nem támogatottak"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"A tér tagjai"</string>
-  <string name="screen_security_and_privacy_room_address_description">"Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban."</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá váljon a szobakatalógusban."</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Közzétett cím"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"A szoba megtalálhatóvá tétele a(z) %1$s nyilvános szobakatalógusában való kereséssel."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"Lehetővé teszi, hogy a nyilvános szobakatalógusban megtalálható legyen."</string>
@@ -149,8 +148,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_room_publishing_section_footer">"A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.
 Kiválaszthatja, hogy szobáját közzéteszi-e a Matrix-kiszolgáló nyilvános szobakatalógusában."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Szoba közzététele"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.
-A cím szükséges ahhoz is, hogy a nyilvános szoba láthatóvá váljon a(z) %1$s kiszolgáló nyilvános szobakatalógusában."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Szoba láthatósága"</string>
   <string name="screen_security_and_privacy_title">"Biztonság és adatvédelem"</string>
 </resources>

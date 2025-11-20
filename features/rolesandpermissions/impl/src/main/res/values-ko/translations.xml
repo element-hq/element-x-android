@@ -8,6 +8,7 @@
   <string name="screen_room_change_permissions_moderators">"관리자 및 중재자"</string>
   <string name="screen_room_change_permissions_remove_people">"사람들을 제거하고 가입 요청을 거부합니다"</string>
   <string name="screen_room_change_permissions_room_avatar">"방 아바타 변경"</string>
+  <string name="screen_room_change_permissions_room_details">"방 편집"</string>
   <string name="screen_room_change_permissions_room_name">"방 이름 변경"</string>
   <string name="screen_room_change_permissions_room_topic">"방 화제 변경"</string>
   <string name="screen_room_change_permissions_send_messages">"메시지 보내기"</string>
@@ -38,12 +39,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"회원만 삭제할 수 있습니다."</string>
   <string name="screen_room_member_list_manage_member_unban_action">"금지 해제"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"초대받으면 이 방에 다시 들어올 수 있습니다."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"사용자 차단 해제"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"방에서 차단 해제"</string>
   <string name="screen_room_member_list_mode_banned">"차단됨"</string>
   <string name="screen_room_member_list_mode_members">"회원들"</string>
   <string name="screen_room_member_list_pending_header_title">"보류 중"</string>
-  <string name="screen_room_member_list_role_administrator">"관리자"</string>
-  <string name="screen_room_member_list_role_moderator">"중재자"</string>
+  <string name="screen_room_member_list_role_administrator">"관리자 전용"</string>
+  <string name="screen_room_member_list_role_moderator">"관리자 및 중재자"</string>
   <string name="screen_room_member_list_role_owner">"소유자"</string>
   <string name="screen_room_member_list_room_members_header_title">"방 회원들"</string>
   <string name="screen_room_member_list_unbanning_user">"차단 해제 %1$s"</string>
