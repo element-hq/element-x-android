@@ -229,6 +229,7 @@ class TimelinePresenter(
             timelineItemsFactory.timelineItems
                 .onEach { newTimelineItems ->
                     analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.NotificationTapOpensTimeline)?.finish()
+                    analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.OpenRoom)?.finish()
                     timelineItemIndexer.process(newTimelineItems)
                     timelineItems = newTimelineItems
                 }
