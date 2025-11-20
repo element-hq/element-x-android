@@ -42,7 +42,7 @@ serialization_json = "1.9.0"
 #other
 coil = "3.3.0"
 # Rollback to 1.0.4, 1.0.5 has this issue: https://github.com/airbnb/Showkase/issues/420
-showkase = "1.0.4"
+showkase = "1.0.5"
 appyx = "1.7.1"
 sqldelight = "2.2.1"
 wysiwyg = "2.40.0"
