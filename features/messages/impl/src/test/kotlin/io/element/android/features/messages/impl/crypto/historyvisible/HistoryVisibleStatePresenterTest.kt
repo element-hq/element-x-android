@@ -8,10 +8,6 @@
 package io.element.android.features.messages.impl.crypto.historyvisible
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.featureflag.api.Feature
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
