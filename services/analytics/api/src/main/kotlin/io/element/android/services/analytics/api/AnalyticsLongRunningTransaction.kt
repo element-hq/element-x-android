@@ -13,4 +13,5 @@ sealed class AnalyticsLongRunningTransaction(
 ) {
     data object FirstRoomsDisplayed : AnalyticsLongRunningTransaction("First rooms displayed after login or restoration", null)
     data object ResumeAppUntilNewRoomsReceived : AnalyticsLongRunningTransaction("App was resumed and new room list items arrived", null)
+    data object NotificationTapOpensTimeline : AnalyticsLongRunningTransaction("A notification was tapped and it opened a timeline", null)
 }

@@ -36,6 +36,7 @@ class DefaultIntentProvider(
         return Intent(context, MainActivity::class.java).apply {
             action = Intent.ACTION_VIEW
             data = deepLinkCreator.create(sessionId, roomId, threadId, eventId).toUri()
+            putExtra("from_notification", true)
         }
     }
 }

@@ -55,6 +55,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -86,6 +88,7 @@ class TimelinePresenter(
     private val typingNotificationPresenter: Presenter<TypingNotificationState>,
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val featureFlagService: FeatureFlagService,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
     @AssistedFactory
@@ -225,6 +228,7 @@ class TimelinePresenter(
         LaunchedEffect(Unit) {
             timelineItemsFactory.timelineItems
                 .onEach { newTimelineItems ->
+                    analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.NotificationTapOpensTimeline)?.finish()
                     timelineItemIndexer.process(newTimelineItems)
                     timelineItems = newTimelineItems
                 }
