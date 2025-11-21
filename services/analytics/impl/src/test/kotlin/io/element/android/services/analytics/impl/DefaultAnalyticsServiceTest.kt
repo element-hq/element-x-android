@@ -21,6 +21,7 @@ import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import io.element.android.services.analytics.impl.store.AnalyticsStore
 import io.element.android.services.analytics.impl.store.FakeAnalyticsStore
+import io.element.android.services.analytics.test.FakeAnalyticsSdkSpanFactory
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.services.analyticsproviders.test.FakeAnalyticsProvider
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -278,6 +279,7 @@ class DefaultAnalyticsServiceTest {
         analyticsStore = analyticsStore,
         coroutineScope = coroutineScope,
         sessionObserver = sessionObserver,
+        analyticsSdkSpanFactory = FakeAnalyticsSdkSpanFactory(),
     ).also {
         // Wait for the service to be ready
         delay(1)

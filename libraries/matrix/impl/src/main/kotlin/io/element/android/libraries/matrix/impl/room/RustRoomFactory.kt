@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapp
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.inBridgeSdkSpan
 import io.element.android.services.analytics.api.recordTransaction
 import io.element.android.services.analyticsproviders.api.recordChildTransaction
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -127,17 +128,19 @@ class RustRoomFactory(
                     val timeline = transaction.recordChildTransaction(
                         operation = "sdkRoom.timelineWithConfiguration",
                         description = "Get timeline from the SDK",
-                    ) {
-                        sdkRoom.timelineWithConfiguration(
-                            TimelineConfiguration(
-                                focus = TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents),
-                                filter = eventFilters?.let(TimelineFilter::EventTypeFilter) ?: TimelineFilter.All,
-                                internalIdPrefix = "live",
-                                dateDividerMode = DateDividerMode.DAILY,
-                                trackReadReceipts = TimelineReadReceiptTracking.ALL_EVENTS,
-                                reportUtds = true,
+                    ) { timelineTransaction ->
+                        analyticsService.inBridgeSdkSpan(parentTraceId = timelineTransaction.traceId()) {
+                            sdkRoom.timelineWithConfiguration(
+                                TimelineConfiguration(
+                                    focus = TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents),
+                                    filter = eventFilters?.let(TimelineFilter::EventTypeFilter) ?: TimelineFilter.All,
+                                    internalIdPrefix = "live",
+                                    dateDividerMode = DateDividerMode.DAILY,
+                                    trackReadReceipts = TimelineReadReceiptTracking.ALL_EVENTS,
+                                    reportUtds = true,
+                                )
                             )
-                        )
+                        }
                     }
 
                     GetRoomResult.Joined(

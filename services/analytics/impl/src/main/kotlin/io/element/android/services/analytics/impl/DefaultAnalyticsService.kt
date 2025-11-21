@@ -20,7 +20,10 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsSdkSpan
+import io.element.android.services.analytics.api.AnalyticsSdkSpanFactory
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.NoopAnalyticsSdkSpan
 import io.element.android.services.analytics.api.NoopAnalyticsTransaction
 import io.element.android.services.analytics.impl.log.analyticsTag
 import io.element.android.services.analytics.impl.store.AnalyticsStore
@@ -43,6 +46,7 @@ class DefaultAnalyticsService(
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
     private val sessionObserver: SessionObserver,
+    private val analyticsSdkSpanFactory: AnalyticsSdkSpanFactory,
 ) : AnalyticsService, SessionListener {
     private val pendingLongRunningTransactions = ConcurrentHashMap<AnalyticsLongRunningTransaction, AnalyticsTransaction>()
 
@@ -170,5 +174,17 @@ class DefaultAnalyticsService(
 
     override fun removeLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction? {
         return pendingLongRunningTransactions.remove(longRunningTransaction)
+    }
+
+    override fun enterSdkSpan(name: String?, parentTraceId: String?): AnalyticsSdkSpan {
+        return if (userConsent.get()) {
+             if (name != null) {
+                analyticsSdkSpanFactory.create(name, parentTraceId)
+            } else {
+                analyticsSdkSpanFactory.bridge(parentTraceId)
+            }.apply { enter() }
+        } else {
+            NoopAnalyticsSdkSpan
+        }
     }
 }
