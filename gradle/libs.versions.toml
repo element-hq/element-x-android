@@ -13,7 +13,7 @@ firebaseAppDistribution = "5.2.0"
 
 # AndroidX
 core = "1.17.0"
-datastore = "1.1.7"
+datastore = "1.2.0"
 constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.9.2"
