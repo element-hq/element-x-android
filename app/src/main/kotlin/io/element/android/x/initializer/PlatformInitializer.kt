@@ -15,6 +15,7 @@ import io.element.android.features.rageshake.api.logs.createWriteToFilesConfigur
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
+import io.element.android.services.analyticsproviders.sentry.SentryConfig
 import io.element.android.x.di.AppBindings
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -38,6 +39,7 @@ class PlatformInitializer : Initializer<Unit> {
             logLevel = logLevel,
             extraTargets = listOf(ELEMENT_X_TARGET),
             traceLogPacks = runBlocking { preferencesStore.getTracingLogPacksFlow().first() },
+            sdkSentryDsn = SentryConfig.SDK_DSN.takeIf { it.isNotBlank() },
         )
         bugReporter.setCurrentTracingLogLevel(logLevel.name)
         platformService.init(tracingConfiguration)
