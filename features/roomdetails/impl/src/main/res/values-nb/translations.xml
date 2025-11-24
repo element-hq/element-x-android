@@ -142,6 +142,5 @@ Vi anbefaler ikke å aktivere kryptering for rom som hvem som helst kan finne og
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Romadresser er måter å finne og få tilgang til rom på. Dette sikrer også at du enkelt kan dele rommet ditt med andre.
 Du kan velge å publisere rommet ditt i hjemeserverens offentlige romkatalog."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publisering av rom"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Romadresser er en måte å finne og få tilgang til rommene på. Dette sikrer også at du enkelt kan dele rommet ditt med andre."</string>
   <string name="screen_security_and_privacy_title">"Sikkerhet og personvern"</string>
 </resources>

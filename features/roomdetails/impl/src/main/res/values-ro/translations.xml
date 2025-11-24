@@ -142,6 +142,5 @@ Nu recomandăm activarea criptării pentru camerele pe care oricine le poate gă
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Adresele camerelor sunt modalități de a găsi și accesa camere. Acest lucru vă asigură, de asemenea, că puteți partaja cu ușurință camera dumneavoastră cu alte persoane.
 Puteți alege să publicați camera în directorul public al camerelor serverului dumneavoastră."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publicare cameră"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresele camerelor sunt modalități de a găsi și accesa camerele. Acest lucru vă asigură, de asemenea, că puteți partaja cu ușurință camera dvs. cu alte persoane."</string>
   <string name="screen_security_and_privacy_title">"Securitate &amp; confidențialitate"</string>
 </resources>

@@ -140,6 +140,5 @@ Não recomendamos que você ative a criptografia para salas que qualquer pessoa 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Os endereços das salas são formas de encontrar e acessar as salas. Isso também garante que você possa compartilhar facilmente sua sala com outras pessoas.
 Você pode optar por publicar sua sala no diretório público de salas do seu servidor-casa."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publicação da sala"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Os endereços das salas são formas de encontrar e acessar as salas. Isso também garante que você possa compartilhar facilmente sua sala com outras pessoas."</string>
   <string name="screen_security_and_privacy_title">"Segurança e privacidade"</string>
 </resources>

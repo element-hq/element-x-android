@@ -142,7 +142,6 @@
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Адреси кімнат — це спосіб знайти кімнату та отримати до неї доступ. Це також гарантує, що ви можете легко поділитися своєю кімнатою з іншими.
 Ви можете опублікувати свою кімнату в каталозі загальнодоступних кімнат вашого домашнього сервера."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Публікація в кімнаті"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Адреси кімнат — це спосіб знайти та отримати доступ до кімнат. Це також гарантує, що ви зможете легко поділитися своєю кімнатою з іншими."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Видимість кімнати"</string>
   <string name="screen_security_and_privacy_title">"Безпека й приватність"</string>
 </resources>

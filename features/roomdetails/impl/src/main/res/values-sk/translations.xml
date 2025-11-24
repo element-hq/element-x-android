@@ -144,7 +144,6 @@ To môže brániť správnemu fungovaniu robotov a premostení. Neodporúčame p
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Adresy miestností predstavujú spôsoby, ako nájsť a získať prístup k miestnostiam. To tiež zaisťuje, že môžete jednoducho zdieľať svoju miestnosť s ostatnými. 
 Môžete sa rozhodnúť zverejniť svoju miestnosť v adresári verejných miestností vášho domovského servera."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Zverejnenie miestnosti"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresy miestností predstavujú spôsoby, ako nájsť a získať prístup k miestnostiam. Toto tiež zaisťuje, že môžete jednoducho zdieľať svoju miestnosť s ostatnými."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Viditeľnosť miestnosti"</string>
   <string name="screen_security_and_privacy_title">"Bezpečnosť a súkromie"</string>
 </resources>

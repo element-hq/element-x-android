@@ -142,7 +142,6 @@
   <string name="screen_security_and_privacy_room_publishing_section_footer">"房间地址是查找和访问房间的方式。这也确保你可以轻松地向他人分享房间。
 你可以选择在你服务器的公共房间目录中发布你的房间。"</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"房间发布"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"房间地址是查找和访问房间的方式。这也确保你可以轻松地向他人分享房间。"</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"房间可见性"</string>
   <string name="screen_security_and_privacy_title">"安全与隐私"</string>
 </resources>

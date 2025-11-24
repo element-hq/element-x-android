@@ -131,6 +131,5 @@ Kami tidak menyarankan untuk mengaktifkan enkripsi untuk ruangan yang dapat dite
   <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Hanya anggota sejak memilih opsi ini"</string>
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Alamat ruangan adalah cara untuk menemukan dan mengakses ruangan. Ini juga memastikan Anda dapat dengan mudah berbagi ruangan dengan orang lain. Anda dapat memilih untuk menerbitkan ruangan Anda di direktori ruangan publik homeserver Anda."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Penerbitan ruangan"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Alamat ruangan adalah cara untuk menemukan dan mengakses ruangan. Hal ini juga memastikan Anda dapat dengan mudah berbagi ruangan dengan orang lain."</string>
   <string name="screen_security_and_privacy_title">"Keamanan &amp; privasi"</string>
 </resources>

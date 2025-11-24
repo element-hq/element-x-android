@@ -149,7 +149,6 @@ Nid ydym yn argymell galluogi amgryptio ar gyfer ystafelloedd y gall unrhyw un d
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Mae cyfeiriadau ystafelloedd yn ffyrdd o ddod o hyd i ystafelloedd a chael mynediad iddyn nhw. Mae hyn hefyd yn sicrhau y gallwch chi rannu\'ch ystafell yn hawdd ag eraill.
 Gallwch ddewis cyhoeddi eich ystafell yng ngweinydd cartref eich cyfeiriadur ystafelloedd cyhoeddus."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Cyhoeddi ystafell"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Mae cyfeiriadau ystafelloedd yn ffyrdd o ddod o hyd i ystafelloedd a chael mynediad iddyn nhw. Mae hyn hefyd yn sicrhau y gallwch chi rannu\'ch ystafell yn hawdd ag eraill."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Gwelededd yr ystafell"</string>
   <string name="screen_security_and_privacy_title">"Diogelwch a phreifatrwydd"</string>
 </resources>

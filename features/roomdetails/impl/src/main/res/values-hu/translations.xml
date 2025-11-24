@@ -82,6 +82,7 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Visszaengedés a szobába"</string>
   <string name="screen_room_member_list_mode_banned">"Kitiltva"</string>
   <string name="screen_room_member_list_mode_members">"Tagok"</string>
+  <string name="screen_room_member_list_pending_status">"Függőben"</string>
   <string name="screen_room_member_list_role_administrator">"Adminisztrátor"</string>
   <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
   <string name="screen_room_member_list_role_owner">"Tulajdonos"</string>
@@ -147,7 +148,6 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_room_publishing_section_footer">"A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.
 Kiválaszthatja, hogy szobáját közzéteszi-e a Matrix-kiszolgáló nyilvános szobakatalógusában."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Szoba közzététele"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Láthatóság"</string>
   <string name="screen_security_and_privacy_title">"Biztonság és adatvédelem"</string>
 </resources>

@@ -143,7 +143,6 @@ Wir empfehlen keine Verschlüsselung für Chats zu aktivieren, die jeder finden 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen.
 Auf Wunsch kannst du deinen Chat im öffentlichen Verzeichnis deines Homeservers veröffentlichen."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Veröffentlichung von Chats"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Chatroomsichtbarkeit."</string>
   <string name="screen_security_and_privacy_title">"Sicherheit &amp; Datenschutz"</string>
 </resources>

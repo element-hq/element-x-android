@@ -133,7 +133,6 @@ Herkesin bulabileceği ve katılabileceği odalar için şifrelemenin etkinleşt
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Oda adresleri, odaları bulmanın ve odalara erişmenin yoludur. Bu aynı zamanda odanızı başkalarıyla kolayca paylaşabilmenizi sağlar.
 Odanızı ana sunucunuzun genel oda dizininde yayınlamayı seçebilirsiniz."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Oda yayınlama"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Oda adresleri, odaları bulmanın ve odalara erişmenin yollarıdır. Bu aynı zamanda odanızı başkalarıyla kolayca paylaşabilmenizi sağlar."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Oda görünürlüğü"</string>
   <string name="screen_security_and_privacy_title">"Güvenlik ve gizlilik"</string>
 </resources>

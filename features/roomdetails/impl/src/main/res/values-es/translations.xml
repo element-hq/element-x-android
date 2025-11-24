@@ -133,6 +133,5 @@ No recomendamos habilitar el cifrado para las salas que cualquiera pueda encontr
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Las direcciones de sala son formas de buscar salas y acceder a ellas. Esto también garantiza que puedas compartir fácilmente tu sala con otras personas.
 Puedes optar por publicar tu sala en el directorio de salas públicas de tu servidor base."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publicación de la sala"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Las direcciones de sala son un medio para buscar y acceder a salas. También te permiten compartir fácilmente tu sala con otras personas."</string>
   <string name="screen_security_and_privacy_title">"Seguridad y privacidad"</string>
 </resources>

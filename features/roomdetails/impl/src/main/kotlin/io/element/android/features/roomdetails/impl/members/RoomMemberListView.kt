@@ -202,7 +202,11 @@ private fun LazyListScope.memberItems(
         SelectedSection.MEMBERS -> {
             if (roomMembers.invited.isNotEmpty()) {
                 roomMemberListSection(
-                    headerText = { stringResource(id = R.string.screen_room_member_list_pending_header_title) },
+                    headerText = {
+                        // TODO Use showMembersCount? iOS seems to always render the number of users, even when searching for users.
+                        val invitedCount = roomMembers.invited.count()
+                        pluralStringResource(id = R.plurals.screen_room_member_list_pending_header_title, count = invitedCount, invitedCount)
+                    },
                     members = roomMembers.invited,
                     onMemberSelected = { onSelectUser(it) }
                 )

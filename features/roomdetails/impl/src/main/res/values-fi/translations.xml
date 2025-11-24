@@ -143,7 +143,6 @@ Emme suosittele salauksen ottamista käyttöön huoneissa, jotka kuka tahansa vo
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.
 Voit halutessasi julkaista huoneesi kotipalvelimesi julkisessa huonehakemistossa."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Huoneen julkaiseminen"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Huoneen näkyvyys"</string>
   <string name="screen_security_and_privacy_title">"Turvallisuus ja yksityisyys"</string>
 </resources>

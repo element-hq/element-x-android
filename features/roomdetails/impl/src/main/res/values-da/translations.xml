@@ -142,6 +142,5 @@ Vi anbefaler ikke at aktivere kryptering for rum, som alle kan finde og deltage 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Rum-adresser er en måde at finde og få adgang til værelser på. Dette sikrer også, at du nemt kan dele dit rum med andre.
 Du kan vælge at offentliggøre dit rum i din hjemmeservers offentlige katalog over rum."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Udgivelse af rum"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Rum-adresser er måder at finde og få adgang til rum på. Dette sikrer også, at du nemt kan dele dit rum med andre."</string>
   <string name="screen_security_and_privacy_title">"Sikkerhed og privatliv"</string>
 </resources>

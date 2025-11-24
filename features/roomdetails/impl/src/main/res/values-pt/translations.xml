@@ -143,7 +143,6 @@ Não recomendamos ativar a cifragem em salas que qualquer pessoa possa encontrar
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Estes endereços permitem encontrar e aceder a sala, bem como a sua fácil partilha com outros.
 Podes escolher publicar a sala no diretório público do teu servidor."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publicar sala"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Estes endereços permitem encontrar e aceder a sala, bem como a sua fácil partilha com outros."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilidade da sala"</string>
   <string name="screen_security_and_privacy_title">"Segurança e privacidade"</string>
 </resources>

@@ -147,7 +147,6 @@ Nous ne recommandons pas d’activer le chiffrement pour les salons que tout le 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Les adresses de salon sont un moyen de trouver et d’accéder aux salons. Cela vous permet également de partager facilement votre salon avec d’autres personnes.
 Vous pouvez choisir de publier votre salon dans l’annuaire des salons publics de votre serveur d’accueil."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publication du salon"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Les adresses de salon sont un moyen de trouver et d’accéder aux salons. Cela vous permet également de partager facilement votre salon avec d’autres personnes."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilité"</string>
   <string name="screen_security_and_privacy_title">"Sécurité &amp; confidentialité"</string>
 </resources>

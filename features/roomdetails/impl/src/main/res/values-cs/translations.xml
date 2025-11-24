@@ -144,7 +144,6 @@ Nedoporučujeme povolovat šifrování pro místnosti, které může kdokoli naj
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Adresy místností představují způsoby, jak najít místnosti a získat k nim přístup. Díky tomu můžete svoji místnost snadno sdílet s ostatními.
 Můžete se rozhodnout publikovat svou místnost ve veřejném adresáři místnosti vašeho domovského serveru."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publikování místnosti"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresy místností představují způsoby, jak najít místnosti a získat k nim přístup. Díky tomu můžete svoji místnost snadno sdílet s ostatními."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Viditelnost místnosti"</string>
   <string name="screen_security_and_privacy_title">"Zabezpečení a soukromí"</string>
 </resources>
