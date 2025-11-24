@@ -6,6 +6,5 @@
     <item quantity="few">"%1$d asmenys"</item>
     <item quantity="other">"%1$d asmenų"</item>
   </plurals>
-  <string name="screen_room_member_list_pending_header_title">"Laukiama"</string>
   <string name="screen_room_member_list_room_members_header_title">"Kambario nariai"</string>
 </resources>

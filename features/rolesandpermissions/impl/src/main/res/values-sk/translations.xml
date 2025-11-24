@@ -44,7 +44,6 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Zrušiť zákaz prístupu do miestnosti"</string>
   <string name="screen_room_member_list_mode_banned">"Zakázaní"</string>
   <string name="screen_room_member_list_mode_members">"Členovia"</string>
-  <string name="screen_room_member_list_pending_header_title">"Čaká sa"</string>
   <string name="screen_room_member_list_role_administrator">"Iba správcovia"</string>
   <string name="screen_room_member_list_role_moderator">"Správcovia a moderátori"</string>
   <string name="screen_room_member_list_role_owner">"Vlastník"</string>

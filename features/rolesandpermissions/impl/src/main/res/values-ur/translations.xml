@@ -38,7 +38,6 @@
   <string name="screen_room_member_list_manage_member_unban_message">"اگر وہ مدعو کیا جائیں تو وہ دوبارہ اس کمرے میں شامل ہوسکیں گے۔"</string>
   <string name="screen_room_member_list_mode_banned">"محظور"</string>
   <string name="screen_room_member_list_mode_members">"اراکین"</string>
-  <string name="screen_room_member_list_pending_header_title">"زیر التواء"</string>
   <string name="screen_room_member_list_role_administrator">"صرف منتظمین"</string>
   <string name="screen_room_member_list_role_moderator">"منتظمین اور ناظمین"</string>
   <string name="screen_room_member_list_room_members_header_title">"کمرے کے ارکان"</string>

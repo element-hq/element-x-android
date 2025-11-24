@@ -43,7 +43,6 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Desbanir da sala"</string>
   <string name="screen_room_member_list_mode_banned">"Banidos"</string>
   <string name="screen_room_member_list_mode_members">"Membros"</string>
-  <string name="screen_room_member_list_pending_header_title">"Pendente"</string>
   <string name="screen_room_member_list_role_administrator">"Somente administradores"</string>
   <string name="screen_room_member_list_role_moderator">"Administradores e moderadores"</string>
   <string name="screen_room_member_list_role_owner">"Proprietário"</string>

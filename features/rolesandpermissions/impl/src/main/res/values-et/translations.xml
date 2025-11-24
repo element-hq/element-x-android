@@ -34,6 +34,8 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Sul on salvestamata muudatusi"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Kas salvestame muudatused?"</string>
   <string name="screen_room_member_list_banned_empty">"Suhtluskeeluga kasutajaid pole"</string>
+  <string name="screen_room_member_list_empty_search_subtitle">"Palun kontrolli otsingusõna korrektsust ja proovi siis uuesti"</string>
+  <string name="screen_room_member_list_empty_search_title">"Otsingul „%1$s“ pole tulemusi"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d osaleja"</item>
     <item quantity="other">"%1$d osalejat"</item>
@@ -45,7 +47,7 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Eemalda suhtluskeeld jututoas"</string>
   <string name="screen_room_member_list_mode_banned">"Suhtluskeeluga kasutajad"</string>
   <string name="screen_room_member_list_mode_members">"Liikmed"</string>
-  <string name="screen_room_member_list_pending_header_title">"Ootel"</string>
+  <string name="screen_room_member_list_pending_status">"Ootel"</string>
   <string name="screen_room_member_list_role_administrator">"Peakasutajad"</string>
   <string name="screen_room_member_list_role_moderator">"Moderaatorid"</string>
   <string name="screen_room_member_list_role_owner">"Omanik"</string>

@@ -42,7 +42,6 @@
   <string name="screen_room_member_list_manage_member_unban_title">"从房间取消解封"</string>
   <string name="screen_room_member_list_mode_banned">"已封禁用户"</string>
   <string name="screen_room_member_list_mode_members">"成员"</string>
-  <string name="screen_room_member_list_pending_header_title">"待处理"</string>
   <string name="screen_room_member_list_role_administrator">"仅限管理员"</string>
   <string name="screen_room_member_list_role_moderator">"管理员和协管员"</string>
   <string name="screen_room_member_list_role_owner">"所有者"</string>

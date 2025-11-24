@@ -43,7 +43,6 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Sperre für diesen Chat aufheben"</string>
   <string name="screen_room_member_list_mode_banned">"Gesperrt"</string>
   <string name="screen_room_member_list_mode_members">"Mitglieder"</string>
-  <string name="screen_room_member_list_pending_header_title">"Ausstehend"</string>
   <string name="screen_room_member_list_role_administrator">"Nur Admins"</string>
   <string name="screen_room_member_list_role_moderator">"Admins und Moderatoren"</string>
   <string name="screen_room_member_list_role_owner">"Eigentümer"</string>
