@@ -33,5 +33,6 @@
   <string name="screen_room_roles_and_permissions_reset">"Нулиране на разрешенията"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Роли"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Подробности за стаята"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Подробности за пространството"</string>
   <string name="screen_room_roles_and_permissions_title">"Роли и разрешения"</string>
 </resources>

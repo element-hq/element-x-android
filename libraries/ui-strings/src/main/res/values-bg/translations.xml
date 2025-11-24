@@ -130,7 +130,9 @@
   <string name="common_about">"Относно"</string>
   <string name="common_acceptable_use_policy">"Политика за приемлива употреба"</string>
   <string name="common_add_account">"Добавяне на акаунт"</string>
+  <string name="common_add_another_account">"Добавяне на друг акаунт"</string>
   <string name="common_advanced_settings">"Разширени настройки"</string>
+  <string name="common_an_image">"изображение"</string>
   <string name="common_analytics">"Статистика"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Напуснахте стаята"</string>
   <string name="common_appearance">"Облик"</string>
@@ -142,6 +144,7 @@
   <string name="common_copyright">"Авторски права"</string>
   <string name="common_creating_room">"Създаване на стая…"</string>
   <string name="common_current_user_left_room">"Стаята е напусната"</string>
+  <string name="common_current_user_left_space">"Пространството е напуснато"</string>
   <string name="common_dark">"Тъмен"</string>
   <string name="common_decryption_error">"Грешка при разшифроване"</string>
   <string name="common_description">"Описание"</string>
@@ -172,6 +175,7 @@
   <string name="common_install_apk_android">"Инсталиране на APK"</string>
   <string name="common_invite_unknown_profile">"Този Matrix ID не може да бъде намерен, така че поканата може да не бъде получена."</string>
   <string name="common_leaving_room">"Стаята се напуска"</string>
+  <string name="common_leaving_space">"Пространството се напуска"</string>
   <string name="common_light">"Светъл"</string>
   <string name="common_link_copied_to_clipboard">"Връзката е копирана в клипборда"</string>
   <string name="common_loading">"Зарежда се…"</string>
@@ -214,6 +218,7 @@
   <string name="common_preparing">"Подготвя се…"</string>
   <string name="common_privacy_policy">"Политика за поверителност"</string>
   <string name="common_private_room">"Частна стая"</string>
+  <string name="common_private_space">"Частно пространство"</string>
   <string name="common_public_room">"Общодостъпна стая"</string>
   <string name="common_public_space">"Общодостъпно пространство"</string>
   <string name="common_reaction">"Реакция"</string>
@@ -243,15 +248,19 @@
   <string name="common_search_results">"Резултати от търсенето"</string>
   <string name="common_security">"Защита"</string>
   <string name="common_seen_by">"Видяно от"</string>
+  <string name="common_select_account">"Избиране на акаунт"</string>
   <string name="common_sending">"Изпраща се…"</string>
   <string name="common_sending_failed">"Изпращането е неуспешно"</string>
   <string name="common_sent">"Изпратено"</string>
   <string name="common_server_not_supported">"Сървърът не се поддържа"</string>
   <string name="common_server_url">"URL адрес на сървъра"</string>
   <string name="common_settings">"Настройки"</string>
+  <string name="common_share_space">"Споделяне на пространството"</string>
   <string name="common_shared_location">"Споделено местоположение"</string>
   <string name="common_signing_out">"Излизате"</string>
+  <string name="common_something_went_wrong">"Нещо се обърка"</string>
   <string name="common_something_went_wrong_message">"Възникна проблем. Моля, опитайте отново."</string>
+  <string name="common_space">"Пространство"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d пространство"</item>
     <item quantity="other">"%1$d пространства"</item>
@@ -268,6 +277,7 @@
   <string name="common_topic">"Тема"</string>
   <string name="common_topic_placeholder">"За какво се отнася тази стая?"</string>
   <string name="common_unable_to_decrypt">"Не може да се разшифрова"</string>
+  <string name="common_unable_to_decrypt_no_access">"Нямате достъп до това съобщение"</string>
   <string name="common_unable_to_invite_message">"Поканите не можаха да бъдат изпратени до един или повече потребители."</string>
   <string name="common_unable_to_invite_title">"Не може да се изпрати покана(и)"</string>
   <string name="common_unlock">"Отключване"</string>
@@ -282,6 +292,9 @@
   <string name="common_verify_identity">"Потвърждаване на самоличността"</string>
   <string name="common_verify_user">"Потвърждаване на потребителя"</string>
   <string name="common_video">"Видео"</string>
+  <string name="common_video_quality_high">"Високо качество"</string>
+  <string name="common_video_quality_low">"Ниско качество"</string>
+  <string name="common_video_quality_standard">"Стандартно качество"</string>
   <string name="common_voice_message">"Гласово съобщение"</string>
   <string name="common_waiting">"Изчаква се…"</string>
   <string name="common_waiting_for_decryption_key">"В очакване на това съобщение"</string>
@@ -320,9 +333,11 @@
   <string name="screen_share_this_location_action">"Споделяне на това местоположение"</string>
   <string name="screen_space_list_parent_space">"%1$s пространство"</string>
   <string name="screen_space_list_title">"Пространства"</string>
+  <string name="screen_space_menu_action_members">"Преглед на членовете"</string>
   <string name="screen_view_location_title">"Местоположение"</string>
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"bg"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Трябва да потвърдите това устройство за да достъпите исторически съобщения"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Нямате достъп до това съобщение"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Съобщението не може да се разшифрова"</string>
 </resources>

@@ -35,8 +35,8 @@
   <string name="screen_room_change_role_unsaved_changes_title">"Save changes?"</string>
   <string name="screen_room_member_list_banned_empty">"There are no banned users."</string>
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$d person"</item>
-    <item quantity="other">"%1$d people"</item>
+    <item quantity="one">"%1$d Person"</item>
+    <item quantity="other">"%1$d People"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Ban user"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Only remove member"</string>
@@ -45,7 +45,7 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Unban user"</string>
   <string name="screen_room_member_list_mode_banned">"Banned"</string>
   <string name="screen_room_member_list_mode_members">"Members"</string>
-  <string name="screen_room_member_list_pending_header_title">"Pending"</string>
+  <string name="screen_room_member_list_pending_header_title">"%1$d Invited"</string>
   <string name="screen_room_member_list_role_administrator">"Admin"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_role_owner">"Owner"</string>

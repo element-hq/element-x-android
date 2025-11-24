@@ -83,7 +83,7 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Разблокировать в комнате"</string>
   <string name="screen_room_member_list_mode_banned">"Заблокированные"</string>
   <string name="screen_room_member_list_mode_members">"Участники"</string>
-  <string name="screen_room_member_list_pending_header_title">"В ожидании"</string>
+  <string name="screen_room_member_list_pending_header_title">"%1$d Приглашен"</string>
   <string name="screen_room_member_list_role_administrator">"Только администраторы"</string>
   <string name="screen_room_member_list_role_moderator">"Модератор"</string>
   <string name="screen_room_member_list_role_owner">"Владелец"</string>
@@ -119,8 +119,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Роли"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Информация о комнате"</string>
   <string name="screen_room_roles_and_permissions_title">"Роли и разрешения"</string>
-  <string name="screen_security_and_privacy_add_room_address_action">"Добавить адрес комнаты"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_description">"Любой желающий может подать заявку на присоединение к комнате, но администратор должен будет принять запрос."</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Добавить адрес"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Каждый должен запросить доступ."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Попросить присоединиться"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Да, включить шифрование"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Шифрование комнаты нельзя будет отключить, история сообщений будет видна только участникам комнаты с момента их приглашения или с момента присоединения к комнате.
@@ -138,7 +138,7 @@
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Пространства в настоящее время не поддерживаются."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Участники пространства"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Вам понадобится адрес комнаты, чтобы сделать ее видимой в каталоге."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Опубликованный адрес"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Адрес"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Опубликовать %1$s в каталоге публичных комнат"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"Разрешить поиск в публичном каталоге."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Доступна в списке публичных комнат"</string>
@@ -150,6 +150,6 @@
 Вы можете опубликовать свою комнату в каталоге общедоступных комнат на домашнем сервере."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Публикация комнат"</string>
   <string name="screen_security_and_privacy_room_visibility_section_footer">"Адреса комнат — это способ найти комнату и получить к ним доступ. Это также гарантирует, что вы сможете легко поделиться своей комнатой с другими."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Видимость комнаты"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Видимость"</string>
   <string name="screen_security_and_privacy_title">"Безопасность и конфиденциальность"</string>
 </resources>
