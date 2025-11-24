@@ -34,6 +34,9 @@
   <string name="screen_room_change_role_unsaved_changes_description">"У вас есть несохраненные изменения."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Сохранить изменения?"</string>
   <string name="screen_room_member_list_banned_empty">"В этой комнате нет заблокированных пользователей."</string>
+  <string name="screen_room_member_list_banned_header_title">"%1$d Заблокирован"</string>
+  <string name="screen_room_member_list_empty_search_subtitle">"Проверьте правописание или попробуйте новый поиск"</string>
+  <string name="screen_room_member_list_empty_search_title">"Отсутствует результат по запросу “%1$s”"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d пользователь"</item>
     <item quantity="few">"%1$d пользователя"</item>
@@ -47,6 +50,7 @@
   <string name="screen_room_member_list_mode_banned">"Заблокированные"</string>
   <string name="screen_room_member_list_mode_members">"Участники"</string>
   <string name="screen_room_member_list_pending_header_title">"%1$d Приглашен"</string>
+  <string name="screen_room_member_list_pending_status">"В ожидании"</string>
   <string name="screen_room_member_list_role_administrator">"Только администраторы"</string>
   <string name="screen_room_member_list_role_moderator">"Модератор"</string>
   <string name="screen_room_member_list_role_owner">"Владелец"</string>

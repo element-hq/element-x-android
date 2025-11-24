@@ -34,6 +34,7 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Mentetlen módosításai vannak."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Menti a módosításokat?"</string>
   <string name="screen_room_member_list_banned_empty">"Ebben a szobában nincsenek kitiltott felhasználók."</string>
+  <string name="screen_room_member_list_banned_header_title">"%1$d kitiltva"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d személy"</item>
     <item quantity="other">"%1$d személy"</item>
@@ -46,6 +47,7 @@
   <string name="screen_room_member_list_mode_banned">"Kitiltva"</string>
   <string name="screen_room_member_list_mode_members">"Tagok"</string>
   <string name="screen_room_member_list_pending_header_title">"%1$d meghívva"</string>
+  <string name="screen_room_member_list_pending_status">"Függőben"</string>
   <string name="screen_room_member_list_role_administrator">"Adminisztrátor"</string>
   <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
   <string name="screen_room_member_list_role_owner">"Tulajdonos"</string>

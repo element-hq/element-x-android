@@ -34,6 +34,9 @@
   <string name="screen_room_change_role_unsaved_changes_description">"You have unsaved changes."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Save changes?"</string>
   <string name="screen_room_member_list_banned_empty">"There are no banned users."</string>
+  <string name="screen_room_member_list_banned_header_title">"%1$d Banned"</string>
+  <string name="screen_room_member_list_empty_search_subtitle">"Check the spelling or try a new search"</string>
+  <string name="screen_room_member_list_empty_search_title">"No results for “%1$s”"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d Person"</item>
     <item quantity="other">"%1$d People"</item>
@@ -46,6 +49,7 @@
   <string name="screen_room_member_list_mode_banned">"Banned"</string>
   <string name="screen_room_member_list_mode_members">"Members"</string>
   <string name="screen_room_member_list_pending_header_title">"%1$d Invited"</string>
+  <string name="screen_room_member_list_pending_status">"Pending"</string>
   <string name="screen_room_member_list_role_administrator">"Admin"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_role_owner">"Owner"</string>
