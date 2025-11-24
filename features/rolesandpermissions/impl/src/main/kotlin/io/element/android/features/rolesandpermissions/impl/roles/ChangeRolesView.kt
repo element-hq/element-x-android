@@ -383,7 +383,7 @@ private fun MemberRow(
                 if (isPending) {
                     Text(
                         modifier = Modifier.padding(start = 8.dp),
-                        text = stringResource(id = R.string.screen_room_member_list_pending_header_title),
+                        text = stringResource(id = R.string.screen_room_member_list_pending_status),
                         style = ElementTheme.typography.fontBodySmRegular.copy(fontStyle = FontStyle.Italic),
                         color = ElementTheme.colors.textSecondary
                     )
