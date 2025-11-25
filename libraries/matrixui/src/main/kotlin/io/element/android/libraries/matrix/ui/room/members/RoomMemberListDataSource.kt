@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.impl.members
+package io.element.android.libraries.matrix.ui.room.members
 
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse

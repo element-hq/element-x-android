@@ -23,7 +23,6 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.RoomModeration
-import io.element.android.features.rolesandpermissions.impl.RoomMemberListDataSource
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
@@ -39,6 +38,7 @@ import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.roleOf
 import io.element.android.libraries.matrix.ui.room.PowerLevelRoomMemberComparator
+import io.element.android.libraries.matrix.ui.room.members.RoomMemberListDataSource
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
