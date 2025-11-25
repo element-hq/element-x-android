@@ -17,6 +17,7 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleState
 import io.element.android.features.messages.impl.crypto.historyvisible.aHistoryVisibleState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
+import io.element.android.features.messages.impl.crypto.identity.aRoomMemberIdentityStateChange
 import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
 import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.link.aLinkState
@@ -50,6 +51,7 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -85,6 +87,19 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                     timelineItems = aTimelineItemList(aTimelineItemTextContent()),
                 )
             ),
+            aMessagesState(
+                composerState = aMessageComposerState(textEditorState = aTextEditorStateMarkdown()),
+                identityChangeState = anIdentityChangeState(listOf(aRoomMemberIdentityStateChange()))
+            ),
+            aMessagesState(
+                composerState = aMessageComposerState(textEditorState = aTextEditorStateMarkdown()),
+                historyVisibleState = aHistoryVisibleState(showAlert = true)
+            ),
+            aMessagesState(
+                composerState = aMessageComposerState(textEditorState = aTextEditorStateMarkdown()),
+                identityChangeState = anIdentityChangeState(listOf(aRoomMemberIdentityStateChange())),
+                historyVisibleState = aHistoryVisibleState(showAlert = true)
+            )
         )
 }
 

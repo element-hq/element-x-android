@@ -473,14 +473,17 @@ private fun MessagesViewComposerBottomSheetContents(
                 // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
                 if (state.composerState.suggestions.isEmpty() &&
                     state.composerState.textEditorState is TextEditorState.Markdown) {
-                    IdentityChangeStateView(
-                        state = state.identityChangeState,
-                        onLinkClick = onLinkClick,
-                    )
-                    HistoryVisibleStateView(
-                        state = state.historyVisibleState,
-                        onLinkClick = onLinkClick,
-                    )
+                    if (state.identityChangeState.roomMemberIdentityStateChanges.isNotEmpty()) {
+                        IdentityChangeStateView(
+                            state = state.identityChangeState,
+                            onLinkClick = onLinkClick,
+                        )
+                    } else {
+                        HistoryVisibleStateView(
+                            state = state.historyVisibleState,
+                            onLinkClick = onLinkClick,
+                        )
+                    }
                 }
                 val verificationViolation = state.identityChangeState.roomMemberIdentityStateChanges.firstOrNull {
                     it.identityState == IdentityState.VerificationViolation
