@@ -18,9 +18,7 @@ import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 
 @PreviewsDayNight
 @Composable
-internal fun MessagesViewWithHistoryVisiblePreview(
-    @PreviewParameter(HistoryVisibleStateProvider::class) historyVisibleState: HistoryVisibleState
-) = ElementPreview {
+internal fun MessagesViewWithHistoryVisiblePreview() = ElementPreview {
     MessagesView(
         state = aMessagesState(
             composerState = aMessageComposerState(
@@ -29,7 +27,7 @@ internal fun MessagesViewWithHistoryVisiblePreview(
                     initialFocus = false,
                 )
             ),
-            historyVisibleState = historyVisibleState,
+            historyVisibleState = aHistoryVisibleState(showAlert = true),
         ),
         onBackClick = {},
         onRoomDetailsClick = {},

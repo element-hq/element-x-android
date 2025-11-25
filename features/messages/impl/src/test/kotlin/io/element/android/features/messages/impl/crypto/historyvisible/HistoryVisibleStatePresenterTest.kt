@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.crypto.historyvisible
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
@@ -80,7 +81,7 @@ class HistoryVisibleStatePresenterTest {
     @Test
     fun `present - transition from joined + unencrypted, to shared + encrypted`() = runTest {
         val room = FakeJoinedRoom()
-        val featureFlagService = FakeFeatureFlagService(mapOf("feature.enableKeyShareOnInvite" to true))
+        val featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.EnableKeyShareOnInvite.key to true))
         val repository = FakeHistoryVisibleAcknowledgementRepository()
 
         room.givenRoomInfo(aRoomInfo(historyVisibility = RoomHistoryVisibility.Joined, isEncrypted = false))

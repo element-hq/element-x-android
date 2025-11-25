@@ -16,8 +16,11 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Inject
@@ -35,22 +38,25 @@ class HistoryVisibleStatePresenter(
 
         val coroutineScope = rememberCoroutineScope()
 
-        LaunchedEffect(roomInfo.historyVisibility) {
-            if (isFeatureEnabled && roomInfo.historyVisibility == RoomHistoryVisibility.Joined && acknowledged) {
+        LaunchedEffect(roomInfo.historyVisibility, acknowledged) {
+            if (roomInfo.historyVisibility == RoomHistoryVisibility.Joined && acknowledged) {
                 repository.setAcknowledged(room.roomId, false)
+            }
+        }
+
+        fun handleEvent(event: HistoryVisibleEvent) {
+            when (event) {
+                is HistoryVisibleEvent.Acknowledge -> coroutineScope.setAcknowledged(room.roomId, true)
             }
         }
 
         return HistoryVisibleState(
             showAlert = isFeatureEnabled && roomInfo.historyVisibility != RoomHistoryVisibility.Joined && roomInfo.isEncrypted == true && !acknowledged,
-            eventSink = { event ->
-                when (event) {
-                    is HistoryVisibleEvent.Acknowledge ->
-                        coroutineScope.launch {
-                            repository.setAcknowledged(room.roomId, true)
-                        }
-                }
-            }
+            eventSink = ::handleEvent,
         )
+    }
+
+    private fun CoroutineScope.setAcknowledged(roomId: RoomId, value: Boolean) = launch {
+        repository.setAcknowledged(roomId, value)
     }
 }

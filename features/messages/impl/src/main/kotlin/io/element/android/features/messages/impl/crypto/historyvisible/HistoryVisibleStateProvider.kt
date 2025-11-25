@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 class HistoryVisibleStateProvider : PreviewParameterProvider<HistoryVisibleState> {
     override val values: Sequence<HistoryVisibleState>
     get() = sequenceOf(
-            aHistoryVisibleState(showAlert = false),
             aHistoryVisibleState(showAlert = true),
         )
 }
