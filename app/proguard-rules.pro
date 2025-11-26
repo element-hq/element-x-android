@@ -41,8 +41,6 @@
     static int windowAttachCount(android.view.View);
 }
 
--keep class io.element.android.x.di.** { *; }
-
 
 # Keep LogSessionId class and related classes (https://github.com/androidx/media/issues/2535)
 -keep class android.media.metrics.LogSessionId { *; }
@@ -51,3 +49,24 @@
 # Keep Media3 classes that use reflection (https://github.com/androidx/media/issues/2535)
 -keep class androidx.media3.** { *; }
 -dontwarn android.media.metrics.**
+
+# New rules after AGP 8.13.1 upgrade
+-dontwarn androidx.window.extensions.WindowExtensions
+-dontwarn androidx.window.extensions.WindowExtensionsProvider
+-dontwarn androidx.window.extensions.area.ExtensionWindowAreaPresentation
+-dontwarn androidx.window.extensions.layout.DisplayFeature
+-dontwarn androidx.window.extensions.layout.FoldingFeature
+-dontwarn androidx.window.extensions.layout.WindowLayoutComponent
+-dontwarn androidx.window.extensions.layout.WindowLayoutInfo
+-dontwarn androidx.window.sidecar.SidecarDeviceState
+-dontwarn androidx.window.sidecar.SidecarDisplayFeature
+-dontwarn androidx.window.sidecar.SidecarInterface$SidecarCallback
+-dontwarn androidx.window.sidecar.SidecarInterface
+-dontwarn androidx.window.sidecar.SidecarProvider
+-dontwarn androidx.window.sidecar.SidecarWindowLayoutInfo
+
+# Also needed after AGP 8.13.1 upgrade, it seems like proguard is now more aggressive on removing unused code
+-keep class org.matrix.rustcomponents.sdk.** { *;}
+-keep class uniffi.** { *;}
+-keep class io.element.android.x.di.** { *; }
+-keepnames class io.element.android.x.**
