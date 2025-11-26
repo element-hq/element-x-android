@@ -49,7 +49,7 @@ telephoto = "0.18.0"
 haze = "1.6.10"
 
 # Dependency analysis
-dependencyAnalysis = "3.5.0"
+dependencyAnalysis = "3.5.1"
 
 # DI
 metro = "0.7.7"
