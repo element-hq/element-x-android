@@ -34,6 +34,11 @@ val RoomListFilter.predicate
                 NonSpacePredicate(roomSummary) &&
                 (roomSummary.info.numUnreadNotifications > 0 || roomSummary.info.isMarkedUnread)
         }
+        RoomListFilter.Mentioned -> { roomSummary: RoomSummary ->
+            NonInvitedPredicate(roomSummary) &&
+                NonSpacePredicate(roomSummary) &&
+                (roomSummary.info.numUnreadMentions > 0)
+        }
         is RoomListFilter.NormalizedMatchRoomName -> { roomSummary: RoomSummary ->
             roomSummary.info.name?.withoutAccents().orEmpty().contains(normalizedPattern, ignoreCase = true) &&
                 (NonSpacePredicate(roomSummary) || IsInvitedPredicate(roomSummary))

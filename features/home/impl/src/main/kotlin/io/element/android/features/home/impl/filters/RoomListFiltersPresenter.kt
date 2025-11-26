@@ -53,6 +53,7 @@ class RoomListFiltersPresenter(
                             RoomListFilter.Unread -> MatrixRoomListFilter.Unread
                             RoomListFilter.Favourites -> MatrixRoomListFilter.Favorite
                             RoomListFilter.Invites -> MatrixRoomListFilter.Invite
+                            RoomListFilter.Mentioned -> MatrixRoomListFilter.Mentioned
                         }
                     }
                 }

@@ -33,6 +33,10 @@ data class RoomListFiltersEmptyStateResources(
                             title = R.string.screen_roomlist_filter_unreads_empty_state_title,
                             subtitle = R.string.screen_roomlist_filter_mixed_empty_state_subtitle
                         )
+                        RoomListFilter.Mentioned -> RoomListFiltersEmptyStateResources(
+                            title = R.string.screen_roomlist_filter_unreads_empty_state_title,
+                            subtitle = R.string.screen_roomlist_filter_mixed_empty_state_subtitle
+                        )
                         RoomListFilter.People -> RoomListFiltersEmptyStateResources(
                             title = R.string.screen_roomlist_filter_people_empty_state_title,
                             subtitle = R.string.screen_roomlist_filter_mixed_empty_state_subtitle

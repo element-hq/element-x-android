@@ -17,7 +17,7 @@ Compared to the previous-generation [Element Classic](https://github.com/element
 ## Table of contents
 
 <!--- TOC -->
-
+* [WHAT'S NEW ?](#what-is-new)
 * [Screenshots](#screenshots)
 * [Translations](#translations)
 * [Rust SDK](#rust-sdk)
@@ -29,6 +29,11 @@ Compared to the previous-generation [Element Classic](https://github.com/element
 * [Copyright and License](#copyright-and-license)
 
 <!--- END -->
+
+## WHAT IS NEW
+
+- Adding mentioned section on top.
+- 
 
 ## Screenshots
 

@@ -49,6 +49,11 @@ sealed interface RoomListFilter {
     data object Unread : RoomListFilter
 
     /**
+     * A filter that matches rooms when you are mentioned.
+     */
+    data object Mentioned : RoomListFilter
+
+    /**
      * A filter that matches rooms that are marked as favorite.
      */
     data object Favorite : RoomListFilter
